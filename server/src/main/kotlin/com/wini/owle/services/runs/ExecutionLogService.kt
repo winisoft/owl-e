@@ -1,0 +1,13 @@
+package com.wini.owle.services.runs
+
+import com.wini.owle.dto.ExecutionLogDto
+import com.wini.owle.entity.runs.ExecutionLogDao
+import com.wini.owle.mapper.runs.ExecutionLogMapper
+import com.wini.owle.repo.runs.ExecutionLogRepository
+import com.wini.owle.services.BaseServiceImpl
+
+
+class ExecutionLogService(
+    repository: ExecutionLogRepository,
+    mapper: ExecutionLogMapper
+): BaseServiceImpl<Long, ExecutionLogDto, ExecutionLogDao>(repository, mapper)

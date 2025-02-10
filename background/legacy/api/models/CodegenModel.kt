@@ -1,0 +1,57 @@
+package com.wini.owle.air.api.models
+
+import com.wini.owle.air.api.models.CodegenProperty
+import com.wini.owle.air.api.models.ExternalDocs
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class CodegenModel(
+    val parent: String? = null,
+    val parentSchema: String? = null,
+    val interfaces: List<String>? = null,
+    val parentModel: CodegenModel? = null,
+    val interfaceModels: List<CodegenModel>? = null,
+    val children: List<CodegenModel>? = null,
+    val name: String? = null,
+    val classname: String? = null,
+    val title: String? = null,
+    val description: String? = null,
+    val classVarName: String? = null,
+    val modelJson: String? = null,
+    val dataType: String? = null,
+    val xmlPrefix: String? = null,
+    val xmlNamespace: String? = null,
+    val xmlName: String? = null,
+    val classFilename: String? = null,
+    val unescapedDescription: String? = null,
+    val discriminator: String? = null,
+    val discriminatorClassVarName: String? = null,
+    val defaultValue: String? = null,
+    val arrayModelType: String? = null,
+    val isAlias: Boolean = false,
+    val allowableValues: Map<String, List<String>>? = null,
+    val hasVars: Boolean = false,
+    val emptyVars: Boolean = false,
+    val hasMoreModels: Boolean = false,
+    val hasEnums: Boolean = false,
+    val isEnum: Boolean = false,
+    val hasRequired: Boolean = false,
+    val hasOptional: Boolean = false,
+    val isArrayModel: Boolean = false,
+    val hasChildren: Boolean = false,
+    val parentContainer: CodegenProperty? = null,
+    val externalDocs: ExternalDocs? = null,
+    val vendorExtensions: Map<String, Boolean>? = null,
+    val additionalPropertiesType: String? = null,
+    val vars: List<CodegenProperty> = mutableListOf(),
+    val requiredVars: List<CodegenProperty> = mutableListOf(),
+    val optionalVars: List<CodegenProperty> = mutableListOf(),
+    val readOnlyVars: List<CodegenProperty> = mutableListOf(),
+    val readWriteVars: List<CodegenProperty> = mutableListOf(),
+    val parentVars: List<CodegenProperty> = mutableListOf(),
+    val mandatory: Set<String>,
+    val imports: Set<String>,
+    val hasOnlyReadOnly: Boolean = true,
+    val allVars: List<CodegenProperty> = vars,
+    val allMandatory: Set<String> = mandatory
+)

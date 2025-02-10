@@ -1,0 +1,408 @@
+/* Base styles for all icons */
+/*.icon-base {
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: inherit;
+}
+
+.icon {
+    @apply icon-base; *//* Inherit all shared styles *//*
+    width: 100%;
+    height: 100%;
+}
+
+.iconButton > .icon {
+    @apply icon-base; *//* Inherit all shared styles *//*
+    width: 80%;
+    height: 80%;
+}
+
+*//* Base styles for icon buttons *//*
+.iconButton {
+    display: flex; *//* Flexbox for centering content *//*
+    align-items: center; *//* Vertical centering *//*
+    justify-content: center; *//* Horizontal centering *//*
+    overflow: hidden; *//* Prevent overflow *//*
+}
+
+*//* State-specific background images *//*
+.iconButtonDefault {
+    background-image: url('../icons/icon-btn-default.svg');
+}
+
+.iconButtonHovered {
+    background-image: url('../icons/icon-btn-hover.svg');
+}
+
+.iconButtonFocused {
+    background-image: url('../icons/icon-btn-focus.svg');
+}
+
+.iconButtonPressed {
+    background-image: url('../icons/icon-btn-press.svg');
+}
+
+.iconButton:hover {
+  @apply iconButtonHovered bg-cover bg-no-repeat bg-center;
+}
+
+.iconButton:focus {
+  @apply iconButtonFocused bg-cover bg-no-repeat bg-center;
+}
+
+.iconButton:active {
+  @apply iconButtonPressed bg-cover bg-no-repeat bg-center;
+}*/
+
+/*
+.icon-add-folder { background-image: url('../icons/element/add_folder.svg'); }
+.icon-add-inspector { background-image: url('../icons/element/add_inspector.svg'); }
+.icon-add-item { background-image: url('../icons/element/add_item.svg'); }
+.icon-add-step { background-image: url('../icons/element/add_step.svg'); }
+.icon-arrow-left { background-image: url('../icons/element/arrow_left.svg'); }
+.icon-arrow-right { background-image: url('../icons/element/arrow_right.svg'); }
+.icon-check { background-image: url('../icons/element/check.svg'); }
+.icon-chevron-down { background-image: url('../icons/element/chevron_down.svg'); }
+.icon-chevron-up { background-image: url('../icons/element/chevron_up.svg'); }
+.icon-circle { background-image: url('../icons/element/circle.svg'); }
+.icon-circle-account { background-image: url('../icons/element/circle_account.svg'); }
+.icon-circle-alert { background-image: url('../icons/element/circle_alert.svg'); }
+.icon-circle-arrow-down { background-image: url('../icons/element/circle_arrow_down.svg'); }
+.icon-circle-arrow-right { background-image: url('../icons/element/circle_arrow_left.svg'); }
+.icon-circle-arrow-left { background-image: url('../icons/element/circle_arrow_right.svg'); }
+.icon-circle-check { background-image: url('../icons/element/circle_check.svg'); }
+.icon-circle-help { background-image: url('../icons/element/circle_help.svg'); }
+.icon-circle-minus { background-image: url('../icons/element/circle_minus.svg'); }
+.icon-circle-pause { background-image: url('../icons/element/circle_pause.svg'); }
+.icon-circle-play { background-image: url('../icons/element/circle_play.svg'); }
+.icon-circle-stop { background-image: url('../icons/element/circle_stop.svg'); }
+.icon-clone { background-image: url('../icons/element/clone.svg'); }
+.icon-collapse-all { background-image: url('../icons/element/collapse_all.svg'); }
+.icon-collapse-fullscreen { background-image: url('../icons/element/collapse_fullscreen.svg'); }
+.icon-collapse-group { background-image: url('../icons/element/collapse_group.svg'); }
+.icon-collapse-section { background-image: url('../icons/element/collapse_section.svg'); }
+.icon-copy { background-image: url('../icons/element/copy.svg'); }
+.icon-data { background-image: url('../icons/element/data.svg'); }
+.icon-data-item { background-image: url('../icons/element/data_item.svg'); }
+.icon-data-item-add { background-image: url('../icons/element/data_item_add.svg'); }
+.icon-data-item-assignable { background-image: url('../icons/element/data_item_assignable.svg'); }
+.icon-data-item-edit { background-image: url('../icons/element/data_item_edit.svg'); }
+.icon-data-item-readonly { background-image: url('../icons/element/data_item_readonly.svg'); }
+.icon-data-item-search { background-image: url('../icons/element/data_item_search.svg'); }
+.icon-data-search { background-image: url('../icons/element/data_search.svg'); }
+.icon-data-type { background-image: url('../icons/element/data_type.svg'); }
+.icon-default-next { background-image: url('../icons/element/default_next.svg'); }
+.icon-delete-folder { background-image: url('../icons/element/delete_folder.svg'); }
+.icon-dependencies { background-image: url('../icons/element/dependencies.svg'); }
+.icon-edit { background-image: url('../icons/element/edit.svg'); }
+.icon-error-watch { background-image: url('../icons/element/error_watch.svg'); }
+.icon-expand-all { background-image: url('../icons/element/expand_all.svg'); }
+.icon-expand-fullscreen { background-image: url('../icons/element/expand_fullscreen.svg'); }
+.icon-expand-group { background-image: url('../icons/element/expand_group.svg'); }
+.icon-expand-item { background-image: url('../icons/element/expand_item.svg'); }
+.icon-expand-section { background-image: url('../icons/element/expand_section.svg'); }
+.icon-filter { background-image: url('../icons/element/filter.svg'); }
+.icon-filter-off { background-image: url('../icons/element/filter_off.svg'); }
+.icon-folder { background-image: url('../icons/element/folder.svg'); }
+.icon-folder-refresh { background-image: url('../icons/element/folder_refresh.svg'); }
+.icon-function { background-image: url('../icons/element/function.svg'); }
+.icon-functions { background-image: url('../icons/element/functions.svg'); }
+.icon-inspect-earlier { background-image: url('../icons/element/inspect_earlier.svg'); }
+.icon-inspect-later { background-image: url('../icons/element/inspect_later.svg'); }
+.icon-inspector { background-image: url('../icons/element/inspector.svg'); }
+.icon-inspector-bad { background-image: url('../icons/element/inspector_bad.svg'); }
+.icon-inspector-definition { background-image: url('../icons/element/inspector_definition.svg'); }
+.icon-inspector-empty { background-image: url('../icons/element/inspector_empty.svg'); }
+.icon-inspector-later { background-image: url('../icons/element/inspector_later.svg'); }
+.icon-inspector-on-met { background-image: url('../icons/element/inspector_on_met.svg'); }
+.icon-inspectors { background-image: url('../icons/element/inspectors.svg'); }
+.icon-junction { background-image: url('../icons/element/junction.svg'); }
+.icon-libraries{ background-image: url('../icons/element/libraries.svg'); }
+.icon-modify-step { background-image: url('../icons/element/modify_step.svg'); }
+.icon-param { background-image: url('../icons/element/param.svg'); }
+.icon-params { background-image: url('../icons/element/params.svg'); }
+.icon-paste { background-image: url('../icons/element/paste.svg'); }
+.icon-pencil { background-image: url('../icons/element/pencil.svg'); }
+.icon-phase { background-image: url('../icons/element/phase.svg'); }
+.icon-phase-add { background-image: url('../icons/element/phase_add.svg'); }
+.icon-phase-delete { background-image: url('../icons/element/phase_delete.svg'); }
+.icon-phase-dissolve { background-image: url('../icons/element/phase_dissolve.svg'); }
+.icon-phases { background-image: url('../icons/element/phases.svg'); }
+.icon-provided { background-image: url('../icons/element/provided.svg'); }
+.icon-provision { background-image: url('../icons/element/provision.svg'); }
+.icon-provisions { background-image: url('../icons/element/provisions.svg'); }
+.icon-remove-inspector { background-image: url('../icons/element/remove_inspector.svg'); }
+.icon-remove-item { background-image: url('../icons/element/remove_item.svg'); }
+.icon-remove-step { background-image: url('../icons/element/remove_step.svg'); }
+.icon-revision { background-image: url('../icons/element/revision.svg'); }
+.icon-revisions { background-image: url('../icons/element/revisions.svg'); }
+.icon-settings { background-image: url('../icons/element/settings.svg'); }
+.icon-star { background-image: url('../icons/element/star.svg'); }
+.icon-step { background-image: url('../icons/element/step.svg'); }
+.icon-step-add { background-image: url('../icons/element/step_add.svg'); }
+.icon-step-next { background-image: url('../icons/element/step_next.svg'); }
+.icon-step-remove { background-image: url('../icons/element/step_remove.svg'); }
+.icon-step-settings { background-image: url('../icons/element/step_settings.svg'); }
+.icon-steps { background-image: url('../icons/element/steps.svg'); }
+.icon-store { background-image: url('../icons/element/store.svg'); }
+.icon-trash { background-image: url('../icons/element/trash.svg'); }
+.icon-value-add { background-image: url('../icons/element/value_add.svg'); }
+.icon-workflow { background-image: url('../icons/element/workflow.svg'); }
+.icon-workflow-head { background-image: url('../icons/element/workflow_head.svg'); }
+.icon-workspace { background-image: url('../icons/element/workspace.svg'); }
+.icon-workspaces { background-image: url('../icons/element/workspaces.svg'); }
+*/
+
+.icon-owle {
+    width: 244px;
+    height: 121px;
+    background-image: url('../icons/owle.svg');
+    background-size: cover; /* Or contain */
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    border: none;
+    display: block; /* Prevent any default inline spacing */
+}
+
+.ach  {
+    background-image: url('../icons/payment/ach.svg');
+}
+
+.alipay  {
+    background-image: url('../icons/payment/alipay.svg');
+}
+
+.amex  {
+    background-image: url('../icons/payment/amex.svg');
+}
+
+.apple-pay  {
+    background-image: url('../icons/payment/apple_pay.svg');
+}
+
+.bacs-dd  {
+    background-image: url('../icons/payment/bacs_dd.svg');
+}
+
+.bancontact  {
+    background-image: url('../icons/payment/bancontact.svg');
+}
+
+.becs-dd  {
+    background-image: url('../icons/payment/becs_dd.svg');
+}
+
+.blik  {
+    background-image: url('../icons/payment/blik.svg');
+}
+
+.ca-pad  {
+    background-image: url('../icons/payment/ca_pad.svg');
+}
+
+.cartes-bancaires  {
+    background-image: url('../icons/payment/cartes_bancaires.svg');
+}
+
+.cash-app  {
+    background-image: url('../icons/payment/cash_app.svg');
+}
+
+.ch-union-pay  {
+    background-image: url('../icons/payment/ch_union_pay.svg');
+}
+
+.cq-rem-com  {
+    background-image: url('../icons/payment/cq_rem_com.svg');
+}
+
+.diners  {
+    background-image: url('../icons/payment/diners.svg');
+}
+
+.discover  {
+    background-image: url('../icons/payment/discover.svg');
+}
+
+.eps  {
+    background-image: url('../icons/payment/eps.svg');
+}
+
+.fpx  {
+    background-image: url('../icons/payment/fpx.svg');
+}
+
+.google-pay  {
+    background-image: url('../icons/payment/google_pay.svg');
+}
+
+.grabpay  {
+    background-image: url('../icons/payment/grabpay.svg');
+}
+
+.ideal  {
+    background-image: url('../icons/payment/ideal.svg');
+}
+
+.jcb  {
+    background-image: url('../icons/payment/jcb.svg');
+}
+
+.link  {
+    background-image: url('../icons/payment/link.svg');
+}
+
+.mastercard  {
+    background-image: url('../icons/payment/mastercard.svg');
+}
+
+.mobilepay  {
+    background-image: url('../icons/payment/mobilepay.svg');
+}
+
+.p24  {
+    background-image: url('../icons/payment/p24.svg');
+}
+
+.paynow  {
+    background-image: url('../icons/payment/paynow.svg');
+}
+
+.paypal  {
+    background-image: url('../icons/payment/paypal.svg');
+}
+
+.promptpay  {
+    background-image: url('../icons/payment/promptpay.svg');
+}
+
+.revolut-pay  {
+    background-image: url('../icons/payment/revolut_pay.svg');
+}
+
+.sepa-dd  {
+    background-image: url('../icons/payment/sepa_dd.svg');
+}
+
+.twint  {
+    background-image: url('../icons/payment/twint.svg');
+}
+
+.visa  {
+    background-image: url('../icons/payment/visa.svg');
+}
+
+.wechat-pay  {
+    background-image: url('../icons/payment/wechat_pay.svg');
+}
+
+.owle-beak {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('../icons/sprite/owle-beak.svg');
+}
+
+.owle-eye-inner-left {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('../icons/sprite/owle-eye-inner-left.svg');
+}
+
+.owle-eye-inner-right {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('../icons/sprite/owle-eye-inner-right.svg');
+}
+
+.owle-eye-outer-left {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('../icons/sprite/owle-eye-outer-left.svg');
+}
+
+.owle-eye-outer-right {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('../icons/sprite/owle-eye-outer-right.svg');
+}
+
+.owle-eye-pupil-left {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-image: url('../icons/sprite/owle-eye-pupil-left.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.owle-eye-pupil-right  {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-image: url('../icons/sprite/owle-eye-pupil-right.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.owle-sprite {
+    width : 275px;
+    height: 121px;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes peer-left {
+    0% { width: 30px; height: 30px; }
+    50% { width: 20px; height: 25px; } /* Shrink slightly */
+    100% { width: 30px; height: 30px; }
+}
+
+@keyframes peer-right {
+    0% { width: 30px; height: 30px; }
+    50% { width: 20px; height: 25px; } /* Shrink slightly */
+    100% { width: 30px; height: 30px; }
+}
+
+.owle-eye-pupil-left,
+.owle-eye-pupil-right {
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    position: absolute;
+}

@@ -1,0 +1,443 @@
+<resources>
+    <!-- IC_* : ICON DESCRIPTIVE TEXT -->
+    <!-- IC_1_* : ICON DESCRIPTIVE TEXT : OELEMENT -->
+    <!-- IC_1_1_* : ICON DESCRIPTIVE TEXT : OELEMENT : STEP -->
+    <string-array name="ic_1_1_1">
+        <string>Step Elements</string>
+        <string>Icon for Step Elements</string>
+    </string-array>
+    <string-array name="ic_1_1_2">
+        <string>Step Element</string>
+        <string>Icon for Step Element</string>
+    </string-array>
+    <string-array name="ic_1_1_3">
+        <string>Step Empty</string>
+        <string>Icon for Empty Step</string>
+    </string-array>
+    <string-array name="ic_1_1_4">
+        <string>Step Add</string>
+        <string>Icon for Step Add Action</string>
+    </string-array>
+    <string-array name="ic_1_1_5">
+        <string>Step Remove</string>
+        <string>Icon for Step Remove Action</string>
+    </string-array>
+    <string-array name="ic_1_1_6">
+        <string>Step Default Next</string>
+        <string>Icon for Default Next Step</string>
+    </string-array>
+    <string-array name="ic_1_1_7">
+        <string>Step Succeeded</string>
+        <string>Icon for Step Success</string>
+    </string-array>
+    <string-array name="ic_1_1_8">
+        <string>Step Bookmark Add</string>
+        <string>Icon for Step Bookmark Add Action</string>
+    </string-array>
+    <string-array name="ic_1_1_9">
+        <string>Step Bookmark Remove</string>
+        <string>Icon for Step Bookmark Remove</string>
+    </string-array>
+    <string-array name="ic_1_1_10">
+        <string>Step Execution Duration</string>
+        <string>Icon for Step Execution Duration</string>
+    </string-array>
+    <string-array name="ic_1_1_11">
+        <string>Step Alert</string>
+        <string>Icon for Step Alert State</string>
+    </string-array>
+    <string-array name="ic_1_1_12">
+        <string>Step Help Hint</string>
+        <string>Icon for Step Help Hint</string>
+    </string-array>
+    <!-- IC_1_2_* : ICON DESCRIPTIVE TEXT : DIRECTIONALS -->
+    <!-- IC_1_2_1_* : ICON DESCRIPTIVE TEXT : DIRECTIONALS : CHEVRON -->
+    <string-array name="ic_1_2_1_1">
+        <string>Chevron Left</string>
+        <string>Icon for Left-Facing Chevron</string>
+    </string-array>
+    <string-array name="ic_1_2_1_2">
+        <string>Chevron Up</string>
+        <string>Icon for Upward-Facing Chevron</string>
+    </string-array>
+    <string-array name="ic_1_2_1_3">
+        <string>Chevron Down</string>
+        <string>Icon for Downward-Facing Chevron</string>
+    </string-array>
+    <string-array name="ic_1_2_1_4">
+        <string>Chevron Right</string>
+        <string>Icon for Right-Facing Chevron</string>
+    </string-array>
+    <!-- IC_1_2_2_* : ICON DESCRIPTIVE TEXT : DIRECTIONALS : CIRCLED ARROW -->
+    <string-array name="ic_1_2_2_1">
+        <string>Arrow Circled Left</string>
+        <string>Icon for Left-Facing Arrow Circled</string>
+    </string-array>
+    <string-array name="ic_1_2_2_2">
+        <string>Arrow Circled Up</string>
+        <string>Icon for Upward-Facing Arrow Circled</string>
+    </string-array>
+    <string-array name="ic_1_2_2_3">
+        <string>Arrow Circled Down</string>
+        <string>Icon for Downward-Facing Arrow Circled</string>
+    </string-array>
+    <string-array name="ic_1_2_2_4">
+        <string>Arrow Circled Right</string>
+        <string>Icon for Right-Facing Arrow Circled</string>
+    </string-array>
+    <!-- IC_1_2_3_* : ICON DESCRIPTIVE TEXT : DIRECTIONALS : ARROW -->
+    <string-array name="ic_1_2_3_1">
+        <string>Arrow Left</string>
+        <string>Icon for Leftward-Facing Arrow</string>
+    </string-array>
+    <string-array name="ic_1_2_3_2">
+        <string>Arrow Right</string>
+        <string>Icon for Rightward-Facing Arrow</string>
+    </string-array>
+    <!-- IC_1_2_4_* : ICON DESCRIPTIVE TEXT : VIEW RESIZE -->
+    <!-- IC_1_2_4_1_* : ICON DESCRIPTIVE TEXT : VIEW RESIZE : REGION -->
+    <string-array name="ic_1_2_4_1_1">
+        <string>Region Expand Full</string>
+        <string>Icon for Region Expand Full</string>
+    </string-array>
+    <string-array name="ic_1_2_4_1_2">
+        <string>Region Collapse</string>
+        <string>Icon for Region Collapse</string>
+    </string-array>
+    <!-- IC_1_2_4_2_* : ICON DESCRIPTIVE TEXT : VIEW RESIZE : ITEM -->
+    <string-array name="ic_1_2_4_2_1">
+        <string>Expand Item</string>
+        <string>Icon for Expand Item Action</string>
+    </string-array>
+    <string-array name="ic_1_2_4_2_2">
+        <string>Collapse Item</string>
+        <string>Icon for Collapse Item Action</string>
+    </string-array>
+    <!-- IC_1_2_4_3_* : ICON DESCRIPTIVE TEXT : VIEW RESIZE : ITEMS -->
+    <string-array name="ic_1_2_4_3_1">
+        <string>Expand Items</string>
+        <string>Icon for Expand Items Action</string>
+    </string-array>
+    <string-array name="ic_1_2_4_3_2">
+        <string>Collapse Items</string>
+        <string>Icon for Collapse Items Action</string>
+    </string-array>
+    <!-- IC_1_2_4_4_* : ICON DESCRIPTIVE TEXT : VIEW RESIZE : ALL ITEMS -->
+    <string-array name="ic_1_2_4_4_1">
+        <string>Expand All Items</string>
+        <string>Icon for Expand All Action</string>
+    </string-array>
+    <string-array name="ic_1_2_4_4_2">
+        <string>Collapse All Items</string>
+        <string>Icon for Collapse All Action</string>
+    </string-array>
+    <!-- IC_1_2_5_* : ICON DESCRIPTIVE TEXT : SORT ORDER -->
+    <!-- IC_1_2_5_1_* : ICON DESCRIPTIVE TEXT : SORT ORDER : DATE -->
+    <string-array name="ic_1_2_5_1_1">
+        <string>Date Sort Desc</string>
+        <string>Icon for Sort by Date Descending</string>
+    </string-array>
+    <string-array name="ic_1_2_5_1_2">
+        <string>Date Sort Asc</string>
+        <string>Icon for Sort by Date Ascending</string>
+    </string-array>
+    <!-- IC_1_2_6_1_* : ICON DESCRIPTIVE TEXT : SORT ORDER : NAME -->
+    <string-array name="ic_1_2_6_1_1">
+        <string>Name Sort Desc</string>
+        <string>Icon for Sort by Name Descending</string>
+    </string-array>
+    <string-array name="ic_1_2_6_1_2">
+        <string>Name Sort Asc</string>
+        <string>Icon for Sort by Name Ascending</string>
+    </string-array>
+    <!-- IC_1_2_7_* : ICON DESCRIPTIVE TEXT : TOGGLE STATES -->
+    <!-- IC_1_2_7_1_* : ICON DESCRIPTIVE TEXT : TOGGLE STATES : FILTERS -->
+    <string-array name="ic_1_2_7_1_1">
+        <string>Filters On</string>
+        <string>Icon for Active Filters</string>
+    </string-array>
+    <string-array name="ic_1_2_7_1_2">
+        <string>Filters Off</string>
+        <string>Icon for Inactive Filters</string>
+    </string-array>
+    <!-- IC_1_2_7_2_* : ICON DESCRIPTIVE TEXT : TOGGLE STATES : ACCOUNT LOGIN -->
+    <string-array name="ic_1_2_7_2_1">
+        <string>Account Signed In</string>
+        <string>Icon for Authenticated User</string>
+    </string-array>
+    <string-array name="ic_1_2_7_2_2">
+        <string>Account Not Authenticated</string>
+        <string>Icon for Account Log In</string>
+    </string-array>
+    <!-- IC_1_2_7_3_* : ICON DESCRIPTIVE TEXT : TOGGLE STATES : CLOUD RUNS -->
+    <string-array name="ic_1_2_7_3_1">
+        <string>Cloud Executions Configured</string>
+        <string>Icon for Configured Executions on the Cloud</string>
+    </string-array>
+    <string-array name="ic_1_2_7_3_2">
+        <string>Cloud Executions Inactive</string>
+        <string>Icon for Inactive Cloud Executions</string>
+    </string-array>
+    <!-- IC_1_2_7_4_* : ICON DESCRIPTIVE TEXT : TOGGLE STATES : BOOKMARKED -->
+    <string-array name="ic_1_2_7_4_1">
+        <string>Star Outlined</string>
+        <string>Not Bookmarked Icon</string>
+    </string-array>
+    <string-array name="ic_1_2_7_4_2">
+        <string>Circled Star Filled</string>
+        <string>Bookmarked Item Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_* : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF -->
+    <!-- IC_1_2_8_1_* : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : CHECKMARK -->
+    <string-array name="ic_1_2_8_1_1">
+        <string>Checkmark</string>
+        <string>Checkmark Icon</string>
+    </string-array>
+    <string-array name="ic_1_2_8_1_2">
+        <string>Checkmark Circled</string>
+        <string>Circled Checkmark Icon</string>
+    </string-array>
+    <string-array name="ic_1_2_8_1_3">
+        <string>Checkmark Circled Alt</string>
+        <string>Circled Checkmark Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_2_* : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : X -->
+    <string-array name="ic_1_2_8_2_1">
+        <string>X</string>
+        <string>Cancel Icon</string>
+    </string-array>
+    <string-array name="ic_1_2_8_2_2">
+        <string>Circled X Medium</string>
+        <string>Circled Cancel Icon</string>
+    </string-array>
+    <string-array name="ic_1_2_8_2_3">
+        <string>Circled X Large</string>
+        <string>Circled Cancel Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_3 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : COPY -->
+    <string-array name="ic_1_2_8_3">
+        <string>Copy</string>
+        <string>Copy Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_4 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : PASTE -->
+    <string-array name="ic_1_2_8_4">
+        <string>Paste</string>
+        <string>Paste Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_5 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : OVERFLOW MENU -->
+    <string-array name="ic_1_2_8_5">
+        <string>Overflow Menu</string>
+        <string>Overflow Menu Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_6 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : PENCIL -->
+    <string-array name="ic_1_2_8_6">
+        <string>Pencil</string>
+        <string>Pencil Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_7 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : SETTINGS -->
+    <string-array name="ic_1_2_8_7">
+        <string>Settings</string>
+        <string>Settings Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_8 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : TRASH -->
+    <string-array name="ic_1_2_8_8">
+        <string>Trash</string>
+        <string>Trash Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_9 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : CLONE -->
+    <string-array name="ic_1_2_8_9">
+        <string>Clone Item</string>
+        <string>Clone Item Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_10 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : GRIP -->
+    <string-array name="ic_1_2_8_10">
+        <string>Grip Item Indicator</string>
+        <string>Item Moving Grip Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_11 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : ALERT -->
+    <string-array name="ic_1_2_8_11">
+        <string>Item Alert</string>
+        <string>Item Alert State Icon</string>
+    </string-array>
+    <!-- IC_1_2_8_12 : ICON DESCRIPTIVE TEXT : TYPICAL UI STUFF : HINT -->
+    <string-array name="ic_1_2_8_12">
+        <string>Help Hint</string>
+        <string>Help Hint Icon</string>
+    </string-array>
+    <!-- IC_1_2_9_* : ICON DESCRIPTIVE TEXT : EXECUTION CONTROLS -->
+    <!-- IC_1_2_9_1 : ICON DESCRIPTIVE TEXT : EXECUTION CONTROLS : PLAY FILLED-->
+    <string-array name="ic_1_2_9_1">
+        <string>Execution Start</string>
+        <string>Icon for Execution Start</string>
+    </string-array>
+    <!-- IC_1_2_9_2 : ICON DESCRIPTIVE TEXT : EXECUTION CONTROLS : PLAY OUTLINE-->
+    <string-array name="ic_1_2_9_2">
+        <string>Execution Start</string>
+        <string>Icon for Execution Start</string>
+    </string-array>
+    <!-- IC_1_2_9_3 : ICON DESCRIPTIVE TEXT : EXECUTION CONTROLS : STOP FILLED-->
+    <string-array name="ic_1_2_9_3">
+        <string>Execution Stop</string>
+        <string>Icon for Execution Stop</string>
+    </string-array>
+    <!-- IC_1_2_9_4 : ICON DESCRIPTIVE TEXT : EXECUTION CONTROLS : STOP OUTLINE-->
+    <string-array name="ic_1_2_9_4">
+        <string>Execution Stop</string>
+        <string>Icon for Execution Stop</string>
+    </string-array>
+    <!-- IC_1_2_9_5 : ICON DESCRIPTIVE TEXT : EXECUTION CONTROLS : PAUSE -->
+    <string-array name="ic_1_2_9_5">
+        <string>Execution PAUSE</string>
+        <string>Icon for Execution PAUSE</string>
+    </string-array>
+    <string-array name="ic_1_4_1">
+        <string>ca_pad</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_2">
+        <string>cartes_bancaires</string>
+        <string>Cartes Bancaires</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_3">
+        <string>cash_app</string>
+        <string>CashApp</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_4">
+        <string>ch_union_pay</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_5">
+        <string>cq_rem_com</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_6">
+        <string>diners</string>
+        <string>Diners' Card</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_7">
+        <string>discover</string>
+        <string>Discover Card</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_8">
+        <string>twint</string>
+        <string>Twint</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_9">
+        <string>eps</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_10">
+        <string>fpx</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_11">
+        <string>grabpay</string>
+        <string>GrabPay</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_12">
+        <string>ideal</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_13">
+        <string>link</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_14">
+        <string>mastercard</string>
+        <string>Mastercard</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_15">
+        <string>mobilepay</string>
+        <string>MobilePay</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_16">
+        <string>p24</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_17">
+        <string>paynow</string>
+        <string>PayNow</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_18">
+        <string>paypal</string>
+        <string>PayPal</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_19">
+        <string>promptpay</string>
+        <string>PromptPay</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_20">
+        <string>revolut_pay</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_21">
+        <string>sepa_dd</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_22">
+        <string>wechat_pay</string>
+        <string>WeChatPay</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_23">
+        <string>ach</string>
+        <string>ACH</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_24">
+        <string>alipay</string>
+        <string>AliPay</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_25">
+        <string>amex</string>
+        <string>American Express</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_26">
+        <string>apple_pay</string>
+        <string>Apple Pay</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_27">
+        <string>bacs_dd</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_28">
+        <string>bancontact</string>
+        <string>Bancontact</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_29">
+        <string>becs_dd</string>
+        <string>Name</string>
+        <string>ContentDescription</string>
+    </string-array>
+    <string-array name="ic_1_4_30">
+        <string>visa</string>
+        <string>VISA</string>
+        <string>ContentDescription</string>
+    </string-array>
+</resources>

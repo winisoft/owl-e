@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",        
+    "jsx": "react",
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "paths": {
+      "#/*": ["src/*"]
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["dom", "es6", "es2017", "esnext.asynciterable"]
+  },
+  "include": [
+    "src",
+    "tests",
+    "node_modules/@types",
+    "src/svg.d.ts",
+    "src/**/*",
+    "tests/**/*",
+    "src/jsMain/resources/public/index.ts",
+    "src/jsMain/resources/components/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

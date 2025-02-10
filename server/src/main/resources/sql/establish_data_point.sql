@@ -1,0 +1,63 @@
+
+-- INSERT INTO packages(id, name)
+-- VALUES
+-- (1, 'python-stdlib');
+
+-- INSERT INTO versionSpecs (id, packageId, versionMin, versionMax, versionExact)
+-- VALUES
+-- (1, 1, '2.6', NULL, NULL), -- python stdlib
+-- (2, 1, NULL, NULL, '3.6'), -- exact version 3.6
+-- (3, 1, NULL, NULL, '3.5'), -- exact version 3.5
+-- (4, 1, '3.5', '3.14', NULL); -- min 3.5, max 3.14
+
+-- -- Type Definitions
+-- INSERT INTO typeDefinitions (id, name, namespace, versionSpecId) 
+-- VALUES
+-- (1, 'NoneType', 'builtins', 1),
+-- (2, 'Any', 'typing', 1),
+-- (3, 'bool', 'builtins', 1),
+-- (4, 'int', 'builtins', 1),
+-- (5, 'float', 'builtins', 1),
+-- (6, 'complex', 'builtins', 1),
+-- (7, 'list', 'builtins', 1),
+-- (8, 'tuple', 'builtins', 1),
+-- (9, 'range', 'builtins', 1),
+-- (10, 'str', 'builtins', 1),
+-- (11, 'bytes', 'builtins', 1),
+-- (12, 'bytearray', 'builtins', 1),
+-- (13, 'memoryview', 'builtins', 1),
+-- (14, 'set', 'builtins', 1),
+-- (15, 'frozenset', 'builtins', 1),
+-- (16, 'dict', 'builtins', 1),
+-- (17, 'List', 'typing', 1),
+-- (18, 'Dict', 'typing', 1),
+-- (19, 'Set', 'typing', 1),
+-- (20, 'Tuple', 'typing', 1),
+-- (21, 'Optional', 'typing', 1),
+-- (22, 'Union', 'typing', 1),
+-- (23, 'TypeVar', 'typing', 1),
+-- (24, 'Generic', 'typing', 1),
+-- (25, 'Collection', 'collections.abc', 2), -- since version 3.6
+-- (26, 'Reversible', 'collections.abc', 2), -- since version 3.6
+-- (27, 'Generator', 'collections.abc', 3), -- since version 3.5
+-- (28, 'ByteString', 'collections.abc', 4); -- min 3.5, max 3.14
+
+-- INSERT INTO transformations (id, name, description, examples, returnsTypeDeclarationId) VALUES 
+-- (1, 'Item at Position X in Collection', 'The item at a specific position in a collection of items.', 'messages[0], images[1]', NULL),
+-- (2, 'Items at Positions Between X and Y', 'The collection of values stored between two indexes of a collection.', 'awards[1:4]', NULL),
+-- (3, 'Element by Key', 'The item referenced by some key name.', 'response["messages"], genres["R & B"]', NULL),
+-- (4, 'Is Equal to', 'Checks if the item matches exactly with a provided value.', 'item == "Success"', NULL),
+-- (5, 'Property Access', 'Accesses a property of an object by name.', 'Organization.Roles, song.tempo', NULL);
+
+-- INSERT INTO tags (id, name, description) VALUES
+-- (1, 'Workflows', 'The heart of Owl-E.'),
+-- (2, 'Tools', 'A manageable Python function that performs a task.'),
+-- (3, 'Transformations', 'A tweak to your tools\' results or your data points to make their structure better suited for some purpose.'),
+-- (4, 'Download', 'Workflows that involve downloading files or data from internet sources.'),
+-- (5, 'Upload', 'Workflows that involve uploading files or data to a server or cloud service.'),
+-- -- ... continue with incremented IDs for the rest of the tags ...
+-- (6, 'Data Processing', 'General workflows that transform or process data in some way.'),
+-- (7, 'Image', 'Workflows related to image processing, including resizing, cropping, and filtering.'),
+-- (8, 'Video', 'Workflows that involve video editing, processing, or generation.'),
+-- -- ... and so on up to the last tag ...
+-- (45, 'Geolocation', 'Workflows that use geographic data or provide location-based services.');

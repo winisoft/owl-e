@@ -1,0 +1,51 @@
+package com.wini.owle.air.api.operations
+
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Response(
+    val code: String,
+    val contents: List<@Contextual Any>,
+    val examples: List<@Contextual Any>,
+    val hasHeaders: Boolean,
+    val hasInnerObject: Boolean,
+    val hasMore: Boolean,
+    val headers: List<Header>,
+    val isAlias: Boolean,
+    val isArrayModel: Boolean,
+    val isBinary: Boolean,
+    val isBoolean: Boolean,
+    val isByteArray: Boolean,
+    val isCollectionFormatMulti: Boolean,
+    val isContainer: Boolean,
+    val isDate: Boolean,
+    val isDateTime: Boolean,
+    val isDefault: Boolean,
+    val isDouble: Boolean,
+    val isEnum: Boolean,
+    val isFile: Boolean,
+    val isFloat: Boolean,
+    val isInteger: Boolean,
+    val isListContainer: Boolean,
+    val isLong: Boolean,
+    val isMapContainer: Boolean,
+    val isMultipart: Boolean,
+    val isNotContainer: Boolean,
+    val isNullable: Boolean,
+    val isNumber: Boolean,
+    val isNumeric: Boolean,
+    val isObject: Boolean,
+    val isPrimitiveType: Boolean,
+    val isReadOnly: Boolean,
+    val isResponseBinary: Boolean,
+    val isResponseFile: Boolean,
+    val isString: Boolean,
+    val isUuid: Boolean,
+    val jsonSchema: String,
+    val message: String,
+    val primitiveType: Boolean,
+    val simpleType: Boolean,
+    val vendorExtensions: Map<String, Boolean>,
+    val wildcard: Boolean
+)
