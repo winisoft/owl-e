@@ -83,8 +83,7 @@ object Icons {
             val ExecutionTime = OwleIcon(drawable = Res.drawable.step, stringArray = Res.array.ic_1_1_10)
             val Alert = OwleIcon(drawable = Res.drawable.step, stringArray = Res.array.ic_1_1_11)
             val Help = OwleIcon(Res.drawable.step, Res.array.ic_1_1_12)
-            val All = listOf(Items, Item, Empty, Add, Remove, DefaultNext, Succeeded, BookmarkAdd, BookmarkRemove,
-                ExecutionTime, Alert, Help)
+            val All = listOf(Items, Item, Empty, Add, Remove, DefaultNext, Succeeded, BookmarkAdd, BookmarkRemove, ExecutionTime, Alert, Help)
         }
         object ErrorWatch {
 
