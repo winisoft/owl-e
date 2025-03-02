@@ -4,19 +4,19 @@
     android:width="24dp"
     android:height="25dp">
     <path
-        android:pathData="M9 3.01367H5C3.89543 3.01367 3 3.9091 3 5.01367V9.01367C3 10.1182 3.89543 11.0137 5 11.0137H9C10.1046 11.0137 11 10.1182 11 9.01367V5.01367C11 3.9091 10.1046 3.01367 9 3.01367Z"
+        android:pathData="M8.66667 2H4.22222C2.99492 2 2 2.99492 2 4.22222V8.66667C2 9.89397 2.99492 10.8889 4.22222 10.8889H8.66667C9.89397 10.8889 10.8889 9.89397 10.8889 8.66667V4.22222C10.8889 2.99492 9.89397 2 8.66667 2Z"
         android:strokeColor="#FFFFFF"
         android:strokeWidth="2"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
-        android:pathData="M7 11.0137V15.0137C7 15.5441 7.21071 16.0528 7.58579 16.4279C7.96086 16.803 8.46957 17.0137 9 17.0137H13"
+        android:pathData="M6.44434 10.8887V15.3331C6.44434 15.9225 6.67846 16.4877 7.09521 16.9045C7.51196 17.3212 8.07719 17.5553 8.66656 17.5553H13.111"
         android:strokeColor="#FFFFFF"
         android:strokeWidth="2"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
-        android:pathData="M19 13.0137H15C13.8954 13.0137 13 13.9091 13 15.0137V19.0137C13 20.1182 13.8954 21.0137 15 21.0137H19C20.1046 21.0137 21 20.1182 21 19.0137V15.0137C21 13.9091 20.1046 13.0137 19 13.0137Z"
+        android:pathData="M19.7778 13.1113H15.3333C14.106 13.1113 13.1111 14.1063 13.1111 15.3336V19.778C13.1111 21.0053 14.106 22.0002 15.3333 22.0002H19.7778C21.0051 22.0002 22 21.0053 22 19.778V15.3336C22 14.1063 21.0051 13.1113 19.7778 13.1113Z"
         android:strokeColor="#FFFFFF"
         android:strokeWidth="2"
         android:strokeLineCap="round"

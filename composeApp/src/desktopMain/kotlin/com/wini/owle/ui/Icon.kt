@@ -61,15 +61,9 @@ object Icons {
 
 
     object OElement {
-        object Workflow {
-
-        }
-        object Folder {
-
-        }
-        object DataItem {
-
-        }
+        object Workflow {}
+        object Folder {}
+        object DataItem {}
         object Step {
             val Items = OwleIcon(drawable = Res.drawable.steps, stringArray = Res.array.ic_1_1_1)
             val Item = OwleIcon(drawable = Res.drawable.step, stringArray = Res.array.ic_1_1_2)
@@ -85,18 +79,10 @@ object Icons {
             val Help = OwleIcon(Res.drawable.step, Res.array.ic_1_1_12)
             val All = listOf(Items, Item, Empty, Add, Remove, DefaultNext, Succeeded, BookmarkAdd, BookmarkRemove, ExecutionTime, Alert, Help)
         }
-        object ErrorWatch {
-
-        }
-        object Junction {
-
-        }
-        object PreReqInjection {
-
-        }
-        object Validator {
-
-        }
+        object ErrorWatch {}
+        object Junction {}
+        object PreReqInjection {}
+        object Validator {}
         val All: List<OwleIcon> = Step.All
     }
 

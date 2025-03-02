@@ -4,9 +4,9 @@
     android:width="24dp"
     android:height="24dp">
     <path
-        android:pathData="M9.42859 14.0003L9.42859 23.8574H6.28573L6.28573 17.286H0.0000171661L0.0000171661 14.0003L9.42859 14.0003Z"
+        android:pathData="M9.63636 14.3913V23H7.09091V17.2609H2V14.3913H9.63636Z"
         android:fillColor="#FFFFFF" />
     <path
-        android:pathData="M17.1429 6.57171V0.000278473L14 0.000278473L14 9.85742L23.4286 9.85742V6.57171L17.1429 6.57171Z"
+        android:pathData="M17.9091 6.73913V1H15.3636V9.6087H23V6.73913H17.9091Z"
         android:fillColor="#FFFFFF" />
 </vector>
