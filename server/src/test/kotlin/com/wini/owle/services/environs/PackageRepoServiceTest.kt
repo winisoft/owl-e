@@ -16,7 +16,9 @@ open class PackageRepoServiceTest {
     @Nested
     @DisplayName("Repo Succeeds")
     inner class PackageRepoServiceSuccessTest: BaseOwleServiceTest<Long, PackageRepoDto>() {
+
         private val service: PackageRepoService by inject()
+
         override val testModule: Module
             get() = module {
                 single<PackageRepoService> { PackageRepoService(get(), get()) }

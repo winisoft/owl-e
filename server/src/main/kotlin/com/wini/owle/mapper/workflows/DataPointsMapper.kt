@@ -44,8 +44,8 @@ class DataPointsMapper(
             storeMethod = storeMethod.toDto(),
             typeDeclaration = typeDeclarationMapper.run { typeDeclaration.toDto() },
             description = description,
-            createdAt = TODO(),
-            updatedAt = TODO(),
+            createdAt = createdAt.toString(),
+            updatedAt = updatedAt.toString(),
         )
     }
 }

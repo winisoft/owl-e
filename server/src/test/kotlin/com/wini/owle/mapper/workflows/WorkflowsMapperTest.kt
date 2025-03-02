@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.workflows
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.WorkflowDto
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
@@ -21,7 +22,7 @@ open class WorkflowsMapperTest: BaseOwleMapperTest<WorkflowDto, WorkflowDao, Wor
     private val realMapper by KoinJavaComponent.inject<WorkflowsMapper>(WorkflowsMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = listOf(Workflows)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.WorkflowsModule.Workflow
 
     override fun instantiateMapper(): WorkflowsMapper { return realMapper }
 

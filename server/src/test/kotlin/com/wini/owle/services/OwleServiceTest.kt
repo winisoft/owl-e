@@ -10,4 +10,5 @@ interface OwleServiceTest<ID: Any, T>: KoinTest where T : BaseDto {
     val testModule: Module
     fun getInstance(): T
     fun getService(): Service<ID, T>
+
 }

@@ -46,7 +46,7 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("StepBenchmarkingDataRepository")
-        inner class StepBenchmarkingTest: StepBenchmarkingDataRepositoryTest()
+        inner class StepBenchmarkingTest: StepBenchmarkingDatasRepositoryTest()
 
         @Nested
         @DisplayName("StepExecutionRepository")
@@ -160,7 +160,7 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("TypeVarianceRepository")
-        inner class TypeVarianceTest: TypeVarianceRepositoryTest()
+        inner class TypeVariancesTest: TypeVariancesRepositoryTest()
         
     }
 

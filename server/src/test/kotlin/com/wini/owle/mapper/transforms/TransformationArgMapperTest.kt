@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.transforms
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.TransformationArgDto
 import com.wini.owle.entity.*
 import com.wini.owle.dto.DtoTestInstanceFactory.transformationArgDto
@@ -25,13 +26,7 @@ open class TransformationArgMapperTest: BaseOwleMapperTest<TransformationArgDto,
 
     private val realMapper by KoinJavaComponent.inject<TransformationArgsMapper>(TransformationArgsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = listOf(
-        TransformationArgs,
-        Transformations,
-        TypeDeclarations,
-        TypeDefinitions,
-        VersionSpecs
-    )
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.TransformsModule.TransformationArg
 
     override fun instantiateMapper(): TransformationArgsMapper { return realMapper }
 

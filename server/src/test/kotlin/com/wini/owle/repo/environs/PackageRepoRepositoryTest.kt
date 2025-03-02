@@ -1,5 +1,6 @@
 package com.wini.owle.repo.environs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.EntityTestInstanceFactory.packageRepoDao
 import com.wini.owle.entity.PackageRepositories
 import com.wini.owle.entity.environs.PackageRepoDao
@@ -17,9 +18,12 @@ import org.koin.java.KoinJavaComponent
 
 
 open class PackageRepoRepositoryTest: UnconstrainedDeleteRepoTest<Long, PackageRepoDao>() {
+
     private val realRepo by KoinJavaComponent.inject<PackageRepoRepository>(PackageRepoRepository::class.java)
+
     override fun getRepo() = realRepo
-    override val implicatedTables = listOf(PackageRepositories)
+
+    override val implicatedTables = TestHelper.ImplicatedTables.EnvironsModule.PackageRepo
 
     override val testModule: Module
         get() = module {

@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.workflows
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.phaseDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.PhaseDto
@@ -28,7 +29,7 @@ open class PhaseMapperTest: BaseOwleMapperTest<PhaseDto, PhaseDao, PhasesMapper>
 
     private val realMapper by KoinJavaComponent.inject<PhasesMapper>(PhasesMapper::class.java)
 
-        override val implicatedTables: List<IdTable<*>> = listOf(WorkflowFolders, Workflows, Steps, DataPoints)
+        override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.WorkflowsModule.Phase
 
     override fun instantiateMapper(): PhasesMapper {
         return realMapper

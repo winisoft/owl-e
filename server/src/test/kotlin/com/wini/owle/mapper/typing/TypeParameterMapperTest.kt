@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.typing
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.typeParameterDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeParameterDao
 import com.wini.owle.dto.TypeParameterDto
@@ -26,7 +27,7 @@ open class TypeParameterMapperTest: BaseOwleMapperTest<TypeParameterDto, TypePar
 
     private val realMapper by KoinJavaComponent.inject<TypeParametersMapper>(TypeParametersMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = listOf(TypeParameters, TypeDeclarations, TypeDefinitions, VersionSpecs)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.TypingModule.TypeParameter
 
     override fun instantiateMapper(): TypeParametersMapper { return realMapper }
 

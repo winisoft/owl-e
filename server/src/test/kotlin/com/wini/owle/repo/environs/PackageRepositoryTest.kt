@@ -1,5 +1,6 @@
 package com.wini.owle.repo.environs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.packageDao
 import com.wini.owle.entity.environs.PackageDao
@@ -46,7 +47,7 @@ open class PackageRepositoryTest: UnconstrainedDeleteRepoTest<Long, PackageDao>(
         }
     }
 
-    override val implicatedTables = listOf(Packages, VersionSpecs)
+    override val implicatedTables = TestHelper.ImplicatedTables.EnvironsModule.Package
 
     override val testModule: Module
         get() = module {

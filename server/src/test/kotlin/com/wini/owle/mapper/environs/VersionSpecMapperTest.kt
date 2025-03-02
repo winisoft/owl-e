@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.environs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
 import com.wini.owle.dto.VersionSpecDto
 import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
@@ -21,7 +22,7 @@ open class VersionSpecMapperTest: BaseOwleMapperTest<VersionSpecDto, VersionSpec
 
     private val realMapper by KoinJavaComponent.inject<VersionSpecsMapper>(VersionSpecsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = listOf(VersionSpecs)
+    override val implicatedTables = TestHelper.ImplicatedTables.EnvironsModule.VersionSpec
 
     override fun instantiateMapper(): VersionSpecsMapper { return realMapper }
 

@@ -154,8 +154,8 @@ object DtoTestInstanceFactory {
             storeMethod = storeMethod,
             typeDeclaration = typeDeclaration,
             workflow = workflow,
-            createdAt = TODO(),
-            updatedAt = TODO()
+            createdAt = "2024-12-21T15:00:00",
+            updatedAt = "2024-12-21T15:00:00"
         )
     }
 

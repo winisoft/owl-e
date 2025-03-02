@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.json.jsonb
 import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
+
 object VersionSpecs : LongIdTable("version_specs") {
     val versionMin = varchar("versionMin", 127).nullable()
     val versionMax = varchar("versionMax", 127).nullable()
@@ -57,7 +58,7 @@ object TypeBounds : LongIdTable("type_bounds") {
     val boundTypeDeclaration = reference("boundTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
 }
 
-object TypeVariance : LongIdTable("type_variance") {
+object TypeVariances : LongIdTable("type_variance") {
     val typeVariableDeclaration = reference("typeVariableDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
     val variance = enumerationByName("variance", 13, VarianceCardinality::class)
         .default(VarianceCardinality.INVARIANT)
@@ -295,7 +296,7 @@ object BenchmarkingData : LongIdTable("benchmarking_data") {
     val predeterminedSteps = integer("predeterminedSteps")
 }
 
-object StepBenchmarkingData : LongIdTable("step_benchmarking_data") {
+object StepBenchmarkingDatas : LongIdTable("step_benchmarking_data") {
     val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
     val executionTime = decimal("executionTime", 10, 2)
     val resourceUsage = json("resourceUsage", ResourceUsageDto.jsonConfig, ResourceUsageDto.serializer()).nullable()

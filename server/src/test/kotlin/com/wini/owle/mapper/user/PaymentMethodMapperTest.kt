@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.user
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.paymentMethodDto
 import com.wini.owle.dto.DtoTestInstanceFactory.userDto
 import com.wini.owle.dto.PaymentMethodDto
@@ -30,7 +31,7 @@ open class PaymentMethodMapperTest: BaseOwleMapperTest<PaymentMethodDto, Payment
     private val realMapper by KoinJavaComponent.inject<PaymentMethodsMapper>(PaymentMethodsMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = listOf(PaymentMethods, Users)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.UserModule.PaymentMethod
 
     override fun instantiateMapper(): PaymentMethodsMapper { return realMapper }
 

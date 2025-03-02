@@ -1,5 +1,6 @@
 package com.wini.owle.dll
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.BaseDto
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Database
@@ -18,19 +19,9 @@ abstract class BaseOwleDllTest<ID: Any, Dto: BaseDto> {
 
 
     fun baseSetUp() {
-        Database.connect(
-            url = "jdbc:mysql://localhost:3306/owle_test_db",
-            driver = "com.mysql.cj.jdbc.Driver",
-            user = "test_runner",
-            password = "test1234"
-        )
+        TestHelper.connectToTestDb()
         stopKoin()
         startKoin { modules(testModule) }
-        transaction {
-            exec("SET FOREIGN_KEY_CHECKS=0;")
-            SchemaUtils.drop(*implicatedTables.toTypedArray())
-            exec("SET FOREIGN_KEY_CHECKS=1;")
-            SchemaUtils.create(*implicatedTables.toTypedArray())
-        }
+        TestHelper.refreshTestDbData(implicatedTables)
     }
 }

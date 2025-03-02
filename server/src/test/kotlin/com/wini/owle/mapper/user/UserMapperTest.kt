@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.user
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.userDto
 import com.wini.owle.dto.UserDto
 import com.wini.owle.entity.EntityTestInstanceFactory.userDao
@@ -26,7 +27,7 @@ open class UserMapperTest: BaseOwleMapperTest<UserDto, UserDao, UsersMapper>() {
     private val realMapper by KoinJavaComponent.inject<UsersMapper>(UsersMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = listOf(Users)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.UserModule.User
 
     override fun instantiateMapper(): UsersMapper { return realMapper }
 

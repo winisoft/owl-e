@@ -1,5 +1,6 @@
 package com.wini.owle.repo.workflows
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.phaseDao
 import com.wini.owle.entity.workflows.PhaseDao
@@ -21,8 +22,7 @@ import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
 open class PhaseRepositoryTest: UnconstrainedDeleteRepoTest<Long, PhaseDao>() {
 
-    override val implicatedTables: List<IdTable<*>>
-        get() = listOf(WorkflowFolders, Workflows, Steps, DataPoints)
+    override val implicatedTables = TestHelper.ImplicatedTables.WorkflowsModule.Phase
 
     override val testModule: Module
         get() = module { }

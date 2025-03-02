@@ -146,7 +146,7 @@ open class ServiceTest {
         inner class TypeBoundTest: TypeBoundServiceTest()
 
         @Nested
-        @DisplayName("TypeDeclaratonService")
+        @DisplayName("TypeDeclarationService")
         inner class TypeDeclarationTest: TypeDeclarationServiceTest()
 
         @Nested
@@ -163,7 +163,7 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("TypeVarianceService")
-        inner class TypeVarianceTest: TypeVarianceServiceTest()
+        inner class TypeVariancesTest: TypeVarianceServiceTest()
 
     }
 

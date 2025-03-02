@@ -22,9 +22,13 @@ import kotlin.test.assertNotNull
 
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
+
 open class PaymentMethodRepositoryTest : UnconstrainedDeleteRepoTest<Long, PaymentMethodDao>() {
+
     private val realRepo by KoinJavaComponent.inject<PaymentMethodRepository>(PaymentMethodRepository::class.java)
+
     override fun getRepo() = realRepo
+
     override fun modifyEntities(entities: List<PaymentMethodDao>): List<PaymentMethodDao> {
         return transaction {
             entities.apply {

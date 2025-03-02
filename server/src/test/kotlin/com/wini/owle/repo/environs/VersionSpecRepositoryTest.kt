@@ -1,5 +1,6 @@
 package com.wini.owle.repo.environs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.EntityTestInstanceFactory
 import com.wini.owle.entity.EntityTestInstanceFactory.packageDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
@@ -27,7 +28,9 @@ import kotlin.test.assertNull
 open class VersionSpecRepositoryTest: UnconstrainedDeleteRepoTest<Long, VersionSpecDao>() {
 
     private val realRepo by KoinJavaComponent.inject<VersionSpecRepository>(VersionSpecRepository::class.java)
+
     override fun getRepo() = realRepo
+
     override fun modifyEntities(entities: List<VersionSpecDao>): List<VersionSpecDao> {
         return transaction {
             entities.apply {
@@ -49,8 +52,10 @@ open class VersionSpecRepositoryTest: UnconstrainedDeleteRepoTest<Long, VersionS
         }
     }
 
-    override val implicatedTables = listOf(VersionSpecs)
+    override val implicatedTables = TestHelper.ImplicatedTables.EnvironsModule.VersionSpec
+
     override fun getInstance(): VersionSpecDao = versionSpecDao()
+
     override fun getList(): List<VersionSpecDao> {
         return listOf(
             versionSpecDao(versionMin = "1.0"),

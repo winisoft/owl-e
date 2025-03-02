@@ -1,11 +1,12 @@
 package com.wini.owle.mapper.typing
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
 import com.wini.owle.dto.TypeVarianceDto
 import com.wini.owle.entity.TypeDeclarations
 import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.TypeVariance
+import com.wini.owle.entity.TypeVariances
 import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.BaseOwleMapperTest
@@ -25,11 +26,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-open class TypeVarianceMapperTest: BaseOwleMapperTest<TypeVarianceDto, TypeVarianceDao, TypeVariancesMapper>() {
+open class TypeVariancesMapperTest: BaseOwleMapperTest<TypeVarianceDto, TypeVarianceDao, TypeVariancesMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TypeVariancesMapper>(TypeVariancesMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = listOf(TypeVariance, TypeDeclarations, TypeDefinitions, VersionSpecs)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.TypingModule.TypeVariance
 
     override fun instantiateMapper(): TypeVariancesMapper { return realMapper }
 

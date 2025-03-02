@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.steps
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.provisionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
@@ -34,10 +35,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class ProvisionMapperTest: BaseOwleMapperTest<ProvisionDto, ProvisionDao, ProvisionsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<ProvisionsMapper>(ProvisionsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = listOf(
-        Provisions, Steps, Workflows, Tools, TypeDeclarations,
-        TypeDefinitions, VersionSpecs, ToolParams)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.StepsModule.Provision
 
     override fun instantiateMapper(): ProvisionsMapper { return realMapper }
 

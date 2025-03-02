@@ -1,5 +1,6 @@
 package com.wini.owle.services.typing
 
+import com.wini.owle.TestHelper
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
@@ -69,18 +70,8 @@ open class TypeDeclarationServiceTest {
         clearAllMocks()
         stopKoin()
         startKoin { modules(testModule) }
-        Database.connect(
-            url = "jdbc:mysql://localhost:3306/owle_test_db",
-            driver = "com.mysql.cj.jdbc.Driver",
-            user = "test_runner",
-            password = "test1234"
-        )
-        transaction {
-            exec("SET FOREIGN_KEY_CHECKS=0;")
-            SchemaUtils.drop(*implicatedTables.toTypedArray())
-            exec("SET FOREIGN_KEY_CHECKS=1;")
-            SchemaUtils.create(*implicatedTables.toTypedArray())
-        }
+        TestHelper.connectToTestDb()
+        TestHelper.refreshTestDbData(implicatedTables)
 
     }
 

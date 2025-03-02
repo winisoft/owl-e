@@ -1,29 +1,17 @@
 package com.wini.owle.repo.typing
 
 import com.wini.owle.entity.*
-import com.wini.owle.entity.EntityTestInstanceFactory.typeBoundDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeParameterDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeUnionMemberDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeVarianceDao
 import com.wini.owle.entity.typing.TypeVarianceDao
-import com.wini.owle.repo.BaseOwleRepoTest
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
-open class TypeVarianceRepositoryTest : UnconstrainedDeleteRepoTest<Long, TypeVarianceDao>() {
+open class TypeVariancesRepositoryTest : UnconstrainedDeleteRepoTest<Long, TypeVarianceDao>() {
     private val realRepo by KoinJavaComponent.inject<TypeVarianceRepository>(TypeVarianceRepository::class.java)
     override fun getRepo() = realRepo
     override fun modifyEntities(entities: List<TypeVarianceDao>): List<TypeVarianceDao> {
@@ -47,7 +35,7 @@ open class TypeVarianceRepositoryTest : UnconstrainedDeleteRepoTest<Long, TypeVa
         }
     }
 
-    override val implicatedTables = listOf(TypeVariance, TypeDeclarations, TypeDefinitions, VersionSpecs)
+    override val implicatedTables = listOf(TypeVariances, TypeDeclarations, TypeDefinitions, VersionSpecs)
 
     override val testModule: Module
         get() = module {
@@ -63,7 +51,7 @@ open class TypeVarianceRepositoryTest : UnconstrainedDeleteRepoTest<Long, TypeVa
     }
 
     override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, TypeVariance)
+        return EntityID(id, TypeVariances)
     }
 
 

@@ -1,5 +1,6 @@
 package com.wini.owle.repo.runs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.benchmarkingDataDao
 import com.wini.owle.entity.EntityTestInstanceFactory.userDao
@@ -45,7 +46,7 @@ open class BenchmarkingDataRepositoryTest: UnconstrainedDeleteRepoTest<Long, Ben
         }
     }
 
-    override val implicatedTables = listOf(BenchmarkingData, WorkflowExecutions, Workflows, Users)
+    override val implicatedTables = TestHelper.ImplicatedTables.RunsModule.BenchmarkingDatas
 
     override val testModule: Module
         get() = module {

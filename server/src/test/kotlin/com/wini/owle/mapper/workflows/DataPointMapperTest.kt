@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.workflows
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
@@ -26,7 +27,7 @@ open class DataPointMapperTest: BaseOwleMapperTest<DataPointDto, DataPointDao, D
     private val realMapper by KoinJavaComponent.inject<DataPointsMapper>(DataPointsMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = listOf(DataPoints, Workflows, TypeDeclarations, TypeDefinitions, VersionSpecs)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.WorkflowsModule.DataPoint
 
     override fun instantiateMapper(): DataPointsMapper {
         return realMapper

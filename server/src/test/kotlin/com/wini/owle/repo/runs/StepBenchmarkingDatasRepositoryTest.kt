@@ -18,7 +18,7 @@ import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import java.math.BigDecimal
 
-open class StepBenchmarkingDataRepositoryTest: UnconstrainedDeleteRepoTest<Long, StepBenchmarkingDataDao>() {
+open class StepBenchmarkingDatasRepositoryTest: UnconstrainedDeleteRepoTest<Long, StepBenchmarkingDataDao>() {
     private val realRepo by KoinJavaComponent.inject<StepBenchmarkingDataRepository>(StepBenchmarkingDataRepository::class.java)
     override fun getRepo() = realRepo
     override fun modifyEntities(entities: List<StepBenchmarkingDataDao>): List<StepBenchmarkingDataDao> {
@@ -43,7 +43,7 @@ open class StepBenchmarkingDataRepositoryTest: UnconstrainedDeleteRepoTest<Long,
     }
 
     override val implicatedTables = listOf(
-        StepBenchmarkingData,
+        StepBenchmarkingDatas,
         StepExecutions,
         WorkflowExecutions,
         Workflows,
@@ -104,7 +104,7 @@ open class StepBenchmarkingDataRepositoryTest: UnconstrainedDeleteRepoTest<Long,
     }
 
     override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, StepBenchmarkingData)
+        return EntityID(id, StepBenchmarkingDatas)
     }
 
 

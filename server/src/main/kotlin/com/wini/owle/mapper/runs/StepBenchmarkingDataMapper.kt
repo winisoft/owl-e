@@ -2,12 +2,10 @@ package com.wini.owle.mapper.runs
 
 import com.wini.owle.dto.ResourceUsageDto
 import com.wini.owle.dto.StepBenchmarkingDataDto
-import com.wini.owle.entity.StepBenchmarkingData
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.toBigDecimal
 import com.wini.owle.mapper.toDecimalValue
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class StepBenchmarkingDataMapper(

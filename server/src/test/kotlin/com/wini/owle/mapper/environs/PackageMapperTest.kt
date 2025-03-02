@@ -1,9 +1,11 @@
 package com.wini.owle.mapper.environs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.PackageDto
 import com.wini.owle.dto.VersionSpecDto
 import com.wini.owle.entity.Packages
 import com.wini.owle.entity.VersionSpecs
+import com.wini.owle.entity.WorkflowFolders
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.mapper.BaseOwleMapperTest
@@ -24,8 +26,7 @@ open class PackageMapperTest: BaseOwleMapperTest<PackageDto, PackageDao, Package
 
     private val realMapper by KoinJavaComponent.inject<PackagesMapper>(PackagesMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>>
-        get() = listOf(Packages, VersionSpecs)
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.EnvironsModule.Package
 
     override fun instantiateMapper(): PackagesMapper {
         return realMapper

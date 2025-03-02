@@ -1,12 +1,9 @@
 package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.TypeVarianceDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeVariance
 import com.wini.owle.entity.VarianceCardinality
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeVariancesMapper(

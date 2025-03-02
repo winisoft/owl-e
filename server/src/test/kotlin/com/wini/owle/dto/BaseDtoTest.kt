@@ -111,7 +111,7 @@ class DtoTest{
         @Nested
         inner class TypeUnionMemberDtoTest : BaseDtoTest<TypeUnionMemberDto>(TypeUnionMemberDto::class.java)
         @Nested
-        inner class TypeVarianceDtoTest : BaseDtoTest<TypeVarianceDto>(TypeVarianceDto::class.java)
+        inner class TypeVariancesDtoTest : BaseDtoTest<TypeVarianceDto>(TypeVarianceDto::class.java)
     }
 
     @Nested

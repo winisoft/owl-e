@@ -1,5 +1,6 @@
 package com.wini.owle.dll.typing
 
+import com.wini.owle.TestHelper
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
@@ -32,12 +33,7 @@ open class TypeDeclarationDllTest : KoinTest {
 
     @BeforeEach
     fun setUp() {
-        Database.connect(
-            url = "jdbc:mysql://localhost:3306/owle_test_db",
-            driver = "com.mysql.cj.jdbc.Driver",
-            user = "test_runner",
-            password = "test1234"
-        )
+        TestHelper.connectToTestDb()
         stopKoin()
         startKoin {
             modules(
@@ -54,12 +50,7 @@ open class TypeDeclarationDllTest : KoinTest {
 //                single<TypeDeclarationDll> { TypeDeclarationDll(get(), get(), get()) }
 //            })
         }
-        transaction {
-            exec("SET FOREIGN_KEY_CHECKS=0;")
-            SchemaUtils.drop(*implicatedTables.toTypedArray())
-            exec("SET FOREIGN_KEY_CHECKS=1;")
-            SchemaUtils.create(*implicatedTables.toTypedArray())
-        }
+        TestHelper.refreshTestDbData(implicatedTables)
     }
 
     /**

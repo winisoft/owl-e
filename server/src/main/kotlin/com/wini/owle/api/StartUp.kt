@@ -5,4 +5,6 @@ import io.ktor.server.application.*
 
 suspend fun Application.startup() {
     AppInitializer
+
+
 }

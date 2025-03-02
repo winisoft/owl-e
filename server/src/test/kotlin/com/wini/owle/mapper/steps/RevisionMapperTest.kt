@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.steps
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.revisionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
@@ -29,17 +30,7 @@ open class RevisionMapperTest: BaseOwleMapperTest<RevisionDto, RevisionDao, Revi
 
     private val realMapper by KoinJavaComponent.inject<RevisionsMapper>(RevisionsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = listOf(
-        Revisions,
-        DataPoints,
-        Workflows,
-        TypeDeclarations,
-        TypeDefinitions,
-        VersionSpecs,
-        Steps,
-        Tools,
-        Transformations
-    )
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.StepsModule.Revision
 
     override fun instantiateMapper(): RevisionsMapper { return realMapper }
 

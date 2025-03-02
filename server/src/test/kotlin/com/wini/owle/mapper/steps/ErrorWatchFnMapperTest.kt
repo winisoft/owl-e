@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.steps
 
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchDto
 import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchFnDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
@@ -23,16 +24,7 @@ open class ErrorWatchFnMapperTest: BaseOwleMapperTest<ErrorWatchFnDto, ErrorWatc
 
     private val realMapper by KoinJavaComponent.inject<ErrorWatchFnsMapper>(ErrorWatchFnsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = listOf(
-        ErrorWatches,
-        ErrorWatchFns,
-        Steps,
-        Workflows,
-        Tools,
-        TypeDeclarations,
-        TypeDefinitions,
-        VersionSpecs
-    )
+    override val implicatedTables = TestHelper.ImplicatedTables.StepsModule.ErrorWatchFn
 
     override fun instantiateMapper(): ErrorWatchFnsMapper { return realMapper }
 

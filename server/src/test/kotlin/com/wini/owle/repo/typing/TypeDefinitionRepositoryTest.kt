@@ -26,9 +26,13 @@ import kotlin.test.assertNull
 
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
+
 open class TypeDefinitionRepositoryTest : UnconstrainedDeleteRepoTest<Long, TypeDefinitionDao>() {
+
     private val realRepo by KoinJavaComponent.inject<TypeDefinitionRepository>(TypeDefinitionRepository::class.java)
+
     override fun getRepo() = realRepo
+
     override fun modifyEntities(entities: List<TypeDefinitionDao>): List<TypeDefinitionDao> {
         return transaction {
             entities.apply {

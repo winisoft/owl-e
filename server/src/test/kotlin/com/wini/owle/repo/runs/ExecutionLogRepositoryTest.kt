@@ -1,5 +1,6 @@
 package com.wini.owle.repo.runs
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.executionLogDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
@@ -30,10 +31,15 @@ import org.koin.java.KoinJavaComponent
 import kotlin.test.assertNotNull
 
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
+import org.jetbrains.exposed.dao.id.IdTable
+
 
 open class ExecutionLogRepositoryTest: UnconstrainedDeleteRepoTest<Long, ExecutionLogDao>() {
+
     private val realRepo by KoinJavaComponent.inject<ExecutionLogRepository>(ExecutionLogRepository::class.java)
+
     override fun getRepo() = realRepo
+
     override fun modifyEntities(entities: List<ExecutionLogDao>): List<ExecutionLogDao> {
         return transaction {
             entities.apply {
@@ -55,18 +61,7 @@ open class ExecutionLogRepositoryTest: UnconstrainedDeleteRepoTest<Long, Executi
         }
     }
 
-    override val implicatedTables = listOf(
-        ExecutionLogs,
-        StepExecutions,
-        WorkflowExecutions,
-        Workflows,
-        Users,
-        Steps,
-        Tools,
-        TypeDeclarations,
-        TypeDefinitions,
-        VersionSpecs
-    )
+    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.RunsModule.ExecutionLog
 
     override val testModule: Module
         get() = module {

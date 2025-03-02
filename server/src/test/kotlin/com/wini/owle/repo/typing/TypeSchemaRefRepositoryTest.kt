@@ -1,5 +1,6 @@
 package com.wini.owle.repo.typing
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
@@ -25,8 +26,7 @@ import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
 open class TypeSchemaRefRepositoryTest: UnconstrainedDeleteRepoTest<Long, TypeSchemaRefDao>() {
 
-    override val implicatedTables: List<IdTable<*>>
-        get() = listOf(TypeDefinitions, TypeDeclarations, TypeSchemaRefs)
+    override val implicatedTables = TestHelper.ImplicatedTables.TypingModule.TypeSchemaRef
 
     override val testModule: Module
         get() = module { }

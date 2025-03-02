@@ -1,14 +1,18 @@
 package com.wini.owle
 
-import com.wini.owle.api.RoutesRegistry
+import com.wini.owle.api.*
+import com.wini.owle.api.environs.PackageApi
 import com.wini.owle.entity.TableRegistry
 import org.koin.core.context.GlobalContext.startKoin
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.get
+
 
 object AppInitializer {
+
     init {
         val koin = startKoin {
             modules(appModule)
@@ -17,18 +21,59 @@ object AppInitializer {
         TableRegistry.registerTables()
 
         fun Application.module() {
+
             install(ContentNegotiation) {
                 json()
             }
 
-            val routesRegistry = koin.koin.get<RoutesRegistry>(RoutesRegistry::class)
 
             routing {
-                routesRegistry.routes.forEach{
-                    it.register(this)
-                }
-            }
 
+                get<PackageRepoApi>().register(this)
+                get<PackageApi>().register(this)
+                get<VersionSpecApi>().register(this)
+                get<ToolPackageDependencyApi>().register(this)
+
+                get<BenchmarkingDataApi>().register(this)
+                get<ExecutionLogApi>().register(this)
+                get<StepExecutionApi>().register(this)
+                get<TestCaseApi>().register(this)
+                get<TestExpectedOutcomeApi>().register(this)
+                get<TestInputApi>().register(this)
+                get<TestResultApi>().register(this)
+                get<WorkflowExecutionApi>().register(this)
+
+                get<ErrorWatchFnApi>().register(this)
+                get<ErrorWatchApi>().register(this)
+                get<InquisitionApi>().register(this)
+                get<WorkflowJunctionApi>().register(this)
+
+                get<AppliedTransformArgApi>().register(this)
+                get<AppliedTransformApi>().register(this)
+                get<TransformationArgApi>().register(this)
+                get<TransformTargetTypeApi>().register(this)
+                get<TransformationApi>().register(this)
+
+                get<TypeDeclarationApi>().register(this)
+                get<TypeDefinitionApi>().register(this)
+                get<TypeParameterApi>().register(this)
+                get<TypeSchemaRefApi>().register(this)
+                get<TypeVarianceApi>().register(this)
+                get<TypeUnionMemberApi>().register(this)
+
+                get<PaymentMethodApi>().register(this)
+                get<TagApi>().register(this)
+                get<UserApi>().register(this)
+                get<TagRelationApi>().register(this)
+
+                get<PhaseApi>().register(this)
+                get<StepApi>().register(this)
+                get<ToolParamApi>().register(this)
+                get<ToolApi>().register(this)
+                get<WorkflowFolderApi>().register(this)
+                get<WorkflowApi>().register(this)
+                get<ProvisionDataPointApi>().register(this)
+            }
         }
     }
 }

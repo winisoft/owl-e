@@ -3,7 +3,6 @@ package com.wini.owle.mapper
 import com.wini.owle.mapper.environs.PackageMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapperTest
 import com.wini.owle.mapper.environs.VersionSpecMapperTest
-import com.wini.owle.mapper.runs.*
 import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
 import com.wini.owle.mapper.typing.*
@@ -160,7 +159,7 @@ open class MapperTests {
 
         @Nested
         @DisplayName("TypeVarianceMapper")
-        inner class TypeVarianceTest: TypeVarianceMapperTest()
+        inner class TypeVariancesTest: TypeVariancesMapperTest()
 
     }
 
