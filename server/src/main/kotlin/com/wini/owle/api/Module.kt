@@ -1,8 +1,23 @@
 package com.wini.owle.api
 
 import com.wini.owle.api.environs.PackageApi
+import com.wini.owle.api.environs.PackageRepoApi
+import com.wini.owle.api.environs.ToolPackageDependencyApi
+import com.wini.owle.api.environs.VersionSpecApi
+import com.wini.owle.api.runs.*
+import com.wini.owle.api.steps.*
+import com.wini.owle.api.transforms.*
+import com.wini.owle.api.typing.*
+import com.wini.owle.api.user.PaymentMethodApi
+import com.wini.owle.api.user.TagApi
+import com.wini.owle.api.user.TagRelationApi
+import com.wini.owle.api.user.UserApi
+import com.wini.owle.api.workflows.PhaseApi
+import com.wini.owle.api.workflows.WorkflowApi
+import com.wini.owle.api.workflows.WorkflowFolderApi
 import com.wini.owle.dto.*
 import org.koin.dsl.module
+
 
 val apiModule = module {
 
@@ -44,17 +59,4 @@ val apiModule = module {
     single<GenericCompositeIdApi<TagRelationDto>> { TagRelationApi(get(), get()) }
     single<GenericCompositeIdApi<TransformationTargetTypeDto>> { TransformTargetTypeApi(get(), get()) }
     single<GenericCompositeIdApi<ToolPackageDependencyDto>> { ToolPackageDependencyApi(get(), get()) }
-}
-
-val routesModule = module {
-
-    includes(apiModule)
-
-    single { EnvironsRoutes(get(), get(), get(), get()) }
-    single {  RunsRoutes(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    single {  StepsRoutes(get(), get(), get(), get(), get(), get(), get(), get()) }
-    single {  TransformsRoutes(get(), get(), get(), get(), get()) }
-    single {  TypingRoutes(get(), get(), get(), get(), get(), get(), get()) }
-    single {  UserRoutes(get(), get(), get(), get()) }
-    single { WorkflowsRoutes(get(), get(), get(), get(), get(), get(), get()) }
 }

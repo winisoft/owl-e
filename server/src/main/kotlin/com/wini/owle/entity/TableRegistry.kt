@@ -4,6 +4,7 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.dao.id.CompositeIdTable
 import org.jetbrains.exposed.sql.Table
 
+
 object TableRegistry {
 
     private val longIdTableMap: MutableMap<String, LongIdTable> = mutableMapOf()
