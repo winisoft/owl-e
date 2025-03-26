@@ -20,9 +20,4 @@ class TypeParameterRepository : OwleLongIdRepoImpl<TypeParameterDao>() {
         }
     }
 
-    override fun getWhere(predicate: (TypeParameterDao) -> Boolean): List<TypeParameterDao> {
-        return transaction {
-            TypeParameterDao.all().filter(predicate)
-        }
-    }
 }

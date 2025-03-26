@@ -6,14 +6,9 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-class PackageRepoRepository : OwleLongIdRepoImpl<PackageRepoDao>() {
+open class PackageRepoRepository : OwleLongIdRepoImpl<PackageRepoDao>() {
 
     override val entityClass: LongEntityClass<PackageRepoDao>
         get() = PackageRepoDao
 
-    override fun getWhere(predicate: (PackageRepoDao) -> Boolean): List<PackageRepoDao> {
-        return transaction {
-            PackageRepoDao.all().filter(predicate)
-        }
-    }
 }

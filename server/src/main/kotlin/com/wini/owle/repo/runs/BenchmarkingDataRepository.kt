@@ -10,9 +10,4 @@ class BenchmarkingDataRepository : OwleLongIdRepoImpl<BenchmarkingDataDao>() {
     override val entityClass: LongEntityClass<BenchmarkingDataDao>
         get() = BenchmarkingDataDao
 
-    override fun getWhere(predicate: (BenchmarkingDataDao) -> Boolean): List<BenchmarkingDataDao> {
-        return transaction {
-            BenchmarkingDataDao.all().filter(predicate)
-        }
-    }
 }

@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 
+
 class WorkflowRepository : OwleLongIdRepoImpl<WorkflowDao>() {
 
     override val entityClass: LongEntityClass<WorkflowDao>
@@ -24,9 +25,4 @@ class WorkflowRepository : OwleLongIdRepoImpl<WorkflowDao>() {
         }
     }
 
-    override fun getWhere(predicate: (WorkflowDao) -> Boolean): List<WorkflowDao> {
-        return transaction {
-            WorkflowDao.all().filter(predicate)
-        }
-    }
 }

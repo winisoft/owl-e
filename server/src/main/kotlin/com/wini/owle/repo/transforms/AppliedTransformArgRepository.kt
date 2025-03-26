@@ -10,9 +10,4 @@ class AppliedTransformArgRepository : OwleLongIdRepoImpl<AppliedTransformArgDao>
     override val entityClass: LongEntityClass<AppliedTransformArgDao>
         get() = AppliedTransformArgDao
 
-    override fun getWhere(predicate: (AppliedTransformArgDao) -> Boolean): List<AppliedTransformArgDao> {
-        return transaction {
-            AppliedTransformArgDao.all().filter(predicate)
-        }
-    }
 }

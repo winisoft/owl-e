@@ -18,9 +18,4 @@ class PaymentMethodRepository : OwleLongIdRepoImpl<PaymentMethodDao>() {
         }
     }
 
-    override fun getWhere(predicate: (PaymentMethodDao) -> Boolean): List<PaymentMethodDao> {
-        return transaction {
-            PaymentMethodDao.all().filter(predicate)
-        }
-    }
 }

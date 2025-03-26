@@ -10,9 +10,4 @@ class TypeVarianceRepository : OwleLongIdRepoImpl<TypeVarianceDao>() {
     override val entityClass: LongEntityClass<TypeVarianceDao>
         get() = TypeVarianceDao
 
-    override fun getWhere(predicate: (TypeVarianceDao) -> Boolean): List<TypeVarianceDao> {
-        return transaction {
-            TypeVarianceDao.all().filter(predicate)
-        }
-    }
 }

@@ -24,9 +24,4 @@ class WorkflowFolderRepository : OwleLongIdRepoImpl<WorkflowFolderDao>() {
         }
     }
 
-    override fun getWhere(predicate: (WorkflowFolderDao) -> Boolean): List<WorkflowFolderDao> {
-        return transaction {
-            WorkflowFolderDao.all().filter(predicate)
-        }
-    }
 }

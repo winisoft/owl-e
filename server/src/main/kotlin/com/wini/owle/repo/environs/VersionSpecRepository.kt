@@ -10,9 +10,4 @@ class VersionSpecRepository : OwleLongIdRepoImpl<VersionSpecDao>() {
     override val entityClass: LongEntityClass<VersionSpecDao>
         get() = VersionSpecDao
 
-    override fun getWhere(predicate: (VersionSpecDao) -> Boolean): List<VersionSpecDao> {
-        return transaction {
-            VersionSpecDao.all().filter(predicate)
-        }
-    }
 }

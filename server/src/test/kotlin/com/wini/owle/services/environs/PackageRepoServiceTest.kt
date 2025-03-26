@@ -1,77 +1,94 @@
 package com.wini.owle.services.environs
 
-import com.wini.owle.dll.typing.TypeDeclarationDll
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.PackageRepoDto
-import com.wini.owle.services.BaseOwleServiceTest
+import com.wini.owle.entity.PackageRepoType
+import com.wini.owle.entity.PackageRepositories
+import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.repo.environs.PackageRepoRepository
+import com.wini.owle.repo.repositoryModule
+import com.wini.owle.services.OwleServiceUnitTest
 import com.wini.owle.services.Service
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
+import com.wini.owle.services.serviceModule
+import io.mockk.MockKMatcherScope
+import io.mockk.every
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IdTable
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import org.koin.test.inject
+import kotlin.reflect.KClass
 
 
-open class PackageRepoServiceTest {
+open class PackageRepoServiceTest: OwleServiceUnitTest<Long, PackageRepoDto, PackageRepoDao>() {
 
-    @Nested
-    @DisplayName("Repo Succeeds")
-    inner class PackageRepoServiceSuccessTest: BaseOwleServiceTest<Long, PackageRepoDto>() {
+    override val service: Service<Long, PackageRepoDto>
+        get() = getKoin().get<PackageRepoService>()
 
-        private val service: PackageRepoService by inject()
+    override val entityClass: KClass<PackageRepoDao>
+        get() = PackageRepoDao::class
 
-        override val testModule: Module
-            get() = module {
-                single<PackageRepoService> { PackageRepoService(get(), get()) }
+    override val tableName: String
+        get() = PackageRepositories.tableName
+
+    override fun createSampleDto(): PackageRepoDto {
+        return PackageRepoDto(
+            id = 1L,
+            sourceType = com.wini.owle.dto.enums.PackageRepoType.Pypi,
+            sourceUrl = "https://repo.example.com"
+        )
+    }
+
+    override fun createSampleEntity(): PackageRepoDao {
+        return transaction {
+            PackageRepoDao.new(1L) {
+                sourceType = PackageRepoType.PYPI
+                sourceUrl = "https://repo.example.com"
             }
-        //        stopKoin()
-        //        startKoin {
-        //            modules(
-        //                serviceModule,         // from main
-        //                repositoryModule,      // from main
-        //                mapperModule,          // from main
-        //                //dllModule,             // from main, if you need it
-        //                module {               // The purely test-tailored bits
-        //                    single<TypeDeclarationDll> { TypeDeclarationDll(get(), get(), get()) }
-        //                }
-        //            )
-        ////            modules(module {
-        ////                includes(serviceModule)
-        ////                single<TypeDeclarationDll> { TypeDeclarationDll(get(), get(), get()) }
-        ////            })
-        //        }
-        //        transaction {
-        //            exec("SET FOREIGN_KEY_CHECKS=0;")
-        //            SchemaUtils.drop(*implicatedTables.toTypedArray())
-        //            exec("SET FOREIGN_KEY_CHECKS=1;")
-        //            SchemaUtils.create(*implicatedTables.toTypedArray())
-        //        }
-        //    }
-
-        override fun getInstance(): PackageRepoDto {
-            TODO("Not yet implemented")
         }
-
-        override fun getService(): Service<Long, PackageRepoDto> {
-            TODO("Not yet implemented")
-        }
-
     }
 
-    @Nested
-    @DisplayName("Repo Fails")
-    inner class PackageRepoServiceFailureTest: BaseOwleServiceTest<Long, PackageRepoDto>() {
-
-        override val testModule: Module
-            get() = TODO("Not yet implemented")
-
-        override fun getInstance(): PackageRepoDto {
-            TODO("Not yet implemented")
-        }
-
-        override fun getService(): Service<Long, PackageRepoDto> {
-            TODO("Not yet implemented")
-        }
-
+    override fun createEntityId(id: Long): EntityID<Long> {
+        return EntityID(id, PackageRepositories)
     }
+
+    override fun extractEntityId(entity: PackageRepoDao): Long {
+        return entity.id.value
+    }
+
+    override fun extractDtoId(dto: PackageRepoDto): Long {
+        return dto.id
+    }
+
+    override fun setupMocks()  {
+        // Setup mapper mocks - now much simpler with regular methods
+        every { mapper.run { anyDto().toEntity() } } returns createSampleEntity()
+        every { mapper.run { anyEntity().toDto() } } returns createSampleDto()
+        every { mapper.run { listOf(anyDto()).toEntities() } } returns listOf(createSampleEntity())
+        every { mapper.run { listOf(anyEntity()).toDtos() } } returns listOf(createSampleDto())
+    }
+
+    override fun MockKMatcherScope.anyDto(): PackageRepoDto {
+        return any<PackageRepoDto>()
+    }
+
+    override fun MockKMatcherScope.anyEntity(): PackageRepoDao {
+        return any<PackageRepoDao>()
+    }
+
+    override val testModule: Module
+        get() = module {
+            includes(repositoryModule, serviceModule)
+            single<PackageRepoService> { PackageRepoService(get(), get()) }
+            single<PackageRepoRepository> { PackageRepoRepository() }
+        }
+
+    override fun getInstance(): PackageRepoDto {
+        return createSampleDto()
+    }
+
+    override val implicatedTables: List<IdTable<*>>
+        get() = TestHelper.ImplicatedTables.EnvironsModule.PackageRepo
+
 
 }

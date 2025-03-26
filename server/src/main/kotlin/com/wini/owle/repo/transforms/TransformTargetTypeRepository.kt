@@ -10,9 +10,4 @@ class TransformTargetTypeRepository : OwleCompositeIdRepoImpl<TransformTargetTyp
     override val entityClass: CompositeEntityClass<TransformTargetTypeDao>
         get() = TransformTargetTypeDao
 
-    override fun getWhere(predicate: (TransformTargetTypeDao) -> Boolean): List<TransformTargetTypeDao> {
-        return transaction {
-            TransformTargetTypeDao.all().filter(predicate)
-        }
-    }
 }

@@ -11,9 +11,4 @@ class TypeDefinitionRepository : OwleLongIdRepoImpl<TypeDefinitionDao>() {
     override val entityClass: LongEntityClass<TypeDefinitionDao>
         get() = TypeDefinitionDao
 
-    override fun getWhere(predicate: (TypeDefinitionDao) -> Boolean): List<TypeDefinitionDao> {
-        return transaction {
-            TypeDefinitionDao.all().filter(predicate)
-        }
-    }
 }

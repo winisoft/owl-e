@@ -10,9 +10,4 @@ class StepBenchmarkingDataRepository : OwleLongIdRepoImpl<StepBenchmarkingDataDa
     override val entityClass: LongEntityClass<StepBenchmarkingDataDao>
         get() = StepBenchmarkingDataDao
 
-    override fun getWhere(predicate: (StepBenchmarkingDataDao) -> Boolean): List<StepBenchmarkingDataDao> {
-        return transaction {
-            StepBenchmarkingDataDao.all().filter(predicate)
-        }
-    }
 }

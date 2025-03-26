@@ -14,12 +14,6 @@ class PackageRepository : OwleLongIdRepoImpl<PackageDao>() {
     override val entityClass: LongEntityClass<PackageDao>
         get() = PackageDao
 
-    override fun getWhere(predicate: (PackageDao) -> Boolean): List<PackageDao> {
-        return transaction {
-            PackageDao.all().filter(predicate)
-        }
-    }
-
     fun createPackageWithVersionSpec(
         packageName: String,
         disambiguation: String?,

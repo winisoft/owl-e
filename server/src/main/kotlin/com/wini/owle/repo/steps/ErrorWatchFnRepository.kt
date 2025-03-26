@@ -10,9 +10,4 @@ class ErrorWatchFnRepository : OwleLongIdRepoImpl<ErrorWatchFnDao>() {
     override val entityClass: LongEntityClass<ErrorWatchFnDao>
         get() = ErrorWatchFnDao
 
-    override fun getWhere(predicate: (ErrorWatchFnDao) -> Boolean): List<ErrorWatchFnDao> {
-        return transaction {
-            ErrorWatchFnDao.all().filter(predicate)
-        }
-    }
 }

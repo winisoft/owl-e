@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 
+
 open class PackageRepositoryTest: UnconstrainedDeleteRepoTest<Long, PackageDao>() {
 
     private val realRepo by KoinJavaComponent.inject<PackageRepository>(PackageRepository::class.java)

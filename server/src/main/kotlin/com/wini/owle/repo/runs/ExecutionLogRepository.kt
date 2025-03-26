@@ -10,9 +10,4 @@ class ExecutionLogRepository : OwleLongIdRepoImpl<ExecutionLogDao>() {
     override val entityClass: LongEntityClass<ExecutionLogDao>
         get() = ExecutionLogDao
 
-    override fun getWhere(predicate: (ExecutionLogDao) -> Boolean): List<ExecutionLogDao> {
-        return transaction {
-            ExecutionLogDao.all().filter(predicate)
-        }
-    }
 }

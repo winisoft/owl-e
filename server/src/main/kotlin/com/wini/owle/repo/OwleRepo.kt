@@ -67,6 +67,12 @@ abstract class OwleRepoImpl<ID: Any, T>: OwleRepo<ID, T> where T : Entity<ID> {
         }
     }
 
+    override fun getWhere(predicate: (T) -> Boolean): List<T> {
+        return transaction {
+            entityClass.all().filter(predicate)
+        }
+    }
+
     override fun create(entity: T): T {
         transaction {
             entity.flush()

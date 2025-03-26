@@ -10,9 +10,4 @@ class ProvisionRepository : OwleLongIdRepoImpl<ProvisionDao>() {
     override val entityClass: LongEntityClass<ProvisionDao>
         get() = ProvisionDao
 
-    override fun getWhere(predicate: (ProvisionDao) -> Boolean): List<ProvisionDao> {
-        return transaction {
-            ProvisionDao.all().filter(predicate)
-        }
-    }
 }

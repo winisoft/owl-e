@@ -31,9 +31,4 @@ class StepRepository : OwleLongIdRepoImpl<StepDao>() {
         }
     }
 
-    override fun getWhere(predicate: (StepDao) -> Boolean): List<StepDao> {
-        return transaction {
-            StepDao.all().filter(predicate)
-        }
-    }
 }

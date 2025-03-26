@@ -2,8 +2,8 @@ package com.wini.owle.services
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dll.BaseOwleDllTest
 import com.wini.owle.dto.BaseDto
-import com.wini.owle.mapper.BaseDbMapper
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.repo.OwleRepo
 import io.mockk.*
@@ -11,33 +11,29 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.id.EntityID
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.fail
-import org.koin.core.module.Module
-import org.koin.test.KoinTest
 import kotlin.reflect.KClass
 
 
-interface OwleServiceTest<ID: Any, T>: KoinTest where T : BaseDto {
+interface OwleServiceTest<ID: Any, T: BaseDto>: BaseOwleDllTest {
 
-    val testModule: Module
     fun getInstance(): T
-    fun getService(): Service<ID, T>
 
 }
 
 @ExtendWith(MockKExtension::class)
-abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
+abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleServiceTest<ID, Dto> {
 
     // Mocked dependencies
     @MockK
     protected lateinit var repository: OwleRepo<ID, E>
 
     @MockK
-    protected lateinit var mapper: BaseDbMapper<Dto, E>
+    protected lateinit var mapper: DbMapper<Dto, E>
 
     // The service to be tested - should be initialized in the setup method
     protected abstract val service: Service<ID, Dto>
@@ -61,18 +57,14 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
 
     @BeforeEach
     fun setUp() {
+        baseSetUp()
         MockKAnnotations.init(this)
         setupMocks()
     }
 
-    // Setup common mocking behavior
-    protected open fun setupMocks() {
-        // Setup mapper mocks - now much simpler with regular methods
-        every { mapper.toEntity(any()) } returns createSampleEntity()
-        every { mapper.toDto(any()) } returns createSampleDto()
-        every { mapper.toEntities(any()) } returns listOf(createSampleEntity())
-        every { mapper.toDtos(any()) } returns listOf(createSampleDto())
-    }
+    abstract fun setupMocks()
+    abstract fun MockKMatcherScope.anyDto(): Dto
+    abstract fun MockKMatcherScope.anyEntity(): E
 
     @Test
     fun `test create success`() {
@@ -80,9 +72,9 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
         val dto = createSampleDto()
         val entity = createSampleEntity()
 
-        every { mapper.toEntity(dto) } returns entity
+        every { mapper.run { dto.toEntity() } } returns entity
         every { repository.create(entity) } returns entity
-        every { mapper.toDto(entity) } returns dto
+        every { mapper.run { entity.toDto() } } returns dto
 
         // Act
         val result = service.create(dto)
@@ -93,8 +85,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
 
         // Verify
         verify { repository.create(entity) }
-        verify { mapper.toEntity(dto) }
-        verify { mapper.toDto(entity) }
+        verify { mapper.run { dto.toEntity() } }
+        verify { mapper.run { entity.toDto() } }
     }
 
     @Test
@@ -187,7 +179,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
 
         // Verify
         verify { repository.getAll(emptyList()) }
-        verify(exactly = entities.size) { mapper.run { any<E>().toDto() } }
+        verify(exactly = entities.size) { mapper.run { anyEntity().toDto() } }
     }
 
     @Test
@@ -256,8 +248,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
 
         // Verify
         verify { repository.create(any<List<E>>()) }
-        verify(exactly = dtos.size) { mapper.run { any<Dto>().toEntity() } }
-        verify(exactly = entities.size) { mapper.run { any<E>().toDto() } }
+        verify(exactly = dtos.size) { mapper.run { anyDto().toEntity() } }
+        verify(exactly = entities.size) { mapper.run { anyEntity().toDto() } }
     }
 
     @Test
@@ -282,8 +274,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>> {
 
         // Verify
         verify { repository.update(any<List<E>>()) }
-        verify(exactly = dtos.size) { mapper.run { any<Dto>().toEntity() } }
-        verify(exactly = entities.size) { mapper.run { any<E>().toDto() } }
+        verify(exactly = dtos.size) { mapper.run { anyDto().toEntity() } }
+        verify(exactly = entities.size) { mapper.run { anyEntity().toDto() } }
     }
 
     @Test

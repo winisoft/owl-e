@@ -10,9 +10,4 @@ class PreReqInjectionRepository : OwleLongIdRepoImpl<PreReqInjectionDao>() {
     override val entityClass: LongEntityClass<PreReqInjectionDao>
         get() = PreReqInjectionDao
 
-    override fun getWhere(predicate: (PreReqInjectionDao) -> Boolean): List<PreReqInjectionDao> {
-        return transaction {
-            PreReqInjectionDao.all().filter(predicate)
-        }
-    }
 }

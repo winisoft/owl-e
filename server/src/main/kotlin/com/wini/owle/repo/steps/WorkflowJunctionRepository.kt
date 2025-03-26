@@ -10,9 +10,4 @@ class WorkflowJunctionRepository : OwleLongIdRepoImpl<WorkflowJunctionDao>() {
     override val entityClass: LongEntityClass<WorkflowJunctionDao>
         get() = WorkflowJunctionDao
 
-    override fun getWhere(predicate: (WorkflowJunctionDao) -> Boolean): List<WorkflowJunctionDao> {
-        return transaction {
-            WorkflowJunctionDao.all().filter(predicate)
-        }
-    }
 }

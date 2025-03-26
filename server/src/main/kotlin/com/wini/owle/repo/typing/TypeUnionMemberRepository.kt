@@ -18,9 +18,4 @@ class TypeUnionMemberRepository : OwleCompositeIdRepoImpl<TypeUnionMemberDao>() 
         }
     }
 
-    override fun getWhere(predicate: (TypeUnionMemberDao) -> Boolean): List<TypeUnionMemberDao> {
-        return transaction {
-            TypeUnionMemberDao.all().filter(predicate)
-        }
-    }
 }

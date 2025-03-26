@@ -10,9 +10,4 @@ class TestInputRepository : OwleLongIdRepoImpl<TestInputDao>() {
     override val entityClass: LongEntityClass<TestInputDao>
         get() = TestInputDao
 
-    override fun getWhere(predicate: (TestInputDao) -> Boolean): List<TestInputDao> {
-        return transaction {
-            TestInputDao.all().filter(predicate)
-        }
-    }
 }

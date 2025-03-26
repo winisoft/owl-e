@@ -11,9 +11,4 @@ class ProvisionDataPointRepository : OwleCompositeIdRepoImpl<ProvisionDataPointD
     override val entityClass: CompositeEntityClass<ProvisionDataPointDao>
         get() = ProvisionDataPointDao
 
-    override fun getWhere(predicate: (ProvisionDataPointDao) -> Boolean): List<ProvisionDataPointDao> {
-        return transaction {
-            ProvisionDataPointDao.all().filter(predicate)
-        }
-    }
 }

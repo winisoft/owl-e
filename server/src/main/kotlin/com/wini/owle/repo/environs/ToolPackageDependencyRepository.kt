@@ -10,9 +10,4 @@ class ToolPackageDependencyRepository : OwleCompositeIdRepoImpl<ToolPackageDepen
     override val entityClass: CompositeEntityClass<ToolPackageDependencyDao>
         get() = ToolPackageDependencyDao
 
-    override fun getWhere(predicate: (ToolPackageDependencyDao) -> Boolean): List<ToolPackageDependencyDao> {
-        return transaction {
-            ToolPackageDependencyDao.all().filter(predicate)
-        }
-    }
 }

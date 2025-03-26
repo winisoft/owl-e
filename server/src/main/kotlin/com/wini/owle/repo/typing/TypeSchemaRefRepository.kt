@@ -10,9 +10,4 @@ class TypeSchemaRefRepository : OwleLongIdRepoImpl<TypeSchemaRefDao>() {
     override val entityClass: LongEntityClass<TypeSchemaRefDao>
         get() = TypeSchemaRefDao
 
-    override fun getWhere(predicate: (TypeSchemaRefDao) -> Boolean): List<TypeSchemaRefDao> {
-        return transaction {
-            TypeSchemaRefDao.all().filter(predicate)
-        }
-    }
 }

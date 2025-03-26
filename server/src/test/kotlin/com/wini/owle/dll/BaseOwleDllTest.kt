@@ -9,14 +9,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.module.Module
+import org.koin.test.KoinTest
 
 
-abstract class BaseOwleDllTest<ID: Any, Dto: BaseDto> {
+interface BaseOwleDllTest: KoinTest {
 
-    abstract val implicatedTables: List<IdTable<*>>
-    abstract val testModule: Module
-    abstract val dll: DLL<ID, Dto>
-
+    val implicatedTables: List<IdTable<*>>
+    val testModule: Module
 
     fun baseSetUp() {
         TestHelper.connectToTestDb()

@@ -26,9 +26,4 @@ class PhaseRepository : OwleLongIdRepoImpl<PhaseDao>() {
         }
     }
 
-    override fun getWhere(predicate: (PhaseDao) -> Boolean): List<PhaseDao> {
-        return transaction {
-            PhaseDao.all().filter(predicate)
-        }
-    }
 }

@@ -10,9 +10,4 @@ class StepExecutionRepository : OwleLongIdRepoImpl<StepExecutionDao>() {
     override val entityClass: LongEntityClass<StepExecutionDao>
         get() = StepExecutionDao
 
-    override fun getWhere(predicate: (StepExecutionDao) -> Boolean): List<StepExecutionDao> {
-        return transaction {
-            StepExecutionDao.all().filter(predicate)
-        }
-    }
 }

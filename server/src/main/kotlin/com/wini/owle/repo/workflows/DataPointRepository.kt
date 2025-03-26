@@ -18,9 +18,4 @@ class DataPointRepository : OwleLongIdRepoImpl<DataPointDao>() {
         }
     }
 
-    override fun getWhere(predicate: (DataPointDao) -> Boolean): List<DataPointDao> {
-        return transaction {
-            DataPointDao.all().filter(predicate)
-        }
-    }
 }

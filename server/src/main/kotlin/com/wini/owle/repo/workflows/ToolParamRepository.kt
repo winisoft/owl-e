@@ -18,9 +18,4 @@ class ToolParamRepository : OwleLongIdRepoImpl<ToolParamDao>() {
         }
     }
 
-    override fun getWhere(predicate: (ToolParamDao) -> Boolean): List<ToolParamDao> {
-        return transaction {
-            ToolParamDao.all().filter(predicate)
-        }
-    }
 }

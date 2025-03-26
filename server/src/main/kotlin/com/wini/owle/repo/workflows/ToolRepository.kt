@@ -10,9 +10,4 @@ class ToolRepository : OwleLongIdRepoImpl<ToolDao>() {
     override val entityClass: LongEntityClass<ToolDao>
         get() = ToolDao
 
-    override fun getWhere(predicate: (ToolDao) -> Boolean): List<ToolDao> {
-        return transaction {
-            ToolDao.all().filter(predicate)
-        }
-    }
 }
