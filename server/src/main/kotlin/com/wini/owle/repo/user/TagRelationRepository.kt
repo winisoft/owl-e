@@ -1,13 +1,7 @@
 package com.wini.owle.repo.user
 
 import com.wini.owle.entity.user.TagRelationDao
-import com.wini.owle.repo.OwleCompositeIdRepoImpl
-import org.jetbrains.exposed.dao.CompositeEntityClass
-import org.jetbrains.exposed.sql.transactions.transaction
+import com.wini.owle.repo.OwleRepoImpl
+import org.jetbrains.exposed.dao.id.CompositeID
 
-class TagRelationRepository : OwleCompositeIdRepoImpl<TagRelationDao>() {
-
-    override val entityClass: CompositeEntityClass<TagRelationDao>
-        get() = TagRelationDao
-
-}
+class TagRelationRepository: OwleRepoImpl<CompositeID, TagRelationDao>(TagRelationDao)

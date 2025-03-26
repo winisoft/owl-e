@@ -1,69 +1,19 @@
 package com.wini.owle.repo.workflows
 
-import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
-import com.wini.owle.entity.EntityTestInstanceFactory.phaseDao
 import com.wini.owle.entity.workflows.PhaseDao
-import com.wini.owle.repo.BaseOwleRepoTest
 import com.wini.owle.repo.OwleRepo
+import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
-import org.koin.dsl.module
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
-open class PhaseRepositoryTest: UnconstrainedDeleteRepoTest<Long, PhaseDao>() {
-
-    override val implicatedTables = TestHelper.ImplicatedTables.WorkflowsModule.Phase
-
-    override val testModule: Module
-        get() = module { }
-
-    override fun getInstance(): PhaseDao {
-        return phaseDao()
-    }
-
-    override fun getList(): List<PhaseDao> {
-        return listOf(phaseDao(), phaseDao())
-    }
-
-    override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, Phases)
-    }
-
-    override fun getRepo(): OwleRepo<Long, PhaseDao> {
-        return PhaseRepository()
-    }
-
-    override fun modifyEntities(entities: List<PhaseDao>): List<PhaseDao> {
-        return transaction {
-            entities.apply {
-                get(0).apply {
-                    name = "Modified 1"
-                }
-                get(1).apply {
-                    name = "Modified 2"
-                }
-            }
-        }
-    }
-
-    override fun modifyEntity(entity: PhaseDao): PhaseDao {
-        return transaction {
-            entity.apply {
-                name = "Modified"
-            }
-        }
-    }
-
+open class PhaseRepositoryTest: DbLayerIntegrationTests<Long, PhaseDao>() {
 
 
     @Test
@@ -111,5 +61,19 @@ open class PhaseRepositoryTest: UnconstrainedDeleteRepoTest<Long, PhaseDao>() {
             val fetchedPhase = repo.getById(EntityID(childPhaseId, Phases))
             assertNull(fetchedPhase, "Phase child should have been deleted on cascade from parent Phase delete")
         }
+    }
+
+    override val implicatedTables: List<IdTable<*>>
+        get() = TODO("Not yet implemented")
+
+    override val testModule: Module
+        get() = TODO("Not yet implemented")
+
+    override fun getRepo(): OwleRepo<Long, PhaseDao> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getInstance(): PhaseDao {
+        TODO("Not yet implemented")
     }
 }

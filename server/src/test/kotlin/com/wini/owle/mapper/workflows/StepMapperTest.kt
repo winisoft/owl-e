@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.toolDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
@@ -27,7 +27,7 @@ open class StepMapperTest: BaseOwleMapperTest<StepDto, StepDao, StepsMapper>() {
     private val realMapper by KoinJavaComponent.inject<StepsMapper>(StepsMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.WorkflowsModule.Step
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.WorkflowsModule.Step
 
     override fun instantiateMapper(): StepsMapper { return realMapper }
 

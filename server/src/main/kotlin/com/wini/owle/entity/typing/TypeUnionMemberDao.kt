@@ -10,15 +10,21 @@ import org.jetbrains.exposed.dao.id.EntityID
  * Represents individual member types within a union type declaration.
  * Supports union types such as 'Union[int, str]' by linking each member type to the union type declaration.
  */
-class TypeUnionMemberDao(id: EntityID<CompositeID>) : CompositeEntity(id) {
+class TypeUnionMemberDao(
+    id: EntityID<CompositeID>
+) : CompositeEntity(id) {
+
     companion object : CompositeEntityClass<TypeUnionMemberDao>(TypeUnionMembers) {
 
-        fun create(unionTypeId: Long, memberTypeId: Long): TypeUnionMemberDao {
-            val compositeID = CompositeID {
+        fun buildId(unionTypeId: Long, memberTypeId: Long): CompositeID {
+            return CompositeID {
                 it[TypeUnionMembers.unionTypeDeclaration] = unionTypeId
                 it[TypeUnionMembers.memberTypeDeclaration] = memberTypeId
             }
+        }
 
+        fun create(unionTypeId: Long, memberTypeId: Long): TypeUnionMemberDao {
+            val compositeID = buildId(unionTypeId, memberTypeId)
             return TypeUnionMemberDao(EntityID(compositeID, TypeUnionMembers))
         }
 

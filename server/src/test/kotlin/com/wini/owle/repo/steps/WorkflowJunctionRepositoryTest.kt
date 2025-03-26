@@ -1,80 +1,23 @@
 package com.wini.owle.repo.steps
 
 import com.wini.owle.entity.*
-import com.wini.owle.entity.EntityTestInstanceFactory.inquisitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowJunctionDao
 import com.wini.owle.entity.steps.WorkflowJunctionDao
-import com.wini.owle.repo.BaseOwleRepoTest
+import com.wini.owle.repo.OwleRepo
+import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 import com.wini.owle.repo.workflows.StepRepository
 import com.wini.owle.repo.workflows.WorkflowRepository
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.koin.core.module.Module
-import org.koin.dsl.module
-import org.koin.java.KoinJavaComponent
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
-open class WorkflowJunctionRepositoryTest : UnconstrainedDeleteRepoTest<Long, WorkflowJunctionDao>() {
-    private val realRepo by KoinJavaComponent.inject<WorkflowJunctionRepository>(WorkflowJunctionRepository::class.java)
-    override fun getRepo() = realRepo
-    override fun modifyEntities(entities: List<WorkflowJunctionDao>): List<WorkflowJunctionDao> {
-        return transaction {
-            entities.apply {
-                get(0).apply {
-                    this.triggerInquisition = inquisitionDao()
-                }
-                get(1).apply {
-                    this.triggerInquisition = inquisitionDao()
-                }
-            }
-        }
-    }
-
-    override fun modifyEntity(entity: WorkflowJunctionDao): WorkflowJunctionDao {
-        return transaction {
-            entity.apply {
-                this.triggerInquisition = null
-            }
-        }
-    }
-
-    override val implicatedTables = listOf(
-        WorkflowJunctions,
-        Steps,
-        Workflows,
-        Tools,
-        TypeDeclarations,
-        TypeDefinitions,
-        VersionSpecs,
-        Inquisitions,
-        DataPoints
-    )
-
-    override val testModule: Module
-        get() = module {
-            single<WorkflowJunctionRepository> { WorkflowJunctionRepository() }
-        }
-
-    override fun getInstance(): WorkflowJunctionDao {
-        return workflowJunctionDao()
-    }
-
-    override fun getList(): List<WorkflowJunctionDao> {
-        return listOf(workflowJunctionDao(), workflowJunctionDao())
-    }
-
-    override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, WorkflowJunctions)
-    }
-
+open class WorkflowJunctionRepositoryTest : DbLayerIntegrationTests<Long, WorkflowJunctionDao>() {
 
 
     @Test
@@ -108,5 +51,18 @@ open class WorkflowJunctionRepositoryTest : UnconstrainedDeleteRepoTest<Long, Wo
                 "WorkflowJunction should have been deleted on cascade from Workflow delete"
             )
         }
+    }
+
+    override val implicatedTables: List<IdTable<*>>
+        get() = TODO("Not yet implemented")
+    override val testModule: Module
+        get() = TODO("Not yet implemented")
+
+    override fun getRepo(): OwleRepo<Long, WorkflowJunctionDao> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getInstance(): WorkflowJunctionDao {
+        TODO("Not yet implemented")
     }
 }

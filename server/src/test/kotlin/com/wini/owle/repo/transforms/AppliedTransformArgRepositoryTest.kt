@@ -6,7 +6,6 @@ import com.wini.owle.entity.transforms.AppliedTransformArgDao
 import com.wini.owle.entity.transforms.AppliedTransformDao
 import com.wini.owle.entity.transforms.TransformationArgDao
 import com.wini.owle.entity.transforms.TransformationDao
-import com.wini.owle.repo.BaseOwleRepoTest
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Assertions
@@ -20,29 +19,12 @@ import kotlin.test.assertNotNull
 
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
-open class AppliedTransformArgRepositoryTest : UnconstrainedDeleteRepoTest<Long, AppliedTransformArgDao>() {
-    private val realRepo by KoinJavaComponent.inject<AppliedTransformArgRepository>(AppliedTransformArgRepository::class.java)
-    override fun getRepo() = realRepo
-    override fun modifyEntities(entities: List<AppliedTransformArgDao>): List<AppliedTransformArgDao> {
-        return transaction {
-            entities.apply {
-                get(0).apply {
-                    value = "Updated Arg Value 1"
-                }
-                get(1).apply {
-                    value = "Updated Arg Value 2"
-                }
-            }
-        }
-    }
 
-    override fun modifyEntity(entity: AppliedTransformArgDao): AppliedTransformArgDao {
-        return transaction {
-            entity.apply {
-                value = "Updated Arg Value"
-            }
-        }
-    }
+open class AppliedTransformArgRepositoryTest : DbLayerIntegrationTests<Long, AppliedTransformArgDao>() {
+
+    private val realRepo by KoinJavaComponent.inject<AppliedTransformArgRepository>(AppliedTransformArgRepository::class.java)
+
+    override fun getRepo() = realRepo
 
     override val implicatedTables = listOf(
         AppliedTransformArgs,
@@ -95,14 +77,5 @@ open class AppliedTransformArgRepositoryTest : UnconstrainedDeleteRepoTest<Long,
 
         return appliedTransformArg
     }
-
-    override fun getList(): List<AppliedTransformArgDao> {
-        return listOf(getInstance(), getInstance())
-    }
-
-    override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, AppliedTransformArgs)
-    }
-
 
 }

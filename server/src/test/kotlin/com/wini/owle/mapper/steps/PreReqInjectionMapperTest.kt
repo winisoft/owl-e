@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.preReqInjectionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowJunctionDto
@@ -29,7 +29,7 @@ open class PreReqInjectionMapperTest: BaseOwleMapperTest<PreReqInjectionDto, Pre
 
     private val realMapper by KoinJavaComponent.inject<PreReqInjectionsMapper>(PreReqInjectionsMapper::class.java)
 
-    override val implicatedTables = TestHelper.ImplicatedTables.StepsModule.PreReqInjection
+    override val implicatedTables = ImplicatedTables.StepsModule.PreReqInjection
 
     override fun instantiateMapper(): PreReqInjectionsMapper { return realMapper }
 

@@ -2,7 +2,6 @@ package com.wini.owle.services
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.BaseOwleDllTest
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.repo.OwleRepo
@@ -19,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.reflect.KClass
 
 
-interface OwleServiceTest<ID: Any, T: BaseDto>: BaseOwleDllTest {
+interface OwleServiceTest<ID: Any, T: BaseDto> {
 
     fun getInstance(): T
 
@@ -57,7 +56,6 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
     @BeforeEach
     fun setUp() {
-        baseSetUp()
         MockKAnnotations.init(this)
         setupMocks()
     }

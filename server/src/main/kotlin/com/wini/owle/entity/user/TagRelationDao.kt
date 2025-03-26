@@ -1,6 +1,7 @@
 package com.wini.owle.entity.user
 
 import com.wini.owle.entity.TagRelations
+import com.wini.owle.entity.TransformTargetTypes
 import org.jetbrains.exposed.dao.CompositeEntity
 import org.jetbrains.exposed.dao.CompositeEntityClass
 import org.jetbrains.exposed.dao.id.CompositeID
@@ -12,15 +13,20 @@ import org.jetbrains.exposed.dao.id.EntityID
  */
 class TagRelationDao(id: EntityID<CompositeID>) : CompositeEntity(id) {
     companion object : CompositeEntityClass<TagRelationDao>(TagRelations) {
+
+        fun buildId(parentTagId: Long, childTagId: Long): CompositeID {
+            return CompositeID {
+                it[TagRelations.parentTag] = parentTagId
+                it[TagRelations.childTag] = childTagId
+            }
+        }
+
         /**
          * Creates a new TagRelationDao by building the CompositeID from the
          * two TagDao objects. This matches typical Exposed usage for composite keys.
          */
         fun create(parentTagId: Long, childTagId: Long): TagRelationDao {
-            val compositeId = CompositeID {
-                it[TagRelations.parentTag] = parentTagId
-                it[TagRelations.childTag] = childTagId
-            }
+            val compositeId = buildId(parentTagId, childTagId)
             return TagRelationDao(EntityID(compositeId, TagRelations))
         }
     }

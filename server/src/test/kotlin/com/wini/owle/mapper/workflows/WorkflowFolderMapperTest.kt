@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowFolderDto
 import com.wini.owle.dto.WorkflowFolderDto
 import com.wini.owle.entity.EntityTestInstanceFactory
@@ -24,7 +24,7 @@ open class WorkflowFolderMapperTest: BaseOwleMapperTest<WorkflowFolderDto, Workf
     private val realMapper by KoinJavaComponent.inject<WorkflowFoldersMapper>(WorkflowFoldersMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.WorkflowsModule.WorkflowFolder
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.WorkflowsModule.WorkflowFolder
 
     override fun instantiateMapper(): WorkflowFoldersMapper {
         return realMapper

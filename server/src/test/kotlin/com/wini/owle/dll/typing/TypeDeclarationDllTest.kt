@@ -1,6 +1,6 @@
 package com.wini.owle.dll.typing
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
@@ -33,7 +33,7 @@ open class TypeDeclarationDllTest : KoinTest {
 
     @BeforeEach
     fun setUp() {
-        TestHelper.connectToTestDb()
+
         stopKoin()
         startKoin {
             modules(
@@ -45,12 +45,7 @@ open class TypeDeclarationDllTest : KoinTest {
                     single<TypeDeclarationDll> { TypeDeclarationDll(get(), get(), get()) }
                 }
             )
-//            modules(module {
-//                includes(serviceModule)
-//                single<TypeDeclarationDll> { TypeDeclarationDll(get(), get(), get()) }
-//            })
         }
-        TestHelper.refreshTestDbData(implicatedTables)
     }
 
     /**

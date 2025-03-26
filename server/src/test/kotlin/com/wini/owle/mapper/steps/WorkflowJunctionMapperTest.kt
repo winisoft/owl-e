@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.inquisitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
@@ -29,7 +29,7 @@ open class WorkflowJunctionMapperTest: BaseOwleMapperTest<WorkflowJunctionDto, W
     private val realMapper by KoinJavaComponent.inject<WorkflowJunctionsMapper>(WorkflowJunctionsMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.StepsModule.WorkflowJunction
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.StepsModule.WorkflowJunction
 
     override fun instantiateMapper(): WorkflowJunctionsMapper { return realMapper }
 

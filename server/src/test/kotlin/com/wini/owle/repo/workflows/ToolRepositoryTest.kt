@@ -3,7 +3,7 @@ package com.wini.owle.repo.workflows
 import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.toolDao
 import com.wini.owle.entity.workflows.ToolDao
-import com.wini.owle.repo.BaseOwleRepoTest
+import com.wini.owle.repo.OwleRepo
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Assertions
@@ -15,50 +15,23 @@ import org.koin.java.KoinJavaComponent
 import kotlin.test.assertNotNull
 
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
+import org.jetbrains.exposed.dao.id.IdTable
+import org.koin.core.module.Module
 
-open class ToolRepositoryTest : UnconstrainedDeleteRepoTest<Long, ToolDao>() {
+open class ToolRepositoryTest : DbLayerIntegrationTests<Long, ToolDao>() {
 
     private val realRepo by KoinJavaComponent.inject<ToolRepository>(ToolRepository::class.java)
-    override fun getRepo() = realRepo
-    override fun modifyEntities(entities: List<ToolDao>): List<ToolDao> {
-        return transaction {
-            entities.apply {
-                get(0).apply {
-                    body = "Updated Tool Body 1"
-                }
-                get(1).apply {
-                    body = "Updated Tool Body 2"
-                }
-            }
-        }
-    }
+    override val implicatedTables: List<IdTable<*>>
+        get() = TODO("Not yet implemented")
+    override val testModule: Module
+        get() = TODO("Not yet implemented")
 
-    override fun modifyEntity(entity: ToolDao): ToolDao {
-        return transaction {
-            entity.apply {
-                body = "Updated Tool Body"
-            }
-        }
-    }
-
-    override val implicatedTables = listOf(Tools, TypeDeclarations, TypeDefinitions, VersionSpecs)
-
-    override val testModule = module {
-        single<ToolRepository> { ToolRepository() }
-        single { EntityTestInstanceFactory }
+    override fun getRepo(): OwleRepo<Long, ToolDao> {
+        TODO("Not yet implemented")
     }
 
     override fun getInstance(): ToolDao {
-        return toolDao()
+        TODO("Not yet implemented")
     }
-
-    override fun getList(): List<ToolDao> {
-        return listOf(toolDao(), toolDao())
-    }
-
-    override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, Tools)
-    }
-
 
 }

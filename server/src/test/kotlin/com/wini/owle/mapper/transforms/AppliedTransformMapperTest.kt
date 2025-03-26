@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.AppliedTransformDto
 import com.wini.owle.dto.DtoTestInstanceFactory.appliedTransformDto
 import com.wini.owle.entity.*
@@ -24,7 +24,7 @@ open class AppliedTransformMapperTest: BaseOwleMapperTest<AppliedTransformDto, A
 
     private val realMapper by KoinJavaComponent.inject<AppliedTransformsMapper>(AppliedTransformsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.TransformsModule.AppliedTransform
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.TransformsModule.AppliedTransform
 
     override fun instantiateMapper(): AppliedTransformsMapper { return realMapper }
 

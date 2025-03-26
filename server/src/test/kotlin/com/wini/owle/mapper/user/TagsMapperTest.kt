@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.tagDto
 import com.wini.owle.dto.TagDto
 import com.wini.owle.dto.UserDto
@@ -32,7 +32,7 @@ open class TagsMapperTest: BaseOwleMapperTest<TagDto, TagDao, TagsMapper>() {
     private val realMapper by KoinJavaComponent.inject<TagsMapper>(TagsMapper::class.java)
 
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.UserModule.Tag
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.UserModule.Tag
 
     override fun instantiateMapper(): TagsMapper { return realMapper }
 

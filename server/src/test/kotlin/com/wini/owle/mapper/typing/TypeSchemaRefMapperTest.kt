@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeSchemaRefDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeSchemaRefDao
@@ -23,7 +23,7 @@ open class TypeSchemaRefMapperTest: BaseOwleMapperTest<TypeSchemaRefDto, TypeSch
 
     private val realMapper by KoinJavaComponent.inject<TypeSchemaRefsMapper>(TypeSchemaRefsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.TypingModule.TypeSchemaRef
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.TypingModule.TypeSchemaRef
 
     override fun instantiateMapper(): TypeSchemaRefsMapper { return realMapper }
 

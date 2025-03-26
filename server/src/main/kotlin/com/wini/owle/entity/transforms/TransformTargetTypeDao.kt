@@ -1,5 +1,6 @@
 package com.wini.owle.entity.transforms
 
+import com.wini.owle.entity.ProvisionDataPoints
 import com.wini.owle.entity.TransformTargetTypes
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import org.jetbrains.exposed.dao.CompositeEntity
@@ -14,11 +15,15 @@ import org.jetbrains.exposed.dao.id.EntityID
 class TransformTargetTypeDao(id: EntityID<CompositeID>) : CompositeEntity(id) {
     companion object : CompositeEntityClass<TransformTargetTypeDao>(TransformTargetTypes) {
 
-        fun create(transformationId: Long, typeDeclarationId: Long): TransformTargetTypeDao {
-            val compositeID = CompositeID {
+        fun buildId(transformationId: Long, typeDeclarationId: Long): CompositeID {
+            return CompositeID {
                 it[TransformTargetTypes.transformation] = transformationId
                 it[TransformTargetTypes.eligibleTypeDeclaration] = typeDeclarationId
             }
+        }
+
+        fun create(transformationId: Long, typeDeclarationId: Long): TransformTargetTypeDao {
+            val compositeID = buildId(transformationId, typeDeclarationId)
             val entityID = EntityID(compositeID, TransformTargetTypes)
             return TransformTargetTypeDao(entityID)
         }

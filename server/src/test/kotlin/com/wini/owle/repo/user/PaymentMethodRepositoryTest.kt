@@ -1,13 +1,9 @@
 package com.wini.owle.repo.user
 
-import com.wini.owle.entity.CardBrand
-import com.wini.owle.entity.EntityTestInstanceFactory
+import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.paymentMethodDao
 import com.wini.owle.entity.EntityTestInstanceFactory.userDao
-import com.wini.owle.entity.PaymentMethods
-import com.wini.owle.entity.Users
 import com.wini.owle.entity.user.PaymentMethodDao
-import com.wini.owle.repo.BaseOwleRepoTest
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Assertions
@@ -23,32 +19,11 @@ import kotlin.test.assertNotNull
 import com.wini.owle.repo.UnconstrainedDeleteRepoTest
 
 
-open class PaymentMethodRepositoryTest : UnconstrainedDeleteRepoTest<Long, PaymentMethodDao>() {
+open class PaymentMethodRepositoryTest : DbLayerIntegrationTests<Long, PaymentMethodDao>() {
 
     private val realRepo by KoinJavaComponent.inject<PaymentMethodRepository>(PaymentMethodRepository::class.java)
 
     override fun getRepo() = realRepo
-
-    override fun modifyEntities(entities: List<PaymentMethodDao>): List<PaymentMethodDao> {
-        return transaction {
-            entities.apply {
-                get(0).apply {
-                    cardBrand = CardBrand.EFTPOS_AUSTRALIA
-                }
-                get(1).apply {
-                    cardBrand = CardBrand.DINERS_CLUB
-                }
-            }
-        }
-    }
-
-    override fun modifyEntity(entity: PaymentMethodDao): PaymentMethodDao {
-        return transaction {
-            entity.apply {
-                cardBrand = CardBrand.EFTPOS_AUSTRALIA
-            }
-        }
-    }
 
     override val implicatedTables = listOf(PaymentMethods, Users)
 
@@ -61,18 +36,6 @@ open class PaymentMethodRepositoryTest : UnconstrainedDeleteRepoTest<Long, Payme
         val user = userDao()
         return paymentMethodDao(user = user)
     }
-
-    override fun getList(): List<PaymentMethodDao> {
-        val user1 = userDao(email = "jim@jim.com")
-        val user2 = userDao(email = "jon@jon.com")
-        return listOf(paymentMethodDao(user = user1), paymentMethodDao(user = user2))
-    }
-
-    override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, PaymentMethods)
-    }
-
-
 
     @Test
     fun `test PaymentMethods can be retrieved by associated User`() {

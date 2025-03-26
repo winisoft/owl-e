@@ -1,13 +1,8 @@
 package com.wini.owle.repo.transforms
 
 import com.wini.owle.entity.transforms.AppliedTransformArgDao
-import com.wini.owle.repo.OwleLongIdRepoImpl
+import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class AppliedTransformArgRepository : OwleLongIdRepoImpl<AppliedTransformArgDao>() {
-
-    override val entityClass: LongEntityClass<AppliedTransformArgDao>
-        get() = AppliedTransformArgDao
-
-}
+class AppliedTransformArgRepository: OwleRepoImpl<Long, AppliedTransformArgDao>(AppliedTransformArgDao)

@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.toolDto
@@ -27,7 +27,7 @@ open class ErrorWatchMapperTest: BaseOwleMapperTest<ErrorWatchDto, ErrorWatchDao
 
     private val realMapper by KoinJavaComponent.inject<ErrorWatchesMapper>(ErrorWatchesMapper::class.java)
 
-    override val implicatedTables = TestHelper.ImplicatedTables.StepsModule.ErrorWatch
+    override val implicatedTables = ImplicatedTables.StepsModule.ErrorWatch
 
     override fun instantiateMapper(): ErrorWatchesMapper { return realMapper }
 

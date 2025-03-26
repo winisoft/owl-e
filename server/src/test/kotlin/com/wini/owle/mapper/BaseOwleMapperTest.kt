@@ -1,6 +1,6 @@
 package com.wini.owle.mapper
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.dto.PackageDto
 import com.wini.owle.dto.VersionSpecDto
@@ -48,8 +48,6 @@ abstract class BaseOwleMapperTest<Dto: BaseDto, T: Entity<Long>, M : DbMapper<Dt
     fun setUp() {
         stopKoin()
         startKoin { modules(testModule) }
-        TestHelper.connectToTestDb()
-        TestHelper.refreshTestDbData(implicatedTables)
         mapper = instantiateMapper()
     }
 

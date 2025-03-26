@@ -1,6 +1,6 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
@@ -70,8 +70,6 @@ open class TypeDeclarationServiceTest {
         clearAllMocks()
         stopKoin()
         startKoin { modules(testModule) }
-        TestHelper.connectToTestDb()
-        TestHelper.refreshTestDbData(implicatedTables)
 
     }
 

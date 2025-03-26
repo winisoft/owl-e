@@ -1,7 +1,6 @@
 package com.wini.owle.api
 
 import com.wini.owle.repo.OwleRepo
-import com.wini.owle.repo.OwleRepoTest
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable

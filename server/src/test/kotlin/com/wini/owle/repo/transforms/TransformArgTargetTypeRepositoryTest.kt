@@ -8,7 +8,6 @@ import com.wini.owle.entity.transforms.TransformTargetTypeDao
 import com.wini.owle.entity.transforms.TransformationDao
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.typing.TypeDefinitionDao
-import com.wini.owle.repo.BaseOwleRepoTest
 import com.wini.owle.repo.OwleRepo
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID

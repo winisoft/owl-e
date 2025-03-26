@@ -10,10 +10,8 @@ import kotlin.reflect.KProperty1
 
 
 interface OwleRepo<ID: Any, T> where T : Entity<ID> {
-
+    
     val entityClass: EntityClass<ID, T>
-
-    fun idExtractor(entity: T): ID
 
     fun getAll(): List<T>
 
@@ -41,7 +39,9 @@ interface OwleRepo<ID: Any, T> where T : Entity<ID> {
 
 }
 
-abstract class OwleRepoImpl<ID: Any, T>: OwleRepo<ID, T> where T : Entity<ID> {
+abstract class OwleRepoImpl<ID: Any, T>(
+    override val entityClass: EntityClass<ID, T>
+): OwleRepo<ID, T> where T : Entity<ID> {
 
     override fun getAll(): List<T> {
         return getAllEagerLoading(emptyList())

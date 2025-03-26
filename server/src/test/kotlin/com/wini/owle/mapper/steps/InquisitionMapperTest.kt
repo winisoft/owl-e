@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.inquisitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
@@ -30,7 +30,7 @@ open class InquisitionMapperTest: BaseOwleMapperTest<InquisitionDto, Inquisition
 
     private val realMapper by KoinJavaComponent.inject<InquisitionsMapper>(InquisitionsMapper::class.java)
 
-    override val implicatedTables: List<IdTable<*>> = TestHelper.ImplicatedTables.StepsModule.Inquisition
+    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.StepsModule.Inquisition
 
     override fun instantiateMapper(): InquisitionsMapper {
         return realMapper

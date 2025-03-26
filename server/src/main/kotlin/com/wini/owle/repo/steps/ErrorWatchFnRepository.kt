@@ -1,13 +1,8 @@
 package com.wini.owle.repo.steps
 
 import com.wini.owle.entity.steps.ErrorWatchFnDao
-import com.wini.owle.repo.OwleLongIdRepoImpl
+import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class ErrorWatchFnRepository : OwleLongIdRepoImpl<ErrorWatchFnDao>() {
-
-    override val entityClass: LongEntityClass<ErrorWatchFnDao>
-        get() = ErrorWatchFnDao
-
-}
+class ErrorWatchFnRepository: OwleRepoImpl<Long, ErrorWatchFnDao>(ErrorWatchFnDao)

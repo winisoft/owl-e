@@ -2,15 +2,12 @@ package com.wini.owle.repo.workflows
 
 import com.wini.owle.entity.Workflows
 import com.wini.owle.entity.workflows.DataPointDao
-import com.wini.owle.repo.OwleLongIdRepoImpl
+import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class DataPointRepository : OwleLongIdRepoImpl<DataPointDao>() {
-
-    override val entityClass: LongEntityClass<DataPointDao>
-        get() = DataPointDao
+class DataPointRepository: OwleRepoImpl<Long, DataPointDao>(DataPointDao) {
 
     fun getDataPointsOfWorkflow(workflowId: Long): List<DataPointDao> {
         return getWhere {

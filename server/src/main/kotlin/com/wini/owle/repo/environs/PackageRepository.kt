@@ -2,17 +2,14 @@ package com.wini.owle.repo.environs
 
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.entity.environs.VersionSpecDao
-import com.wini.owle.repo.OwleLongIdRepoImpl
-import org.jetbrains.exposed.dao.LongEntityClass
+import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.sql.transactions.transaction
+
 
 /**
  * Provides data access operations for `PackageEntity` objects.
  */
-class PackageRepository : OwleLongIdRepoImpl<PackageDao>() {
-
-    override val entityClass: LongEntityClass<PackageDao>
-        get() = PackageDao
+class PackageRepository: OwleRepoImpl<Long, PackageDao>(PackageDao) {
 
     fun createPackageWithVersionSpec(
         packageName: String,

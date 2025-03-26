@@ -1,6 +1,8 @@
 package com.wini.owle.entity.environs
 
 import com.wini.owle.entity.ToolPackageDependencies
+import com.wini.owle.entity.TypeUnionMembers
+import com.wini.owle.entity.typing.TypeUnionMemberDao
 import com.wini.owle.entity.workflows.ToolDao
 import org.jetbrains.exposed.dao.CompositeEntity
 import org.jetbrains.exposed.dao.CompositeEntityClass
@@ -15,16 +17,20 @@ import org.jetbrains.exposed.dao.id.EntityID
 class ToolPackageDependencyDao(id: EntityID<CompositeID>) : CompositeEntity(id) {
     companion object : CompositeEntityClass<ToolPackageDependencyDao>(ToolPackageDependencies) {
 
+        fun buildId(toolId: Long, pkgId: Long, versionId: Long): CompositeID {
+            return CompositeID {
+                it[ToolPackageDependencies.tool] = toolId
+                it[ToolPackageDependencies.packageEntity] = pkgId
+                it[ToolPackageDependencies.versionSpec] = versionId
+            }
+        }
+
         /**
          * Creates a new TagRelationDao by building the CompositeID from the
          * two TagDao objects. This matches typical Exposed usage for composite keys.
          */
         fun create(toolId: Long, pkgId: Long, versionId: Long): ToolPackageDependencyDao {
-            val compositeId = CompositeID {
-                it[ToolPackageDependencies.tool] = toolId
-                it[ToolPackageDependencies.packageEntity] = pkgId
-                it[ToolPackageDependencies.versionSpec] = versionId
-            }
+            val compositeId = buildId(toolId, pkgId, versionId)
             return ToolPackageDependencyDao(EntityID(compositeId, ToolPackageDependencies))
         }
     }

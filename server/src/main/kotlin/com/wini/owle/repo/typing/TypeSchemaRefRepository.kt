@@ -1,13 +1,8 @@
 package com.wini.owle.repo.typing
 
 import com.wini.owle.entity.typing.TypeSchemaRefDao
-import com.wini.owle.repo.OwleLongIdRepoImpl
+import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class TypeSchemaRefRepository : OwleLongIdRepoImpl<TypeSchemaRefDao>() {
-
-    override val entityClass: LongEntityClass<TypeSchemaRefDao>
-        get() = TypeSchemaRefDao
-
-}
+class TypeSchemaRefRepository: OwleRepoImpl<Long, TypeSchemaRefDao>(TypeSchemaRefDao)

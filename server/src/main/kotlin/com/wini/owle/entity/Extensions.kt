@@ -25,14 +25,3 @@ fun <ID : Any, T : Entity<ID>> EntityClass<ID, T>.getByIdWith(
         it.id.value == id
     }
 }
-
-//fun <ID : Any, T : Entity<ID>> EntityClass<ID, T>.getByIdWith(
-//    id: ID,
-//    collectionProperties: List<KProperty1<T, Iterable<Entity<*>>>>
-//): T? {
-//    return this.findById(id)?.apply {
-//        collectionProperties.forEach { prop ->
-//            this.load(prop)
-//        }
-//    }
-//}

@@ -1,6 +1,6 @@
 package com.wini.owle.services.environs
 
-import com.wini.owle.TestHelper
+import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.PackageRepoDto
 import com.wini.owle.entity.PackageRepoType
 import com.wini.owle.entity.PackageRepositories
@@ -17,6 +17,7 @@ import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.koin.java.KoinJavaComponent.getKoin
 import kotlin.reflect.KClass
 
 
@@ -76,19 +77,8 @@ open class PackageRepoServiceTest: OwleServiceUnitTest<Long, PackageRepoDto, Pac
         return any<PackageRepoDao>()
     }
 
-    override val testModule: Module
-        get() = module {
-            includes(repositoryModule, serviceModule)
-            single<PackageRepoService> { PackageRepoService(get(), get()) }
-            single<PackageRepoRepository> { PackageRepoRepository() }
-        }
-
     override fun getInstance(): PackageRepoDto {
         return createSampleDto()
     }
-
-    override val implicatedTables: List<IdTable<*>>
-        get() = TestHelper.ImplicatedTables.EnvironsModule.PackageRepo
-
 
 }

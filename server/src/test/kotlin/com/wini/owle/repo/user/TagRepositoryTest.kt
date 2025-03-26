@@ -19,31 +19,14 @@ import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 
 
-open class TagRepositoryTest : UnconstrainedDeleteRepoTest<Long, TagDao>() {
-    private val realRepo by KoinJavaComponent.inject<TagRepository>(TagRepository::class.java)
-    override fun getRepo() = realRepo
-    override fun modifyEntities(entities: List<TagDao>): List<TagDao> {
-        return transaction {
-            entities.apply {
-                get(0).apply {
-                    name = "Updated Tag Name 1"
-                }
-                get(1).apply {
-                    name = "Updated Tag Name 2"
-                }
-            }
-        }
-    }
+open class TagRepositoryTest : DbLayerIntegrationTests<Long, TagDao>() {
 
-    override fun modifyEntity(entity: TagDao): TagDao {
-        return transaction {
-            entity.apply {
-                name = "Updated Tag Name"
-            }
-        }
-    }
+    private val realRepo by KoinJavaComponent.inject<TagRepository>(TagRepository::class.java)
+
+    override fun getRepo() = realRepo
 
     override val implicatedTables = listOf(Tags, TagRelations, Users, StepTags, WorkflowTags)
+
     override val testModule: Module
         get() = module {
             single<TagRepository> { TagRepository() }
@@ -52,18 +35,6 @@ open class TagRepositoryTest : UnconstrainedDeleteRepoTest<Long, TagDao>() {
     override fun getInstance(): TagDao {
         return tagDao()
     }
-
-    override fun getList(): List<TagDao> {
-        val user1 = userDao(email = "jim@jim.com")
-        val user2 = userDao(email = "jon@jon.com")
-        return listOf(tagDao(user = user1), tagDao(user = user2))
-    }
-
-    override fun makeEntityID(id: Long): EntityID<Long> {
-        return EntityID(id, Tags)
-    }
-
-
 
     @Nested
     @DisplayName("Parent / Child Relationships")
