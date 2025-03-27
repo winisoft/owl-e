@@ -1,31 +1,16 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
-import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.provisionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.toolParamDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
-import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.ProvisionDto
-import com.wini.owle.entity.*
-import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
 import com.wini.owle.entity.EntityTestInstanceFactory.provisionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.EntityTestInstanceFactory.toolParamDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
-import com.wini.owle.entity.StoreMethod.Companion.toDto
 import com.wini.owle.entity.steps.ProvisionDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -35,7 +20,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class ProvisionMapperTest: BaseOwleMapperTest<ProvisionDto, ProvisionDao, ProvisionsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<ProvisionsMapper>(ProvisionsMapper::class.java)
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.StepsModule.Provision
 
     override fun instantiateMapper(): ProvisionsMapper { return realMapper }
 

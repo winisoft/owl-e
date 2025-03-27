@@ -5,13 +5,8 @@ import com.wini.owle.dto.DtoTestInstanceFactory.toolParamDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.ToolParamDto
 import com.wini.owle.entity.EntityTestInstanceFactory.toolParamDao
-import com.wini.owle.entity.ToolParams
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.workflows.ToolParamDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
 import org.koin.java.KoinJavaComponent
@@ -22,8 +17,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class ToolParamMapperTest: BaseOwleMapperTest<ToolParamDto, ToolParamDao, ToolParamsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<ToolParamsMapper>(ToolParamsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = listOf(ToolParams, TypeDeclarations, TypeDefinitions, VersionSpecs)
 
 
     override fun instantiateMapper(): ToolParamsMapper { return realMapper }

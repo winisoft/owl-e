@@ -1,21 +1,14 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
 import com.wini.owle.dto.TypeDefinitionDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeDefinitionDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -24,8 +17,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class TypeDefinitionMapperTest: BaseOwleMapperTest<TypeDefinitionDto, TypeDefinitionDao, TypeDefinitionsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TypeDefinitionsMapper>(TypeDefinitionsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> =  ImplicatedTables.TypingModule.TypeDefinition
 
     override fun instantiateMapper(): TypeDefinitionsMapper { return realMapper }
 

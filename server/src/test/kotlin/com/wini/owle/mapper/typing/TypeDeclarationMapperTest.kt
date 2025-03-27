@@ -1,6 +1,5 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
@@ -8,12 +7,8 @@ import com.wini.owle.dto.TypeDeclarationDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
 import org.koin.java.KoinJavaComponent
@@ -24,8 +19,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class TypeDeclarationMapperTest: BaseOwleMapperTest<TypeDeclarationDto, TypeDeclarationDao, TypeDeclarationsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TypeDeclarationsMapper>(TypeDeclarationsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.TypingModule.TypeDeclaration
 
     override fun instantiateMapper(): TypeDeclarationsMapper { return realMapper }
 

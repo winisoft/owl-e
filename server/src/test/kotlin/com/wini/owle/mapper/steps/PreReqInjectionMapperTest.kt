@@ -1,11 +1,9 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.preReqInjectionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowJunctionDto
 import com.wini.owle.dto.PreReqInjectionDto
-import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
 import com.wini.owle.entity.EntityTestInstanceFactory.inquisitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.preReqInjectionDao
@@ -14,12 +12,8 @@ import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowJunctionDao
 import com.wini.owle.entity.steps.PreReqInjectionDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -28,8 +22,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class PreReqInjectionMapperTest: BaseOwleMapperTest<PreReqInjectionDto, PreReqInjectionDao, PreReqInjectionsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<PreReqInjectionsMapper>(PreReqInjectionsMapper::class.java)
-
-    override val implicatedTables = ImplicatedTables.StepsModule.PreReqInjection
 
     override fun instantiateMapper(): PreReqInjectionsMapper { return realMapper }
 

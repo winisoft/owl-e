@@ -1,21 +1,12 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.PackageDto
 import com.wini.owle.dto.VersionSpecDto
-import com.wini.owle.entity.Packages
-import com.wini.owle.entity.VersionSpecs
-import com.wini.owle.entity.WorkflowFolders
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.mapperModule
-import com.wini.owle.repo.environs.PackageRepoRepository
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.core.module.Module
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import kotlin.test.assertEquals
 
@@ -25,8 +16,6 @@ import kotlin.test.assertEquals
 open class PackageMapperTest: BaseOwleMapperTest<PackageDto, PackageDao, PackagesMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<PackagesMapper>(PackagesMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.EnvironsModule.Package
 
     override fun instantiateMapper(): PackagesMapper {
         return realMapper

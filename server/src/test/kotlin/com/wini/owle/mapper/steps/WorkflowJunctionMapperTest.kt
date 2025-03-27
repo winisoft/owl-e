@@ -1,24 +1,18 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.inquisitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowJunctionDto
 import com.wini.owle.dto.WorkflowJunctionDto
-import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.inquisitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
 import com.wini.owle.entity.steps.WorkflowJunctionDao
 import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowJunctionDao
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -28,8 +22,6 @@ open class WorkflowJunctionMapperTest: BaseOwleMapperTest<WorkflowJunctionDto, W
 
     private val realMapper by KoinJavaComponent.inject<WorkflowJunctionsMapper>(WorkflowJunctionsMapper::class.java)
 
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.StepsModule.WorkflowJunction
 
     override fun instantiateMapper(): WorkflowJunctionsMapper { return realMapper }
 

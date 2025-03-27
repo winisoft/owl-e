@@ -1,17 +1,12 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeSchemaRefDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeSchemaRefDao
 import com.wini.owle.dto.TypeSchemaRefDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.TypeSchemaRefs
 import com.wini.owle.entity.typing.TypeSchemaRefDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
 import org.koin.java.KoinJavaComponent
@@ -22,8 +17,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class TypeSchemaRefMapperTest: BaseOwleMapperTest<TypeSchemaRefDto, TypeSchemaRefDao, TypeSchemaRefsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TypeSchemaRefsMapper>(TypeSchemaRefsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.TypingModule.TypeSchemaRef
 
     override fun instantiateMapper(): TypeSchemaRefsMapper { return realMapper }
 

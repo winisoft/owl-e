@@ -1,6 +1,5 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.toolDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
@@ -9,12 +8,10 @@ import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.StepDto
 import com.wini.owle.dto.UserDesignedMetadataDto
-import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.DateTimeConverter
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.TestInstance
@@ -26,8 +23,6 @@ open class StepMapperTest: BaseOwleMapperTest<StepDto, StepDao, StepsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<StepsMapper>(StepsMapper::class.java)
 
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.WorkflowsModule.Step
 
     override fun instantiateMapper(): StepsMapper { return realMapper }
 

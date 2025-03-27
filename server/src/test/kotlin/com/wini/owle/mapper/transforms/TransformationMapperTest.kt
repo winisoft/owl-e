@@ -1,6 +1,5 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.transformationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
@@ -9,18 +8,10 @@ import com.wini.owle.dto.TransformationDto
 import com.wini.owle.entity.EntityTestInstanceFactory.transformationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
-import com.wini.owle.entity.Transformations
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.transforms.TransformationDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -29,8 +20,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class TransformationMapperTest: BaseOwleMapperTest<TransformationDto, TransformationDao, TransformationsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TransformationsMapper>(TransformationsMapper::class.java)
-
-    override val implicatedTables = ImplicatedTables.TransformsModule.Transformation
 
     override fun instantiateMapper(): TransformationsMapper { return realMapper }
 

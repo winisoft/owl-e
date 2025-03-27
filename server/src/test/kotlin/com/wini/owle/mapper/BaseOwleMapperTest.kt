@@ -1,20 +1,7 @@
 package com.wini.owle.mapper
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.BaseDto
-import com.wini.owle.dto.PackageDto
-import com.wini.owle.dto.VersionSpecDto
-import com.wini.owle.entity.PackageRepositories
-import com.wini.owle.entity.Packages
-import com.wini.owle.entity.VersionSpecs
-import com.wini.owle.entity.environs.PackageDao
-import com.wini.owle.entity.environs.VersionSpecDao
-import com.wini.owle.mapper.environs.PackagesMapper
-import com.wini.owle.mapper.environs.VersionSpecsMapper
 import org.jetbrains.exposed.dao.Entity
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
@@ -31,11 +18,6 @@ import kotlin.test.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class BaseOwleMapperTest<Dto: BaseDto, T: Entity<Long>, M : DbMapper<Dto, T>>: KoinTest {
-
-    /**
-     * List of Exposed tables that this test manipulates.
-     */
-    abstract val implicatedTables: List<IdTable<*>>
 
     /**
      * Mapper S.U.T.

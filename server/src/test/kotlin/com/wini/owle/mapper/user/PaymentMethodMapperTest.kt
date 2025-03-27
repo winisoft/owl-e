@@ -1,28 +1,17 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.paymentMethodDto
 import com.wini.owle.dto.DtoTestInstanceFactory.userDto
 import com.wini.owle.dto.PaymentMethodDto
 import com.wini.owle.entity.CardBrand.Companion.toDto
 import com.wini.owle.entity.EntityTestInstanceFactory.paymentMethodDao
-import com.wini.owle.entity.PaymentMethods
-import com.wini.owle.entity.Users
 import com.wini.owle.entity.user.PaymentMethodDao
 import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.DateTimeConverter
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
-import kotlinx.datetime.toInstant
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.time.format.DateTimeFormatter
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -30,8 +19,6 @@ open class PaymentMethodMapperTest: BaseOwleMapperTest<PaymentMethodDto, Payment
 
     private val realMapper by KoinJavaComponent.inject<PaymentMethodsMapper>(PaymentMethodsMapper::class.java)
 
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.UserModule.PaymentMethod
 
     override fun instantiateMapper(): PaymentMethodsMapper { return realMapper }
 

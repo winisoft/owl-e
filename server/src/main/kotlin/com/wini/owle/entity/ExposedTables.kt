@@ -140,7 +140,7 @@ object DataPoints : LongIdTable("data_points") {
     val presetValue = text("presetValue").nullable()
     val storeMethod = enumerationByName("storeMethod", 10, StoreMethod::class).default(StoreMethod.TEXT)
     val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val description = text("description")
+    val description = text("description").nullable()
     val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
     val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
 }

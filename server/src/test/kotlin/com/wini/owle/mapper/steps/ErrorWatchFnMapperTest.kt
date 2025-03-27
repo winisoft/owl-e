@@ -1,18 +1,15 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchDto
 import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchFnDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.ErrorWatchFnDto
-import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.errorWatchDao
 import com.wini.owle.entity.EntityTestInstanceFactory.errorWatchFnDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.steps.ErrorWatchFnDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.TestInstance
@@ -23,8 +20,6 @@ import org.koin.java.KoinJavaComponent
 open class ErrorWatchFnMapperTest: BaseOwleMapperTest<ErrorWatchFnDto, ErrorWatchFnDao, ErrorWatchFnsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<ErrorWatchFnsMapper>(ErrorWatchFnsMapper::class.java)
-
-    override val implicatedTables = ImplicatedTables.StepsModule.ErrorWatchFn
 
     override fun instantiateMapper(): ErrorWatchFnsMapper { return realMapper }
 

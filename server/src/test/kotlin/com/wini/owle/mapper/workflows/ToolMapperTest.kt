@@ -1,17 +1,11 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.toolDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.ToolDto
 import com.wini.owle.entity.EntityTestInstanceFactory.toolDao
-import com.wini.owle.entity.Tools
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.workflows.ToolDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.TestInstance
@@ -22,8 +16,6 @@ import org.koin.java.KoinJavaComponent
 open class ToolMapperTest: BaseOwleMapperTest<ToolDto, ToolDao, ToolsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<ToolsMapper>(ToolsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.WorkflowsModule.Tool
 
     override fun instantiateMapper(): ToolsMapper { return realMapper }
 

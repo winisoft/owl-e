@@ -1,18 +1,12 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.typeBoundDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.TypeBoundsDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeBoundDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
-import com.wini.owle.entity.TypeBounds
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeBoundDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
 
@@ -24,8 +18,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class TypeBoundMapperTest: BaseOwleMapperTest<TypeBoundsDto, TypeBoundDao, TypeBoundsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TypeBoundsMapper>(TypeBoundsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.TypingModule.TypeBound
 
     override fun instantiateMapper(): TypeBoundsMapper { return realMapper }
 

@@ -1,19 +1,12 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowFolderDto
 import com.wini.owle.dto.WorkflowFolderDto
-import com.wini.owle.entity.EntityTestInstanceFactory
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowFolderDao
-import com.wini.owle.entity.WorkflowFolders
 import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -23,8 +16,6 @@ open class WorkflowFolderMapperTest: BaseOwleMapperTest<WorkflowFolderDto, Workf
 
     private val realMapper by KoinJavaComponent.inject<WorkflowFoldersMapper>(WorkflowFoldersMapper::class.java)
 
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.WorkflowsModule.WorkflowFolder
 
     override fun instantiateMapper(): WorkflowFoldersMapper {
         return realMapper

@@ -1,6 +1,5 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.revisionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
@@ -8,7 +7,6 @@ import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.RevisionDto
-import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
 import com.wini.owle.entity.EntityTestInstanceFactory.revisionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
@@ -17,7 +15,6 @@ import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
 import com.wini.owle.entity.StoreMethod.Companion.toDto
 import com.wini.owle.entity.steps.RevisionDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
 
@@ -29,8 +26,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class RevisionMapperTest: BaseOwleMapperTest<RevisionDto, RevisionDao, RevisionsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<RevisionsMapper>(RevisionsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.StepsModule.Revision
 
     override fun instantiateMapper(): RevisionsMapper { return realMapper }
 

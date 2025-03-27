@@ -1,25 +1,16 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
 import com.wini.owle.dto.DtoTestInstanceFactory.inquisitionDto
 import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
 import com.wini.owle.dto.InquisitionDto
-import com.wini.owle.entity.DataPoints
 import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
 import com.wini.owle.entity.EntityTestInstanceFactory.inquisitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
-import com.wini.owle.entity.Inquisitions
-import com.wini.owle.entity.Steps
-import com.wini.owle.entity.Workflows
 import com.wini.owle.entity.steps.InquisitionDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
 
 import org.koin.java.KoinJavaComponent
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -29,8 +20,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class InquisitionMapperTest: BaseOwleMapperTest<InquisitionDto, InquisitionDao, InquisitionsMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<InquisitionsMapper>(InquisitionsMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.StepsModule.Inquisition
 
     override fun instantiateMapper(): InquisitionsMapper {
         return realMapper

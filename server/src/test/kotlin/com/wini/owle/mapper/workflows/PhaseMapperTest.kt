@@ -1,87 +1,86 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.phaseDto
 import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
 import com.wini.owle.dto.PhaseDto
-import com.wini.owle.dto.UserDesignedMetadataDto
-import com.wini.owle.entity.DataPoints
-import com.wini.owle.entity.EntityTestInstanceFactory.phaseDao
-import com.wini.owle.entity.Steps
-import com.wini.owle.entity.WorkflowFolders
-import com.wini.owle.entity.Workflows
+import com.wini.owle.dto.WorkflowDto
+import com.wini.owle.entity.EntityTestInstanceFactory
 import com.wini.owle.entity.workflows.PhaseDao
-import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.DateTimeConverter
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Transaction
+import com.wini.owle.entity.workflows.WorkflowDao
+import com.wini.owle.mapper.BaseMapperUnitTest
+import com.wini.owle.models.metadata.UserDesignedMetadata
+import io.mockk.*
+import kotlinx.datetime.LocalDateTime
+import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-open class PhaseMapperTest: BaseOwleMapperTest<PhaseDto, PhaseDao, PhasesMapper>() {
+open class PhaseMapperTest: BaseMapperUnitTest<PhaseDto, PhaseDao, PhasesMapper>() {
 
-    private val realMapper by KoinJavaComponent.inject<PhasesMapper>(PhasesMapper::class.java)
-
-        override val implicatedTables: List<IdTable<*>> = ImplicatedTables.WorkflowsModule.Phase
-
-    override fun instantiateMapper(): PhasesMapper {
-        return realMapper
+    private val workflowMapper: WorkflowsMapper = mockk()
+    private lateinit var mockWorkflowDto: WorkflowDto
+    private lateinit var mockWorkflowEntity: WorkflowDao
+    
+    override fun createMapperWithMocks(): PhasesMapper {
+        // Setup workflow mocks
+        mockWorkflowDto = workflowDto(id = 1)
+        mockWorkflowEntity = EntityTestInstanceFactory.workflowDao(id=1)
+        
+        // Mock workflow mapper behavior
+        every { workflowMapper.run { any<WorkflowDto>().toEntity() } } returns mockWorkflowEntity
+        every { workflowMapper.run { any<WorkflowDao>().toDto() } } returns mockWorkflowDto
+        
+        return PhasesMapper(workflowMapper)
+    }
+    
+    override fun createNewDto(): PhaseDto {
+        return phaseDto(id = 0, workflow = mockWorkflowDto)
+    }
+    
+    override fun createExistingDto(id: Long): PhaseDto {
+        return phaseDto(id = id, workflow = mockWorkflowDto)
     }
 
-    override fun Transaction.dto(id: Long): PhaseDto {
-        return phaseDto()
+    override fun createMockEntity(id: Long): PhaseDao {
+        return EntityTestInstanceFactory.phaseDao(id=id, workflow = mockWorkflowEntity)
     }
 
-    override fun Transaction.existingDao(): PhaseDao {
-        return phaseDao()
-    }
-
-    override fun Transaction.existingDaoDto(): Pair<PhaseDao, PhaseDto> {
-        val dao = existingDao()
-        val dto = dao.run {
-            phaseDto(
-                id = id.value,
-                workflow = workflow.run {
-                    workflowDto(
-                        id = id.value,
-                        name = name,
-                        description = description,
-                        pythonVersion = pythonVersion,
-                        parentFolder = null,
-                        metadata = UserDesignedMetadataDto.mock,
-                        createdAt = DateTimeConverter.toString(createdAt),
-                        updatedAt = DateTimeConverter.toString(updatedAt)
-                    )
-                },
-                parentPhase = null,
-                name = name,
-                description = description,
-                displayOrder = displayOrder
-            )
+    override fun setupMockForNewEntity(dto: PhaseDto, entity: PhaseDao) {
+        mockkObject(PhaseDao.Companion)
+        every {
+            PhaseDao.new(captureLambda<PhaseDao.() -> Unit>())
+        } answers {
+            val mockEntity = createMockEntity(0)
+            with(mockEntity) {
+                lambda<PhaseDao.() -> Unit>().invoke(this)
+            }
+            mockEntity
         }
-        return dao to dto
     }
-
-    override fun assertDaoPropsExpectedMatch(dao: PhaseDao, dto: PhaseDto) {
-        assertEquals(dao.name, dto.name)
-        assertEquals(dao.description, dto.description)
-        assertEquals(dao.workflow.id.value, dto.workflow.id)
-        assertEquals(dao.parentPhase, dto.parentPhase)
+    
+    override fun setupMockForExistingEntity(dto: PhaseDto, entity: PhaseDao) {
+        // Mock PhaseDao.findById
+        mockkObject(PhaseDao.Companion)
+        every { PhaseDao.findById(dto.id) } returns entity
     }
-
-    override fun assertDtoPropsExpectedMatch(dto: PhaseDto, dao: PhaseDao) {
-        assertEquals(dto.name, dao.name)
-        assertEquals(dto.description, dao.description)
-        assertEquals(dto.workflow.id, dao.workflow.id.value)
-        assertEquals(dto.parentPhase, dao.parentPhase)
+    
+    override fun setupMockForNonExistentEntity(dto: PhaseDto) {
+        // Mock PhaseDao.findById returning null
+        mockkObject(PhaseDao.Companion)
+        every { PhaseDao.findById(dto.id) } returns null
     }
-
-
+    
+    override fun assertEntityMatchesDto(entity: PhaseDao, dto: PhaseDto) {
+        assertEquals(dto.name, entity.name)
+        assertEquals(dto.description, entity.description)
+        assertEquals(dto.displayOrder, entity.displayOrder)
+    }
+    
+    override fun assertDtoMatchesEntity(dto: PhaseDto, entity: PhaseDao) {
+        assertEquals(entity.name, dto.name)
+        assertEquals(entity.description, dto.description)
+        assertEquals(entity.id.value, dto.id)
+    }
 }

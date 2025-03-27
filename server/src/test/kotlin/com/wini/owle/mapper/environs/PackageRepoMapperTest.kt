@@ -2,28 +2,20 @@ package com.wini.owle.mapper.environs
 
 import com.wini.owle.dto.PackageRepoDto
 import com.wini.owle.entity.PackageRepoType.Companion.toDto
-import com.wini.owle.entity.PackageRepositories
 import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.mapper.BaseOwleMapperTest
-import com.wini.owle.mapper.mapperModule
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
-import org.koin.core.module.Module
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
 import kotlin.test.assertEquals
 import com.wini.owle.dto.enums.PackageRepoType as PackageRepoTypeDto
 import com.wini.owle.entity.PackageRepoType as PackageRepoTypeEntity
-import org.koin.dsl.module
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 open class PackageRepoMapperTest: BaseOwleMapperTest<PackageRepoDto, PackageRepoDao, PackageRepoMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<PackageRepoMapper>(PackageRepoMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = listOf(PackageRepositories)
 
     override fun instantiateMapper(): PackageRepoMapper { return realMapper }
 

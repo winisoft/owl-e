@@ -1,13 +1,8 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
 import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
 import com.wini.owle.dto.TypeVarianceDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.TypeVariances
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.dto.DtoTestInstanceFactory.typeVarianceDto
@@ -17,7 +12,6 @@ import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeVarianceDao
 import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
 import com.wini.owle.entity.VarianceCardinality.Companion.toDto
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance
 
@@ -29,8 +23,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 open class TypeVariancesMapperTest: BaseOwleMapperTest<TypeVarianceDto, TypeVarianceDao, TypeVariancesMapper>() {
 
     private val realMapper by KoinJavaComponent.inject<TypeVariancesMapper>(TypeVariancesMapper::class.java)
-
-    override val implicatedTables: List<IdTable<*>> = ImplicatedTables.TypingModule.TypeVariance
 
     override fun instantiateMapper(): TypeVariancesMapper { return realMapper }
 
