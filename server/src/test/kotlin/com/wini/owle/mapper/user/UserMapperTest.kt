@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class UserMapperTest {
+open class UserMapperTest {
 
     private lateinit var mapper: UsersMapper
     private val factory: DaoFactory<UserDao, Long> = mockk()

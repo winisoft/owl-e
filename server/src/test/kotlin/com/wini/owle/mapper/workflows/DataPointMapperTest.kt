@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class DataPointMapperTest {
+open class DataPointMapperTest {
 
     private lateinit var mapper: DataPointsMapper
     private val typeDeclarationMapper: TypeDeclarationsMapper = mockk()

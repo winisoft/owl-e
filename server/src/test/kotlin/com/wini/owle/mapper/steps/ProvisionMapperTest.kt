@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class ProvisionMapperTest {
+open class ProvisionMapperTest {
 
     private lateinit var mapper: ProvisionsMapper
     private val stepsMapper: StepsMapper = mockk()

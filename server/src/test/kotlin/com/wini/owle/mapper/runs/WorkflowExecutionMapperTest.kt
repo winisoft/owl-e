@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class WorkflowExecutionMapperTest {
+open class WorkflowExecutionMapperTest {
 
     private lateinit var mapper: WorkflowExecutionsMapper
     private val workflowsMapper: WorkflowsMapper = mockk()

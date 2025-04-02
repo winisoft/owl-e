@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TransformationArgMapperTest {
+open class TransformationArgMapperTest {
 
     private lateinit var mapper: TransformationArgsMapper
     private val transformationsMapper: TransformationsMapper = mockk()

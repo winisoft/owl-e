@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TestExpectedOutcomeMapperTest {
+open class TestExpectedOutcomeMapperTest {
 
     private lateinit var mapper: TestExpectedOutcomesMapper
     private val testCasesMapper: TestCasesMapper = mockk()

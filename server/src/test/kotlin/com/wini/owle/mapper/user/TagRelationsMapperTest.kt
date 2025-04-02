@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TagRelationsMapperTest {
+open class TagRelationsMapperTest {
 
     private lateinit var mapper: TagRelationsMapper
     private val factory: DaoFactory<TagRelationDao, CompositeID> = mockk()

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TypeDeclarationMapperTest {
+open class TypeDeclarationMapperTest {
 
     private lateinit var mapper: TypeDeclarationsMapper
     private val typeDefinitionsMapper: TypeDefinitionsMapper = mockk()
@@ -89,4 +89,4 @@ class TypeDeclarationMapperTest {
 
         // Verify the result is the new entity
     }
-}}
+}

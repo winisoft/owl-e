@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class ErrorWatchFnMapperTest {
+open class ErrorWatchFnMapperTest {
 
     private lateinit var mapper: ErrorWatchFnsMapper
     private val errorWatchesMapper: ErrorWatchesMapper = mockk()

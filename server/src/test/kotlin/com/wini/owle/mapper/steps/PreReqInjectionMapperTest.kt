@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class PreReqInjectionMapperTest {
+open class PreReqInjectionMapperTest {
 
     private lateinit var mapper: PreReqInjectionsMapper
     private val workflowJunctionsMapper: WorkflowJunctionsMapper = mockk()

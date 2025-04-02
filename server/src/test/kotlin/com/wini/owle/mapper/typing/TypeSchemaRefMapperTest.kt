@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TypeSchemaRefMapperTest {
+open class TypeSchemaRefMapperTest {
 
     private lateinit var mapper: TypeSchemaRefsMapper
     private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()

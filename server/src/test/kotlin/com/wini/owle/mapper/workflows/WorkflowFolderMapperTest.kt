@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class WorkflowFolderMapperTest {
+open class WorkflowFolderMapperTest {
 
     private lateinit var mapper: WorkflowFoldersMapper
     private val factory: DaoFactory<WorkflowFolderDao, Long> = mockk()

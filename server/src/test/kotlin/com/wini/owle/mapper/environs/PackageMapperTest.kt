@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 
-class PackageMapperTest {
+open class PackageMapperTest {
 
     private lateinit var mapper: PackagesMapper
     private val versionSpecsMapper: VersionSpecsMapper = mockk()

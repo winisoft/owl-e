@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TransformArgTargetTypeMapperTest {
+open class TransformArgTargetTypeMapperTest {
 
     private lateinit var mapper: TransformTargetTypesMapper
     private val factory: DaoFactory<TransformTargetTypeDao, CompositeID> = mockk()

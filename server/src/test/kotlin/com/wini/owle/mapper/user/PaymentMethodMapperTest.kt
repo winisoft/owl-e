@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class PaymentMethodMapperTest {
+open class PaymentMethodMapperTest {
 
     private lateinit var mapper: PaymentMethodsMapper
     private val userMapper: UsersMapper = mockk()

@@ -13,7 +13,7 @@ import com.wini.owle.mapper.workflows.WorkflowsMapper
 import org.jetbrains.exposed.dao.id.EntityID
 
 
-class WorkflowExecutionsMapper(
+open class WorkflowExecutionsMapper(
     private val daoFactory: DaoFactory<WorkflowExecutionDao, Long>,
     private val workflowsMapper: WorkflowsMapper,
     private val usersMapper: UsersMapper,

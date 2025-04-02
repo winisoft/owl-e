@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TypeVariancesMapperTest {
+open class TypeVariancesMapperTest {
 
     private lateinit var mapper: TypeVariancesMapper
     private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()

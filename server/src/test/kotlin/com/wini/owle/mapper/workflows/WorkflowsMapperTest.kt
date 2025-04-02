@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class WorkflowsMapperTest {
+open class WorkflowsMapperTest {
 
     private lateinit var mapper: WorkflowsMapper
     private val userDesignedMetadataMapper: UserDesignedMetadataMapper = mockk()

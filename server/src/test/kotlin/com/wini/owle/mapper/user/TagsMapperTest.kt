@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TagsMapperTest {
+open class TagsMapperTest {
 
     private lateinit var mapper: TagsMapper
     private val usersMapper: UsersMapper = mockk()

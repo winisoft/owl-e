@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class TestInputMapperTest {
+open class TestInputMapperTest {
 
     private lateinit var mapper: TestInputsMapper
     private val testCasesMapper: TestCasesMapper = mockk()

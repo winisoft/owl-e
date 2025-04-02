@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-class ToolParamMapperTest {
+open class ToolParamMapperTest {
 
     private lateinit var mapper: ToolParamsMapper
     private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()

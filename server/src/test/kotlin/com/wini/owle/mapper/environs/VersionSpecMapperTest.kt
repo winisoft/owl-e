@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class VersionSpecsMapperTest {
+open class VersionSpecsMapperTest {
 
     private lateinit var mapper: VersionSpecsMapper
     private val factory: ExposedDaoFactory<VersionSpecDao, Long, VersionSpecDao.Companion> = mockk()
