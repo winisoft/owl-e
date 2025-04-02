@@ -1,101 +1,95 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
-import com.wini.owle.dto.DtoTestInstanceFactory.revisionDto
-import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
-import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
-import com.wini.owle.dto.RevisionDto
-import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
-import com.wini.owle.entity.EntityTestInstanceFactory.revisionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
-import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
-import com.wini.owle.entity.StoreMethod.Companion.toDto
 import com.wini.owle.entity.steps.RevisionDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.workflows.DataPointsMapper
+import com.wini.owle.mapper.workflows.StepsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class RevisionMapperTest: BaseOwleMapperTest<RevisionDto, RevisionDao, RevisionsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<RevisionsMapper>(RevisionsMapper::class.java)
-//
-//    override fun instantiateMapper(): RevisionsMapper { return realMapper }
-//
-//    override fun Transaction.dto(id: Long): RevisionDto {
-//        val dataPointDao = dataPointDao()
-//        val stepDao = stepDao()
-//        val workflowDao = workflowDao()
-//        val typeDeclarationDao = typeDeclarationDao()
-//        return revisionDto(
-//            id = id,
-//            dataPoint = dataPointDto(
-//                id = dataPointDao.id.value,
-//                name = dataPointDao.name,
-//                description = dataPointDao.description,
-//                presetValue = dataPointDao.presetValue,
-//                storeMethod = dataPointDao.storeMethod.toDto(),
-//                typeDeclaration = typeDeclarationDto(
-//                    id = typeDeclarationDao.id.value,
-//                    typeDefinition = typeDefinitionDto()
-//                ),
-//                workflow = workflowDto(
-//                    id = workflowDao.id.value
-//                )
-//            ),
-//            step = stepDto(
-//                id = stepDao.id.value
-//            )
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): RevisionDao {
-//        return revisionDao()
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<RevisionDao, RevisionDto> {
-//        val dao = existingDao()
-//        val dataPointDao = dataPointDao()
-//        val stepDao = stepDao()
-//        val workflowDao = workflowDao()
-//        val typeDeclarationDao = typeDeclarationDao()
-//        val dto = revisionDto(
-//            id = dao.id.value,
-//            dataPoint = dataPointDto(
-//                id = dataPointDao.id.value,
-//                name = dataPointDao.name,
-//                description = dataPointDao.description,
-//                presetValue = dataPointDao.presetValue,
-//                storeMethod = dataPointDao.storeMethod.toDto(),
-//                typeDeclaration = typeDeclarationDto(
-//                    id = typeDeclarationDao.id.value,
-//                    typeDefinition = typeDefinitionDto()
-//                ),
-//                workflow = workflowDto(
-//                    id = workflowDao.id.value
-//                )
-//            ),
-//            step = stepDto(
-//                id = stepDao.id.value
-//            )
-//        )
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: RevisionDao, dto: RevisionDto) {
-//        assertEquals(dao.dataPoint.id.value, dto.dataPoint.id)
-//        assertEquals(dao.step.id.value, dto.step.id)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: RevisionDto, dao: RevisionDao) {
-//        assertEquals(dto.dataPoint.id, dao.dataPoint.id.value)
-//        assertEquals(dto.step.id, dao.step.id.value)
-//    }
-//
-//}
+class RevisionMapperTest {
+
+    private lateinit var mapper: RevisionsMapper
+    private val dataPointMapper: DataPointsMapper = mockk()
+    private val stepMapper: StepsMapper = mockk()
+    private val factory: DaoFactory<RevisionDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = RevisionsMapper(factory, dataPointMapper, stepMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

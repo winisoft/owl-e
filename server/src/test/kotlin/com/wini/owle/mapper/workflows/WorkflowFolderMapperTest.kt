@@ -1,57 +1,91 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.DtoTestInstanceFactory.workflowFolderDto
-import com.wini.owle.dto.WorkflowFolderDto
-import com.wini.owle.entity.EntityTestInstanceFactory.workflowFolderDao
 import com.wini.owle.entity.workflows.WorkflowFolderDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class WorkflowFolderMapperTest: BaseOwleMapperTest<WorkflowFolderDto, WorkflowFolderDao, WorkflowFoldersMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<WorkflowFoldersMapper>(WorkflowFoldersMapper::class.java)
-//
-//
-//    override fun instantiateMapper(): WorkflowFoldersMapper {
-//        return realMapper
-//    }
-//
-//    override fun Transaction.dto(id: Long): WorkflowFolderDto {
-//        return workflowFolderDto()
-//    }
-//
-//    override fun Transaction.existingDao(): WorkflowFolderDao {
-//        return workflowFolderDao()
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<WorkflowFolderDao, WorkflowFolderDto> {
-//        val dao = existingDao()
-//        val dto = dao. run {
-//            workflowFolderDto(
-//                id = id.value,
-//                name = name,
-//                description = description,
-//                parentFolder = null
-//            )
-//        }
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: WorkflowFolderDao, dto: WorkflowFolderDto) {
-//        assertEquals(dao.name, dto.name)
-//        assertEquals(dao.description, dto.description)
-//        assertEquals(dao.parentFolder?.id?.value, dto.parentFolder?.id)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: WorkflowFolderDto, dao: WorkflowFolderDao) {
-//        assertEquals(dto.name, dao.name)
-//        assertEquals(dto.description, dao.description)
-//        assertEquals(dto.parentFolder?.id, dao.parentFolder?.id?.value)
-//    }
-//
-//
-//}
+
+class WorkflowFolderMapperTest {
+
+    private lateinit var mapper: WorkflowFoldersMapper
+    private val factory: DaoFactory<WorkflowFolderDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = WorkflowFoldersMapper(factory)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

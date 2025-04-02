@@ -15,7 +15,7 @@ class WorkflowJunctionsMapper(
     private val daoFactory: DaoFactory<WorkflowJunctionDao, Long>,
     private val stepsMapper: StepsMapper,
     private val workflowsMapper: WorkflowsMapper,
-    private val inquisitionsMapper: InquisitionsMapper // Assumed updated
+    private val inquisitionsMapper: InquisitionsMapper
 ): DbMapper<WorkflowJunctionDto, WorkflowJunctionDao>() {
 
     override fun toEntity(dto: WorkflowJunctionDto): WorkflowJunctionDao {

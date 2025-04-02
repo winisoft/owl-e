@@ -1,99 +1,94 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.DataPointDto
-import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDefinitionDto
-import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
-import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
-import com.wini.owle.dto.UserDesignedMetadataDto
-import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
-import com.wini.owle.entity.StoreMethod.Companion.toDto
 import com.wini.owle.entity.workflows.DataPointDao
-import com.wini.owle.mapper.DateTimeConverter
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.typing.TypeDeclarationsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class DataPointMapperTest: BaseOwleMapperTest<DataPointDto, DataPointDao, DataPointsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<DataPointsMapper>(DataPointsMapper::class.java)
-//
-//
-//    override fun instantiateMapper(): DataPointsMapper {
-//        return realMapper
-//    }
-//
-//    override fun Transaction.dto(id: Long): DataPointDto {
-//        return dataPointDto()
-//    }
-//
-//    override fun Transaction.existingDao(): DataPointDao {
-//        return dataPointDao()
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<DataPointDao, DataPointDto> {
-//        val dao = existingDao()
-//        val dto = dao.run {
-//            DataPointDto(
-//                id = id.value,
-//                name = name,
-//                description = description,
-//                workflow = workflow.run {
-//                    workflowDto(
-//                        id = id.value,
-//                        name = name,
-//                        description = description,
-//                        pythonVersion = pythonVersion,
-//                        parentFolder = null,
-//                        metadata = UserDesignedMetadataDto.mock,
-//                        createdAt = DateTimeConverter.toString(createdAt),
-//                        updatedAt = DateTimeConverter.toString(updatedAt)
-//                    )
-//                },
-//                presetValue = presetValue,
-//                storeMethod = storeMethod.toDto(),
-//                typeDeclaration = typeDeclaration.run {
-//                    typeDeclarationDto(
-//                        id = id.value,
-//                        typeDefinition = typeDefinition.run {
-//                            typeDefinitionDto(
-//                                id = id.value,
-//                                name = name,
-//                                namespace = namespace,
-//                                versionSpec = versionSpec.run {
-//                                    versionSpecDto(
-//                                        id = id.value,
-//                                        versionMin = versionMin,
-//                                        versionMax = versionMax,
-//                                        versionExact = versionExact
-//                                    )
-//                                }
-//                            )
-//                        }
-//                    )
-//                },
-//                createdAt = TODO(),
-//                updatedAt = TODO()
-//            )
-//        }
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: DataPointDao, dto: DataPointDto) {
-//        assertEquals(dao.name, dto.name)
-//        assertEquals(dao.description, dto.description)
-//        assertEquals(dao.typeDeclaration, dto.typeDeclaration)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: DataPointDto, dao: DataPointDao) {
-//        assertEquals(dto.name, dao.name)
-//        assertEquals(dto.description, dao.description)
-//        assertEquals(dto.typeDeclaration, dao.typeDeclaration)
-//    }
-//
-//
-//}
+
+class DataPointMapperTest {
+
+    private lateinit var mapper: DataPointsMapper
+    private val typeDeclarationMapper: TypeDeclarationsMapper = mockk()
+    private val workflowMapper: WorkflowsMapper = mockk()
+    private val factory: DaoFactory<DataPointDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = DataPointsMapper(factory, typeDeclarationMapper, workflowMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

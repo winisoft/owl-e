@@ -1,73 +1,92 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.DtoTestInstanceFactory.stepBenchmarkingDataDto
-import com.wini.owle.dto.StepBenchmarkingDataDto
-import com.wini.owle.entity.*
-import com.wini.owle.entity.EntityTestInstanceFactory.stepBenchmarkingDataDao
-import com.wini.owle.entity.EntityTestInstanceFactory.stepExecutionDao
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import org.koin.dsl.module
-import com.wini.owle.mapper.mapperModule
-import com.wini.owle.mapper.toDecimalValue
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class StepBenchmarkingDataMapperTest: BaseOwleMapperTest<StepBenchmarkingDataDto, StepBenchmarkingDataDao, StepBenchmarkingDataMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<StepBenchmarkingDataMapper>(StepBenchmarkingDataMapper::class.java)
-//
-//
-//
-//    override val implicatedTables: List<IdTable<*>> = listOf(
-//        StepBenchmarkingData,
-//        StepExecutions,
-//        WorkflowExecutions,
-//        Workflows,
-//        Users,
-//        Steps,
-//        Tools,
-//        TypeDeclarations,
-//        TypeDefinitions,
-//        VersionSpecs
-//    )
-//
-//    override fun instantiateMapper(): StepBenchmarkingDataMapper {
-//        return realMapper
-//    }
-//
-//    override fun Transaction.dto(id: Long): StepBenchmarkingDataDto {
-//        return stepBenchmarkingDataDto()
-//    }
-//
-//    override fun Transaction.existingDao(): StepBenchmarkingDataDao {
-//        return stepBenchmarkingDataDao(
-//            stepExecution = stepExecutionDao()
-//        )
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<StepBenchmarkingDataDao, StepBenchmarkingDataDto> {
-//        val dao = existingDao()
-//        val dto = stepBenchmarkingDataDto(id = dao.id.value)
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: StepBenchmarkingDataDao, dto: StepBenchmarkingDataDto) {
-//        assertEquals(dao.stepExecution.id.value, dto.stepExecution.id)
-//        assertEquals(dao.executionTime.toDecimalValue(), dto.executionTime)
-//        assertEquals(dao.resourceUsage, dto.resourceUsage)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: StepBenchmarkingDataDto, dao: StepBenchmarkingDataDao) {
-//        assertEquals(dto.stepExecution.id, dao.stepExecution.id.value)
-//        assertEquals(dto.executionTime, dao.executionTime.toDecimalValue())
-//        assertEquals(dto.resourceUsage, dao.resourceUsage)
-//    }
-//
-//
-//}
+class StepBenchmarkingDataMapperTest {
+
+    private lateinit var mapper: StepBenchmarkingDataMapper
+    private val stepExecutionsMapper: StepExecutionsMapper = mockk()
+    private val factory: DaoFactory<StepBenchmarkingDataDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = StepBenchmarkingDataMapper(factory, stepExecutionsMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

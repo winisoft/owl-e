@@ -1,80 +1,92 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.TestExpectedOutcomeDto
-import com.wini.owle.dto.enums.ComparisonOperator
-import com.wini.owle.entity.ComparisonOperator.Companion.toDto
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.TestExpectedOutcomes
-import com.wini.owle.entity.Users
-import com.wini.owle.entity.Workflows
 import com.wini.owle.entity.runs.TestExpectedOutcomeDao
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
-import com.wini.owle.mapper.mapperModule
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class TestExpectedOutcomeMapperTest: BaseOwleMapperTest<TestExpectedOutcomeDto, TestExpectedOutcomeDao, TestExpectedOutcomesMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<TestExpectedOutcomesMapper>(TestExpectedOutcomesMapper::class.java)
-//
-//
-//
-//    override val implicatedTables: List<IdTable<*>> = listOf(TestExpectedOutcomes, TestCases, Workflows, Users)
-//
-//    override fun instantiateMapper(): TestExpectedOutcomesMapper {
-//        return realMapper
-//    }
-//
-//    override fun Transaction.dto(id: Long): TestExpectedOutcomeDto {
-//        return TestExpectedOutcomeDto(
-//            id = id,
-//            testCaseId = 1L,
-//            dataPointName = "Test Data Point",
-//            expectedValue = "Expected Value",
-//            comparisonOperator = com.wini.owle.entity.ComparisonOperator.EQUALS.toDto()
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): TestExpectedOutcomeDao {
-//        return TestExpectedOutcomeDao.new {
-//            this.testCaseId = EntityID(1L, TestCases)
-//            this.dataPointName = "Test Data Point"
-//            this.expectedValue = "Expected Value"
-//            this.comparisonOperator = ComparisonOperator.EQUALS
-//        }
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<TestExpectedOutcomeDao, TestExpectedOutcomeDto> {
-//        val dao = existingDao()
-//        val dto = TestExpectedOutcomeDto(
-//            id = dao.id.value,
-//            testCaseId = dao.testCaseId.value,
-//            dataPointName = dao.dataPointName,
-//            expectedValue = dao.expectedValue,
-//            comparisonOperator = dao.comparisonOperator.toDto()
-//        )
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: TestExpectedOutcomeDao, dto: TestExpectedOutcomeDto) {
-//        assertEquals(dao.testCaseId.value, dto.testCaseId)
-//        assertEquals(dao.dataPointName, dto.dataPointName)
-//        assertEquals(dao.expectedValue, dto.expectedValue)
-//        assertEquals(dao.comparisonOperator.toDto(), dto.comparisonOperator)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: TestExpectedOutcomeDto, dao: TestExpectedOutcomeDao) {
-//        assertEquals(dto.testCaseId, dao.testCaseId.value)
-//        assertEquals(dto.dataPointName, dao.dataPointName)
-//        assertEquals(dto.expectedValue, dao.expectedValue)
-//        assertEquals(dto.comparisonOperator, dao.comparisonOperator.toDto())
-//    }
-//
-//
-//}
+class TestExpectedOutcomeMapperTest {
+
+    private lateinit var mapper: TestExpectedOutcomesMapper
+    private val testCasesMapper: TestCasesMapper = mockk()
+    private val factory: DaoFactory<TestExpectedOutcomeDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = TestExpectedOutcomesMapper(factory, testCasesMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

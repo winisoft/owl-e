@@ -1,88 +1,95 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
-import com.wini.owle.dto.DtoTestInstanceFactory.inquisitionDto
-import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
-import com.wini.owle.dto.InquisitionDto
-import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
-import com.wini.owle.entity.EntityTestInstanceFactory.inquisitionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.steps.InquisitionDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.workflows.DataPointsMapper
+import com.wini.owle.mapper.workflows.StepsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class InquisitionMapperTest: BaseOwleMapperTest<InquisitionDto, InquisitionDao, InquisitionsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<InquisitionsMapper>(InquisitionsMapper::class.java)
-//
-//    override fun instantiateMapper(): InquisitionsMapper {
-//        return realMapper
-//    }
-//
-//    override fun Transaction.dto(id: Long): InquisitionDto {
-//        val inquisitionDao = inquisitionDao(
-//            onMetWorkflowStep = stepDao(),
-//            dataPoint = dataPointDao()
-//        )
-//        return inquisitionDto(
-//            id = inquisitionDao.id.value,
-//            step = stepDto(
-//                id = inquisitionDao.workflowStep.id.value
-//            ),
-//            dataPoint = dataPointDto(
-//                id = inquisitionDao.dataPoint.id.value
-//            ),
-//            onMetWorkflowStep = stepDto(
-//                inquisitionDao.onMetWorkflowStep.id.value
-//            )
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): InquisitionDao {
-//        return inquisitionDao()
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<InquisitionDao, InquisitionDto> {
-//        val inquisitionDao = inquisitionDao(
-//            step = stepDao(),
-//            dataPoint = dataPointDao(),
-//            onMetWorkflowStep = stepDao()
-//        )
-//        val inquisitionDto = inquisitionDto(
-//            id = inquisitionDao.id.value,
-//            step = stepDto(
-//                id = inquisitionDao.workflowStep.id.value
-//            ),
-//            dataPoint = dataPointDto(
-//                id = inquisitionDao.dataPoint.id.value
-//            ),
-//            onMetWorkflowStep = stepDto(
-//                inquisitionDao.onMetWorkflowStep.id.value
-//            )
-//        )
-//
-//        return inquisitionDao to inquisitionDto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: InquisitionDao, dto: InquisitionDto) {
-//        assertEquals(dao.workflowStep.id.value, dto.step.id)
-//        assertEquals(dao.className, dto.className)
-//        assertEquals(dao.dataPoint.id.value, dto.dataPoint.id)
-//        assertEquals(dao.onMetWorkflowStep.id.value, dto.onMetWorkflowStep.id)
-//        assertEquals(dao.executionOrder, dto.executionOrder)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: InquisitionDto, dao: InquisitionDao) {
-//        assertEquals(dto.step.id, dao.workflowStep.id.value)
-//        assertEquals(dto.className, dao.className)
-//        assertEquals(dto.dataPoint.id, dao.dataPoint.id.value)
-//        assertEquals(dto.onMetWorkflowStep.id, dao.onMetWorkflowStep.id.value)
-//        assertEquals(dto.executionOrder, dao.executionOrder)
-//    }
-//
-//}
+class InquisitionMapperTest {
+
+    private lateinit var mapper: InquisitionsMapper
+    private val stepsMapper: StepsMapper = mockk()
+    private val dataPointsMapper: DataPointsMapper = mockk()
+    private val factory: DaoFactory<InquisitionDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = InquisitionsMapper(factory, stepsMapper, dataPointsMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

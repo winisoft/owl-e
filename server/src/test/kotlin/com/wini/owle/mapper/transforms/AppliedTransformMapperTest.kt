@@ -1,46 +1,96 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.dto.AppliedTransformDto
-import com.wini.owle.dto.DtoTestInstanceFactory.appliedTransformDto
-import com.wini.owle.entity.EntityTestInstanceFactory.appliedTransformDao
-import com.wini.owle.entity.TransformOccurrence.Companion.toDto
 import com.wini.owle.entity.transforms.AppliedTransformDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.typing.TypeDeclarationsMapper
+import com.wini.owle.mapper.workflows.DataPointsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class AppliedTransformMapperTest: BaseOwleMapperTest<AppliedTransformDto, AppliedTransformDao, AppliedTransformsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<AppliedTransformsMapper>(AppliedTransformsMapper::class.java)
-//
-//    override fun instantiateMapper(): AppliedTransformsMapper { return realMapper }
-//
-//    override fun Transaction.dto(id: Long): AppliedTransformDto { return appliedTransformDto(id = id) }
-//
-//    override fun Transaction.existingDao(): AppliedTransformDao { return appliedTransformDao() }
-//
-//    override fun Transaction.existingDaoDto(): Pair<AppliedTransformDao, AppliedTransformDto> {
-//        val dao = existingDao()
-//        val dto = appliedTransformDto(id = dao.id.value)
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: AppliedTransformDao, dto: AppliedTransformDto) {
-//        assertEquals(dao.transformation.id.value, dto.transformation.id)
-//        assertEquals(dao.occurrence.toDto(), dto.occurrence)
-//        assertEquals(dao.resultType.id.value, dto.resultType.id)
-//        assertEquals(dao.dataPoint?.id?.value, dto.dataPoint?.id)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: AppliedTransformDto, dao: AppliedTransformDao) {
-//        assertEquals(dto.transformation.id, dao.transformation.id.value, )
-//        assertEquals(dto.occurrence, dao.occurrence.toDto())
-//        assertEquals(dto.resultType.id, dao.resultType.id.value)
-//        assertEquals(dto.dataPoint?.id, dao.dataPoint?.id?.value)
-//    }
-//
-//}
+class AppliedTransformMapperTest {
+
+    private lateinit var mapper: AppliedTransformsMapper
+    private val transformationsMapper: TransformationsMapper = mockk()
+    private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()
+    private val dataPointsMapper: DataPointsMapper = mockk()
+    private val factory: DaoFactory<AppliedTransformDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = AppliedTransformsMapper(factory, transformationsMapper, typeDeclarationsMapper, dataPointsMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

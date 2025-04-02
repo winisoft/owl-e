@@ -1,74 +1,91 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.dto.DtoTestInstanceFactory.userDto
-import com.wini.owle.dto.UserDto
-import com.wini.owle.entity.EntityTestInstanceFactory.userDao
-import com.wini.owle.entity.SubscriptionStatus
-import com.wini.owle.entity.SubscriptionStatus.Companion.toDto
 import com.wini.owle.entity.user.UserDao
-import com.wini.owle.mapper.DateTimeConverter
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-//
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class UserMapperTest: BaseOwleMapperTest<UserDto, UserDao, UsersMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<UsersMapper>(UsersMapper::class.java)
-//
-//
-//    override fun instantiateMapper(): UsersMapper { return realMapper }
-//
-//    override fun Transaction.dto(id: Long): UserDto {
-//        return userDto(
-//            id = id,
-//            email = "test@example.com",
-//            password = "securepassword"
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): UserDao {
-//        return userDao(
-//            email = "test@example.com",
-//            password = "securepassword",
-//            subscriptionStatus = SubscriptionStatus.ACTIVE
-//        )
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<UserDao, UserDto> {
-//        val dao = existingDao()
-//        val dto = userDto(
-//            id = dao.id.value,
-//            email = dao.email,
-//            password = dao.password,
-//            resetToken = dao.resetToken,
-//            oauthProvider = dao.oauthProvider,
-//            oauthId = dao.oauthId,
-//            subscriptionStatus = dao.subscriptionStatus.toDto(),
-//            apiKey = dao.apiKey,
-//            createdAt = DateTimeConverter.toString(dao.createdAt),
-//            updatedAt = DateTimeConverter.toString(dao.updatedAt),
-//            paymentMethods = emptyList()
-//        )
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: UserDao, dto: UserDto) {
-//        assertEquals(dao.email, dto.email)
-//        assertEquals(dao.password, dto.password)
-//        assertEquals(dao.subscriptionStatus.toDto(), dto.subscriptionStatus)
-//        assertEquals(dao.apiKey, dto.apiKey)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: UserDto, dao: UserDao) {
-//        assertEquals(dto.email, dao.email)
-//        assertEquals(dto.password, dao.password)
-//        assertEquals(dto.subscriptionStatus, dao.subscriptionStatus.toDto())
-//        assertEquals(dto.apiKey, dao.apiKey)
-//    }
-//
-//
-//}
+
+class UserMapperTest {
+
+    private lateinit var mapper: UsersMapper
+    private val factory: DaoFactory<UserDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = UsersMapper(factory)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

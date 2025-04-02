@@ -1,55 +1,94 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.DtoTestInstanceFactory.toolDto
-import com.wini.owle.dto.DtoTestInstanceFactory.toolParamDto
-import com.wini.owle.dto.DtoTestInstanceFactory.typeDeclarationDto
-import com.wini.owle.dto.ToolParamDto
-import com.wini.owle.entity.EntityTestInstanceFactory.toolParamDao
 import com.wini.owle.entity.workflows.ToolParamDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.typing.TypeDeclarationsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class ToolParamMapperTest: BaseOwleMapperTest<ToolParamDto, ToolParamDao, ToolParamsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<ToolParamsMapper>(ToolParamsMapper::class.java)
-//
-//
-//    override fun instantiateMapper(): ToolParamsMapper { return realMapper }
-//
-//    override fun Transaction.dto(id: Long): ToolParamDto { return toolParamDto(id = id) }
-//
-//    override fun Transaction.existingDao(): ToolParamDao { return toolParamDao() }
-//
-//    override fun Transaction.existingDaoDto(): Pair<ToolParamDao, ToolParamDto> {
-//        val dao = existingDao()
-//        val dto = dao.run {
-//            toolParamDto(
-//                id = id.value,
-//                name = name,
-//                typeDeclaration = typeDeclarationDto(),
-//                hasDefault = dao.hasDefault,
-//                tool = toolDto()
-//            )
-//        }
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: ToolParamDao, dto: ToolParamDto) {
-//        assertEquals(dao.name, dto.name)
-//        assertEquals(dao.typeDeclaration.id.value, dto.typeDeclaration.id)
-//        assertEquals(dao.hasDefault, dto.hasDefault)
-//        assertEquals(dao.tool.id.value, dto.tool.id)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: ToolParamDto, dao: ToolParamDao) {
-//        assertEquals(dto.name, dao.name)
-//        assertEquals(dto.typeDeclaration.id, dao.typeDeclaration.id.value)
-//        assertEquals(dto.hasDefault, dao.hasDefault)
-//        assertEquals(dto.tool.id, dao.tool.id.value)
-//    }
-//
-//}
+
+class ToolParamMapperTest {
+
+    private lateinit var mapper: ToolParamsMapper
+    private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()
+    private val toolMapper: ToolsMapper = mockk()
+    private val factory: DaoFactory<ToolParamDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = ToolParamsMapper(factory, typeDeclarationsMapper, toolMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

@@ -1,91 +1,92 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchDto
-import com.wini.owle.dto.DtoTestInstanceFactory.errorWatchFnDto
-import com.wini.owle.dto.DtoTestInstanceFactory.stepDto
-import com.wini.owle.dto.DtoTestInstanceFactory.workflowDto
-import com.wini.owle.dto.ErrorWatchFnDto
-import com.wini.owle.entity.EntityTestInstanceFactory.errorWatchDao
-import com.wini.owle.entity.EntityTestInstanceFactory.errorWatchFnDao
-import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.steps.ErrorWatchFnDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
+import com.wini.owle.mapper.DaoFactory
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class ErrorWatchFnMapperTest: BaseOwleMapperTest<ErrorWatchFnDto, ErrorWatchFnDao, ErrorWatchFnsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<ErrorWatchFnsMapper>(ErrorWatchFnsMapper::class.java)
-//
-//    override fun instantiateMapper(): ErrorWatchFnsMapper { return realMapper }
-//
-//    override fun Transaction.dto(id: Long): ErrorWatchFnDto {
-//        return errorWatchFnDto(
-//            id = id,
-//            errorWatch = errorWatchDto(
-//                id = errorWatchDao().run {
-//                    this@run.id.value
-//                },
-//                step = stepDao().run {
-//                    stepDto(id = this@run.id.value)
-//                },
-//                triggerStep = stepDao().run {
-//                    stepDto(id = this@run.id.value)
-//                }
-//            )
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): ErrorWatchFnDao {
-//        return errorWatchFnDao(
-//            errorWatch = errorWatchDao(
-//                step = stepDao(),
-//                //onMetStep = stepDao()
-//            )
-//        )
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<ErrorWatchFnDao, ErrorWatchFnDto> {
-//        val dao = existingDao()
-//        val dto = errorWatchFnDto(
-//            id = dao.id.value,
-//            errorWatch = dao.errorWatch.run {
-//                errorWatchDto(
-//                    id = id.value,
-//                    step = step.run {
-//                        stepDto(
-//                            id = id.value,
-//                            name = name,
-//                            description = description,
-//                            workflow = workflowDto(id = workflow.id.value)
-//                        )
-//                    },
-//                    errorType = errorType,
-//                    triggerStep = stepDto(
-//                        id = onMetStep.id.value,
-//                        name = onMetStep.name,
-//                        description = onMetStep.description,
-//                        workflow = workflowDto(id = onMetStep.id.value)
-//                    )
-//                )
-//            },
-//        )
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: ErrorWatchFnDao, dto: ErrorWatchFnDto) {
-//        assertEquals(dao.errorWatch.id.value, dto.errorWatch.id)
-//        assertEquals(dao.functionName, dto.functionName)
-//        assertEquals(dao.position, dto.position)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: ErrorWatchFnDto, dao: ErrorWatchFnDao) {
-//        assertEquals(dto.errorWatch.id, dao.errorWatch.id.value)
-//        assertEquals(dto.functionName, dao.functionName)
-//        assertEquals(dto.position, dao.position)
-//    }
-//
-//}
+
+class ErrorWatchFnMapperTest {
+
+    private lateinit var mapper: ErrorWatchFnsMapper
+    private val errorWatchesMapper: ErrorWatchesMapper = mockk()
+    private val factory: DaoFactory<ErrorWatchFnDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = ErrorWatchFnsMapper(factory, errorWatchesMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

@@ -1,88 +1,108 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.TestCaseDto
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.Users
-import com.wini.owle.entity.Workflows
 import com.wini.owle.entity.runs.TestCaseDao
-import com.wini.owle.mapper.environs.PackageRepoMapper
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.dsl.module
-import com.wini.owle.mapper.mapperModule
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.user.UsersMapper
+import com.wini.owle.mapper.workflows.StepsMapper
+import com.wini.owle.mapper.workflows.WorkflowsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class TestCaseMapperTest: BaseOwleMapperTest<TestCaseDto, TestCaseDao, TestCasesMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<TestCasesMapper>(TestCasesMapper::class.java)
-//
-//
-//
-//    override val implicatedTables: List<IdTable<*>> = listOf(TestCases, Workflows, Users)
-//
-//    override fun instantiateMapper(): TestCasesMapper {
-//        return realMapper
-//    }
-//
-//    override fun Transaction.dto(id: Long): TestCaseDto {
-//        return TestCaseDto(
-//            id = id,
-//            userId = 1L,
-//            name = "Test Case",
-//            description = "A test case description",
-//            workflowId = 2L,
-//            stepId = 3L,
-//            inputs = emptyList(),
-//            expectedOutcomes = emptyList(),
-//            results = emptyList()
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): TestCaseDao {
-//        return TestCaseDao.new {
-//            this.userId = EntityID(1L, Users)
-//            this.workflowId = EntityID(2L, Workflows)
-//            this.stepId = EntityID(3L, Steps)
-//            this.name = "Test Case"
-//            this.description = "A test case description"
-//        }
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<TestCaseDao, TestCaseDto> {
-//        val dao = existingDao()
-//        val dto = TestCaseDto(
-//            id = dao.id.value,
-//            userId = dao.userId.value,
-//            name = dao.name,
-//            description = dao.description,
-//            workflowId = dao.workflowId?.value,
-//            stepId = dao.stepId?.value,
-//            inputs = emptyList(), // Inputs require setup
-//            expectedOutcomes = emptyList(), // Outcomes require setup
-//            results = emptyList() // Results require setup
-//        )
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: TestCaseDao, dto: TestCaseDto) {
-//        assertEquals(dao.userId.value, dto.userId)
-//        assertEquals(dao.name, dto.name)
-//        assertEquals(dao.description, dto.description)
-//        assertEquals(dao.workflowId?.value, dto.workflowId)
-//        assertEquals(dao.stepId?.value, dto.stepId)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: TestCaseDto, dao: TestCaseDao) {
-//        assertEquals(dto.userId, dao.userId.value)
-//        assertEquals(dto.name, dao.name)
-//        assertEquals(dto.description, dao.description)
-//        assertEquals(dto.workflowId, dao.workflowId?.value)
-//        assertEquals(dto.stepId, dao.stepId?.value)
-//    }
-//
-//
-//}
+class TestCaseMapperTest {
+
+    private lateinit var mapper: TestCasesMapper
+    private val testInputMapper: TestInputsMapper = mockk()
+    private val testExpectedOutcomeMapper: TestExpectedOutcomesMapper = mockk()
+    private val testResultMapper: TestResultsMapper = mockk()
+    private val usersMapper: UsersMapper = mockk()
+    private val workflowsMapper: WorkflowsMapper = mockk()
+    private val stepsMapper: StepsMapper = mockk()
+    private val factory: DaoFactory<TestCaseDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = TestCasesMapper(
+            factory,
+            testInputMapper,
+            testExpectedOutcomeMapper,
+            testResultMapper,
+            usersMapper,
+            workflowsMapper,
+            stepsMapper
+        )
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}

@@ -1,104 +1,94 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.DtoTestInstanceFactory.dataPointDto
-import com.wini.owle.dto.DtoTestInstanceFactory.preReqInjectionDto
-import com.wini.owle.dto.DtoTestInstanceFactory.workflowJunctionDto
-import com.wini.owle.dto.PreReqInjectionDto
-import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
-import com.wini.owle.entity.EntityTestInstanceFactory.inquisitionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.preReqInjectionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
-import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
-import com.wini.owle.entity.EntityTestInstanceFactory.workflowJunctionDao
 import com.wini.owle.entity.steps.PreReqInjectionDao
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import org.junit.jupiter.api.Assertions.assertEquals
-//
-//
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class PreReqInjectionMapperTest: BaseOwleMapperTest<PreReqInjectionDto, PreReqInjectionDao, PreReqInjectionsMapper>() {
-//
-//    private val realMapper by KoinJavaComponent.inject<PreReqInjectionsMapper>(PreReqInjectionsMapper::class.java)
-//
-//    override fun instantiateMapper(): PreReqInjectionsMapper { return realMapper }
-//
-//    override fun Transaction.dto(id: Long): PreReqInjectionDto {
-//        val sourceStep = stepDao()
-//        val workflowDao = workflowDao()
-//        val inquisitionDao = inquisitionDao()
-//        val junctionDao = workflowJunctionDao(
-//            sourceStep = sourceStep,
-//            targetWorkflow = workflowDao,
-//            triggerInquisition = inquisitionDao
-//        )
-//        val sourceDataPoint = dataPointDao()
-//        val injectedDataPoint = dataPointDao()
-//        val preReqDao = preReqInjectionDao(
-//            junction = junctionDao,
-//            sourceDataPoint = sourceDataPoint,
-//            injectedDataPoint = injectedDataPoint
-//        )
-//        return preReqInjectionDto(
-//            id = id,
-//            junction = workflowJunctionDto(
-//                id = junctionDao.id.value
-//            ),
-//            sourceDataPoint = dataPointDto(
-//                id = sourceDataPoint.id.value
-//            ),
-//            injectedDataPoint = dataPointDto(
-//                id = injectedDataPoint.id.value
-//            )
-//        )
-//    }
-//
-//    override fun Transaction.existingDao(): PreReqInjectionDao {
-//        return preReqInjectionDao()
-//    }
-//
-//    override fun Transaction.existingDaoDto(): Pair<PreReqInjectionDao, PreReqInjectionDto> {
-//        val dao = existingDao()
-//        val sourceStep = stepDao()
-//        val workflowDao = workflowDao()
-//        val inquisitionDao = inquisitionDao()
-//        val junctionDao = workflowJunctionDao(
-//            sourceStep = sourceStep,
-//            targetWorkflow = workflowDao,
-//            triggerInquisition = inquisitionDao
-//        )
-//        val sourceDataPoint = dataPointDao()
-//        val injectedDataPoint = dataPointDao()
-//        val dto = preReqInjectionDto(
-//            id = dao.id.value,
-//            junction = workflowJunctionDto(
-//                id = junctionDao.id.value
-//            ),
-//            sourceDataPoint = dataPointDto(
-//                id = sourceDataPoint.id.value
-//            ),
-//            injectedDataPoint = dataPointDto(
-//                id = injectedDataPoint.id.value
-//            )
-//        )
-//        return dao to dto
-//    }
-//
-//    override fun assertDaoPropsExpectedMatch(dao: PreReqInjectionDao, dto: PreReqInjectionDto) {
-//        assertEquals(dao.junction.id.value, dto.junction.id)
-//        assertEquals(dao.sourceDataPoint.id.value, dto.sourceDataPoint.id)
-//        assertEquals(dao.injectedDataPoint.id.value, dto.injectedDataPoint.id)
-//        assertEquals(dao.name, dto.name)
-//        assertEquals(dao.description, dto.description)
-//    }
-//
-//    override fun assertDtoPropsExpectedMatch(dto: PreReqInjectionDto, dao: PreReqInjectionDao) {
-//        assertEquals(dto.junction.id, dao.junction.id.value)
-//        assertEquals(dto.sourceDataPoint.id, dao.sourceDataPoint.id.value)
-//        assertEquals(dto.injectedDataPoint.id, dao.injectedDataPoint.id.value)
-//        assertEquals(dto.name, dao.name)
-//        assertEquals(dto.description, dao.description)
-//    }
-//
-//}
+import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.workflows.DataPointsMapper
+import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+
+class PreReqInjectionMapperTest {
+
+    private lateinit var mapper: PreReqInjectionsMapper
+    private val workflowJunctionsMapper: WorkflowJunctionsMapper = mockk()
+    private val dataPointsMapper: DataPointsMapper = mockk()
+    private val factory: DaoFactory<PreReqInjectionDao, Long> = mockk()
+
+    @BeforeEach
+    fun setUp() {
+        mapper = PreReqInjectionsMapper(factory, workflowJunctionsMapper, dataPointsMapper)
+    }
+
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+
+        // Mock the nested dao member(s) that would be created from the DTO
+
+        // Mock the behavior of findById to return null (not found)
+
+        // Verify that the exception is thrown with the correct message
+
+    }
+
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock dao objects
+
+        // Mock toDto behavior of the mapper
+
+        // Call the method under test
+
+        // Verify the result
+    }
+
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+
+        // Mock the existing entity that will be updated
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+
+        // Set up mocks for finding existing entity
+
+        // Define slots to capture property assignments
+
+        // Capture the property updates
+
+        // Execute the method under test
+
+        // Verify that the existing entity was found and updated
+
+        // Verify the captured values
+
+        // Verify the result is the updated entity
+
+    }
+
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+
+        // Mock the new entity that will be created
+
+        // Mock nested entity type(s) that would be returned from the mapper
+
+        // Set up the factory mock to return our mock entity
+
+        // Define slots to capture property assignments
+
+        // Set up property capture
+
+        // Execute the method under test
+
+        // Verify that the factory was used to create a new entity
+
+        // Verify the properties were set correctly
+
+        // Verify the captured values
+
+        // Verify the result is the new entity
+    }
+}
