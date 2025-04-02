@@ -3,14 +3,10 @@ package com.wini.owle.dll.typing
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TypeDeclarationDto
-import com.wini.owle.dto.TypeParameterDto
-import com.wini.owle.dto.TypeUnionMemberDto
-import com.wini.owle.services.Service
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.services.typing.TypeDeclarationService
 import com.wini.owle.services.typing.TypeParameterService
 import com.wini.owle.services.typing.TypeUnionMemberService
-import org.jetbrains.exposed.dao.id.CompositeID
 
 class TypeDeclarationDll(
     private val typeDeclarationService: TypeDeclarationService,

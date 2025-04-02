@@ -2,7 +2,7 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.runs.TestInputDll
-import com.wini.owle.dto.TestInputDto
+import com.wini.owle.dto.runs.TestInputDto
 import io.ktor.server.routing.*
 
 class TestInputApi(dll: TestInputDll) : GenericLongPkApi<TestInputDto>(

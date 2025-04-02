@@ -9,8 +9,8 @@ import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowExecutionDao
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
+import com.wini.owle.entity.user.SubscriptionStatus
 import com.wini.owle.entity.user.UserDao
-import org.jetbrains.exposed.dao.id.EntityID
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent

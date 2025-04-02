@@ -1,15 +1,13 @@
 package com.wini.owle.entity.steps
 
 import com.wini.owle.entity.workflows.DataPointDao
-import com.wini.owle.entity.OwleEntity
 import com.wini.owle.entity.ProvisionDataPoints
-import com.wini.owle.entity.ToolPackageDependencies
 import org.jetbrains.exposed.dao.CompositeEntity
 import org.jetbrains.exposed.dao.CompositeEntityClass
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 
-class ProvisionDataPointDao(id: EntityID<CompositeID>) : CompositeEntity(id), OwleEntity<ProvisionDataPointDao> {
+class ProvisionDataPointDao(id: EntityID<CompositeID>) : CompositeEntity(id) {
     companion object : CompositeEntityClass<ProvisionDataPointDao>(ProvisionDataPoints) {
 
         fun buildId(provisionId: Long, dataPointId: Long): CompositeID {

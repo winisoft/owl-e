@@ -1,7 +1,6 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.ToolDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.entity.workflows.ToolDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

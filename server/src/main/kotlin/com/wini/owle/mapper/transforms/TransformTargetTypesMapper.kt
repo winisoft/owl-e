@@ -1,13 +1,10 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.dto.TransformationTargetTypeDto
-import com.wini.owle.entity.TransformTargetTypes
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.entity.transforms.TransformTargetTypeDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import org.jetbrains.exposed.dao.id.CompositeID
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TransformTargetTypesMapper(

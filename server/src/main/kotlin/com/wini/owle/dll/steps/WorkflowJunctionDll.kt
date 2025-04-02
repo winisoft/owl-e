@@ -2,7 +2,7 @@ package com.wini.owle.dll.steps
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.WorkflowJunctionDto
+import com.wini.owle.dto.steps.WorkflowJunctionDto
 import com.wini.owle.services.steps.WorkflowJunctionService
 
 class WorkflowJunctionDll(

@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.workflows.ToolParamDll
-import com.wini.owle.dto.ToolParamDto
+import com.wini.owle.dto.workflows.ToolParamDto
 import io.ktor.server.routing.*
 
 class ToolParamApi(dll: ToolParamDll) : GenericLongPkApi<ToolParamDto>(

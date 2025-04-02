@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.workflows.StepDll
-import com.wini.owle.dto.StepDto
+import com.wini.owle.dto.workflows.StepDto
 import io.ktor.server.routing.*
 
 class StepApi(dll: StepDll) : GenericLongPkApi<StepDto>(

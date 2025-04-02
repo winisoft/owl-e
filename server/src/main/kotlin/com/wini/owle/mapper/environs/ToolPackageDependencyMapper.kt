@@ -1,7 +1,6 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.ToolPackageDependencyDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import com.wini.owle.entity.environs.ToolPackageDependencyDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

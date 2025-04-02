@@ -2,7 +2,7 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.GenericCompositeIdApi
 import com.wini.owle.dll.typing.TypeUnionMemberDll
-import com.wini.owle.dto.TypeUnionMemberDto
+import com.wini.owle.dto.typing.TypeUnionMemberDto
 import com.wini.owle.mapper.CompositeIdMap
 import io.ktor.server.routing.*
 

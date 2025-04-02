@@ -1,12 +1,11 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
-import com.wini.owle.dto.TypeDeclarationDto
-import com.wini.owle.dto.TypeDefinitionDto
-import com.wini.owle.dto.VersionSpecDto
+import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.dto.typing.TypeDefinitionDto
+import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
@@ -15,7 +14,6 @@ import com.wini.owle.entity.TypeDefinitions
 import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.typing.TypeDefinitionDao
-import com.wini.owle.mapper.mapperModule
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import com.wini.owle.mapper.typing.TypeDefinitionsMapper
 import com.wini.owle.repo.typing.TypeDeclarationRepository
@@ -26,8 +24,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach

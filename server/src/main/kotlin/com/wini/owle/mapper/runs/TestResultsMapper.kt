@@ -1,17 +1,11 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.TestResultDto
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.TestResults
-import com.wini.owle.entity.WorkflowExecutions
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.entity.runs.TestResultDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
 import kotlinx.datetime.LocalDateTime // Ensure correct import
-import org.jetbrains.exposed.dao.id.EntityID
-import kotlinx.datetime.toKotlinLocalDateTime // If needed for conversion from Java
 
 
 class TestResultsMapper(

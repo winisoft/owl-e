@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.steps.RevisionDll
-import com.wini.owle.dto.RevisionDto
+import com.wini.owle.dto.steps.RevisionDto
 import io.ktor.server.routing.*
 
 class RevisionApi(dll: RevisionDll): GenericLongPkApi<RevisionDto>(

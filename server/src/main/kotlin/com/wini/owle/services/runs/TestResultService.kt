@@ -1,6 +1,6 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.dto.TestResultDto
+import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.entity.runs.TestResultDao
 import com.wini.owle.mapper.runs.TestResultsMapper
 import com.wini.owle.repo.runs.TestResultRepository

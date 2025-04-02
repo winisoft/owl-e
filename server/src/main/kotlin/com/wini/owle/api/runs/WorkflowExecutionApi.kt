@@ -2,7 +2,7 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.runs.WorkflowExecutionDll
-import com.wini.owle.dto.WorkflowExecutionDto
+import com.wini.owle.dto.runs.WorkflowExecutionDto
 import io.ktor.server.routing.*
 
 class WorkflowExecutionApi(dll: WorkflowExecutionDll) : GenericLongPkApi<WorkflowExecutionDto>(

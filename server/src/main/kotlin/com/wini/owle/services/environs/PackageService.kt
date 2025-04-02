@@ -1,6 +1,6 @@
 package com.wini.owle.services.environs
 
-import com.wini.owle.dto.PackageDto
+import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.mapper.environs.PackagesMapper
 import com.wini.owle.repo.environs.PackageRepository

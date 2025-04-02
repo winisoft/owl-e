@@ -2,7 +2,7 @@ package com.wini.owle.dll.typing
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TypeVarianceDto
+import com.wini.owle.dto.typing.TypeVarianceDto
 import com.wini.owle.services.typing.TypeVarianceService
 
 class TypeVarianceDll(

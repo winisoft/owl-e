@@ -15,7 +15,6 @@ import com.wini.owle.api.user.UserApi
 import com.wini.owle.api.workflows.PhaseApi
 import com.wini.owle.api.workflows.WorkflowApi
 import com.wini.owle.api.workflows.WorkflowFolderApi
-import com.wini.owle.entity.TableRegistry
 import org.koin.core.context.GlobalContext.startKoin
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -30,8 +29,6 @@ object AppInitializer {
         val koin = startKoin {
             modules(appModule)
         }
-
-        TableRegistry.registerTables()
 
         fun Application.module() {
 

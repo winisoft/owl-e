@@ -2,7 +2,7 @@ package com.wini.owle.api.environs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.environs.PackageRepoDll
-import com.wini.owle.dto.PackageRepoDto
+import com.wini.owle.dto.environs.PackageRepoDto
 import io.ktor.server.routing.*
 
 class PackageRepoApi(dll: PackageRepoDll): GenericLongPkApi<PackageRepoDto>(

@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.steps.WorkflowJunctionDll
-import com.wini.owle.dto.WorkflowJunctionDto
+import com.wini.owle.dto.steps.WorkflowJunctionDto
 import io.ktor.server.routing.*
 
 class WorkflowJunctionApi(dll: WorkflowJunctionDll) : GenericLongPkApi<WorkflowJunctionDto>(

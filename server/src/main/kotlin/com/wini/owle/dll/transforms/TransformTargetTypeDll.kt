@@ -2,7 +2,7 @@ package com.wini.owle.dll.transforms
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TransformationTargetTypeDto
+import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.services.transforms.TransformTargetTypeService
 import org.jetbrains.exposed.dao.id.CompositeID
 

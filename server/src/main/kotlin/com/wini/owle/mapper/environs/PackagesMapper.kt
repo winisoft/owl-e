@@ -1,14 +1,9 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.PackageDto
-import com.wini.owle.dto.PackageRepoDto
-import com.wini.owle.entity.Packages
-import com.wini.owle.entity.VersionSpecs
+import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.entity.environs.PackageDao
-import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class PackagesMapper(

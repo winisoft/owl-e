@@ -1,14 +1,10 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.ToolParamDto
-import com.wini.owle.entity.ToolParams
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.entity.workflows.ToolParamDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class ToolParamsMapper(

@@ -1,6 +1,6 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.dto.WorkflowFolderDto
+import com.wini.owle.dto.workflows.WorkflowFolderDto
 import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.workflows.WorkflowFoldersMapper
 import com.wini.owle.repo.workflows.WorkflowFolderRepository

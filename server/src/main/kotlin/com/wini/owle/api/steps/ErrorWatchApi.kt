@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.steps.ErrorWatchDll
-import com.wini.owle.dto.ErrorWatchDto
+import com.wini.owle.dto.steps.ErrorWatchDto
 import io.ktor.server.routing.*
 
 class ErrorWatchApi(dll: ErrorWatchDll) : GenericLongPkApi<ErrorWatchDto>(

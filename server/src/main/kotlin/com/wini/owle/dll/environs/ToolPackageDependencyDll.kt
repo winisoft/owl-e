@@ -2,7 +2,7 @@ package com.wini.owle.dll.environs
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.ToolPackageDependencyDto
+import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import com.wini.owle.services.environs.ToolPackageDependencyService
 import org.jetbrains.exposed.dao.id.CompositeID
 

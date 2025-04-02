@@ -1,15 +1,11 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.TestInputDto
-import com.wini.owle.entity.GenerationMethod
-import com.wini.owle.entity.GenerationMethod.Companion.toDto
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.TestInputs
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.TestInputDto
+import com.wini.owle.entity.runs.GenerationMethod
+import com.wini.owle.entity.runs.GenerationMethod.Companion.toDto
 import com.wini.owle.entity.runs.TestInputDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TestInputsMapper(

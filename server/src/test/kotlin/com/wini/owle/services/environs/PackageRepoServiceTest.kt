@@ -1,22 +1,16 @@
 package com.wini.owle.services.environs
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
-import com.wini.owle.dto.PackageRepoDto
-import com.wini.owle.entity.PackageRepoType
+import com.wini.owle.dto.environs.PackageRepoDto
+import com.wini.owle.dto.environs.PackageRepoTypeDto
+import com.wini.owle.entity.environs.PackageRepoType
 import com.wini.owle.entity.PackageRepositories
 import com.wini.owle.entity.environs.PackageRepoDao
-import com.wini.owle.repo.environs.PackageRepoRepository
-import com.wini.owle.repo.repositoryModule
 import com.wini.owle.services.OwleServiceUnitTest
 import com.wini.owle.services.Service
-import com.wini.owle.services.serviceModule
 import io.mockk.MockKMatcherScope
 import io.mockk.every
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.koin.core.module.Module
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent.getKoin
 import kotlin.reflect.KClass
 
@@ -35,7 +29,7 @@ open class PackageRepoServiceTest: OwleServiceUnitTest<Long, PackageRepoDto, Pac
     override fun createSampleDto(): PackageRepoDto {
         return PackageRepoDto(
             id = 1L,
-            sourceType = com.wini.owle.dto.enums.PackageRepoType.Pypi,
+            sourceType = PackageRepoTypeDto.Pypi,
             sourceUrl = "https://repo.example.com"
         )
     }

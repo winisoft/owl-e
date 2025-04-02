@@ -1,9 +1,8 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.ExecutionLogDto
-import com.wini.owle.entity.LogLevel
-import com.wini.owle.entity.LogLevel.Companion.toDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.ExecutionLogDto
+import com.wini.owle.entity.runs.LogLevel
+import com.wini.owle.entity.runs.LogLevel.Companion.toDto
 import com.wini.owle.entity.runs.ExecutionLogDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

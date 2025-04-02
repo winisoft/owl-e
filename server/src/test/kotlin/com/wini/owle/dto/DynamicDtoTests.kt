@@ -1,15 +1,5 @@
 package com.wini.owle.dto
 
-import com.wini.owle.dto.enums.ComparisonOperator
-import com.wini.owle.dto.enums.GenerationMethod
-import com.wini.owle.dto.enums.PackageRepoType
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
-import kotlin.test.assertEquals
-import com.wini.owle.serialization.polymorphicJson
-import com.wini.owle.dto.enums.*
-import com.wini.owle.dto.enums.SubscriptionStatus
-import com.wini.owle.dto.enums.CardBrand
 //
 //class DynamicDtoTests {
 //

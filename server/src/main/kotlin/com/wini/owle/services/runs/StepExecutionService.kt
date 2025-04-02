@@ -1,6 +1,6 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.dto.StepExecutionDto
+import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.entity.runs.StepExecutionDao
 import com.wini.owle.mapper.runs.StepExecutionsMapper
 import com.wini.owle.repo.runs.StepExecutionRepository

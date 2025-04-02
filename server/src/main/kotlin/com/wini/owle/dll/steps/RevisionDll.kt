@@ -2,7 +2,7 @@ package com.wini.owle.dll.steps
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.RevisionDto
+import com.wini.owle.dto.steps.RevisionDto
 import com.wini.owle.services.steps.RevisionService
 
 class RevisionDll(

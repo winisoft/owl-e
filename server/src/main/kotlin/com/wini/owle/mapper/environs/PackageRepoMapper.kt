@@ -1,10 +1,9 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.PackageRepoDto
-import com.wini.owle.entity.PackageRepoType
-import com.wini.owle.entity.PackageRepoType.Companion.toDto
+import com.wini.owle.dto.environs.PackageRepoDto
+import com.wini.owle.entity.environs.PackageRepoType
+import com.wini.owle.entity.environs.PackageRepoType.Companion.toDto
 import com.wini.owle.entity.environs.PackageRepoDao
-import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 

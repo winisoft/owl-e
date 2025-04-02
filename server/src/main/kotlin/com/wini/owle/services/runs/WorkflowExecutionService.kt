@@ -1,6 +1,6 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.dto.WorkflowExecutionDto
+import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.runs.WorkflowExecutionsMapper
 import com.wini.owle.repo.runs.WorkflowExecutionRepository

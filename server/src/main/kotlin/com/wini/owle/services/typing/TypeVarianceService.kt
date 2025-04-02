@@ -1,6 +1,6 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.dto.TypeVarianceDto
+import com.wini.owle.dto.typing.TypeVarianceDto
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.typing.TypeVariancesMapper
 import com.wini.owle.repo.typing.TypeVarianceRepository

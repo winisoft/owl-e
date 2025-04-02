@@ -2,7 +2,7 @@ package com.wini.owle.api.transforms
 
 import com.wini.owle.api.GenericCompositeIdApi
 import com.wini.owle.dll.transforms.TransformTargetTypeDll
-import com.wini.owle.dto.TransformationTargetTypeDto
+import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.mapper.CompositeIdMap
 import io.ktor.server.routing.*
 

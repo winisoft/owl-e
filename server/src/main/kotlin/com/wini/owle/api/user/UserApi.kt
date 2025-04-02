@@ -2,7 +2,7 @@ package com.wini.owle.api.user
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.user.UserDll
-import com.wini.owle.dto.UserDto
+import com.wini.owle.dto.user.UserDto
 import io.ktor.server.routing.*
 
 class UserApi(dll: UserDll) : GenericLongPkApi<UserDto>(

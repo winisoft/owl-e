@@ -1,6 +1,6 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.dto.*
+import com.wini.owle.dto.steps.ProvisionDataPointDto
 import com.wini.owle.entity.steps.*
 import com.wini.owle.mapper.steps.ProvisionDataPointMapper
 import com.wini.owle.repo.steps.*

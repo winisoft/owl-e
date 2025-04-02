@@ -1,6 +1,6 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.dto.DataPointDto
+import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.mapper.workflows.DataPointsMapper
 import com.wini.owle.repo.workflows.DataPointRepository

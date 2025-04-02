@@ -1,8 +1,8 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.TypeVarianceDto
-import com.wini.owle.entity.VarianceCardinality
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.typing.TypeVarianceDto
+import com.wini.owle.dto.typing.VarianceCardinalityDto
+import com.wini.owle.entity.typing.VarianceCardinality
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
@@ -17,9 +17,9 @@ class TypeVariancesMapper(
         val applyProps: TypeVarianceDao.() -> Unit = {
             typeVariableDeclaration = typeDeclarationsMapper.toEntity(dto.typeVariableDeclaration)
             varianceCardinality = when (dto.varianceCardinality) {
-                com.wini.owle.dto.enums.VarianceCardinality.Covariant -> VarianceCardinality.COVARIANT
-                com.wini.owle.dto.enums.VarianceCardinality.Contravariant -> VarianceCardinality.CONTRAVARIANT
-                com.wini.owle.dto.enums.VarianceCardinality.Invariant -> VarianceCardinality.INVARIANT
+                VarianceCardinalityDto.Covariant -> VarianceCardinality.COVARIANT
+                VarianceCardinalityDto.Contravariant -> VarianceCardinality.CONTRAVARIANT
+                VarianceCardinalityDto.Invariant -> VarianceCardinality.INVARIANT
             }
         }
         return if (dto.id == 0L) {
@@ -36,9 +36,9 @@ class TypeVariancesMapper(
             id = entity.id.value,
             typeVariableDeclaration = typeDeclarationsMapper.toDto(entity.typeVariableDeclaration),
             varianceCardinality = when (entity.varianceCardinality) {
-                VarianceCardinality.COVARIANT -> com.wini.owle.dto.enums.VarianceCardinality.Covariant
-                VarianceCardinality.CONTRAVARIANT -> com.wini.owle.dto.enums.VarianceCardinality.Contravariant
-                VarianceCardinality.INVARIANT -> com.wini.owle.dto.enums.VarianceCardinality.Invariant
+                VarianceCardinality.COVARIANT -> VarianceCardinalityDto.Covariant
+                VarianceCardinality.CONTRAVARIANT -> VarianceCardinalityDto.Contravariant
+                VarianceCardinality.INVARIANT -> VarianceCardinalityDto.Invariant
             }
         )
     }

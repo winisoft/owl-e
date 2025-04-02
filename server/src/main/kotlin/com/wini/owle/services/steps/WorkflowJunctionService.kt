@@ -1,6 +1,6 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.dto.WorkflowJunctionDto
+import com.wini.owle.dto.steps.WorkflowJunctionDto
 import com.wini.owle.entity.steps.WorkflowJunctionDao
 import com.wini.owle.mapper.steps.WorkflowJunctionsMapper
 import com.wini.owle.repo.steps.WorkflowJunctionRepository

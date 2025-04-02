@@ -1,13 +1,9 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.TypeParameterDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeParameters
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.entity.typing.TypeParameterDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeParametersMapper(

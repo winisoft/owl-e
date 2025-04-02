@@ -2,7 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.workflows.DataPointDll
-import com.wini.owle.dto.DataPointDto
+import com.wini.owle.dto.workflows.DataPointDto
 import io.ktor.server.routing.*
 
 class DataPointsApi(

@@ -1,17 +1,12 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.DataPointDto
-import com.wini.owle.entity.DataPoints
-import com.wini.owle.entity.StoreMethod
-import com.wini.owle.entity.StoreMethod.Companion.toDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.Workflows
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.entity.workflows.StoreMethod
+import com.wini.owle.entity.workflows.StoreMethod.Companion.toDto
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class DataPointsMapper(

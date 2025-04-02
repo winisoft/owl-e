@@ -2,7 +2,7 @@ package com.wini.owle.dll.steps
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.ErrorWatchFnDto
+import com.wini.owle.dto.steps.ErrorWatchFnDto
 import com.wini.owle.services.steps.ErrorWatchFnService
 
 class ErrorWatchFnDll(

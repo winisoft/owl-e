@@ -2,7 +2,7 @@ package com.wini.owle.dll.user
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.UserDto
+import com.wini.owle.dto.user.UserDto
 import com.wini.owle.services.user.UserService
 
 class UserDll(

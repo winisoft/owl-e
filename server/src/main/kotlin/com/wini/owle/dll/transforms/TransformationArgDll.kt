@@ -2,7 +2,7 @@ package com.wini.owle.dll.transforms
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TransformationArgDto
+import com.wini.owle.dto.transforms.TransformationArgDto
 import com.wini.owle.services.transforms.TransformationArgService
 
 class TransformationArgDll(

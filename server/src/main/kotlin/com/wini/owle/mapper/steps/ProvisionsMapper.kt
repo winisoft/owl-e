@@ -1,8 +1,7 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.ProvisionDto
+import com.wini.owle.dto.steps.ProvisionDto
 import com.wini.owle.entity.ProvisionDataPoints // Needed for query
-import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.steps.ProvisionDao
 import com.wini.owle.entity.steps.ProvisionDataPointDao
 import com.wini.owle.mapper.DaoFactory

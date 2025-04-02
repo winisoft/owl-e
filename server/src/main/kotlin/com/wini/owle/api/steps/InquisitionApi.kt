@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.steps.InquisitionDll
-import com.wini.owle.dto.InquisitionDto
+import com.wini.owle.dto.steps.InquisitionDto
 import io.ktor.server.routing.*
 
 class InquisitionApi(dll: InquisitionDll) : GenericLongPkApi<InquisitionDto>(

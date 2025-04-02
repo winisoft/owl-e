@@ -1,13 +1,9 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.dto.TagDto
-import com.wini.owle.entity.Tags
-import com.wini.owle.entity.Users
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.user.TagDto
 import com.wini.owle.entity.user.TagDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TagsMapper(

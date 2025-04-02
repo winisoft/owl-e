@@ -2,7 +2,7 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.TypeParameterDto
+import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.entity.typing.TypeParameterDao
 import com.wini.owle.mapper.typing.TypeParametersMapper
 import com.wini.owle.repo.typing.TypeParameterRepository

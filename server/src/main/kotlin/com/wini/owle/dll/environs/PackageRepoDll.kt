@@ -2,7 +2,7 @@ package com.wini.owle.dll.environs
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.PackageRepoDto
+import com.wini.owle.dto.environs.PackageRepoDto
 import com.wini.owle.services.environs.PackageRepoService
 
 class PackageRepoDll(

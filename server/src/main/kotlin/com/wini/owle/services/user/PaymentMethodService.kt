@@ -1,6 +1,6 @@
 package com.wini.owle.services.user
 
-import com.wini.owle.dto.PaymentMethodDto
+import com.wini.owle.dto.user.PaymentMethodDto
 import com.wini.owle.entity.user.PaymentMethodDao
 import com.wini.owle.mapper.user.PaymentMethodsMapper
 import com.wini.owle.repo.user.PaymentMethodRepository

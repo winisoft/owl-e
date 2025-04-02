@@ -1,7 +1,6 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.TypeUnionMemberDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.typing.TypeUnionMemberDto
 import com.wini.owle.entity.typing.TypeUnionMemberDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

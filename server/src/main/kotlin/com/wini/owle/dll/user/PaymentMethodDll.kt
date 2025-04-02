@@ -2,7 +2,7 @@ package com.wini.owle.dll.user
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.PaymentMethodDto
+import com.wini.owle.dto.user.PaymentMethodDto
 import com.wini.owle.services.user.PaymentMethodService
 
 class PaymentMethodDll(

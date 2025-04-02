@@ -2,7 +2,7 @@ package com.wini.owle.dll.steps
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.PreReqInjectionDto
+import com.wini.owle.dto.steps.PreReqInjectionDto
 import com.wini.owle.services.steps.PreReqInjectionService
 
 class PreReqInjectionDll(

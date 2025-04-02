@@ -1,15 +1,11 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.TestExpectedOutcomeDto
-import com.wini.owle.entity.ComparisonOperator
-import com.wini.owle.entity.ComparisonOperator.Companion.toDto
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.TestExpectedOutcomes
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.TestExpectedOutcomeDto
+import com.wini.owle.entity.runs.ComparisonOperator
+import com.wini.owle.entity.runs.ComparisonOperator.Companion.toDto
 import com.wini.owle.entity.runs.TestExpectedOutcomeDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TestExpectedOutcomesMapper(

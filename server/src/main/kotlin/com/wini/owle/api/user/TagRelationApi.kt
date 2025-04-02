@@ -2,7 +2,7 @@ package com.wini.owle.api.user
 
 import com.wini.owle.api.GenericCompositeIdApi
 import com.wini.owle.dll.user.TagRelationDll
-import com.wini.owle.dto.TagRelationDto
+import com.wini.owle.dto.user.TagRelationDto
 import com.wini.owle.mapper.CompositeIdMap
 import io.ktor.server.routing.*
 

@@ -1,6 +1,6 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.dto.PhaseDto
+import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.entity.workflows.PhaseDao
 import com.wini.owle.mapper.workflows.PhasesMapper
 import com.wini.owle.repo.workflows.PhaseRepository

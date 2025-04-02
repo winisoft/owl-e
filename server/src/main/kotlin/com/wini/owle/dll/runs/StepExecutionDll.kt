@@ -2,7 +2,7 @@ package com.wini.owle.dll.runs
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.StepExecutionDto
+import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.services.runs.StepExecutionService
 
 class StepExecutionDll(

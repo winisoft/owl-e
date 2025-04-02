@@ -2,7 +2,7 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.typing.TypeBoundsDll
-import com.wini.owle.dto.TypeBoundsDto
+import com.wini.owle.dto.typing.TypeBoundsDto
 import io.ktor.server.routing.*
 
 class TypeBoundsApi(

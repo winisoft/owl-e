@@ -2,7 +2,7 @@ package com.wini.owle.api.transforms
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.transforms.TransformationArgDll
-import com.wini.owle.dto.TransformationArgDto
+import com.wini.owle.dto.transforms.TransformationArgDto
 import io.ktor.server.routing.*
 
 class TransformationArgApi(dll: TransformationArgDll) : GenericLongPkApi<TransformationArgDto>(

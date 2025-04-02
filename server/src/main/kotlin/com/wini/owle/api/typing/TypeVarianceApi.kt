@@ -2,7 +2,7 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.typing.TypeVarianceDll
-import com.wini.owle.dto.TypeVarianceDto
+import com.wini.owle.dto.typing.TypeVarianceDto
 import io.ktor.server.routing.*
 
 class TypeVarianceApi(dll: TypeVarianceDll) : GenericLongPkApi<TypeVarianceDto>(

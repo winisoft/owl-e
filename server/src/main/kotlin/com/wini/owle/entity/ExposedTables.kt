@@ -1,7 +1,17 @@
 package com.wini.owle.entity
 
-import com.wini.owle.dto.ResourceUsageDto
-import com.wini.owle.models.Metadata
+import com.wini.owle.dto.runs.ResourceUsageDto
+import com.wini.owle.entity.environs.PackageRepoType
+import com.wini.owle.entity.runs.ComparisonOperator
+import com.wini.owle.entity.runs.ExecutionStatus
+import com.wini.owle.entity.runs.GenerationMethod
+import com.wini.owle.entity.runs.LogLevel
+import com.wini.owle.entity.transforms.TransformOccurrence
+import com.wini.owle.entity.typing.VarianceCardinality
+import com.wini.owle.entity.user.CardBrand
+import com.wini.owle.entity.user.SubscriptionStatus
+import com.wini.owle.entity.workflows.StoreMethod
+import com.wini.owle.models.user.metadata.UserDesignedMetadata
 import com.wini.owle.models.metadata.UserDesignedMetadata
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.CompositeIdTable
@@ -128,7 +138,7 @@ object Steps : LongIdTable("steps") {
     val defaultNext = reference("defaultNextId", Steps, onDelete = ReferenceOption.SET_NULL).nullable()
 
     val displayOrder = integer("displayOrder")
-    val metadata = json("metadata", Metadata.jsonConfig, Metadata.serializer()).nullable()
+    val metadata = json("metadata", UserDesignedMetadata.jsonConfig, UserDesignedMetadata.serializer()).nullable()
     val img = blob("img").nullable()
     val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
     val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)

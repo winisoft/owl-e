@@ -1,7 +1,6 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.dto.TagRelationDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.user.TagRelationDto
 import com.wini.owle.entity.user.TagRelationDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

@@ -1,6 +1,6 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.dto.TestCaseDto
+import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.entity.runs.TestCaseDao
 import com.wini.owle.mapper.runs.TestCasesMapper
 import com.wini.owle.repo.runs.TestCaseRepository

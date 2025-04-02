@@ -1,6 +1,5 @@
 package com.wini.owle.services
 
-import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncError.DatabaseError
 import com.wini.owle.async.AsyncError.NoSuchIdError
 import com.wini.owle.async.AsyncResult

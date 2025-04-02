@@ -2,7 +2,7 @@ package com.wini.owle.api.user
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.user.PaymentMethodDll
-import com.wini.owle.dto.PaymentMethodDto
+import com.wini.owle.dto.user.PaymentMethodDto
 import io.ktor.server.routing.*
 
 class PaymentMethodApi(dll: PaymentMethodDll) : GenericLongPkApi<PaymentMethodDto>(

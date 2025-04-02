@@ -2,7 +2,7 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.GenericCompositeIdApi
 import com.wini.owle.dll.steps.ProvisionDataPointDll
-import com.wini.owle.dto.ProvisionDataPointDto
+import com.wini.owle.dto.steps.ProvisionDataPointDto
 import com.wini.owle.mapper.CompositeIdMap
 import io.ktor.server.routing.*
 

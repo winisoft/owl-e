@@ -1,9 +1,15 @@
 package com.wini.owle
 
-import com.wini.owle.dto.VersionSpecDto
-import com.wini.owle.dto.enums.*
 import kotlinx.datetime.LocalDateTime
 import com.wini.owle.dto.*
+import com.wini.owle.dto.environs.*
+import com.wini.owle.dto.runs.*
+import com.wini.owle.dto.steps.*
+import com.wini.owle.dto.transforms.*
+import com.wini.owle.dto.typing.*
+import com.wini.owle.dto.user.*
+import com.wini.owle.dto.user.metadata.UserDesignedMetadataDto
+import com.wini.owle.dto.workflows.*
 import kotlin.reflect.KClass
 
 
@@ -26,7 +32,7 @@ object DtoTestInstanceFactory {
 
     fun packageRepoDto(
         id: Long = 1L,
-        sourceType: PackageRepoType = PackageRepoType.Pypi,
+        sourceType: PackageRepoTypeDto = PackageRepoTypeDto.Pypi,
         sourceUrl: String = "https://pypi.org"
     ): PackageRepoDto {
         return PackageRepoDto(
@@ -143,7 +149,7 @@ object DtoTestInstanceFactory {
         name: String = "Data Point Name",
         description: String? = "Data Point Description",
         presetValue: String? = "Some stuff",
-        storeMethod: StoreMethod = StoreMethod.Blob,
+        storeMethod: StoreMethodDto = StoreMethodDto.Blob,
         typeDeclaration: TypeDeclarationDto = typeDeclarationDto(),
         workflow: WorkflowDto = workflowDto(),
         createdAt: String = "2024-12-20T15:00:00",
@@ -208,7 +214,7 @@ object DtoTestInstanceFactory {
         id: Long = 1L,
         stripePaymentMethodId: String? = "1AF002B1B22200",
         user: UserDto = userDto(),
-        cardBrand: CardBrand? = CardBrand.Visa,
+        cardBrand: CardBrandDto? = CardBrandDto.Visa,
         lastFour: String? = "4103",
         isDefault: Boolean = true,
         createdAt: String = "2024-12-21T15:00:00",
@@ -256,7 +262,7 @@ object DtoTestInstanceFactory {
         user: UserDto = userDto(),
         startedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
         completedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
-        status: ExecutionStatus = ExecutionStatus.Failed,
+        status: ExecutionStatusDto = ExecutionStatusDto.Failed,
         stepExecutions: List<StepExecutionDto> = emptyList()
     ) : WorkflowExecutionDto {
         return WorkflowExecutionDto(
@@ -295,7 +301,7 @@ object DtoTestInstanceFactory {
         resetToken: String? = "3ij3oi2joi342j",
         oauthProvider: String? = "Google",
         oauthId: String? = "IROEJOWejofdjsojfoaj3ioj439u2jiof",
-        subscriptionStatus: SubscriptionStatus = SubscriptionStatus.Registered,
+        subscriptionStatus: SubscriptionStatusDto = SubscriptionStatusDto.Registered,
         apiKey: String? = "jowejrojoewjrew",
         createdAt: String = "2024-12-24T15:00:00",
         updatedAt: String = "2024-12-25T15:00:00",
@@ -320,7 +326,7 @@ object DtoTestInstanceFactory {
         id: Long = 1L,
         stepExecution: StepExecutionDto = stepExecutionDto(),
         timeStamp: String = "2024-12-21T12:00:00Z",
-        logLevel: LogLevel = LogLevel.Info,
+        logLevel: LogLevelDto = LogLevelDto.Info,
         message: String = "Execution Started"
     ) : ExecutionLogDto {
         return ExecutionLogDto(
@@ -352,7 +358,7 @@ object DtoTestInstanceFactory {
         step: StepDto = stepDto(),
         startedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
         completedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
-        status: ExecutionStatus = ExecutionStatus.Failed
+        status: ExecutionStatusDto = ExecutionStatusDto.Failed
     ) : StepExecutionDto {
         return StepExecutionDto(
             id = id,
@@ -548,7 +554,7 @@ object DtoTestInstanceFactory {
     fun typeVarianceDto(
         id: Long = 23L,
         typeVariableDeclaration: TypeDeclarationDto = typeDeclarationDto(),
-        varianceCardinality: VarianceCardinality = VarianceCardinality.Covariant
+        varianceCardinality: VarianceCardinalityDto = VarianceCardinalityDto.Covariant
     ): TypeVarianceDto {
         return TypeVarianceDto(
             id = id,
@@ -591,7 +597,7 @@ object DtoTestInstanceFactory {
         id: Long = 6L,
         dataPointName: String = "input1",
         value: String = "value1",
-        generationMethod: GenerationMethod = GenerationMethod.Manual,
+        generationMethod: GenerationMethodDto = GenerationMethodDto.Manual,
         testCase: TestCaseDto = testCaseDto()
     ): TestInputDto {
         return TestInputDto(
@@ -606,7 +612,7 @@ object DtoTestInstanceFactory {
         id: Long = 7L,
         dataPointName: String = "output1",
         expectedValue: String = "expectedValue1",
-        comparisonOperator: ComparisonOperator = ComparisonOperator.Equals,
+        comparisonOperator: ComparisonOperatorDto = ComparisonOperatorDto.Equals,
         testCase: TestCaseDto = testCaseDto()
     ): TestExpectedOutcomeDto {
         return TestExpectedOutcomeDto(
@@ -679,7 +685,7 @@ object DtoTestInstanceFactory {
     fun appliedTransformDto(
         id: Long = 0L,
         transformation: TransformationDto = transformationDto(),
-        occurrence: TransformOccurrence = TransformOccurrence.PreReqInjection,
+        occurrence: TransformOccurrenceDto = TransformOccurrenceDto.PreReqInjection,
         resultType: TypeDeclarationDto = typeDeclarationDto(),
         dataPoint: DataPointDto? = dataPointDto(),
     ) : AppliedTransformDto {

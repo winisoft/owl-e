@@ -1,8 +1,7 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.ResourceUsageDto
-import com.wini.owle.dto.StepBenchmarkingDataDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.ResourceUsageDto
+import com.wini.owle.dto.runs.StepBenchmarkingDataDto
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

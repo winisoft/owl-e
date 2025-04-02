@@ -1,7 +1,7 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.PackageDto
-import com.wini.owle.dto.VersionSpecDto
+import com.wini.owle.dto.environs.PackageDto
+import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.mapper.DaoFactory

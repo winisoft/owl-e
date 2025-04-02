@@ -2,7 +2,7 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.runs.ExecutionLogDll
-import com.wini.owle.dto.ExecutionLogDto
+import com.wini.owle.dto.runs.ExecutionLogDto
 import io.ktor.server.routing.*
 
 class ExecutionLogApi(dll: ExecutionLogDll) : GenericLongPkApi<ExecutionLogDto>(

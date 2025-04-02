@@ -1,8 +1,8 @@
 package com.wini.owle.api.workflows
 
 import com.wini.owle.api.GenericLongPkApi
-import com.wini.owle.dto.*
 import com.wini.owle.dll.workflows.*
+import com.wini.owle.dto.workflows.WorkflowDto
 import io.ktor.server.routing.*
 
 

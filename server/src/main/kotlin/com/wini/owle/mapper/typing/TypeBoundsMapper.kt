@@ -1,13 +1,9 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.TypeBoundsDto
-import com.wini.owle.entity.TypeBounds // Table definition, keep if needed
-import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.typing.TypeBoundsDto
 import com.wini.owle.entity.typing.TypeBoundDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeBoundsMapper(

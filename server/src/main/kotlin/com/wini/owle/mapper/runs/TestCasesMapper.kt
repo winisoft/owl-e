@@ -1,15 +1,10 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.TestCaseDto
-import com.wini.owle.dto.TestExpectedOutcomeDto
-import com.wini.owle.dto.TestInputDto
-import com.wini.owle.dto.TestResultDto
-import com.wini.owle.entity.*
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.TestCaseDto
+import com.wini.owle.dto.runs.TestExpectedOutcomeDto
+import com.wini.owle.dto.runs.TestInputDto
+import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.entity.runs.TestCaseDao
-import com.wini.owle.entity.runs.TestExpectedOutcomeDao
-import com.wini.owle.entity.runs.TestInputDao
-import com.wini.owle.entity.runs.TestResultDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.user.UsersMapper

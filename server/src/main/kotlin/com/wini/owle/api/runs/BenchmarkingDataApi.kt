@@ -2,7 +2,7 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.runs.BenchmarkingDataDll
-import com.wini.owle.dto.BenchmarkingDataDto
+import com.wini.owle.dto.runs.BenchmarkingDataDto
 import io.ktor.server.routing.*
 
 class BenchmarkingDataApi(dll: BenchmarkingDataDll) : GenericLongPkApi<BenchmarkingDataDto>(

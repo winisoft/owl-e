@@ -1,6 +1,6 @@
 package com.wini.owle.services.transforms
 
-import com.wini.owle.dto.TransformationArgDto
+import com.wini.owle.dto.transforms.TransformationArgDto
 import com.wini.owle.entity.transforms.TransformationArgDao
 import com.wini.owle.mapper.transforms.TransformationArgsMapper
 import com.wini.owle.repo.transforms.TransformationArgRepository

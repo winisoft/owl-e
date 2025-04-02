@@ -1,12 +1,9 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.dto.AppliedTransformArgDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.transforms.AppliedTransformArgDto
 import com.wini.owle.entity.transforms.AppliedTransformArgDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.transforms.AppliedTransformsMapper
-import com.wini.owle.mapper.transforms.TransformationArgsMapper
 
 
 class AppliedTransformArgsMapper(

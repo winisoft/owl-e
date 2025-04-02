@@ -1,18 +1,13 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.dto.UserDto
-import com.wini.owle.entity.PaymentMethods
-import com.wini.owle.entity.SubscriptionStatus
-import com.wini.owle.entity.SubscriptionStatus.Companion.toDto
-import com.wini.owle.entity.Users
-import com.wini.owle.entity.environs.PackageRepoDao
-import com.wini.owle.entity.user.PaymentMethodDao
+import com.wini.owle.dto.user.UserDto
+import com.wini.owle.entity.user.SubscriptionStatus
+import com.wini.owle.entity.user.SubscriptionStatus.Companion.toDto
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
 import kotlinx.datetime.LocalDateTime // Assuming kotlinx-datetime is used
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class UsersMapper(

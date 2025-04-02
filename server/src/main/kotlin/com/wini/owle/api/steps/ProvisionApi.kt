@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.steps.ProvisionDll
-import com.wini.owle.dto.ProvisionDto
+import com.wini.owle.dto.steps.ProvisionDto
 import io.ktor.server.routing.*
 
 class ProvisionApi(dll: ProvisionDll): GenericLongPkApi<ProvisionDto>(

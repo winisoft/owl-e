@@ -1,13 +1,9 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.TypeSchemaRefDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeSchemaRefs
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.typing.TypeSchemaRefDto
 import com.wini.owle.entity.typing.TypeSchemaRefDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeSchemaRefsMapper(

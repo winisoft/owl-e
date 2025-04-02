@@ -1,6 +1,6 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.dto.TestExpectedOutcomeDto
+import com.wini.owle.dto.runs.TestExpectedOutcomeDto
 import com.wini.owle.entity.runs.TestExpectedOutcomeDao
 import com.wini.owle.mapper.runs.TestExpectedOutcomesMapper
 import com.wini.owle.repo.runs.TestExpectedOutcomeRepository

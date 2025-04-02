@@ -1,8 +1,8 @@
 package com.wini.owle.models.metadata
 
-import com.wini.owle.dto.ModificationDto
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+
 
 /**
  * Represents metadata for workflows or steps within the Owl-E application.

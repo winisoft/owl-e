@@ -1,6 +1,6 @@
 package com.wini.owle.services.user
 
-import com.wini.owle.dto.TagRelationDto
+import com.wini.owle.dto.user.TagRelationDto
 import com.wini.owle.entity.user.TagRelationDao
 import com.wini.owle.mapper.user.TagRelationsMapper
 import com.wini.owle.repo.user.TagRelationRepository

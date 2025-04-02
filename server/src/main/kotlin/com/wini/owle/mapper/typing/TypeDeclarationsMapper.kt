@@ -1,14 +1,10 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.TypeDeclarationDto
-import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
-import com.wini.owle.entity.TypeDefinitions // Table definition, keep if needed
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 // Removed TransformationsMapper import as it's not directly used here
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeDeclarationsMapper(

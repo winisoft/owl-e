@@ -2,7 +2,7 @@ package com.wini.owle.api.environs
 
 import com.wini.owle.api.GenericCompositeIdApi
 import com.wini.owle.dll.environs.ToolPackageDependencyDll
-import com.wini.owle.dto.*
+import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import com.wini.owle.mapper.CompositeIdMap
 import io.ktor.server.routing.*
 

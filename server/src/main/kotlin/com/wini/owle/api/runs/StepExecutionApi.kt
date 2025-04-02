@@ -2,7 +2,7 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.runs.StepExecutionDll
-import com.wini.owle.dto.StepExecutionDto
+import com.wini.owle.dto.runs.StepExecutionDto
 import io.ktor.server.routing.*
 
 class StepExecutionApi(dll: StepExecutionDll) : GenericLongPkApi<StepExecutionDto>(

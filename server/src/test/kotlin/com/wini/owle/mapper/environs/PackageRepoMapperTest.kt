@@ -1,10 +1,16 @@
 package com.wini.owle.mapper.environs
 
+import com.wini.owle.dto.environs.PackageRepoDto
+import com.wini.owle.dto.environs.PackageRepoTypeDto
+import com.wini.owle.entity.environs.PackageRepoType.Companion.toDto
 import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.entity.environs.PackageRepoType
 import com.wini.owle.mapper.DaoFactory
-import io.mockk.mockk
+import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import kotlin.test.assertEquals
 
 
 open class PackageRepoMapperTest {
@@ -19,73 +25,94 @@ open class PackageRepoMapperTest {
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        // Create test DTOs
+        val dto = PackageRepoDto(
+            id = 99L, 
+            sourceType = PackageRepoTypeDto.Pypi,
+            sourceUrl = "http://example.com"
+        )
 
-        // Mock the nested dao member(s) that would be created from the DTO
+        mockkObject(PackageRepoDao)
+        every { PackageRepoDao.findById(99L) } returns null
 
-        // Mock the behavior of findById to return null (not found)
+        val exception = assertThrows<IllegalStateException> {
+            mapper.toEntity(dto)
+        }
 
-        // Verify that the exception is thrown with the correct message
-
+        assertEquals("PackageRepo with id=99 not found", exception.message)
+        unmockkObject(PackageRepoDao)
     }
 
     @Test
     fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+        val entity = mockk<PackageRepoDao> {
+            every { id.value } returns 1L
+            every { sourceType.toDto() } returns PackageRepoTypeDto.Pypi
+            every { sourceUrl } returns "http://example.com"
+        }
 
-        // Mock toDto behavior of the mapper
+        val result = mapper.toDto(entity)
 
-        // Call the method under test
-
-        // Verify the result
+        assertEquals(1L, result.id)
+        assertEquals(PackageRepoTypeDto.Pypi, result.sourceType)
+        assertEquals("http://example.com", result.sourceUrl)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
-        // Create test DTOs
+        val dto = PackageRepoDto(
+            id = 42L,
+            sourceType = PackageRepoTypeDto.Pypi,
+            sourceUrl = "http://updated.com"
+        )
 
-        // Mock the existing entity that will be updated
+        val existingEntity = mockk<PackageRepoDao>(relaxed = true)
 
-        // Mock the VersionSpecDao that would be returned from the mapper
+        mockkObject(PackageRepoDao)
+        every { PackageRepoDao.findById(42L) } returns existingEntity
 
-        // Set up mocks for finding existing entity
+        val sourceTypeSlot = slot<PackageRepoType>()
+        val sourceUrlSlot = slot<String>()
 
-        // Define slots to capture property assignments
+        every { existingEntity.sourceType = capture(sourceTypeSlot) } just runs
+        every { existingEntity.sourceUrl = capture(sourceUrlSlot) } just runs
 
-        // Capture the property updates
+        val result = mapper.toEntity(dto)
 
-        // Execute the method under test
+        verify { PackageRepoDao.findById(42L) }
+        verify { existingEntity.sourceType = PackageRepoType.PYPI }
+        verify { existingEntity.sourceUrl = "http://updated.com" }
 
-        // Verify that the existing entity was found and updated
+        assertEquals(PackageRepoType.PYPI, sourceTypeSlot.captured)
+        assertEquals("http://updated.com", sourceUrlSlot.captured)
 
-        // Verify the captured values
+        assertEquals(existingEntity, result)
 
-        // Verify the result is the updated entity
-
+        unmockkObject(PackageRepoDao)
     }
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+        val dto = PackageRepoDto(id = 0L, sourceType = PackageRepoTypeDto.Pypi, sourceUrl = "http://new.com")
 
-        // Mock the new entity that will be created
+        val newEntity = mockk<PackageRepoDao>(relaxed = true)
 
-        // Mock nested entity type(s) that would be returned from the mapper
+        every { factory.create() } returns newEntity
 
-        // Set up the factory mock to return our mock entity
+        val sourceTypeSlot = slot<PackageRepoType>()
+        val sourceUrlSlot = slot<String>()
 
-        // Define slots to capture property assignments
+        every { newEntity.sourceType = capture(sourceTypeSlot) } just runs
+        every { newEntity.sourceUrl = capture(sourceUrlSlot) } just runs
 
-        // Set up property capture
+        val result = mapper.toEntity(dto)
 
-        // Execute the method under test
+        verify { factory.create() }
+        verify { newEntity.sourceType = PackageRepoType.PYPI }
+        verify { newEntity.sourceUrl = "http://new.com" }
 
-        // Verify that the factory was used to create a new entity
+        assertEquals(PackageRepoType.PYPI, sourceTypeSlot.captured)
+        assertEquals("http://new.com", sourceUrlSlot.captured)
 
-        // Verify the properties were set correctly
-
-        // Verify the captured values
-
-        // Verify the result is the new entity
+        assertEquals(newEntity, result)
     }
 }

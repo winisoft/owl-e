@@ -2,7 +2,7 @@ package com.wini.owle.dll.runs
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.WorkflowExecutionDto
+import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.services.runs.WorkflowExecutionService
 
 class WorkflowExecutionDll(

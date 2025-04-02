@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.steps.PreReqInjectionDll
-import com.wini.owle.dto.PreReqInjectionDto
+import com.wini.owle.dto.steps.PreReqInjectionDto
 import io.ktor.server.routing.*
 
 class PreReqInjectionApi(dll: PreReqInjectionDll): GenericLongPkApi<PreReqInjectionDto>(

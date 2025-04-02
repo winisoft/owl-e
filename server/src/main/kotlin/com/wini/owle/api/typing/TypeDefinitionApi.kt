@@ -2,7 +2,7 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.typing.TypeDefinitionDll
-import com.wini.owle.dto.TypeDefinitionDto
+import com.wini.owle.dto.typing.TypeDefinitionDto
 import io.ktor.server.routing.*
 
 class TypeDefinitionApi(dll: TypeDefinitionDll) : GenericLongPkApi<TypeDefinitionDto>(

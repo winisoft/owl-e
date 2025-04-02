@@ -2,7 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.workflows.PhaseDll
-import com.wini.owle.dto.PhaseDto
+import com.wini.owle.dto.workflows.PhaseDto
 import io.ktor.server.routing.*
 
 class PhaseApi(dll: PhaseDll) : GenericLongPkApi<PhaseDto>(

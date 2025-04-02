@@ -2,7 +2,7 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.TypeUnionMemberDto
+import com.wini.owle.dto.typing.TypeUnionMemberDto
 import com.wini.owle.entity.typing.TypeUnionMemberDao
 import com.wini.owle.mapper.typing.TypeUnionMembersMapper
 import com.wini.owle.repo.typing.TypeUnionMemberRepository

@@ -2,7 +2,7 @@ package com.wini.owle.dll.runs
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TestResultDto
+import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.services.runs.TestResultService
 
 class TestResultDll(

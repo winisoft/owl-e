@@ -2,7 +2,7 @@ package com.wini.owle.dll.workflows
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.PhaseDto
+import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.services.workflows.PhaseService
 import com.wini.owle.services.workflows.StepService
 import kotlin.math.max

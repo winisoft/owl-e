@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.VersionSpecDto
+import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.mapper.ExposedDaoFactory
 import io.mockk.*

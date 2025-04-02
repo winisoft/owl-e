@@ -2,7 +2,7 @@ package com.wini.owle.dll.typing
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TypeSchemaRefDto
+import com.wini.owle.dto.typing.TypeSchemaRefDto
 import com.wini.owle.services.typing.TypeSchemaRefService
 
 class TypeSchemaRefDll(

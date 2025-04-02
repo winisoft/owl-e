@@ -2,7 +2,7 @@ package com.wini.owle.dll.workflows
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.ToolParamDto
+import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.services.workflows.ToolParamService
 
 class ToolParamDll(

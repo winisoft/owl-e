@@ -1,6 +1,6 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.dto.TypeSchemaRefDto
+import com.wini.owle.dto.typing.TypeSchemaRefDto
 import com.wini.owle.entity.typing.TypeSchemaRefDao
 import com.wini.owle.mapper.typing.TypeSchemaRefsMapper
 import com.wini.owle.repo.typing.TypeSchemaRefRepository

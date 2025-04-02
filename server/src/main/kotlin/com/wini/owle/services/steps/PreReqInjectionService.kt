@@ -1,6 +1,6 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.dto.PreReqInjectionDto
+import com.wini.owle.dto.steps.PreReqInjectionDto
 import com.wini.owle.entity.steps.PreReqInjectionDao
 import com.wini.owle.mapper.steps.PreReqInjectionsMapper
 import com.wini.owle.repo.steps.PreReqInjectionRepository

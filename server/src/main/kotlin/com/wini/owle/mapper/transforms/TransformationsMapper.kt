@@ -1,18 +1,10 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.dto.TransformationDto
-import com.wini.owle.entity.TransformTargetTypes // Table definition, keep if needed
-import com.wini.owle.entity.TransformationArgs // Table definition, keep if needed
-import com.wini.owle.entity.Transformations // Table definition, keep if needed
-import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
-import com.wini.owle.entity.environs.PackageRepoDao
-import com.wini.owle.entity.transforms.TransformTargetTypeDao // Not directly used here
-import com.wini.owle.entity.transforms.TransformationArgDao // Not directly used here
+import com.wini.owle.dto.transforms.TransformationDto
 import com.wini.owle.entity.transforms.TransformationDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TransformationsMapper(

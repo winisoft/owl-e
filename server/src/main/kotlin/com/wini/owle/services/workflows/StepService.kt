@@ -1,6 +1,6 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.dto.StepDto
+import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.mapper.workflows.StepsMapper
 import com.wini.owle.repo.workflows.StepRepository

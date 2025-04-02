@@ -17,11 +17,11 @@ import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
 import com.wini.owle.mapper.typing.*
 import com.wini.owle.mapper.user.*
+import com.wini.owle.mapper.user.metadata.UserDesignedMetadataMapper
 import com.wini.owle.mapper.workflows.*
 import org.jetbrains.exposed.dao.id.CompositeID
-import org.koin.core.module.dsl.factoryOf
-import org.koin.core.scope.get
 import org.koin.dsl.module
+
 
 val daoFactoryModule = module {
     single<DaoFactory<VersionSpecDao, Long>> { ExposedDaoFactory(VersionSpecDao) }

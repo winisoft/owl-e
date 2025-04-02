@@ -2,7 +2,7 @@ package com.wini.owle.api.environs
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.environs.VersionSpecDll
-import com.wini.owle.dto.VersionSpecDto
+import com.wini.owle.dto.environs.VersionSpecDto
 import io.ktor.server.routing.*
 
 class VersionSpecApi(dll: VersionSpecDll) : GenericLongPkApi<VersionSpecDto>(

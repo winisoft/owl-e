@@ -2,7 +2,7 @@ package com.wini.owle.dll.user
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TagRelationDto
+import com.wini.owle.dto.user.TagRelationDto
 import com.wini.owle.services.user.TagRelationService
 import org.jetbrains.exposed.dao.id.CompositeID
 

@@ -2,7 +2,7 @@ package com.wini.owle.services.user
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TagDto
+import com.wini.owle.dto.user.TagDto
 
 class TagDll(
     private val service: TagService

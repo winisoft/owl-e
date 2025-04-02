@@ -2,7 +2,7 @@ package com.wini.owle.dll.runs
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.ExecutionLogDto
+import com.wini.owle.dto.runs.ExecutionLogDto
 import com.wini.owle.services.runs.ExecutionLogService
 
 class ExecutionLogDll(

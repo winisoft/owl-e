@@ -7,12 +7,9 @@ import com.wini.owle.entity.EntityTestInstanceFactory.stepExecutionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.toolDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowDao
 import com.wini.owle.entity.EntityTestInstanceFactory.workflowExecutionDao
-import com.wini.owle.entity.ExecutionLogs
-import com.wini.owle.entity.LogLevel
-import com.wini.owle.entity.SubscriptionStatus
+import com.wini.owle.entity.user.SubscriptionStatus
 import com.wini.owle.entity.runs.ExecutionLogDao
 import com.wini.owle.entity.user.UserDao
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.koin.core.module.Module
 import org.koin.dsl.module

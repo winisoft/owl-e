@@ -1,17 +1,12 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.StepExecutionDto
-import com.wini.owle.entity.ExecutionStatus
-import com.wini.owle.entity.ExecutionStatus.Companion.toDto
-import com.wini.owle.entity.StepExecutions
-import com.wini.owle.entity.Steps
-import com.wini.owle.entity.WorkflowExecutions
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.runs.StepExecutionDto
+import com.wini.owle.entity.runs.ExecutionStatus
+import com.wini.owle.entity.runs.ExecutionStatus.Companion.toDto
 import com.wini.owle.entity.runs.StepExecutionDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.workflows.StepsMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class StepExecutionsMapper(

@@ -1,8 +1,13 @@
 package com.wini.owle.models
 
 import com.wini.owle.dto.DecimalValue
-import com.wini.owle.dto.ResourceUsageDto
-import com.wini.owle.dto.enums.*
+import com.wini.owle.dto.environs.PackageRepoTypeDto
+import com.wini.owle.dto.runs.*
+import com.wini.owle.dto.transforms.TransformOccurrenceDto
+import com.wini.owle.dto.typing.VarianceCardinalityDto
+import com.wini.owle.dto.user.CardBrandDto
+import com.wini.owle.dto.user.SubscriptionStatusDto
+import com.wini.owle.dto.workflows.StoreMethodDto
 import com.wini.owle.models.metadata.UserDesignedMetadata
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
@@ -15,7 +20,7 @@ data class DataPoint(
     val name: String,
     val description: String? = null,
     val presetValue: String? = null,
-    val storeMethod: StoreMethod,
+    val storeMethod: StoreMethodDto,
     val typeDeclaration: TypeDeclaration,
     val createdAt: String,
     val updatedAt: String
@@ -62,7 +67,7 @@ data class WorkflowFolder(
 @Serializable
 data class PackageRepo(
     val id: Long,
-    val sourceType: PackageRepoType,
+    val sourceType: PackageRepoTypeDto,
     val sourceUrl: String?
 )
 
@@ -221,7 +226,7 @@ data class ExecutionLog(
     val id: Long,
     val stepExecution: StepExecution,
     val timestamp: String,
-    val logLevel: LogLevel,
+    val logLevel: LogLevelDto,
     val message: String
 )
 
@@ -240,7 +245,7 @@ data class StepExecution(
     val step: Step,
     val startedAt: LocalDateTime,
     val completedAt: LocalDateTime?,
-    val status: ExecutionStatus
+    val status: ExecutionStatusDto
 )
 
 @Serializable
@@ -262,7 +267,7 @@ data class TestInput(
     val testCase: TestCase,
     val dataPointName: String,
     val value: String?,
-    val generationMethod: GenerationMethod
+    val generationMethod: GenerationMethodDto
 )
 
 @Serializable
@@ -271,7 +276,7 @@ data class TestExpectedOutcome(
     val testCase: TestCase,
     val dataPointName: String,
     val expectedValue: String?,
-    val comparisonOperator: ComparisonOperator
+    val comparisonOperator: ComparisonOperatorDto
 )
 
 @Serializable
@@ -290,7 +295,7 @@ data class WorkflowExecution(
     val user: User,
     val startedAt: LocalDateTime,
     val completedAt: LocalDateTime?,
-    val status: ExecutionStatus,
+    val status: ExecutionStatusDto,
     val stepExecutions: List<StepExecution>
 )
 
@@ -342,7 +347,7 @@ data class PreReqInjection(
 data class AppliedTransform(
     val id: Long,
     val transformation: Transformation,
-    val occurrence: TransformOccurrence,
+    val occurrence: TransformOccurrenceDto,
     val resultType: TypeDeclaration,
     val dataPoint: DataPoint?
 )
@@ -441,7 +446,7 @@ data class TypeSchemaRef(
 data class TypeVariance(
     val id: Long,
     val typeVariableDeclaration: TypeDeclaration,
-    val varianceCardinality: VarianceCardinality
+    val varianceCardinality: VarianceCardinalityDto
 )
 
 @Serializable
@@ -472,7 +477,7 @@ data class User(
     val resetToken: String? = null,
     val oauthProvider: String? = null,
     val oauthId: String? = null,
-    val subscriptionStatus: SubscriptionStatus,
+    val subscriptionStatus: SubscriptionStatusDto,
     val apiKey: String? = null,
     val createdAt: String,
     val updatedAt: String,
@@ -503,7 +508,7 @@ data class PaymentMethod(
     val id: Long,
     val stripePaymentMethodId: String?,
     val user: User,
-    val cardBrand: CardBrand?,
+    val cardBrand: CardBrandDto?,
     val lastFour: String?,
     val isDefault: Boolean,
     val createdAt: String,

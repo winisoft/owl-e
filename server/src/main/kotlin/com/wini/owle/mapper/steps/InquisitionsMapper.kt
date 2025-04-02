@@ -1,7 +1,6 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.InquisitionDto
-import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.dto.steps.InquisitionDto
 import com.wini.owle.entity.steps.InquisitionDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

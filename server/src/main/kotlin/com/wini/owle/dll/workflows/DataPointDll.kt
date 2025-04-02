@@ -2,7 +2,7 @@ package com.wini.owle.dll.workflows
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DataPointDto
+import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.services.workflows.DataPointService
 
 class DataPointDll(

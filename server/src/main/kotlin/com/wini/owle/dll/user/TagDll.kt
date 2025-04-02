@@ -2,7 +2,7 @@ package com.wini.owle.dll.user
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.TagDto
+import com.wini.owle.dto.user.TagDto
 import com.wini.owle.services.user.TagService
 
 

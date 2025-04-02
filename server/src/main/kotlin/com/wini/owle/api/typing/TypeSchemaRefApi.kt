@@ -2,7 +2,7 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.GenericLongPkApi
 import com.wini.owle.dll.typing.TypeSchemaRefDll
-import com.wini.owle.dto.TypeSchemaRefDto
+import com.wini.owle.dto.typing.TypeSchemaRefDto
 import io.ktor.server.routing.*
 
 class TypeSchemaRefApi(dll: TypeSchemaRefDll) : GenericLongPkApi<TypeSchemaRefDto>(
