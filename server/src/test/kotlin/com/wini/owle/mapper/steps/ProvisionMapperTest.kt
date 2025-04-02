@@ -4,6 +4,7 @@ import com.wini.owle.dto.steps.ProvisionDataPointDto
 import com.wini.owle.dto.steps.ProvisionDto
 import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.dto.workflows.ToolParamDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.ProvisionDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.entity.workflows.ToolParamDao
@@ -36,7 +37,8 @@ open class ProvisionMapperTest {
         val dto = ProvisionDto(
             id = 99L,
             step = mockk(),
-            toolParam = mockk<ToolParamDto>()
+            toolParam = mockk<ToolParamDto>(),
+            dataPoints = emptyList()
         )
 
         // Mock the behavior of findById to return null (not found)
@@ -85,11 +87,16 @@ open class ProvisionMapperTest {
         val dto = ProvisionDto(
             id = 42L,
             step = mockk(),
-            toolParam = mockk()
+            toolParam = mockk(),
+            dataPoints = emptyList()
         )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<ProvisionDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val toolParamDao: ToolParamDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(ProvisionDao)
@@ -107,12 +114,12 @@ open class ProvisionMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { ProvisionDao.findById(42L) }
-        verify { existingEntity.step = dto.step }
-        verify { existingEntity.toolParam = dto.toolParam }
+        verify { existingEntity.step = stepDao }
+        verify { existingEntity.toolParam = toolParamDao }
 
         // Verify the captured values
-        assertEquals(dto.step, stepSlot.captured)
-        assertEquals(dto.toolParam, toolParamSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
+        assertEquals(toolParamDao, toolParamSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -123,10 +130,19 @@ open class ProvisionMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = ProvisionDto(id = 0L, step = mockk(), toolParam = mockk())
+        val dto = ProvisionDto(
+            id = 0L,
+            step = mockk(),
+            toolParam = mockk(),
+            dataPoints = emptyList()
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<ProvisionDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val toolParamDao: ToolParamDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -145,12 +161,12 @@ open class ProvisionMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.step = dto.step }
-        verify { newEntity.toolParam = dto.toolParam }
+        verify { newEntity.step = stepDao }
+        verify { newEntity.toolParam = toolParamDao }
 
         // Verify the captured values
-        assertEquals(dto.step, stepSlot.captured)
-        assertEquals(dto.toolParam, toolParamSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
+        assertEquals(toolParamDao, toolParamSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

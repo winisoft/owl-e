@@ -3,6 +3,7 @@ package com.wini.owle.mapper.steps
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.steps.PreReqInjectionDto
 import com.wini.owle.dto.steps.WorkflowJunctionDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.PreReqInjectionDao
 import com.wini.owle.entity.steps.WorkflowJunctionDao
 import com.wini.owle.entity.workflows.DataPointDao
@@ -99,6 +100,11 @@ open class PreReqInjectionMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<PreReqInjectionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowJunctionDao: WorkflowJunctionDao = mockk()
+        val sourceDataPointDao: DataPointDao = mockk()
+        val injectedDataPointDao: DataPointDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(PreReqInjectionDao)
         every { PreReqInjectionDao.findById(42L) } returns existingEntity
@@ -121,16 +127,16 @@ open class PreReqInjectionMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { PreReqInjectionDao.findById(42L) }
-        verify { existingEntity.junction = dto.junction }
-        verify { existingEntity.sourceDataPoint = dto.sourceDataPoint }
-        verify { existingEntity.injectedDataPoint = dto.injectedDataPoint }
+        verify { existingEntity.junction = workflowJunctionDao }
+        verify { existingEntity.sourceDataPoint = sourceDataPointDao }
+        verify { existingEntity.injectedDataPoint = injectedDataPointDao }
         verify { existingEntity.name = dto.name }
         verify { existingEntity.description = dto.description }
 
         // Verify the captured values
-        assertEquals(dto.junction, junctionSlot.captured)
-        assertEquals(dto.sourceDataPoint, sourceDataPointSlot.captured)
-        assertEquals(dto.injectedDataPoint, injectedDataPointSlot.captured)
+        assertEquals(workflowJunctionDao, junctionSlot.captured)
+        assertEquals(sourceDataPointDao, sourceDataPointSlot.captured)
+        assertEquals(injectedDataPointDao, injectedDataPointSlot.captured)
         assertEquals(dto.name, nameSlot.captured)
         assertEquals(dto.description, descriptionSlot.captured)
 
@@ -143,10 +149,22 @@ open class PreReqInjectionMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = PreReqInjectionDto(id = 0L, junction = mockk(), sourceDataPoint = mockk(), injectedDataPoint = mockk(), name = "newName", description = "newDescription")
+        val dto = PreReqInjectionDto(
+            id = 0L,
+            junction = mockk(),
+            sourceDataPoint = mockk(),
+            injectedDataPoint = mockk(),
+            name = "newName",
+            description = "newDescription"
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<PreReqInjectionDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowJunctionDao: WorkflowJunctionDao = mockk()
+        val sourceDataPointDao: DataPointDao = mockk()
+        val injectedDataPointDao: DataPointDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -171,16 +189,16 @@ open class PreReqInjectionMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.junction = dto.junction }
-        verify { newEntity.sourceDataPoint = dto.sourceDataPoint }
-        verify { newEntity.injectedDataPoint = dto.injectedDataPoint }
+        verify { newEntity.junction = workflowJunctionDao }
+        verify { newEntity.sourceDataPoint = sourceDataPointDao }
+        verify { newEntity.injectedDataPoint = injectedDataPointDao }
         verify { newEntity.name = dto.name }
         verify { newEntity.description = dto.description }
 
         // Verify the captured values
-        assertEquals(dto.junction, junctionSlot.captured)
-        assertEquals(dto.sourceDataPoint, sourceDataPointSlot.captured)
-        assertEquals(dto.injectedDataPoint, injectedDataPointSlot.captured)
+        assertEquals(workflowJunctionDao, junctionSlot.captured)
+        assertEquals(sourceDataPointDao, sourceDataPointSlot.captured)
+        assertEquals(injectedDataPointDao, injectedDataPointSlot.captured)
         assertEquals(dto.name, nameSlot.captured)
         assertEquals(dto.description, descriptionSlot.captured)
 

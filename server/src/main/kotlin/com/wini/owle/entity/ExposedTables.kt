@@ -11,7 +11,6 @@ import com.wini.owle.entity.typing.VarianceCardinality
 import com.wini.owle.entity.user.CardBrand
 import com.wini.owle.entity.user.SubscriptionStatus
 import com.wini.owle.entity.workflows.StoreMethod
-import com.wini.owle.models.user.metadata.UserDesignedMetadata
 import com.wini.owle.models.metadata.UserDesignedMetadata
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.CompositeIdTable

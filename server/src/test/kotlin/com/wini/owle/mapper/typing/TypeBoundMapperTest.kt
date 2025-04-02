@@ -2,7 +2,9 @@ package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.typing.TypeBoundsDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.typing.TypeBoundDao
+import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.mockk
 import io.mockk.every
@@ -83,13 +85,17 @@ open class TypeBoundMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TypeBoundDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeVariableDeclarationDao: TypeDeclarationDao = mockk()
+        val boundTypeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TypeBoundDao)
         every { TypeBoundDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val typeVariableSlot = slot<TypeDeclaration>()
-        val boundTypeSlot = slot<TypeDeclaration>()
+        val typeVariableSlot = slot<TypeDeclarationDao>()
+        val boundTypeSlot = slot<TypeDeclarationDao>()
 
         every { existingEntity.typeVariableDeclaration = capture(typeVariableSlot) } just runs
         every { existingEntity.boundTypeDeclaration = capture(boundTypeSlot) } just runs
@@ -99,12 +105,12 @@ open class TypeBoundMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { TypeBoundDao.findById(42L) }
-        verify { existingEntity.typeVariableDeclaration = dto.typeVariableDeclaration }
-        verify { existingEntity.boundTypeDeclaration = dto.boundTypeDeclaration }
+        verify { existingEntity.typeVariableDeclaration = typeVariableDeclarationDao }
+        verify { existingEntity.boundTypeDeclaration = boundTypeDeclarationDao }
 
         // Verify the captured values
-        assertEquals(dto.typeVariableDeclaration, typeVariableSlot.captured)
-        assertEquals(dto.boundTypeDeclaration, boundTypeSlot.captured)
+        assertEquals(typeVariableDeclarationDao, typeVariableSlot.captured)
+        assertEquals(boundTypeDeclarationDao, boundTypeSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -124,12 +130,16 @@ open class TypeBoundMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<TypeBoundDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeVariableDeclarationDao: TypeDeclarationDao = mockk()
+        val boundTypeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val typeVariableSlot = slot<TypeDeclaration>()
-        val boundTypeSlot = slot<TypeDeclaration>()
+        val typeVariableSlot = slot<TypeDeclarationDao>()
+        val boundTypeSlot = slot<TypeDeclarationDao>()
 
         every { newEntity.typeVariableDeclaration = capture(typeVariableSlot) } just runs
         every { newEntity.boundTypeDeclaration = capture(boundTypeSlot) } just runs
@@ -141,12 +151,12 @@ open class TypeBoundMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.typeVariableDeclaration = dto.typeVariableDeclaration }
-        verify { newEntity.boundTypeDeclaration = dto.boundTypeDeclaration }
+        verify { newEntity.typeVariableDeclaration = typeVariableDeclarationDao }
+        verify { newEntity.boundTypeDeclaration = boundTypeDeclarationDao }
 
         // Verify the captured values
-        assertEquals(dto.typeVariableDeclaration, typeVariableSlot.captured)
-        assertEquals(dto.boundTypeDeclaration, boundTypeSlot.captured)
+        assertEquals(typeVariableDeclarationDao, typeVariableSlot.captured)
+        assertEquals(boundTypeDeclarationDao, boundTypeSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

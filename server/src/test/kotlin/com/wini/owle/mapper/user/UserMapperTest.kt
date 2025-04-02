@@ -1,7 +1,9 @@
 package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.UserDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.user.SubscriptionStatus
+import com.wini.owle.entity.user.SubscriptionStatus.Companion.toDto
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
@@ -116,6 +118,9 @@ open class UserMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<UserDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val subscriptionStatus: SubscriptionStatus = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(UserDao)
         every { UserDao.findById(42L) } returns existingEntity
@@ -151,7 +156,7 @@ open class UserMapperTest {
         verify { existingEntity.resetToken = "token" }
         verify { existingEntity.oauthProvider = "provider" }
         verify { existingEntity.oauthId = "oauthId" }
-        verify { existingEntity.subscriptionStatus = dto.subscriptionStatus }
+        verify { existingEntity.subscriptionStatus = subscriptionStatus }
         verify { existingEntity.apiKey = "apiKey" }
         verify { existingEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
         verify { existingEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
@@ -162,7 +167,7 @@ open class UserMapperTest {
         assertEquals("token", resetTokenSlot.captured)
         assertEquals("provider", oauthProviderSlot.captured)
         assertEquals("oauthId", oauthIdSlot.captured)
-        assertEquals(dto.subscriptionStatus, subscriptionStatusSlot.captured)
+        assertEquals(subscriptionStatus, subscriptionStatusSlot.captured)
         assertEquals("apiKey", apiKeySlot.captured)
         assertEquals(LocalDateTime.parse(dto.createdAt), createdAtSlot.captured)
         assertEquals(LocalDateTime.parse(dto.updatedAt), updatedAtSlot.captured)
@@ -192,6 +197,9 @@ open class UserMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<UserDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val subscriptionStatus: SubscriptionStatus = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -229,7 +237,7 @@ open class UserMapperTest {
         verify { newEntity.resetToken = "token" }
         verify { newEntity.oauthProvider = "provider" }
         verify { newEntity.oauthId = "oauthId" }
-        verify { newEntity.subscriptionStatus = dto.subscriptionStatus }
+        verify { newEntity.subscriptionStatus = subscriptionStatus }
         verify { newEntity.apiKey = "apiKey" }
         verify { newEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
         verify { newEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
@@ -240,7 +248,7 @@ open class UserMapperTest {
         assertEquals("token", resetTokenSlot.captured)
         assertEquals("provider", oauthProviderSlot.captured)
         assertEquals("oauthId", oauthIdSlot.captured)
-        assertEquals(dto.subscriptionStatus, subscriptionStatusSlot.captured)
+        assertEquals(subscriptionStatus, subscriptionStatusSlot.captured)
         assertEquals("apiKey", apiKeySlot.captured)
         assertEquals(LocalDateTime.parse(dto.createdAt), createdAtSlot.captured)
         assertEquals(LocalDateTime.parse(dto.updatedAt), updatedAtSlot.captured)

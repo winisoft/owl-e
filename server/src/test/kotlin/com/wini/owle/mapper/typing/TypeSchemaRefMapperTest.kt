@@ -2,6 +2,8 @@ package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.typing.TypeSchemaRefDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.typing.TypeSchemaRefDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.every
@@ -37,7 +39,8 @@ open class TypeSchemaRefMapperTest {
             parentRef = null,
             name = "schemaName",
             typeDeclaration = mockk(),
-            description = "description"
+            description = "description",
+            childRefs = emptyList()
         )
 
         // Mock the behavior of findById to return null (not found)
@@ -87,11 +90,15 @@ open class TypeSchemaRefMapperTest {
             parentRef = null,
             name = "schemaName",
             typeDeclaration = mockk(),
-            description = "description"
+            description = "description",
+            childRefs = emptyList()
         )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TypeSchemaRefDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(TypeSchemaRefDao)
@@ -99,7 +106,7 @@ open class TypeSchemaRefMapperTest {
 
         // Capture the property updates
         val nameSlot = slot<String>()
-        val typeDeclarationSlot = slot<TypeDeclaration>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val descriptionSlot = slot<String>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
@@ -112,12 +119,12 @@ open class TypeSchemaRefMapperTest {
         // Verify that the existing entity was found and updated
         verify { TypeSchemaRefDao.findById(42L) }
         verify { existingEntity.name = "schemaName" }
-        verify { existingEntity.typeDeclaration = dto.typeDeclaration }
+        verify { existingEntity.typeDeclaration = typeDeclarationDao }
         verify { existingEntity.description = "description" }
 
         // Verify the captured values
         assertEquals("schemaName", nameSlot.captured)
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
         assertEquals("description", descriptionSlot.captured)
 
         // Verify the result is the updated entity
@@ -134,18 +141,22 @@ open class TypeSchemaRefMapperTest {
             parentRef = null,
             name = "schemaName",
             typeDeclaration = mockk(),
-            description = "description"
+            description = "description",
+            childRefs = emptyList()
         )
 
         // Mock the new entity that will be created
         val newEntity = mockk<TypeSchemaRefDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
         val nameSlot = slot<String>()
-        val typeDeclarationSlot = slot<TypeDeclaration>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val descriptionSlot = slot<String>()
 
         every { newEntity.name = capture(nameSlot) } just runs
@@ -160,12 +171,12 @@ open class TypeSchemaRefMapperTest {
 
         // Verify the properties were set correctly
         verify { newEntity.name = "schemaName" }
-        verify { newEntity.typeDeclaration = dto.typeDeclaration }
+        verify { newEntity.typeDeclaration = typeDeclarationDao }
         verify { newEntity.description = "description" }
 
         // Verify the captured values
         assertEquals("schemaName", nameSlot.captured)
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
         assertEquals("description", descriptionSlot.captured)
 
         // Verify the result is the new entity

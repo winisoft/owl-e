@@ -1,10 +1,14 @@
 package com.wini.owle.mapper.runs
 
+import com.wini.owle.dto.DecimalValue
 import com.wini.owle.dto.runs.BenchmarkingDataDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.WorkflowExecutions
 import com.wini.owle.entity.runs.BenchmarkingDataDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.toBigDecimal
+import com.wini.owle.mapper.toDecimalValue
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,7 +34,7 @@ open class BenchmarkingDataMapperTest {
         val dto = BenchmarkingDataDto(
             id = 99L,
             workflowExecution = mockk(),
-            totalExecutionTime = "100",
+            totalExecutionTime = DecimalValue("100.0"),
             totalSteps = 10,
             aiDeterminedSteps = 5,
             predeterminedSteps = 5
@@ -55,7 +59,7 @@ open class BenchmarkingDataMapperTest {
         val entity = mockk<BenchmarkingDataDao> {
             every { id.value } returns 1L
             every { workflowExecution } returns mockk()
-            every { totalExecutionTime.toDecimalValue() } returns "100"
+            every { totalExecutionTime.toDecimalValue() } returns DecimalValue("100")
             every { totalSteps } returns 10
             every { aiDeterminedSteps } returns 5
             every { predeterminedSteps } returns 5
@@ -71,7 +75,7 @@ open class BenchmarkingDataMapperTest {
         // Verify the result
         assertEquals(1L, result.id)
         assertEquals(workflowExecutionDto, result.workflowExecution)
-        assertEquals("100", result.totalExecutionTime)
+        assertEquals(DecimalValue("100.0"), result.totalExecutionTime)
         assertEquals(10, result.totalSteps)
         assertEquals(5, result.aiDeterminedSteps)
         assertEquals(5, result.predeterminedSteps)
@@ -83,7 +87,7 @@ open class BenchmarkingDataMapperTest {
         val dto = BenchmarkingDataDto(
             id = 42L,
             workflowExecution = mockk(),
-            totalExecutionTime = "200",
+            totalExecutionTime = DecimalValue("200"),
             totalSteps = 20,
             aiDeterminedSteps = 10,
             predeterminedSteps = 10
@@ -92,12 +96,15 @@ open class BenchmarkingDataMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<BenchmarkingDataDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(BenchmarkingDataDao)
         every { BenchmarkingDataDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val workflowExecutionSlot = slot<WorkflowExecutions>()
+        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
         val totalExecutionTimeSlot = slot<BigDecimal>()
         val totalStepsSlot = slot<Int>()
         val aiDeterminedStepsSlot = slot<Int>()
@@ -114,14 +121,14 @@ open class BenchmarkingDataMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { BenchmarkingDataDao.findById(42L) }
-        verify { existingEntity.workflowExecution = dto.workflowExecution }
+        verify { existingEntity.workflowExecution = workflowExecutionDao }
         verify { existingEntity.totalExecutionTime = dto.totalExecutionTime.toBigDecimal() }
         verify { existingEntity.totalSteps = dto.totalSteps }
         verify { existingEntity.aiDeterminedSteps = dto.aiDeterminedSteps }
         verify { existingEntity.predeterminedSteps = dto.predeterminedSteps }
 
         // Verify the captured values
-        assertEquals(dto.workflowExecution, workflowExecutionSlot.captured)
+        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
         assertEquals(dto.totalExecutionTime.toBigDecimal(), totalExecutionTimeSlot.captured)
         assertEquals(dto.totalSteps, totalStepsSlot.captured)
         assertEquals(dto.aiDeterminedSteps, aiDeterminedStepsSlot.captured)
@@ -139,7 +146,7 @@ open class BenchmarkingDataMapperTest {
         val dto = BenchmarkingDataDto(
             id = 0L,
             workflowExecution = mockk(),
-            totalExecutionTime = "300",
+            totalExecutionTime = DecimalValue("300"),
             totalSteps = 30,
             aiDeterminedSteps = 15,
             predeterminedSteps = 15
@@ -148,11 +155,14 @@ open class BenchmarkingDataMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<BenchmarkingDataDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val workflowExecutionSlot = slot<WorkflowExecutions>()
+        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
         val totalExecutionTimeSlot = slot<BigDecimal>()
         val totalStepsSlot = slot<Int>()
         val aiDeterminedStepsSlot = slot<Int>()
@@ -171,14 +181,14 @@ open class BenchmarkingDataMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflowExecution = dto.workflowExecution }
+        verify { newEntity.workflowExecution = workflowExecutionDao }
         verify { newEntity.totalExecutionTime = dto.totalExecutionTime.toBigDecimal() }
         verify { newEntity.totalSteps = dto.totalSteps }
         verify { newEntity.aiDeterminedSteps = dto.aiDeterminedSteps }
         verify { newEntity.predeterminedSteps = dto.predeterminedSteps }
 
         // Verify the captured values
-        assertEquals(dto.workflowExecution, workflowExecutionSlot.captured)
+        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
         assertEquals(dto.totalExecutionTime.toBigDecimal(), totalExecutionTimeSlot.captured)
         assertEquals(dto.totalSteps, totalStepsSlot.captured)
         assertEquals(dto.aiDeterminedSteps, aiDeterminedStepsSlot.captured)

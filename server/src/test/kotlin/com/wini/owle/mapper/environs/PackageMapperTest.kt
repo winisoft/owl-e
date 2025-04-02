@@ -4,6 +4,7 @@ import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -80,6 +81,9 @@ open class PackageMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<PackageDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Mock the VersionSpecDao that would be returned from the mapper
         val versionSpecDao = mockk<VersionSpecDao>()
         every { versionSpecsMapper.toEntity(versionSpecDto) } returns versionSpecDao
@@ -126,6 +130,9 @@ open class PackageMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<PackageDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
 
         // Mock the VersionSpecDao that would be returned from the mapper
         val versionSpecDao = mockk<VersionSpecDao>()

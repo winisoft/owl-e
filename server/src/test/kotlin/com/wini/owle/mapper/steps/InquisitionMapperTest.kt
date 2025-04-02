@@ -3,6 +3,7 @@ package com.wini.owle.mapper.steps
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.steps.InquisitionDto
 import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.InquisitionDao
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.entity.workflows.StepDao
@@ -100,6 +101,11 @@ open class InquisitionMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<InquisitionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val dataPointDao: DataPointDao = mockk()
+        val onMetWorkflowStepDao: StepDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(InquisitionDao)
         every { InquisitionDao.findById(42L) } returns existingEntity
@@ -122,17 +128,17 @@ open class InquisitionMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { InquisitionDao.findById(42L) }
-        verify { existingEntity.workflowStep = dto.step }
+        verify { existingEntity.workflowStep = stepDao }
         verify { existingEntity.className = dto.className }
-        verify { existingEntity.dataPoint = dto.dataPoint }
-        verify { existingEntity.onMetWorkflowStep = dto.onMetWorkflowStep }
+        verify { existingEntity.dataPoint = dataPointDao }
+        verify { existingEntity.onMetWorkflowStep = onMetWorkflowStepDao }
         verify { existingEntity.executionOrder = dto.executionOrder }
 
         // Verify the captured values
-        assertEquals(dto.step, workflowStepSlot.captured)
+        assertEquals(stepDao, workflowStepSlot.captured)
         assertEquals(dto.className, classNameSlot.captured)
-        assertEquals(dto.dataPoint, dataPointSlot.captured)
-        assertEquals(dto.onMetWorkflowStep, onMetWorkflowStepSlot.captured)
+        assertEquals(dataPointDao, dataPointSlot.captured)
+        assertEquals(onMetWorkflowStepDao, onMetWorkflowStepSlot.captured)
         assertEquals(dto.executionOrder, executionOrderSlot.captured)
 
         // Verify the result is the updated entity
@@ -155,6 +161,11 @@ open class InquisitionMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<InquisitionDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val dataPointDao: DataPointDao = mockk()
+        val onMetWorkflowStepDao: StepDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -179,17 +190,17 @@ open class InquisitionMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflowStep = dto.step }
+        verify { newEntity.workflowStep = stepDao }
         verify { newEntity.className = dto.className }
-        verify { newEntity.dataPoint = dto.dataPoint }
-        verify { newEntity.onMetWorkflowStep = dto.onMetWorkflowStep }
+        verify { newEntity.dataPoint = dataPointDao }
+        verify { newEntity.onMetWorkflowStep = onMetWorkflowStepDao }
         verify { newEntity.executionOrder = dto.executionOrder }
 
         // Verify the captured values
-        assertEquals(dto.step, workflowStepSlot.captured)
+        assertEquals(stepDao, workflowStepSlot.captured)
         assertEquals(dto.className, classNameSlot.captured)
-        assertEquals(dto.dataPoint, dataPointSlot.captured)
-        assertEquals(dto.onMetWorkflowStep, onMetWorkflowStepSlot.captured)
+        assertEquals(dataPointDao, dataPointSlot.captured)
+        assertEquals(onMetWorkflowStepDao, onMetWorkflowStepSlot.captured)
         assertEquals(dto.executionOrder, executionOrderSlot.captured)
 
         // Verify the result is the new entity

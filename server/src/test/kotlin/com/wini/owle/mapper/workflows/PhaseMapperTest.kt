@@ -2,7 +2,9 @@ package com.wini.owle.mapper.workflows
 
 import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.PhaseDao
+import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -90,12 +92,15 @@ open class PhaseMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<PhaseDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(PhaseDao)
         every { PhaseDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val workflowSlot = slot<Workflows>()
+        val workflowSlot = slot<WorkflowDao>()
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val displayOrderSlot = slot<Int>()
@@ -110,13 +115,13 @@ open class PhaseMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { PhaseDao.findById(42L) }
-        verify { existingEntity.workflow = dto.workflow }
+        verify { existingEntity.workflow = workflowDao }
         verify { existingEntity.name = "phaseName" }
         verify { existingEntity.description = "description" }
         verify { existingEntity.displayOrder = 1 }
 
         // Verify the captured values
-        assertEquals(dto.workflow, workflowSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
         assertEquals("phaseName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
         assertEquals(1, displayOrderSlot.captured)
@@ -142,11 +147,14 @@ open class PhaseMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<PhaseDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val workflowSlot = slot<Workflows>()
+        val workflowSlot = slot<WorkflowDao>()
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val displayOrderSlot = slot<Int>()
@@ -163,13 +171,13 @@ open class PhaseMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflow = dto.workflow }
+        verify { newEntity.workflow = workflowDao }
         verify { newEntity.name = "phaseName" }
         verify { newEntity.description = "description" }
         verify { newEntity.displayOrder = 1 }
 
         // Verify the captured values
-        assertEquals(dto.workflow, workflowSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
         assertEquals("phaseName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
         assertEquals(1, displayOrderSlot.captured)

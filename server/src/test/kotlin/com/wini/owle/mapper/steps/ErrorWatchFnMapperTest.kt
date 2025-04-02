@@ -2,6 +2,7 @@ package com.wini.owle.mapper.steps
 
 import com.wini.owle.dto.steps.ErrorWatchDto
 import com.wini.owle.dto.steps.ErrorWatchFnDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.ErrorWatchDao
 import com.wini.owle.entity.steps.ErrorWatchFnDao
 import com.wini.owle.mapper.DaoFactory
@@ -78,6 +79,9 @@ open class ErrorWatchFnMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<ErrorWatchFnDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val errorWatchDao: ErrorWatchDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(ErrorWatchFnDao)
         every { ErrorWatchFnDao.findById(42L) } returns existingEntity
@@ -96,12 +100,12 @@ open class ErrorWatchFnMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { ErrorWatchFnDao.findById(42L) }
-        verify { existingEntity.errorWatch = dto.errorWatch }
+        verify { existingEntity.errorWatch = errorWatchDao }
         verify { existingEntity.functionName = dto.functionName }
         verify { existingEntity.position = dto.position }
 
         // Verify the captured values
-        assertEquals(dto.errorWatch, errorWatchSlot.captured)
+        assertEquals(errorWatchDao, errorWatchSlot.captured)
         assertEquals(dto.functionName, functionNameSlot.captured)
         assertEquals(dto.position, positionSlot.captured)
 
@@ -118,6 +122,9 @@ open class ErrorWatchFnMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<ErrorWatchFnDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val errorWatchDao: ErrorWatchDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -138,12 +145,12 @@ open class ErrorWatchFnMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.errorWatch = dto.errorWatch }
+        verify { newEntity.errorWatch = errorWatchDao }
         verify { newEntity.functionName = dto.functionName }
         verify { newEntity.position = dto.position }
 
         // Verify the captured values
-        assertEquals(dto.errorWatch, errorWatchSlot.captured)
+        assertEquals(errorWatchDao, errorWatchSlot.captured)
         assertEquals(dto.functionName, functionNameSlot.captured)
         assertEquals(dto.position, positionSlot.captured)
 

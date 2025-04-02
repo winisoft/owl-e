@@ -5,7 +5,9 @@ import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.TestCases
 import com.wini.owle.entity.WorkflowExecutions
+import com.wini.owle.entity.runs.TestCaseDao
 import com.wini.owle.entity.runs.TestResultDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
@@ -93,13 +95,17 @@ open class TestResultMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TestResultDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val testCaseDao: TestCaseDao = mockk()
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TestResultDao)
         every { TestResultDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val testCaseSlot = slot<TestCases>()
-        val workflowExecutionSlot = slot<WorkflowExecutions>()
+        val testCaseSlot = slot<TestCaseDao>()
+        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
         val passedSlot = slot<Boolean>()
         val executedAtSlot = slot<LocalDateTime>()
 
@@ -113,14 +119,14 @@ open class TestResultMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { TestResultDao.findById(42L) }
-        verify { existingEntity.testCase = dto.testCase }
-        verify { existingEntity.workflowExecution = dto.workflowExecution }
+        verify { existingEntity.testCase = testCaseDao }
+        verify { existingEntity.workflowExecution = workflowExecutionDao }
         verify { existingEntity.passed = dto.passed }
         verify { existingEntity.executedAt = LocalDateTime.parse(dto.executedAt) }
 
         // Verify the captured values
-        assertEquals(dto.testCase, testCaseSlot.captured)
-        assertEquals(dto.workflowExecution, workflowExecutionSlot.captured)
+        assertEquals(testCaseDao, testCaseSlot.captured)
+        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
         assertEquals(dto.passed, passedSlot.captured)
         assertEquals(LocalDateTime.parse(dto.executedAt), executedAtSlot.captured)
 
@@ -144,12 +150,16 @@ open class TestResultMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<TestResultDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val testCaseDao: TestCaseDao = mockk()
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val testCaseSlot = slot<TestCases>()
-        val workflowExecutionSlot = slot<WorkflowExecutions>()
+        val testCaseSlot = slot<TestCaseDao>()
+        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
         val passedSlot = slot<Boolean>()
         val executedAtSlot = slot<LocalDateTime>()
 
@@ -165,14 +175,14 @@ open class TestResultMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.testCase = dto.testCase }
-        verify { newEntity.workflowExecution = dto.workflowExecution }
+        verify { newEntity.testCase = testCaseDao }
+        verify { newEntity.workflowExecution = workflowExecutionDao }
         verify { newEntity.passed = dto.passed }
         verify { newEntity.executedAt = LocalDateTime.parse(dto.executedAt) }
 
         // Verify the captured values
-        assertEquals(dto.testCase, testCaseSlot.captured)
-        assertEquals(dto.workflowExecution, workflowExecutionSlot.captured)
+        assertEquals(testCaseDao, testCaseSlot.captured)
+        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
         assertEquals(dto.passed, passedSlot.captured)
         assertEquals(LocalDateTime.parse(dto.executedAt), executedAtSlot.captured)
 

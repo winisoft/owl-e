@@ -1,13 +1,18 @@
 package com.wini.owle.mapper.runs
 
 import com.wini.owle.dto.runs.ExecutionLogDto
+import com.wini.owle.dto.runs.LogLevelDto
 import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.entity.runs.LogLevel
 import com.wini.owle.entity.StepExecutions
 import com.wini.owle.entity.runs.ExecutionLogDao
+import com.wini.owle.entity.runs.LogLevel.Companion.toDto
+import com.wini.owle.entity.runs.StepExecutionDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -56,7 +61,7 @@ open class ExecutionLogMapperTest {
             every { id.value } returns 1L
             every { stepExecution } returns mockk()
             every { timestamp.toJavaLocalDateTime().toString() } returns "2023-10-01T10:00:00"
-            every { logLevel.toDto() } returns mockk()
+            every { logLevel.toDto() } returns LogLevelDto.Info
             every { message } returns "Test message"
         }
 
@@ -89,12 +94,15 @@ open class ExecutionLogMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<ExecutionLogDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepExecutionDao: StepExecutionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(ExecutionLogDao)
         every { ExecutionLogDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val stepExecutionSlot = slot<StepExecutions>()
+        val stepExecutionSlot = slot<StepExecutionDao>()
         val timestampSlot = slot<LocalDateTime>()
         val logLevelSlot = slot<LogLevel>()
         val messageSlot = slot<String>()
@@ -109,13 +117,13 @@ open class ExecutionLogMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { ExecutionLogDao.findById(42L) }
-        verify { existingEntity.stepExecution = dto.stepExecution }
+        verify { existingEntity.stepExecution = stepExecutionDao }
         verify { existingEntity.timestamp = LocalDateTime.parse(dto.timestamp) }
         verify { existingEntity.logLevel = LogLevel.fromDto(dto.logLevel) }
         verify { existingEntity.message = dto.message }
 
         // Verify the captured values
-        assertEquals(dto.stepExecution, stepExecutionSlot.captured)
+        assertEquals(stepExecutionDao, stepExecutionSlot.captured)
         assertEquals(LocalDateTime.parse(dto.timestamp), timestampSlot.captured)
         assertEquals(LogLevel.fromDto(dto.logLevel), logLevelSlot.captured)
         assertEquals(dto.message, messageSlot.captured)
@@ -140,11 +148,14 @@ open class ExecutionLogMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<ExecutionLogDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepExecutionDao: StepExecutionDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val stepExecutionSlot = slot<StepExecutions>()
+        val stepExecutionSlot = slot<StepExecutionDao>()
         val timestampSlot = slot<LocalDateTime>()
         val logLevelSlot = slot<LogLevel>()
         val messageSlot = slot<String>()
@@ -161,13 +172,13 @@ open class ExecutionLogMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.stepExecution = dto.stepExecution }
+        verify { newEntity.stepExecution = stepExecutionDao }
         verify { newEntity.timestamp = LocalDateTime.parse(dto.timestamp) }
         verify { newEntity.logLevel = LogLevel.fromDto(dto.logLevel) }
         verify { newEntity.message = dto.message }
 
         // Verify the captured values
-        assertEquals(dto.stepExecution, stepExecutionSlot.captured)
+        assertEquals(stepExecutionDao, stepExecutionSlot.captured)
         assertEquals(LocalDateTime.parse(dto.timestamp), timestampSlot.captured)
         assertEquals(LogLevel.fromDto(dto.logLevel), logLevelSlot.captured)
         assertEquals(dto.message, messageSlot.captured)

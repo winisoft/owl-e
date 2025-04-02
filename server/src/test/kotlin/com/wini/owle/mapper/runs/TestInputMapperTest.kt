@@ -1,10 +1,13 @@
 package com.wini.owle.mapper.runs
 
+import com.wini.owle.dto.runs.GenerationMethodDto
 import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.runs.TestInputDto
 import com.wini.owle.entity.runs.GenerationMethod
+import com.wini.owle.entity.runs.GenerationMethod.Companion.toDto
 import com.wini.owle.entity.runs.TestCaseDao
 import com.wini.owle.entity.runs.TestInputDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
@@ -56,7 +59,7 @@ open class TestInputMapperTest {
             every { testCase } returns mockk()
             every { dataPointName } returns "Data Point"
             every { value } returns "Value"
-            every { generationMethod.toDto() } returns mockk()
+            every { generationMethod.toDto() } returns GenerationMethodDto.Manual
         }
 
         // Mock the behavior of testCasesMapper
@@ -88,6 +91,9 @@ open class TestInputMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TestInputDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val testCaseDao: TestCaseDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TestInputDao)
         every { TestInputDao.findById(42L) } returns existingEntity
@@ -108,13 +114,13 @@ open class TestInputMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { TestInputDao.findById(42L) }
-        verify { existingEntity.testCase = dto.testCase }
+        verify { existingEntity.testCase = testCaseDao }
         verify { existingEntity.dataPointName = dto.dataPointName }
         verify { existingEntity.value = dto.value }
         verify { existingEntity.generationMethod = GenerationMethod.fromDto(dto.generationMethod) }
 
         // Verify the captured values
-        assertEquals(dto.testCase, testCaseSlot.captured)
+        assertEquals(testCaseDao, testCaseSlot.captured)
         assertEquals(dto.dataPointName, dataPointNameSlot.captured)
         assertEquals(dto.value, valueSlot.captured)
         assertEquals(GenerationMethod.fromDto(dto.generationMethod), generationMethodSlot.captured)
@@ -128,10 +134,19 @@ open class TestInputMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = TestInputDto(id = 0L, testCase = mockk(), dataPointName = "New Data Point", value = "New Value", generationMethod = mockk())
+        val dto = TestInputDto(
+            id = 0L,
+            testCase = mockk(),
+            dataPointName = "New Data Point",
+            value = "New Value",
+            generationMethod = mockk()
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<TestInputDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val testCaseDao: TestCaseDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -154,13 +169,13 @@ open class TestInputMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.testCase = dto.testCase }
+        verify { newEntity.testCase = testCaseDao }
         verify { newEntity.dataPointName = dto.dataPointName }
         verify { newEntity.value = dto.value }
         verify { newEntity.generationMethod = GenerationMethod.fromDto(dto.generationMethod) }
 
         // Verify the captured values
-        assertEquals(dto.testCase, testCaseSlot.captured)
+        assertEquals(testCaseDao, testCaseSlot.captured)
         assertEquals(dto.dataPointName, dataPointNameSlot.captured)
         assertEquals(dto.value, valueSlot.captured)
         assertEquals(GenerationMethod.fromDto(dto.generationMethod), generationMethodSlot.captured)

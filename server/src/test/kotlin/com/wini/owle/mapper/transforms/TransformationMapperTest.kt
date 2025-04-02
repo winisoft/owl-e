@@ -2,7 +2,9 @@ package com.wini.owle.mapper.transforms
 
 import com.wini.owle.dto.transforms.TransformationDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.transforms.TransformationDao
+import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import io.mockk.every
@@ -94,6 +96,9 @@ open class TransformationMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TransformationDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TransformationDao)
         every { TransformationDao.findById(42L) } returns existingEntity
@@ -102,7 +107,7 @@ open class TransformationMapperTest {
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val examplesSlot = slot<String>()
-        val returnsTypeSlot = slot<TypeDeclaration>()
+        val returnsTypeSlot = slot<TypeDeclarationDao>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
         every { existingEntity.description = capture(descriptionSlot) } just runs
@@ -117,13 +122,13 @@ open class TransformationMapperTest {
         verify { existingEntity.name = "transformationName" }
         verify { existingEntity.description = "transformationDescription" }
         verify { existingEntity.examples = "example" }
-        verify { existingEntity.returnsTypeDeclaration = dto.returnsType }
+        verify { existingEntity.returnsTypeDeclaration = typeDeclarationDao }
 
         // Verify the captured values
         assertEquals("transformationName", nameSlot.captured)
         assertEquals("transformationDescription", descriptionSlot.captured)
         assertEquals("example", examplesSlot.captured)
-        assertEquals(dto.returnsType, returnsTypeSlot.captured)
+        assertEquals(typeDeclarationDao, returnsTypeSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -134,10 +139,19 @@ open class TransformationMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = TransformationDto(id = 0L, name = "transformationName", description = "transformationDescription", examples = "example", returnsType = mockk())
+        val dto = TransformationDto(
+            id = 0L,
+            name = "transformationName",
+            description = "transformationDescription",
+            examples = "example",
+            returnsType = mockk()
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<TransformationDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -146,7 +160,7 @@ open class TransformationMapperTest {
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val examplesSlot = slot<String>()
-        val returnsTypeSlot = slot<TypeDeclaration>()
+        val returnsTypeSlot = slot<TypeDeclarationDao>()
 
         every { newEntity.name = capture(nameSlot) } just runs
         every { newEntity.description = capture(descriptionSlot) } just runs
@@ -163,13 +177,13 @@ open class TransformationMapperTest {
         verify { newEntity.name = "transformationName" }
         verify { newEntity.description = "transformationDescription" }
         verify { newEntity.examples = "example" }
-        verify { newEntity.returnsTypeDeclaration = dto.returnsType }
+        verify { newEntity.returnsTypeDeclaration = typeDeclarationDao }
 
         // Verify the captured values
         assertEquals("transformationName", nameSlot.captured)
         assertEquals("transformationDescription", descriptionSlot.captured)
         assertEquals("example", examplesSlot.captured)
-        assertEquals(dto.returnsType, returnsTypeSlot.captured)
+        assertEquals(typeDeclarationDao, returnsTypeSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

@@ -4,8 +4,10 @@ import com.wini.owle.dto.steps.InquisitionDto
 import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.dto.steps.WorkflowJunctionDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.InquisitionDao
 import com.wini.owle.entity.steps.WorkflowJunctionDao
+import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
@@ -70,7 +72,7 @@ open class WorkflowJunctionMapperTest {
         val triggerInquisitionDto = mockk<InquisitionDto>()
         every { stepsMapper.toDto(entity.sourceStep) } returns sourceStepDto
         every { workflowsMapper.toDto(entity.targetWorkflow) } returns targetWorkflowDto
-        every { inquisitionsMapper.toDto(entity.triggerInquisition) } returns triggerInquisitionDto
+        every { entity.triggerInquisition?.let { inquisitionsMapper.toDto(it) } } returns triggerInquisitionDto
 
         // Call the method under test
         val result = mapper.toDto(entity)
@@ -90,6 +92,11 @@ open class WorkflowJunctionMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<WorkflowJunctionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val workflowDao: WorkflowDao = mockk()
+        val inquisitionDao: InquisitionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(WorkflowJunctionDao)
         every { WorkflowJunctionDao.findById(42L) } returns existingEntity
@@ -108,14 +115,14 @@ open class WorkflowJunctionMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { WorkflowJunctionDao.findById(42L) }
-        verify { existingEntity.sourceStep = dto.sourceStep }
-        verify { existingEntity.targetWorkflow = dto.targetWorkflow }
-        verify { existingEntity.triggerInquisition = dto.triggerInquisition }
+        verify { existingEntity.sourceStep = stepDao }
+        verify { existingEntity.targetWorkflow = workflowDao }
+        verify { existingEntity.triggerInquisition = inquisitionDao }
 
         // Verify the captured values
-        assertEquals(dto.sourceStep, sourceStepSlot.captured)
-        assertEquals(dto.targetWorkflow, targetWorkflowSlot.captured)
-        assertEquals(dto.triggerInquisition, triggerInquisitionSlot.captured)
+        assertEquals(stepDao, sourceStepSlot.captured)
+        assertEquals(workflowDao, targetWorkflowSlot.captured)
+        assertEquals(inquisitionDao, triggerInquisitionSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -136,6 +143,11 @@ open class WorkflowJunctionMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<WorkflowJunctionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val workflowDao: WorkflowDao = mockk()
+        val inquisitionDao: InquisitionDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
@@ -155,14 +167,14 @@ open class WorkflowJunctionMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.sourceStep = dto.sourceStep }
-        verify { newEntity.targetWorkflow = dto.targetWorkflow }
-        verify { newEntity.triggerInquisition = dto.triggerInquisition }
+        verify { newEntity.sourceStep = stepDao }
+        verify { newEntity.targetWorkflow = workflowDao }
+        verify { newEntity.triggerInquisition = inquisitionDao }
 
         // Verify the captured values
-        assertEquals(dto.sourceStep, sourceStepSlot.captured)
-        assertEquals(dto.targetWorkflow, targetWorkflowSlot.captured)
-        assertEquals(dto.triggerInquisition, triggerInquisitionSlot.captured)
+        assertEquals(stepDao, sourceStepSlot.captured)
+        assertEquals(workflowDao, targetWorkflowSlot.captured)
+        assertEquals(inquisitionDao, triggerInquisitionSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

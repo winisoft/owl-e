@@ -4,6 +4,8 @@ import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.entity.TypeDeclarations
+import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.workflows.ToolDao
 import com.wini.owle.entity.workflows.ToolParamDao
 import com.wini.owle.mapper.DaoFactory
@@ -93,6 +95,10 @@ open class ToolParamMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<ToolParamDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val toolDao: ToolDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(ToolParamDao)
         every { ToolParamDao.findById(42L) } returns existingEntity
@@ -100,7 +106,7 @@ open class ToolParamMapperTest {
         // Capture the property updates
         val nameSlot = slot<String>()
         val hasDefaultSlot = slot<Boolean>()
-        val typeDeclarationSlot = slot<TypeDeclarations>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val toolSlot = slot<ToolDao>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
@@ -115,14 +121,14 @@ open class ToolParamMapperTest {
         verify { ToolParamDao.findById(42L) }
         verify { existingEntity.name = "paramName" }
         verify { existingEntity.hasDefault = true }
-        verify { existingEntity.typeDeclaration = dto.typeDeclaration }
-        verify { existingEntity.tool = dto.tool }
+        verify { existingEntity.typeDeclaration = typeDeclarationDao }
+        verify { existingEntity.tool = toolDao }
 
         // Verify the captured values
         assertEquals("paramName", nameSlot.captured)
         assertEquals(true, hasDefaultSlot.captured)
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
-        assertEquals(dto.tool, toolSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
+        assertEquals(toolDao, toolSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -144,13 +150,17 @@ open class ToolParamMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<ToolParamDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val toolDao: ToolDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
         val nameSlot = slot<String>()
         val hasDefaultSlot = slot<Boolean>()
-        val typeDeclarationSlot = slot<TypeDeclarations>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val toolSlot = slot<ToolDao>()
 
         every { newEntity.name = capture(nameSlot) } just runs
@@ -167,14 +177,14 @@ open class ToolParamMapperTest {
         // Verify the properties were set correctly
         verify { newEntity.name = "paramName" }
         verify { newEntity.hasDefault = true }
-        verify { newEntity.typeDeclaration = dto.typeDeclaration }
-        verify { newEntity.tool = dto.tool }
+        verify { newEntity.typeDeclaration = typeDeclarationDao }
+        verify { newEntity.tool = toolDao }
 
         // Verify the captured values
         assertEquals("paramName", nameSlot.captured)
         assertEquals(true, hasDefaultSlot.captured)
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
-        assertEquals(dto.tool, toolSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
+        assertEquals(toolDao, toolSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

@@ -3,7 +3,12 @@ package com.wini.owle.mapper.workflows
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.workflows.DataPointDao
+import com.wini.owle.entity.workflows.StoreMethod
+import com.wini.owle.entity.workflows.StoreMethod.Companion.toDto
+import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import io.mockk.every
@@ -104,16 +109,21 @@ open class DataPointMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<DataPointDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+        val storeMethod: StoreMethod = mockk()
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(DataPointDao)
         every { DataPointDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val workflowSlot = slot<Workflows>()
+        val workflowSlot = slot<WorkflowDao>()
         val nameSlot = slot<String>()
         val presetValueSlot = slot<String>()
         val storeMethodSlot = slot<StoreMethod>()
-        val typeDeclarationSlot = slot<TypeDeclarations>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val descriptionSlot = slot<String>()
 
         every { existingEntity.workflow = capture(workflowSlot) } just runs
@@ -128,19 +138,19 @@ open class DataPointMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { DataPointDao.findById(42L) }
-        verify { existingEntity.workflow = dto.workflow }
+        verify { existingEntity.workflow = workflowDao }
         verify { existingEntity.name = "dataPointName" }
         verify { existingEntity.presetValue = "preset" }
-        verify { existingEntity.storeMethod = dto.storeMethod }
-        verify { existingEntity.typeDeclaration = dto.typeDeclaration }
+        verify { existingEntity.storeMethod = storeMethod }
+        verify { existingEntity.typeDeclaration = typeDeclarationDao }
         verify { existingEntity.description = "description" }
 
         // Verify the captured values
-        assertEquals(dto.workflow, workflowSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
         assertEquals("dataPointName", nameSlot.captured)
         assertEquals("preset", presetValueSlot.captured)
-        assertEquals(dto.storeMethod, storeMethodSlot.captured)
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
+        assertEquals(storeMethod, storeMethodSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
         assertEquals("description", descriptionSlot.captured)
 
         // Verify the result is the updated entity
@@ -167,15 +177,20 @@ open class DataPointMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<DataPointDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+        val storeMethod: StoreMethod = mockk()
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val workflowSlot = slot<Workflows>()
+        val workflowSlot = slot<WorkflowDao>()
         val nameSlot = slot<String>()
         val presetValueSlot = slot<String>()
         val storeMethodSlot = slot<StoreMethod>()
-        val typeDeclarationSlot = slot<TypeDeclarations>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val descriptionSlot = slot<String>()
 
         every { newEntity.workflow = capture(workflowSlot) } just runs
@@ -192,19 +207,19 @@ open class DataPointMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflow = dto.workflow }
+        verify { newEntity.workflow = workflowDao }
         verify { newEntity.name = "dataPointName" }
         verify { newEntity.presetValue = "preset" }
-        verify { newEntity.storeMethod = dto.storeMethod }
-        verify { newEntity.typeDeclaration = dto.typeDeclaration }
+        verify { newEntity.storeMethod = storeMethod }
+        verify { newEntity.typeDeclaration = typeDeclarationDao }
         verify { newEntity.description = "description" }
 
         // Verify the captured values
-        assertEquals(dto.workflow, workflowSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
         assertEquals("dataPointName", nameSlot.captured)
         assertEquals("preset", presetValueSlot.captured)
-        assertEquals(dto.storeMethod, storeMethodSlot.captured)
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
+        assertEquals(storeMethod, storeMethodSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
         assertEquals("description", descriptionSlot.captured)
 
         // Verify the result is the new entity

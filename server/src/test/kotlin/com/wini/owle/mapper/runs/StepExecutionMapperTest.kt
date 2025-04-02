@@ -1,15 +1,19 @@
 package com.wini.owle.mapper.runs
 
+import com.wini.owle.dto.runs.ExecutionStatusDto
 import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.runs.ExecutionStatus
 import com.wini.owle.entity.WorkflowExecutions
+import com.wini.owle.entity.runs.ExecutionStatus.Companion.toDto
 import com.wini.owle.entity.runs.StepExecutionDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.workflows.StepsMapper
 import io.mockk.*
+import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -35,8 +39,8 @@ open class StepExecutionMapperTest {
             id = 99L,
             workflowExecution = mockk(),
             step = mockk(),
-            startedAt = "2023-10-01T10:00:00",
-            completedAt = "2023-10-01T11:00:00",
+            startedAt = LocalDateTime.parse("2023-10-01T10:00:00"),
+            completedAt = LocalDateTime.parse("2023-10-01T11:00:00"),
             status = mockk()
         )
 
@@ -60,9 +64,9 @@ open class StepExecutionMapperTest {
             every { id.value } returns 1L
             every { workflowExecution } returns mockk()
             every { step } returns mockk()
-            every { startedAt } returns "2023-10-01T10:00:00"
-            every { completedAt } returns "2023-10-01T11:00:00"
-            every { status.toDto() } returns mockk()
+            every { startedAt } returns LocalDateTime.parse("2023-10-01T10:00:00")
+            every { completedAt } returns LocalDateTime.parse("2023-10-01T11:00:00")
+            every { status.toDto() } returns ExecutionStatusDto.Running
         }
 
         // Mock the behavior of workflowExecutionsMapper and stepMapper
@@ -78,8 +82,8 @@ open class StepExecutionMapperTest {
         assertEquals(1L, result.id)
         assertEquals(workflowExecutionDto, result.workflowExecution)
         assertEquals(stepDto, result.step)
-        assertEquals("2023-10-01T10:00:00", result.startedAt)
-        assertEquals("2023-10-01T11:00:00", result.completedAt)
+        assertEquals(LocalDateTime.parse("2023-10-01T10:00:00"), result.startedAt)
+        assertEquals(LocalDateTime.parse("2023-10-01T11:00:00"), result.completedAt)
         assertEquals(entity.status.toDto(), result.status)
     }
 
@@ -90,23 +94,27 @@ open class StepExecutionMapperTest {
             id = 42L,
             workflowExecution = mockk(),
             step = mockk(),
-            startedAt = "2023-10-01T12:00:00",
-            completedAt = "2023-10-01T13:00:00",
+            startedAt = LocalDateTime.parse("2023-10-01T12:00:00"),
+            completedAt = LocalDateTime.parse("2023-10-01T13:00:00"),
             status = mockk()
         )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<StepExecutionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        val stepDao: StepDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(StepExecutionDao)
         every { StepExecutionDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val workflowExecutionSlot = slot<WorkflowExecutions>()
+        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
         val stepSlot = slot<StepDao>()
-        val startedAtSlot = slot<String>()
-        val completedAtSlot = slot<String>()
+        val startedAtSlot = slot<LocalDateTime>()
+        val completedAtSlot = slot<LocalDateTime>()
         val statusSlot = slot<ExecutionStatus>()
 
         every { existingEntity.workflowExecution = capture(workflowExecutionSlot) } just runs
@@ -120,15 +128,15 @@ open class StepExecutionMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { StepExecutionDao.findById(42L) }
-        verify { existingEntity.workflowExecution = dto.workflowExecution }
-        verify { existingEntity.step = dto.step }
+        verify { existingEntity.workflowExecution = workflowExecutionDao }
+        verify { existingEntity.step = stepDao }
         verify { existingEntity.startedAt = dto.startedAt }
         verify { existingEntity.completedAt = dto.completedAt }
         verify { existingEntity.status = ExecutionStatus.fromDto(dto.status) }
 
         // Verify the captured values
-        assertEquals(dto.workflowExecution, workflowExecutionSlot.captured)
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
         assertEquals(dto.startedAt, startedAtSlot.captured)
         assertEquals(dto.completedAt, completedAtSlot.captured)
         assertEquals(ExecutionStatus.fromDto(dto.status), statusSlot.captured)
@@ -146,22 +154,26 @@ open class StepExecutionMapperTest {
             id = 0L,
             workflowExecution = mockk(),
             step = mockk(),
-            startedAt = "2023-10-01T14:00:00",
-            completedAt = "2023-10-01T15:00:00",
+            startedAt = LocalDateTime.parse("2023-10-01T14:00:00"),
+            completedAt = LocalDateTime.parse("2023-10-01T15:00:00"),
             status = mockk()
         )
 
         // Mock the new entity that will be created
         val newEntity = mockk<StepExecutionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        val stepDao: StepDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val workflowExecutionSlot = slot<WorkflowExecutions>()
+        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
         val stepSlot = slot<StepDao>()
-        val startedAtSlot = slot<String>()
-        val completedAtSlot = slot<String>()
+        val startedAtSlot = slot<LocalDateTime>()
+        val completedAtSlot = slot<LocalDateTime>()
         val statusSlot = slot<ExecutionStatus>()
 
         every { newEntity.workflowExecution = capture(workflowExecutionSlot) } just runs
@@ -177,15 +189,15 @@ open class StepExecutionMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflowExecution = dto.workflowExecution }
-        verify { newEntity.step = dto.step }
+        verify { newEntity.workflowExecution = workflowExecutionDao }
+        verify { newEntity.step = stepDao }
         verify { newEntity.startedAt = dto.startedAt }
         verify { newEntity.completedAt = dto.completedAt }
         verify { newEntity.status = ExecutionStatus.fromDto(dto.status) }
 
         // Verify the captured values
-        assertEquals(dto.workflowExecution, workflowExecutionSlot.captured)
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
         assertEquals(dto.startedAt, startedAtSlot.captured)
         assertEquals(dto.completedAt, completedAtSlot.captured)
         assertEquals(ExecutionStatus.fromDto(dto.status), statusSlot.captured)

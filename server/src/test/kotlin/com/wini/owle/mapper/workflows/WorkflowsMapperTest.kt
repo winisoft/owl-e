@@ -3,6 +3,7 @@ package com.wini.owle.mapper.workflows
 import com.wini.owle.dto.user.metadata.UserDesignedMetadataDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.dto.workflows.WorkflowFolderDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.user.metadata.UserDesignedMetadataMapper
@@ -105,6 +106,9 @@ open class WorkflowsMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<WorkflowDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(WorkflowDao)
         every { WorkflowDao.findById(42L) } returns existingEntity
@@ -149,10 +153,22 @@ open class WorkflowsMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = WorkflowDto(id = 0L, name = "workflowName", description = "description", pythonVersion = "3.8", parentFolder = null, metadata = mockk(), createdAt = "2023-01-01T00:00:00", updatedAt = "2023-01-02T00:00:00")
+        val dto = WorkflowDto(
+            id = 0L,
+            name = "workflowName",
+            description = "description",
+            pythonVersion = "3.8",
+            parentFolder = null,
+            metadata = mockk(),
+            createdAt = "2023-01-01T00:00:00",
+            updatedAt = "2023-01-02T00:00:00"
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<WorkflowDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

@@ -3,7 +3,10 @@ package com.wini.owle.mapper.workflows
 import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.StepDao
+import com.wini.owle.entity.workflows.ToolDao
+import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -104,15 +107,19 @@ open class StepMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<StepDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+        val toolDao: ToolDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(StepDao)
         every { StepDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val workflowSlot = slot<Workflows>()
+        val workflowSlot = slot<WorkflowDao>()
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
-        val toolSlot = slot<Tools>()
+        val toolSlot = slot<ToolDao>()
         val isWorkflowHeadSlot = slot<Boolean>()
         val displayOrderSlot = slot<Int>()
 
@@ -128,18 +135,18 @@ open class StepMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { StepDao.findById(42L) }
-        verify { existingEntity.workflow = dto.workflow }
+        verify { existingEntity.workflow = workflowDao }
         verify { existingEntity.name = "stepName" }
         verify { existingEntity.description = "description" }
-        verify { existingEntity.tool = dto.tool }
+        verify { existingEntity.tool = toolDao }
         verify { existingEntity.isWorkflowHead = true }
         verify { existingEntity.displayOrder = 1 }
 
         // Verify the captured values
-        assertEquals(dto.workflow, workflowSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
         assertEquals("stepName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
-        assertEquals(dto.tool, toolSlot.captured)
+        assertEquals(toolDao, toolSlot.captured)
         assertEquals(true, isWorkflowHeadSlot.captured)
         assertEquals(1, displayOrderSlot.captured)
 
@@ -167,14 +174,18 @@ open class StepMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<StepDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+        val toolDao: ToolDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val workflowSlot = slot<Workflows>()
+        val workflowSlot = slot<WorkflowDao>()
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
-        val toolSlot = slot<Tools>()
+        val toolSlot = slot<ToolDao>()
         val isWorkflowHeadSlot = slot<Boolean>()
         val displayOrderSlot = slot<Int>()
 
@@ -192,18 +203,18 @@ open class StepMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflow = dto.workflow }
+        verify { newEntity.workflow = workflowDao }
         verify { newEntity.name = "stepName" }
         verify { newEntity.description = "description" }
-        verify { newEntity.tool = dto.tool }
+        verify { newEntity.tool = toolDao }
         verify { newEntity.isWorkflowHead = true }
         verify { newEntity.displayOrder = 1 }
 
         // Verify the captured values
-        assertEquals(dto.workflow, workflowSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
         assertEquals("stepName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
-        assertEquals(dto.tool, toolSlot.captured)
+        assertEquals(toolDao, toolSlot.captured)
         assertEquals(true, isWorkflowHeadSlot.captured)
         assertEquals(1, displayOrderSlot.captured)
 

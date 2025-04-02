@@ -2,8 +2,11 @@ package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.PaymentMethodDto
 import com.wini.owle.dto.user.UserDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.user.CardBrand
+import com.wini.owle.entity.user.CardBrand.Companion.toDto
 import com.wini.owle.entity.user.PaymentMethodDao
+import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import io.mockk.every
@@ -101,13 +104,17 @@ open class PaymentMethodMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<PaymentMethodDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val userDao: UserDao = mockk()
+        val cardBrand: CardBrand = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(PaymentMethodDao)
         every { PaymentMethodDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
         val stripePaymentMethodIdSlot = slot<String>()
-        val userSlot = slot<User>()
+        val userSlot = slot<UserDao>()
         val cardBrandSlot = slot<CardBrand>()
         val lastFourSlot = slot<String>()
         val isDefaultSlot = slot<Boolean>()
@@ -128,8 +135,8 @@ open class PaymentMethodMapperTest {
         // Verify that the existing entity was found and updated
         verify { PaymentMethodDao.findById(42L) }
         verify { existingEntity.stripePaymentMethodId = "pm_12345" }
-        verify { existingEntity.user = dto.user }
-        verify { existingEntity.cardBrand = dto.cardBrand }
+        verify { existingEntity.user = userDao }
+        verify { existingEntity.cardBrand = cardBrand }
         verify { existingEntity.lastFour = "1234" }
         verify { existingEntity.isDefault = true }
         verify { existingEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
@@ -137,8 +144,8 @@ open class PaymentMethodMapperTest {
 
         // Verify the captured values
         assertEquals("pm_12345", stripePaymentMethodIdSlot.captured)
-        assertEquals(dto.user, userSlot.captured)
-        assertEquals(dto.cardBrand, cardBrandSlot.captured)
+        assertEquals(userDao, userSlot.captured)
+        assertEquals(cardBrand, cardBrandSlot.captured)
         assertEquals("1234", lastFourSlot.captured)
         assertEquals(true, isDefaultSlot.captured)
         assertEquals(LocalDateTime.parse(dto.createdAt), createdAtSlot.captured)
@@ -167,12 +174,16 @@ open class PaymentMethodMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<PaymentMethodDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val userDao: UserDao = mockk()
+        val cardBrand: CardBrand = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
         val stripePaymentMethodIdSlot = slot<String>()
-        val userSlot = slot<User>()
+        val userSlot = slot<UserDao>()
         val cardBrandSlot = slot<CardBrand>()
         val lastFourSlot = slot<String>()
         val isDefaultSlot = slot<Boolean>()
@@ -195,8 +206,8 @@ open class PaymentMethodMapperTest {
 
         // Verify the properties were set correctly
         verify { newEntity.stripePaymentMethodId = "pm_12345" }
-        verify { newEntity.user = dto.user }
-        verify { newEntity.cardBrand = dto.cardBrand }
+        verify { newEntity.user = userDao }
+        verify { newEntity.cardBrand = cardBrand }
         verify { newEntity.lastFour = "1234" }
         verify { newEntity.isDefault = true }
         verify { newEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
@@ -204,8 +215,8 @@ open class PaymentMethodMapperTest {
 
         // Verify the captured values
         assertEquals("pm_12345", stripePaymentMethodIdSlot.captured)
-        assertEquals(dto.user, userSlot.captured)
-        assertEquals(dto.cardBrand, cardBrandSlot.captured)
+        assertEquals(userDao, userSlot.captured)
+        assertEquals(cardBrand, cardBrandSlot.captured)
         assertEquals("1234", lastFourSlot.captured)
         assertEquals(true, isDefaultSlot.captured)
         assertEquals(LocalDateTime.parse(dto.createdAt), createdAtSlot.captured)

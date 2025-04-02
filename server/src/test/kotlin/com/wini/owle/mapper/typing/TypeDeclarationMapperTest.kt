@@ -2,7 +2,9 @@ package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.typing.TypeDefinitionDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.typing.TypeDeclarationDao
+import com.wini.owle.entity.typing.TypeDefinitionDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -77,12 +79,15 @@ open class TypeDeclarationMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TypeDeclarationDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDefinitionDao: TypeDefinitionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TypeDeclarationDao)
         every { TypeDeclarationDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val typeDefinitionSlot = slot<TypeDefinition>()
+        val typeDefinitionSlot = slot<TypeDefinitionDao>()
         val aliasSlot = slot<String>()
 
         every { existingEntity.typeDefinition = capture(typeDefinitionSlot) } just runs
@@ -93,11 +98,11 @@ open class TypeDeclarationMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { TypeDeclarationDao.findById(42L) }
-        verify { existingEntity.typeDefinition = dto.typeDefinition }
+        verify { existingEntity.typeDefinition = typeDefinitionDao }
         verify { existingEntity.alias = "aliasName" }
 
         // Verify the captured values
-        assertEquals(dto.typeDefinition, typeDefinitionSlot.captured)
+        assertEquals(typeDefinitionDao, typeDefinitionSlot.captured)
         assertEquals("aliasName", aliasSlot.captured)
 
         // Verify the result is the updated entity
@@ -114,11 +119,14 @@ open class TypeDeclarationMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<TypeDeclarationDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDefinitionDao: TypeDefinitionDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val typeDefinitionSlot = slot<TypeDefinition>()
+        val typeDefinitionSlot = slot<TypeDefinitionDao>()
         val aliasSlot = slot<String>()
 
         every { newEntity.typeDefinition = capture(typeDefinitionSlot) } just runs
@@ -131,11 +139,11 @@ open class TypeDeclarationMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.typeDefinition = dto.typeDefinition }
+        verify { newEntity.typeDefinition = typeDefinitionDao }
         verify { newEntity.alias = "aliasName" }
 
         // Verify the captured values
-        assertEquals(dto.typeDefinition, typeDefinitionSlot.captured)
+        assertEquals(typeDefinitionDao, typeDefinitionSlot.captured)
         assertEquals("aliasName", aliasSlot.captured)
 
         // Verify the result is the new entity

@@ -3,6 +3,7 @@ package com.wini.owle.mapper.steps
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.steps.RevisionDto
 import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.RevisionDao
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.entity.workflows.StepDao
@@ -77,6 +78,10 @@ open class RevisionMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<RevisionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val dataPointDao: DataPointDao = mockk()
+        val stepDao: StepDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(RevisionDao)
         every { RevisionDao.findById(42L) } returns existingEntity
@@ -93,12 +98,12 @@ open class RevisionMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { RevisionDao.findById(42L) }
-        verify { existingEntity.dataPoint = dto.dataPoint }
-        verify { existingEntity.step = dto.step }
+        verify { existingEntity.dataPoint = dataPointDao }
+        verify { existingEntity.step = stepDao }
 
         // Verify the captured values
-        assertEquals(dto.dataPoint, dataPointSlot.captured)
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(dataPointDao, dataPointSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -113,6 +118,10 @@ open class RevisionMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<RevisionDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val dataPointDao: DataPointDao = mockk()
+        val stepDao: StepDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -131,12 +140,12 @@ open class RevisionMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.dataPoint = dto.dataPoint }
-        verify { newEntity.step = dto.step }
+        verify { newEntity.dataPoint = dataPointDao }
+        verify { newEntity.step = stepDao }
 
         // Verify the captured values
-        assertEquals(dto.dataPoint, dataPointSlot.captured)
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(dataPointDao, dataPointSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

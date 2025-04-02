@@ -2,6 +2,8 @@ package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.typing.TypeDefinitionDto
 import com.wini.owle.dto.environs.VersionSpecDto
+import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.typing.TypeDefinitionDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.environs.VersionSpecsMapper
@@ -85,6 +87,9 @@ open class TypeDefinitionMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TypeDefinitionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val versionSpecDao: VersionSpecDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TypeDefinitionDao)
         every { TypeDefinitionDao.findById(42L) } returns existingEntity
@@ -92,7 +97,7 @@ open class TypeDefinitionMapperTest {
         // Capture the property updates
         val nameSlot = slot<String>()
         val namespaceSlot = slot<String>()
-        val versionSpecSlot = slot<VersionSpec>()
+        val versionSpecSlot = slot<VersionSpecDao>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
         every { existingEntity.namespace = capture(namespaceSlot) } just runs
@@ -105,12 +110,12 @@ open class TypeDefinitionMapperTest {
         verify { TypeDefinitionDao.findById(42L) }
         verify { existingEntity.name = "definitionName" }
         verify { existingEntity.namespace = "namespace" }
-        verify { existingEntity.versionSpec = dto.versionSpec }
+        verify { existingEntity.versionSpec = versionSpecDao }
 
         // Verify the captured values
         assertEquals("definitionName", nameSlot.captured)
         assertEquals("namespace", namespaceSlot.captured)
-        assertEquals(dto.versionSpec, versionSpecSlot.captured)
+        assertEquals(versionSpecDao, versionSpecSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -131,13 +136,16 @@ open class TypeDefinitionMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<TypeDefinitionDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val versionSpecDao: VersionSpecDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
         val nameSlot = slot<String>()
         val namespaceSlot = slot<String>()
-        val versionSpecSlot = slot<VersionSpec>()
+        val versionSpecSlot = slot<VersionSpecDao>()
 
         every { newEntity.name = capture(nameSlot) } just runs
         every { newEntity.namespace = capture(namespaceSlot) } just runs
@@ -152,12 +160,12 @@ open class TypeDefinitionMapperTest {
         // Verify the properties were set correctly
         verify { newEntity.name = "definitionName" }
         verify { newEntity.namespace = "namespace" }
-        verify { newEntity.versionSpec = dto.versionSpec }
+        verify { newEntity.versionSpec = versionSpecDao }
 
         // Verify the captured values
         assertEquals("definitionName", nameSlot.captured)
         assertEquals("namespace", namespaceSlot.captured)
-        assertEquals(dto.versionSpec, versionSpecSlot.captured)
+        assertEquals(versionSpecDao, versionSpecSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

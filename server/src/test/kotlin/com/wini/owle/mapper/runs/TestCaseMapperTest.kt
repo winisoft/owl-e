@@ -5,6 +5,8 @@ import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.runs.TestCaseDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.entity.user.UserDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
@@ -17,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.assertThrows
+import org.testcontainers.shaded.org.yaml.snakeyaml.Yaml
+import kotlin.math.exp
 
 
 open class TestCaseMapperTest {
@@ -52,7 +56,10 @@ open class TestCaseMapperTest {
             name = "Test Case",
             description = "Description",
             workflow = mockk(),
-            step = mockk()
+            step = mockk(),
+            inputs = emptyList(),
+            expectedOutcomes = emptyList(),
+            results = emptyList()
         )
 
         // Mock the behavior of findById to return null (not found)
@@ -85,8 +92,8 @@ open class TestCaseMapperTest {
         val workflowDto = mockk<WorkflowDto>()
         val stepDto = mockk<StepDto>()
         every { usersMapper.toDto(entity.user) } returns userDto
-        every { workflowsMapper.toDto(entity.workflow) } returns workflowDto
-        every { stepsMapper.toDto(entity.step) } returns stepDto
+        every { workflowsMapper.toDto(any<WorkflowDao>()) } returns workflowDto
+        every { stepsMapper.toDto(any<StepDao>()) } returns stepDto
 
         // Call the method under test
         val result = mapper.toDto(entity)
@@ -109,18 +116,26 @@ open class TestCaseMapperTest {
             name = "Updated Test Case",
             description = "Updated Description",
             workflow = mockk(),
-            step = mockk()
+            step = mockk(),
+            inputs = emptyList(),
+            expectedOutcomes = emptyList(),
+            results = emptyList()
         )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TestCaseDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+        val userDao: UserDao = mockk()
+        val stepDao: StepDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(TestCaseDao)
         every { TestCaseDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val userSlot = slot<User>()
+        val userSlot = slot<UserDao>()
         val workflowSlot = slot<WorkflowDao>()
         val stepSlot = slot<StepDao>()
         val nameSlot = slot<String>()
@@ -137,16 +152,16 @@ open class TestCaseMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { TestCaseDao.findById(42L) }
-        verify { existingEntity.user = dto.user }
-        verify { existingEntity.workflow = dto.workflow }
-        verify { existingEntity.step = dto.step }
+        verify { existingEntity.user = userDao }
+        verify { existingEntity.workflow = workflowDao }
+        verify { existingEntity.step = stepDao }
         verify { existingEntity.name = dto.name }
         verify { existingEntity.description = dto.description }
 
         // Verify the captured values
-        assertEquals(dto.user, userSlot.captured)
-        assertEquals(dto.workflow, workflowSlot.captured)
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(userDao, userSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
         assertEquals(dto.name, nameSlot.captured)
         assertEquals(dto.description, descriptionSlot.captured)
 
@@ -165,19 +180,27 @@ open class TestCaseMapperTest {
             name = "New Test Case",
             description = "New Description",
             workflow = mockk(),
-            step = mockk()
+            step = mockk(),
+            inputs = emptyList(),
+            expectedOutcomes = emptyList(),
+            results = emptyList()
         )
 
         // Mock the new entity that will be created
         val newEntity = mockk<TestCaseDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowDao: WorkflowDao = mockk()
+        val stepDao: StepDao = mockk()
+        val userDao: UserDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val userSlot = slot<User>()
-        val workflowSlot = slot<Workflow>()
-        val stepSlot = slot<Step>()
+        val userSlot = slot<UserDao>()
+        val workflowSlot = slot<WorkflowDao>()
+        val stepSlot = slot<StepDao>()
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
 
@@ -194,16 +217,16 @@ open class TestCaseMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.user = dto.user }
-        verify { newEntity.workflow = dto.workflow }
-        verify { newEntity.step = dto.step }
+        verify { newEntity.user = userDao }
+        verify { newEntity.workflow = workflowDao }
+        verify { newEntity.step = stepDao }
         verify { newEntity.name = dto.name }
         verify { newEntity.description = dto.description }
 
         // Verify the captured values
-        assertEquals(dto.user, userSlot.captured)
-        assertEquals(dto.workflow, workflowSlot.captured)
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(userDao, userSlot.captured)
+        assertEquals(workflowDao, workflowSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
         assertEquals(dto.name, nameSlot.captured)
         assertEquals(dto.description, descriptionSlot.captured)
 

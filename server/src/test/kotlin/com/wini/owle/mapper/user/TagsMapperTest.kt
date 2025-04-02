@@ -2,7 +2,9 @@ package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.TagDto
 import com.wini.owle.dto.user.UserDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.user.TagDao
+import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -79,6 +81,9 @@ open class TagsMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TagDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val userDao: UserDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TagDao)
         every { TagDao.findById(42L) } returns existingEntity
@@ -86,7 +91,7 @@ open class TagsMapperTest {
         // Capture the property updates
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
-        val userSlot = slot<User>()
+        val userSlot = slot<UserDao>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
         every { existingEntity.description = capture(descriptionSlot) } just runs
@@ -99,12 +104,12 @@ open class TagsMapperTest {
         verify { TagDao.findById(42L) }
         verify { existingEntity.name = "tagName" }
         verify { existingEntity.description = "tagDescription" }
-        verify { existingEntity.user = dto.user }
+        verify { existingEntity.user = userDao }
 
         // Verify the captured values
         assertEquals("tagName", nameSlot.captured)
         assertEquals("tagDescription", descriptionSlot.captured)
-        assertEquals(dto.user, userSlot.captured)
+        assertEquals(userDao, userSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -120,13 +125,16 @@ open class TagsMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<TagDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val userDao: UserDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
-        val userSlot = slot<User>()
+        val userSlot = slot<UserDao>()
 
         every { newEntity.name = capture(nameSlot) } just runs
         every { newEntity.description = capture(descriptionSlot) } just runs
@@ -141,12 +149,12 @@ open class TagsMapperTest {
         // Verify the properties were set correctly
         verify { newEntity.name = "tagName" }
         verify { newEntity.description = "tagDescription" }
-        verify { newEntity.user = dto.user }
+        verify { newEntity.user = userDao }
 
         // Verify the captured values
         assertEquals("tagName", nameSlot.captured)
         assertEquals("tagDescription", descriptionSlot.captured)
-        assertEquals(dto.user, userSlot.captured)
+        assertEquals(userDao, userSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

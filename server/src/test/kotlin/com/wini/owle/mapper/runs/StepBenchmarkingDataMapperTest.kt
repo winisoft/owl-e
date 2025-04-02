@@ -1,10 +1,15 @@
 package com.wini.owle.mapper.runs
 
+import com.wini.owle.dto.DecimalValue
 import com.wini.owle.dto.runs.StepBenchmarkingDataDto
 import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.entity.StepExecutions
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
+import com.wini.owle.entity.runs.StepExecutionDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.toBigDecimal
+import com.wini.owle.mapper.toDecimalValue
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,7 +35,8 @@ open class StepBenchmarkingDataMapperTest {
         val dto = StepBenchmarkingDataDto(
             id = 99L,
             stepExecution = mockk(),
-            executionTime = "100"
+            executionTime = DecimalValue("100"),
+            resourceUsage = mockk()
         )
 
         // Mock the behavior of findById to return null (not found)
@@ -52,7 +58,7 @@ open class StepBenchmarkingDataMapperTest {
         val entity = mockk<StepBenchmarkingDataDao> {
             every { id.value } returns 1L
             every { stepExecution } returns mockk()
-            every { executionTime.toDecimalValue() } returns "100"
+            every { executionTime.toDecimalValue() } returns DecimalValue("100")
         }
 
         // Mock the behavior of stepExecutionsMapper
@@ -65,23 +71,31 @@ open class StepBenchmarkingDataMapperTest {
         // Verify the result
         assertEquals(1L, result.id)
         assertEquals(stepExecutionDto, result.stepExecution)
-        assertEquals("100", result.executionTime)
+        assertEquals(DecimalValue("100"), result.executionTime)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val dto = StepBenchmarkingDataDto(id = 42L, stepExecution = mockk(), executionTime = "200")
+        val dto = StepBenchmarkingDataDto(
+            id = 42L,
+            stepExecution = mockk(),
+            executionTime = DecimalValue("200"),
+            resourceUsage = mockk()
+        )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<StepBenchmarkingDataDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepExecutionDao: StepExecutionDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(StepBenchmarkingDataDao)
         every { StepBenchmarkingDataDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val stepExecutionSlot = slot<StepExecutions>()
+        val stepExecutionSlot = slot<StepExecutionDao>()
         val executionTimeSlot = slot<BigDecimal>()
 
         every { existingEntity.stepExecution = capture(stepExecutionSlot) } just runs
@@ -92,11 +106,11 @@ open class StepBenchmarkingDataMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { StepBenchmarkingDataDao.findById(42L) }
-        verify { existingEntity.stepExecution = dto.stepExecution }
+        verify { existingEntity.stepExecution = stepExecutionDao }
         verify { existingEntity.executionTime = dto.executionTime.toBigDecimal() }
 
         // Verify the captured values
-        assertEquals(dto.stepExecution, stepExecutionSlot.captured)
+        assertEquals(stepExecutionDao, stepExecutionSlot.captured)
         assertEquals(dto.executionTime.toBigDecimal(), executionTimeSlot.captured)
 
         // Verify the result is the updated entity
@@ -108,16 +122,24 @@ open class StepBenchmarkingDataMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = StepBenchmarkingDataDto(id = 0L, stepExecution = mockk(), executionTime = "300")
+        val dto = StepBenchmarkingDataDto(
+            id = 0L,
+            stepExecution = mockk(),
+            executionTime = DecimalValue("300"),
+            resourceUsage = mockk()
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<StepBenchmarkingDataDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepExecutionDao: StepExecutionDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val stepExecutionSlot = slot<StepExecutions>()
+        val stepExecutionSlot = slot<StepExecutionDao>()
         val executionTimeSlot = slot<BigDecimal>()
 
         every { newEntity.stepExecution = capture(stepExecutionSlot) } just runs
@@ -130,11 +152,11 @@ open class StepBenchmarkingDataMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.stepExecution = dto.stepExecution }
+        verify { newEntity.stepExecution = stepExecutionDao }
         verify { newEntity.executionTime = dto.executionTime.toBigDecimal() }
 
         // Verify the captured values
-        assertEquals(dto.stepExecution, stepExecutionSlot.captured)
+        assertEquals(stepExecutionDao, stepExecutionSlot.captured)
         assertEquals(dto.executionTime.toBigDecimal(), executionTimeSlot.captured)
 
         // Verify the result is the new entity

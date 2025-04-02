@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.entity.typing.TypeDeclarationDao
 import org.junit.jupiter.api.assertThrows
 
 
@@ -86,14 +88,18 @@ open class TypeParameterMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<TypeParameterDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val parameterTypeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(TypeParameterDao)
         every { TypeParameterDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val typeDeclarationSlot = slot<TypeDeclaration>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val positionSlot = slot<Int>()
-        val parameterTypeDeclarationSlot = slot<TypeDeclaration>()
+        val parameterTypeDeclarationSlot = slot<TypeDeclarationDao>()
 
         every { existingEntity.typeDeclaration = capture(typeDeclarationSlot) } just runs
         every { existingEntity.position = capture(positionSlot) } just runs
@@ -104,14 +110,14 @@ open class TypeParameterMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { TypeParameterDao.findById(42L) }
-        verify { existingEntity.typeDeclaration = dto.typeDeclaration }
+        verify { existingEntity.typeDeclaration = typeDeclarationDao }
         verify { existingEntity.position = 1 }
-        verify { existingEntity.parameterTypeDeclaration = dto.parameterTypeDeclaration }
+        verify { existingEntity.parameterTypeDeclaration = parameterTypeDeclarationDao }
 
         // Verify the captured values
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
         assertEquals(1, positionSlot.captured)
-        assertEquals(dto.parameterTypeDeclaration, parameterTypeDeclarationSlot.captured)
+        assertEquals(parameterTypeDeclarationDao, parameterTypeDeclarationSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -132,13 +138,17 @@ open class TypeParameterMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<TypeParameterDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val parameterTypeDeclarationDao: TypeDeclarationDao = mockk()
+
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val typeDeclarationSlot = slot<TypeDeclaration>()
+        val typeDeclarationSlot = slot<TypeDeclarationDao>()
         val positionSlot = slot<Int>()
-        val parameterTypeDeclarationSlot = slot<TypeDeclaration>()
+        val parameterTypeDeclarationSlot = slot<TypeDeclarationDao>()
 
         every { newEntity.typeDeclaration = capture(typeDeclarationSlot) } just runs
         every { newEntity.position = capture(positionSlot) } just runs
@@ -151,14 +161,14 @@ open class TypeParameterMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.typeDeclaration = dto.typeDeclaration }
+        verify { newEntity.typeDeclaration = typeDeclarationDao }
         verify { newEntity.position = 1 }
-        verify { newEntity.parameterTypeDeclaration = dto.parameterTypeDeclaration }
+        verify { newEntity.parameterTypeDeclaration = parameterTypeDeclarationDao }
 
         // Verify the captured values
-        assertEquals(dto.typeDeclaration, typeDeclarationSlot.captured)
+        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
         assertEquals(1, positionSlot.captured)
-        assertEquals(dto.parameterTypeDeclaration, parameterTypeDeclarationSlot.captured)
+        assertEquals(parameterTypeDeclarationDao, parameterTypeDeclarationSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

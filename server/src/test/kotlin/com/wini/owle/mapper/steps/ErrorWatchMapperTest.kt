@@ -2,6 +2,7 @@ package com.wini.owle.mapper.steps
 
 import com.wini.owle.dto.steps.ErrorWatchDto
 import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.ErrorWatchDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.mapper.DaoFactory
@@ -80,6 +81,10 @@ open class ErrorWatchMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<ErrorWatchDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val onMetStepDao: StepDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(ErrorWatchDao)
         every { ErrorWatchDao.findById(42L) } returns existingEntity
@@ -98,14 +103,14 @@ open class ErrorWatchMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { ErrorWatchDao.findById(42L) }
-        verify { existingEntity.step = dto.step }
+        verify { existingEntity.step = stepDao }
         verify { existingEntity.errorType = dto.errorType }
-        verify { existingEntity.onMetStep = dto.triggerStep }
+        verify { existingEntity.onMetStep = onMetStepDao }
 
         // Verify the captured values
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
         assertEquals(dto.errorType, errorTypeSlot.captured)
-        assertEquals(dto.triggerStep, triggerStepSlot.captured)
+        assertEquals(onMetStepDao, triggerStepSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -120,6 +125,10 @@ open class ErrorWatchMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<ErrorWatchDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val stepDao: StepDao = mockk()
+        val onMetStepDao: StepDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -140,14 +149,14 @@ open class ErrorWatchMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.step = dto.step }
+        verify { newEntity.step = stepDao }
         verify { newEntity.errorType = dto.errorType }
-        verify { newEntity.onMetStep = dto.triggerStep }
+        verify { newEntity.onMetStep = onMetStepDao }
 
         // Verify the captured values
-        assertEquals(dto.step, stepSlot.captured)
+        assertEquals(stepDao, stepSlot.captured)
         assertEquals(dto.errorType, errorTypeSlot.captured)
-        assertEquals(dto.triggerStep, triggerStepSlot.captured)
+        assertEquals(onMetStepDao, triggerStepSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

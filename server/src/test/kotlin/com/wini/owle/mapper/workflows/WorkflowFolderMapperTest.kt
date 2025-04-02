@@ -1,6 +1,7 @@
 package com.wini.owle.mapper.workflows
 
 import com.wini.owle.dto.workflows.WorkflowFolderDto
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
@@ -75,6 +76,9 @@ open class WorkflowFolderMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<WorkflowFolderDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up mocks for finding existing entity
         mockkObject(WorkflowFolderDao)
         every { WorkflowFolderDao.findById(42L) } returns existingEntity
@@ -125,6 +129,9 @@ open class WorkflowFolderMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<WorkflowFolderDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

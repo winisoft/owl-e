@@ -2,6 +2,7 @@ package com.wini.owle.mapper.environs
 
 import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.ExposedDaoFactory
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -59,6 +60,9 @@ open class VersionSpecsMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<VersionSpecDao>(relaxed = true)
 
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+
         // Set up mocks
         mockkObject(VersionSpecDao)
         every { VersionSpecDao.findById(42L) } returns existingEntity
@@ -99,6 +103,9 @@ open class VersionSpecsMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<VersionSpecDao>(relaxed = true)
+
+        // Mock the class's member dao types that would be returned from the mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

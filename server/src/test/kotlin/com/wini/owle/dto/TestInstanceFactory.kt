@@ -1,7 +1,5 @@
 package com.wini.owle.dto
 
-import com.wini.owle.dto.enums.*
-
 //@Suppress("UNCHECKED_CAST")
 //object TestInstanceFactory {
 //
