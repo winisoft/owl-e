@@ -6,7 +6,6 @@ import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.stepExecutionDao
 import com.wini.owle.entity.ExecutionStatus.Companion.toDto
 import com.wini.owle.entity.runs.StepExecutionDao
-import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction

@@ -4,81 +4,164 @@ import com.wini.owle.dto.PackageDto
 import com.wini.owle.dto.VersionSpecDto
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.entity.environs.VersionSpecDao
-import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.sql.Transaction
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
-import kotlin.test.assertEquals
+import com.wini.owle.mapper.DaoFactory
+import io.mockk.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 
+class PackageMapperTest {
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-open class PackageMapperTest: BaseOwleMapperTest<PackageDto, PackageDao, PackagesMapper>() {
+    private lateinit var mapper: PackagesMapper
+    private val versionSpecsMapper: VersionSpecsMapper = mockk()
+    private val factory: DaoFactory<PackageDao, Long> = mockk()
 
-    private val realMapper by KoinJavaComponent.inject<PackagesMapper>(PackagesMapper::class.java)
-
-    override fun instantiateMapper(): PackagesMapper {
-        return realMapper
+    @BeforeEach
+    fun setUp() {
+        mapper = PackagesMapper(factory, versionSpecsMapper)
     }
 
-    override fun Transaction.dto(id: Long): PackageDto {
-        return PackageDto(
-            id = id,
-            name = "TestPackage",
-            disambiguation = "test",
-            versionSpec = VersionSpecDto(
-                id = 0L,
-                versionMin = "1.0.0",
-                versionMax = "2.0.0",
-                versionExact = null
-            )
-        )
-    }
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        // Create test DTOs
+        val versionSpecDto = VersionSpecDto(id = 1L, versionMin = "1.0", versionMax = "2.0", versionExact = "1.5")
+        val packageDto = PackageDto(id = 99L, name = "numpy", disambiguation = "test", versionSpec = versionSpecDto)
 
-    override fun Transaction.existingDao(): PackageDao {
-        return PackageDao.new {
-            this.name = "TestPackage"
-            this.disambiguation = "test"
-            this.versionSpec = VersionSpecDao.new {
-                this.versionMin = "1.0.0"
-                this.versionMax = "2.0.0"
-                this.versionExact = null
-            }
+        // Mock the VersionSpecDao that would be created from the DTO
+        val versionSpecDao = mockk<VersionSpecDao>()
+        every { versionSpecsMapper.toEntity(versionSpecDto) } returns versionSpecDao
+
+        // Mock the behavior of findById to return null (not found)
+        mockkObject(PackageDao)
+        every { PackageDao.findById(99L) } returns null
+
+        // Verify that the exception is thrown with the correct message
+        val exception = assertThrows<IllegalStateException> {
+            mapper.toEntity(packageDto)
         }
+
+        assertEquals("Package with id=99 not found", exception.message)
+        unmockkObject(PackageDao)
     }
 
-    override fun Transaction.existingDaoDto(): Pair<PackageDao, PackageDto> {
-        val premiseDao = existingDao()
-        val premiseDto = PackageDto(
-            id = premiseDao.id.value,
-            name = premiseDao.name,
-            disambiguation = premiseDao.disambiguation,
-            versionSpec = VersionSpecDto(
-                id = premiseDao.versionSpec.id.value,
-                versionMin = premiseDao.versionSpec.versionMin,
-                versionMax = premiseDao.versionSpec.versionMax,
-                versionExact = premiseDao.versionSpec.versionExact
-            )
-        )
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        // Create mock objects
+        val versionSpecDao = mockk<VersionSpecDao>()
+        val packageDao = mockk<PackageDao> {
+            every { id.value } returns 1L
+            every { name } returns "pandas"
+            every { disambiguation } returns "data-analysis"
+            every { versionSpec } returns versionSpecDao
+        }
 
-        return premiseDao to premiseDto
+        // Mock the behavior of versionSpecsMapper
+        val versionSpecDto = VersionSpecDto(id = 2L, versionMin = "2.0", versionMax = "3.0", versionExact = "2.5")
+        every { versionSpecsMapper.toDto(versionSpecDao) } returns versionSpecDto
+
+        // Call the method under test
+        val result = mapper.toDto(packageDao)
+
+        // Verify the result
+        assertEquals(1L, result.id)
+        assertEquals("pandas", result.name)
+        assertEquals("data-analysis", result.disambiguation)
+        assertEquals(versionSpecDto, result.versionSpec)
     }
 
-    override fun assertDtoPropsExpectedMatch(dto: PackageDto, dao: PackageDao) {
-        assertEquals(dto.name, dao.name)
-        assertEquals(dto.disambiguation, dao.disambiguation)
-        assertEquals(dto.versionSpec.versionMin, dao.versionSpec.versionMin)
-        assertEquals(dto.versionSpec.versionMax, dao.versionSpec.versionMax)
-        assertEquals(dto.versionSpec.versionExact, dao.versionSpec.versionExact)
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create test DTOs
+        val versionSpecDto = VersionSpecDto(id = 3L, versionMin = "1.5", versionMax = "3.0", versionExact = "2.0")
+        val packageDto = PackageDto(id = 42L, name = "scikit-learn", disambiguation = "ml", versionSpec = versionSpecDto)
+
+        // Mock the existing entity that will be updated
+        val existingEntity = mockk<PackageDao>(relaxed = true)
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+        val versionSpecDao = mockk<VersionSpecDao>()
+        every { versionSpecsMapper.toEntity(versionSpecDto) } returns versionSpecDao
+
+        // Set up mocks for finding existing entity
+        mockkObject(PackageDao)
+        every { PackageDao.findById(42L) } returns existingEntity
+
+        // Capture the property updates
+        val nameSlot = slot<String>()
+        val disambiguationSlot = slot<String>()
+        val versionSpecSlot = slot<VersionSpecDao>()
+
+        every { existingEntity.name = capture(nameSlot) } just runs
+        every { existingEntity.disambiguation = capture(disambiguationSlot) } just runs
+        every { existingEntity.versionSpec = capture(versionSpecSlot) } just runs
+
+        // Execute the method under test
+        val result = mapper.toEntity(packageDto)
+
+        // Verify that the existing entity was found and updated
+        verify { PackageDao.findById(42L) }
+        verify { existingEntity.name = "scikit-learn" }
+        verify { existingEntity.disambiguation = "ml" }
+        verify { existingEntity.versionSpec = versionSpecDao }
+        verify { versionSpecsMapper.toEntity(versionSpecDto) }
+
+        // Verify the captured values
+        assertEquals("scikit-learn", nameSlot.captured)
+        assertEquals("ml", disambiguationSlot.captured)
+        assertEquals(versionSpecDao, versionSpecSlot.captured)
+
+        // Verify the result is the updated entity
+        assertEquals(existingEntity, result)
+
+        unmockkObject(PackageDao)
     }
 
-    override fun assertDaoPropsExpectedMatch(dao: PackageDao, dto: PackageDto) {
-        assertEquals(dao.id.value, dto.id)
-        assertEquals(dao.name, dto.name)
-        assertEquals(dao.disambiguation, dto.disambiguation)
-        assertEquals(dao.id.value, dto.versionSpec.id)
-        assertEquals(dao.versionSpec.versionMin, dto.versionSpec.versionMin)
-        assertEquals(dao.versionSpec.versionMax, dto.versionSpec.versionMax)
-        assertEquals(dao.versionSpec.versionExact, dto.versionSpec.versionExact)
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create test DTOs
+        val versionSpecDto = VersionSpecDto(id = 4L, versionMin = "2.0", versionMax = "4.0", versionExact = "3.0")
+        val packageDto = PackageDto(id = 0L, name = "tensorflow", disambiguation = "ml", versionSpec = versionSpecDto)
+
+        // Mock the new entity that will be created
+        val newEntity = mockk<PackageDao>(relaxed = true)
+
+        // Mock the VersionSpecDao that would be returned from the mapper
+        val versionSpecDao = mockk<VersionSpecDao>()
+        every { versionSpecsMapper.toEntity(versionSpecDto) } returns versionSpecDao
+
+        // Set up the factory mock to return our mock entity
+        every { factory.create() } returns newEntity
+
+        // Slots to capture property assignments
+        val nameSlot = slot<String>()
+        val disambiguationSlot = slot<String>()
+        val versionSpecSlot = slot<VersionSpecDao>()
+
+        // Set up property capture
+        every { newEntity.name = capture(nameSlot) } just runs
+        every { newEntity.disambiguation = capture(disambiguationSlot) } just runs
+        every { newEntity.versionSpec = capture(versionSpecSlot) } just runs
+
+        // Execute the method under test
+        val result = mapper.toEntity(packageDto)
+
+        // Verify that the factory was used to create a new entity
+        verify { factory.create() }
+        verify { versionSpecsMapper.toEntity(versionSpecDto) }
+
+        // Verify the properties were set correctly
+        verify { newEntity.name = "tensorflow" }
+        verify { newEntity.disambiguation = "ml" }
+        verify { newEntity.versionSpec = versionSpecDao }
+
+        // Verify the captured values
+        assertEquals("tensorflow", nameSlot.captured)
+        assertEquals("ml", disambiguationSlot.captured)
+        assertEquals(versionSpecDao, versionSpecSlot.captured)
+
+        // Verify the result is the new entity
+        assertEquals(newEntity, result)
     }
 }

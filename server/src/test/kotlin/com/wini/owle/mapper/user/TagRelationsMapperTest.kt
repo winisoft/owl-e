@@ -6,7 +6,6 @@ import com.wini.owle.entity.Tags
 import com.wini.owle.entity.user.TagDao
 import com.wini.owle.entity.user.TagRelationDao
 import com.wini.owle.entity.user.UserDao
-import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.DbMapper
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Database

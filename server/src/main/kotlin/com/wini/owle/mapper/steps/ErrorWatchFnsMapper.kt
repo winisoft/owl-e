@@ -1,39 +1,38 @@
 package com.wini.owle.mapper.steps
 
 import com.wini.owle.dto.ErrorWatchFnDto
-import com.wini.owle.entity.ErrorWatchFns
-import com.wini.owle.entity.ErrorWatches
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.steps.ErrorWatchFnDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class ErrorWatchFnsMapper(
+    private val daoFactory: DaoFactory<ErrorWatchFnDao, Long>,
     private val errorWatchesMapper: ErrorWatchesMapper
-) : DbMapper<ErrorWatchFnDto, ErrorWatchFnDao>() {
+): DbMapper<ErrorWatchFnDto, ErrorWatchFnDao>() {
 
-    override val applyProps: ErrorWatchFnDao.(ErrorWatchFnDto) -> Unit = { dto ->
-        errorWatch = errorWatchesMapper.run { dto.errorWatch.toEntity() }
-        functionName = dto.functionName
-        position = dto.position
-    }
-
-    override fun ErrorWatchFnDto.toEntity(): ErrorWatchFnDao {
-        return if (id == 0L) {
-            ErrorWatchFnDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: ErrorWatchFnDto): ErrorWatchFnDao {
+        val applyProps: ErrorWatchFnDao.() -> Unit = {
+            errorWatch = errorWatchesMapper.toEntity(dto.errorWatch)
+            functionName = dto.functionName
+            position = dto.position
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            ErrorWatchFnDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("ErrorWatchFn with id=$id not found")
+            ErrorWatchFnDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("ErrorWatchFn with id=${dto.id} not found")
         }
     }
 
-    override fun ErrorWatchFnDao.toDto(): ErrorWatchFnDto {
+    override fun toDto(entity: ErrorWatchFnDao): ErrorWatchFnDto {
         return ErrorWatchFnDto(
-            id = id.value,
-            errorWatch = errorWatchesMapper.run { errorWatch.toDto() },
-            functionName = functionName,
-            position = position
+            id = entity.id.value,
+            errorWatch = errorWatchesMapper.toDto(entity.errorWatch),
+            functionName = entity.functionName,
+            position = entity.position
         )
     }
 }

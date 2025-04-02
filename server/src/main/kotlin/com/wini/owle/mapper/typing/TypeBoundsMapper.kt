@@ -1,37 +1,39 @@
 package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.TypeBoundsDto
-import com.wini.owle.entity.TypeBounds
-import com.wini.owle.entity.TypeDeclarations
+import com.wini.owle.entity.TypeBounds // Table definition, keep if needed
+import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.typing.TypeBoundDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeBoundsMapper(
+    private val daoFactory: DaoFactory<TypeBoundDao, Long>,
     private val typeDeclarationMapper: TypeDeclarationsMapper
-) : DbMapper<TypeBoundsDto, TypeBoundDao>() {
+): DbMapper<TypeBoundsDto, TypeBoundDao>() {
 
-    override val applyProps: TypeBoundDao.(TypeBoundsDto) -> Unit = { dto ->
-        typeVariableDeclaration = typeDeclarationMapper.run { dto.typeVariableDeclaration.toEntity() }
-        boundTypeDeclaration = typeDeclarationMapper.run { dto.boundTypeDeclaration.toEntity() }
-    }
-
-    override fun TypeBoundsDto.toEntity(): TypeBoundDao {
-        return if (id == 0L) {
-            TypeBoundDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: TypeBoundsDto): TypeBoundDao {
+        val applyProps: TypeBoundDao.() -> Unit = {
+            typeVariableDeclaration = typeDeclarationMapper.toEntity(dto.typeVariableDeclaration)
+            boundTypeDeclaration = typeDeclarationMapper.toEntity(dto.boundTypeDeclaration)
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            TypeBoundDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("TypeBound with id=$id not found")
+            TypeBoundDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("TypeBound with id=${dto.id} not found")
         }
     }
 
-    override fun TypeBoundDao.toDto(): TypeBoundsDto {
+    override fun toDto(entity: TypeBoundDao): TypeBoundsDto {
         return TypeBoundsDto(
-            id = id.value,
-            typeVariableDeclaration = typeDeclarationMapper.run { typeVariableDeclaration.toDto() },
-            boundTypeDeclaration = typeDeclarationMapper.run { boundTypeDeclaration.toDto() }
+            id = entity.id.value,
+            typeVariableDeclaration = typeDeclarationMapper.toDto(entity.typeVariableDeclaration),
+            boundTypeDeclaration = typeDeclarationMapper.toDto(entity.boundTypeDeclaration)
         )
     }
 }

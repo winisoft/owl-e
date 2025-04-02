@@ -63,10 +63,10 @@ open class PackageRepoServiceTest: OwleServiceUnitTest<Long, PackageRepoDto, Pac
 
     override fun setupMocks()  {
         // Setup mapper mocks - now much simpler with regular methods
-        every { mapper.run { anyDto().toEntity() } } returns createSampleEntity()
-        every { mapper.run { anyEntity().toDto() } } returns createSampleDto()
-        every { mapper.run { listOf(anyDto()).toEntities() } } returns listOf(createSampleEntity())
-        every { mapper.run { listOf(anyEntity()).toDtos() } } returns listOf(createSampleDto())
+        every { mapper.toEntity(anyDto()) } returns createSampleEntity()
+        every { mapper.toDto(anyEntity()) } returns createSampleDto()
+        every { mapper.toEntities(listOf(anyDto())) } returns listOf(createSampleEntity())
+        every { mapper.toDtos(listOf(anyEntity())) } returns listOf(createSampleDto())
     }
 
     override fun MockKMatcherScope.anyDto(): PackageRepoDto {

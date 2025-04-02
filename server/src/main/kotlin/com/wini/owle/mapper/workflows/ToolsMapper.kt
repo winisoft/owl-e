@@ -1,41 +1,43 @@
 package com.wini.owle.mapper.workflows
 
 import com.wini.owle.dto.ToolDto
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.workflows.ToolDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 
 
 class ToolsMapper(
-    private val typeDeclarationMapper: TypeDeclarationsMapper
+    private val daoFactory: DaoFactory<ToolDao, Long>,
+    private val typeDeclarationMapper: TypeDeclarationsMapper,
+    private val toolParamMapper: ToolParamsMapper
 ) : DbMapper<ToolDto, ToolDao>() {
 
-    override val applyProps: ToolDao.(ToolDto) -> Unit = { dto ->
-        name = dto.name
-        description = dto.description
-        body = dto.body
-        returnTypeDeclaration = typeDeclarationMapper.run { dto.returnTypeDeclaration?.toEntity() }
-    }
-
-    override fun ToolDto.toEntity(): ToolDao {
-        return if (id == 0L) {
-            ToolDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: ToolDto): ToolDao {
+        val applyProps: ToolDao.() -> Unit = {
+            name = dto.name
+            description = dto.description
+            body = dto.body
+            returnTypeDeclaration = dto.returnTypeDeclaration?.let { typeDeclarationMapper.run { toEntity(it) } }
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            ToolDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("Tool with id=$id not found")
+            ToolDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("Tool with id=${dto.id} not found")
         }
     }
 
-    override fun ToolDao.toDto(): ToolDto {
+    override fun toDto(entity: ToolDao): ToolDto {
         return ToolDto(
-            id = id.value,
-            name = name,
-            description = description,
-            body = body,
-            returnTypeDeclaration = typeDeclarationMapper.run {
-                returnTypeDeclaration?.toDto()
-            }
+            id = entity.id.value,
+            name = entity.name,
+            description = entity.description,
+            body = entity.body,
+            returnTypeDeclaration = entity.returnTypeDeclaration?.let { typeDeclarationMapper.toDto(it) }
         )
     }
+
 }

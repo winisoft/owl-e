@@ -1,40 +1,40 @@
 package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.TypeDeclarationDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
+import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
+import com.wini.owle.entity.TypeDefinitions // Table definition, keep if needed
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.typing.TypeDeclarationDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.transforms.TransformationsMapper
+// Removed TransformationsMapper import as it's not directly used here
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeDeclarationsMapper(
+    private val daoFactory: DaoFactory<TypeDeclarationDao, Long>,
     private val typeDefinitionsMapper: TypeDefinitionsMapper
-) : DbMapper<TypeDeclarationDto, TypeDeclarationDao>() {
+): DbMapper<TypeDeclarationDto, TypeDeclarationDao>() {
 
-    override val applyProps: TypeDeclarationDao.(TypeDeclarationDto) -> Unit = { dto ->
-        typeDefinition = typeDefinitionsMapper.run { dto.typeDefinition.toEntity() }
-        alias = dto.alias
-    }
-
-    override fun TypeDeclarationDto.toEntity(): TypeDeclarationDao {
-        return if (id == 0L) {
-            TypeDeclarationDao.new {
-                applyProps(this@toEntity)
-            }
+    override fun toEntity(dto: TypeDeclarationDto): TypeDeclarationDao {
+        val applyProps: TypeDeclarationDao.() -> Unit = {
+            typeDefinition = typeDefinitionsMapper.toEntity(dto.typeDefinition)
+            alias = dto.alias
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            TypeDeclarationDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("TypeDeclaration with id=$id not found")
+            TypeDeclarationDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("TypeDeclaration with id=${dto.id} not found")
         }
     }
 
-    override fun TypeDeclarationDao.toDto(): TypeDeclarationDto {
+    override fun toDto(entity: TypeDeclarationDao): TypeDeclarationDto {
         return TypeDeclarationDto(
-            id = id.value,
-            typeDefinition = typeDefinitionsMapper.run { typeDefinition.toDto() },
-            alias = alias
+            id = entity.id.value,
+            typeDefinition = typeDefinitionsMapper.toDto(entity.typeDefinition),
+            alias = entity.alias
         )
     }
 }

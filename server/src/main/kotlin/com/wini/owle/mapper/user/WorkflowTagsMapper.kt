@@ -10,22 +10,26 @@ import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 
 
-class WorkflowTagsMapper : DbMapper<WorkflowTagDto, WorkflowTagDao>() {
-
-    override val applyProps: WorkflowTagDao.(WorkflowTagDto) -> Unit = {}
-
-    override fun WorkflowTagDto.toEntity(): WorkflowTagDao {
-        val compositeId = CompositeID {
-            it[WorkflowTags.workflow] = EntityID(workflowId, Workflows)
-            it[WorkflowTags.tag] = EntityID(tagId, Tags)
-        }
-        return WorkflowTagDao(EntityID(compositeId, WorkflowTags))
-    }
-
-    override fun WorkflowTagDao.toDto(): WorkflowTagDto {
-        return WorkflowTagDto(
-            workflowId = workflow.id.value,
-            tagId = tag.id.value
-        )
-    }
-}
+//class WorkflowTagsMapper : DbMapper<WorkflowTagDto, WorkflowTagDao>() {
+//
+//    // No properties to apply for this simple relation entity beyond the ID
+//    val applyProps: WorkflowTagDao.(WorkflowTagDto) -> Unit = {}
+//
+//    override fun toEntity(dto: WorkflowTagDto): WorkflowTagDao {
+//        val compositeId = CompositeID {
+//            it[WorkflowTags.workflow] = EntityID(dto.workflowId, Workflows)
+//            it[WorkflowTags.tag] = EntityID(dto.tagId, Tags)
+//        }
+//        // Find existing or create new might be more appropriate,
+//        // but sticking to creation based on original code.
+//        // WorkflowTagDao.findById(compositeId) ?: WorkflowTagDao.new(compositeId) {} might be an alternative
+//        return WorkflowTagDao.new(EntityID(compositeId, WorkflowTags)) {}
+//    }
+//
+//    override fun toDto(entity: WorkflowTagDao): WorkflowTagDto {
+//        return WorkflowTagDto(
+//            workflowId = entity.workflow.id.value,
+//            tagId = entity.tag.id.value
+//        )
+//    }
+//}

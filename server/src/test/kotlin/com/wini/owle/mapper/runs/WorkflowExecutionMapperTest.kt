@@ -5,7 +5,6 @@ import com.wini.owle.entity.Users
 import com.wini.owle.entity.WorkflowExecutions
 import com.wini.owle.entity.Workflows
 import com.wini.owle.entity.runs.WorkflowExecutionDao
-import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import com.wini.owle.mapper.mapperModule
 import org.jetbrains.exposed.dao.id.IdTable

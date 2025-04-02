@@ -7,7 +7,6 @@ import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.stepBenchmarkingDataDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepExecutionDao
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
-import com.wini.owle.mapper.BaseOwleMapperTest
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction
 import org.junit.jupiter.api.TestInstance

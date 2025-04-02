@@ -111,13 +111,13 @@ open class TypeDeclarationServiceTest {
 
             val typeDefinitionsMapper = mockk<TypeDefinitionsMapper>()
             // 6) Now we must tell the typeDefinitionsMapper how to turn defDao -> defDto
-            every { typeDefinitionsMapper.run { defDao.toDto() } } returns defDto
+            every { typeDefinitionsMapper.toDto(defDao) } returns defDto
 
             // 7) Finally, tell the top-level mapper how to turn dao -> dto
             //    Actually, in your code, TypeDeclarationsMapper *is* the one calling with(typeDefinitionsMapper) { defDao.toDto() }
             //    So you could do it at the repository / service layer.
             //    But if your test calls mapper.toDto(dao) directly:
-            val mappedResult = with(mockMapper) { dao.toDto() }
+            val mappedResult = with(mockMapper) { toDto(dao) }
 
             // The repository returns this DAO for the given ID
             every { mockRepo.getById(any()) } returns dao
@@ -297,8 +297,8 @@ open class TypeDeclarationServiceTest {
             every { mockRepo.create(dao) } returns dao
 
             // The mapper is used to convert from Dto->Dao and then Dao->Dto
-            every { mockMapper.run { inputDto.toEntity() } } returns dao
-            every { mockMapper.run { dao.toDto() } } returns inputDto.copy(id = 999)
+            every { mockMapper.toEntity(inputDto) } returns dao
+            every { mockMapper.toDto(dao) } returns inputDto.copy(id = 999)
 
             // Call the service
             val result = service.create(inputDto)
@@ -338,8 +338,8 @@ open class TypeDeclarationServiceTest {
 
             // A mock DAO for the "converted" entity
             val dao = mockk<TypeDeclarationDao>()
-            every { mockMapper.run { inputDto.toEntity() } } returns dao
-            every { mockMapper.run { dao.toDto() } } returns inputDto.copy(id = 998)
+            every { mockMapper.toEntity(inputDto) } returns dao
+            every { mockMapper.toDto(dao) } returns inputDto.copy(id = 998)
 
             // GIVEN the repository throws an exception
             every { mockRepo.create(any<TypeDeclarationDao>()) } throws IllegalStateException("(Message Irrelevant)")

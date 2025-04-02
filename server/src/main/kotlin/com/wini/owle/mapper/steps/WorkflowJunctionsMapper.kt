@@ -1,45 +1,44 @@
 package com.wini.owle.mapper.steps
 
 import com.wini.owle.dto.WorkflowJunctionDto
-import com.wini.owle.entity.Inquisitions
-import com.wini.owle.entity.Steps
-import com.wini.owle.entity.WorkflowJunctions
-import com.wini.owle.entity.Workflows
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.steps.WorkflowJunctionDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.workflows.StepsMapper
-import com.wini.owle.mapper.workflows.WorkflowsMapper
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.mapper.workflows.StepsMapper // Assumed updated
+import com.wini.owle.mapper.workflows.WorkflowsMapper // Assumed updated
+// Assuming InquisitionsMapper exists in this package and is updated
+import com.wini.owle.mapper.steps.InquisitionsMapper
 
 
 class WorkflowJunctionsMapper(
+    private val daoFactory: DaoFactory<WorkflowJunctionDao, Long>,
     private val stepsMapper: StepsMapper,
     private val workflowsMapper: WorkflowsMapper,
-    private val inquisitionsMapper: InquisitionsMapper
-) : DbMapper<WorkflowJunctionDto, WorkflowJunctionDao>() {
+    private val inquisitionsMapper: InquisitionsMapper // Assumed updated
+): DbMapper<WorkflowJunctionDto, WorkflowJunctionDao>() {
 
-    override val applyProps: WorkflowJunctionDao.(WorkflowJunctionDto) -> Unit = { dto ->
-        sourceStep = stepsMapper.run { dto.sourceStep.toEntity() }
-        targetWorkflow = workflowsMapper.run { dto.targetWorkflow.toEntity() }
-        triggerInquisition = inquisitionsMapper.run { dto.triggerInquisition?.toEntity() }
-    }
-
-    override fun WorkflowJunctionDto.toEntity(): WorkflowJunctionDao {
-        return if (id == 0L) {
-            WorkflowJunctionDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: WorkflowJunctionDto): WorkflowJunctionDao {
+        val applyProps: WorkflowJunctionDao.() -> Unit = {
+            sourceStep = stepsMapper.toEntity(dto.sourceStep)
+            targetWorkflow = workflowsMapper.toEntity(dto.targetWorkflow)
+            triggerInquisition = dto.triggerInquisition?.let { inquisitionsMapper.toEntity(it) }
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            WorkflowJunctionDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("WorkflowJunction with id=$id not found")
+            WorkflowJunctionDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("WorkflowJunction with id=${dto.id} not found")
         }
     }
 
-    override fun WorkflowJunctionDao.toDto(): WorkflowJunctionDto {
+    override fun toDto(entity: WorkflowJunctionDao): WorkflowJunctionDto {
         return WorkflowJunctionDto(
-            id = id.value,
-            sourceStep = stepsMapper.run { sourceStep.toDto() },
-            targetWorkflow = workflowsMapper.run { targetWorkflow.toDto() },
-            triggerInquisition = inquisitionsMapper.run { triggerInquisition?.toDto() }
+            id = entity.id.value,
+            sourceStep = stepsMapper.toDto(entity.sourceStep),
+            targetWorkflow = workflowsMapper.toDto(entity.targetWorkflow),
+            triggerInquisition = entity.triggerInquisition?.let { inquisitionsMapper.toDto(it) }
         )
     }
 }

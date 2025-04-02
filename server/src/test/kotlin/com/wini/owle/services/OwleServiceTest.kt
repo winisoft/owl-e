@@ -70,9 +70,9 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
         val dto = createSampleDto()
         val entity = createSampleEntity()
 
-        every { mapper.run { dto.toEntity() } } returns entity
+        every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
-        every { mapper.run { entity.toDto() } } returns dto
+        every { mapper.toDto(entity) } returns dto
 
         // Act
         val result = service.create(dto)
@@ -83,8 +83,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.create(entity) }
-        verify { mapper.run { dto.toEntity() } }
-        verify { mapper.run { entity.toDto() } }
+        verify { mapper.toEntity(dto) }
+        verify { mapper.toDto(entity) }
     }
 
     @Test
@@ -94,7 +94,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
         val entity = createSampleEntity()
         val exception = RuntimeException("Database error")
 
-        every { mapper.run { dto.toEntity() } } returns entity
+        every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } throws exception
 
         // Act
@@ -108,7 +108,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.create(entity) }
-        verify { mapper.run { dto.toEntity() } }
+        verify { mapper.toEntity(dto) }
     }
 
     @Test
@@ -121,7 +121,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         every { repository.entityClass.table } returns mockk()
         every { repository.getById(entityId) } returns entity
-        every { mapper.run { entity.toDto() } } returns dto
+        every { mapper.toDto(entity) } returns dto
 
         // Act
         val result = service.getById(id)
@@ -132,7 +132,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.getById(entityId) }
-        verify { mapper.run { entity.toDto() } }
+        verify { mapper.toDto(entity) }
     }
 
     @Test
@@ -165,7 +165,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         every { repository.getAll(emptyList()) } returns entities
         for (i in entities.indices) {
-            every { mapper.run { entities[i].toDto() } } returns dtos[i]
+            every { mapper.toDto(entities[i]) } returns dtos[i]
         }
 
         // Act
@@ -177,7 +177,7 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.getAll(emptyList()) }
-        verify(exactly = entities.size) { mapper.run { anyEntity().toDto() } }
+        verify(exactly = entities.size) { mapper.toDto(anyEntity()) }
     }
 
     @Test
@@ -186,9 +186,9 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
         val dto = createSampleDto()
         val entity = createSampleEntity()
 
-        every { mapper.run { dto.toEntity() } } returns entity
+        every { mapper.toEntity(dto) } returns entity
         every { repository.update(entity) } returns entity
-        every { mapper.run { entity.toDto() } } returns dto
+        every { mapper.toDto(entity) } returns dto
 
         // Act
         val result = service.update(dto)
@@ -199,8 +199,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.update(entity) }
-        verify { mapper.run { dto.toEntity() } }
-        verify { mapper.run { entity.toDto() } }
+        verify { mapper.toEntity(dto) }
+        verify { mapper.toDto(entity) }
     }
 
     @Test
@@ -231,8 +231,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
         val entities = dtos.map { createSampleEntity() }
 
         for (i in dtos.indices) {
-            every { mapper.run { dtos[i].toEntity() } } returns entities[i]
-            every { mapper.run { entities[i].toDto() } } returns dtos[i]
+            every { mapper.toEntity(dtos[i]) } returns entities[i]
+            every { mapper.toDto(entities[i]) } returns dtos[i]
         }
 
         every { repository.create(any<List<E>>()) } returns entities
@@ -246,8 +246,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.create(any<List<E>>()) }
-        verify(exactly = dtos.size) { mapper.run { anyDto().toEntity() } }
-        verify(exactly = entities.size) { mapper.run { anyEntity().toDto() } }
+        verify(exactly = dtos.size) { mapper.toEntity(anyDto()) }
+        verify(exactly = entities.size) { mapper.toDto(anyEntity()) }
     }
 
     @Test
@@ -257,8 +257,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
         val entities = dtos.map { createSampleEntity() }
 
         for (i in dtos.indices) {
-            every { mapper.run { dtos[i].toEntity() } } returns entities[i]
-            every { mapper.run { entities[i].toDto() } } returns dtos[i]
+            every { mapper.toEntity(dtos[i]) } returns entities[i]
+            every { mapper.toDto(entities[i]) } returns dtos[i]
         }
 
         every { repository.update(any<List<E>>()) } returns entities
@@ -272,8 +272,8 @@ abstract class OwleServiceUnitTest<ID: Any, Dto: BaseDto, E: Entity<ID>>: OwleSe
 
         // Verify
         verify { repository.update(any<List<E>>()) }
-        verify(exactly = dtos.size) { mapper.run { anyDto().toEntity() } }
-        verify(exactly = entities.size) { mapper.run { anyEntity().toDto() } }
+        verify(exactly = dtos.size) { mapper.toEntity(anyDto()) }
+        verify(exactly = entities.size) { mapper.toDto(anyEntity()) }
     }
 
     @Test

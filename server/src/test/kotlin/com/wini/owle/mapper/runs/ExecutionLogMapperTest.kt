@@ -14,7 +14,6 @@ import com.wini.owle.entity.EntityTestInstanceFactory.executionLogDao
 import com.wini.owle.entity.ExecutionStatus.Companion.toDto
 import com.wini.owle.entity.LogLevel.Companion.toDto
 import com.wini.owle.entity.runs.ExecutionLogDao
-import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction

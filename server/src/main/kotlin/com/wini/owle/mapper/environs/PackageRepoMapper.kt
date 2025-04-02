@@ -4,30 +4,32 @@ import com.wini.owle.dto.PackageRepoDto
 import com.wini.owle.entity.PackageRepoType
 import com.wini.owle.entity.PackageRepoType.Companion.toDto
 import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 
 
-class PackageRepoMapper: DbMapper<PackageRepoDto, PackageRepoDao>() {
+class PackageRepoMapper(
+    private val daoFactory: DaoFactory<PackageRepoDao, Long>
+): DbMapper<PackageRepoDto, PackageRepoDao>() {
 
-    override val applyProps: PackageRepoDao.(PackageRepoDto) -> Unit = { dto ->
-        this.sourceType = PackageRepoType.fromDto(dto.sourceType)
-        this.sourceUrl = dto.sourceUrl
+    override fun toEntity(dto: PackageRepoDto): PackageRepoDao {
+        val applyProps: PackageRepoDao.() -> Unit = {
+            sourceType = PackageRepoType.fromDto(dto.sourceType)
+            sourceUrl = dto.sourceUrl
+        }
+        return if (dto.id == 0L)
+            daoFactory.create().apply(applyProps)
+        else PackageRepoDao.findById(dto.id)
+            ?.apply(applyProps)
+            ?: throw IllegalStateException("PackageRepo with id=${dto.id} not found")
     }
 
-    override fun PackageRepoDto.toEntity(): PackageRepoDao {
-        return if (id == 0L) PackageRepoDao.new {
-            applyProps(this@toEntity)
-        } else
-            PackageRepoDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("VersionSpec with id=$id not found")
-    }
-
-    override fun PackageRepoDao.toDto(): PackageRepoDto {
+    override fun toDto(entity: PackageRepoDao): PackageRepoDto {
         return PackageRepoDto(
-            id = id.value,
-            sourceType = sourceType.toDto(),
-            sourceUrl = sourceUrl
+            id = entity.id.value,
+            sourceType = entity.sourceType.toDto(),
+            sourceUrl = entity.sourceUrl
         )
     }
 }

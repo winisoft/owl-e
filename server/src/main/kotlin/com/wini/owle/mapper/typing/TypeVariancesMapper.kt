@@ -2,33 +2,40 @@ package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.TypeVarianceDto
 import com.wini.owle.entity.VarianceCardinality
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.typing.TypeVarianceDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 
 
 class TypeVariancesMapper(
+    private val daoFactory: DaoFactory<TypeVarianceDao, Long>,
     private val typeDeclarationsMapper: TypeDeclarationsMapper
-) : DbMapper<TypeVarianceDto, TypeVarianceDao>() {
+): DbMapper<TypeVarianceDto, TypeVarianceDao>() {
 
-    override val applyProps: TypeVarianceDao.(TypeVarianceDto) -> Unit = { dto ->
-        typeVariableDeclaration = typeDeclarationsMapper.run { dto.typeVariableDeclaration.toEntity() }
-    }
-
-    override fun TypeVarianceDto.toEntity(): TypeVarianceDao {
-        return if (id == 0L) {
-            TypeVarianceDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: TypeVarianceDto): TypeVarianceDao {
+        val applyProps: TypeVarianceDao.() -> Unit = {
+            typeVariableDeclaration = typeDeclarationsMapper.toEntity(dto.typeVariableDeclaration)
+            varianceCardinality = when (dto.varianceCardinality) {
+                com.wini.owle.dto.enums.VarianceCardinality.Covariant -> VarianceCardinality.COVARIANT
+                com.wini.owle.dto.enums.VarianceCardinality.Contravariant -> VarianceCardinality.CONTRAVARIANT
+                com.wini.owle.dto.enums.VarianceCardinality.Invariant -> VarianceCardinality.INVARIANT
+            }
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            TypeVarianceDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("TypeVariance with id=$id not found")
+            TypeVarianceDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("TypeVariance with id=${dto.id} not found")
         }
     }
 
-    override fun TypeVarianceDao.toDto(): TypeVarianceDto {
+    override fun toDto(entity: TypeVarianceDao): TypeVarianceDto {
         return TypeVarianceDto(
-            id = id.value,
-            typeVariableDeclaration = typeDeclarationsMapper.run { typeVariableDeclaration.toDto() },
-            varianceCardinality = when (varianceCardinality) {
+            id = entity.id.value,
+            typeVariableDeclaration = typeDeclarationsMapper.toDto(entity.typeVariableDeclaration),
+            varianceCardinality = when (entity.varianceCardinality) {
                 VarianceCardinality.COVARIANT -> com.wini.owle.dto.enums.VarianceCardinality.Covariant
                 VarianceCardinality.CONTRAVARIANT -> com.wini.owle.dto.enums.VarianceCardinality.Contravariant
                 VarianceCardinality.INVARIANT -> com.wini.owle.dto.enums.VarianceCardinality.Invariant

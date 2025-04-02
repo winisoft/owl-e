@@ -1,42 +1,44 @@
 package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.TypeDefinitionDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
-import com.wini.owle.entity.typing.TypeDeclarationDao
+import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
+import com.wini.owle.entity.TypeDefinitions // Table definition, keep if needed
+import com.wini.owle.entity.VersionSpecs // Table definition, keep if needed
+import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.entity.typing.TypeDeclarationDao // Not directly used here
 import com.wini.owle.entity.typing.TypeDefinitionDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.environs.VersionSpecsMapper
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeDefinitionsMapper(
+    private val daoFactory: DaoFactory<TypeDefinitionDao, Long>,
     private val versionSpecsMapper: VersionSpecsMapper
-) : DbMapper<TypeDefinitionDto, TypeDefinitionDao>() {
+): DbMapper<TypeDefinitionDto, TypeDefinitionDao>() {
 
-    override val applyProps: TypeDefinitionDao.(TypeDefinitionDto) -> Unit = { dto ->
-        name = dto.name
-        namespace = dto.namespace
-        versionSpec = versionSpecsMapper.run { dto.versionSpec.toEntity() }
-    }
-
-    override fun TypeDefinitionDto.toEntity(): TypeDefinitionDao {
-        return if (id == 0L) {
-            TypeDefinitionDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: TypeDefinitionDto): TypeDefinitionDao {
+        val applyProps: TypeDefinitionDao.() -> Unit = {
+            name = dto.name
+            namespace = dto.namespace
+            versionSpec = versionSpecsMapper.toEntity(dto.versionSpec)
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            TypeDefinitionDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("TypeDefinition with id=$id not found")
+            TypeDefinitionDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("TypeDefinition with id=${dto.id} not found")
         }
     }
 
-    override fun TypeDefinitionDao.toDto(): TypeDefinitionDto {
+    override fun toDto(entity: TypeDefinitionDao): TypeDefinitionDto {
         return TypeDefinitionDto(
-            id = id.value,
-            name = name,
-            namespace = namespace,
-            versionSpec = versionSpecsMapper.run { versionSpec.toDto() }
+            id = entity.id.value,
+            name = entity.name,
+            namespace = entity.namespace,
+            versionSpec = versionSpecsMapper.toDto(entity.versionSpec)
         )
     }
 }

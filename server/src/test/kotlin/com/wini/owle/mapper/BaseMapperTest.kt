@@ -35,7 +35,7 @@ abstract class BaseMapperUnitTest<Dto : BaseDto, T : Entity<Long>, M : DbMapper<
     abstract fun assertDtoMatchesEntity(dto: Dto, entity: T)
     
     @BeforeEach
-    fun setUp() {
+    open fun setUp() {
         MockKAnnotations.init(this)
         
         // Set up the mock transaction context
@@ -53,7 +53,7 @@ abstract class BaseMapperUnitTest<Dto : BaseDto, T : Entity<Long>, M : DbMapper<
         setupMockForNewEntity(dto, mockEntity)
         
         // Act
-        val result = mapper.run { dto.toEntity() }
+        val result = mapper.toEntity(dto)
         
         // Assert
         assertEntityMatchesDto(result, dto)
@@ -69,7 +69,7 @@ abstract class BaseMapperUnitTest<Dto : BaseDto, T : Entity<Long>, M : DbMapper<
         setupMockForExistingEntity(dto, mockEntity)
         
         // Act
-        val result = mapper.run { dto.toEntity() }
+        val result = mapper.toEntity(dto)
         
         // Assert 
         assertEntityMatchesDto(result, dto)
@@ -82,7 +82,7 @@ abstract class BaseMapperUnitTest<Dto : BaseDto, T : Entity<Long>, M : DbMapper<
         val entity = createMockEntity(1)
         
         // Act
-        val dto = mapper.run { entity.toDto() }
+        val dto = mapper.toDto(entity)
         
         // Assert
         assertDtoMatchesEntity(dto, entity)
@@ -98,7 +98,7 @@ abstract class BaseMapperUnitTest<Dto : BaseDto, T : Entity<Long>, M : DbMapper<
         
         // Act & Assert
         assertFailsWith<IllegalStateException> {
-            mapper.run { dto.toEntity() }
+            mapper.toEntity(dto)
         }
     }
     

@@ -1,41 +1,41 @@
 package com.wini.owle.mapper.transforms
 
 import com.wini.owle.dto.AppliedTransformArgDto
-import com.wini.owle.entity.AppliedTransformArgs
-import com.wini.owle.entity.AppliedTransforms
-import com.wini.owle.entity.TransformationArgs
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.transforms.AppliedTransformArgDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.mapper.transforms.AppliedTransformsMapper
+import com.wini.owle.mapper.transforms.TransformationArgsMapper
 
 
 class AppliedTransformArgsMapper(
+    private val daoFactory: DaoFactory<AppliedTransformArgDao, Long>,
     private val appliedTransformsMapper: AppliedTransformsMapper,
     private val transformationArgsMapper: TransformationArgsMapper
-) : DbMapper<AppliedTransformArgDto, AppliedTransformArgDao>() {
+): DbMapper<AppliedTransformArgDto, AppliedTransformArgDao>() {
 
-    override val applyProps: AppliedTransformArgDao.(AppliedTransformArgDto) -> Unit = { dto ->
-        appliedTransform = appliedTransformsMapper.run { dto.appliedTransform.toEntity() }
-        transformationArg = transformationArgsMapper.run { dto.transformationArg.toEntity() }
-        value = dto.value
-    }
-
-    override fun AppliedTransformArgDto.toEntity(): AppliedTransformArgDao {
-        return if (id == 0L) {
-            AppliedTransformArgDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: AppliedTransformArgDto): AppliedTransformArgDao {
+        val applyProps: AppliedTransformArgDao.() -> Unit = {
+            appliedTransform = appliedTransformsMapper.toEntity(dto.appliedTransform)
+            transformationArg = transformationArgsMapper.toEntity(dto.transformationArg)
+            value = dto.value
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            AppliedTransformArgDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("AppliedTransformArg with id=$id not found")
+            AppliedTransformArgDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("AppliedTransformArg with id=${dto.id} not found")
         }
     }
 
-    override fun AppliedTransformArgDao.toDto(): AppliedTransformArgDto {
+    override fun toDto(entity: AppliedTransformArgDao): AppliedTransformArgDto {
         return AppliedTransformArgDto(
-            id = id.value,
-            appliedTransform = appliedTransformsMapper.run { appliedTransform.toDto() },
-            transformationArg = transformationArgsMapper.run { transformationArg.toDto() },
-            value = value
+            id = entity.id.value,
+            appliedTransform = appliedTransformsMapper.toDto(entity.appliedTransform),
+            transformationArg = transformationArgsMapper.toDto(entity.transformationArg),
+            value = entity.value
         )
     }
 }

@@ -1,5 +1,13 @@
 package com.wini.owle.mapper
 
+import com.wini.owle.entity.environs.*
+import com.wini.owle.entity.runs.*
+import com.wini.owle.entity.steps.*
+import com.wini.owle.entity.transforms.*
+import com.wini.owle.entity.typing.*
+import com.wini.owle.entity.user.*
+import com.wini.owle.entity.workflows.*
+import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import com.wini.owle.mapper.environs.PackagesMapper
 import com.wini.owle.mapper.environs.ToolPackageDependencyMapper
@@ -10,58 +18,113 @@ import com.wini.owle.mapper.transforms.*
 import com.wini.owle.mapper.typing.*
 import com.wini.owle.mapper.user.*
 import com.wini.owle.mapper.workflows.*
+import org.jetbrains.exposed.dao.id.CompositeID
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
+val daoFactoryModule = module {
+    single<DaoFactory<VersionSpecDao, Long>> { ExposedDaoFactory(VersionSpecDao) }
+    single<DaoFactory<PackageRepoDao, Long>> { ExposedDaoFactory(PackageRepoDao) }
+    single<DaoFactory<PackageDao, Long>> { ExposedDaoFactory(PackageDao) }
+    single<DaoFactory<ToolPackageDependencyDao, CompositeID>> { ExposedDaoFactory(ToolPackageDependencyDao) }
+    single<DaoFactory<BenchmarkingDataDao, Long>> { ExposedDaoFactory(BenchmarkingDataDao) }
+    single<DaoFactory<ExecutionLogDao, Long>> { ExposedDaoFactory(ExecutionLogDao) }
+    single<DaoFactory<StepBenchmarkingDataDao, Long>> { ExposedDaoFactory(StepBenchmarkingDataDao) }
+    single<DaoFactory<StepExecutionDao, Long>> { ExposedDaoFactory(StepExecutionDao) }
+    single<DaoFactory<TestCaseDao, Long>> { ExposedDaoFactory(TestCaseDao) }
+    single<DaoFactory<TestExpectedOutcomeDao, Long>> { ExposedDaoFactory(TestExpectedOutcomeDao) }
+    single<DaoFactory<TestInputDao, Long>> { ExposedDaoFactory(TestInputDao) }
+    single<DaoFactory<TestResultDao, Long>> { ExposedDaoFactory(TestResultDao) }
+    single<DaoFactory<WorkflowExecutionDao, Long>> { ExposedDaoFactory(WorkflowExecutionDao) }
+    single<DaoFactory<ErrorWatchDao, Long>> { ExposedDaoFactory(ErrorWatchDao) }
+    single<DaoFactory<ErrorWatchFnDao, Long>> { ExposedDaoFactory(ErrorWatchFnDao) }
+    single<DaoFactory<InquisitionDao, Long>> { ExposedDaoFactory(InquisitionDao) }
+    single<DaoFactory<PreReqInjectionDao, Long>> { ExposedDaoFactory(PreReqInjectionDao) }
+    single<DaoFactory<ProvisionDataPointDao, CompositeID>> { ExposedDaoFactory(ProvisionDataPointDao) }
+    single<DaoFactory<ProvisionDao, Long>> { ExposedDaoFactory(ProvisionDao) }
+    single<DaoFactory<RevisionDao, Long>> { ExposedDaoFactory(RevisionDao) }
+    single<DaoFactory<WorkflowJunctionDao, Long>> { ExposedDaoFactory(WorkflowJunctionDao) }
+    single<DaoFactory<AppliedTransformArgDao, Long>> { ExposedDaoFactory(AppliedTransformArgDao) }
+    single<DaoFactory<AppliedTransformDao, Long>> { ExposedDaoFactory(AppliedTransformDao) }
+    single<DaoFactory<TransformationArgDao, Long>> { ExposedDaoFactory(TransformationArgDao) }
+    single<DaoFactory<TransformationDao, Long>> { ExposedDaoFactory(TransformationDao) }
+    single<DaoFactory<TransformTargetTypeDao, CompositeID>> { ExposedDaoFactory(TransformTargetTypeDao) }
+    single<DaoFactory<TypeBoundDao, Long>> { ExposedDaoFactory(TypeBoundDao) }
+    single<DaoFactory<TypeDeclarationDao, Long>> { ExposedDaoFactory(TypeDeclarationDao) }
+    single<DaoFactory<TypeDefinitionDao, Long>> { ExposedDaoFactory(TypeDefinitionDao) }
+    single<DaoFactory<TypeParameterDao, Long>> { ExposedDaoFactory(TypeParameterDao) }
+    single<DaoFactory<TypeSchemaRefDao, Long>> { ExposedDaoFactory(TypeSchemaRefDao) }
+    single<DaoFactory<TypeUnionMemberDao, CompositeID>> { ExposedDaoFactory(TypeUnionMemberDao) }
+    single<DaoFactory<TypeVarianceDao, Long>> { ExposedDaoFactory(TypeVarianceDao) }
+    single<DaoFactory<PaymentMethodDao, Long>> { ExposedDaoFactory(PaymentMethodDao) }
+    single<DaoFactory<StepTagDao, CompositeID>> { ExposedDaoFactory(StepTagDao) }
+    single<DaoFactory<TagRelationDao, CompositeID>> { ExposedDaoFactory(TagRelationDao) }
+    single<DaoFactory<TagDao, Long>> { ExposedDaoFactory(TagDao) }
+    single<DaoFactory<UserDao, Long>> { ExposedDaoFactory(UserDao) }
+    single<DaoFactory<WorkflowTagDao, CompositeID>> { ExposedDaoFactory(WorkflowTagDao) }
+    single<DaoFactory<DataPointDao, Long>> { ExposedDaoFactory(DataPointDao) }
+    single<DaoFactory<PhaseDao, Long>> { ExposedDaoFactory(PhaseDao) }
+    single<DaoFactory<StepDao, Long>> { ExposedDaoFactory(StepDao) }
+    single<DaoFactory<ToolParamDao, Long>> { ExposedDaoFactory(ToolParamDao) }
+    single<DaoFactory<ToolDao, Long>> { ExposedDaoFactory(ToolDao) }
+    single<DaoFactory<WorkflowFolderDao, Long>> { ExposedDaoFactory(WorkflowFolderDao) }
+    single<DaoFactory<WorkflowDao, Long>> { ExposedDaoFactory(WorkflowDao) }
+}
 
 val mapperModule = module {
 
-    single<TypeUnionMembersMapper> { TypeUnionMembersMapper() }
-    single<TransformTargetTypesMapper> { TransformTargetTypesMapper() }
-    single<TagRelationsMapper> { TagRelationsMapper() }
-    single<WorkflowFoldersMapper> { WorkflowFoldersMapper() }
-    single<WorkflowsMapper> { WorkflowsMapper(get(), get()) }
-    single<VersionSpecsMapper> { VersionSpecsMapper() }
-    single<TypeDeclarationsMapper> { TypeDeclarationsMapper(get()) }
-    single<TagsMapper> { TagsMapper(get()) }
-    single<StepTagsMapper> { StepTagsMapper() }
-    single<WorkflowTagsMapper> { WorkflowTagsMapper() }
-    single<ToolParamsMapper> { ToolParamsMapper(get(), get()) }
-    single<PhasesMapper> { PhasesMapper(get()) }
-    single<BenchmarkingDataMapper> { BenchmarkingDataMapper(get()) }
-    single<AppliedTransformArgsMapper> { AppliedTransformArgsMapper(get(), get()) }
-    single<PreReqInjectionsMapper> { PreReqInjectionsMapper(get(), get()) }
-    single<TestInputsMapper> { TestInputsMapper(get()) }
-    single<TestExpectedOutcomesMapper> { TestExpectedOutcomesMapper(get()) }
-    single<TestResultsMapper> { TestResultsMapper(get(), get()) }
-    single<StepExecutionsMapper> { StepExecutionsMapper(get(), get()) }
-    single<TransformationArgsMapper> { TransformationArgsMapper(get(), get()) }
-    single<ErrorWatchFnsMapper> { ErrorWatchFnsMapper(get()) }
-    single<PackagesMapper> { PackagesMapper(get()) }
-    single<TypeParametersMapper> { TypeParametersMapper(get()) }
-    single<TypeSchemaRefsMapper> { TypeSchemaRefsMapper(get()) }
-    single<StepBenchmarkingDataMapper> { StepBenchmarkingDataMapper(get()) }
-    single<DataPointsMapper> { DataPointsMapper(get(), get()) }
-    single<ToolsMapper> { ToolsMapper(get()) }
-    single<ToolPackageDependencyMapper> { ToolPackageDependencyMapper() }
-    single<PackageRepoMapper> { PackageRepoMapper() }
-    single<TransformationsMapper> { TransformationsMapper(get()) }
-    single<UsersMapper> { UsersMapper() }
-    single<StepsMapper> { StepsMapper(get(), get(), get()) }
-    single<InquisitionsMapper> { InquisitionsMapper(get(), get()) }
+    includes(daoFactoryModule)
+
+    single<VersionSpecsMapper> { VersionSpecsMapper(get()) }
+    factory<DaoFactory<VersionSpecDao, Long>> { ExposedDaoFactory(VersionSpecDao) }
+    single<TypeUnionMembersMapper> { TypeUnionMembersMapper(get()) }
+    single<TransformTargetTypesMapper> { TransformTargetTypesMapper(get()) }
+    single<TagRelationsMapper> { TagRelationsMapper(get()) }
+    single<WorkflowFoldersMapper> { WorkflowFoldersMapper(get()) }
+    single<WorkflowsMapper> { WorkflowsMapper(get(), get(), get()) }
+
+    single<TypeDeclarationsMapper> { TypeDeclarationsMapper(get(), get()) }
+    single<TagsMapper> { TagsMapper(get(), get()) }
+    //single<StepTagsMapper> { StepTagsMapper() }
+    //single<WorkflowTagsMapper> { WorkflowTagsMapper() }
+    single<ToolParamsMapper> { ToolParamsMapper(get(), get(), get()) }
+    single<PhasesMapper> { PhasesMapper(get(), get()) }
+    single<BenchmarkingDataMapper> { BenchmarkingDataMapper(get(), get()) }
+    single<AppliedTransformArgsMapper> { AppliedTransformArgsMapper(get(), get(), get()) }
+    single<PreReqInjectionsMapper> { PreReqInjectionsMapper(get(), get(), get()) }
+    single<TestInputsMapper> { TestInputsMapper(get(), get()) }
+    single<TestExpectedOutcomesMapper> { TestExpectedOutcomesMapper(get(), get()) }
+    single<TestResultsMapper> { TestResultsMapper(get(), get(), get()) }
+    single<StepExecutionsMapper> { StepExecutionsMapper(get(), get(), get()) }
+    single<TransformationArgsMapper> { TransformationArgsMapper(get(), get(), get()) }
+    single<ErrorWatchFnsMapper> { ErrorWatchFnsMapper(get(), get()) }
+    single<PackagesMapper> { PackagesMapper(get(), get()) }
+    single<TypeParametersMapper> { TypeParametersMapper(get(), get()) }
+    single<TypeSchemaRefsMapper> { TypeSchemaRefsMapper(get(), get()) }
+    single<StepBenchmarkingDataMapper> { StepBenchmarkingDataMapper(get(), get()) }
+    single<DataPointsMapper> { DataPointsMapper(get(), get(), get()) }
+    single<ToolsMapper> { ToolsMapper(get(), get(), get()) }
+    single<ToolPackageDependencyMapper> { ToolPackageDependencyMapper(get()) }
+    single<PackageRepoMapper> { PackageRepoMapper(get()) }
+    single<TransformationsMapper> { TransformationsMapper(get(), get()) }
+    single<UsersMapper> { UsersMapper(get()) }
+    single<StepsMapper> { StepsMapper(get(), get(), get(), get()) }
+    single<InquisitionsMapper> { InquisitionsMapper(get(), get(), get()) }
     single<AppliedTransformsMapper> { AppliedTransformsMapper(get(), get(), get(), get()) }
-    single<WorkflowJunctionsMapper> { WorkflowJunctionsMapper(get(), get(), get()) }
-    single<WorkflowExecutionsMapper> { WorkflowExecutionsMapper(get(), get(), get()) }
-    single<TestCasesMapper> { TestCasesMapper(get(), get(), get(), get(), get(), get()) }
-    single<ProvisionsMapper> { ProvisionsMapper(get(), get(), get()) }
-    single<ErrorWatchesMapper> { ErrorWatchesMapper(get()) }
-    single<TypeDefinitionsMapper> { TypeDefinitionsMapper(get()) }
-    single<TypeBoundsMapper> { TypeBoundsMapper(get()) }
-    single<TypeVariancesMapper> { TypeVariancesMapper(get()) }
-    single<RevisionsMapper> { RevisionsMapper(get(), get()) }
-    single<PaymentMethodsMapper> { PaymentMethodsMapper(get()) }
-    single<ProvisionDataPointMapper> { ProvisionDataPointMapper() }
-    single<PackageRepoMapper> { PackageRepoMapper() }
-    single<ExecutionLogMapper> { ExecutionLogMapper(get()) }
+    single<WorkflowJunctionsMapper> { WorkflowJunctionsMapper(get(), get(), get(), get()) }
+    single<WorkflowExecutionsMapper> { WorkflowExecutionsMapper(get(), get(), get(), get()) }
+    single<TestCasesMapper> { TestCasesMapper(get(), get(), get(), get(), get(), get(), get()) }
+    single<ProvisionsMapper> { ProvisionsMapper(get(), get(), get(), get()) }
+    single<ErrorWatchesMapper> { ErrorWatchesMapper(get(), get()) }
+    single<TypeDefinitionsMapper> { TypeDefinitionsMapper(get(), get()) }
+    single<TypeBoundsMapper> { TypeBoundsMapper(get(), get()) }
+    single<TypeVariancesMapper> { TypeVariancesMapper(get(), get()) }
+    single<RevisionsMapper> { RevisionsMapper(get(), get(), get()) }
+    single<PaymentMethodsMapper> { PaymentMethodsMapper(get(), get()) }
+    single<ProvisionDataPointMapper> { ProvisionDataPointMapper(get()) }
+    single<PackageRepoMapper> { PackageRepoMapper(get()) }
+    single<ExecutionLogMapper> { ExecutionLogMapper(get(), get()) }
     single<UserDesignedMetadataMapper> { UserDesignedMetadataMapper() }
 }
 

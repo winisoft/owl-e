@@ -21,7 +21,7 @@ open class InquisitionRepositoryTest : DbLayerIntegrationTests<Long, Inquisition
     fun `test 'on delete' of dependent Step cascades to Inquisition`() {
         transaction {
             val step = EntityTestInstanceFactory.stepDao()
-            val inquisition = EntityTestInstanceFactory.inquisitionDao(workflowStep = step)
+            val inquisition = EntityTestInstanceFactory.inquisitionDao()
             val inquisitionId = inquisition.id.value
 
             StepRepository().delete(step.id)

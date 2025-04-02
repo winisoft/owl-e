@@ -1,164 +1,135 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
 import com.wini.owle.dto.VersionSpecDto
-import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
 import com.wini.owle.entity.environs.VersionSpecDao
-import com.wini.owle.mapper.BaseOwleMapperTest
-import org.jetbrains.exposed.sql.Transaction
+import com.wini.owle.mapper.ExposedDaoFactory
+import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.TestInstance
-import org.koin.java.KoinJavaComponent
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
+class VersionSpecsMapperTest {
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-open class VersionSpecMapperTest: BaseOwleMapperTest<VersionSpecDto, VersionSpecDao, VersionSpecsMapper>() {
+    private lateinit var mapper: VersionSpecsMapper
+    private val factory: ExposedDaoFactory<VersionSpecDao, Long, VersionSpecDao.Companion> = mockk()
 
-    private val realMapper by KoinJavaComponent.inject<VersionSpecsMapper>(VersionSpecsMapper::class.java)
-
-    override fun instantiateMapper(): VersionSpecsMapper { return realMapper }
-
-    override fun Transaction.dto(id: Long): VersionSpecDto {
-        return versionSpecDto(id = id, versionMin = "1.0.0", versionMax = "2.0.0", versionExact = null)
+    @BeforeEach
+    fun setUp() {
+        mapper = VersionSpecsMapper(factory)
     }
 
-    override fun Transaction.existingDao(): VersionSpecDao {
-        return versionSpecDao(
-            versionMin = "1.0.0",
-            versionMax = "2.0.0",
-            versionExact = null
-        )
+    @Test
+    fun `toEntity should throw exception when id is non-zero but entity not found`() {
+        val dto = VersionSpecDto(id = 99L, versionMin = "2.0", versionMax = "3.0", versionExact = "2.5")
+
+        mockkObject(VersionSpecDao)
+        every { VersionSpecDao.findById(99L) } returns null
+
+        val exception = assertThrows<IllegalStateException> {
+            mapper.toEntity(dto)
+        }
+
+        assertEquals("VersionSpec with id=99 not found", exception.message)
+        unmockkObject(VersionSpecDao)
     }
 
-    override fun Transaction.existingDaoDto(): Pair<VersionSpecDao, VersionSpecDto> {
-        val dao = existingDao()
-        val dto = VersionSpecDto(
-            id = dao.id.value,
-            versionMin = dao.versionMin,
-            versionMax = dao.versionMax,
-            versionExact = dao.versionExact
-        )
-        return dao to dto
+    @Test
+    fun `toDto should correctly map entity to dto`() {
+        val entity = mockk<VersionSpecDao> {
+            every { id.value } returns 1L
+            every { versionMin } returns "1.0"
+            every { versionMax } returns "2.0"
+            every { versionExact } returns "1.5"
+        }
+
+        val result = mapper.toDto(entity)
+
+        assertEquals(1L, result.id)
+        assertEquals("1.0", result.versionMin)
+        assertEquals("2.0", result.versionMax)
+        assertEquals("1.5", result.versionExact)
     }
 
-    override fun assertDaoPropsExpectedMatch(dao: VersionSpecDao, dto: VersionSpecDto) {
-        assertEquals(dao.versionMin, dto.versionMin)
-        assertEquals(dao.versionMax, dto.versionMax)
-        assertEquals(dao.versionExact, dto.versionExact)
+    @Test
+    fun `toEntity should update existing entity when id is non-zero`() {
+        // Create a DTO with non-zero ID
+        val dto = VersionSpecDto(id = 42L, versionMin = "1.5", versionMax = "3.0", versionExact = "2.0")
+
+        // Mock the existing entity that will be updated
+        val existingEntity = mockk<VersionSpecDao>(relaxed = true)
+
+        // Set up mocks
+        mockkObject(VersionSpecDao)
+        every { VersionSpecDao.findById(42L) } returns existingEntity
+
+        // Capture the property updates
+        val minVersionSlot = slot<String>()
+        val maxVersionSlot = slot<String>()
+        val exactVersionSlot = slot<String>()
+
+        every { existingEntity.versionMin = capture(minVersionSlot) } just runs
+        every { existingEntity.versionMax = capture(maxVersionSlot) } just runs
+        every { existingEntity.versionExact = capture(exactVersionSlot) } just runs
+
+        // Execute the method under test
+        val result = mapper.toEntity(dto)
+
+        // Verify that the existing entity was found and updated
+        verify { VersionSpecDao.findById(42L) }
+        verify { existingEntity.versionMin = "1.5" }
+        verify { existingEntity.versionMax = "3.0" }
+        verify { existingEntity.versionExact = "2.0" }
+
+        // Verify the captured values
+        assertEquals("1.5", minVersionSlot.captured)
+        assertEquals("3.0", maxVersionSlot.captured)
+        assertEquals("2.0", exactVersionSlot.captured)
+
+        // Verify the result is the updated entity
+        assertEquals(existingEntity, result)
+
+        unmockkObject(VersionSpecDao)
     }
 
-    override fun assertDtoPropsExpectedMatch(dto: VersionSpecDto, dao: VersionSpecDao) {
-        assertEquals(dto.versionMin, dao.versionMin)
-        assertEquals(dto.versionMax, dao.versionMax)
-        assertEquals(dto.versionExact, dao.versionExact)
+    @Test
+    fun `toEntity should create a correctly mapped entity when id is zero`() {
+        // Create a DTO with zero ID (indicating new entity)
+        val dto = VersionSpecDto(id = 0L, versionMin = "2.0", versionMax = "4.0", versionExact = "3.0")
+
+        // Mock the new entity that will be created
+        val newEntity = mockk<VersionSpecDao>(relaxed = true)
+
+        // Set up the factory mock to return our mock entity
+        every { factory.create() } returns newEntity
+
+        // Slots to capture property assignments
+        val minVersionSlot = slot<String>()
+        val maxVersionSlot = slot<String>()
+        val exactVersionSlot = slot<String>()
+
+        // Set up property capture
+        every { newEntity.versionMin = capture(minVersionSlot) } just runs
+        every { newEntity.versionMax = capture(maxVersionSlot) } just runs
+        every { newEntity.versionExact = capture(exactVersionSlot) } just runs
+
+        // Execute the method under test
+        val result = mapper.toEntity(dto)
+
+        // Verify that the factory was used to create a new entity
+        verify { factory.create() }
+
+        // Verify the properties were set correctly
+        verify { newEntity.versionMin = "2.0" }
+        verify { newEntity.versionMax = "4.0" }
+        verify { newEntity.versionExact = "3.0" }
+
+        // Verify the captured values
+        assertEquals("2.0", minVersionSlot.captured)
+        assertEquals("4.0", maxVersionSlot.captured)
+        assertEquals("3.0", exactVersionSlot.captured)
+
+        // Verify the result is the new entity
+        assertEquals(newEntity, result)
     }
-
-
 }
-
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//open class VersionSpecsMapperTest: BaseOwleMapperTest<VersionSpecDto, VersionSpecDao>() {
-//
-//    private val mapper = VersionSpecsMapper()
-//
-//    override val implicatedTables: List<IdTable<*>>
-//        get() = listOf(VersionSpecs)
-//
-//    @Test
-//    fun `test minimal valid data to entity`() {
-//        transaction {
-//            // A VersionSpecDto with no optional fields set
-//            val intendedDao = VersionSpecDao.new {
-//                versionMin = null
-//                versionMax = null
-//                versionExact = null
-//            }
-//            val intendedId = intendedDao.id.value
-//            val dto = VersionSpecDto(
-//                id = intendedId,
-//                versionMin = null,
-//                versionMax = null,
-//                versionExact = null
-//            )
-//
-//            // Convert to DAO
-//            val dao = mapper.run { dto.toEntity() }
-//
-//            // Insert into DB (Exposed automatically does this on flush,
-//            // but we can check values right away)
-//            assertEquals(intendedId, dao.id.value)
-//            assertNull(dao.versionMin)
-//            assertNull(dao.versionMax)
-//            assertNull(dao.versionExact)
-//        }
-//    }
-//
-//    @Test
-//    fun `test minimal valid data to dto`() {
-//        transaction {
-//            // Create a VersionSpecDao in DB
-//            val dao = VersionSpecDao.new {
-//                this.versionMin = "1.0.0"
-//                this.versionMax = "2.0.0"
-//                this.versionExact = null
-//            }
-//
-//            // Convert to Dto
-//            val dto = mapper.run { dao.toDto() }
-//            assertEquals(dao.id.value, dto.id)
-//            assertEquals("1.0.0", dto.versionMin)
-//            assertEquals("2.0.0", dto.versionMax)
-//            assertNull(dto.versionExact)
-//        }
-//    }
-//
-//    @Test
-//    fun `test round trip`() {
-//        transaction {
-//            // Original Dto
-//            val originalDto = VersionSpecDto(
-//                id = 42L,
-//                versionMin = "0.9.0",
-//                versionMax = "1.5.0",
-//                versionExact = "1.2.3"
-//            )
-//
-//            // 1) Convert Dto → Dao
-//            val dao = mapper.run { originalDto.toEntity() }
-//
-//            // 2) Convert Dao → Dto
-//            val roundTrippedDto = mapper.run { dao.toDto() }
-//
-//            // 3) Assert equality
-//            assertEquals(originalDto.id, roundTrippedDto.id)
-//            assertEquals(originalDto.versionMin, roundTrippedDto.versionMin)
-//            assertEquals(originalDto.versionMax, roundTrippedDto.versionMax)
-//            assertEquals(originalDto.versionExact, roundTrippedDto.versionExact)
-//        }
-//    }
-//
-//    @Test
-//    fun `test null optional fields`() {
-//        transaction {
-//            // Some fields are explicitly set to null
-//            val intended = VersionSpecDao.new {
-//                versionMin = null
-//                versionMax = "9.9.9"
-//                versionExact = null
-//            }
-//
-//            val dto = VersionSpecDto(
-//                id = intended.id.value,
-//                versionMin = null,
-//                versionMax = "9.9.9",
-//                versionExact = null
-//            )
-//
-//            val dao = mapper.run { dto.toEntity() }
-//            // Check that Exposed sees them as null / not-null
-//            assertNull(dao.versionMin)
-//            assertEquals("9.9.9", dao.versionMax)
-//            assertNull(dao.versionExact)
-//        }
-//    }
-//}

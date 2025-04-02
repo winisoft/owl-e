@@ -1,50 +1,45 @@
 package com.wini.owle.mapper.steps
 
 import com.wini.owle.dto.InquisitionDto
-import com.wini.owle.entity.AppliedTransforms
-import com.wini.owle.entity.DataPoints
-import com.wini.owle.entity.Inquisitions
-import com.wini.owle.entity.Steps
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.steps.InquisitionDao
-import com.wini.owle.entity.transforms.AppliedTransformDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.transforms.AppliedTransformsMapper
 import com.wini.owle.mapper.workflows.DataPointsMapper
 import com.wini.owle.mapper.workflows.StepsMapper
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 class InquisitionsMapper(
+    private val daoFactory: DaoFactory<InquisitionDao, Long>,
     private val stepsMapper: StepsMapper,
     private val dataPointsMapper: DataPointsMapper
-) : DbMapper<InquisitionDto, InquisitionDao>() {
+): DbMapper<InquisitionDto, InquisitionDao>() {
 
-    override val applyProps: InquisitionDao.(InquisitionDto) -> Unit = { dto ->
-        workflowStep = stepsMapper.run { dto.step.toEntity() }
-        className = dto.className
-        dataPoint = dataPointsMapper.run { dto.dataPoint.toEntity() }
-        onMetWorkflowStep = stepsMapper.run { dto.onMetWorkflowStep.toEntity() }
-        executionOrder = dto.executionOrder
-    }
-
-    override fun InquisitionDto.toEntity(): InquisitionDao {
-        return if (id == 0L) {
-            InquisitionDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: InquisitionDto): InquisitionDao {
+        val applyProps: InquisitionDao.() -> Unit = {
+            workflowStep = stepsMapper.toEntity(dto.step)
+            className = dto.className
+            dataPoint = dataPointsMapper.toEntity(dto.dataPoint)
+            onMetWorkflowStep = stepsMapper.toEntity(dto.onMetWorkflowStep)
+            executionOrder = dto.executionOrder
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            InquisitionDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("Inquisition with id=$id not found")
+            InquisitionDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("Inquisition with id=${dto.id} not found")
         }
     }
 
-    override fun InquisitionDao.toDto(): InquisitionDto {
+    override fun toDto(entity: InquisitionDao): InquisitionDto {
         return InquisitionDto(
-            id = id.value,
-            step = stepsMapper.run { workflowStep.toDto() },
-            className = className,
-            dataPoint = dataPointsMapper.run { dataPoint.toDto() },
-            onMetWorkflowStep = stepsMapper.run { onMetWorkflowStep.toDto() },
-            executionOrder = executionOrder
+            id = entity.id.value,
+            step = stepsMapper.toDto(entity.workflowStep),
+            className = entity.className,
+            dataPoint = dataPointsMapper.toDto(entity.dataPoint),
+            onMetWorkflowStep = stepsMapper.toDto(entity.onMetWorkflowStep),
+            executionOrder = entity.executionOrder
         )
     }
 }

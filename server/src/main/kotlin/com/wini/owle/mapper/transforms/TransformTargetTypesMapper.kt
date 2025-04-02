@@ -2,27 +2,32 @@ package com.wini.owle.mapper.transforms
 
 import com.wini.owle.dto.TransformationTargetTypeDto
 import com.wini.owle.entity.TransformTargetTypes
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.transforms.TransformTargetTypeDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 
 
-class TransformTargetTypesMapper : DbMapper<TransformationTargetTypeDto, TransformTargetTypeDao>() {
+class TransformTargetTypesMapper(
+    private val daoFactory: DaoFactory<TransformTargetTypeDao, CompositeID>
+) : DbMapper<TransformationTargetTypeDto, TransformTargetTypeDao>() {
 
-    override val applyProps: TransformTargetTypeDao.(TransformationTargetTypeDto) -> Unit = {}
+//    val applyProps: TransformTargetTypeDao.(TransformationTargetTypeDto) -> TransformTargetTypeDao = {
+//    }
 
-    override fun TransformationTargetTypeDto.toEntity(): TransformTargetTypeDao {
+    override fun toEntity(dto: TransformationTargetTypeDto): TransformTargetTypeDao {
         return TransformTargetTypeDao.create(
-            transformationId = transformationId,
-            typeDeclarationId = typeDeclarationId
+            transformationId = dto.transformationId,
+            typeDeclarationId = dto.typeDeclarationId
         )
     }
 
-    override fun TransformTargetTypeDao.toDto(): TransformationTargetTypeDto {
+    override fun toDto(entity: TransformTargetTypeDao) : TransformationTargetTypeDto {
         return TransformationTargetTypeDto(
-            transformationId = transformation.id.value,
-            typeDeclarationId = eligibleTypeDeclaration.id.value
+            transformationId = 1,
+            typeDeclarationId = 1
         )
     }
 }

@@ -1,46 +1,48 @@
 package com.wini.owle.mapper.transforms
 
 import com.wini.owle.dto.TransformationDto
-import com.wini.owle.entity.TransformTargetTypes
-import com.wini.owle.entity.TransformationArgs
-import com.wini.owle.entity.Transformations
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.transforms.TransformTargetTypeDao
-import com.wini.owle.entity.transforms.TransformationArgDao
+import com.wini.owle.entity.TransformTargetTypes // Table definition, keep if needed
+import com.wini.owle.entity.TransformationArgs // Table definition, keep if needed
+import com.wini.owle.entity.Transformations // Table definition, keep if needed
+import com.wini.owle.entity.TypeDeclarations // Table definition, keep if needed
+import com.wini.owle.entity.environs.PackageRepoDao
+import com.wini.owle.entity.transforms.TransformTargetTypeDao // Not directly used here
+import com.wini.owle.entity.transforms.TransformationArgDao // Not directly used here
 import com.wini.owle.entity.transforms.TransformationDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TransformationsMapper(
+    private val daoFactory: DaoFactory<TransformationDao, Long>,
     private val typeDeclarationMapper: TypeDeclarationsMapper
-) : DbMapper<TransformationDto, TransformationDao>() {
+): DbMapper<TransformationDto, TransformationDao>() {
 
-    override val applyProps: TransformationDao.(TransformationDto) -> Unit = { dto ->
-        name = dto.name
-        description = dto.description
-        examples = dto.examples
-        returnsTypeDeclaration = typeDeclarationMapper.run { dto.returnsType?.toEntity() }
-    }
-
-    override fun TransformationDto.toEntity(): TransformationDao {
-        return if (id == 0L) {
-            TransformationDao.new { applyProps(this@toEntity) }
+    override fun toEntity(dto: TransformationDto): TransformationDao {
+        val applyProps: TransformationDao.() -> Unit = {
+            name = dto.name
+            description = dto.description
+            examples = dto.examples
+            returnsTypeDeclaration = dto.returnsType?.let { typeDeclarationMapper.toEntity(it) }
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            TransformationDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("Transformation with id=$id not found")
+            TransformationDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("Transformation with id=${dto.id} not found")
         }
     }
 
-    override fun TransformationDao.toDto(): TransformationDto {
+    override fun toDto(entity: TransformationDao): TransformationDto {
         return TransformationDto(
-            id = id.value,
-            name = name,
-            description = description,
-            examples = examples,
-            returnsType = typeDeclarationMapper.run { returnsTypeDeclaration?.toDto() }
+            id = entity.id.value,
+            name = entity.name,
+            description = entity.description,
+            examples = entity.examples,
+            returnsType = entity.returnsTypeDeclaration?.let { typeDeclarationMapper.toDto(it) }
         )
     }
 }

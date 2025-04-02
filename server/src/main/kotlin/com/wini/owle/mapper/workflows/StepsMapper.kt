@@ -4,48 +4,52 @@ import com.wini.owle.dto.StepDto
 import com.wini.owle.entity.Steps
 import com.wini.owle.entity.Tools
 import com.wini.owle.entity.Workflows
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.workflows.StepDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class StepsMapper(
+    private val daoFactory: DaoFactory<StepDao, Long>,
     private val workflowMapper: WorkflowsMapper,
     private val toolMapper: ToolsMapper,
     private val phasesMapper: PhasesMapper
 ) : DbMapper<StepDto, StepDao>() {
 
-    override val applyProps: StepDao.(StepDto) -> Unit = { dto ->
-        workflow = workflowMapper.run { dto.workflow.toEntity() }
-        name = dto.name
-        description = dto.description
-        tool = toolMapper.run { dto.tool.toEntity() }
-        defaultNext = null //TODO
-        isWorkflowHead = dto.isWorkflowHead
-        parentPhase = phasesMapper.run { dto.parentPhase?.toEntity() }
-    }
+    override fun toEntity(dto: StepDto): StepDao {
 
-    override fun StepDto.toEntity(): StepDao {
-        return if (id == 0L) {
-            StepDao.new { applyProps(this@toEntity) }
+        val applyProps: StepDao.() -> Unit = {
+            workflow = workflowMapper.toEntity(dto.workflow)
+            name = dto.name
+            description = dto.description
+            tool = toolMapper.toEntity(dto.tool)
+            defaultNext = dto.nextStep?.let { toEntity(it) }
+            isWorkflowHead = dto.isWorkflowHead
+            parentPhase = dto.parentPhase?.let { phasesMapper.toEntity(it) }
+            displayOrder = dto.displayOrder
+        }
+        return if (dto.id == 0L) {
+            daoFactory.create().apply(applyProps)
         } else {
-            StepDao.findById(id)
-                ?.apply { applyProps(this@toEntity) }
-                ?: throw IllegalStateException("Step with id=$id not found")
+            StepDao.findById(dto.id)
+                ?.apply(applyProps)
+                ?: throw IllegalStateException("Step with id=${dto.id} not found")
         }
     }
 
-    override fun StepDao.toDto(): StepDto {
+    override fun toDto(entity: StepDao): StepDto {
         return StepDto(
-            id = id.value,
-            name = name,
-            description = description,
-            workflow = workflowMapper.run { workflow.toDto() },
-            isWorkflowHead = isWorkflowHead,
-            tool = toolMapper.run { tool.toDto() },
-            nextStep = null, //TODO
-            displayOrder = displayOrder,
-            parentPhase = phasesMapper.run { parentPhase?.toDto() }
+            id = entity.id.value,
+            name = entity.name,
+            description = entity.description,
+            workflow = workflowMapper.toDto(entity.workflow),
+            isWorkflowHead = entity.isWorkflowHead,
+            tool = toolMapper.toDto(entity.tool),
+            nextStep = entity.defaultNext?.let { toDto(it) },
+            displayOrder = entity.displayOrder,
+            parentPhase = entity.parentPhase?.let { phasesMapper.toDto(it) }
         )
     }
 }

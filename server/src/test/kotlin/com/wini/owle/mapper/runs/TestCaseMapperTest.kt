@@ -5,7 +5,6 @@ import com.wini.owle.entity.TestCases
 import com.wini.owle.entity.Users
 import com.wini.owle.entity.Workflows
 import com.wini.owle.entity.runs.TestCaseDao
-import com.wini.owle.mapper.BaseOwleMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Transaction

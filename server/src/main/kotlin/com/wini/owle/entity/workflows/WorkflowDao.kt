@@ -10,7 +10,7 @@ import org.jetbrains.exposed.dao.id.EntityID
  * Represents a workflow, containing steps and data points, and supports organization
  * into folders. Metadata is stored as JSON to allow for flexible information capture.
  */
-class WorkflowDao(id: EntityID<Long>) : LongEntity(id) {
+open class WorkflowDao(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<WorkflowDao>(Workflows)
 
     /**

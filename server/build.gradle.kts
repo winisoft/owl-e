@@ -44,6 +44,11 @@ sourceSets {
             testImplementation(libs.kotlin.test.junit)
             implementation(libs.ktor.server.tests)
             implementation(libs.kotlin.test.junit)
+            implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+            implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+            testImplementation("org.mockito:mockito-core:5.6.0") // Adjust to latest version
+            testImplementation("org.mockito:mockito-inline:5.2.0") // For mocking final classes
+            testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 
         }
     }

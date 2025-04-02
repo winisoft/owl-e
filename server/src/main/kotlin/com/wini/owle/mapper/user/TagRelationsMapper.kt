@@ -1,22 +1,33 @@
 package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.TagRelationDto
+import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.entity.user.TagRelationDao
+import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
+import org.jetbrains.exposed.dao.id.CompositeID
 
 
-class TagRelationsMapper : DbMapper<TagRelationDto, TagRelationDao>() {
+class TagRelationsMapper(
+    private val daoFactory: DaoFactory<TagRelationDao, CompositeID>
+) : DbMapper<TagRelationDto, TagRelationDao>() {
 
-    override val applyProps: TagRelationDao.(TagRelationDto) -> Unit = {}
+    // No properties to apply for this simple relation entity beyond the ID
+//    val applyProps: TagRelationDao.(TagRelationDto) -> TagRelationDao = {
+//    }
 
-    override fun TagRelationDto.toEntity(): TagRelationDao {
-        return TagRelationDao.create(parentTagId = parentTagId, childTagId = childTagId)
+    override fun toEntity(dto: TagRelationDto): TagRelationDao {
+        // Assuming TagRelationDao.create handles finding or creating.
+        // If it only creates, this might lead to duplicates or errors
+        // if the relation already exists. Check TagRelationDao implementation.
+        // Based on original code `TagRelationDao.create(...)`
+        return TagRelationDao.create(parentTagId = dto.parentTagId, childTagId = dto.childTagId)
     }
 
-    override fun TagRelationDao.toDto(): TagRelationDto {
+    override fun toDto(entity: TagRelationDao): TagRelationDto {
         return TagRelationDto(
-            parentTagId = parentTag.id.value,
-            childTagId = childTag.id.value
+            parentTagId = entity.parentTag.id.value,
+            childTagId = entity.childTag.id.value
         )
     }
 }
