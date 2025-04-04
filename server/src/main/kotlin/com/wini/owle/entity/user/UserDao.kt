@@ -1,9 +1,36 @@
 package com.wini.owle.entity.user
 
+import com.wini.owle.dto.user.SubscriptionStatusDto
 import com.wini.owle.entity.Users
+import com.wini.owle.entity.WorkflowMetadataContributors
+import com.wini.owle.entity.workflows.WorkflowMetadataDao
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+
+
+enum class SubscriptionStatus {
+    REGISTERED, ACTIVE, CANCELLED, ON_HOLD;
+
+    companion object {
+        fun fromDto(dto: SubscriptionStatusDto): SubscriptionStatus {
+            return when (dto) {
+                SubscriptionStatusDto.Registered -> REGISTERED
+                SubscriptionStatusDto.Active -> ACTIVE
+                SubscriptionStatusDto.Cancelled -> CANCELLED
+                SubscriptionStatusDto.OnHold -> ON_HOLD
+            }
+        }
+        fun SubscriptionStatus.toDto(): SubscriptionStatusDto {
+            return when(this){
+                REGISTERED -> SubscriptionStatusDto.Registered
+                ACTIVE -> SubscriptionStatusDto.Active
+                CANCELLED -> SubscriptionStatusDto.Cancelled
+                ON_HOLD -> SubscriptionStatusDto.OnHold
+            }
+        }
+    }
+}
 
 /**
  * Represents a user in the Owl-E application, with authentication details,
@@ -56,4 +83,11 @@ class UserDao(id: EntityID<Long>) : LongEntity(id) {
      * Timestamp for when the user was last updated.
      */
     var updatedAt by Users.updatedAt
+
+    /**
+     * Metadata records representing distributed workflow content the user has contributed to.
+     * This is a many-to-many relationship through `workflow_metadata_contributors`.
+     */
+    val sharedWorkflowContributions by WorkflowMetadataDao via WorkflowMetadataContributors
+
 }

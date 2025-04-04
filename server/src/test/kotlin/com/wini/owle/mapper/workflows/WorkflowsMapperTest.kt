@@ -5,8 +5,8 @@ import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.dto.workflows.WorkflowFolderDto
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.WorkflowDao
+import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.DaoFactory
-import com.wini.owle.mapper.user.metadata.UserDesignedMetadataMapper
 import com.wini.owle.models.metadata.UserDesignedMetadata
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
@@ -19,13 +19,12 @@ import kotlin.test.assertEquals
 open class WorkflowsMapperTest {
 
     private lateinit var mapper: WorkflowsMapper
-    private val userDesignedMetadataMapper: UserDesignedMetadataMapper = mockk()
     private val workflowFoldersMapper: WorkflowFoldersMapper = mockk()
     private val factory: DaoFactory<WorkflowDao, Long> = mockk()
 
     @BeforeEach
     fun setUp() {
-        mapper = WorkflowsMapper(factory, userDesignedMetadataMapper, workflowFoldersMapper)
+        mapper = WorkflowsMapper(factory, workflowFoldersMapper)
     }
 
     @Test
@@ -37,7 +36,6 @@ open class WorkflowsMapperTest {
             description = "description",
             pythonVersion = "3.8",
             parentFolder = null,
-            metadata = mockk(),
             createdAt = "2023-01-01T00:00:00",
             updatedAt = "2023-01-02T00:00:00"
         )
@@ -64,7 +62,6 @@ open class WorkflowsMapperTest {
             every { description } returns "description"
             every { pythonVersion } returns "3.8"
             every { parentFolder } returns mockk()
-            every { metadata } returns mockk<UserDesignedMetadata>()
             every { createdAt } returns LocalDateTime.parse("2023-01-01T00:00:00")
             every { updatedAt } returns LocalDateTime.parse("2023-01-02T00:00:00")
         }
@@ -73,7 +70,7 @@ open class WorkflowsMapperTest {
         val parentFolderDto = mockk<WorkflowFolderDto>()
         val metadataDto = mockk<UserDesignedMetadataDto>()
         every { workflowFoldersMapper.toDto(entity.parentFolder!!) } returns parentFolderDto
-        every { userDesignedMetadataMapper.run { UserDesignedMetadataDto.mock } } returns metadataDto
+//        every { userDesignedMetadataMapper.run { UserDesignedMetadataDto.mock } } returns metadataDto
 
         // Call the method under test
         val result = mapper.toDto(entity)
@@ -84,7 +81,6 @@ open class WorkflowsMapperTest {
         assertEquals("description", result.description)
         assertEquals("3.8", result.pythonVersion)
         assertEquals(parentFolderDto, result.parentFolder)
-        assertEquals(metadataDto, result.metadata)
         assertEquals("2023-01-01T00:00:00", result.createdAt)
         assertEquals("2023-01-02T00:00:00", result.updatedAt)
     }
@@ -97,8 +93,7 @@ open class WorkflowsMapperTest {
             name = "workflowName",
             description = "description",
             pythonVersion = "3.8",
-            parentFolder = null,
-            metadata = mockk(),
+            parentFolder = mockk(),
             createdAt = "2023-01-01T00:00:00",
             updatedAt = "2023-01-02T00:00:00"
         )
@@ -106,8 +101,9 @@ open class WorkflowsMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<WorkflowDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        // Mock the workflowFoldersMapper
+        val parentFolderDao = mockk<WorkflowFolderDao>()
+        every { workflowFoldersMapper.toEntity(any()) } returns parentFolderDao
 
         // Set up mocks for finding existing entity
         mockkObject(WorkflowDao)
@@ -117,12 +113,14 @@ open class WorkflowsMapperTest {
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val pythonVersionSlot = slot<String>()
+        val parentFolderSlot = slot<WorkflowFolderDao>()
         val createdAtSlot = slot<LocalDateTime>()
         val updatedAtSlot = slot<LocalDateTime>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
         every { existingEntity.description = capture(descriptionSlot) } just runs
         every { existingEntity.pythonVersion = capture(pythonVersionSlot) } just runs
+        every { existingEntity.parentFolder = capture(parentFolderSlot) } just runs
         every { existingEntity.createdAt = capture(createdAtSlot) } just runs
         every { existingEntity.updatedAt = capture(updatedAtSlot) } just runs
 
@@ -134,13 +132,15 @@ open class WorkflowsMapperTest {
         verify { existingEntity.name = "workflowName" }
         verify { existingEntity.description = "description" }
         verify { existingEntity.pythonVersion = "3.8" }
-        verify { existingEntity.createdAt = LocalDateTime.parse("2023-01-01T00:00:00") }
-        verify { existingEntity.updatedAt = LocalDateTime.parse("2023-01-02T00:00:00") }
+        verify { existingEntity.parentFolder = parentFolderDao }
+        verify { existingEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
+        verify { existingEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
 
         // Verify the captured values
         assertEquals("workflowName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
         assertEquals("3.8", pythonVersionSlot.captured)
+        assertEquals(parentFolderDao, parentFolderSlot.captured)
         assertEquals(LocalDateTime.parse("2023-01-01T00:00:00"), createdAtSlot.captured)
         assertEquals(LocalDateTime.parse("2023-01-02T00:00:00"), updatedAtSlot.captured)
 
@@ -158,8 +158,7 @@ open class WorkflowsMapperTest {
             name = "workflowName",
             description = "description",
             pythonVersion = "3.8",
-            parentFolder = null,
-            metadata = mockk(),
+            parentFolder = mockk(),
             createdAt = "2023-01-01T00:00:00",
             updatedAt = "2023-01-02T00:00:00"
         )
@@ -167,8 +166,9 @@ open class WorkflowsMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<WorkflowDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        // Mock the workflowFoldersMapper
+        val parentFolderDao = mockk<WorkflowFolderDao>()
+        every { workflowFoldersMapper.toEntity(any()) } returns parentFolderDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -177,12 +177,14 @@ open class WorkflowsMapperTest {
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val pythonVersionSlot = slot<String>()
+        val parentFolderSlot = slot<WorkflowFolderDao>()
         val createdAtSlot = slot<LocalDateTime>()
         val updatedAtSlot = slot<LocalDateTime>()
 
         every { newEntity.name = capture(nameSlot) } just runs
         every { newEntity.description = capture(descriptionSlot) } just runs
         every { newEntity.pythonVersion = capture(pythonVersionSlot) } just runs
+        every { newEntity.parentFolder = capture(parentFolderSlot) } just runs
         every { newEntity.createdAt = capture(createdAtSlot) } just runs
         every { newEntity.updatedAt = capture(updatedAtSlot) } just runs
 
@@ -196,13 +198,15 @@ open class WorkflowsMapperTest {
         verify { newEntity.name = "workflowName" }
         verify { newEntity.description = "description" }
         verify { newEntity.pythonVersion = "3.8" }
-        verify { newEntity.createdAt = LocalDateTime.parse("2023-01-01T00:00:00") }
-        verify { newEntity.updatedAt = LocalDateTime.parse("2023-01-02T00:00:00") }
+        verify { newEntity.parentFolder = parentFolderDao }
+        verify { newEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
+        verify { newEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
 
         // Verify the captured values
         assertEquals("workflowName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
         assertEquals("3.8", pythonVersionSlot.captured)
+        assertEquals(parentFolderDao, parentFolderSlot.captured)
         assertEquals(LocalDateTime.parse("2023-01-01T00:00:00"), createdAtSlot.captured)
         assertEquals(LocalDateTime.parse("2023-01-02T00:00:00"), updatedAtSlot.captured)
 

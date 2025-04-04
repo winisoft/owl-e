@@ -44,17 +44,25 @@ open class PackageRepoMapperTest {
 
     @Test
     fun `toDto should correctly map entity to dto`() {
+        val mockSourceType = mockk<PackageRepoType>()
+        
         val entity = mockk<PackageRepoDao> {
             every { id.value } returns 1L
-            every { sourceType.toDto() } returns PackageRepoTypeDto.Pypi
+            every { sourceType } returns mockSourceType
             every { sourceUrl } returns "http://example.com"
         }
+        
+        // Mock the extension function behavior
+        mockkObject(PackageRepoType.Companion)
+        every { mockSourceType.toDto() } returns PackageRepoTypeDto.Pypi
 
         val result = mapper.toDto(entity)
 
         assertEquals(1L, result.id)
         assertEquals(PackageRepoTypeDto.Pypi, result.sourceType)
         assertEquals("http://example.com", result.sourceUrl)
+        
+        unmockkObject(PackageRepoType.Companion)
     }
 
     @Test

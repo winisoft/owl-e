@@ -16,7 +16,7 @@ import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 
 
-class OwleRepoImplTest {
+abstract class OwleRepoImplTest {
 
     // Test implementation of the abstract class
     private class TestEntity(id: EntityID<Long>) : Entity<Long>(id) {

@@ -605,7 +605,6 @@ object EntityTestInstanceFactory {
         every { this@mockk.description } returns description
         every { this@mockk.pythonVersion } returns pythonVersion
         every { this@mockk.parentFolder } returns parentFolder
-        every { this@mockk.metadata } returns metadata
         every { this@mockk.createdAt } returns createdAt
         every { this@mockk.updatedAt } returns updatedAt
     }

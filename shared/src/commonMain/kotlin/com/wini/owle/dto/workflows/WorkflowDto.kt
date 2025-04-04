@@ -11,7 +11,6 @@ data class WorkflowDto(
     val description: String?,
     val pythonVersion: String,
     val parentFolder: WorkflowFolderDto?,
-    val metadata: UserDesignedMetadataDto,
     val createdAt: String,
     val updatedAt: String
 ) : BaseDto

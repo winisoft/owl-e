@@ -17,7 +17,6 @@ import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
 import com.wini.owle.mapper.typing.*
 import com.wini.owle.mapper.user.*
-import com.wini.owle.mapper.user.metadata.UserDesignedMetadataMapper
 import com.wini.owle.mapper.workflows.*
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.koin.dsl.module
@@ -70,6 +69,7 @@ val daoFactoryModule = module {
     single<DaoFactory<ToolDao, Long>> { ExposedDaoFactory(ToolDao) }
     single<DaoFactory<WorkflowFolderDao, Long>> { ExposedDaoFactory(WorkflowFolderDao) }
     single<DaoFactory<WorkflowDao, Long>> { ExposedDaoFactory(WorkflowDao) }
+    single<DaoFactory<WorkflowMetadataDao, Long>> { ExposedDaoFactory(WorkflowMetadataDao) }
 }
 
 val mapperModule = module {
@@ -82,7 +82,7 @@ val mapperModule = module {
     single<TransformTargetTypesMapper> { TransformTargetTypesMapper(get()) }
     single<TagRelationsMapper> { TagRelationsMapper(get()) }
     single<WorkflowFoldersMapper> { WorkflowFoldersMapper(get()) }
-    single<WorkflowsMapper> { WorkflowsMapper(get(), get(), get()) }
+    single<WorkflowsMapper> { WorkflowsMapper(get(), get()) }
 
     single<TypeDeclarationsMapper> { TypeDeclarationsMapper(get(), get()) }
     single<TagsMapper> { TagsMapper(get(), get()) }
@@ -125,7 +125,6 @@ val mapperModule = module {
     single<ProvisionDataPointMapper> { ProvisionDataPointMapper(get()) }
     single<PackageRepoMapper> { PackageRepoMapper(get()) }
     single<ExecutionLogMapper> { ExecutionLogMapper(get(), get()) }
-    single<UserDesignedMetadataMapper> { UserDesignedMetadataMapper() }
 }
 
 

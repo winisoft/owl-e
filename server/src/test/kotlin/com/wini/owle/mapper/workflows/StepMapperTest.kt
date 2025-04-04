@@ -111,6 +111,10 @@ open class StepMapperTest {
         val workflowDao: WorkflowDao = mockk()
         val toolDao: ToolDao = mockk()
 
+        // Mock the behavior of workflowMapper.toEntity and toolMapper.toEntity
+        every { workflowMapper.toEntity(any()) } returns workflowDao
+        every { toolMapper.toEntity(any()) } returns toolDao
+        
         // Set up mocks for finding existing entity
         mockkObject(StepDao)
         every { StepDao.findById(42L) } returns existingEntity
@@ -177,6 +181,10 @@ open class StepMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val workflowDao: WorkflowDao = mockk()
         val toolDao: ToolDao = mockk()
+
+        // Mock the behavior of workflowMapper.toEntity and toolMapper.toEntity
+        every { workflowMapper.toEntity(any()) } returns workflowDao
+        every { toolMapper.toEntity(any()) } returns toolDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

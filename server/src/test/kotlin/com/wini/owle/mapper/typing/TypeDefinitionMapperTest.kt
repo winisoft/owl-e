@@ -90,6 +90,9 @@ open class TypeDefinitionMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val versionSpecDao: VersionSpecDao = mockk()
 
+        // Mock the behavior of versionSpecsMapper.toEntity
+        every { versionSpecsMapper.toEntity(any()) } returns versionSpecDao
+
         // Set up mocks for finding existing entity
         mockkObject(TypeDefinitionDao)
         every { TypeDefinitionDao.findById(42L) } returns existingEntity
@@ -138,6 +141,9 @@ open class TypeDefinitionMapperTest {
 
         // Mock the class's member dao types that would be returned from the mapper
         val versionSpecDao: VersionSpecDao = mockk()
+
+        // Mock the behavior of versionSpecsMapper.toEntity
+        every { versionSpecsMapper.toEntity(any()) } returns versionSpecDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

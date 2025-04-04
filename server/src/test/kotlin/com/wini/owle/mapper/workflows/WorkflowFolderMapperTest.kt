@@ -71,13 +71,16 @@ open class WorkflowFolderMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val dto = WorkflowFolderDto(id = 42L, name = "folderName", description = "description", createdAt = "2023-01-01T00:00:00", updatedAt = "2023-01-02T00:00:00")
+        val dto = WorkflowFolderDto(
+            id = 42L,
+            name = "folderName",
+            description = "description",
+            createdAt = "2023-01-01T00:00:00",
+            updatedAt = "2023-01-02T00:00:00"
+        )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<WorkflowFolderDao>(relaxed = true)
-
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(WorkflowFolderDao)
@@ -129,9 +132,6 @@ open class WorkflowFolderMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<WorkflowFolderDao>(relaxed = true)
-
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

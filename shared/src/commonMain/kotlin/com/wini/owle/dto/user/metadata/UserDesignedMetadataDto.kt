@@ -1,5 +1,6 @@
 package com.wini.owle.dto.user.metadata
 
+import com.wini.owle.dto.BaseDto
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -89,7 +90,7 @@ data class UserDesignedMetadataDto(
      * all steps are bundled by default and any step exclusions.
      */
     val sharingConfig: SharingConfigDto = SharingConfigDto()
-) {
+): BaseDto {
 
     companion object {
         val jsonConfig = Json {

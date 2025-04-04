@@ -97,6 +97,10 @@ open class WorkflowJunctionMapperTest {
         val workflowDao: WorkflowDao = mockk()
         val inquisitionDao: InquisitionDao = mockk()
 
+        every { stepsMapper.toEntity(any<StepDto>()) } returns stepDao
+        every { workflowsMapper.toEntity(any<WorkflowDto>()) } returns workflowDao
+        every { inquisitionsMapper.toEntity(any<InquisitionDto>()) } returns inquisitionDao
+
         // Set up mocks for finding existing entity
         mockkObject(WorkflowJunctionDao)
         every { WorkflowJunctionDao.findById(42L) } returns existingEntity
@@ -147,6 +151,10 @@ open class WorkflowJunctionMapperTest {
         val stepDao: StepDao = mockk()
         val workflowDao: WorkflowDao = mockk()
         val inquisitionDao: InquisitionDao = mockk()
+
+        every { stepsMapper.toEntity(any<StepDto>()) } returns stepDao
+        every { workflowsMapper.toEntity(any<WorkflowDto>()) } returns workflowDao
+        every { inquisitionsMapper.toEntity(any<InquisitionDto>()) } returns inquisitionDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

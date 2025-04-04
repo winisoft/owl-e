@@ -96,7 +96,6 @@ object DtoTestInstanceFactory {
             description = description,
             pythonVersion = pythonVersion,
             parentFolder = parentFolder,
-            metadata = metadata,
             createdAt = createdAt,
             updatedAt = updatedAt
         )
@@ -450,7 +449,7 @@ object DtoTestInstanceFactory {
         id: Long = 1L,
         step: StepDto = stepDto(),
         toolParam: ToolParamDto = toolParamDto(),
-        dataPoints: List<ProvisionDataPointDto> = emptyList()
+        dataPoints: List<DataPointDto> = emptyList()
     ) : ProvisionDto {
         return ProvisionDto(
             id = id,

@@ -1,61 +1,26 @@
 package com.wini.owle.repo.transforms
 
+import com.wini.owle.TestHelper
 import com.wini.owle.entity.environs.VersionSpecDao
 import com.wini.owle.entity.transforms.TransformationDao
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.typing.TypeDefinitionDao
+import com.wini.owle.repo.OwleRepoImplTest
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+
 open class TransformArgTargetTypeRepositoryTest {
 
-//    override val implicatedTables: List<IdTable<*>>
-//        get() = listOf(VersionSpecs, Transformations, TypeDeclarations, TypeDefinitions)
-//
-//    override val testModule: Module
-//        get() = module {
-//
-//        }
-//
-//    override fun getInstance(): TransformTargetTypeDao {
-//        return transformTargetTypeDao()
-//    }
-//
-//    override fun getList(): List<TransformTargetTypeDao> {
-//        return listOf(transformTargetTypeDao(), transformTargetTypeDao())
-//    }
-//
-//    override fun makeEntityID(id: CompositeID): EntityID<CompositeID> {
-//        return EntityID(id, TransformTargetTypes)
-//    }
-//
-//    override fun getRepo(): OwleRepo<CompositeID, TransformTargetTypeDao> {
-//        return TransformTargetTypeRepository()
-//    }
-//
-//    override fun modifyEntities(entities: List<TransformTargetTypeDao>): List<TransformTargetTypeDao> {
-//        return transaction {
-//            entities.apply {
-//                get(0).apply {
-//                    this.transformation = transformationDao()
-//                }
-//                get(1).apply {
-//                    this.transformation = transformationDao()
-//                }
-//            }
-//        }
-//    }
-//
-//    override fun modifyEntity(entity: TransformTargetTypeDao): TransformTargetTypeDao {
-//        return transaction {
-//            entity.apply {
-//                this.transformation = transformationDao()
-//            }
-//        }
-//    }
+    @BeforeEach
+    fun setUp() {
+        TestHelper.connectToTestDb()
+        TestHelper.refreshTestDbData(TestHelper.ImplicatedTables.TransformsModule.TransformTargetType)
+    }
 
     @Test
     @DisplayName("Transformation to TypeDeclaration Relationship")

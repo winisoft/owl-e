@@ -150,6 +150,7 @@ open class ExecutionLogMapperTest {
 
         // Mock the class's member dao types that would be returned from the mapper
         val stepExecutionDao: StepExecutionDao = mockk()
+        every { stepExecutionsMapper.toEntity(any<StepExecutionDto>()) } returns stepExecutionDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

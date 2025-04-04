@@ -34,7 +34,14 @@ open class PhaseMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val dto = PhaseDto(id = 99L, workflow = mockk(), parentPhase = null, name = "phaseName", description = "description", displayOrder = 1)
+        val dto = PhaseDto(
+            id = 99L,
+            workflow = mockk(),
+            parentPhase = null,
+            name = "phaseName",
+            description = "description",
+            displayOrder = 1
+        )
 
         // Mock the behavior of findById to return null (not found)
         mockkObject(PhaseDao)

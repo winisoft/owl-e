@@ -89,6 +89,9 @@ open class TypeVariancesMapperTest {
         val varianceCardinality: VarianceCardinality = mockk()
         val typeVariableDeclaration: TypeDeclarationDao = mockk()
 
+        // Mock the behavior of typeDeclarationsMapper.toEntity
+        every { typeDeclarationsMapper.toEntity(any()) } returns typeVariableDeclaration
+
         // Set up mocks for finding existing entity
         mockkObject(TypeVarianceDao)
         every { TypeVarianceDao.findById(42L) } returns existingEntity
@@ -132,6 +135,9 @@ open class TypeVariancesMapperTest {
 
         // Mock the class's member dao types that would be returned from the mapper
         val typeVariableDeclaration: TypeDeclarationDao = mockk()
+
+        // Mock the behavior of typeDeclarationsMapper.toEntity
+        every { typeDeclarationsMapper.toEntity(any()) } returns typeVariableDeclaration
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

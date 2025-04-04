@@ -1,6 +1,7 @@
 package com.wini.owle.entity.workflows
 
 import com.wini.owle.entity.WorkflowFolders
+import com.wini.owle.entity.WorkflowMetadata
 import com.wini.owle.entity.Workflows
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
@@ -30,11 +31,6 @@ open class WorkflowDao(id: EntityID<Long>) : LongEntity(id) {
     var pythonVersion by Workflows.pythonVersion
 
     /**
-     * JSON field for storing additional metadata related to the workflow.
-     */
-    var metadata by Workflows.metadata
-
-    /**
      * Timestamp for when the workflow was created.
      */
     var createdAt by Workflows.createdAt
@@ -53,4 +49,5 @@ open class WorkflowDao(id: EntityID<Long>) : LongEntity(id) {
      * References the folder in which this workflow is stored.
      */
     var parentFolder by WorkflowFolderDao optionalReferencedOn Workflows.parentFolder
+
 }

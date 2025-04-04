@@ -1,6 +1,5 @@
 package com.wini.owle.mapper
 
-
 import com.wini.owle.mapper.environs.PackageMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapperTest
 import com.wini.owle.mapper.environs.VersionSpecsMapperTest
@@ -9,7 +8,6 @@ import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
 import com.wini.owle.mapper.typing.*
 import com.wini.owle.mapper.user.PaymentMethodMapperTest
-import com.wini.owle.mapper.user.TagRelationsMapperTest
 import com.wini.owle.mapper.user.TagsMapperTest
 import com.wini.owle.mapper.user.UserMapperTest
 import com.wini.owle.mapper.workflows.*
@@ -177,10 +175,6 @@ open class MapperTests {
         @Nested
         @DisplayName("TagMapper")
         inner class TagTest: TagsMapperTest()
-
-        @Nested
-        @DisplayName("TagRelationsMapper")
-        inner class TagRelationsTest: TagRelationsMapperTest()
 
         @Nested
         @DisplayName("UserMapper")

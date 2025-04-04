@@ -3,7 +3,6 @@ package com.wini.owle.mapper.steps
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.steps.RevisionDto
 import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.steps.RevisionDao
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.entity.workflows.StepDao
@@ -11,10 +10,11 @@ import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.workflows.DataPointsMapper
 import com.wini.owle.mapper.workflows.StepsMapper
 import io.mockk.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.Test
-import kotlin.test.assertEquals
+
 
 open class RevisionMapperTest {
 
@@ -82,6 +82,9 @@ open class RevisionMapperTest {
         val dataPointDao: DataPointDao = mockk()
         val stepDao: StepDao = mockk()
 
+        every { dataPointMapper.toEntity(any<DataPointDto>()) } returns dataPointDao
+        every { stepMapper.toEntity(any<StepDto>()) } returns stepDao
+
         // Set up mocks for finding existing entity
         mockkObject(RevisionDao)
         every { RevisionDao.findById(42L) } returns existingEntity
@@ -122,6 +125,9 @@ open class RevisionMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val dataPointDao: DataPointDao = mockk()
         val stepDao: StepDao = mockk()
+
+        every { dataPointMapper.toEntity(any<DataPointDto>()) } returns dataPointDao
+        every { stepMapper.toEntity(any<StepDto>()) } returns stepDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

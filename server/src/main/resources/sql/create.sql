@@ -116,6 +116,48 @@ CREATE TABLE workflows (
   FOREIGN KEY(parentFolderId) REFERENCES workflow_folders(id)
 );
 
+-- Main metadata table
+CREATE TABLE workflow_metadata (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    workflow_id BIGINT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    version VARCHAR(20) NOT NULL DEFAULT '1.0.0',
+    copyright_information TEXT,
+    contact_information TEXT,
+    third_party_licenses TEXT,
+    discretion_advised_content BOOLEAN NOT NULL DEFAULT FALSE,
+    commercial_usage ENUM('PERSONAL_NON_PROFIT', 'PERSONAL_PROFIT', 'CORPORATION') NOT NULL DEFAULT 'PERSONAL_NON_PROFIT',
+    credit_notation ENUM('REQUIRED', 'UNNECESSARY') NOT NULL DEFAULT 'REQUIRED',
+    allow_redistribution BOOLEAN NOT NULL DEFAULT FALSE,
+    modification ENUM('PROHIBITED', 'ALLOW_MODIFICATION', 'ALLOW_MODIFICATION_REDISTRIBUTION') NOT NULL DEFAULT 'PROHIBITED',
+    distribution_version VARCHAR(20) NOT NULL DEFAULT '1.0.0',
+    distribution_accepted_at DATETIME NOT NULL,
+    distribution_updated_at DATETIME NOT NULL,
+
+    FOREIGN KEY (workflow_id) REFERENCES workflows(id)
+);
+
+-- Contributors join table
+CREATE TABLE workflow_metadata_contributors (
+    metadata_id BIGINT NOT NULL,
+    contributor_user_id BIGINT NOT NULL,
+
+    PRIMARY KEY (metadata_id, contributor_user_id),
+    FOREIGN KEY (metadata_id) REFERENCES workflow_metadata(id) ON DELETE CASCADE,
+    FOREIGN KEY (contributor_user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Step exclusions join table
+CREATE TABLE metadata_step_exclusions (
+    metadata_id BIGINT NOT NULL,
+    excluded_step_id BIGINT NOT NULL,
+
+    PRIMARY KEY (metadata_id, excluded_step_id),
+    FOREIGN KEY (metadata_id) REFERENCES workflow_metadata(id) ON DELETE CASCADE,
+    FOREIGN KEY (excluded_step_id) REFERENCES steps(id) ON DELETE CASCADE
+);
+
+
 CREATE TABLE tools (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(512) NOT NULL,

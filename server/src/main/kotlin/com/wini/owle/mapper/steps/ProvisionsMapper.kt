@@ -6,6 +6,7 @@ import com.wini.owle.entity.steps.ProvisionDao
 import com.wini.owle.entity.steps.ProvisionDataPointDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
+import com.wini.owle.mapper.workflows.DataPointsMapper
 import com.wini.owle.mapper.workflows.StepsMapper
 import com.wini.owle.mapper.workflows.ToolParamsMapper
 
@@ -14,7 +15,7 @@ class ProvisionsMapper(
     private val daoFactory: DaoFactory<ProvisionDao, Long>,
     private val stepsMapper: StepsMapper,
     private val toolParamsMapper: ToolParamsMapper,
-    private val provisionDataPointMapper: ProvisionDataPointMapper
+    private val dataPointMapper: DataPointsMapper
 ): DbMapper<ProvisionDto, ProvisionDao>() {
 
 
@@ -37,9 +38,7 @@ class ProvisionsMapper(
             id = entity.id.value,
             step = stepsMapper.toDto(entity.step),
             toolParam = toolParamsMapper.toDto(entity.toolParam),
-            dataPoints = ProvisionDataPointDao
-                .find { ProvisionDataPoints.provision eq entity.id }
-                .map { provisionDataPointMapper.toDto(it) }
+            dataPoints = entity.dataPoint.map { dataPointMapper.toDto(it) }
         )
     }
 }

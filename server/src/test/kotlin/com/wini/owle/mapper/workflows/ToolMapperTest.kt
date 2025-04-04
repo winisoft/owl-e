@@ -101,6 +101,9 @@ open class ToolMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val typeDeclarationDao: TypeDeclarationDao = mockk()
 
+        // Mock the behavior of typeDeclarationMapper.toEntity
+        every { typeDeclarationMapper.toEntity(any()) } returns typeDeclarationDao
+
         // Set up mocks for finding existing entity
         mockkObject(ToolDao)
         every { ToolDao.findById(42L) } returns existingEntity
@@ -154,6 +157,9 @@ open class ToolMapperTest {
 
         // Mock the class's member dao types that would be returned from the mapper
         val typeDeclarationDao: TypeDeclarationDao = mockk()
+
+        // Mock the behavior of typeDeclarationMapper.toEntity
+        every { typeDeclarationMapper.toEntity(any()) } returns typeDeclarationDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

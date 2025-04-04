@@ -105,6 +105,8 @@ open class InquisitionMapperTest {
         val stepDao: StepDao = mockk()
         val dataPointDao: DataPointDao = mockk()
         val onMetWorkflowStepDao: StepDao = mockk()
+        every { stepsMapper.toEntity(any<StepDto>()) }.returnsMany(stepDao, onMetWorkflowStepDao)
+        every { dataPointsMapper.toEntity(any<DataPointDto>()) } returns dataPointDao
 
         // Set up mocks for finding existing entity
         mockkObject(InquisitionDao)
@@ -167,6 +169,8 @@ open class InquisitionMapperTest {
         val dataPointDao: DataPointDao = mockk()
         val onMetWorkflowStepDao: StepDao = mockk()
 
+        every { stepsMapper.toEntity(any<StepDto>()) }.returnsMany(stepDao, onMetWorkflowStepDao)
+        every { dataPointsMapper.toEntity(any<DataPointDto>()) } returns dataPointDao
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 

@@ -1,33 +1,19 @@
 package com.wini.owle
 
-import com.wini.owle.dto.*
-import com.wini.owle.dto.environs.PackageDto
-import com.wini.owle.dto.environs.PackageRepoDto
-import com.wini.owle.dto.environs.VersionSpecDto
-import com.wini.owle.dto.runs.*
-import com.wini.owle.dto.steps.*
-import com.wini.owle.dto.typing.*
-import com.wini.owle.dto.user.PaymentMethodDto
-import com.wini.owle.dto.user.TagDto
-import com.wini.owle.dto.user.TagRelationDto
-import com.wini.owle.dto.user.UserDto
-import com.wini.owle.dto.workflows.*
 import com.wini.owle.mapper.MapperTests
+import com.wini.owle.repo.DatabaseIntegrationTests
 import com.wini.owle.repo.RepositoryTest
-import com.wini.owle.serialization.polymorphicJson
 import com.wini.owle.services.ServiceTest
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.TestFactory
-import kotlin.test.assertEquals
 
 
 class OwleTest {
 
+
     @Nested
     @DisplayName("Repository Tests")
-    inner class RepoTests: RepositoryTest()
+    inner class RepositoryTests: RepositoryTest()
 
 //    @Nested
 //    @DisplayName("Dto Serialization Tests")

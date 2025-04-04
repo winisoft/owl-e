@@ -1,6 +1,9 @@
 package com.wini.owle.entity
 
 import com.wini.owle.dto.runs.ResourceUsageDto
+import com.wini.owle.entity.AppliedTransformArgs.reference
+import com.wini.owle.entity.ProvisionDataPoints.dataPoint
+import com.wini.owle.entity.ProvisionDataPoints.provision
 import com.wini.owle.entity.environs.PackageRepoType
 import com.wini.owle.entity.runs.ComparisonOperator
 import com.wini.owle.entity.runs.ExecutionStatus
@@ -10,6 +13,9 @@ import com.wini.owle.entity.transforms.TransformOccurrence
 import com.wini.owle.entity.typing.VarianceCardinality
 import com.wini.owle.entity.user.CardBrand
 import com.wini.owle.entity.user.SubscriptionStatus
+import com.wini.owle.entity.workflows.AuthorshipCredit
+import com.wini.owle.entity.workflows.CommercialUse
+import com.wini.owle.entity.workflows.ModificationTerms
 import com.wini.owle.entity.workflows.StoreMethod
 import com.wini.owle.models.metadata.UserDesignedMetadata
 import kotlinx.serialization.json.Json
@@ -101,6 +107,37 @@ object Workflows : LongIdTable("workflows") {
     val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
     val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
 }
+
+object WorkflowMetadata : LongIdTable("workflow_metadata") {
+    val workflow = reference("workflow_id", Workflows) // assumes Workflows is another LongIdTable
+    val name = varchar("name", 255)
+    val version = varchar("version", 20).default("1.0.0")
+    val copyrightInformation = text("copyright_information").nullable()
+    val contactInformation = text("contact_information").nullable()
+    val thirdPartyLicenses = text("third_party_licenses").nullable()
+    val discretionAdvisedContent = bool("discretion_advised_content").default(false)
+    val commercialUsage = enumerationByName("commercial_usage", 32, CommercialUse::class)
+    val creditNotation = enumerationByName("credit_notation", 32, AuthorshipCredit::class)
+    val allowRedistribution = bool("allow_redistribution").default(false)
+    val modification = enumerationByName("modification", 64, ModificationTerms::class)
+    val distributionVersion = varchar("distribution_version", 20).default("1.0.0")
+    val distributionAcceptedAt = datetime("distribution_accepted_at")
+    val distributionUpdatedAt = datetime("distribution_updated_at")
+}
+
+object WorkflowMetadataContributors : CompositeIdTable("workflow_metadata_contributors") {
+    val metadata = reference("metadata_id", WorkflowMetadata)
+    val contributor = reference("contributor_user_id", Users)
+    override val primaryKey = PrimaryKey(metadata, contributor)
+}
+
+object MetadataStepExclusions : CompositeIdTable("metadata_step_exclusions") {
+    val metadata = reference("metadata_id", WorkflowMetadata)
+    val step = reference("excluded_step_id", Steps)
+    override val primaryKey = PrimaryKey(metadata, step)
+}
+
+
 
 object Tools : LongIdTable("tools") {
     val name = varchar("name", 512)

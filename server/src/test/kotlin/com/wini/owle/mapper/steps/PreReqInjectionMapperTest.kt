@@ -105,6 +105,9 @@ open class PreReqInjectionMapperTest {
         val sourceDataPointDao: DataPointDao = mockk()
         val injectedDataPointDao: DataPointDao = mockk()
 
+        every { workflowJunctionsMapper.toEntity(any<WorkflowJunctionDto>()) } returns workflowJunctionDao
+        every { dataPointsMapper.toEntity(any<DataPointDto>()) }.returnsMany(sourceDataPointDao, injectedDataPointDao)
+
         // Set up mocks for finding existing entity
         mockkObject(PreReqInjectionDao)
         every { PreReqInjectionDao.findById(42L) } returns existingEntity
@@ -165,6 +168,9 @@ open class PreReqInjectionMapperTest {
         val workflowJunctionDao: WorkflowJunctionDao = mockk()
         val sourceDataPointDao: DataPointDao = mockk()
         val injectedDataPointDao: DataPointDao = mockk()
+
+        every { workflowJunctionsMapper.toEntity(any<WorkflowJunctionDto>()) } returns workflowJunctionDao
+        every { dataPointsMapper.toEntity(any<DataPointDto>()) }.returnsMany(sourceDataPointDao, injectedDataPointDao)
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

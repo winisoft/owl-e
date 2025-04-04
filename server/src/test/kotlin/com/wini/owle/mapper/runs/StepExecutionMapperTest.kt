@@ -94,8 +94,8 @@ open class StepExecutionMapperTest {
             id = 42L,
             workflowExecution = mockk(),
             step = mockk(),
-            startedAt = LocalDateTime.parse("2023-10-01T12:00:00"),
-            completedAt = LocalDateTime.parse("2023-10-01T13:00:00"),
+            startedAt = LocalDateTime.parse("2023-10-01T10:00:00"),
+            completedAt = LocalDateTime.parse("2023-10-01T11:00:00"),
             status = mockk()
         )
 
@@ -105,6 +105,10 @@ open class StepExecutionMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val workflowExecutionDao: WorkflowExecutionDao = mockk()
         val stepDao: StepDao = mockk()
+
+        // Mock the dependency mappers
+        every { workflowExecutionsMapper.toEntity(any()) } returns workflowExecutionDao
+        every { stepMapper.toEntity(any()) } returns stepDao
 
         // Set up mocks for finding existing entity
         mockkObject(StepExecutionDao)
@@ -154,8 +158,8 @@ open class StepExecutionMapperTest {
             id = 0L,
             workflowExecution = mockk(),
             step = mockk(),
-            startedAt = LocalDateTime.parse("2023-10-01T14:00:00"),
-            completedAt = LocalDateTime.parse("2023-10-01T15:00:00"),
+            startedAt = LocalDateTime.parse("2023-10-01T12:00:00"),
+            completedAt = LocalDateTime.parse("2023-10-01T13:00:00"),
             status = mockk()
         )
 
@@ -165,6 +169,10 @@ open class StepExecutionMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val workflowExecutionDao: WorkflowExecutionDao = mockk()
         val stepDao: StepDao = mockk()
+
+        // Mock the dependency mappers
+        every { workflowExecutionsMapper.toEntity(any()) } returns workflowExecutionDao
+        every { stepMapper.toEntity(any()) } returns stepDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

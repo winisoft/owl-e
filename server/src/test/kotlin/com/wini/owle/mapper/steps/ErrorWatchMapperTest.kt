@@ -88,6 +88,7 @@ open class ErrorWatchMapperTest {
         // Set up mocks for finding existing entity
         mockkObject(ErrorWatchDao)
         every { ErrorWatchDao.findById(42L) } returns existingEntity
+        every { stepsMapper.toEntity(any()) }.returnsMany(stepDao, onMetStepDao)
 
         // Capture the property updates
         val stepSlot = slot<StepDao>()
@@ -121,7 +122,12 @@ open class ErrorWatchMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = ErrorWatchDto(id = 0L, step = mockk(), errorType = "newError", triggerStep = mockk())
+        val dto = ErrorWatchDto(
+            id = 0L,
+            step = mockk(),
+            errorType = "newError",
+            triggerStep = mockk()
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<ErrorWatchDao>(relaxed = true)
@@ -129,6 +135,7 @@ open class ErrorWatchMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val stepDao: StepDao = mockk()
         val onMetStepDao: StepDao = mockk()
+        every { stepsMapper.toEntity(any()) }.returnsMany(stepDao, onMetStepDao)
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

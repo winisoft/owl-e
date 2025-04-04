@@ -1,5 +1,6 @@
 package com.wini.owle.mapper.user
 
+import com.wini.owle.dto.user.CardBrandDto
 import com.wini.owle.dto.user.PaymentMethodDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.entity.runs.WorkflowExecutionDao
@@ -108,6 +109,13 @@ open class PaymentMethodMapperTest {
         val userDao: UserDao = mockk()
         val cardBrand: CardBrand = mockk()
 
+        // Mock the behavior of userMapper.toEntity
+        every { userMapper.toEntity(any()) } returns userDao
+        
+        // Mock the behavior of CardBrand.fromDto
+        mockkObject(CardBrand.Companion)
+        every { CardBrand.fromDto(any()) } returns cardBrand
+        
         // Set up mocks for finding existing entity
         mockkObject(PaymentMethodDao)
         every { PaymentMethodDao.findById(42L) } returns existingEntity
@@ -155,6 +163,7 @@ open class PaymentMethodMapperTest {
         assertEquals(existingEntity, result)
 
         unmockkObject(PaymentMethodDao)
+        unmockkObject(CardBrand.Companion)
     }
 
     @Test
@@ -177,6 +186,13 @@ open class PaymentMethodMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val userDao: UserDao = mockk()
         val cardBrand: CardBrand = mockk()
+
+        // Mock the behavior of userMapper.toEntity
+        every { userMapper.toEntity(any()) } returns userDao
+        
+        // Mock the behavior of CardBrand.fromDto
+        mockkObject(CardBrand.Companion)
+        every { CardBrand.fromDto(any()) } returns cardBrand
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -224,5 +240,7 @@ open class PaymentMethodMapperTest {
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)
+        
+        unmockkObject(CardBrand.Companion)
     }
 }

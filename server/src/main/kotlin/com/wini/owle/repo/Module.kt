@@ -26,6 +26,7 @@ val repositoryModule = module {
     single<TypeSchemaRefRepository> { TypeSchemaRefRepository() }
     single<WorkflowFolderRepository> { WorkflowFolderRepository() }
     single<WorkflowRepository> { WorkflowRepository() }
+    single<WorkflowMetadataRepository> { WorkflowMetadataRepository() }
     single<ToolRepository> { ToolRepository() }
     single<ToolParamRepository> { ToolParamRepository() }
     single<PhaseRepository> { PhaseRepository() }

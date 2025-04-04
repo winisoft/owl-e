@@ -99,6 +99,9 @@ open class ToolParamMapperTest {
         val typeDeclarationDao: TypeDeclarationDao = mockk()
         val toolDao: ToolDao = mockk()
 
+        every { typeDeclarationsMapper.toEntity(any()) } returns typeDeclarationDao
+        every { toolMapper.toEntity(any()) } returns toolDao
+
         // Set up mocks for finding existing entity
         mockkObject(ToolParamDao)
         every { ToolParamDao.findById(42L) } returns existingEntity
@@ -154,6 +157,10 @@ open class ToolParamMapperTest {
         val typeDeclarationDao: TypeDeclarationDao = mockk()
         val toolDao: ToolDao = mockk()
 
+        // Mock the behavior of typeDeclarationsMapper.toEntity and toolMapper.toEntity
+        every { typeDeclarationsMapper.toEntity(any()) } returns typeDeclarationDao
+        every { toolMapper.toEntity(any()) } returns toolDao
+        
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
 

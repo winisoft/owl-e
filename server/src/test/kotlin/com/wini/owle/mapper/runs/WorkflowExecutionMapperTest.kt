@@ -108,6 +108,10 @@ open class WorkflowExecutionMapperTest {
         val workflowDao: WorkflowDao = mockk()
         val userDao: UserDao = mockk()
 
+        // Mock the behavior of dependency mappers
+        every { workflowsMapper.toEntity(any()) } returns workflowDao
+        every { usersMapper.toEntity(any()) } returns userDao
+        
         // Set up mocks for finding existing entity
         mockkObject(WorkflowExecutionDao)
         every { WorkflowExecutionDao.findById(42L) } returns existingEntity
@@ -168,6 +172,10 @@ open class WorkflowExecutionMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val workflowDao: WorkflowDao = mockk()
         val userDao: UserDao = mockk()
+
+        // Mock the behavior of dependency mappers
+        every { workflowsMapper.toEntity(any()) } returns workflowDao
+        every { usersMapper.toEntity(any()) } returns userDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

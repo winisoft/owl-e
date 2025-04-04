@@ -40,7 +40,17 @@ open class DataPointMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val dto = DataPointDto(id = 99L, workflow = mockk(), name = "dataPointName", presetValue = "preset", storeMethod = mockk(), typeDeclaration = mockk(), description = "description", createdAt = "2023-01-01T00:00:00", updatedAt = "2023-01-01T00:00:00")
+        val dto = DataPointDto(
+            id = 99L,
+            workflow = mockk(),
+            name = "dataPointName",
+            presetValue = "preset",
+            storeMethod = mockk(),
+            typeDeclaration = mockk(),
+            description = "description",
+            createdAt = "2023-01-01T00:00:00",
+            updatedAt = "2023-01-01T00:00:00"
+        )
 
         // Mock the behavior of findById to return null (not found)
         mockkObject(DataPointDao)

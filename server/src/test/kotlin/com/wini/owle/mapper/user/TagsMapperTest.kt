@@ -84,6 +84,9 @@ open class TagsMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val userDao: UserDao = mockk()
 
+        // Mock the behavior of usersMapper.toEntity
+        every { usersMapper.toEntity(any()) } returns userDao
+
         // Set up mocks for finding existing entity
         mockkObject(TagDao)
         every { TagDao.findById(42L) } returns existingEntity
@@ -127,6 +130,9 @@ open class TagsMapperTest {
 
         // Mock the class's member dao types that would be returned from the mapper
         val userDao: UserDao = mockk()
+
+        // Mock the behavior of usersMapper.toEntity
+        every { usersMapper.toEntity(any()) } returns userDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

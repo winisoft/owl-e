@@ -89,6 +89,9 @@ open class TypeBoundMapperTest {
         val typeVariableDeclarationDao: TypeDeclarationDao = mockk()
         val boundTypeDeclarationDao: TypeDeclarationDao = mockk()
 
+        // Mock the behavior of typeDeclarationMapper.toEntity
+        every { typeDeclarationMapper.toEntity(any()) } returnsMany listOf(typeVariableDeclarationDao, boundTypeDeclarationDao)
+
         // Set up mocks for finding existing entity
         mockkObject(TypeBoundDao)
         every { TypeBoundDao.findById(42L) } returns existingEntity
@@ -133,6 +136,9 @@ open class TypeBoundMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val typeVariableDeclarationDao: TypeDeclarationDao = mockk()
         val boundTypeDeclarationDao: TypeDeclarationDao = mockk()
+
+        // Mock the behavior of typeDeclarationMapper.toEntity
+        every { typeDeclarationMapper.toEntity(any()) } returnsMany listOf(typeVariableDeclarationDao, boundTypeDeclarationDao)
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

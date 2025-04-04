@@ -1,19 +1,15 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.user.metadata.UserDesignedMetadataDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.user.metadata.UserDesignedMetadataMapper
-import com.wini.owle.models.metadata.UserDesignedMetadata
 import kotlinx.datetime.LocalDateTime
 
 
 open class WorkflowsMapper(
     private val daoFactory: DaoFactory<WorkflowDao, Long>,
-    private val userDesignedMetadataMapper: UserDesignedMetadataMapper,
     private val workflowFoldersMapper: WorkflowFoldersMapper
 ) : DbMapper<WorkflowDto, WorkflowDao>() {
 
@@ -23,7 +19,6 @@ open class WorkflowsMapper(
             description = dto.description
             pythonVersion = dto.pythonVersion
             parentFolder = dto.parentFolder?.let { workflowFoldersMapper.toEntity(it) }
-            metadata = userDesignedMetadataMapper.run { UserDesignedMetadata.mock }
             createdAt = LocalDateTime.parse(dto.createdAt)
             updatedAt = LocalDateTime.parse(dto.updatedAt)
         }
@@ -43,7 +38,6 @@ open class WorkflowsMapper(
             description = entity.description,
             pythonVersion = entity.pythonVersion,
             parentFolder = entity.parentFolder?.let { workflowFoldersMapper.toDto(it) },
-            metadata = userDesignedMetadataMapper.run { UserDesignedMetadataDto.mock },
             createdAt = DateTimeConverter.toString(entity.createdAt),
             updatedAt = DateTimeConverter.toString(entity.updatedAt)
         )

@@ -82,6 +82,9 @@ open class TypeDeclarationMapperTest {
         // Mock the class's member dao types that would be returned from the mapper
         val typeDefinitionDao: TypeDefinitionDao = mockk()
 
+        // Mock the behavior of typeDefinitionsMapper.toEntity
+        every { typeDefinitionsMapper.toEntity(any()) } returns typeDefinitionDao
+
         // Set up mocks for finding existing entity
         mockkObject(TypeDeclarationDao)
         every { TypeDeclarationDao.findById(42L) } returns existingEntity
@@ -121,6 +124,9 @@ open class TypeDeclarationMapperTest {
 
         // Mock the class's member dao types that would be returned from the mapper
         val typeDefinitionDao: TypeDefinitionDao = mockk()
+
+        // Mock the behavior of typeDefinitionsMapper.toEntity
+        every { typeDefinitionsMapper.toEntity(any()) } returns typeDefinitionDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

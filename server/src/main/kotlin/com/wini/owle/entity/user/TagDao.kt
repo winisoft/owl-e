@@ -10,6 +10,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 
+
 /**
  * Represents a tag that can be associated with workflow steps.
  * Tags help categorize or filter steps and have a many-to-many relationship with StepDao.

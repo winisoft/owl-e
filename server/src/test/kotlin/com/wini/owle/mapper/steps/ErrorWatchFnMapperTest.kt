@@ -27,7 +27,12 @@ open class ErrorWatchFnMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val dto = ErrorWatchFnDto(id = 99L, errorWatch = mockk(), functionName = "testFunction", position = 1)
+        val dto = ErrorWatchFnDto(
+            id = 99L,
+            errorWatch = mockk(),
+            functionName = "testFunction",
+            position = 1
+        )
 
         // Mock the behavior of findById to return null (not found)
         mockkObject(ErrorWatchFnDao)
@@ -84,6 +89,7 @@ open class ErrorWatchFnMapperTest {
 
         // Set up mocks for finding existing entity
         mockkObject(ErrorWatchFnDao)
+        every { errorWatchesMapper.toEntity(any<ErrorWatchDto>()) } returns errorWatchDao
         every { ErrorWatchFnDao.findById(42L) } returns existingEntity
 
         // Capture the property updates
@@ -118,13 +124,19 @@ open class ErrorWatchFnMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = ErrorWatchFnDto(id = 0L, errorWatch = mockk(), functionName = "newFunction", position = 3)
+        val dto = ErrorWatchFnDto(
+            id = 0L,
+            errorWatch = mockk(),
+            functionName = "newFunction",
+            position = 3
+        )
 
         // Mock the new entity that will be created
         val newEntity = mockk<ErrorWatchFnDao>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
         val errorWatchDao: ErrorWatchDao = mockk()
+        every { errorWatchesMapper.toEntity(any<ErrorWatchDto>()) } returns errorWatchDao
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

@@ -1,6 +1,5 @@
 package com.wini.owle.dll.typing
 
-import com.wini.owle.entity.DbLayerIntegrationTests.ImplicatedTables
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
@@ -11,11 +10,9 @@ import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.mapper.mapperModule
 import com.wini.owle.repo.repositoryModule
 import com.wini.owle.services.serviceModule
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
