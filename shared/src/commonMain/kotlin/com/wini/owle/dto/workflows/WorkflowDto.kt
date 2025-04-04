@@ -1,7 +1,6 @@
 package com.wini.owle.dto.workflows
 
 import com.wini.owle.dto.BaseDto
-import com.wini.owle.dto.user.metadata.UserDesignedMetadataDto
 import kotlinx.serialization.Serializable
 
 @Serializable

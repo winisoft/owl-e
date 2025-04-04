@@ -37,11 +37,10 @@ class TestResultsMapper(
     override fun toDto(entity: TestResultDao): TestResultDto {
         return TestResultDto(
             id = entity.id.value,
-            // Similar caution regarding recursive mapping
             testCase = testCasesMapper.toDto(entity.testCase),
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             passed = entity.passed,
-            executedAt = DateTimeConverter.toString(entity.executedAt) // Convert LocalDateTime to String
+            executedAt = DateTimeConverter.toString(entity.executedAt)
         )
     }
 }

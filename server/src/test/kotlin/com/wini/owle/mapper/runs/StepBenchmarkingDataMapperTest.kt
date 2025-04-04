@@ -1,21 +1,16 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.DecimalValue
 import com.wini.owle.dto.runs.StepBenchmarkingDataDto
 import com.wini.owle.dto.runs.StepExecutionDto
-import com.wini.owle.entity.StepExecutions
 import com.wini.owle.entity.runs.StepBenchmarkingDataDao
 import com.wini.owle.entity.runs.StepExecutionDao
-import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
-import com.wini.owle.mapper.toBigDecimal
-import com.wini.owle.mapper.toDecimalValue
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.assertThrows
 import java.math.BigDecimal
+import kotlin.test.assertEquals
 
 
 open class StepBenchmarkingDataMapperTest {
@@ -35,8 +30,7 @@ open class StepBenchmarkingDataMapperTest {
         val dto = StepBenchmarkingDataDto(
             id = 99L,
             stepExecution = mockk(),
-            executionTime = DecimalValue("100"),
-            resourceUsage = mockk()
+            executionTime = 100.123
         )
 
         // Mock the behavior of findById to return null (not found)
@@ -58,7 +52,7 @@ open class StepBenchmarkingDataMapperTest {
         val entity = mockk<StepBenchmarkingDataDao> {
             every { id.value } returns 1L
             every { stepExecution } returns mockk()
-            every { executionTime.toDecimalValue() } returns DecimalValue("100")
+            every { executionTime.toDouble() } returns 100.123
         }
 
         // Mock the behavior of stepExecutionsMapper
@@ -71,7 +65,7 @@ open class StepBenchmarkingDataMapperTest {
         // Verify the result
         assertEquals(1L, result.id)
         assertEquals(stepExecutionDto, result.stepExecution)
-        assertEquals(DecimalValue("100"), result.executionTime)
+        assertEquals(100.123, result.executionTime)
     }
 
     @Test
@@ -80,8 +74,7 @@ open class StepBenchmarkingDataMapperTest {
         val dto = StepBenchmarkingDataDto(
             id = 42L,
             stepExecution = mockk(),
-            executionTime = DecimalValue("200"),
-            resourceUsage = mockk()
+            executionTime = 200.234
         )
 
         // Mock the existing entity that will be updated
@@ -125,8 +118,7 @@ open class StepBenchmarkingDataMapperTest {
         val dto = StepBenchmarkingDataDto(
             id = 0L,
             stepExecution = mockk(),
-            executionTime = DecimalValue("300"),
-            resourceUsage = mockk()
+            executionTime = 300.345
         )
 
         // Mock the new entity that will be created

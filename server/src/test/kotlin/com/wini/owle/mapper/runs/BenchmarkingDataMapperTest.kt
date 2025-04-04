@@ -1,14 +1,11 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.DecimalValue
 import com.wini.owle.dto.runs.BenchmarkingDataDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.WorkflowExecutions
 import com.wini.owle.entity.runs.BenchmarkingDataDao
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
-import com.wini.owle.mapper.toBigDecimal
-import com.wini.owle.mapper.toDecimalValue
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,10 +28,11 @@ open class BenchmarkingDataMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
+        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
         val dto = BenchmarkingDataDto(
             id = 99L,
-            workflowExecution = mockk(),
-            totalExecutionTime = DecimalValue("100.0"),
+            workflowExecution = workflowExecutionDto,
+            totalExecutionTime = 100.012,
             totalSteps = 10,
             aiDeterminedSteps = 5,
             predeterminedSteps = 5
@@ -43,6 +41,10 @@ open class BenchmarkingDataMapperTest {
         // Mock the behavior of findById to return null (not found)
         mockkObject(BenchmarkingDataDao)
         every { BenchmarkingDataDao.findById(99L) } returns null
+        
+        // Mock the dependency mapper
+        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        every { workflowExecutionsMapper.toEntity(any()) } returns workflowExecutionDao
 
         // Verify that the exception is thrown with the correct message
         val exception = assertThrows<IllegalStateException> {
@@ -59,7 +61,7 @@ open class BenchmarkingDataMapperTest {
         val entity = mockk<BenchmarkingDataDao> {
             every { id.value } returns 1L
             every { workflowExecution } returns mockk()
-            every { totalExecutionTime.toDecimalValue() } returns DecimalValue("100")
+            every { totalExecutionTime } returns 123.456.toBigDecimal()
             every { totalSteps } returns 10
             every { aiDeterminedSteps } returns 5
             every { predeterminedSteps } returns 5
@@ -75,7 +77,7 @@ open class BenchmarkingDataMapperTest {
         // Verify the result
         assertEquals(1L, result.id)
         assertEquals(workflowExecutionDto, result.workflowExecution)
-        assertEquals(DecimalValue("100.0"), result.totalExecutionTime)
+        assertEquals(123.456, result.totalExecutionTime)
         assertEquals(10, result.totalSteps)
         assertEquals(5, result.aiDeterminedSteps)
         assertEquals(5, result.predeterminedSteps)
@@ -84,10 +86,11 @@ open class BenchmarkingDataMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
+        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
         val dto = BenchmarkingDataDto(
             id = 42L,
-            workflowExecution = mockk(),
-            totalExecutionTime = DecimalValue("200"),
+            workflowExecution = workflowExecutionDto,
+            totalExecutionTime = 200.456,
             totalSteps = 20,
             aiDeterminedSteps = 10,
             predeterminedSteps = 10
@@ -102,6 +105,9 @@ open class BenchmarkingDataMapperTest {
         // Set up mocks for finding existing entity
         mockkObject(BenchmarkingDataDao)
         every { BenchmarkingDataDao.findById(42L) } returns existingEntity
+        
+        // Set up the workflowExecutionsMapper to return the mocked workflowExecutionDao
+        every { workflowExecutionsMapper.toEntity(workflowExecutionDto) } returns workflowExecutionDao
 
         // Capture the property updates
         val workflowExecutionSlot = slot<WorkflowExecutionDao>()
@@ -143,10 +149,11 @@ open class BenchmarkingDataMapperTest {
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
+        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
         val dto = BenchmarkingDataDto(
             id = 0L,
-            workflowExecution = mockk(),
-            totalExecutionTime = DecimalValue("300"),
+            workflowExecution = workflowExecutionDto,
+            totalExecutionTime = 300.987,
             totalSteps = 30,
             aiDeterminedSteps = 15,
             predeterminedSteps = 15
@@ -160,6 +167,9 @@ open class BenchmarkingDataMapperTest {
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
+        
+        // Set up the workflowExecutionsMapper to return the mocked workflowExecutionDao
+        every { workflowExecutionsMapper.toEntity(workflowExecutionDto) } returns workflowExecutionDao
 
         // Capture property assignments
         val workflowExecutionSlot = slot<WorkflowExecutionDao>()

@@ -6,11 +6,8 @@ import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.transforms.*
 import com.wini.owle.dto.typing.*
 import com.wini.owle.dto.user.*
-import com.wini.owle.dto.user.metadata.UserDesignedMetadataDto
 import com.wini.owle.dto.workflows.*
-import com.wini.owle.mapper.toDecimalValue
-import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
+import com.wini.owle.mapper.transforms.*
 
 
 @Suppress("UNCHECKED_CAST")
@@ -80,13 +77,52 @@ object DtoTestInstanceFactory {
         )
     }
 
+    fun workflowMetadataDto(
+        id: Long = 1L,
+        name: String = "John Arbuckle",
+        version: String = "1.0.0",
+        contributors: List<UserDto> = emptyList(),
+        //authors = listOf("Garfield Cat", "Nermal"),
+        copyrightInformation:String = "2025",
+        contactInformation: String = "lasagnalonely@email.com",
+        thirdPartyLicenses: String = "Ok",
+        distributionVersion: String = "1.0.0",
+        distributionAcceptedAt: String = "",
+        distributionUpdatedAt: String = "",
+        discretionAdvisedContent: Boolean = true,
+        commercialUsage: CommercialUseDto = CommercialUseDto.Corporation,
+        authorshipCredit: AuthorshipCreditDto = AuthorshipCreditDto.Required,
+        allowRedistribution: Boolean = false,
+        modification: ModificationTermsDto = ModificationTermsDto.Prohibited,
+        excludedSteps: List<StepDto> = emptyList()
+    ): WorkflowMetadataDto {
+        return WorkflowMetadataDto(
+            id = id,
+            name = name,
+            version = version,
+            contributors = contributors,
+            copyrightInformation = copyrightInformation,
+            contactInformation = contactInformation,
+            thirdPartyLicenses = thirdPartyLicenses,
+            discretionAdvisedContent = discretionAdvisedContent,
+            commercialUsage = commercialUsage,
+            creditNotation = authorshipCredit,
+            allowRedistribution = allowRedistribution,
+            modification = modification,
+            distributionVersion = distributionVersion,
+            distributionAcceptedAt = distributionAcceptedAt,
+            distributionUpdatedAt = distributionUpdatedAt,
+            excludedSteps = excludedSteps
+        )
+    }
+
     fun workflowDto(
         id: Long = 1L,
         name: String = "Example Workflow",
         description: String? = "A sample workflow description",
         pythonVersion: String = "3.9",
         parentFolder: WorkflowFolderDto? = null,
-        metadata: UserDesignedMetadataDto = UserDesignedMetadataDto.mock,
+        metadata: WorkflowMetadataDto = workflowMetadataDto(),
         createdAt: String = "2024-12-20T15:00:00",
         updatedAt: String = "2024-12-21T15:00:00"
     ): WorkflowDto {
@@ -257,8 +293,8 @@ object DtoTestInstanceFactory {
         id: Long = 1L,
         workflow: WorkflowDto = workflowDto(),
         user: UserDto = userDto(),
-        startedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
-        completedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
+        startedAt: String = "2024-12-21T10:00:00",
+        completedAt: String = "2024-12-21T10:00:00",
         status: ExecutionStatusDto = ExecutionStatusDto.Failed,
         stepExecutions: List<StepExecutionDto> = emptyList()
     ) : WorkflowExecutionDto {
@@ -276,7 +312,7 @@ object DtoTestInstanceFactory {
     fun benchmarkingDataDto(
         id: Long = 1L,
         workflowExecution: WorkflowExecutionDto = workflowExecutionDto(),
-        totalExecutionTime: DecimalValue = BigDecimal.valueOf(123.45).toDecimalValue(),
+        totalExecutionTime: Double = 123.45,
         totalSteps: Int = 35,
         aiDeterminedSteps: Int = 4,
         preDeterminedSteps: Int = 8
@@ -338,14 +374,12 @@ object DtoTestInstanceFactory {
     fun stepBenchmarkingDataDto(
         id: Long = 0L,
         stepExecution: StepExecutionDto = stepExecutionDto(),
-        executionTime: DecimalValue = BigDecimal.valueOf(123.45).toDecimalValue(),
-        resourceUsage: ResourceUsageDto = ResourceUsageDto()
+        executionTime: Double = 123.45
     ) : StepBenchmarkingDataDto {
         return StepBenchmarkingDataDto(
             id = id,
             stepExecution = stepExecution,
-            executionTime = executionTime,
-            resourceUsage = resourceUsage
+            executionTime = executionTime
         )
     }
 
@@ -353,8 +387,8 @@ object DtoTestInstanceFactory {
         id: Long = 1L,
         workflowExecution: WorkflowExecutionDto = workflowExecutionDto(),
         step: StepDto = stepDto(),
-        startedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
-        completedAt: LocalDateTime = LocalDateTime.parse("2024-12-21T10:00:00"),
+        startedAt: String = "2024-12-21T10:00:00",
+        completedAt: String = "2024-12-21T10:00:00",
         status: ExecutionStatusDto = ExecutionStatusDto.Failed
     ) : StepExecutionDto {
         return StepExecutionDto(
@@ -731,6 +765,11 @@ object DtoTestInstanceFactory {
             TestExpectedOutcomeDto::class.java -> testExpectedOutcomeDto() as T
             TestResultDto::class.java -> testResultDto() as T
             PackageDto::class.java -> packageDto() as T
+            WorkflowExecutionDto::class.java -> workflowExecutionDto() as T
+            AppliedTransformArgDto::class.java -> appliedTransformArgDto() as T
+            AppliedTransformDto::class.java -> appliedTransformDto() as T
+            TransformationDto::class.java -> transformationDto() as T
+            TransformationArgDto::class.java -> transformationArgDto() as T
             else -> throw IllegalArgumentException("Unsupported DTO type: ${dtoClass.simpleName}")
         }
     }

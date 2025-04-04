@@ -46,7 +46,6 @@ class WorkflowMetadataMapper(
             distributionVersion = dto.distributionVersion
             distributionAcceptedAt = DateTimeConverter.fromString(dto.distributionAcceptedAt)
             distributionUpdatedAt = DateTimeConverter.fromString(dto.distributionUpdatedAt)
-            workflow = workflowsMapper.toEntity(dto.workflow)
         }
 
         return if (dto.id == 0L)
@@ -84,7 +83,6 @@ class WorkflowMetadataMapper(
             distributionVersion = entity.distributionVersion,
             distributionAcceptedAt = DateTimeConverter.toString(entity.distributionAcceptedAt),
             distributionUpdatedAt = DateTimeConverter.toString(entity.distributionUpdatedAt),
-            workflow = workflowsMapper.toDto(entity.workflow),
             contributors = emptyList(),
             excludedSteps = emptyList()
         )

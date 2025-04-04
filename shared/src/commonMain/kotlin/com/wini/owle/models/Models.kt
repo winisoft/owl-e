@@ -1,6 +1,5 @@
 package com.wini.owle.models
 
-import com.wini.owle.dto.DecimalValue
 import com.wini.owle.dto.environs.PackageRepoTypeDto
 import com.wini.owle.dto.runs.*
 import com.wini.owle.dto.transforms.TransformOccurrenceDto
@@ -215,7 +214,7 @@ data class ToolPackageDependency(
 data class BenchmarkingData(
     val id: Long,
     val workflowExecution: WorkflowExecution,
-    val totalExecutionTime: DecimalValue,
+    val totalExecutionTime: Double,
     val totalSteps: Int,
     val aiDeterminedSteps: Int,
     val predeterminedSteps: Int
@@ -234,8 +233,7 @@ data class ExecutionLog(
 data class StepBenchmarkingData(
     val id: Long,
     val stepExecution: StepExecution,
-    val executionTime: DecimalValue,
-    val resourceUsage: ResourceUsageDto?
+    val executionTime: Double
 )
 
 @Serializable

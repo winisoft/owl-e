@@ -39,8 +39,8 @@ open class WorkflowExecutionMapperTest {
             id = 99L,
             workflow = mockk(),
             user = mockk(),
-            startedAt = LocalDateTime.parse("2023-10-01T10:00:00"),
-            completedAt = LocalDateTime.parse("2023-10-01T11:00:00"),
+            startedAt = "2023-10-01T10:00:00",
+            completedAt = "2023-10-01T11:00:00",
             status = mockk(),
             stepExecutions = emptyList()
         )
@@ -83,8 +83,8 @@ open class WorkflowExecutionMapperTest {
         assertEquals(1L, result.id)
         assertEquals(workflowDto, result.workflow)
         assertEquals(userDto, result.user)
-        assertEquals(LocalDateTime.parse("2023-10-01T10:00:00"), result.startedAt)
-        assertEquals(LocalDateTime.parse("2023-10-01T11:00:00"), result.completedAt)
+        assertEquals("2023-10-01T10:00:00", result.startedAt)
+        assertEquals("2023-10-01T11:00:00", result.completedAt)
         assertEquals(entity.status.toDto(), result.status)
     }
 
@@ -95,8 +95,8 @@ open class WorkflowExecutionMapperTest {
             id = 42L,
             workflow = mockk(),
             user = mockk(),
-            startedAt = LocalDateTime.parse("2023-10-01T12:00:00"),
-            completedAt = LocalDateTime.parse("2023-10-01T13:00:00"),
+            startedAt = "2023-10-01T12:00:00",
+            completedAt = "2023-10-01T13:00:00",
             status = mockk(),
             stepExecutions = emptyList()
         )
@@ -111,6 +111,7 @@ open class WorkflowExecutionMapperTest {
         // Mock the behavior of dependency mappers
         every { workflowsMapper.toEntity(any()) } returns workflowDao
         every { usersMapper.toEntity(any()) } returns userDao
+
         
         // Set up mocks for finding existing entity
         mockkObject(WorkflowExecutionDao)
@@ -136,15 +137,15 @@ open class WorkflowExecutionMapperTest {
         verify { WorkflowExecutionDao.findById(42L) }
         verify { existingEntity.workflow = workflowDao }
         verify { existingEntity.user = userDao }
-        verify { existingEntity.startedAt = dto.startedAt }
-        verify { existingEntity.completedAt = dto.completedAt }
+        verify { existingEntity.startedAt = LocalDateTime.parse(dto.startedAt) }
+        verify { existingEntity.completedAt = LocalDateTime.parse(dto.completedAt!!) }
         verify { existingEntity.status = ExecutionStatus.fromDto(dto.status) }
 
         // Verify the captured values
         assertEquals(workflowDao, workflowSlot.captured)
         assertEquals(userDao, userSlot.captured)
-        assertEquals(dto.startedAt, startedAtSlot.captured)
-        assertEquals(dto.completedAt, completedAtSlot.captured)
+        assertEquals(LocalDateTime.parse(dto.startedAt), startedAtSlot.captured)
+        assertEquals(LocalDateTime.parse(dto.completedAt!!), completedAtSlot.captured)
         assertEquals(ExecutionStatus.fromDto(dto.status), statusSlot.captured)
 
         // Verify the result is the updated entity
@@ -160,8 +161,8 @@ open class WorkflowExecutionMapperTest {
             id = 0L,
             workflow = mockk(),
             user = mockk(),
-            startedAt = LocalDateTime.parse("2023-10-01T14:00:00"),
-            completedAt = LocalDateTime.parse("2023-10-01T15:00:00"),
+            startedAt = "2023-10-01T14:00:00",
+            completedAt = "2023-10-01T15:00:00",
             status = mockk(),
             stepExecutions = emptyList()
         )
@@ -202,15 +203,15 @@ open class WorkflowExecutionMapperTest {
         // Verify the properties were set correctly
         verify { newEntity.workflow = workflowDao }
         verify { newEntity.user = userDao }
-        verify { newEntity.startedAt = dto.startedAt }
-        verify { newEntity.completedAt = dto.completedAt }
+        verify { newEntity.startedAt = LocalDateTime.parse(dto.startedAt) }
+        verify { newEntity.completedAt = LocalDateTime.parse(dto.completedAt!!) }
         verify { newEntity.status = ExecutionStatus.fromDto(dto.status) }
 
         // Verify the captured values
         assertEquals(workflowDao, workflowSlot.captured)
         assertEquals(userDao, userSlot.captured)
-        assertEquals(dto.startedAt, startedAtSlot.captured)
-        assertEquals(dto.completedAt, completedAtSlot.captured)
+        assertEquals(LocalDateTime.parse(dto.startedAt), startedAtSlot.captured)
+        assertEquals(LocalDateTime.parse(dto.completedAt!!), completedAtSlot.captured)
         assertEquals(ExecutionStatus.fromDto(dto.status), statusSlot.captured)
 
         // Verify the result is the new entity

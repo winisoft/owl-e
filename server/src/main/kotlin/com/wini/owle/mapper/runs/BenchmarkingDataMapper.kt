@@ -4,8 +4,6 @@ import com.wini.owle.dto.runs.BenchmarkingDataDto
 import com.wini.owle.entity.runs.BenchmarkingDataDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.toBigDecimal
-import com.wini.owle.mapper.toDecimalValue
 
 
 class BenchmarkingDataMapper(
@@ -32,8 +30,8 @@ class BenchmarkingDataMapper(
     override fun toDto(entity: BenchmarkingDataDao): BenchmarkingDataDto {
         return BenchmarkingDataDto(
             id = entity.id.value,
-            workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution), // Updated call
-            totalExecutionTime = entity.totalExecutionTime.toDecimalValue(),
+            workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
+            totalExecutionTime = entity.totalExecutionTime.toDouble(),
             totalSteps = entity.totalSteps,
             aiDeterminedSteps = entity.aiDeterminedSteps,
             predeterminedSteps = entity.predeterminedSteps

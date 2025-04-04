@@ -22,8 +22,4 @@ class StepBenchmarkingDataDao(id: EntityID<Long>) : LongEntity(id) {
      */
     var executionTime by StepBenchmarkingDatas.executionTime
 
-    /**
-     * JSON-encoded resource usage data (e.g., CPU and memory metrics).
-     */
-    var resourceUsage by StepBenchmarkingDatas.resourceUsage
 }

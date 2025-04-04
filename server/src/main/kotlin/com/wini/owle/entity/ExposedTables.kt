@@ -1,9 +1,5 @@
 package com.wini.owle.entity
 
-import com.wini.owle.dto.runs.ResourceUsageDto
-import com.wini.owle.entity.AppliedTransformArgs.reference
-import com.wini.owle.entity.ProvisionDataPoints.dataPoint
-import com.wini.owle.entity.ProvisionDataPoints.provision
 import com.wini.owle.entity.environs.PackageRepoType
 import com.wini.owle.entity.runs.ComparisonOperator
 import com.wini.owle.entity.runs.ExecutionStatus
@@ -345,7 +341,6 @@ object BenchmarkingData : LongIdTable("benchmarking_data") {
 object StepBenchmarkingDatas : LongIdTable("step_benchmarking_data") {
     val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
     val executionTime = decimal("executionTime", 10, 2)
-    val resourceUsage = json("resourceUsage", ResourceUsageDto.jsonConfig, ResourceUsageDto.serializer()).nullable()
 }
 
 object TestCases : LongIdTable("test_cases") {

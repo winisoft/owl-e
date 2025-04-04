@@ -114,12 +114,6 @@ data class WorkflowMetadataDto(
     val distributionUpdatedAt: String,
 
     /**
-     * The workflow that this metadata is associated with.
-     * Links back to the `workflows` table.
-     */
-    val workflow: WorkflowDto,
-
-    /**
      * List of steps that are explicitly excluded from distribution.
      */
     val excludedSteps: List<StepDto> = emptyList(),

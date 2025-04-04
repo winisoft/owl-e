@@ -1,13 +1,10 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.user.metadata.UserDesignedMetadataDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.dto.workflows.WorkflowFolderDto
-import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.DaoFactory
-import com.wini.owle.models.metadata.UserDesignedMetadata
 import io.mockk.*
 import kotlinx.datetime.LocalDateTime
 import org.junit.jupiter.api.BeforeEach
@@ -68,9 +65,7 @@ open class WorkflowsMapperTest {
 
         // Mock toDto behavior of the mappers
         val parentFolderDto = mockk<WorkflowFolderDto>()
-        val metadataDto = mockk<UserDesignedMetadataDto>()
         every { workflowFoldersMapper.toDto(entity.parentFolder!!) } returns parentFolderDto
-//        every { userDesignedMetadataMapper.run { UserDesignedMetadataDto.mock } } returns metadataDto
 
         // Call the method under test
         val result = mapper.toDto(entity)

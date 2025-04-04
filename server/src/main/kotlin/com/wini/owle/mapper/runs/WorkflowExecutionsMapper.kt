@@ -5,6 +5,7 @@ import com.wini.owle.entity.runs.ExecutionStatus
 import com.wini.owle.entity.runs.ExecutionStatus.Companion.toDto
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.user.UsersMapper
 import com.wini.owle.mapper.workflows.WorkflowsMapper
@@ -21,8 +22,8 @@ open class WorkflowExecutionsMapper(
         val applyProps: WorkflowExecutionDao.() -> Unit = {
             workflow = workflowsMapper.toEntity(dto.workflow)
             user = usersMapper.toEntity(dto.user)
-            startedAt = dto.startedAt
-            completedAt = dto.completedAt
+            startedAt = DateTimeConverter.fromString(dto.startedAt)
+            completedAt = dto.completedAt?.let { DateTimeConverter.fromString(it) }
             status = ExecutionStatus.fromDto(dto.status)
         }
         return if (dto.id == 0L) {
@@ -39,8 +40,8 @@ open class WorkflowExecutionsMapper(
             id = entity.id.value,
             workflow = workflowsMapper.toDto(entity.workflow),
             user = usersMapper.toDto(entity.user),
-            startedAt = entity.startedAt,
-            completedAt = entity.completedAt,
+            startedAt = DateTimeConverter.toString(entity.startedAt),
+            completedAt = entity.completedAt?.let { DateTimeConverter.toString(it) },
             status = entity.status.toDto(),
             stepExecutions = emptyList()
         )

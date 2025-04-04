@@ -65,12 +65,15 @@ open class PaymentMethodMapperTest {
 
     @Test
     fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+        // Create mock dao objects and specific CardBrand instance
+        val cardBrandMock = CardBrand.VISA
+        val cardBrandDto = CardBrandDto.Visa
+        
         val entity = mockk<PaymentMethodDao> {
             every { id.value } returns 1L
             every { stripePaymentMethodId } returns "pm_12345"
             every { user } returns mockk()
-            every { cardBrand } returns mockk()
+            every { cardBrand } returns cardBrandMock
             every { lastFour } returns "1234"
             every { isDefault } returns true
             every { createdAt } returns mockk()
@@ -82,6 +85,10 @@ open class PaymentMethodMapperTest {
         every { userMapper.toDto(entity.user) } returns userDto
         every { DateTimeConverter.toString(entity.createdAt) } returns "2023-01-01T00:00:00"
         every { DateTimeConverter.toString(entity.updatedAt) } returns "2023-01-01T00:00:00"
+        
+        // Mock the extension function
+        mockkObject(CardBrand.Companion)
+        every { cardBrandMock.toDto() } returns cardBrandDto
 
         // Call the method under test
         val result = mapper.toDto(entity)
@@ -90,11 +97,14 @@ open class PaymentMethodMapperTest {
         assertEquals(1L, result.id)
         assertEquals("pm_12345", result.stripePaymentMethodId)
         assertEquals(userDto, result.user)
-        assertEquals(entity.cardBrand?.toDto(), result.cardBrand)
+        assertEquals(cardBrandDto, result.cardBrand)
         assertEquals("1234", result.lastFour)
         assertEquals(true, result.isDefault)
         assertEquals("2023-01-01T00:00:00", result.createdAt)
         assertEquals("2023-01-01T00:00:00", result.updatedAt)
+        
+        // Clean up
+        unmockkObject(CardBrand.Companion)
     }
 
     @Test

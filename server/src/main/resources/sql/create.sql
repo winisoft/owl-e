@@ -506,7 +506,7 @@ CREATE TABLE execution_logs (
 CREATE TABLE benchmarking_data (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     workflowExecutionId BIGINT NOT NULL,
-    totalExecutionTime DECIMAL(10, 2) NOT NULL, -- in seconds
+    totalExecutionTime DECIMAL(10, 3) NOT NULL, -- in seconds
     totalSteps BIGINT NOT NULL,
     aiDeterminedSteps BIGINT NOT NULL,
     predeterminedSteps BIGINT NOT NULL,
@@ -516,8 +516,7 @@ CREATE TABLE benchmarking_data (
 CREATE TABLE step_benchmarking_data (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     stepExecutionId BIGINT NOT NULL,
-    executionTime DECIMAL(10, 2) NOT NULL, -- in seconds
-    resourceUsage JSON, -- e.g., CPU, memory
+    executionTime DECIMAL(10, 3) NOT NULL, -- in seconds
     FOREIGN KEY(stepExecutionId) REFERENCES step_executions(id)
 );
 

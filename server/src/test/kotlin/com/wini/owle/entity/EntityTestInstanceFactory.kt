@@ -1,6 +1,5 @@
 package com.wini.owle.entity
 
-import com.wini.owle.dto.runs.ResourceUsageDto
 import com.wini.owle.entity.environs.*
 import com.wini.owle.entity.runs.*
 import com.wini.owle.entity.steps.*
@@ -252,13 +251,11 @@ object EntityTestInstanceFactory {
     fun stepBenchmarkingDataDao(
         id: Long = 1,
         stepExecution: StepExecutionDao = stepExecutionDao(),
-        executionTime: BigDecimal = 123.45.toBigDecimal(),
-        resourceUsage: ResourceUsageDto? = null
+        executionTime: BigDecimal = 123.45.toBigDecimal()
     ): StepBenchmarkingDataDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
         every { this@mockk.stepExecution } returns stepExecution
         every { this@mockk.executionTime } returns executionTime
-        every { this@mockk.resourceUsage } returns resourceUsage
     }
 
     fun stepDao(
