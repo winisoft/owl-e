@@ -1,8 +1,8 @@
 package com.wini.owle.api.user
 
 import com.wini.owle.api.GenericLongPkApi
+import com.wini.owle.dll.user.TagDll
 import com.wini.owle.dto.user.TagDto
-import com.wini.owle.services.user.TagDll
 import io.ktor.server.routing.*
 
 class TagApi(dll: TagDll) : GenericLongPkApi<TagDto>(

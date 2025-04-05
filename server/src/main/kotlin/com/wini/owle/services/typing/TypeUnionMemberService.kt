@@ -5,6 +5,8 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.typing.TypeUnionMemberDto
 import com.wini.owle.entity.typing.TypeUnionMemberDao
 import com.wini.owle.mapper.typing.TypeUnionMembersMapper
+import com.wini.owle.repo.EntityIdFactory
+import com.wini.owle.repo.TypeUnionMemberIdFactory
 import com.wini.owle.repo.typing.TypeUnionMemberRepository
 import com.wini.owle.services.BaseServiceImpl
 import org.jetbrains.exposed.dao.id.CompositeID
@@ -12,17 +14,21 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 class TypeUnionMemberService(
     private val repository: TypeUnionMemberRepository,
-    private val mapper: TypeUnionMembersMapper
-): BaseServiceImpl<CompositeID, TypeUnionMemberDto, TypeUnionMemberDao>(repository, mapper) {
+    private val mapper: TypeUnionMembersMapper,
+    entityIdFactory: TypeUnionMemberIdFactory
+): BaseServiceImpl<CompositeID, TypeUnionMemberDto, TypeUnionMemberDao>(
+    repository,
+    mapper,
+    entityIdFactory
+) {
 
     fun getByUnionTypeDeclarationId(typeDeclarationId: Long): AsyncResult<List<TypeUnionMemberDto>> {
         return runCatching {
             repository.getByUnionTypeDeclarationId(typeDeclarationId)
         }.fold(
             onSuccess = { list ->
-                list.map { it.toDto() }.let {
-                    AsyncResult.Success(it)
-                }
+                val data = mapper.toDtos(list)
+                return AsyncResult.Success(data)
             },
             onFailure = { exception ->
                 AsyncError.DatabaseError(exception.message ?: "Unable to delete entities").asFailure()

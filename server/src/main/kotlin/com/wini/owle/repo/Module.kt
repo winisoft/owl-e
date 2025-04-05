@@ -15,7 +15,59 @@ import com.wini.owle.repo.workflows.*
 import org.koin.dsl.module
 
 
+val idFactoryModule = module {
+
+    single<PackageRepoIdFactory> { PackageRepoIdFactory }
+    single<PackageIdFactory> { PackageIdFactory }
+    single<ToolPackageDependencyIdFactory> { ToolPackageDependencyIdFactory }
+    single<VersionSpecIdFactory> { VersionSpecIdFactory }
+    single<BenchmarkingDataIdFactory> { BenchmarkingDataIdFactory }
+    single<ExecutionLogsIdFactory> { ExecutionLogsIdFactory }
+    single<StepBenchmarkingDataIdFactory> { StepBenchmarkingDataIdFactory }
+    single<StepExecutionIdFactory> { StepExecutionIdFactory }
+    single<TestCaseIdFactory> { TestCaseIdFactory }
+    single<TestExpectedOutcomeIdFactory> { TestExpectedOutcomeIdFactory }
+    single<TestInputIdFactory> { TestInputIdFactory }
+    single<TestResultIdFactory> { TestResultIdFactory }
+    single<WorkflowExecutionIdFactory> { WorkflowExecutionIdFactory }
+    single<ErrorWatchFnIdFactory> { ErrorWatchFnIdFactory }
+    single<ErrorWatchIdFactory> { ErrorWatchIdFactory }
+    single<InquisitionIdFactory> { InquisitionIdFactory }
+    single<PreReqInjectionIdFactory> { PreReqInjectionIdFactory }
+    single<ProvisionDataPointIdFactory> { ProvisionDataPointIdFactory }
+    single<ProvisionIdFactory> { ProvisionIdFactory }
+    single<RevisionIdFactory> { RevisionIdFactory }
+    single<WorkflowJunctionIdFactory> { WorkflowJunctionIdFactory }
+    single<AppliedTransformArgIdFactory> { AppliedTransformArgIdFactory }
+    single<AppliedTransformIdFactory> { AppliedTransformIdFactory }
+    single<TransformationArgIdFactory> { TransformationArgIdFactory }
+    single<TransformationIdFactory> { TransformationIdFactory }
+    single<TransformTargetTypeIdFactory> { TransformTargetTypeIdFactory }
+    single<TypeBoundIdFactory> { TypeBoundIdFactory }
+    single<TypeDeclarationIdFactory> { TypeDeclarationIdFactory }
+    single<TypeDefinitionIdFactory> { TypeDefinitionIdFactory }
+    single<TypeParameterIdFactory> { TypeParameterIdFactory }
+    single<TypeSchemaRefIdFactory> { TypeSchemaRefIdFactory }
+    single<TypeUnionMemberIdFactory> { TypeUnionMemberIdFactory }
+    single<TypeVarianceIdFactory> { TypeVarianceIdFactory }
+    single<PaymentMethodIdFactory> { PaymentMethodIdFactory }
+    single<TagRelationIdFactory> { TagRelationIdFactory }
+    single<TagIdFactory> { TagIdFactory }
+    single<UserIdFactory> { UserIdFactory }
+    single<DataPointIdFactory> { DataPointIdFactory }
+    single<PhaseIdFactory> { PhaseIdFactory }
+    single<StepIdFactory> { StepIdFactory }
+    single<ToolParamIdFactory> { ToolParamIdFactory }
+    single<ToolIdFactory> { ToolIdFactory }
+    single<WorkflowFolderIdFactory> { WorkflowFolderIdFactory }
+    single<WorkflowMetadataIdFactory> { WorkflowMetadataIdFactory }
+    single<WorkflowIdFactory> { WorkflowIdFactory }
+
+}
+
+
 val repositoryModule = module {
+
     single<PackageRepoRepository> { PackageRepoRepository() }
     single<VersionSpecRepository> { VersionSpecRepository() }
     single<TypeDefinitionRepository> { TypeDefinitionRepository() }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNull
 
+
 open class VersionSpecDbIntegrationTest {
 
     @BeforeEach

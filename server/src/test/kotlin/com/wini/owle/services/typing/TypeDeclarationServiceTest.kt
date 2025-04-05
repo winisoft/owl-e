@@ -2,414 +2,326 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.DtoTestInstanceFactory.versionSpecDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.dto.typing.TypeDefinitionDto
-import com.wini.owle.dto.environs.VersionSpecDto
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
-import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
-import com.wini.owle.entity.EntityTestInstanceFactory.versionSpecDao
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.TypeDefinitions
-import com.wini.owle.entity.VersionSpecs
 import com.wini.owle.entity.typing.TypeDeclarationDao
-import com.wini.owle.entity.typing.TypeDefinitionDao
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
-import com.wini.owle.mapper.typing.TypeDefinitionsMapper
+import com.wini.owle.repo.TypeBoundIdFactory
+import com.wini.owle.repo.TypeDeclarationIdFactory
+import com.wini.owle.repo.typing.TypeBoundRepository
 import com.wini.owle.repo.typing.TypeDeclarationRepository
-import com.wini.owle.services.serviceModule
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
+import io.mockk.impl.annotations.MockK
+import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.emptySized
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.core.module.Module
-import org.koin.dsl.module
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 
-/**
- * Unit tests for [TypeDeclarationService].
- */
 open class TypeDeclarationServiceTest {
 
-    /**
-     * Mock repository to simulate success/failure and capture arguments.
-     */
-    private val mockRepo = mockk<TypeDeclarationRepository>(relaxed = true)
+    private lateinit var service: TypeDeclarationService
+    @MockK private lateinit var repository: TypeDeclarationRepository
+    @MockK private lateinit var mapper: TypeDeclarationsMapper
+    @MockK private lateinit var idFactory: TypeDeclarationIdFactory
 
-    /**
-     * Mock mapper to test correct conversion from Dao <-> Dto.
-     */
-    private val mockMapper = mockk<TypeDeclarationsMapper>(relaxed = true)
+    fun createSampleDto(mockId: Long = 1L): TypeDeclarationDto = TypeDeclarationDto(
+        id = mockId,
+    )
 
-    /**
-     * The service under test, using the mocked repository and mapper.
-     */
-    private val service = TypeDeclarationService(mockRepo, mockMapper)
-
-    protected val testModule: Module get() = module { includes(serviceModule) }
-
-    val implicatedTables: List<IdTable<*>> = listOf(TypeDeclarations, TypeDefinitions, VersionSpecs)
+    fun createSampleEntity(): TypeDeclarationDao = mockk<TypeDeclarationDao>() {
+        every { id } returns mockk()
+    }
 
     @BeforeEach
     fun setUp() {
-        clearAllMocks()
-        stopKoin()
-        startKoin { modules(testModule) }
-
+        MockKAnnotations.init(this)
+        service = TypeDeclarationService(repository, mapper, idFactory)
     }
 
-    /**
-     * Test that getById returns a Success when the repository returns an entity,
-     * and that the entity is converted to the correct DTO.
-     */
     @Test
-    fun `getById - success`() {
-        transaction {
-            // 1) Create a TypeDeclarationDao mock
-            val dao = mockk<TypeDeclarationDao>(relaxed = true)
+    fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
+        // Arrange
+        val dto: TypeDeclarationDto = mockk()
+        val entity: TypeDeclarationDao = mockk()
 
-            // 2) Create a TypeDefinitionDao mock
-            val defDao = mockk<TypeDefinitionDao>(relaxed = true)
+        every { mapper.toEntity(dto) } returns entity
+        every { repository.create(entity) } returns entity
+        every { mapper.toDto(entity) } returns dto
 
-            // 3) In the mapper’s final DTO, we need a TypeDefinitionDto
-            val defDto = TypeDefinitionDto(
-                id = 234,
-                name = "typeDef",
-                namespace = "ok.name.space",
-                versionSpec = VersionSpecDto(
-                    id = 345L,
-                    versionMin = "1.0",
-                    versionMax = "2.0",
-                    versionExact = "3.0"
-                )
-            )
+        // Act
+        val result = service.create(dto)
 
-            // 4) And a top-level TypeDeclarationDto that references the above def
-            val dto = TypeDeclarationDto(
-                id = 123,
-                typeDefinition = defDto
-            )
+        // Assert
+        assertTrue(result is AsyncResult.Success<*>)
+        assertEquals(dto, (result as AsyncResult.Success<*>).data)
 
-            // 5) Tell the mock dao how to provide its nested properties
-            every { dao.typeDefinition } returns defDao
-            every { dao.transformations } returns emptySized()
-
-            val typeDefinitionsMapper = mockk<TypeDefinitionsMapper>()
-            // 6) Now we must tell the typeDefinitionsMapper how to turn defDao -> defDto
-            every { typeDefinitionsMapper.toDto(defDao) } returns defDto
-
-            // 7) Finally, tell the top-level mapper how to turn dao -> dto
-            //    Actually, in your code, TypeDeclarationsMapper *is* the one calling with(typeDefinitionsMapper) { defDao.toDto() }
-            //    So you could do it at the repository / service layer.
-            //    But if your test calls mapper.toDto(dao) directly:
-            val mappedResult = with(mockMapper) { toDto(dao) }
-
-            // The repository returns this DAO for the given ID
-            every { mockRepo.getById(any()) } returns dao
-
-            // WHEN we call the service method
-            val result = service.getById(123L)
-
-            // THEN verify we got a Success with the correct data
-            assertIs<AsyncResult.Success<TypeDeclarationDto>>(result)
-            assertEquals(dto, result.data)
-            assertEquals(dto, mappedResult)
-            // Also verify the repository was called with an EntityID pointing to TypeDeclarations
-            // (If you need to ensure it's that table, we can match the table as well.)
-            verify {
-                mockRepo.getById(
-                    withArg {
-                        assertEquals(123L, it.value)
-                        assertEquals(TypeDeclarations, it.table)
-                    }
-                )
-            }
-        }
+        // Verify
+        verify(exactly = 1) { repository.create(entity) }
+        verify(exactly = 1) { mapper.toEntity(dto) }
+        verify(exactly = 1) { mapper.toDto(entity) }
     }
 
-    /**
-     * Test that getById returns a Failure when the repository throws an exception,
-     * and that the error is an AsyncError.DatabaseError.
-     */
     @Test
-    fun `getById - failure`() {
-        transaction {
-            // GIVEN the repository throws an exception
-            every { mockRepo.getById(any()) } throws RuntimeException("(Message Irrelevant)")
+    fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
+        // Arrange
+        val dto: TypeDeclarationDto = mockk()
+        val entity: TypeDeclarationDao = mockk()
+        val exception = RuntimeException("Database error")
 
-            // WHEN we call the service method
-            val result = service.getById(999L)
+        every { mapper.toEntity(dto) } returns entity
+        every { repository.create(entity) } throws exception
 
-            // THEN verify it's a Failure
-            assertIs<AsyncResult.Failure>(result)
-            val error = result.error
-            assertIs<AsyncError.DatabaseError>(error)
-            assertTrue(error.message.contains("Failed to get id"))
+        // Act
+        val result = service.create(dto)
 
-            // Verify we invoked the repository with the correct ID
-            verify {
-                mockRepo.getById(
-                    withArg {
-                        assertEquals(999L, it.value)
-                    }
-                )
-            }
-        }
+        // Assert
+        verify(exactly = 1) { mapper.toEntity(dto) }
+        verify(exactly = 1) { repository.create(entity) }
+
+        assertTrue(result is AsyncResult.Failure)
+
+        val error = (result as AsyncResult.Failure).error
+        assertTrue(error is AsyncError.DatabaseError)
+        assertEquals("Database error", error.message)
     }
 
-    /**
-     * Test that delete returns Success(true) when repository succeeds,
-     * and is called with the correct EntityID.
-     */
     @Test
-    fun `delete - single entity - success`() {
-        transaction {
-            // Mock repository.delete() to do nothing (success)
-            every { mockRepo.delete(any<EntityID<Long>>()) } returns Unit
-
-            // WHEN we call delete on the service
-            val result = service.delete(77L)
-
-            // THEN it's a success with 'true'
-            assertIs<AsyncResult.Success<Boolean>>(result)
-            assertTrue(result.data)
-
-            verify {
-                mockRepo.delete(withArg<EntityID<Long>> { entityId ->
-                    assertEquals(77L, entityId.value)
-                })
-            }
+    fun `test getById success`() {
+        // Arrange
+        val dto: TypeDeclarationDto = createSampleDto()
+        val entityId: EntityID<Long> = mockk()
+        val entity: TypeDeclarationDao = mockk<TypeDeclarationDao>() {
+            every { id } returns mockk()
         }
+
+        every { mapper.toEntity(dto) } returns entity
+        every { idFactory.build(any<Long>()) } returns entityId
+        every { repository.getById(entityId) } returns entity
+        every { mapper.toDto(entity) } returns dto
+
+        // Act
+        val result = service.getById(dto.id)
+
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertEquals(dto, (result as AsyncResult.Success).data)
+
+        // Verify
+        verify(exactly = 1) { repository.getById(entityId) }
+        verify(exactly = 1) { mapper.toDto(entity) }
     }
 
-    /**
-     * Test that delete returns Success(true) when repository succeeds,
-     * and is called with the correct EntityID.
-     */
     @Test
-    fun `delete - multiple entities - success`() {
-        transaction {
-            // Mock repository.delete() to do nothing (success)
-            every { mockRepo.delete(any<List<EntityID<Long>>>()) } returns Unit
+    fun `test getById not found`() {
+        // Arrange
+        val dto = createSampleDto()
+        val entity = createSampleEntity()
+        val entityId: EntityID<Long> = mockk()
 
-            // WHEN we call delete on the service
-            val result = service.delete(listOf(77L, 78L))
+        every { entityId.value } returns dto.id
+        every { repository.entityClass.table }
+        every { idFactory.build(any()) } returns entityId
+        every { repository.getById(entityId) } returns null
 
-            // THEN it's a success with 'true'
-            assertIs<AsyncResult.Success<Boolean>>(result)
-            assertTrue(result.data)
+        // Act
+        val result = service.getById(dto.id)
 
-            verify {
-                mockRepo.delete(withArg<List<EntityID<Long>>> { idList ->
-                    assertEquals(listOf(77L, 78L), idList.map { it.value })
-                })
-            }
-        }
+        // Assert
+        assertTrue(result is AsyncResult.Failure)
+        val error = (result as AsyncResult.Failure).error
+        assertTrue(error is AsyncError.NoSuchIdError)
+
+        // Verify
+        verify { repository.getById(entityId) }
     }
 
-    /**
-     * Test that delete returns a Failure if the repository.delete() call throws.
-     */
     @Test
-    fun `delete - multiple entities - failure`() {
-        // Mock an exception
-        every { mockRepo.delete(any<List<EntityID<Long>>>()) } throws IllegalStateException("(Message Irrelevant)")
+    fun `test getAll success`() {
+        // Arrange
+        val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
+        val entities: List<TypeDeclarationDao> = mockk()
 
-        val result = service.delete(listOf(88L, 89L))
+        every { mapper.toEntities(dtos) } returns entities
+        every { mapper.toDtos(entities) } returns dtos
+        every { repository.getAll(emptyList()) } returns entities
 
-        assertIs<AsyncResult.Failure>(result)
-        assertIs<AsyncError.DatabaseError>(result.error)
-        assertTrue(result.error.message?.contains("Unable to delete entity") ?: false)
+        // Act
+        val result = service.getAll()
 
-        // Verify the correct argument
-        verify {
-            mockRepo.delete(withArg<EntityID<Long>> { entityId ->
-                assertEquals(88L, entityId.value)
-            })
-        }
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertEquals(dtos, (result as AsyncResult.Success).data)
+
+        // Verify
+        verify(exactly = 1) { repository.getAll(emptyList()) }
+        verify(exactly = 1) { mapper.toDtos(entities) }
     }
 
-    /**
-     * Test that delete returns a Failure if the repository.delete() call throws.
-     */
     @Test
-    fun `delete - single entity - failure`() {
-        transaction {
-            // Mock an exception
-            every { mockRepo.delete(any<EntityID<Long>>()) } throws IllegalStateException("(Message Irrelevant)")
+    fun `test getAll returns empty list when no entities exist`() {
+        // Arrange
+        val emptyList = emptyList<TypeDeclarationDao>()
+        val emptyDtoList = emptyList<TypeDeclarationDto>()
 
-            val result = service.delete(88L)
+        every { repository.getAll(emptyList()) } returns emptyList
+        every { mapper.toDtos(emptyList) } returns emptyDtoList
 
-            assertIs<AsyncResult.Failure>(result)
-            assertIs<AsyncError.DatabaseError>(result.error)
-            assertTrue(result.error.message?.contains("Unable to delete entity") ?: false)
+        // Act
+        val result = service.getAll()
 
-            // Verify the correct argument
-            verify {
-                mockRepo.delete(withArg<List<EntityID<Long>>> { idList ->
-                    assertEquals(listOf(88L, 89L), idList.map { it.value })
-                })
-            }
-        }
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertTrue((result as AsyncResult.Success).data.isEmpty())
+
+        // Verify
+        verify(exactly = 1) { repository.getAll(emptyList()) }
+        verify(exactly = 1) { mapper.toDtos(emptyList) }
     }
 
-    /**
-     * A minimal demonstration of create() success:
-     * verifying it calls mapper to convert Dto->Dao, repo returns the same Dao,
-     * and service returns the mapped Dto.
-     */
     @Test
-    fun `create - single entity - success`() {
-        transaction {
-            // A simple Dto
-            val defDto = TypeDefinitionDto(
-                id = 234,
-                name = "typeDef",
-                namespace="ok.name.space",
-                versionSpec = VersionSpecDto(
-                    id = 345L,
-                    versionMin="1.0",
-                    versionMax="2.0",
-                    versionExact="3.0"
-                )
-            )
-            val inputDto = TypeDeclarationDto(id = 123, typeDefinition = defDto)
+    fun `test update success`() {
+        // Arrange
+        val dto = createSampleDto()
+        val entity = createSampleEntity()
 
-            // A mock DAO for the "converted" entity
-            val dao = mockk<TypeDeclarationDao>()
+        every { mapper.toEntity(dto) } returns entity
+        every { repository.update(entity) } returns entity
+        every { mapper.toDto(entity) } returns dto
 
-            // Suppose the repo returns the same dao after creation
-            every { mockRepo.create(dao) } returns dao
+        // Act
+        val result = service.update(dto)
 
-            // The mapper is used to convert from Dto->Dao and then Dao->Dto
-            every { mockMapper.toEntity(inputDto) } returns dao
-            every { mockMapper.toDto(dao) } returns inputDto.copy(id = 999)
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertEquals(dto, (result as AsyncResult.Success).data)
 
-            // Call the service
-            val result = service.create(inputDto)
-
-            // Should get success
-            assertIs<AsyncResult.Success<TypeDeclarationDto>>(result)
-            // The returned DTO might have an ID if the DB logic does that
-            assertEquals(999, result.data.id)
-
-            // Verify the repository was called with the dao
-            verify {
-                mockRepo.create(dao)
-            }
-        }
+        // Verify
+        verify { repository.update(entity) }
+        verify { mapper.toEntity(dto) }
+        verify { mapper.toDto(entity) }
     }
 
-    /**
-     * Test that create (passed a single DTO) returns a Failure when the repository throws an exception,
-     * and that the error is an AsyncError.DatabaseError.
-     */
     @Test
-    fun `create - single entity - failure`() {
-        transaction {
-            // A simple Dto
-            val defDto = TypeDefinitionDto(
-                id = 234,
-                name = "typeDef",
-                namespace = "ok.name.space",
-                versionSpec = VersionSpecDto(
-                    id = 345L,
-                    versionMin="1.0",
-                    versionMax="2.0",
-                    versionExact="3.0"
-                )
-            )
-            val inputDto = TypeDeclarationDto(id = 123, typeDefinition = defDto)
+    fun `test delete success`() {
+        // Arrange
+        val dto = createSampleDto()
+        val entity = createSampleEntity()
+        val entityClass: EntityClass<Long, TypeDeclarationDao> = mockk()
+        val id = 1L
+        val entityId: EntityID<Long> = mockk()
 
-            // A mock DAO for the "converted" entity
-            val dao = mockk<TypeDeclarationDao>()
-            every { mockMapper.toEntity(inputDto) } returns dao
-            every { mockMapper.toDto(dao) } returns inputDto.copy(id = 998)
+        every { entity.id } returns entityId
+        every { entityId.value } returns id
+        every { mapper.toEntity(dto) } returns entity
+        every { idFactory.build(id) } returns entityId
+        every { repository.entityClass } returns entityClass
+        every { entityClass.findById(entityId) } returns entity
+        every { repository.getById(entityId) } returns mockk()
+        every { repository.delete(entityId) } just runs
 
-            // GIVEN the repository throws an exception
-            every { mockRepo.create(any<TypeDeclarationDao>()) } throws IllegalStateException("(Message Irrelevant)")
+        // Act
+        val result = service.delete(dto.id)
 
-            // WHEN we call the service method
-            val result = service.create(inputDto)
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertTrue((result as AsyncResult.Success).data)
 
-            // THEN verify it's a Failure
-            assertIs<AsyncResult.Failure>(result)
-            val error = result.error
-            assertIs<AsyncError.DatabaseError>(error)
-            assertTrue(error.message.contains("Unable to create entity"))
-
-            // Verify we invoked the repository with the correct ID
-            verify {
-                mockRepo.create(withArg<TypeDeclarationDao> { entity ->
-                    // Check each EntityID in the list
-                    assertEquals(entity, dao)
-                })
-            }
-        }
+        // Verify
+        verify { repository.delete(entityId) }
     }
 
-    /**
-     * Test that create (passed a list of DTOs) returns a Failure when the repository throws an exception,
-     * and that the error is an AsyncError.DatabaseError.
-     */
     @Test
-    fun `create - multiple entities - failure`() {
-        transaction {
-            val versionSpecDao = versionSpecDao(versionMin="1.0", versionMax="2.0", versionExact="3.0")
-            val versionSpecDto = versionSpecDao.run {
-                versionSpecDto(id = id.value, versionMin, versionMax, versionExact)
-            }
-            val typeDefDao = typeDefinitionDao(name = "typeDef", namespace="ok.name.space", versionSpec=versionSpecDao)
-            val defDto = TypeDefinitionDto(
-                id = typeDefDao.id.value,
-                name = typeDefDao.name,
-                namespace=typeDefDao.namespace,
-                versionSpec=versionSpecDto
-            )
-            val inputDao1 = typeDeclarationDao()
-            val inputDao2 = typeDeclarationDao()
-            val inputDto1 = TypeDeclarationDto(id = inputDao1.id.value, typeDefinition = defDto)
-            val inputDto2 = TypeDeclarationDto(id = inputDao2.id.value, typeDefinition = defDto)
+    fun `test batch create success`() {
+        // Arrange
+        val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
+        val entities = listOf(createSampleEntity(), createSampleEntity())
 
-            // Mock DAOs for the "converted" entity
-//            val dao1 = mockk<TypeDeclarationDao>()
-//            every { mockMapper.run { inputDto1.toEntity() } } returns dao1
-//            every { mockMapper.run { dao1.toDto() } } returns inputDto1.copy(id = 998)
+        every { mapper.toEntities(dtos) } returns entities
+        every { mapper.toDtos(entities) } returns dtos
+        every { repository.create(entities) } returns entities
 
-//            val dao2 = mockk<TypeDeclarationDao>()
-//            every { mockMapper.run { inputDto2.toEntity() } } returns dao2
-//            every { mockMapper.run { dao2.toDto() } } returns inputDto2.copy(id = 999)
+        // Act
+        val result = service.create(dtos)
 
-            // GIVEN the repository throws an exception
-            every { mockRepo.create(any<List<TypeDeclarationDao>>()) } throws IllegalStateException("(Message Irrelevant)")
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertEquals(dtos, (result as AsyncResult.Success).data)
 
-            // WHEN we call the service method
-            val result = service.create(listOf(inputDto1, inputDto2))
-
-            // THEN verify it's a Failure
-            assertIs<AsyncResult.Failure>(result)
-            val error = result.error
-            assertIs<AsyncError.DatabaseError>(error)
-            assertTrue(error.message.contains("Unable to create entities"))
-
-            // Verify we invoked the repository with the correct ID
-//            verify {
-//                mockRepo.create(withArg<List<TypeDeclarationDao>> { idList ->
-//                    assertEquals(listOf(dao1, dao2), idList)
-//                })
-//            }
-        }
+        // Verify
+        verify(exactly = 1) { repository.create(entities) }
+        verify(exactly = 1) { mapper.toEntities(dtos) }
+        verify(exactly = 1) { mapper.toDtos(entities) }
     }
 
+    @Test
+    fun `test batch create with empty list`() {
+        // Arrange
+        val emptyDtoList = emptyList<TypeDeclarationDto>()
+        val emptyEntityList = emptyList<TypeDeclarationDao>()
+
+        every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
+        every { repository.create(emptyEntityList) } returns emptyEntityList
+        every { mapper.toDtos(emptyEntityList) } returns emptyDtoList
+
+        // Act
+        val result = service.create(emptyDtoList)
+
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertTrue((result as AsyncResult.Success).data.isEmpty())
+
+        // Verify
+        verify(exactly = 1) { repository.create(emptyEntityList) }
+        verify(exactly = 1) { mapper.toEntities(emptyDtoList) }
+        verify(exactly = 1) { mapper.toDtos(emptyEntityList) }
+    }
+
+    @Test
+    fun `test batch update success`() {
+        // Arrange
+        val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
+        val entities = listOf(createSampleEntity(), createSampleEntity())
+
+        every { mapper.toEntities(dtos) } returns entities
+        every { mapper.toDtos(entities) } returns dtos
+        every { repository.update(entities) } returns entities
+
+        // Act
+        val result = service.update(dtos)
+
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertEquals((result as AsyncResult.Success).data, dtos)
+
+        // Verify
+        verify(exactly = 1) { repository.update(entities) }
+        verify(exactly = 1) { mapper.toEntities(dtos) }
+        verify(exactly = 1) { mapper.toDtos(entities) }
+    }
+
+    @Test
+    fun `test batch delete success`() {
+        // Arrange
+        val ids = listOf(1L, 2L)
+        val entityIds = listOf<EntityID<Long>>(mockk(), mockk())
+
+        every { idFactory.build(1L) } returns entityIds[0]
+        every { idFactory.build(2L) } returns entityIds[1]
+        every { repository.delete(entityIds) } just runs
+
+        // Act
+        val result = service.delete(ids)
+
+        // Assert
+        assertTrue(result is AsyncResult.Success)
+        assertTrue((result as AsyncResult.Success).data)
+
+        // Verify
+        verify { idFactory.build(1L) }
+        verify { idFactory.build(2L) }
+        verify { repository.delete(entityIds) }
+    }
+    
 }

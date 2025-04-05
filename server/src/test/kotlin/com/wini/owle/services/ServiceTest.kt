@@ -2,12 +2,14 @@ package com.wini.owle.services
 
 import com.wini.owle.services.environs.PackageRepoServiceTest
 import com.wini.owle.services.environs.PackageServiceTest
+import com.wini.owle.services.environs.ToolPackageDependencyServiceTest
 import com.wini.owle.services.environs.VersionSpecServiceTest
 import com.wini.owle.services.runs.*
 import com.wini.owle.services.steps.*
 import com.wini.owle.services.transforms.*
 import com.wini.owle.services.typing.*
 import com.wini.owle.services.user.PaymentMethodServiceTest
+import com.wini.owle.services.user.TagRelationServiceTest
 import com.wini.owle.services.user.TagServiceTest
 import com.wini.owle.services.user.UserServiceTest
 import com.wini.owle.services.workflows.*
@@ -30,6 +32,10 @@ open class ServiceTest {
         inner class PackageTest: PackageServiceTest()
 
         @Nested
+        @DisplayName("ToolPackageDependency")
+        inner class ToolPackageDepServiceTest: ToolPackageDependencyServiceTest()
+
+        @Nested
         @DisplayName("VersionSpecService")
         inner class VersionSpecTest: VersionSpecServiceTest()
 
@@ -46,10 +52,6 @@ open class ServiceTest {
         @Nested
         @DisplayName("ExecutionLogService")
         inner class ExecutionLogTest: ExecutionLogServiceTest()
-
-        @Nested
-        @DisplayName("StepBenchmarkingDataService")
-        inner class StepBenchmarkingTest: StepBenchmarkingDataServiceTest()
 
         @Nested
         @DisplayName("StepExecutionService")
@@ -100,6 +102,10 @@ open class ServiceTest {
         @Nested
         @DisplayName("ProvisionService")
         inner class ProvisionTest: ProvisionServiceTest()
+
+        @Nested
+        @DisplayName("ProvisionDataPointService")
+        inner class ProvisionDataPointTest: ProvisionDataPointServiceTest()
 
         @Nested
         @DisplayName("RevisionService")
@@ -162,6 +168,10 @@ open class ServiceTest {
         inner class TypeSchemaRefTest: TypeSchemaRefServiceTest()
 
         @Nested
+        @DisplayName("TypeUnionMemberService")
+        inner class TypeUnionMemberTest: TypeUnionMemberServiceTest()
+
+        @Nested
         @DisplayName("TypeVarianceService")
         inner class TypeVariancesTest: TypeVarianceServiceTest()
 
@@ -174,6 +184,10 @@ open class ServiceTest {
         @Nested
         @DisplayName("PaymentMethodService")
         inner class PaymentMethodTest: PaymentMethodServiceTest()
+
+        @Nested
+        @DisplayName("TagRelationService")
+        inner class TagRelationTest: TagRelationServiceTest()
 
         @Nested
         @DisplayName("TagService")

@@ -3,14 +3,20 @@ package com.wini.owle.services.workflows
 import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.entity.workflows.PhaseDao
 import com.wini.owle.mapper.workflows.PhasesMapper
+import com.wini.owle.repo.PhaseIdFactory
 import com.wini.owle.repo.workflows.PhaseRepository
 import com.wini.owle.services.BaseServiceImpl
 
 
 class PhaseService(
     private val repository: PhaseRepository,
-    private val mapper: PhasesMapper
-): BaseServiceImpl<Long, PhaseDto, PhaseDao>(repository, mapper) {
+    private val mapper: PhasesMapper,
+    entityIdFactory: PhaseIdFactory
+): BaseServiceImpl<Long, PhaseDto, PhaseDao>(
+    repository,
+    mapper,
+    entityIdFactory
+) {
 
     fun getMaxDisplayOrder(workflowId: Long, parentPhaseId: Long?): Int {
         return repository.getWhere {

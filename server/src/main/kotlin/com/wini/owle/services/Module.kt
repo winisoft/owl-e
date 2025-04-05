@@ -6,6 +6,7 @@ import com.wini.owle.services.runs.StepExecutionService
 import com.wini.owle.services.runs.TestCaseService
 import com.wini.owle.services.environs.VersionSpecService
 import com.wini.owle.mapper.mapperModule
+import com.wini.owle.repo.idFactoryModule
 import com.wini.owle.repo.repositoryModule
 import com.wini.owle.services.environs.PackageRepoService
 import com.wini.owle.services.environs.PackageService
@@ -27,43 +28,45 @@ import org.koin.dsl.module
 
 
 val serviceModule = module {
-    includes(repositoryModule, mapperModule)
-    single<PackageRepoService> { PackageRepoService(get(), get()) }
-    single<PackageService> { PackageService(get(), get()) }
-    single<VersionSpecService> { VersionSpecService(get(), get()) }
-    single<BenchmarkingDataService> { BenchmarkingDataService(get(), get()) }
-    single<ExecutionLogService> { ExecutionLogService(get(), get()) }
-    single<StepExecutionService> { StepExecutionService(get(), get()) }
-    single<TestCaseService> { TestCaseService(get(), get()) }
-    single<TestExpectedOutcomeService> { TestExpectedOutcomeService(get(), get()) }
-    single<TestInputService> { TestInputService(get(), get()) }
-    single<TestResultService> { TestResultService(get(), get()) }
-    single<WorkflowExecutionService> { WorkflowExecutionService(get(), get()) }
-    single<ErrorWatchFnService> { ErrorWatchFnService(get(), get()) }
-    single<ErrorWatchService> { ErrorWatchService(get(), get()) }
-    single<InquisitionService> { InquisitionService(get(), get()) }
-    single<WorkflowJunctionService> { WorkflowJunctionService(get(), get()) }
-    single<AppliedTransformArgService> { AppliedTransformArgService(get(), get()) }
-    single<AppliedTransformService> { AppliedTransformService(get(), get()) }
-    single<TransformationArgService> { TransformationArgService(get(), get()) }
-    single<TransformationService> { TransformationService(get(), get()) }
-    single<TypeDeclarationService> { TypeDeclarationService(get(), get()) }
-    single<TypeDefinitionService> { TypeDefinitionService(get(), get()) }
-    single<TypeParameterService> { TypeParameterService(get(), get()) }
-    single<TypeSchemaRefService> { TypeSchemaRefService(get(), get()) }
-    single<TypeVarianceService> { TypeVarianceService(get(), get()) }
-    single<PaymentMethodService> { PaymentMethodService(get(), get()) }
-    single<TagService> { TagService(get(), get()) }
-    single<UserService> { UserService(get(), get()) }
-    single<PhaseService> { PhaseService(get(), get()) }
-    single<StepService> { StepService(get(), get()) }
-    single<ToolParamService> { ToolParamService(get(), get()) }
-    single<ToolService> { ToolService(get(), get()) }
-    single<WorkflowFolderService> { WorkflowFolderService(get(), get()) }
-    single<WorkflowService> { WorkflowService(get(), get()) }
-    single<TypeUnionMemberService> { TypeUnionMemberService(get(), get()) }
-    single<TagRelationService> { TagRelationService(get(), get()) }
-    single<TransformTargetTypeService> { TransformTargetTypeService(get(), get()) }
-    single<ToolPackageDependencyService> { ToolPackageDependencyService(get(), get()) }
-    single<ProvisionDataPointService> { ProvisionDataPointService(get(), get()) }
+
+    includes(repositoryModule, mapperModule, idFactoryModule)
+
+    single<PackageRepoService> { PackageRepoService(get(), get(), get()) }
+    single<PackageService> { PackageService(get(), get(), get()) }
+    single<VersionSpecService> { VersionSpecService(get(), get(), get()) }
+    single<BenchmarkingDataService> { BenchmarkingDataService(get(), get(), get()) }
+    single<ExecutionLogService> { ExecutionLogService(get(), get(), get()) }
+    single<StepExecutionService> { StepExecutionService(get(), get(), get()) }
+    single<TestCaseService> { TestCaseService(get(), get(), get()) }
+    single<TestExpectedOutcomeService> { TestExpectedOutcomeService(get(), get(), get()) }
+    single<TestInputService> { TestInputService(get(), get(), get()) }
+    single<TestResultService> { TestResultService(get(), get(), get()) }
+    single<WorkflowExecutionService> { WorkflowExecutionService(get(), get(), get()) }
+    single<ErrorWatchFnService> { ErrorWatchFnService(get(), get(), get()) }
+    single<ErrorWatchService> { ErrorWatchService(get(), get(), get()) }
+    single<InquisitionService> { InquisitionService(get(), get(), get()) }
+    single<WorkflowJunctionService> { WorkflowJunctionService(get(), get(), get()) }
+    single<AppliedTransformArgService> { AppliedTransformArgService(get(), get(), get()) }
+    single<AppliedTransformService> { AppliedTransformService(get(), get(), get()) }
+    single<TransformationArgService> { TransformationArgService(get(), get(), get()) }
+    single<TransformationService> { TransformationService(get(), get(), get()) }
+    single<TypeDeclarationService> { TypeDeclarationService(get(), get(), get()) }
+    single<TypeDefinitionService> { TypeDefinitionService(get(), get(), get()) }
+    single<TypeParameterService> { TypeParameterService(get(), get(), get()) }
+    single<TypeSchemaRefService> { TypeSchemaRefService(get(), get(), get()) }
+    single<TypeVarianceService> { TypeVarianceService(get(), get(), get()) }
+    single<PaymentMethodService> { PaymentMethodService(get(), get(), get()) }
+    single<TagService> { TagService(get(), get(), get()) }
+    single<UserService> { UserService(get(), get(), get()) }
+    single<PhaseService> { PhaseService(get(), get(), get()) }
+    single<StepService> { StepService(get(), get(), get()) }
+    single<ToolParamService> { ToolParamService(get(), get(), get()) }
+    single<ToolService> { ToolService(get(), get(), get()) }
+    single<WorkflowFolderService> { WorkflowFolderService(get(), get(), get()) }
+    single<WorkflowService> { WorkflowService(get(), get(), get()) }
+    single<TypeUnionMemberService> { TypeUnionMemberService(get(), get(), get()) }
+    single<TagRelationService> { TagRelationService(get(), get(), get()) }
+    single<TransformTargetTypeService> { TransformTargetTypeService(get(), get(), get()) }
+    single<ToolPackageDependencyService> { ToolPackageDependencyService(get(), get(), get()) }
+    single<ProvisionDataPointService> { ProvisionDataPointService(get(), get(), get()) }
 }

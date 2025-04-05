@@ -4,30 +4,27 @@ import com.wini.owle.async.AsyncError.DatabaseError
 import com.wini.owle.async.AsyncError.NoSuchIdError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
-import com.wini.owle.mapper.BaseDbMapper
+import com.wini.owle.mapper.DbMapper
+import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.OwleRepo
 import org.jetbrains.exposed.dao.Entity
-import org.jetbrains.exposed.dao.id.EntityID
 
 
 open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
     private val repository: OwleRepo<ID, T>,
-    private val mapper: BaseDbMapper<Dto, T>
+    private val mapper: DbMapper<Dto, T>,
+    private val idFactory: EntityIdFactory<ID>
 ) : Service<ID, Dto> {
-
-    fun T.toDto(): Dto {
-        return mapper.run { toDto() }
-    }
-
-    fun Dto.toEntity(): T {
-        return mapper.run { toEntity() }
-    }
 
     override fun create(dto: Dto): AsyncResult<Dto> {
         return runCatching {
-            repository.create(dto.toEntity())
+            val entity = mapper.toEntity(dto)
+            repository.create(entity)
         }.fold(
-            onSuccess = { entity -> AsyncResult.Success(entity.toDto()) },
+            onSuccess = { entity ->
+                val data = mapper.toDto(entity)
+                AsyncResult.Success(data)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to create entity").asFailure()
             }
@@ -38,7 +35,10 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
         return runCatching {
             repository.getAll(emptyList())
         }.fold(
-            onSuccess = { entities -> AsyncResult.Success(entities.map { it.toDto() }) },
+            onSuccess = { entities ->
+                val data = mapper.toDtos(entities)
+                AsyncResult.Success(data)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to get all entities").asFailure()
             }
@@ -47,12 +47,15 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun getById(id: ID): AsyncResult<Dto?> {
         return runCatching {
-            repository.getById(EntityID(id, repository.entityClass.table))
+            val entityID = idFactory.build(id)
+            repository.getById(entityID)
         }.fold(
             onSuccess = { entity ->
-                entity?.let {
-                    AsyncResult.Success(it.toDto())
-                } ?: NoSuchIdError("No such id in ${repository.entityClass.table}: $id").asFailure()
+                entity
+                    ?.let {
+                        val data = mapper.toDto(it)
+                        AsyncResult.Success(data)
+                    } ?: NoSuchIdError("No such id: $id").asFailure()
             },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Failed to get id $id").asFailure()
@@ -62,9 +65,13 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun create(dtos: List<Dto>): AsyncResult<List<Dto>> {
         return runCatching {
-            repository.create(dtos.map { it.toEntity() })
+            val entities = mapper.toEntities(dtos)
+            repository.create(entities)
         }.fold(
-            onSuccess = { entities -> AsyncResult.Success(entities.map { it.toDto() }) },
+            onSuccess = { entities ->
+                val data = mapper.toDtos(entities)
+                AsyncResult.Success(data)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to create entities").asFailure()
             }
@@ -73,9 +80,13 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun update(dto: Dto): AsyncResult<Dto> {
         return runCatching {
-            repository.update(dto.toEntity())
+            val entity = mapper.toEntity(dto)
+            repository.update(entity)
         }.fold(
-            onSuccess = { entity -> AsyncResult.Success(entity.toDto()) },
+            onSuccess = { entity ->
+                val data = mapper.toDto(entity)
+                AsyncResult.Success(data)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
             }
@@ -84,9 +95,13 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun update(dtos: List<Dto>): AsyncResult<List<Dto>> {
         return runCatching {
-            repository.update(dtos.map { it.toEntity() })
+            val entities = mapper.toEntities(dtos)
+            repository.update(entities)
         }.fold(
-            onSuccess = { entities -> AsyncResult.Success(entities.map { it.toDto() }) },
+            onSuccess = { entities ->
+                val data = mapper.toDtos(entities)
+                AsyncResult.Success(data)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
             }
@@ -95,10 +110,13 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun delete(id: ID): AsyncResult<Boolean> {
         return runCatching {
-            repository.delete(EntityID(id, repository.entityClass.table))
+            val entityID = idFactory.build(id)
+            repository.delete(entityID)
             true
         }.fold(
-            onSuccess = { AsyncResult.Success(it) },
+            onSuccess = {
+                AsyncResult.Success(it)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to delete entity $id").asFailure()
             }
@@ -107,10 +125,13 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun delete(ids: List<ID>): AsyncResult<Boolean> {
         return runCatching {
-            repository.delete(ids.map { EntityID(it, repository.entityClass.table) })
+            val entityIds = ids.map { idFactory.build(it) }
+            repository.delete(entityIds)
             true
         }.fold(
-            onSuccess = { AsyncResult.Success(it) },
+            onSuccess = {
+                AsyncResult.Success(it)
+            },
             onFailure = { exception ->
                 DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
             }
