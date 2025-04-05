@@ -5,8 +5,9 @@ import com.wini.owle.dto.workflows.WorkflowFolderDto
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.DateTimeConverter
 import io.mockk.*
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -18,15 +19,20 @@ open class WorkflowsMapperTest {
     private lateinit var mapper: WorkflowsMapper
     private val workflowFoldersMapper: WorkflowFoldersMapper = mockk()
     private val factory: DaoFactory<WorkflowDao, Long> = mockk()
+    private val dateTimeConverter: DateTimeConverter = mockk()
 
     @BeforeEach
     fun setUp() {
-        mapper = WorkflowsMapper(factory, workflowFoldersMapper)
+        mapper = WorkflowsMapper(
+            factory,
+            workflowFoldersMapper,
+            dateTimeConverter
+        )
     }
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = WorkflowDto(
             id = 99L,
             name = "workflowName",
@@ -37,11 +43,11 @@ open class WorkflowsMapperTest {
             updatedAt = "2023-01-02T00:00:00"
         )
 
-        // Mock the behavior of findById to return null (not found)
+        // Mock behavior for findById to return null (not found)
         mockkObject(WorkflowDao)
         every { WorkflowDao.findById(99L) } returns null
 
-        // Verify that the exception is thrown with the correct message
+        // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
             mapper.toEntity(dto)
         }
@@ -51,38 +57,50 @@ open class WorkflowsMapperTest {
     }
 
     @Test
-    fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+    fun `toDto should correctly delegate to collaborators`() {
+        // Setup mocks
         val entity = mockk<WorkflowDao> {
             every { id.value } returns 1L
             every { name } returns "workflowName"
             every { description } returns "description"
             every { pythonVersion } returns "3.8"
             every { parentFolder } returns mockk()
-            every { createdAt } returns LocalDateTime.parse("2023-01-01T00:00:00")
-            every { updatedAt } returns LocalDateTime.parse("2023-01-02T00:00:00")
+            every { createdAt } returns mockk()
+            every { updatedAt } returns mockk()
         }
 
-        // Mock toDto behavior of the mappers
+        // Setup mock responses from collaborators
         val parentFolderDto = mockk<WorkflowFolderDto>()
+        val createdAtStr = "2023-01-01T00:00:00"
+        val updatedAtStr = "2023-01-02T00:00:00"
+        
         every { workflowFoldersMapper.toDto(entity.parentFolder!!) } returns parentFolderDto
+        every { dateTimeConverter.toString(entity.createdAt) } returns createdAtStr
+        every { dateTimeConverter.toString(entity.updatedAt) } returns updatedAtStr
 
-        // Call the method under test
+        // Call method under test
         val result = mapper.toDto(entity)
 
-        // Verify the result
-        assertEquals(1L, result.id)
-        assertEquals("workflowName", result.name)
-        assertEquals("description", result.description)
-        assertEquals("3.8", result.pythonVersion)
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { workflowFoldersMapper.toDto(entity.parentFolder!!) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.createdAt) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.updatedAt) }
+
+        // Verify result contains values from collaborators
         assertEquals(parentFolderDto, result.parentFolder)
-        assertEquals("2023-01-01T00:00:00", result.createdAt)
-        assertEquals("2023-01-02T00:00:00", result.updatedAt)
+        assertEquals(createdAtStr, result.createdAt)
+        assertEquals(updatedAtStr, result.updatedAt)
+        
+        // Verify direct property mappings
+        assertEquals(entity.id.value, result.id)
+        assertEquals(entity.name, result.name)
+        assertEquals(entity.description, result.description)
+        assertEquals(entity.pythonVersion, result.pythonVersion)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = WorkflowDto(
             id = 42L,
             name = "workflowName",
@@ -93,51 +111,39 @@ open class WorkflowsMapperTest {
             updatedAt = "2023-01-02T00:00:00"
         )
 
-        // Mock the existing entity that will be updated
+        // Create mock existing entity to update
         val existingEntity = mockk<WorkflowDao>(relaxed = true)
 
-        // Mock the workflowFoldersMapper
+        // Setup mock responses from collaborators
         val parentFolderDao = mockk<WorkflowFolderDao>()
-        every { workflowFoldersMapper.toEntity(any()) } returns parentFolderDao
+        val createdAt = mockk<Instant>()
+        val updatedAt = mockk<Instant>()
+        
+        every { workflowFoldersMapper.toEntity(dto.parentFolder!!) } returns parentFolderDao
+        every { dateTimeConverter.fromString(dto.createdAt) } returns createdAt
+        every { dateTimeConverter.fromString(dto.updatedAt) } returns updatedAt
 
-        // Set up mocks for finding existing entity
+        // Mock finding existing entity
         mockkObject(WorkflowDao)
         every { WorkflowDao.findById(42L) } returns existingEntity
 
-        // Capture the property updates
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-        val pythonVersionSlot = slot<String>()
-        val parentFolderSlot = slot<WorkflowFolderDao>()
-        val createdAtSlot = slot<LocalDateTime>()
-        val updatedAtSlot = slot<LocalDateTime>()
-
-        every { existingEntity.name = capture(nameSlot) } just runs
-        every { existingEntity.description = capture(descriptionSlot) } just runs
-        every { existingEntity.pythonVersion = capture(pythonVersionSlot) } just runs
-        every { existingEntity.parentFolder = capture(parentFolderSlot) } just runs
-        every { existingEntity.createdAt = capture(createdAtSlot) } just runs
-        every { existingEntity.updatedAt = capture(updatedAtSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the existing entity was found and updated
-        verify { WorkflowDao.findById(42L) }
-        verify { existingEntity.name = "workflowName" }
-        verify { existingEntity.description = "description" }
-        verify { existingEntity.pythonVersion = "3.8" }
-        verify { existingEntity.parentFolder = parentFolderDao }
-        verify { existingEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
-        verify { existingEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { workflowFoldersMapper.toEntity(dto.parentFolder!!) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.createdAt) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.updatedAt) }
 
-        // Verify the captured values
-        assertEquals("workflowName", nameSlot.captured)
-        assertEquals("description", descriptionSlot.captured)
-        assertEquals("3.8", pythonVersionSlot.captured)
-        assertEquals(parentFolderDao, parentFolderSlot.captured)
-        assertEquals(LocalDateTime.parse("2023-01-01T00:00:00"), createdAtSlot.captured)
-        assertEquals(LocalDateTime.parse("2023-01-02T00:00:00"), updatedAtSlot.captured)
+        // Verify entity fields were set with values from collaborators
+        verify { existingEntity.parentFolder = parentFolderDao }
+        verify { existingEntity.createdAt = createdAt }
+        verify { existingEntity.updatedAt = updatedAt }
+        
+        // Verify other fields were set correctly
+        verify { existingEntity.name = dto.name }
+        verify { existingEntity.description = dto.description }
+        verify { existingEntity.pythonVersion = dto.pythonVersion }
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -146,8 +152,8 @@ open class WorkflowsMapperTest {
     }
 
     @Test
-    fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+    fun `toEntity should create a new entity when id is zero`() {
+        // Create test DTO
         val dto = WorkflowDto(
             id = 0L,
             name = "workflowName",
@@ -158,52 +164,41 @@ open class WorkflowsMapperTest {
             updatedAt = "2023-01-02T00:00:00"
         )
 
-        // Mock the new entity that will be created
+        // Create mock new entity
         val newEntity = mockk<WorkflowDao>(relaxed = true)
 
-        // Mock the workflowFoldersMapper
+        // Setup mock responses from collaborators
         val parentFolderDao = mockk<WorkflowFolderDao>()
-        every { workflowFoldersMapper.toEntity(any()) } returns parentFolderDao
-
-        // Set up the factory mock to return our mock entity
+        val createdAt = mockk<Instant>()
+        val updatedAt = mockk<Instant>()
+        
+        every { workflowFoldersMapper.toEntity(dto.parentFolder!!) } returns parentFolderDao
+        every { dateTimeConverter.fromString(dto.createdAt) } returns createdAt
+        every { dateTimeConverter.fromString(dto.updatedAt) } returns updatedAt
+        
+        // Setup factory mock
         every { factory.create() } returns newEntity
 
-        // Capture property assignments
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-        val pythonVersionSlot = slot<String>()
-        val parentFolderSlot = slot<WorkflowFolderDao>()
-        val createdAtSlot = slot<LocalDateTime>()
-        val updatedAtSlot = slot<LocalDateTime>()
-
-        every { newEntity.name = capture(nameSlot) } just runs
-        every { newEntity.description = capture(descriptionSlot) } just runs
-        every { newEntity.pythonVersion = capture(pythonVersionSlot) } just runs
-        every { newEntity.parentFolder = capture(parentFolderSlot) } just runs
-        every { newEntity.createdAt = capture(createdAtSlot) } just runs
-        every { newEntity.updatedAt = capture(updatedAtSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
+        // Verify factory was used to create new entity
+        verify(exactly = 1) { factory.create() }
 
-        // Verify the properties were set correctly
-        verify { newEntity.name = "workflowName" }
-        verify { newEntity.description = "description" }
-        verify { newEntity.pythonVersion = "3.8" }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { workflowFoldersMapper.toEntity(dto.parentFolder!!) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.createdAt) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.updatedAt) }
+
+        // Verify entity fields were set with values from collaborators
         verify { newEntity.parentFolder = parentFolderDao }
-        verify { newEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
-        verify { newEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
-
-        // Verify the captured values
-        assertEquals("workflowName", nameSlot.captured)
-        assertEquals("description", descriptionSlot.captured)
-        assertEquals("3.8", pythonVersionSlot.captured)
-        assertEquals(parentFolderDao, parentFolderSlot.captured)
-        assertEquals(LocalDateTime.parse("2023-01-01T00:00:00"), createdAtSlot.captured)
-        assertEquals(LocalDateTime.parse("2023-01-02T00:00:00"), updatedAtSlot.captured)
+        verify { newEntity.createdAt = createdAt }
+        verify { newEntity.updatedAt = updatedAt }
+        
+        // Verify other fields were set correctly
+        verify { newEntity.name = dto.name }
+        verify { newEntity.description = dto.description }
+        verify { newEntity.pythonVersion = dto.pythonVersion }
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

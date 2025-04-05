@@ -2,7 +2,7 @@ package com.wini.owle.services.environs
 
 import com.wini.owle.dto.environs.PackageRepoDto
 import com.wini.owle.dto.environs.PackageRepoTypeDto
-import com.wini.owle.entity.environs.PackageRepoType
+import com.wini.owle.entity.environs.enums.PackageRepoType
 import com.wini.owle.entity.PackageRepositories
 import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.services.OwleServiceUnitTest

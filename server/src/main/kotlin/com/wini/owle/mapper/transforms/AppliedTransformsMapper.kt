@@ -1,26 +1,27 @@
 package com.wini.owle.mapper.transforms
 
 import com.wini.owle.dto.transforms.AppliedTransformDto
-import com.wini.owle.entity.transforms.TransformOccurrence
-import com.wini.owle.entity.transforms.TransformOccurrence.Companion.toDto // Needed for entity.occurrence.toDto()
+import com.wini.owle.entity.transforms.enums.TransformOccurrence
 import com.wini.owle.entity.transforms.AppliedTransformDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.typing.TypeDeclarationsMapper // Assumed updated
-import com.wini.owle.mapper.workflows.DataPointsMapper // Assumed updated
+import com.wini.owle.mapper.transforms.enums.TransformOccurrenceMapper
+import com.wini.owle.mapper.typing.TypeDeclarationsMapper
+import com.wini.owle.mapper.workflows.DataPointsMapper
 
 
 class AppliedTransformsMapper(
     private val daoFactory: DaoFactory<AppliedTransformDao, Long>,
     private val transformationsMapper: TransformationsMapper,
     private val typeDeclarationsMapper: TypeDeclarationsMapper,
-    private val dataPointsMapper: DataPointsMapper
+    private val dataPointsMapper: DataPointsMapper,
+    private val transformOccurrenceMapper: TransformOccurrenceMapper
 ): DbMapper<AppliedTransformDto, AppliedTransformDao>() {
 
     override fun toEntity(dto: AppliedTransformDto): AppliedTransformDao {
         val applyProps: AppliedTransformDao.() -> Unit = {
             transformation = transformationsMapper.toEntity(dto.transformation)
-            occurrence = TransformOccurrence.fromDto(dto.occurrence) // Use companion method
+            occurrence = transformOccurrenceMapper.toEntity(dto.occurrence)
             resultType = typeDeclarationsMapper.toEntity(dto.resultType)
             dataPoint = dto.dataPoint?.let { dataPointsMapper.toEntity(it) }
         }
@@ -37,7 +38,7 @@ class AppliedTransformsMapper(
         return AppliedTransformDto(
             id = entity.id.value,
             transformation = transformationsMapper.toDto(entity.transformation),
-            occurrence = entity.occurrence.toDto(), // Use extension function from companion
+            occurrence = transformOccurrenceMapper.toDto(entity.occurrence),
             resultType = typeDeclarationsMapper.toDto(entity.resultType),
             dataPoint = entity.dataPoint?.let { dataPointsMapper.toDto(it) }
         )

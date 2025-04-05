@@ -12,12 +12,25 @@ import com.wini.owle.mapper.environs.PackageRepoMapper
 import com.wini.owle.mapper.environs.PackagesMapper
 import com.wini.owle.mapper.environs.ToolPackageDependencyMapper
 import com.wini.owle.mapper.environs.VersionSpecsMapper
+import com.wini.owle.mapper.environs.enums.PackageRepoTypeMapper
 import com.wini.owle.mapper.runs.*
+import com.wini.owle.mapper.runs.enums.ComparisonOperatorMapper
+import com.wini.owle.mapper.runs.enums.ExecutionStatusMapper
+import com.wini.owle.mapper.runs.enums.GenerationMethodMapper
+import com.wini.owle.mapper.runs.enums.LogLevelMapper
 import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
+import com.wini.owle.mapper.transforms.enums.TransformOccurrenceMapper
 import com.wini.owle.mapper.typing.*
+import com.wini.owle.mapper.typing.enums.VarianceCardinalityMapper
 import com.wini.owle.mapper.user.*
+import com.wini.owle.mapper.user.enums.CardBrandMapper
+import com.wini.owle.mapper.user.enums.SubscriptionStatusMapper
 import com.wini.owle.mapper.workflows.*
+import com.wini.owle.mapper.workflows.enums.AuthorshipCreditMapper
+import com.wini.owle.mapper.workflows.enums.CommercialUseMapper
+import com.wini.owle.mapper.workflows.enums.ModificationTermsMapper
+import com.wini.owle.mapper.workflows.enums.StoreMethodMapper
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.koin.dsl.module
 
@@ -81,8 +94,23 @@ val mapperModule = module {
     single<TypeUnionMembersMapper> { TypeUnionMembersMapper(get()) }
     single<TransformTargetTypesMapper> { TransformTargetTypesMapper(get()) }
     single<TagRelationsMapper> { TagRelationsMapper(get()) }
-    single<WorkflowFoldersMapper> { WorkflowFoldersMapper(get()) }
-    single<WorkflowsMapper> { WorkflowsMapper(get(), get()) }
+    single<WorkflowFoldersMapper> { WorkflowFoldersMapper(get(), get()) }
+    single<WorkflowsMapper> { WorkflowsMapper(get(), get(), get()) }
+    single<PackageRepoTypeMapper> { PackageRepoTypeMapper() }
+
+    single<ComparisonOperatorMapper> { ComparisonOperatorMapper() }
+    single<ExecutionStatusMapper> { ExecutionStatusMapper() }
+    single<GenerationMethodMapper> { GenerationMethodMapper() }
+    single<LogLevelMapper> { LogLevelMapper() }
+    single<TransformOccurrenceMapper> { TransformOccurrenceMapper() }
+    single<VarianceCardinalityMapper> { VarianceCardinalityMapper() }
+    single<CardBrandMapper> { CardBrandMapper()  }
+    single<SubscriptionStatusMapper> { SubscriptionStatusMapper() }
+    single<AuthorshipCreditMapper> { AuthorshipCreditMapper() }
+    single<CommercialUseMapper> { CommercialUseMapper() }
+    single<ModificationTermsMapper> { ModificationTermsMapper() }
+    single<StoreMethodMapper> { StoreMethodMapper() }
+    single<DateTimeConverter> { DateTimeConverter }
 
     single<TypeDeclarationsMapper> { TypeDeclarationsMapper(get(), get()) }
     single<TagsMapper> { TagsMapper(get(), get()) }
@@ -93,27 +121,27 @@ val mapperModule = module {
     single<BenchmarkingDataMapper> { BenchmarkingDataMapper(get(), get()) }
     single<AppliedTransformArgsMapper> { AppliedTransformArgsMapper(get(), get(), get()) }
     single<PreReqInjectionsMapper> { PreReqInjectionsMapper(get(), get(), get()) }
-    single<TestInputsMapper> { TestInputsMapper(get(), get()) }
-    single<TestExpectedOutcomesMapper> { TestExpectedOutcomesMapper(get(), get()) }
-    single<TestResultsMapper> { TestResultsMapper(get(), get(), get()) }
-    single<StepExecutionsMapper> { StepExecutionsMapper(get(), get(), get()) }
+    single<TestInputsMapper> { TestInputsMapper(get(), get(), get()) }
+    single<TestExpectedOutcomesMapper> { TestExpectedOutcomesMapper(get(), get(), get()) }
+    single<TestResultsMapper> { TestResultsMapper(get(), get(), get(), get()) }
+    single<StepExecutionsMapper> { StepExecutionsMapper(get(), get(), get(), get(), get()) }
     single<TransformationArgsMapper> { TransformationArgsMapper(get(), get(), get()) }
     single<ErrorWatchFnsMapper> { ErrorWatchFnsMapper(get(), get()) }
     single<PackagesMapper> { PackagesMapper(get(), get()) }
     single<TypeParametersMapper> { TypeParametersMapper(get(), get()) }
     single<TypeSchemaRefsMapper> { TypeSchemaRefsMapper(get(), get()) }
     single<StepBenchmarkingDataMapper> { StepBenchmarkingDataMapper(get(), get()) }
-    single<DataPointsMapper> { DataPointsMapper(get(), get(), get()) }
+    single<DataPointsMapper> { DataPointsMapper(get(), get(), get(), get()) }
     single<ToolsMapper> { ToolsMapper(get(), get(), get()) }
     single<ToolPackageDependencyMapper> { ToolPackageDependencyMapper(get()) }
-    single<PackageRepoMapper> { PackageRepoMapper(get()) }
+    single<PackageRepoMapper> { PackageRepoMapper(get(), get()) }
     single<TransformationsMapper> { TransformationsMapper(get(), get()) }
-    single<UsersMapper> { UsersMapper(get()) }
+    single<UsersMapper> { UsersMapper(get(), get(), get()) }
     single<StepsMapper> { StepsMapper(get(), get(), get(), get()) }
     single<InquisitionsMapper> { InquisitionsMapper(get(), get(), get()) }
-    single<AppliedTransformsMapper> { AppliedTransformsMapper(get(), get(), get(), get()) }
+    single<AppliedTransformsMapper> { AppliedTransformsMapper(get(), get(), get(), get(), get()) }
     single<WorkflowJunctionsMapper> { WorkflowJunctionsMapper(get(), get(), get(), get()) }
-    single<WorkflowExecutionsMapper> { WorkflowExecutionsMapper(get(), get(), get(), get()) }
+    single<WorkflowExecutionsMapper> { WorkflowExecutionsMapper(get(), get(), get(), get(), get(), get()) }
     single<TestCasesMapper> { TestCasesMapper(get(), get(), get(), get(), get(), get(), get()) }
     single<ProvisionsMapper> { ProvisionsMapper(get(), get(), get(), get()) }
     single<ErrorWatchesMapper> { ErrorWatchesMapper(get(), get()) }
@@ -121,10 +149,10 @@ val mapperModule = module {
     single<TypeBoundsMapper> { TypeBoundsMapper(get(), get()) }
     single<TypeVariancesMapper> { TypeVariancesMapper(get(), get()) }
     single<RevisionsMapper> { RevisionsMapper(get(), get(), get()) }
-    single<PaymentMethodsMapper> { PaymentMethodsMapper(get(), get()) }
+    single<PaymentMethodsMapper> { PaymentMethodsMapper(get(), get(), get(), get()) }
     single<ProvisionDataPointMapper> { ProvisionDataPointMapper(get()) }
-    single<PackageRepoMapper> { PackageRepoMapper(get()) }
-    single<ExecutionLogMapper> { ExecutionLogMapper(get(), get()) }
+    single<PackageRepoMapper> { PackageRepoMapper(get(), get()) }
+    single<ExecutionLogMapper> { ExecutionLogMapper(get(), get(), get(), get()) }
 }
 
 

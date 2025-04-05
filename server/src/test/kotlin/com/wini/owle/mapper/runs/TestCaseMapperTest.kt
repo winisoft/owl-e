@@ -5,7 +5,6 @@ import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.runs.TestCaseDao
-import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.entity.workflows.WorkflowDao
@@ -13,14 +12,11 @@ import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.user.UsersMapper
 import com.wini.owle.mapper.workflows.StepsMapper
 import com.wini.owle.mapper.workflows.WorkflowsMapper
-import com.wini.owle.models.User
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.assertThrows
-import org.testcontainers.shaded.org.yaml.snakeyaml.Yaml
-import kotlin.math.exp
 
 
 open class TestCaseMapperTest {
@@ -49,7 +45,7 @@ open class TestCaseMapperTest {
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = TestCaseDto(
             id = 99L,
             user = mockk(),
@@ -62,11 +58,11 @@ open class TestCaseMapperTest {
             results = emptyList()
         )
 
-        // Mock the behavior of findById to return null (not found)
+        // Mock behavior for findById to return null (not found)
         mockkObject(TestCaseDao)
         every { TestCaseDao.findById(99L) } returns null
 
-        // Verify that the exception is thrown with the correct message
+        // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
             mapper.toEntity(dto)
         }
@@ -76,8 +72,8 @@ open class TestCaseMapperTest {
     }
 
     @Test
-    fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+    fun `toDto should correctly delegate to collaborators`() {
+        // Setup mocks
         val entity = mockk<TestCaseDao> {
             every { id.value } returns 1L
             every { user } returns mockk()
@@ -87,29 +83,37 @@ open class TestCaseMapperTest {
             every { step } returns mockk()
         }
 
-        // Mock the behavior of usersMapper, workflowsMapper, and stepsMapper
+        // Setup mock responses from collaborators
         val userDto = mockk<UserDto>()
         val workflowDto = mockk<WorkflowDto>()
         val stepDto = mockk<StepDto>()
+        
         every { usersMapper.toDto(entity.user) } returns userDto
-        every { workflowsMapper.toDto(any<WorkflowDao>()) } returns workflowDto
-        every { stepsMapper.toDto(any<StepDao>()) } returns stepDto
+        every { workflowsMapper.toDto(entity.workflow!!) } returns workflowDto
+        every { stepsMapper.toDto(entity.step!!) } returns stepDto
 
-        // Call the method under test
+        // Call method under test
         val result = mapper.toDto(entity)
 
-        // Verify the result
-        assertEquals(1L, result.id)
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { usersMapper.toDto(entity.user) }
+        verify(exactly = 1) { workflowsMapper.toDto(entity.workflow!!) }
+        verify(exactly = 1) { stepsMapper.toDto(entity.step!!) }
+
+        // Verify result contains values from collaborators
         assertEquals(userDto, result.user)
-        assertEquals("Test Case", result.name)
-        assertEquals("Description", result.description)
         assertEquals(workflowDto, result.workflow)
         assertEquals(stepDto, result.step)
+        
+        // Verify direct property mappings
+        assertEquals(entity.id.value, result.id)
+        assertEquals(entity.name, result.name)
+        assertEquals(entity.description, result.description)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = TestCaseDto(
             id = 42L,
             user = mockk(),
@@ -122,48 +126,38 @@ open class TestCaseMapperTest {
             results = emptyList()
         )
 
-        // Mock the existing entity that will be updated
+        // Create mock existing entity to update
         val existingEntity = mockk<TestCaseDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowDao: WorkflowDao = mockk()
-        val userDao: UserDao = mockk()
-        val stepDao: StepDao = mockk()
+        // Setup mock responses from collaborators
+        val userDao = mockk<UserDao>()
+        val workflowDao = mockk<WorkflowDao>()
+        val stepDao = mockk<StepDao>()
+        
+        every { usersMapper.toEntity(dto.user) } returns userDao
+        every { workflowsMapper.toEntity(dto.workflow!!) } returns workflowDao
+        every { stepsMapper.toEntity(dto.step!!) } returns stepDao
 
-        // Set up mocks for finding existing entity
+        // Mock finding existing entity
         mockkObject(TestCaseDao)
         every { TestCaseDao.findById(42L) } returns existingEntity
 
-        // Capture the property updates
-        val userSlot = slot<UserDao>()
-        val workflowSlot = slot<WorkflowDao>()
-        val stepSlot = slot<StepDao>()
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-
-        every { existingEntity.user = capture(userSlot) } just runs
-        every { existingEntity.workflow = capture(workflowSlot) } just runs
-        every { existingEntity.step = capture(stepSlot) } just runs
-        every { existingEntity.name = capture(nameSlot) } just runs
-        every { existingEntity.description = capture(descriptionSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the existing entity was found and updated
-        verify { TestCaseDao.findById(42L) }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { usersMapper.toEntity(dto.user) }
+        verify(exactly = 1) { workflowsMapper.toEntity(dto.workflow!!) }
+        verify(exactly = 1) { stepsMapper.toEntity(dto.step!!) }
+
+        // Verify entity fields were set with values from collaborators
         verify { existingEntity.user = userDao }
         verify { existingEntity.workflow = workflowDao }
         verify { existingEntity.step = stepDao }
+        
+        // Verify other fields were set correctly
         verify { existingEntity.name = dto.name }
         verify { existingEntity.description = dto.description }
-
-        // Verify the captured values
-        assertEquals(userDao, userSlot.captured)
-        assertEquals(workflowDao, workflowSlot.captured)
-        assertEquals(stepDao, stepSlot.captured)
-        assertEquals(dto.name, nameSlot.captured)
-        assertEquals(dto.description, descriptionSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -172,8 +166,8 @@ open class TestCaseMapperTest {
     }
 
     @Test
-    fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+    fun `toEntity should create a new entity when id is zero`() {
+        // Create test DTO
         val dto = TestCaseDto(
             id = 0L,
             user = mockk(),
@@ -186,49 +180,40 @@ open class TestCaseMapperTest {
             results = emptyList()
         )
 
-        // Mock the new entity that will be created
+        // Create mock new entity
         val newEntity = mockk<TestCaseDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowDao: WorkflowDao = mockk()
-        val stepDao: StepDao = mockk()
-        val userDao: UserDao = mockk()
-
-        // Set up the factory mock to return our mock entity
+        // Setup mock responses from collaborators
+        val userDao = mockk<UserDao>()
+        val workflowDao = mockk<WorkflowDao>()
+        val stepDao = mockk<StepDao>()
+        
+        every { usersMapper.toEntity(dto.user) } returns userDao
+        every { workflowsMapper.toEntity(dto.workflow!!) } returns workflowDao
+        every { stepsMapper.toEntity(dto.step!!) } returns stepDao
+        
+        // Setup factory mock
         every { factory.create() } returns newEntity
 
-        // Capture property assignments
-        val userSlot = slot<UserDao>()
-        val workflowSlot = slot<WorkflowDao>()
-        val stepSlot = slot<StepDao>()
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-
-        every { newEntity.user = capture(userSlot) } just runs
-        every { newEntity.workflow = capture(workflowSlot) } just runs
-        every { newEntity.step = capture(stepSlot) } just runs
-        every { newEntity.name = capture(nameSlot) } just runs
-        every { newEntity.description = capture(descriptionSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
+        // Verify factory was used to create new entity
+        verify(exactly = 1) { factory.create() }
 
-        // Verify the properties were set correctly
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { usersMapper.toEntity(dto.user) }
+        verify(exactly = 1) { workflowsMapper.toEntity(dto.workflow!!) }
+        verify(exactly = 1) { stepsMapper.toEntity(dto.step!!) }
+
+        // Verify entity fields were set with values from collaborators
         verify { newEntity.user = userDao }
         verify { newEntity.workflow = workflowDao }
         verify { newEntity.step = stepDao }
+        
+        // Verify other fields were set correctly
         verify { newEntity.name = dto.name }
         verify { newEntity.description = dto.description }
-
-        // Verify the captured values
-        assertEquals(userDao, userSlot.captured)
-        assertEquals(workflowDao, workflowSlot.captured)
-        assertEquals(stepDao, stepSlot.captured)
-        assertEquals(dto.name, nameSlot.captured)
-        assertEquals(dto.description, descriptionSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

@@ -1,23 +1,32 @@
 package com.wini.owle.entity
 
 import com.wini.owle.entity.environs.*
+import com.wini.owle.entity.environs.enums.PackageRepoType
 import com.wini.owle.entity.runs.*
+import com.wini.owle.entity.runs.enums.ComparisonOperator
+import com.wini.owle.entity.runs.enums.ExecutionStatus
+import com.wini.owle.entity.runs.enums.GenerationMethod
+import com.wini.owle.entity.runs.enums.LogLevel
 import com.wini.owle.entity.steps.*
 import com.wini.owle.entity.transforms.*
+import com.wini.owle.entity.user.enums.CardBrand
+import com.wini.owle.entity.transforms.enums.TransformOccurrence
 import com.wini.owle.entity.typing.*
+import com.wini.owle.entity.typing.enums.VarianceCardinality
 import com.wini.owle.entity.user.*
+import com.wini.owle.entity.user.enums.SubscriptionStatus
 import com.wini.owle.entity.workflows.*
+import com.wini.owle.entity.workflows.enums.StoreMethod
 import com.wini.owle.models.metadata.UserDesignedMetadata
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import java.math.BigDecimal
 import io.mockk.mockk
 import io.mockk.*
-import kotlinx.datetime.LocalDateTime
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
+
 
 @Suppress("UNCHECKED_CAST")
 object EntityTestInstanceFactory {
@@ -72,8 +81,8 @@ object EntityTestInstanceFactory {
         presetValue: String? = null,
         storeMethod: StoreMethod = StoreMethod.BLOB,
         typeDeclaration: TypeDeclarationDao = typeDeclarationDao(),
-        createdAt: LocalDateTime = mockk(),
-        updatedAt: LocalDateTime = mockk()
+        createdAt: Instant = mockk(),
+        updatedAt: Instant = mockk()
     ): DataPointDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
         every { this@mockk.workflow } returns workflow
@@ -113,7 +122,7 @@ object EntityTestInstanceFactory {
     fun executionLogDao(
         id: Long = 1,
         stepExecution: StepExecutionDao = stepExecutionDao(),
-        timestamp: LocalDateTime = mockk(),
+        timestamp: Instant = mockk(),
         logLevel: LogLevel = LogLevel.WARNING,
         message: String = "Execution started"
     ): ExecutionLogDao = mockk {
@@ -169,8 +178,8 @@ object EntityTestInstanceFactory {
         cardBrand: CardBrand? = CardBrand.VISA,
         lastFour: String? = "4242",
         isDefault: Boolean = true,
-        createdAt: LocalDateTime = mockk(),
-        updatedAt: LocalDateTime = mockk()
+        createdAt: Instant = mockk(),
+        updatedAt: Instant = mockk()
     ): PaymentMethodDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
         every { this@mockk.stripePaymentMethodId } returns stripePaymentMethodId
@@ -284,8 +293,8 @@ object EntityTestInstanceFactory {
         id: Long = 1,
         workflowExecution: WorkflowExecutionDao = workflowExecutionDao(),
         step: StepDao = stepDao(),
-        startedAt: LocalDateTime = Instant.parse("2024-12-20T10:00:00Z").toLocalDateTime(TimeZone.UTC),
-        completedAt: LocalDateTime? = Instant.parse("2024-12-20T10:00:00Z").toLocalDateTime(TimeZone.UTC),
+        startedAt: Instant = Instant.parse("2024-12-20T10:00:00Z"),
+        completedAt: Instant? = Instant.parse("2024-12-20T10:00:00Z"),
         status: ExecutionStatus = ExecutionStatus.RUNNING
     ): StepExecutionDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
@@ -375,7 +384,7 @@ object EntityTestInstanceFactory {
         testCase: TestCaseDao = testCaseDao(),
         workflowExecution: WorkflowExecutionDao = workflowExecutionDao(),
         passed: Boolean = true,
-        executedAt: LocalDateTime = mockk()
+        executedAt: Instant = mockk()
     ): TestResultDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
         every { this@mockk.testCase } returns testCase
@@ -558,8 +567,8 @@ object EntityTestInstanceFactory {
         oauthId: String? = null,
         subscriptionStatus: SubscriptionStatus = SubscriptionStatus.REGISTERED,
         apiKey: String? = null,
-        createdAt: LocalDateTime = mockk(),
-        updatedAt: LocalDateTime = mockk(),
+        createdAt: Instant = mockk(),
+        updatedAt: Instant = mockk(),
         paymentMethods: List<PaymentMethodDao> = emptyList()
     ): UserDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
@@ -594,8 +603,8 @@ object EntityTestInstanceFactory {
         pythonVersion: String = "3.9",
         parentFolder: WorkflowFolderDao? = null,
         metadata: UserDesignedMetadata = mockk(),
-        createdAt: LocalDateTime = mockk(),
-        updatedAt: LocalDateTime = mockk()
+        createdAt: Instant = mockk(),
+        updatedAt: Instant = mockk()
     ): WorkflowDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
         every { this@mockk.name } returns name
@@ -610,8 +619,8 @@ object EntityTestInstanceFactory {
         id: Long = 1,
         workflow: WorkflowDao = workflowDao(),
         user: UserDao = userDao(),
-        startedAt: LocalDateTime = Instant.parse("2024-12-20T10:00:00Z").toLocalDateTime(TimeZone.UTC),
-        completedAt: LocalDateTime? = Instant.parse("2024-12-20T10:00:00Z").toLocalDateTime(TimeZone.UTC),
+        startedAt: Instant = Instant.parse("2024-12-20T10:00:00Z"),
+        completedAt: Instant? = Instant.parse("2024-12-20T10:00:00Z"),
         status: ExecutionStatus = ExecutionStatus.SKIPPED,
         stepExecutions: List<StepExecutionDao> = emptyList()
     ): WorkflowExecutionDao = mockk {
@@ -630,8 +639,8 @@ object EntityTestInstanceFactory {
         name: String = "ExampleFolder",
         description: String? = "Folder description",
         img: ExposedBlob? = null,
-        createdAt: LocalDateTime = mockk(),
-        updatedAt: LocalDateTime = mockk()
+        createdAt: Instant = mockk(),
+        updatedAt: Instant = mockk()
     ): WorkflowFolderDao = mockk {
         every { this@mockk.id } returns EntityID(id, mockk())
         every { this@mockk.parentFolder } returns parentFolder

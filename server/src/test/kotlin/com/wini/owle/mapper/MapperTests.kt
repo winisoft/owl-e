@@ -3,20 +3,93 @@ package com.wini.owle.mapper
 import com.wini.owle.mapper.environs.PackageMapperTest
 import com.wini.owle.mapper.environs.PackageRepoMapperTest
 import com.wini.owle.mapper.environs.VersionSpecsMapperTest
+import com.wini.owle.mapper.environs.enums.PackageRepoTypeMapperTest
 import com.wini.owle.mapper.runs.*
+import com.wini.owle.mapper.runs.enums.ComparisonOperatorMapperTest
+import com.wini.owle.mapper.runs.enums.ExecutionStatusMapperTest
+import com.wini.owle.mapper.runs.enums.GenerationMethodMapperTest
+import com.wini.owle.mapper.runs.enums.LogLevelMapperTest
 import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
+import com.wini.owle.mapper.transforms.enums.TransformOccurrenceMapperTest
 import com.wini.owle.mapper.typing.*
+import com.wini.owle.mapper.typing.enums.VarianceCardinalityMapperTest
 import com.wini.owle.mapper.user.PaymentMethodMapperTest
 import com.wini.owle.mapper.user.TagsMapperTest
 import com.wini.owle.mapper.user.UserMapperTest
+import com.wini.owle.mapper.user.enums.CardBrandMapperTest
+import com.wini.owle.mapper.user.enums.SubscriptionStatusMapperTest
 import com.wini.owle.mapper.workflows.*
+import com.wini.owle.mapper.workflows.enums.AuthorshipCreditMapperTest
+import com.wini.owle.mapper.workflows.enums.CommercialUseMapperTest
+import com.wini.owle.mapper.workflows.enums.ModificationTermsMapperTest
+import com.wini.owle.mapper.workflows.enums.StoreMethodMapperTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
 
 @DisplayName("Mapper Tests")
 open class MapperTests {
+
+    @Nested
+    @DisplayName("DateTime Converter Tests")
+    inner class DateTimeConverterTests: DateTimeConverterTest()
+
+    @Nested
+    @DisplayName("Enum Mapper Tests")
+    inner class EnumMapperTests {
+
+        @Nested
+        inner class
+        PackageRepoTypeMapperTests: PackageRepoTypeMapperTest()
+
+        @Nested
+        inner class
+        ComparisonOperatorMapperTests: ComparisonOperatorMapperTest()
+
+        @Nested
+        inner class
+        ExecutionStatusMapperTests: ExecutionStatusMapperTest()
+
+        @Nested
+        inner class
+        GenerationMethodMapperTests: GenerationMethodMapperTest()
+
+        @Nested
+        inner class
+        LogLevelMapperTests: LogLevelMapperTest()
+
+        @Nested
+        inner class
+        TransformOccurrenceMapperTests: TransformOccurrenceMapperTest()
+
+        @Nested
+        inner class
+        VarianceCardinalityMapperTests: VarianceCardinalityMapperTest()
+
+        @Nested
+        inner class
+        CardBrandMapperTests: CardBrandMapperTest()
+
+        @Nested
+        inner class
+        SubscriptionStatusMapperTests: SubscriptionStatusMapperTest()
+
+        @Nested
+        inner class
+        AuthorshipCreditMapperTests: AuthorshipCreditMapperTest()
+
+        @Nested
+        inner class
+        CommercialUseMapperTests: CommercialUseMapperTest()
+
+        @Nested
+        inner class
+        ModificationTermsMapperTests: ModificationTermsMapperTest()
+
+        @Nested
+        inner class StoreMethodMapperTests: StoreMethodMapperTest()
+    }
 
     @Nested
     @DisplayName("Environs Module")

@@ -11,7 +11,8 @@ import kotlinx.datetime.LocalDateTime // Ensure correct import
 class TestResultsMapper(
     private val daoFactory: DaoFactory<TestResultDao, Long>,
     private val testCasesMapper: TestCasesMapper,
-    private val workflowExecutionsMapper: WorkflowExecutionsMapper
+    private val workflowExecutionsMapper: WorkflowExecutionsMapper,
+    private val dateTimeConverter: DateTimeConverter
 ): DbMapper<TestResultDto, TestResultDao>() {
 
     override fun toEntity(dto: TestResultDto): TestResultDao {
@@ -19,11 +20,7 @@ class TestResultsMapper(
             testCase = testCasesMapper.toEntity(dto.testCase)
             workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
             passed = dto.passed
-            executedAt = try {
-                LocalDateTime.parse(dto.executedAt)
-            } catch (e: Exception) {
-                throw IllegalArgumentException("Invalid date format for executedAt: ${dto.executedAt}", e)
-            }
+            executedAt = dateTimeConverter.fromString(dto.executedAt)
         }
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
@@ -40,7 +37,7 @@ class TestResultsMapper(
             testCase = testCasesMapper.toDto(entity.testCase),
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             passed = entity.passed,
-            executedAt = DateTimeConverter.toString(entity.executedAt)
+            executedAt = dateTimeConverter.toString(entity.executedAt)
         )
     }
 }

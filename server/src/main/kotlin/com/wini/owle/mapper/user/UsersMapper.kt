@@ -1,17 +1,17 @@
 package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.UserDto
-import com.wini.owle.entity.user.SubscriptionStatus
-import com.wini.owle.entity.user.SubscriptionStatus.Companion.toDto
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
-import kotlinx.datetime.LocalDateTime // Assuming kotlinx-datetime is used
+import com.wini.owle.mapper.user.enums.SubscriptionStatusMapper
 
 
 class UsersMapper(
-    private val daoFactory: DaoFactory<UserDao, Long>
+    private val daoFactory: DaoFactory<UserDao, Long>,
+    private val subscriptionStatusMapper: SubscriptionStatusMapper,
+    private val dateTimeConverter: DateTimeConverter
 ): DbMapper<UserDto, UserDao>() {
 
     override fun toEntity(dto: UserDto): UserDao {
@@ -21,10 +21,10 @@ class UsersMapper(
             resetToken = dto.resetToken
             oauthProvider = dto.oauthProvider
             oauthId = dto.oauthId
-            subscriptionStatus = SubscriptionStatus.fromDto(dto.subscriptionStatus)
+            subscriptionStatus = subscriptionStatusMapper.toEntity(dto.subscriptionStatus)
             apiKey = dto.apiKey
-            createdAt = LocalDateTime.parse(dto.createdAt)
-            updatedAt = LocalDateTime.parse(dto.updatedAt)
+            createdAt = dateTimeConverter.fromString(dto.createdAt)
+            updatedAt = dateTimeConverter.fromString(dto.updatedAt)
         }
         return if (dto.id == 0L)
             daoFactory.create().apply(applyProps)
@@ -43,10 +43,10 @@ class UsersMapper(
             resetToken = entity.resetToken,
             oauthProvider = entity.oauthProvider,
             oauthId = entity.oauthId,
-            subscriptionStatus = entity.subscriptionStatus.toDto(),
+            subscriptionStatus = subscriptionStatusMapper.toDto(entity.subscriptionStatus),
             apiKey = entity.apiKey,
-            createdAt = DateTimeConverter.toString(entity.createdAt),
-            updatedAt = DateTimeConverter.toString(entity.updatedAt),
+            createdAt = dateTimeConverter.toString(entity.createdAt),
+            updatedAt = dateTimeConverter.toString(entity.updatedAt),
             paymentMethods = emptyList() // Keeping original behavior
         )
     }

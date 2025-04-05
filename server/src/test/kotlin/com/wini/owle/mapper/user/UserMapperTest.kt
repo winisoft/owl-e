@@ -1,21 +1,14 @@
 package com.wini.owle.mapper.user
 
+import com.wini.owle.dto.user.SubscriptionStatusDto
 import com.wini.owle.dto.user.UserDto
-import com.wini.owle.entity.runs.WorkflowExecutionDao
-import com.wini.owle.entity.user.SubscriptionStatus
-import com.wini.owle.entity.user.SubscriptionStatus.Companion.toDto
+import com.wini.owle.entity.user.enums.SubscriptionStatus
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.unmockkObject
-import io.mockk.verify
-import io.mockk.slot
-import io.mockk.just
-import io.mockk.runs
-import kotlinx.datetime.LocalDateTime
+import com.wini.owle.mapper.user.enums.SubscriptionStatusMapper
+import io.mockk.*
+import kotlinx.datetime.Instant
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,15 +19,17 @@ open class UserMapperTest {
 
     private lateinit var mapper: UsersMapper
     private val factory: DaoFactory<UserDao, Long> = mockk()
+    private val subscriptionStatusMapper: SubscriptionStatusMapper = mockk()
+    private val dateTimeConverter: DateTimeConverter = mockk()
 
     @BeforeEach
     fun setUp() {
-        mapper = UsersMapper(factory)
+        mapper = UsersMapper(factory, subscriptionStatusMapper, dateTimeConverter)
     }
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = UserDto(
             id = 99L,
             email = "test@example.com",
@@ -44,16 +39,16 @@ open class UserMapperTest {
             oauthId = "oauthId",
             subscriptionStatus = mockk(),
             apiKey = "apiKey",
-            createdAt = "2023-01-01T00:00:00",
-            updatedAt = "2023-01-01T00:00:00",
+            createdAt = "2023-01-01T00:00:00Z",
+            updatedAt = "2023-01-01T00:00:00Z",
             paymentMethods = emptyList()
         )
 
-        // Mock the behavior of findById to return null (not found)
+        // Mock behavior for findById to return null (not found)
         mockkObject(UserDao)
         every { UserDao.findById(99L) } returns null
 
-        // Verify that the exception is thrown with the correct message
+        // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
             mapper.toEntity(dto)
         }
@@ -63,8 +58,8 @@ open class UserMapperTest {
     }
 
     @Test
-    fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+    fun `toDto should correctly delegate to collaborators`() {
+        // Setup mocks
         val entity = mockk<UserDao> {
             every { id.value } returns 1L
             every { email } returns "test@example.com"
@@ -78,29 +73,41 @@ open class UserMapperTest {
             every { updatedAt } returns mockk()
         }
 
-        // Mock the behavior of DateTimeConverter
-        every { DateTimeConverter.toString(entity.createdAt) } returns "2023-01-01T00:00:00"
-        every { DateTimeConverter.toString(entity.updatedAt) } returns "2023-01-01T00:00:00"
+        // Setup mock responses from collaborators
+        val subscriptionStatusDto = mockk<SubscriptionStatusDto>()
+        val createdAtStr = "2023-01-01T00:00:00Z"
+        val updatedAtStr = "2023-01-02T00:00:00Z"
+        
+        every { subscriptionStatusMapper.toDto(entity.subscriptionStatus) } returns subscriptionStatusDto
+        every { dateTimeConverter.toString(entity.createdAt) } returns createdAtStr
+        every { dateTimeConverter.toString(entity.updatedAt) } returns updatedAtStr
 
-        // Call the method under test
+        // Call method under test
         val result = mapper.toDto(entity)
 
-        // Verify the result
-        assertEquals(1L, result.id)
-        assertEquals("test@example.com", result.email)
-        assertEquals("password", result.password)
-        assertEquals("token", result.resetToken)
-        assertEquals("provider", result.oauthProvider)
-        assertEquals("oauthId", result.oauthId)
-        assertEquals(entity.subscriptionStatus.toDto(), result.subscriptionStatus)
-        assertEquals("apiKey", result.apiKey)
-        assertEquals("2023-01-01T00:00:00", result.createdAt)
-        assertEquals("2023-01-01T00:00:00", result.updatedAt)
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { subscriptionStatusMapper.toDto(entity.subscriptionStatus) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.createdAt) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.updatedAt) }
+
+        // Verify result contains values from collaborators
+        assertEquals(subscriptionStatusDto, result.subscriptionStatus)
+        assertEquals(createdAtStr, result.createdAt)
+        assertEquals(updatedAtStr, result.updatedAt)
+        
+        // Verify direct property mappings
+        assertEquals(entity.id.value, result.id)
+        assertEquals(entity.email, result.email)
+        assertEquals(entity.password, result.password)
+        assertEquals(entity.resetToken, result.resetToken)
+        assertEquals(entity.oauthProvider, result.oauthProvider)
+        assertEquals(entity.oauthId, result.oauthId)
+        assertEquals(entity.apiKey, result.apiKey)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = UserDto(
             id = 42L,
             email = "test@example.com",
@@ -110,67 +117,47 @@ open class UserMapperTest {
             oauthId = "oauthId",
             subscriptionStatus = mockk(),
             apiKey = "apiKey",
-            createdAt = "2023-01-01T00:00:00",
-            updatedAt = "2023-01-01T00:00:00",
+            createdAt = "2023-01-01T00:00:00Z",
+            updatedAt = "2023-01-02T00:00:00Z",
             paymentMethods = emptyList()
         )
 
-        // Mock the existing entity that will be updated
+        // Create mock existing entity to update
         val existingEntity = mockk<UserDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val subscriptionStatus: SubscriptionStatus = mockk()
+        // Setup mock responses from collaborators
+        val subscriptionStatus = mockk<SubscriptionStatus>()
+        val createdAt = mockk<Instant>(name = "createdAt")
+        val updatedAt = mockk<Instant>(name = "updatedAt")
+        
+        every { subscriptionStatusMapper.toEntity(dto.subscriptionStatus) } returns subscriptionStatus
+        every { dateTimeConverter.fromString(dto.createdAt) } returns createdAt
+        every { dateTimeConverter.fromString(dto.updatedAt) } returns updatedAt
 
-        // Set up mocks for finding existing entity
+        // Mock finding existing entity
         mockkObject(UserDao)
         every { UserDao.findById(42L) } returns existingEntity
 
-        // Capture the property updates
-        val emailSlot = slot<String>()
-        val passwordSlot = slot<String>()
-        val resetTokenSlot = slot<String>()
-        val oauthProviderSlot = slot<String>()
-        val oauthIdSlot = slot<String>()
-        val subscriptionStatusSlot = slot<SubscriptionStatus>()
-        val apiKeySlot = slot<String>()
-        val createdAtSlot = slot<LocalDateTime>()
-        val updatedAtSlot = slot<LocalDateTime>()
-
-        every { existingEntity.email = capture(emailSlot) } just runs
-        every { existingEntity.password = capture(passwordSlot) } just runs
-        every { existingEntity.resetToken = capture(resetTokenSlot) } just runs
-        every { existingEntity.oauthProvider = capture(oauthProviderSlot) } just runs
-        every { existingEntity.oauthId = capture(oauthIdSlot) } just runs
-        every { existingEntity.subscriptionStatus = capture(subscriptionStatusSlot) } just runs
-        every { existingEntity.apiKey = capture(apiKeySlot) } just runs
-        every { existingEntity.createdAt = capture(createdAtSlot) } just runs
-        every { existingEntity.updatedAt = capture(updatedAtSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the existing entity was found and updated
-        verify { UserDao.findById(42L) }
-        verify { existingEntity.email = "test@example.com" }
-        verify { existingEntity.password = "password" }
-        verify { existingEntity.resetToken = "token" }
-        verify { existingEntity.oauthProvider = "provider" }
-        verify { existingEntity.oauthId = "oauthId" }
-        verify { existingEntity.subscriptionStatus = subscriptionStatus }
-        verify { existingEntity.apiKey = "apiKey" }
-        verify { existingEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
-        verify { existingEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { subscriptionStatusMapper.toEntity(dto.subscriptionStatus) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.createdAt) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.updatedAt) }
 
-        // Verify the captured values
-        assertEquals("test@example.com", emailSlot.captured)
-        assertEquals("password", passwordSlot.captured)
-        assertEquals("token", resetTokenSlot.captured)
-        assertEquals("provider", oauthProviderSlot.captured)
-        assertEquals("oauthId", oauthIdSlot.captured)
-        assertEquals(subscriptionStatus, subscriptionStatusSlot.captured)
-        assertEquals("apiKey", apiKeySlot.captured)
-        assertEquals(LocalDateTime.parse(dto.createdAt), createdAtSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.updatedAt), updatedAtSlot.captured)
+        // Verify entity fields were set with values from collaborators
+        verify { existingEntity.subscriptionStatus = subscriptionStatus }
+        verify { existingEntity.createdAt = createdAt }
+        verify { existingEntity.updatedAt = updatedAt }
+        
+        // Verify other fields were set correctly
+        verify { existingEntity.email = dto.email }
+        verify { existingEntity.password = dto.password }
+        verify { existingEntity.resetToken = dto.resetToken }
+        verify { existingEntity.oauthProvider = dto.oauthProvider }
+        verify { existingEntity.oauthId = dto.oauthId }
+        verify { existingEntity.apiKey = dto.apiKey }
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -179,8 +166,8 @@ open class UserMapperTest {
     }
 
     @Test
-    fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+    fun `toEntity should create a new entity when id is zero`() {
+        // Create test DTO
         val dto = UserDto(
             id = 0L,
             email = "test@example.com",
@@ -190,68 +177,49 @@ open class UserMapperTest {
             oauthId = "oauthId",
             subscriptionStatus = mockk(),
             apiKey = "apiKey",
-            createdAt = "2023-01-01T00:00:00",
-            updatedAt = "2023-01-01T00:00:00",
+            createdAt = "2023-01-01T00:00:00Z",
+            updatedAt = "2023-01-02T00:00:00Z",
             paymentMethods = emptyList()
         )
 
-        // Mock the new entity that will be created
+        // Create mock new entity
         val newEntity = mockk<UserDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val subscriptionStatus: SubscriptionStatus = mockk()
-
-        // Set up the factory mock to return our mock entity
+        // Setup mock responses from collaborators
+        val subscriptionStatus = mockk<SubscriptionStatus>()
+        val createdAt = mockk<Instant>(name = "createdAt")
+        val updatedAt = mockk<Instant>(name = "updatedAt")
+        
+        every { subscriptionStatusMapper.toEntity(dto.subscriptionStatus) } returns subscriptionStatus
+        every { dateTimeConverter.fromString(dto.createdAt) } returns createdAt
+        every { dateTimeConverter.fromString(dto.updatedAt) } returns updatedAt
+        
+        // Setup factory mock
         every { factory.create() } returns newEntity
 
-        // Capture property assignments
-        val emailSlot = slot<String>()
-        val passwordSlot = slot<String>()
-        val resetTokenSlot = slot<String>()
-        val oauthProviderSlot = slot<String>()
-        val oauthIdSlot = slot<String>()
-        val subscriptionStatusSlot = slot<SubscriptionStatus>()
-        val apiKeySlot = slot<String>()
-        val createdAtSlot = slot<LocalDateTime>()
-        val updatedAtSlot = slot<LocalDateTime>()
-
-        every { newEntity.email = capture(emailSlot) } just runs
-        every { newEntity.password = capture(passwordSlot) } just runs
-        every { newEntity.resetToken = capture(resetTokenSlot) } just runs
-        every { newEntity.oauthProvider = capture(oauthProviderSlot) } just runs
-        every { newEntity.oauthId = capture(oauthIdSlot) } just runs
-        every { newEntity.subscriptionStatus = capture(subscriptionStatusSlot) } just runs
-        every { newEntity.apiKey = capture(apiKeySlot) } just runs
-        every { newEntity.createdAt = capture(createdAtSlot) } just runs
-        every { newEntity.updatedAt = capture(updatedAtSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
+        // Verify factory was used to create new entity
+        verify(exactly = 1) { factory.create() }
 
-        // Verify the properties were set correctly
-        verify { newEntity.email = "test@example.com" }
-        verify { newEntity.password = "password" }
-        verify { newEntity.resetToken = "token" }
-        verify { newEntity.oauthProvider = "provider" }
-        verify { newEntity.oauthId = "oauthId" }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { subscriptionStatusMapper.toEntity(dto.subscriptionStatus) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.createdAt) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.updatedAt) }
+
+        // Verify entity fields were set with values from collaborators
         verify { newEntity.subscriptionStatus = subscriptionStatus }
-        verify { newEntity.apiKey = "apiKey" }
-        verify { newEntity.createdAt = LocalDateTime.parse(dto.createdAt) }
-        verify { newEntity.updatedAt = LocalDateTime.parse(dto.updatedAt) }
-
-        // Verify the captured values
-        assertEquals("test@example.com", emailSlot.captured)
-        assertEquals("password", passwordSlot.captured)
-        assertEquals("token", resetTokenSlot.captured)
-        assertEquals("provider", oauthProviderSlot.captured)
-        assertEquals("oauthId", oauthIdSlot.captured)
-        assertEquals(subscriptionStatus, subscriptionStatusSlot.captured)
-        assertEquals("apiKey", apiKeySlot.captured)
-        assertEquals(LocalDateTime.parse(dto.createdAt), createdAtSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.updatedAt), updatedAtSlot.captured)
+        verify { newEntity.createdAt = createdAt }
+        verify { newEntity.updatedAt = updatedAt }
+        
+        // Verify other fields were set correctly
+        verify { newEntity.email = dto.email }
+        verify { newEntity.password = dto.password }
+        verify { newEntity.resetToken = dto.resetToken }
+        verify { newEntity.oauthProvider = dto.oauthProvider }
+        verify { newEntity.oauthId = dto.oauthId }
+        verify { newEntity.apiKey = dto.apiKey }
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

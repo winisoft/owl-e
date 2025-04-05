@@ -1,20 +1,20 @@
 package com.wini.owle.mapper.environs
 
 import com.wini.owle.dto.environs.PackageRepoDto
-import com.wini.owle.entity.environs.PackageRepoType
-import com.wini.owle.entity.environs.PackageRepoType.Companion.toDto
 import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
+import com.wini.owle.mapper.environs.enums.PackageRepoTypeMapper
 
 
 class PackageRepoMapper(
-    private val daoFactory: DaoFactory<PackageRepoDao, Long>
+    private val daoFactory: DaoFactory<PackageRepoDao, Long>,
+    private val packageRepoTypeMapper: PackageRepoTypeMapper
 ): DbMapper<PackageRepoDto, PackageRepoDao>() {
 
     override fun toEntity(dto: PackageRepoDto): PackageRepoDao {
         val applyProps: PackageRepoDao.() -> Unit = {
-            sourceType = PackageRepoType.fromDto(dto.sourceType)
+            sourceType = packageRepoTypeMapper.toEntity(dto.sourceType)
             sourceUrl = dto.sourceUrl
         }
         return if (dto.id == 0L)
@@ -27,7 +27,7 @@ class PackageRepoMapper(
     override fun toDto(entity: PackageRepoDao): PackageRepoDto {
         return PackageRepoDto(
             id = entity.id.value,
-            sourceType = entity.sourceType.toDto(),
+            sourceType = packageRepoTypeMapper.toDto(entity.sourceType),
             sourceUrl = entity.sourceUrl
         )
     }

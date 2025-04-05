@@ -2,10 +2,10 @@ package com.wini.owle.mapper.environs
 
 import com.wini.owle.dto.environs.PackageRepoDto
 import com.wini.owle.dto.environs.PackageRepoTypeDto
-import com.wini.owle.entity.environs.PackageRepoType.Companion.toDto
 import com.wini.owle.entity.environs.PackageRepoDao
-import com.wini.owle.entity.environs.PackageRepoType
+import com.wini.owle.entity.environs.enums.PackageRepoType
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.environs.enums.PackageRepoTypeMapper
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,10 +17,11 @@ open class PackageRepoMapperTest {
 
     private lateinit var mapper: PackageRepoMapper
     private val factory: DaoFactory<PackageRepoDao, Long> = mockk()
+    private val packageRepoTypeMapper: PackageRepoTypeMapper = mockk()
 
     @BeforeEach
     fun setUp() {
-        mapper = PackageRepoMapper(factory)
+        mapper = PackageRepoMapper(factory, packageRepoTypeMapper)
     }
 
     @Test
@@ -44,25 +45,21 @@ open class PackageRepoMapperTest {
 
     @Test
     fun `toDto should correctly map entity to dto`() {
-        val mockSourceType = mockk<PackageRepoType>()
         
         val entity = mockk<PackageRepoDao> {
             every { id.value } returns 1L
-            every { sourceType } returns mockSourceType
+            every { sourceType } returns mockk()
             every { sourceUrl } returns "http://example.com"
         }
-        
-        // Mock the extension function behavior
-        mockkObject(PackageRepoType.Companion)
-        every { mockSourceType.toDto() } returns PackageRepoTypeDto.Pypi
+
+        every { packageRepoTypeMapper.toDto(any()) } returns PackageRepoTypeDto.Pypi
 
         val result = mapper.toDto(entity)
 
         assertEquals(1L, result.id)
         assertEquals(PackageRepoTypeDto.Pypi, result.sourceType)
         assertEquals("http://example.com", result.sourceUrl)
-        
-        unmockkObject(PackageRepoType.Companion)
+
     }
 
     @Test
@@ -77,6 +74,7 @@ open class PackageRepoMapperTest {
 
         mockkObject(PackageRepoDao)
         every { PackageRepoDao.findById(42L) } returns existingEntity
+        every { packageRepoTypeMapper.toEntity(any()) } returns PackageRepoType.PYPI
 
         val sourceTypeSlot = slot<PackageRepoType>()
         val sourceUrlSlot = slot<String>()
@@ -105,6 +103,7 @@ open class PackageRepoMapperTest {
         val newEntity = mockk<PackageRepoDao>(relaxed = true)
 
         every { factory.create() } returns newEntity
+        every { packageRepoTypeMapper.toEntity(any()) } returns PackageRepoType.PYPI
 
         val sourceTypeSlot = slot<PackageRepoType>()
         val sourceUrlSlot = slot<String>()

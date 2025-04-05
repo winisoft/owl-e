@@ -1,18 +1,18 @@
 package com.wini.owle.mapper.workflows
 
 import com.wini.owle.dto.workflows.DataPointDto
-import com.wini.owle.entity.workflows.StoreMethod
-import com.wini.owle.entity.workflows.StoreMethod.Companion.toDto
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
+import com.wini.owle.mapper.workflows.enums.StoreMethodMapper
 
 
 class DataPointsMapper(
     private val daoFactory: DaoFactory<DataPointDao, Long>,
     private val typeDeclarationMapper: TypeDeclarationsMapper,
-    private val workflowMapper: WorkflowsMapper
+    private val workflowMapper: WorkflowsMapper,
+    private val storeMethodMapper: StoreMethodMapper
 ) : DbMapper<DataPointDto, DataPointDao>() {
 
     override fun toEntity(dto: DataPointDto): DataPointDao {
@@ -20,7 +20,7 @@ class DataPointsMapper(
             workflow = workflowMapper.toEntity(dto.workflow)
             name = dto.name
             presetValue = dto.presetValue
-            storeMethod = StoreMethod.fromDto(dto.storeMethod)
+            storeMethod = storeMethodMapper.toEntity(dto.storeMethod)
             typeDeclaration = typeDeclarationMapper.toEntity(dto.typeDeclaration)
             description = dto.description
         }
@@ -39,7 +39,7 @@ class DataPointsMapper(
             workflow = workflowMapper.toDto(entity.workflow),
             name = entity.name,
             presetValue = entity.presetValue,
-            storeMethod = entity.storeMethod.toDto(),
+            storeMethod = storeMethodMapper.toDto(entity.storeMethod),
             typeDeclaration = typeDeclarationMapper.toDto(entity.typeDeclaration),
             description = entity.description,
             createdAt = entity.createdAt.toString(),

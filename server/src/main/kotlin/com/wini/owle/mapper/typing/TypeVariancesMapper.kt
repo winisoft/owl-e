@@ -2,7 +2,7 @@ package com.wini.owle.mapper.typing
 
 import com.wini.owle.dto.typing.TypeVarianceDto
 import com.wini.owle.dto.typing.VarianceCardinalityDto
-import com.wini.owle.entity.typing.VarianceCardinality
+import com.wini.owle.entity.typing.enums.VarianceCardinality
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper

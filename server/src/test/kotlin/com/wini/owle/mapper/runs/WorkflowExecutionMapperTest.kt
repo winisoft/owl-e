@@ -1,18 +1,20 @@
 package com.wini.owle.mapper.runs
 
+import com.wini.owle.dto.runs.ExecutionStatusDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
-import com.wini.owle.entity.runs.ExecutionStatus
-import com.wini.owle.entity.runs.ExecutionStatus.Companion.toDto
+import com.wini.owle.entity.runs.enums.ExecutionStatus
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.DateTimeConverter
+import com.wini.owle.mapper.runs.enums.ExecutionStatusMapper
 import com.wini.owle.mapper.user.UsersMapper
 import com.wini.owle.mapper.workflows.WorkflowsMapper
 import io.mockk.*
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -26,15 +28,24 @@ open class WorkflowExecutionMapperTest {
     private val usersMapper: UsersMapper = mockk()
     private val stepExecutionMapper: StepExecutionsMapper = mockk()
     private val factory: DaoFactory<WorkflowExecutionDao, Long> = mockk()
+    private val executionStatusMapper: ExecutionStatusMapper = mockk()
+    private val dateTimeConverter: DateTimeConverter = mockk()
 
     @BeforeEach
     fun setUp() {
-        mapper = WorkflowExecutionsMapper(factory, workflowsMapper, usersMapper, stepExecutionMapper)
+        mapper = WorkflowExecutionsMapper(
+            factory,
+            workflowsMapper,
+            usersMapper,
+            stepExecutionMapper,
+            executionStatusMapper,
+            dateTimeConverter
+        )
     }
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = WorkflowExecutionDto(
             id = 99L,
             workflow = mockk(),
@@ -45,11 +56,11 @@ open class WorkflowExecutionMapperTest {
             stepExecutions = emptyList()
         )
 
-        // Mock the behavior of findById to return null (not found)
+        // Mock behavior for findById to return null (not found)
         mockkObject(WorkflowExecutionDao)
         every { WorkflowExecutionDao.findById(99L) } returns null
 
-        // Verify that the exception is thrown with the correct message
+        // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
             mapper.toEntity(dto)
         }
@@ -59,94 +70,100 @@ open class WorkflowExecutionMapperTest {
     }
 
     @Test
-    fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+    fun `toDto should correctly delegate to collaborators`() {
+        // Setup mocks
         val entity = mockk<WorkflowExecutionDao> {
             every { id.value } returns 1L
             every { workflow } returns mockk()
             every { user } returns mockk()
-            every { startedAt } returns LocalDateTime.parse("2023-10-01T10:00:00")
-            every { completedAt } returns LocalDateTime.parse("2023-10-01T11:00:00")
-            every { status.toDto() } returns mockk()
+            every { startedAt } returns mockk()
+            every { completedAt } returns mockk()
+            every { status } returns mockk()
         }
 
-        // Mock the behavior of workflowsMapper, usersMapper, and stepExecutionMapper
+        // Setup mock responses from collaborators
         val workflowDto = mockk<WorkflowDto>()
         val userDto = mockk<UserDto>()
+        val startedAtStr = "2025-04-04T12:34:56Z"
+        val completedAtStr = "2025-05-04T12:34:56Z"
+        val statusDto = ExecutionStatusDto.Failed
+        
         every { workflowsMapper.toDto(entity.workflow) } returns workflowDto
         every { usersMapper.toDto(entity.user) } returns userDto
+        every { dateTimeConverter.toString(entity.startedAt) } returns startedAtStr
+        every { dateTimeConverter.toString(entity.completedAt!!) } returns completedAtStr
+        every { executionStatusMapper.toDto(entity.status) } returns statusDto
 
-        // Call the method under test
+        // Call method under test
         val result = mapper.toDto(entity)
 
-        // Verify the result
-        assertEquals(1L, result.id)
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { workflowsMapper.toDto(entity.workflow) }
+        verify(exactly = 1) { usersMapper.toDto(entity.user) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.startedAt) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.completedAt!!) }
+        verify(exactly = 1) { executionStatusMapper.toDto(entity.status) }
+
+        // Verify result contains values from collaborators
         assertEquals(workflowDto, result.workflow)
         assertEquals(userDto, result.user)
-        assertEquals("2023-10-01T10:00:00", result.startedAt)
-        assertEquals("2023-10-01T11:00:00", result.completedAt)
-        assertEquals(entity.status.toDto(), result.status)
+        assertEquals(startedAtStr, result.startedAt)
+        assertEquals(completedAtStr, result.completedAt)
+        assertEquals(statusDto, result.status)
+        
+        // Verify direct property mappings
+        assertEquals(entity.id.value, result.id)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = WorkflowExecutionDto(
             id = 42L,
             workflow = mockk(),
             user = mockk(),
-            startedAt = "2023-10-01T12:00:00",
-            completedAt = "2023-10-01T13:00:00",
-            status = mockk(),
+            startedAt = "2025-04-04T12:34:56Z",
+            completedAt = "2025-05-04T12:34:56Z",
+            status = ExecutionStatusDto.Failed,
             stepExecutions = emptyList()
         )
 
-        // Mock the existing entity that will be updated
+        // Create mock existing entity to update
         val existingEntity = mockk<WorkflowExecutionDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowDao: WorkflowDao = mockk()
-        val userDao: UserDao = mockk()
-
-        // Mock the behavior of dependency mappers
-        every { workflowsMapper.toEntity(any()) } returns workflowDao
-        every { usersMapper.toEntity(any()) } returns userDao
-
+        // Setup mock responses from collaborators
+        val workflowDao = mockk<WorkflowDao>()
+        val userDao = mockk<UserDao>()
+        val startedAt = mockk<Instant>(name = "startedAt")
+        val completedAt = mockk<Instant>(name = "completedAt")
+        val status = ExecutionStatus.FAILED
         
-        // Set up mocks for finding existing entity
+        every { workflowsMapper.toEntity(dto.workflow) } returns workflowDao
+        every { usersMapper.toEntity(dto.user) } returns userDao
+        every { dateTimeConverter.fromString(dto.startedAt) } returns startedAt
+        every { dateTimeConverter.fromString(dto.completedAt!!) } returns completedAt
+        every { executionStatusMapper.toEntity(dto.status) } returns status
+
+        // Mock finding existing entity
         mockkObject(WorkflowExecutionDao)
         every { WorkflowExecutionDao.findById(42L) } returns existingEntity
 
-        // Capture the property updates
-        val workflowSlot = slot<WorkflowDao>()
-        val userSlot = slot<UserDao>()
-        val startedAtSlot = slot<LocalDateTime>()
-        val completedAtSlot = slot<LocalDateTime>()
-        val statusSlot = slot<ExecutionStatus>()
-
-        every { existingEntity.workflow = capture(workflowSlot) } just runs
-        every { existingEntity.user = capture(userSlot) } just runs
-        every { existingEntity.startedAt = capture(startedAtSlot) } just runs
-        every { existingEntity.completedAt = capture(completedAtSlot) } just runs
-        every { existingEntity.status = capture(statusSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the existing entity was found and updated
-        verify { WorkflowExecutionDao.findById(42L) }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { workflowsMapper.toEntity(dto.workflow) }
+        verify(exactly = 1) { usersMapper.toEntity(dto.user) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.startedAt) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.completedAt!!) }
+        verify(exactly = 1) { executionStatusMapper.toEntity(dto.status) }
+
+        // Verify entity fields were set with values from collaborators
         verify { existingEntity.workflow = workflowDao }
         verify { existingEntity.user = userDao }
-        verify { existingEntity.startedAt = LocalDateTime.parse(dto.startedAt) }
-        verify { existingEntity.completedAt = LocalDateTime.parse(dto.completedAt!!) }
-        verify { existingEntity.status = ExecutionStatus.fromDto(dto.status) }
-
-        // Verify the captured values
-        assertEquals(workflowDao, workflowSlot.captured)
-        assertEquals(userDao, userSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.startedAt), startedAtSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.completedAt!!), completedAtSlot.captured)
-        assertEquals(ExecutionStatus.fromDto(dto.status), statusSlot.captured)
+        verify { existingEntity.startedAt = startedAt }
+        verify { existingEntity.completedAt = completedAt }
+        verify { existingEntity.status = status }
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -155,64 +172,56 @@ open class WorkflowExecutionMapperTest {
     }
 
     @Test
-    fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+    fun `toEntity should create a new entity when id is zero`() {
+        // Create test DTO
         val dto = WorkflowExecutionDto(
             id = 0L,
             workflow = mockk(),
             user = mockk(),
-            startedAt = "2023-10-01T14:00:00",
-            completedAt = "2023-10-01T15:00:00",
-            status = mockk(),
+            startedAt = "2025-04-04T12:34:56Z",
+            completedAt = "2025-05-04T12:34:56Z",
+            status = ExecutionStatusDto.Failed,
             stepExecutions = emptyList()
         )
 
-        // Mock the new entity that will be created
+        // Create mock new entity
         val newEntity = mockk<WorkflowExecutionDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowDao: WorkflowDao = mockk()
-        val userDao: UserDao = mockk()
-
-        // Mock the behavior of dependency mappers
-        every { workflowsMapper.toEntity(any()) } returns workflowDao
-        every { usersMapper.toEntity(any()) } returns userDao
-
-        // Set up the factory mock to return our mock entity
+        // Setup mock responses from collaborators
+        val workflowDao = mockk<WorkflowDao>()
+        val userDao = mockk<UserDao>()
+        val startedAt = mockk<Instant>(name = "startedAt")
+        val completedAt = mockk<Instant>(name = "completedAt")
+        val status = ExecutionStatus.FAILED
+        
+        every { workflowsMapper.toEntity(dto.workflow) } returns workflowDao
+        every { usersMapper.toEntity(dto.user) } returns userDao
+        every { dateTimeConverter.fromString(dto.startedAt) } returns startedAt
+        every { dateTimeConverter.fromString(dto.completedAt!!) } returns completedAt
+        every { executionStatusMapper.toEntity(dto.status) } returns status
+        
+        // Setup factory mock
         every { factory.create() } returns newEntity
 
-        // Capture property assignments
-        val workflowSlot = slot<WorkflowDao>()
-        val userSlot = slot<UserDao>()
-        val startedAtSlot = slot<LocalDateTime>()
-        val completedAtSlot = slot<LocalDateTime>()
-        val statusSlot = slot<ExecutionStatus>()
-
-        every { newEntity.workflow = capture(workflowSlot) } just runs
-        every { newEntity.user = capture(userSlot) } just runs
-        every { newEntity.startedAt = capture(startedAtSlot) } just runs
-        every { newEntity.completedAt = capture(completedAtSlot) } just runs
-        every { newEntity.status = capture(statusSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
+        // Verify factory was used to create new entity
+        verify(exactly = 1) { factory.create() }
 
-        // Verify the properties were set correctly
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { workflowsMapper.toEntity(dto.workflow) }
+        verify(exactly = 1) { usersMapper.toEntity(dto.user) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.startedAt) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.completedAt!!) }
+        verify(exactly = 1) { executionStatusMapper.toEntity(dto.status) }
+
+        // Verify entity fields were set with values from collaborators
         verify { newEntity.workflow = workflowDao }
         verify { newEntity.user = userDao }
-        verify { newEntity.startedAt = LocalDateTime.parse(dto.startedAt) }
-        verify { newEntity.completedAt = LocalDateTime.parse(dto.completedAt!!) }
-        verify { newEntity.status = ExecutionStatus.fromDto(dto.status) }
-
-        // Verify the captured values
-        assertEquals(workflowDao, workflowSlot.captured)
-        assertEquals(userDao, userSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.startedAt), startedAtSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.completedAt!!), completedAtSlot.captured)
-        assertEquals(ExecutionStatus.fromDto(dto.status), statusSlot.captured)
+        verify { newEntity.startedAt = startedAt }
+        verify { newEntity.completedAt = completedAt }
+        verify { newEntity.status = status }
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

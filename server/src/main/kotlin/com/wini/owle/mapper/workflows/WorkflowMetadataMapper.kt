@@ -1,23 +1,22 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.AuthorshipCreditDto
-import com.wini.owle.dto.workflows.CommercialUseDto
-import com.wini.owle.dto.workflows.ModificationTermsDto
 import com.wini.owle.dto.workflows.WorkflowMetadataDto
-import com.wini.owle.entity.workflows.AuthorshipCredit
-import com.wini.owle.entity.workflows.CommercialUse
-import com.wini.owle.entity.workflows.ModificationTerms
 import com.wini.owle.entity.workflows.WorkflowMetadataDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.user.UsersMapper
-import org.jetbrains.exposed.sql.SizedIterable
+import com.wini.owle.mapper.workflows.enums.AuthorshipCreditMapper
+import com.wini.owle.mapper.workflows.enums.CommercialUseMapper
+import com.wini.owle.mapper.workflows.enums.ModificationTermsMapper
 
 
 class WorkflowMetadataMapper(
     private val daoFactory: DaoFactory<WorkflowMetadataDao, Long>,
     private val workflowsMapper: WorkflowsMapper,
+    private val commercialUserMapper: CommercialUseMapper,
+    private val authorshipCreditMapper: AuthorshipCreditMapper,
+    private val modificationTermsMapper: ModificationTermsMapper,
+    private val dateTimeConverter: DateTimeConverter
 ) : DbMapper<WorkflowMetadataDto, WorkflowMetadataDao>() {
 
     override fun toEntity(dto: WorkflowMetadataDto): WorkflowMetadataDao {
@@ -28,24 +27,13 @@ class WorkflowMetadataMapper(
             contactInformation = dto.contactInformation
             thirdPartyLicenses = dto.thirdPartyLicenses
             discretionAdvisedContent = dto.discretionAdvisedContent
-            commercialUsage = when (dto.commercialUsage) {
-                CommercialUseDto.PersonalNonProfit -> CommercialUse.PERSONAL_NON_PROFIT
-                CommercialUseDto.PersonalProfit -> CommercialUse.PERSONAL_PROFIT
-                CommercialUseDto.Corporation -> CommercialUse.CORPORATION
-            }
-            creditNotation = when (dto.creditNotation) {
-                AuthorshipCreditDto.Required -> AuthorshipCredit.REQUIRED
-                AuthorshipCreditDto.Unnecessary -> AuthorshipCredit.UNNECESSARY
-            }
+            commercialUsage = commercialUserMapper.toEntity(dto.commercialUsage)
+            creditNotation = authorshipCreditMapper.toEntity(dto.creditNotation)
             allowRedistribution = dto.allowRedistribution
-            modification = when (dto.modification) {
-                ModificationTermsDto.Prohibited -> ModificationTerms.PROHIBITED
-                ModificationTermsDto.AllowModification -> ModificationTerms.ALLOW_MODIFICATION
-                ModificationTermsDto.AllowModificationDistribution -> ModificationTerms.ALLOW_MODIFICATION_REDISTRIBUTION
-            }
+            modification = modificationTermsMapper.toEntity(dto.modification)
             distributionVersion = dto.distributionVersion
-            distributionAcceptedAt = DateTimeConverter.fromString(dto.distributionAcceptedAt)
-            distributionUpdatedAt = DateTimeConverter.fromString(dto.distributionUpdatedAt)
+            distributionAcceptedAt = dateTimeConverter.fromString(dto.distributionAcceptedAt)
+            distributionUpdatedAt = dateTimeConverter.fromString(dto.distributionUpdatedAt)
         }
 
         return if (dto.id == 0L)
@@ -65,24 +53,13 @@ class WorkflowMetadataMapper(
             contactInformation = entity.contactInformation,
             thirdPartyLicenses = entity.thirdPartyLicenses,
             discretionAdvisedContent = entity.discretionAdvisedContent,
-            commercialUsage = when (entity.commercialUsage) {
-                CommercialUse.PERSONAL_NON_PROFIT -> CommercialUseDto.PersonalNonProfit
-                CommercialUse.PERSONAL_PROFIT -> CommercialUseDto.PersonalProfit
-                CommercialUse.CORPORATION -> CommercialUseDto.Corporation
-            },
-            creditNotation = when (entity.creditNotation) {
-                AuthorshipCredit.REQUIRED -> AuthorshipCreditDto.Required
-                AuthorshipCredit.UNNECESSARY -> AuthorshipCreditDto.Unnecessary
-            },
+            commercialUsage = commercialUserMapper.toDto(entity.commercialUsage),
+            creditNotation = authorshipCreditMapper.toDto(entity.creditNotation),
+            modification = modificationTermsMapper.toDto(entity.modification),
             allowRedistribution = entity.allowRedistribution,
-            modification = when (entity.modification) {
-                ModificationTerms.PROHIBITED -> ModificationTermsDto.Prohibited
-                ModificationTerms.ALLOW_MODIFICATION -> ModificationTermsDto.AllowModification
-                ModificationTerms.ALLOW_MODIFICATION_REDISTRIBUTION -> ModificationTermsDto.AllowModificationDistribution
-            },
             distributionVersion = entity.distributionVersion,
-            distributionAcceptedAt = DateTimeConverter.toString(entity.distributionAcceptedAt),
-            distributionUpdatedAt = DateTimeConverter.toString(entity.distributionUpdatedAt),
+            distributionAcceptedAt = dateTimeConverter.toString(entity.distributionAcceptedAt),
+            distributionUpdatedAt = dateTimeConverter.toString(entity.distributionUpdatedAt),
             contributors = emptyList(),
             excludedSteps = emptyList()
         )

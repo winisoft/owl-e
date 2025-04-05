@@ -1,27 +1,29 @@
 package com.wini.owle.entity
 
-import com.wini.owle.entity.environs.PackageRepoType
-import com.wini.owle.entity.runs.ComparisonOperator
-import com.wini.owle.entity.runs.ExecutionStatus
-import com.wini.owle.entity.runs.GenerationMethod
-import com.wini.owle.entity.runs.LogLevel
-import com.wini.owle.entity.transforms.TransformOccurrence
-import com.wini.owle.entity.typing.VarianceCardinality
-import com.wini.owle.entity.user.CardBrand
-import com.wini.owle.entity.user.SubscriptionStatus
-import com.wini.owle.entity.workflows.AuthorshipCredit
-import com.wini.owle.entity.workflows.CommercialUse
-import com.wini.owle.entity.workflows.ModificationTerms
-import com.wini.owle.entity.workflows.StoreMethod
+import com.wini.owle.entity.environs.enums.PackageRepoType
+import com.wini.owle.entity.runs.enums.ComparisonOperator
+import com.wini.owle.entity.runs.enums.ExecutionStatus
+import com.wini.owle.entity.runs.enums.GenerationMethod
+import com.wini.owle.entity.runs.enums.LogLevel
+import com.wini.owle.entity.transforms.enums.TransformOccurrence
+import com.wini.owle.entity.typing.enums.VarianceCardinality
+import com.wini.owle.entity.user.enums.CardBrand
+import com.wini.owle.entity.user.enums.SubscriptionStatus
+import com.wini.owle.entity.workflows.enums.AuthorshipCredit
+import com.wini.owle.entity.workflows.enums.CommercialUse
+import com.wini.owle.entity.workflows.enums.ModificationTerms
+import com.wini.owle.entity.workflows.enums.StoreMethod
 import com.wini.owle.models.metadata.UserDesignedMetadata
+import kotlinx.datetime.Instant
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.CompositeIdTable
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.json.json
 import org.jetbrains.exposed.sql.json.jsonb
-import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import org.jetbrains.exposed.sql.kotlin.datetime.CurrentTimestamp
+import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
 
 object VersionSpecs : LongIdTable("version_specs") {
@@ -89,8 +91,8 @@ object WorkflowFolders : LongIdTable("workflow_folders") {
     val img = blob("img").nullable()
 
     val parentFolder = reference("parentFolderId", WorkflowFolders, onDelete = ReferenceOption.CASCADE).nullable()
-    val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
-    val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 object Workflows : LongIdTable("workflows") {
@@ -100,8 +102,8 @@ object Workflows : LongIdTable("workflows") {
     val parentFolder = reference("parentFolderId", WorkflowFolders, onDelete = ReferenceOption.CASCADE).nullable()
     val img = blob("img").nullable()
     val metadata = jsonb<UserDesignedMetadata>("metadata", Json)
-    val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
-    val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 object WorkflowMetadata : LongIdTable("workflow_metadata") {
@@ -117,8 +119,8 @@ object WorkflowMetadata : LongIdTable("workflow_metadata") {
     val allowRedistribution = bool("allow_redistribution").default(false)
     val modification = enumerationByName("modification", 64, ModificationTerms::class)
     val distributionVersion = varchar("distribution_version", 20).default("1.0.0")
-    val distributionAcceptedAt = datetime("distribution_accepted_at")
-    val distributionUpdatedAt = datetime("distribution_updated_at")
+    val distributionAcceptedAt = timestamp("distribution_accepted_at")
+    val distributionUpdatedAt = timestamp("distribution_updated_at")
 }
 
 object WorkflowMetadataContributors : CompositeIdTable("workflow_metadata_contributors") {
@@ -172,8 +174,8 @@ object Steps : LongIdTable("steps") {
     val displayOrder = integer("displayOrder")
     val metadata = json("metadata", UserDesignedMetadata.jsonConfig, UserDesignedMetadata.serializer()).nullable()
     val img = blob("img").nullable()
-    val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
-    val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 object DataPoints : LongIdTable("data_points") {
@@ -183,8 +185,8 @@ object DataPoints : LongIdTable("data_points") {
     val storeMethod = enumerationByName("storeMethod", 10, StoreMethod::class).default(StoreMethod.TEXT)
     val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
     val description = text("description").nullable()
-    val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
-    val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 object PackageRepositories : LongIdTable("packagerepositories") {
@@ -274,8 +276,8 @@ object Users : LongIdTable("users") {
     val subscriptionStatus = enumerationByName("subscriptionStatus", 20, SubscriptionStatus::class)
         .default(SubscriptionStatus.REGISTERED)
     val apiKey = varchar("apiKey", 255).nullable()
-    val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
-    val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 object PaymentMethods : LongIdTable("payment_methods") {
@@ -287,8 +289,8 @@ object PaymentMethods : LongIdTable("payment_methods") {
     val cardBrand = enumerationByName("cardBrand", 50, CardBrand::class).nullable()
     val lastFour = varchar("lastFour", 4).nullable()
     val isDefault = bool("isDefault").default(false)
-    val createdAt = datetime("createdAt").defaultExpression(CurrentDateTime)
-    val updatedAt = datetime("updatedAt").defaultExpression(CurrentDateTime)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 object Tags : LongIdTable("tags") {
@@ -310,29 +312,29 @@ object StepTags: CompositeIdTable("step_tags") {
 object WorkflowExecutions : LongIdTable("workflow_executions") {
     val workflow = reference("workflowid", Workflows, onDelete = ReferenceOption.CASCADE)
     val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
-    val startedAt = datetime("startedAt").defaultExpression(CurrentDateTime)
-    val completedAt = datetime("completedAt").nullable()
+    val startedAt = timestamp("startedAt").defaultExpression(CurrentTimestamp)
+    val completedAt = timestamp("completedAt").nullable()
     val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
 }
 
 object StepExecutions : LongIdTable("step_executions") {
     val workflowExecution = reference("workflowExecutionId", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
     val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE)
-    val startedAt = datetime("startedAt").defaultExpression(CurrentDateTime)
-    val completedAt = datetime("completedAt").nullable()
+    val startedAt = timestamp("startedAt").defaultExpression(CurrentTimestamp)
+    val completedAt = timestamp("completedAt").nullable()
     val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
 }
 
 object ExecutionLogs : LongIdTable("execution_logs") {
     val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
-    val timestamp = datetime("timestamp").defaultExpression(CurrentDateTime)
+    val timestamp = timestamp("timestamp").defaultExpression(CurrentTimestamp)
     val logLevel = enumerationByName("logLevel", 10, LogLevel::class)
     val message = text("message")
 }
 
 object BenchmarkingData : LongIdTable("benchmarking_data") {
     val workflowExecution = reference("workflowExecutionId", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
-    val totalExecutionTime = decimal("totalExecutionTime", 10, 2)
+    val totalExecutionTime = decimal("totalExecutionTime", 10, 3)
     val totalSteps = integer("totalSteps")
     val aiDeterminedSteps = integer("aiDeterminedSteps")
     val predeterminedSteps = integer("predeterminedSteps")
@@ -340,7 +342,7 @@ object BenchmarkingData : LongIdTable("benchmarking_data") {
 
 object StepBenchmarkingDatas : LongIdTable("step_benchmarking_data") {
     val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
-    val executionTime = decimal("executionTime", 10, 2)
+    val executionTime = decimal("executionTime", 10, 3)
 }
 
 object TestCases : LongIdTable("test_cases") {
@@ -369,7 +371,7 @@ object TestResults : LongIdTable("test_results") {
     val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
     val workflowExecution = reference("workflowExecutionId", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
     val passed = bool("passed")
-    val executedAt = datetime("executedAt").defaultExpression(CurrentDateTime)
+    val executedAt = timestamp("executedAt").defaultExpression(CurrentTimestamp)
 }
 
 object TypeUnionMembers : CompositeIdTable("type_union_members") {

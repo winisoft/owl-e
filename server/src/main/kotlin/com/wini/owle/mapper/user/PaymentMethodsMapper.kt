@@ -1,18 +1,20 @@
 package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.PaymentMethodDto
-import com.wini.owle.entity.user.CardBrand
-import com.wini.owle.entity.user.CardBrand.Companion.toDto
+import com.wini.owle.entity.user.enums.CardBrand
 import com.wini.owle.entity.user.PaymentMethodDao
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
+import com.wini.owle.mapper.user.enums.CardBrandMapper
 import kotlinx.datetime.LocalDateTime
 
 
 class PaymentMethodsMapper(
     private val daoFactory: DaoFactory<PaymentMethodDao, Long>,
-    private val userMapper: UsersMapper
+    private val userMapper: UsersMapper,
+    private val cardBrandMapper: CardBrandMapper,
+    private val dateTimeConverter: DateTimeConverter
 ): DbMapper<PaymentMethodDto, PaymentMethodDao>() {
 
 
@@ -20,11 +22,11 @@ class PaymentMethodsMapper(
         val applyProps: PaymentMethodDao.() -> Unit = {
             stripePaymentMethodId = dto.stripePaymentMethodId
             user = userMapper.toEntity(dto.user)
-            cardBrand = dto.cardBrand?.let { CardBrand.fromDto(it) }
+            cardBrand = dto.cardBrand?.let { cardBrandMapper.toEntity(it) }
             lastFour = dto.lastFour
             isDefault = dto.isDefault
-            createdAt = LocalDateTime.parse(dto.createdAt)
-            updatedAt = LocalDateTime.parse(dto.updatedAt)
+            createdAt = dateTimeConverter.fromString(dto.createdAt)
+            updatedAt = dateTimeConverter.fromString(dto.updatedAt)
         }
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
@@ -40,11 +42,11 @@ class PaymentMethodsMapper(
             id = entity.id.value,
             stripePaymentMethodId = entity.stripePaymentMethodId,
             user = userMapper.toDto(entity.user),
-            cardBrand = entity.cardBrand?.toDto(),
+            cardBrand = entity.cardBrand?.let { cardBrandMapper.toDto(it) },
             lastFour = entity.lastFour,
             isDefault = entity.isDefault,
-            createdAt = DateTimeConverter.toString(entity.createdAt),
-            updatedAt = DateTimeConverter.toString(entity.updatedAt)
+            createdAt = dateTimeConverter.toString(entity.createdAt),
+            updatedAt = dateTimeConverter.toString(entity.updatedAt)
         )
     }
 }

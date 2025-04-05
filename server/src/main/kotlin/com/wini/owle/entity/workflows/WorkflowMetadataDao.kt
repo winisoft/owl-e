@@ -1,28 +1,9 @@
 package com.wini.owle.entity.workflows
 
-import com.wini.owle.entity.MetadataStepExclusions
 import com.wini.owle.entity.WorkflowMetadata
-import com.wini.owle.entity.WorkflowMetadataContributors
-import com.wini.owle.entity.user.UserDao
-import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-
-@Serializable
-enum class ModificationTerms {
-    PROHIBITED, ALLOW_MODIFICATION, ALLOW_MODIFICATION_REDISTRIBUTION
-}
-
-@Serializable
-enum class AuthorshipCredit {
-    REQUIRED, UNNECESSARY
-}
-
-@Serializable
-enum class CommercialUse {
-    PERSONAL_NON_PROFIT, PERSONAL_PROFIT, CORPORATION
-}
 
 /**
  * Represents metadata for workflows or steps within the Owl-E application.

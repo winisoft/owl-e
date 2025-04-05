@@ -10,7 +10,8 @@ import kotlinx.datetime.LocalDateTime
 
 open class WorkflowsMapper(
     private val daoFactory: DaoFactory<WorkflowDao, Long>,
-    private val workflowFoldersMapper: WorkflowFoldersMapper
+    private val workflowFoldersMapper: WorkflowFoldersMapper,
+    private val dateTimeConverter: DateTimeConverter
 ) : DbMapper<WorkflowDto, WorkflowDao>() {
 
     override fun toEntity(dto: WorkflowDto): WorkflowDao {
@@ -19,8 +20,8 @@ open class WorkflowsMapper(
             description = dto.description
             pythonVersion = dto.pythonVersion
             parentFolder = dto.parentFolder?.let { workflowFoldersMapper.toEntity(it) }
-            createdAt = LocalDateTime.parse(dto.createdAt)
-            updatedAt = LocalDateTime.parse(dto.updatedAt)
+            createdAt = dateTimeConverter.fromString(dto.createdAt)
+            updatedAt = dateTimeConverter.fromString(dto.updatedAt)
         }
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
@@ -38,8 +39,8 @@ open class WorkflowsMapper(
             description = entity.description,
             pythonVersion = entity.pythonVersion,
             parentFolder = entity.parentFolder?.let { workflowFoldersMapper.toDto(it) },
-            createdAt = DateTimeConverter.toString(entity.createdAt),
-            updatedAt = DateTimeConverter.toString(entity.updatedAt)
+            createdAt = dateTimeConverter.toString(entity.createdAt),
+            updatedAt = dateTimeConverter.toString(entity.updatedAt)
         )
     }
 }

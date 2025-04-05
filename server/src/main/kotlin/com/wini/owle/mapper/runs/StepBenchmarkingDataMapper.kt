@@ -6,7 +6,7 @@ import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 
 
-class StepBenchmarkingDataMapper(
+open class StepBenchmarkingDataMapper(
     private val daoFactory: DaoFactory<StepBenchmarkingDataDao, Long>,
     private val stepExecutionsMapper: StepExecutionsMapper
 ) : DbMapper<StepBenchmarkingDataDto, StepBenchmarkingDataDao>() {

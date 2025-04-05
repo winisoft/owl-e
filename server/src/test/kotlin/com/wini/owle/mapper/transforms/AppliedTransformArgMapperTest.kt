@@ -75,7 +75,12 @@ open class AppliedTransformArgMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val dto = AppliedTransformArgDto(id = 42L, appliedTransform = mockk(), transformationArg = mockk(), value = "updatedValue")
+        val dto = AppliedTransformArgDto(
+            id = 42L,
+            appliedTransform = mockk(),
+            transformationArg = mockk(),
+            value = "updatedValue"
+        )
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<AppliedTransformArgDao>(relaxed = true)

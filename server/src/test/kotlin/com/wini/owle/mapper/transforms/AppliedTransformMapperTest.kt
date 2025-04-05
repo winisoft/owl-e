@@ -5,14 +5,13 @@ import com.wini.owle.dto.transforms.TransformOccurrenceDto
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.transforms.TransformationDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.entity.transforms.AppliedTransformDao
-import com.wini.owle.entity.transforms.TransformOccurrence
-import com.wini.owle.entity.transforms.TransformOccurrence.Companion.toDto
+import com.wini.owle.entity.transforms.enums.TransformOccurrence
 import com.wini.owle.entity.transforms.TransformationDao
 import com.wini.owle.entity.typing.TypeDeclarationDao
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.transforms.enums.TransformOccurrenceMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import com.wini.owle.mapper.workflows.DataPointsMapper
 import io.mockk.*
@@ -28,6 +27,7 @@ open class AppliedTransformMapperTest {
     private val transformationsMapper: TransformationsMapper = mockk()
     private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()
     private val dataPointsMapper: DataPointsMapper = mockk()
+    private val transformOccurrenceMapper: TransformOccurrenceMapper = mockk()
     private val factory: DaoFactory<AppliedTransformDao, Long> = mockk()
 
     @BeforeEach
@@ -36,7 +36,8 @@ open class AppliedTransformMapperTest {
             factory,
             transformationsMapper,
             typeDeclarationsMapper,
-            dataPointsMapper
+            dataPointsMapper,
+            transformOccurrenceMapper
         )
     }
 
@@ -80,13 +81,19 @@ open class AppliedTransformMapperTest {
         val occurrenceDto = mockk<TransformOccurrenceDto>()
         val resultTypeDto = mockk<TypeDeclarationDto>()
         val dataPointDto = mockk<DataPointDto>()
+
         every { transformationsMapper.toDto(entity.transformation) } returns transformationDto
-        every { entity.occurrence.toDto() } returns occurrenceDto
+        every { transformOccurrenceMapper.toDto(entity.occurrence) } returns occurrenceDto
         every { typeDeclarationsMapper.toDto(entity.resultType) } returns resultTypeDto
-        every { dataPointsMapper.toDto(any<DataPointDao>()) } returns dataPointDto
+        every { dataPointsMapper.toDto(entity.dataPoint!!) } returns dataPointDto
 
         // Call the method under test
         val result = mapper.toDto(entity)
+
+        verify(exactly = 1) { transformationsMapper.toDto(entity.transformation) }
+        verify(exactly = 1) { transformOccurrenceMapper.toDto(entity.occurrence) }
+        verify(exactly = 1) { typeDeclarationsMapper.toDto(entity.resultType) }
+        verify(exactly = 1) { dataPointsMapper.toDto(entity.dataPoint!!) }
 
         // Verify the result
         assertEquals(1L, result.id)
@@ -119,33 +126,20 @@ open class AppliedTransformMapperTest {
         // Set up mocks for finding existing entity
         mockkObject(AppliedTransformDao)
         every { AppliedTransformDao.findById(42L) } returns existingEntity
-
-        // Capture the property updates
-        val transformationSlot = slot<TransformationDao>()
-        val occurrenceSlot = slot<TransformOccurrence>()
-        val resultTypeSlot = slot<TypeDeclarationDao>()
-        val dataPointSlot = slot<DataPointDao>()
-
-        every { existingEntity.transformation = capture(transformationSlot) } just runs
-        every { existingEntity.occurrence = capture(occurrenceSlot) } just runs
-        every { existingEntity.resultType = capture(resultTypeSlot) } just runs
-        every { existingEntity.dataPoint = capture(dataPointSlot) } just runs
+        every { transformationsMapper.toEntity(dto.transformation) } returns transformDao
+        every { dataPointsMapper.toEntity(dto.dataPoint!!) } returns dataPointDao
+        every { transformOccurrenceMapper.toEntity(dto.occurrence) } returns transformOccurrence
+        every { typeDeclarationsMapper.toEntity(dto.resultType) } returns typeDeclarationDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
         // Verify that the existing entity was found and updated
-        verify { AppliedTransformDao.findById(42L) }
-        verify { existingEntity.transformation = transformDao }
-        verify { existingEntity.occurrence = transformOccurrence }
-        verify { existingEntity.resultType = typeDeclarationDao }
-        verify { existingEntity.dataPoint = dataPointDao }
-
-        // Verify the captured values
-        assertEquals(transformDao, transformationSlot.captured)
-        assertEquals(transformOccurrence, occurrenceSlot.captured)
-        assertEquals(typeDeclarationDao, resultTypeSlot.captured)
-        assertEquals(dataPointDao, dataPointSlot.captured)
+        verify(exactly = 1) { AppliedTransformDao.findById(42L) }
+        verify(exactly = 1) { transformationsMapper.toEntity(dto.transformation) }
+        verify(exactly = 1) { dataPointsMapper.toEntity(dto.dataPoint!!) }
+        verify(exactly = 1) { transformOccurrenceMapper.toEntity(dto.occurrence) }
+        verify(exactly = 1) { typeDeclarationsMapper.toEntity(dto.resultType) }
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -166,46 +160,34 @@ open class AppliedTransformMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<AppliedTransformDao>(relaxed = true)
-
-        // Mock the class's member dao types that would be returned from the mapper
         val transformDao: TransformationDao = mockk()
         val dataPointDao: DataPointDao = mockk()
         val transformOccurrence: TransformOccurrence = mockk()
         val typeDeclarationDao: TypeDeclarationDao = mockk()
 
-        // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
-
-        // Capture property assignments
-        val transformationSlot = slot<TransformationDao>()
-        val occurrenceSlot = slot<TransformOccurrence>()
-        val resultTypeSlot = slot<TypeDeclarationDao>()
-        val dataPointSlot = slot<DataPointDao>()
-
-        every { newEntity.transformation = capture(transformationSlot) } just runs
-        every { newEntity.occurrence = capture(occurrenceSlot) } just runs
-        every { newEntity.resultType = capture(resultTypeSlot) } just runs
-        every { newEntity.dataPoint = capture(dataPointSlot) } just runs
+        every { transformationsMapper.toEntity(dto.transformation) } returns transformDao
+        every { dataPointsMapper.toEntity(dto.dataPoint!!) } returns dataPointDao
+        every { transformOccurrenceMapper.toEntity(dto.occurrence) } returns transformOccurrence
+        every { typeDeclarationsMapper.toEntity(dto.resultType) } returns typeDeclarationDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
-
         // Verify the properties were set correctly
-        verify { newEntity.transformation = transformDao }
-        verify { newEntity.occurrence = transformOccurrence }
-        verify { newEntity.resultType = typeDeclarationDao }
-        verify { newEntity.dataPoint = dataPointDao }
-
-        // Verify the captured values
-        assertEquals(transformDao, transformationSlot.captured)
-        assertEquals(transformOccurrence, occurrenceSlot.captured)
-        assertEquals(typeDeclarationDao, resultTypeSlot.captured)
-        assertEquals(dataPointDao, dataPointSlot.captured)
+        verify { factory.create() }
+        verify(exactly = 1) { transformationsMapper.toEntity(dto.transformation) }
+        verify(exactly = 1) { dataPointsMapper.toEntity(dto.dataPoint!!) }
+        verify(exactly = 1) { transformOccurrenceMapper.toEntity(dto.occurrence) }
+        verify(exactly = 1) { typeDeclarationsMapper.toEntity(dto.resultType) }
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)
+        assertEquals(transformDao, result.transformation)
+        assertEquals(transformOccurrence, result.occurrence)
+        assertEquals(typeDeclarationDao, result.resultType)
+        assertEquals(dataPointDao, result.dataPoint)
+
+
     }
 }

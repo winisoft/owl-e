@@ -3,14 +3,13 @@ package com.wini.owle.mapper.runs
 import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.WorkflowExecutions
 import com.wini.owle.entity.runs.TestCaseDao
 import com.wini.owle.entity.runs.TestResultDao
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.DateTimeConverter
 import io.mockk.*
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -23,15 +22,16 @@ open class TestResultMapperTest {
     private val testCasesMapper: TestCasesMapper = mockk()
     private val workflowExecutionsMapper: WorkflowExecutionsMapper = mockk()
     private val factory: DaoFactory<TestResultDao, Long> = mockk()
+    private val dateTimeConverter: DateTimeConverter = mockk()
 
     @BeforeEach
     fun setUp() {
-        mapper = TestResultsMapper(factory, testCasesMapper, workflowExecutionsMapper)
+        mapper = TestResultsMapper(factory, testCasesMapper, workflowExecutionsMapper, dateTimeConverter)
     }
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = TestResultDto(
             id = 99L,
             testCase = mockk(),
@@ -40,11 +40,11 @@ open class TestResultMapperTest {
             executedAt = "2023-10-01T10:00:00"
         )
 
-        // Mock the behavior of findById to return null (not found)
+        // Mock behavior for findById to return null (not found)
         mockkObject(TestResultDao)
         every { TestResultDao.findById(99L) } returns null
 
-        // Verify that the exception is thrown with the correct message
+        // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
             mapper.toEntity(dto)
         }
@@ -54,36 +54,46 @@ open class TestResultMapperTest {
     }
 
     @Test
-    fun `toDto should correctly map entity to dto`() {
-        // Create mock dao objects
+    fun `toDto should correctly delegate to collaborators`() {
+        // Setup mocks
         val entity = mockk<TestResultDao> {
             every { id.value } returns 1L
             every { testCase } returns mockk()
             every { workflowExecution } returns mockk()
             every { passed } returns true
-            every { executedAt } returns LocalDateTime.parse("2023-10-01T10:00:00")
+            every { executedAt } returns mockk()
         }
 
-        // Mock the behavior of testCasesMapper and workflowExecutionsMapper
+        // Setup mock responses from collaborators
         val testCaseDto = mockk<TestCaseDto>()
         val workflowExecutionDto = mockk<WorkflowExecutionDto>()
+        val executedAtStr = "2023-10-01T10:00:00"
+        
         every { testCasesMapper.toDto(entity.testCase) } returns testCaseDto
         every { workflowExecutionsMapper.toDto(entity.workflowExecution) } returns workflowExecutionDto
+        every { dateTimeConverter.toString(entity.executedAt) } returns executedAtStr
 
-        // Call the method under test
+        // Call method under test
         val result = mapper.toDto(entity)
 
-        // Verify the result
-        assertEquals(1L, result.id)
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { testCasesMapper.toDto(entity.testCase) }
+        verify(exactly = 1) { workflowExecutionsMapper.toDto(entity.workflowExecution) }
+        verify(exactly = 1) { dateTimeConverter.toString(entity.executedAt) }
+
+        // Verify result contains values from collaborators
         assertEquals(testCaseDto, result.testCase)
         assertEquals(workflowExecutionDto, result.workflowExecution)
-        assertEquals(true, result.passed)
-        assertEquals("2023-10-01T10:00:00", result.executedAt)
+        assertEquals(executedAtStr, result.executedAt)
+        
+        // Verify direct property mappings
+        assertEquals(entity.id.value, result.id)
+        assertEquals(entity.passed, result.passed)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
-        // Create test DTOs
+        // Create test DTO
         val dto = TestResultDto(
             id = 42L,
             testCase = mockk(),
@@ -92,43 +102,37 @@ open class TestResultMapperTest {
             executedAt = "2023-10-01T11:00:00"
         )
 
-        // Mock the existing entity that will be updated
+        // Create mock existing entity to update
         val existingEntity = mockk<TestResultDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val testCaseDao: TestCaseDao = mockk()
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        // Setup mock responses from collaborators
+        val testCaseDao = mockk<TestCaseDao>()
+        val workflowExecutionDao = mockk<WorkflowExecutionDao>()
+        val executedAt = mockk<Instant>()
+        
+        every { testCasesMapper.toEntity(dto.testCase) } returns testCaseDao
+        every { workflowExecutionsMapper.toEntity(dto.workflowExecution) } returns workflowExecutionDao
+        every { dateTimeConverter.fromString(dto.executedAt) } returns executedAt
 
-        // Set up mocks for finding existing entity
+        // Mock finding existing entity
         mockkObject(TestResultDao)
         every { TestResultDao.findById(42L) } returns existingEntity
 
-        // Capture the property updates
-        val testCaseSlot = slot<TestCaseDao>()
-        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
-        val passedSlot = slot<Boolean>()
-        val executedAtSlot = slot<LocalDateTime>()
-
-        every { existingEntity.testCase = capture(testCaseSlot) } just runs
-        every { existingEntity.workflowExecution = capture(workflowExecutionSlot) } just runs
-        every { existingEntity.passed = capture(passedSlot) } just runs
-        every { existingEntity.executedAt = capture(executedAtSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the existing entity was found and updated
-        verify { TestResultDao.findById(42L) }
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { testCasesMapper.toEntity(dto.testCase) }
+        verify(exactly = 1) { workflowExecutionsMapper.toEntity(dto.workflowExecution) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.executedAt) }
+
+        // Verify entity fields were set with values from collaborators
         verify { existingEntity.testCase = testCaseDao }
         verify { existingEntity.workflowExecution = workflowExecutionDao }
+        verify { existingEntity.executedAt = executedAt }
+        
+        // Verify other fields were set correctly
         verify { existingEntity.passed = dto.passed }
-        verify { existingEntity.executedAt = LocalDateTime.parse(dto.executedAt) }
-
-        // Verify the captured values
-        assertEquals(testCaseDao, testCaseSlot.captured)
-        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
-        assertEquals(dto.passed, passedSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.executedAt), executedAtSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -137,8 +141,8 @@ open class TestResultMapperTest {
     }
 
     @Test
-    fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+    fun `toEntity should create a new entity when id is zero`() {
+        // Create test DTO
         val dto = TestResultDto(
             id = 0L,
             testCase = mockk(),
@@ -147,44 +151,39 @@ open class TestResultMapperTest {
             executedAt = "2023-10-01T12:00:00"
         )
 
-        // Mock the new entity that will be created
+        // Create mock new entity
         val newEntity = mockk<TestResultDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val testCaseDao: TestCaseDao = mockk()
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
-
-        // Set up the factory mock to return our mock entity
+        // Setup mock responses from collaborators
+        val testCaseDao = mockk<TestCaseDao>()
+        val workflowExecutionDao = mockk<WorkflowExecutionDao>()
+        val executedAt = mockk<Instant>()
+        
+        every { testCasesMapper.toEntity(dto.testCase) } returns testCaseDao
+        every { workflowExecutionsMapper.toEntity(dto.workflowExecution) } returns workflowExecutionDao
+        every { dateTimeConverter.fromString(dto.executedAt) } returns executedAt
+        
+        // Setup factory mock
         every { factory.create() } returns newEntity
 
-        // Capture property assignments
-        val testCaseSlot = slot<TestCaseDao>()
-        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
-        val passedSlot = slot<Boolean>()
-        val executedAtSlot = slot<LocalDateTime>()
-
-        every { newEntity.testCase = capture(testCaseSlot) } just runs
-        every { newEntity.workflowExecution = capture(workflowExecutionSlot) } just runs
-        every { newEntity.passed = capture(passedSlot) } just runs
-        every { newEntity.executedAt = capture(executedAtSlot) } just runs
-
-        // Execute the method under test
+        // Execute method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
+        // Verify factory was used to create new entity
+        verify(exactly = 1) { factory.create() }
 
-        // Verify the properties were set correctly
+        // Verify collaborators were called with correct arguments
+        verify(exactly = 1) { testCasesMapper.toEntity(dto.testCase) }
+        verify(exactly = 1) { workflowExecutionsMapper.toEntity(dto.workflowExecution) }
+        verify(exactly = 1) { dateTimeConverter.fromString(dto.executedAt) }
+
+        // Verify entity fields were set with values from collaborators
         verify { newEntity.testCase = testCaseDao }
         verify { newEntity.workflowExecution = workflowExecutionDao }
+        verify { newEntity.executedAt = executedAt }
+        
+        // Verify other fields were set correctly
         verify { newEntity.passed = dto.passed }
-        verify { newEntity.executedAt = LocalDateTime.parse(dto.executedAt) }
-
-        // Verify the captured values
-        assertEquals(testCaseDao, testCaseSlot.captured)
-        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
-        assertEquals(dto.passed, passedSlot.captured)
-        assertEquals(LocalDateTime.parse(dto.executedAt), executedAtSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

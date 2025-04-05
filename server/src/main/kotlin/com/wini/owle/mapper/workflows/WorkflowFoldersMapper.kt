@@ -9,7 +9,8 @@ import kotlinx.datetime.LocalDateTime
 
 
 class WorkflowFoldersMapper(
-    private val daoFactory: DaoFactory<WorkflowFolderDao, Long>
+    private val daoFactory: DaoFactory<WorkflowFolderDao, Long>,
+    private val dateTimeConverter: DateTimeConverter
 ) : DbMapper<WorkflowFolderDto, WorkflowFolderDao>() {
 
     override fun toEntity(dto: WorkflowFolderDto): WorkflowFolderDao {
@@ -18,8 +19,8 @@ class WorkflowFoldersMapper(
             description = dto.description
             img = null
             parentFolder = null //TODO
-            createdAt = LocalDateTime.parse(dto.createdAt)
-            updatedAt = LocalDateTime.parse(dto.updatedAt)
+            createdAt = dateTimeConverter.fromString(dto.createdAt)
+            updatedAt = dateTimeConverter.fromString(dto.updatedAt)
         }
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
@@ -36,8 +37,8 @@ class WorkflowFoldersMapper(
             parentFolder = null, //TODO
             name = entity.name,
             description = entity.description,
-            createdAt = DateTimeConverter.toString(entity.createdAt),
-            updatedAt = DateTimeConverter.toString(entity.updatedAt),
+            createdAt = dateTimeConverter.toString(entity.createdAt),
+            updatedAt = dateTimeConverter.toString(entity.updatedAt),
             img = null
         )
     }
