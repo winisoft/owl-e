@@ -3,6 +3,7 @@ package com.wini.owle.services.runs
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.BenchmarkingDataDto
+import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.runs.BenchmarkingDataDao
 import com.wini.owle.mapper.runs.BenchmarkingDataMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -17,26 +18,46 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 
 open class BenchmarkingDataServiceTest {
 
     private lateinit var service: BenchmarkingDataService
-    @MockK private lateinit var repository: BenchmarkingDataRepository
-    @MockK private lateinit var mapper: BenchmarkingDataMapper
-    @MockK private lateinit var idFactory: BenchmarkingDataIdFactory
+    private lateinit var repository: BenchmarkingDataRepository
+    private lateinit var mapper: BenchmarkingDataMapper
+    private lateinit var idFactory: BenchmarkingDataIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): BenchmarkingDataDto = BenchmarkingDataDto(
+    fun createSampleDto(
+        mockId: Long = 1L,
+        workflowExecution: WorkflowExecutionDto = mockk(),
+        totalExecutionTime: Double = 123.456,
+        totalSteps: Int = 99,
+        aiDeterminedSteps: Int = 88,
+        predeterminedSteps: Int = 77
+    ): BenchmarkingDataDto = BenchmarkingDataDto(
         id = mockId,
+        workflowExecution = workflowExecution,
+        totalExecutionTime = totalExecutionTime,
+        totalSteps = totalSteps,
+        aiDeterminedSteps = aiDeterminedSteps,
+        predeterminedSteps = predeterminedSteps
     )
 
     fun createSampleEntity(): BenchmarkingDataDao = mockk<BenchmarkingDataDao>() {
         every { id } returns mockk()
+        every { workflowExecution } returns mockk()
+        every { totalExecutionTime } returns BigDecimal(123.456)
+        every { totalSteps } returns 99
+        every { aiDeterminedSteps } returns 88
+        every { predeterminedSteps } returns 77
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = BenchmarkingDataService(repository, mapper, idFactory)
     }
 

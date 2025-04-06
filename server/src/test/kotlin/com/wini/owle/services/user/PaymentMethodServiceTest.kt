@@ -2,7 +2,9 @@ package com.wini.owle.services.user
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.user.CardBrandDto
 import com.wini.owle.dto.user.PaymentMethodDto
+import com.wini.owle.dto.user.UserDto
 import com.wini.owle.entity.user.PaymentMethodDao
 import com.wini.owle.mapper.user.PaymentMethodsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +24,48 @@ import org.junit.jupiter.api.Test
 open class PaymentMethodServiceTest {
     
     private lateinit var service: PaymentMethodService
-    @MockK private lateinit var repository: PaymentMethodRepository
-    @MockK private lateinit var mapper: PaymentMethodsMapper
-    @MockK private lateinit var idFactory: PaymentMethodIdFactory
+    private lateinit var repository: PaymentMethodRepository
+    private lateinit var mapper: PaymentMethodsMapper
+    private lateinit var idFactory: PaymentMethodIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): PaymentMethodDto = PaymentMethodDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        stripePaymentMethodId: String? = "1AF002B1B22200",
+        user: UserDto = mockk(),
+        cardBrand: CardBrandDto? = mockk(),
+        lastFour: String? = "4103",
+        isDefault: Boolean = true,
+        createdAt: String = "2024-12-21T15:00:00Z",
+        updatedAt: String = "2024-12-22T15:00:00Z"
+    ) : PaymentMethodDto {
+        return PaymentMethodDto(
+            id = id,
+            stripePaymentMethodId = stripePaymentMethodId,
+            user = user,
+            cardBrand = cardBrand,
+            lastFour = lastFour,
+            isDefault = isDefault,
+            createdAt = createdAt,
+            updatedAt = updatedAt
+        )
+    }
 
     fun createSampleEntity(): PaymentMethodDao = mockk<PaymentMethodDao>() {
         every { id } returns mockk()
+        every { stripePaymentMethodId } returns "1AF002B1B22200"
+        every { user } returns mockk()
+        every { cardBrand } returns mockk()
+        every { lastFour } returns "4103"
+        every { isDefault } returns true
+        every { createdAt } returns mockk()
+        every { updatedAt } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = PaymentMethodService(repository, mapper, idFactory)
     }
 

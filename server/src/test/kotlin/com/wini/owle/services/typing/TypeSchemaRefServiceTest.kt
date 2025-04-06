@@ -2,6 +2,7 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.typing.TypeSchemaRefDto
 import com.wini.owle.entity.typing.TypeSchemaRefDao
 import com.wini.owle.mapper.typing.TypeSchemaRefsMapper
@@ -22,21 +23,41 @@ import org.junit.jupiter.api.Test
 open class TypeSchemaRefServiceTest {
     
     private lateinit var service: TypeSchemaRefService
-    @MockK private lateinit var repository: TypeSchemaRefRepository
-    @MockK private lateinit var mapper: TypeSchemaRefsMapper
-    @MockK private lateinit var idFactory: TypeSchemaRefIdFactory
+    private lateinit var repository: TypeSchemaRefRepository
+    private lateinit var mapper: TypeSchemaRefsMapper
+    private lateinit var idFactory: TypeSchemaRefIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TypeSchemaRefDto = TypeSchemaRefDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        parentRef: TypeSchemaRefDto? = null,
+        name: String = "exampleSchema",
+        typeDeclaration: TypeDeclarationDto = mockk(),
+        description: String = "Schema reference description",
+        childRefs: List<TypeSchemaRefDto> = emptyList()
+    ) : TypeSchemaRefDto {
+        return TypeSchemaRefDto(
+            id = id,
+            parentRef = parentRef,
+            name = name,
+            typeDeclaration = typeDeclaration,
+            description = description,
+            childRefs = childRefs
+        )
+    }
 
     fun createSampleEntity(): TypeSchemaRefDao = mockk<TypeSchemaRefDao>() {
         every { id } returns mockk()
+        every { parentRef } returns mockk()
+        every { name } returns "exampleSchema"
+        every { typeDeclaration } returns mockk()
+        every { description } returns "Schema reference description"
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TypeSchemaRefService(repository, mapper, idFactory)
     }
 

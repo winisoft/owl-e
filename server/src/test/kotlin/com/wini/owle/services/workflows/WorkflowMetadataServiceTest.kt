@@ -2,7 +2,8 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.workflows.WorkflowMetadataDto
+import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.workflows.*
 import com.wini.owle.entity.workflows.WorkflowMetadataDao
 import com.wini.owle.mapper.workflows.WorkflowMetadataMapper
 import com.wini.owle.repo.WorkflowMetadataIdFactory
@@ -20,21 +21,69 @@ import org.junit.jupiter.api.Test
 open class WorkflowMetadataServiceTest {
 
     private lateinit var service: WorkflowMetadataService
-    @MockK private lateinit var repository: WorkflowMetadataRepository
-    @MockK private lateinit var mapper: WorkflowMetadataMapper
-    @MockK private lateinit var idFactory: WorkflowMetadataIdFactory
+    private lateinit var repository: WorkflowMetadataRepository
+    private lateinit var mapper: WorkflowMetadataMapper
+    private lateinit var idFactory: WorkflowMetadataIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): WorkflowMetadataDto = WorkflowMetadataDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "John Arbuckle",
+        version: String = "1.0.0",
+        contributors: List<UserDto> = mockk(),
+        copyrightInformation:String = "2025",
+        contactInformation: String = "lasagnalonely@email.com",
+        thirdPartyLicenses: String = "Ok",
+        distributionVersion: String = "1.0.0",
+        distributionAcceptedAt: String = "",
+        distributionUpdatedAt: String = "",
+        discretionAdvisedContent: Boolean = true,
+        commercialUsage: CommercialUseDto = mockk(),
+        authorshipCredit: AuthorshipCreditDto = mockk(),
+        allowRedistribution: Boolean = false,
+        modification: ModificationTermsDto = mockk(),
+        excludedSteps: List<StepDto> = mockk()
+    ): WorkflowMetadataDto {
+        return WorkflowMetadataDto(
+            id = id,
+            name = name,
+            version = version,
+            contributors = contributors,
+            copyrightInformation = copyrightInformation,
+            contactInformation = contactInformation,
+            thirdPartyLicenses = thirdPartyLicenses,
+            discretionAdvisedContent = discretionAdvisedContent,
+            commercialUsage = commercialUsage,
+            creditNotation = authorshipCredit,
+            allowRedistribution = allowRedistribution,
+            modification = modification,
+            distributionVersion = distributionVersion,
+            distributionAcceptedAt = distributionAcceptedAt,
+            distributionUpdatedAt = distributionUpdatedAt,
+            excludedSteps = excludedSteps
+        )
+    }
 
     fun createSampleEntity(): WorkflowMetadataDao = mockk<WorkflowMetadataDao>() {
         every { id } returns mockk()
+        every { name } returns "John Arbuckle"
+        every { version } returns "1.0.0"
+        every { copyrightInformation } returns "2025"
+        every { contactInformation } returns "lasagnalonely@email.com"
+        every { thirdPartyLicenses } returns "Ok"
+        every { distributionVersion } returns "1.0.0"
+        every { distributionAcceptedAt } returns mockk()
+        every { distributionUpdatedAt } returns mockk()
+        every { discretionAdvisedContent } returns true
+        every { commercialUsage } returns mockk()
+        every { allowRedistribution } returns false
+        every { modification } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = WorkflowMetadataService(repository, mapper, idFactory)
     }
 

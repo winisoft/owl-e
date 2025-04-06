@@ -2,7 +2,10 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.dto.workflows.StoreMethodDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.workflows.DataPointDao
 import com.wini.owle.mapper.workflows.DataPointsMapper
 import com.wini.owle.repo.DataPointIdFactory
@@ -22,21 +25,47 @@ import org.junit.jupiter.api.Test
 open class DataPointServiceTest {
     
     private lateinit var service: DataPointService
-    @MockK private lateinit var repository: DataPointRepository
-    @MockK private lateinit var mapper: DataPointsMapper
-    @MockK private lateinit var idFactory: DataPointIdFactory
+    private lateinit var repository: DataPointRepository
+    private lateinit var mapper: DataPointsMapper
+    private lateinit var idFactory: DataPointIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): DataPointDto = DataPointDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Data Point Name",
+        description: String? = "Data Point Description",
+        presetValue: String? = "Some stuff",
+        storeMethod: StoreMethodDto = mockk(),
+        typeDeclaration: TypeDeclarationDto = mockk(),
+        workflow: WorkflowDto = mockk()
+    ): DataPointDto {
+        return DataPointDto(
+            id = id,
+            name = name,
+            description = description,
+            presetValue = presetValue,
+            storeMethod = storeMethod,
+            typeDeclaration = typeDeclaration,
+            workflow = workflow,
+            createdAt = "2024-12-21T15:00:00",
+            updatedAt = "2024-12-21T15:00:00"
+        )
+    }
 
     fun createSampleEntity(): DataPointDao = mockk<DataPointDao>() {
         every { id } returns mockk()
+        every { name } returns "Data Point Name"
+        every { description } returns "Data Point Description"
+        every { presetValue } returns "Some stuff"
+        every { storeMethod } returns mockk()
+        every { typeDeclaration } returns mockk()
+        every { workflow } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = DataPointService(repository, mapper, idFactory)
     }
 

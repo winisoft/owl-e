@@ -3,6 +3,8 @@ package com.wini.owle.services.workflows
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.dto.workflows.WorkflowFolderDto
+import com.wini.owle.dto.workflows.WorkflowMetadataDto
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.workflows.WorkflowsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +24,45 @@ import org.junit.jupiter.api.Test
 open class WorkflowServiceTest {
     
     private lateinit var service: WorkflowService
-    @MockK private lateinit var repository: WorkflowRepository
-    @MockK private lateinit var mapper: WorkflowsMapper
-    @MockK private lateinit var idFactory: WorkflowIdFactory
+    private lateinit var repository: WorkflowRepository
+    private lateinit var mapper: WorkflowsMapper
+    private lateinit var idFactory: WorkflowIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): WorkflowDto = WorkflowDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Example Workflow",
+        description: String? = "A sample workflow description",
+        pythonVersion: String = "3.9",
+        parentFolder: WorkflowFolderDto? = mockk(),
+        createdAt: String = "2024-12-20T15:00:00Z",
+        updatedAt: String = "2024-12-21T15:00:00Z"
+    ): WorkflowDto {
+        return WorkflowDto(
+            id = id,
+            name = name,
+            description = description,
+            pythonVersion = pythonVersion,
+            parentFolder = parentFolder,
+            createdAt = createdAt,
+            updatedAt = updatedAt
+        )
+    }
 
     fun createSampleEntity(): WorkflowDao = mockk<WorkflowDao>() {
         every { id } returns mockk()
+        every { name } returns "Example Workflow"
+        every { description } returns "A sample workflow description"
+        every { pythonVersion } returns "3.9"
+        every { parentFolder } returns mockk()
+        every { createdAt } returns mockk()
+        every { updatedAt } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = WorkflowService(repository, mapper, idFactory)
     }
 

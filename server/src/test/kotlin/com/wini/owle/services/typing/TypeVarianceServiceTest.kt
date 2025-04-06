@@ -2,7 +2,9 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.typing.TypeVarianceDto
+import com.wini.owle.dto.typing.VarianceCardinalityDto
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.typing.TypeVariancesMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +24,33 @@ import org.junit.jupiter.api.Test
 open class TypeVarianceServiceTest {
     
     private lateinit var service: TypeVarianceService
-    @MockK private lateinit var repository: TypeVarianceRepository
-    @MockK private lateinit var mapper: TypeVariancesMapper
-    @MockK private lateinit var idFactory: TypeVarianceIdFactory
+    private lateinit var repository: TypeVarianceRepository
+    private lateinit var mapper: TypeVariancesMapper
+    private lateinit var idFactory: TypeVarianceIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TypeVarianceDto = TypeVarianceDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 23L,
+        typeVariableDeclaration: TypeDeclarationDto = mockk(),
+        varianceCardinality: VarianceCardinalityDto = mockk()
+    ): TypeVarianceDto {
+        return TypeVarianceDto(
+            id = id,
+            typeVariableDeclaration = typeVariableDeclaration,
+            varianceCardinality = varianceCardinality
+        )
+    }
 
     fun createSampleEntity(): TypeVarianceDao = mockk<TypeVarianceDao>() {
         every { id } returns mockk()
+        every { typeVariableDeclaration } returns mockk()
+        every { varianceCardinality } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TypeVarianceService(repository, mapper, idFactory)
     }
 
@@ -122,7 +136,7 @@ open class TypeVarianceServiceTest {
 
         every { entityId.value } returns dto.id
         every { repository.entityClass.table }
-        every { idFactory.build(any()) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.getById(entityId) } returns null
 
         // Act
@@ -215,7 +229,7 @@ open class TypeVarianceServiceTest {
         every { entity.id } returns entityId
         every { entityId.value } returns id
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(id) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
         every { repository.getById(entityId) } returns mockk()

@@ -2,6 +2,8 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.runs.GenerationMethodDto
+import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.runs.TestInputDto
 import com.wini.owle.entity.runs.TestInputDao
 import com.wini.owle.mapper.runs.TestInputsMapper
@@ -22,21 +24,39 @@ import org.junit.jupiter.api.Test
 open class TestInputServiceTest {
     
     private lateinit var service: TestInputService
-    @MockK private lateinit var repository: TestInputRepository
-    @MockK private lateinit var mapper: TestInputsMapper
-    @MockK private lateinit var idFactory: TestInputIdFactory
+    private lateinit var repository: TestInputRepository
+    private lateinit var mapper: TestInputsMapper
+    private lateinit var idFactory: TestInputIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TestInputDto = TestInputDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        dataPointName: String = "input1",
+        value: String = "value1",
+        generationMethod: GenerationMethodDto = mockk(),
+        testCase: TestCaseDto = mockk()
+    ): TestInputDto {
+        return TestInputDto(
+            id = id,
+            dataPointName = dataPointName,
+            value = value,
+            generationMethod = generationMethod,
+            testCase = testCase
+        )
+    }
 
     fun createSampleEntity(): TestInputDao = mockk<TestInputDao>() {
         every { id } returns mockk()
+        every { dataPointName } returns "input1"
+        every { value } returns "value1"
+        every { generationMethod } returns mockk()
+        every { testCase } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TestInputService(repository, mapper, idFactory)
     }
 

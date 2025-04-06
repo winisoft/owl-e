@@ -3,6 +3,8 @@ package com.wini.owle.services.steps
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.PreReqInjectionDto
+import com.wini.owle.dto.steps.WorkflowJunctionDto
+import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.entity.steps.PreReqInjectionDao
 import com.wini.owle.mapper.steps.PreReqInjectionsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,21 +23,42 @@ import org.junit.jupiter.api.Test
 open class PreReqInjectionServiceTest {
     
     private lateinit var service: PreReqInjectionService
-    @MockK private lateinit var repository: PreReqInjectionRepository
-    @MockK private lateinit var mapper: PreReqInjectionsMapper
-    @MockK private lateinit var idFactory: PreReqInjectionIdFactory
+    private lateinit var repository: PreReqInjectionRepository
+    private lateinit var mapper: PreReqInjectionsMapper
+    private lateinit var idFactory: PreReqInjectionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): PreReqInjectionDto = PreReqInjectionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        junction: WorkflowJunctionDto = mockk(),
+        sourceDataPoint: DataPointDto = mockk(),
+        injectedDataPoint: DataPointDto = mockk(),
+        name: String = "Name",
+        description: String? = "Description"
+    ) : PreReqInjectionDto {
+        return PreReqInjectionDto(
+            id = id,
+            junction = junction,
+            sourceDataPoint = sourceDataPoint,
+            injectedDataPoint = injectedDataPoint,
+            name = name,
+            description = description
+        )
+    }
 
     fun createSampleEntity(): PreReqInjectionDao = mockk<PreReqInjectionDao>() {
         every { id } returns mockk()
+        every { junction } returns mockk()
+        every { sourceDataPoint } returns mockk()
+        every { injectedDataPoint } returns mockk()
+        every { name } returns "Name"
+        every { description } returns "Description"
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = PreReqInjectionService(repository, mapper, idFactory)
     }
 

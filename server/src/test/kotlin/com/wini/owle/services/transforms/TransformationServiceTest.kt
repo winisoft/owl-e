@@ -3,6 +3,7 @@ package com.wini.owle.services.transforms
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.transforms.TransformationDto
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.entity.transforms.TransformationDao
 import com.wini.owle.mapper.transforms.TransformationsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +23,39 @@ import org.junit.jupiter.api.Test
 open class TransformationServiceTest {
     
     private lateinit var service: TransformationService
-    @MockK private lateinit var repository: TransformationRepository
-    @MockK private lateinit var mapper: TransformationsMapper
-    @MockK private lateinit var idFactory: TransformationIdFactory
+    private lateinit var repository: TransformationRepository
+    private lateinit var mapper: TransformationsMapper
+    private lateinit var idFactory: TransformationIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TransformationDto = TransformationDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Transformation Name",
+        description: String = "Transformation Description",
+        examples: String? = "Example",
+        returnsType: TypeDeclarationDto = mockk()
+    ) : TransformationDto {
+        return TransformationDto(
+            id = id,
+            name = name,
+            description = description,
+            examples = examples,
+            returnsType = returnsType
+        )
+    }
 
     fun createSampleEntity(): TransformationDao = mockk<TransformationDao>() {
         every { id } returns mockk()
+        every { name } returns "Transformation Name"
+        every { description } returns "Transformation Description"
+        every { examples } returns "Example"
+        every { returnsTypeDeclaration } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TransformationService(repository, mapper, idFactory)
     }
 

@@ -2,7 +2,9 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.runs.TestResultDto
+import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.runs.TestResultDao
 import com.wini.owle.mapper.runs.TestResultsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +24,39 @@ import org.junit.jupiter.api.Test
 open class TestResultServiceTest {
     
     private lateinit var service: TestResultService
-    @MockK private lateinit var repository: TestResultRepository
-    @MockK private lateinit var mapper: TestResultsMapper
-    @MockK private lateinit var idFactory: TestResultIdFactory
+    private lateinit var repository: TestResultRepository
+    private lateinit var mapper: TestResultsMapper
+    private lateinit var idFactory: TestResultIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TestResultDto = TestResultDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        testCase: TestCaseDto = mockk(),
+        workflowExecution: WorkflowExecutionDto = mockk(),
+        passed: Boolean = true,
+        executedAt: String = "2024-12-21T00:00:00Z"
+    ): TestResultDto {
+        return TestResultDto(
+            id = id,
+            testCase = testCase,
+            workflowExecution = workflowExecution,
+            passed = passed,
+            executedAt = executedAt
+        )
+    }
 
     fun createSampleEntity(): TestResultDao = mockk<TestResultDao>() {
         every { id } returns mockk()
+        every { testCase } returns mockk()
+        every { workflowExecution } returns mockk()
+        every { passed } returns true
+        every { executedAt } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TestResultService(repository, mapper, idFactory)
     }
 

@@ -3,6 +3,7 @@ package com.wini.owle.services.user
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.user.TagDto
+import com.wini.owle.dto.user.UserDto
 import com.wini.owle.entity.user.TagDao
 import com.wini.owle.mapper.user.TagsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +23,36 @@ import org.junit.jupiter.api.Test
 open class TagServiceTest {
     
     private lateinit var service: TagService
-    @MockK private lateinit var repository: TagRepository
-    @MockK private lateinit var mapper: TagsMapper
-    @MockK private lateinit var idFactory: TagIdFactory
+    private lateinit var repository: TagRepository
+    private lateinit var mapper: TagsMapper
+    private lateinit var idFactory: TagIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TagDto = TagDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Tag Name",
+        description: String? = "Tag Description",
+        user: UserDto = mockk()
+    ) : TagDto {
+        return TagDto(
+            id = id,
+            name = name,
+            description = description,
+            user = user
+        )
+    }
 
     fun createSampleEntity(): TagDao = mockk<TagDao>() {
         every { id } returns mockk()
+        every { name } returns "Tag Name"
+        every { description } returns "Tag Description"
+        every { user } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk()
+        mapper = mockk()
+        idFactory = mockk()
         service = TagService(repository, mapper, idFactory)
     }
 

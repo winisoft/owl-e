@@ -22,21 +22,45 @@ import org.junit.jupiter.api.Test
 open class WorkflowFolderServiceTest {
     
     private lateinit var service: WorkflowFolderService
-    @MockK private lateinit var repository: WorkflowFolderRepository
-    @MockK private lateinit var mapper: WorkflowFoldersMapper
-    @MockK private lateinit var idFactory: WorkflowFolderIdFactory
+    private lateinit var repository: WorkflowFolderRepository
+    private lateinit var mapper: WorkflowFoldersMapper
+    private lateinit var idFactory: WorkflowFolderIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): WorkflowFolderDto = WorkflowFolderDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 32L,
+        parentFolder: WorkflowFolderDto? = mockk(),
+        name: String = "ExampleFolder",
+        description: String? = "Folder description",
+        img: String? = null,
+        createdAt: String = "2024-12-21T10:00:00Z",
+        updatedAt: String = "2024-12-21T10:00:00Z"
+    ): WorkflowFolderDto {
+        return WorkflowFolderDto(
+            id = id,
+            parentFolder = parentFolder,
+            name = name,
+            description = description,
+            img = null,
+            createdAt = createdAt,
+            updatedAt = updatedAt
+        )
+    }
 
     fun createSampleEntity(): WorkflowFolderDao = mockk<WorkflowFolderDao>() {
         every { id } returns mockk()
+        every { parentFolder } returns mockk()
+        every { name } returns "ExampleFolder"
+        every { description } returns "Folder description"
+        every { img } returns null
+        every { createdAt } returns mockk()
+        every { updatedAt } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = WorkflowFolderService(repository, mapper, idFactory)
     }
 
@@ -215,7 +239,7 @@ open class WorkflowFolderServiceTest {
         every { entity.id } returns entityId
         every { entityId.value } returns id
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(id) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
         every { repository.getById(entityId) } returns mockk()

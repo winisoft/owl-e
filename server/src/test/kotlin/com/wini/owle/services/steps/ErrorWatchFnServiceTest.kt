@@ -2,6 +2,7 @@ package com.wini.owle.services.steps
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.steps.ErrorWatchDto
 import com.wini.owle.dto.steps.ErrorWatchFnDto
 import com.wini.owle.entity.steps.ErrorWatchFnDao
 import com.wini.owle.mapper.steps.ErrorWatchFnsMapper
@@ -21,21 +22,36 @@ import org.junit.jupiter.api.Test
 open class ErrorWatchFnServiceTest {
     
     private lateinit var service: ErrorWatchFnService
-    @MockK private lateinit var repository: ErrorWatchFnRepository
-    @MockK private lateinit var mapper: ErrorWatchFnsMapper
-    @MockK private lateinit var idFactory: ErrorWatchFnIdFactory
+    private lateinit var repository: ErrorWatchFnRepository
+    private lateinit var mapper: ErrorWatchFnsMapper
+    private lateinit var idFactory: ErrorWatchFnIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): ErrorWatchFnDto = ErrorWatchFnDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        errorWatch: ErrorWatchDto = mockk(),
+        functionName: String = "exampleFunction",
+        position: Int = 1,
+    ) : ErrorWatchFnDto {
+        return ErrorWatchFnDto(
+            id = id,
+            errorWatch = errorWatch,
+            functionName = functionName,
+            position = position
+        )
+    }
 
     fun createSampleEntity(): ErrorWatchFnDao = mockk<ErrorWatchFnDao>() {
         every { id } returns mockk()
+        every { errorWatch } returns mockk()
+        every { functionName } returns "exampleFunction"
+        every { position } returns 1
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ErrorWatchFnService(repository, mapper, idFactory)
     }
 

@@ -21,25 +21,34 @@ import org.junit.jupiter.api.Test
 open class ToolPackageDependencyServiceTest {
 
     private lateinit var service: ToolPackageDependencyService
-    @MockK private lateinit var repository: ToolPackageDependencyRepository
-    @MockK private lateinit var mapper: ToolPackageDependencyMapper
-    @MockK private lateinit var idFactory: ToolPackageDependencyIdFactory
+    private lateinit var repository: ToolPackageDependencyRepository
+    private lateinit var mapper: ToolPackageDependencyMapper
+    private lateinit var idFactory: ToolPackageDependencyIdFactory
 
     fun createSampleDto(
         toolId: Long = 1,
         packageId: Long = 2,
         versionSpecId: Long = 3
     ): ToolPackageDependencyDto = ToolPackageDependencyDto(
-        toolId, packageId, versionSpecId
+        toolId = toolId, 
+        packageId = packageId, 
+        versionSpecId = versionSpecId
     )
 
     fun createSampleEntity(): ToolPackageDependencyDao = mockk<ToolPackageDependencyDao>() {
-        every { id } returns mockk()
+        every { id } returns mockk {
+            every { value } returns mockk<CompositeID>()
+        }
+        every { tool } returns mockk()
+        every { packageEntity } returns mockk()
+        every { versionSpec } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ToolPackageDependencyService(repository, mapper, idFactory)
     }
 
@@ -313,19 +322,13 @@ open class ToolPackageDependencyServiceTest {
 
     @Test
     fun `test batch delete success`() {
-        // Arrange
         val compositeIds = listOf<CompositeID>(mockk(), mockk())
-        val entityId1: EntityID<CompositeID> = mockk() {
-            every { value } returns mockk()
-        }
-        val entityId2: EntityID<CompositeID> = mockk() {
-            every { value } returns mockk()
-        }
-        val entityIds = listOf<EntityID<CompositeID>>(entityId1, entityId2)
-
-        every { idFactory.build(entityId1.value) } returns entityId1
-        every { idFactory.build(entityId2.value) } returns entityId2
-        every { repository.delete(entityIds) } just runs
+        val entityIds = listOf<EntityID<CompositeID>>(
+            mockk { every { value } returns mockk() },
+            mockk { every { value } returns mockk() }
+        )
+        every { idFactory.build(any<CompositeID>()) }.returnsMany(entityIds[0], entityIds[1])
+        every { repository.delete(any<List<EntityID<CompositeID>>>()) } just runs
 
         // Act
         val result = service.delete(compositeIds)

@@ -99,23 +99,13 @@ open class PhaseMapperTest {
         // Mock the existing entity that will be updated
         val existingEntity = mockk<PhaseDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
+        // Mock the workflow DAOs that would be returned from the mapper
         val workflowDao: WorkflowDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(PhaseDao)
         every { PhaseDao.findById(42L) } returns existingEntity
-
-        // Capture the property updates
-        val workflowSlot = slot<WorkflowDao>()
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-        val displayOrderSlot = slot<Int>()
-
-        every { existingEntity.workflow = capture(workflowSlot) } just runs
-        every { existingEntity.name = capture(nameSlot) } just runs
-        every { existingEntity.description = capture(descriptionSlot) } just runs
-        every { existingEntity.displayOrder = capture(displayOrderSlot) } just runs
+        every { workflowMapper.toEntity(dto.workflow) } returns workflowDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
@@ -123,15 +113,10 @@ open class PhaseMapperTest {
         // Verify that the existing entity was found and updated
         verify { PhaseDao.findById(42L) }
         verify { existingEntity.workflow = workflowDao }
+        verify { existingEntity.parentPhase = null }
         verify { existingEntity.name = "phaseName" }
         verify { existingEntity.description = "description" }
         verify { existingEntity.displayOrder = 1 }
-
-        // Verify the captured values
-        assertEquals(workflowDao, workflowSlot.captured)
-        assertEquals("phaseName", nameSlot.captured)
-        assertEquals("description", descriptionSlot.captured)
-        assertEquals(1, displayOrderSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -141,11 +126,15 @@ open class PhaseMapperTest {
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
-        // Create test DTOs
+        // Create a mock workflow and DTO
+        val workflowDto = mockk<WorkflowDto>()
+        val workflowDao = mockk<WorkflowDao>()
+        
+        // Create a DTO with no parent phase initially
         val dto = PhaseDto(
             id = 0L,
-            workflow = mockk(),
-            parentPhase = null,
+            workflow = workflowDto,
+            parentPhase = null,  // No parent phase to avoid recursion issues
             name = "phaseName",
             description = "description",
             displayOrder = 1
@@ -154,42 +143,86 @@ open class PhaseMapperTest {
         // Mock the new entity that will be created
         val newEntity = mockk<PhaseDao>(relaxed = true)
 
-        // Mock the class's member dao types that would be returned from the mapper
-        val workflowDao: WorkflowDao = mockk()
-
-        // Set up the factory mock to return our mock entity
+        // Set up the factory and workflow mapper mocks
         every { factory.create() } returns newEntity
-
-        // Capture property assignments
-        val workflowSlot = slot<WorkflowDao>()
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-        val displayOrderSlot = slot<Int>()
-
-        every { newEntity.workflow = capture(workflowSlot) } just runs
-        every { newEntity.name = capture(nameSlot) } just runs
-        every { newEntity.description = capture(descriptionSlot) } just runs
-        every { newEntity.displayOrder = capture(displayOrderSlot) } just runs
+        every { workflowMapper.toEntity(workflowDto) } returns workflowDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the factory was used to create a new entity
-        verify { factory.create() }
-
         // Verify the properties were set correctly
-        verify { newEntity.workflow = workflowDao }
-        verify { newEntity.name = "phaseName" }
-        verify { newEntity.description = "description" }
-        verify { newEntity.displayOrder = 1 }
-
-        // Verify the captured values
-        assertEquals(workflowDao, workflowSlot.captured)
-        assertEquals("phaseName", nameSlot.captured)
-        assertEquals("description", descriptionSlot.captured)
-        assertEquals(1, displayOrderSlot.captured)
+        verify(exactly = 1) { factory.create() }
+        verify(exactly = 1) { workflowMapper.toEntity(workflowDto) }
+        verify(exactly = 1) { newEntity.workflow = workflowDao }
+        verify(exactly = 1) { newEntity.parentPhase = null }
+        verify(exactly = 1) { newEntity.name = "phaseName" }
+        verify(exactly = 1) { newEntity.description = "description" }
+        verify(exactly = 1) { newEntity.displayOrder = 1 }
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)
+    }
+
+    @Test
+    fun `toEntity should correctly handle parent phase recursion`() {
+        // Create a mock child DTO with a mock parent
+        val parentWorkflowDto = mockk<WorkflowDto>()
+        val childWorkflowDto = mockk<WorkflowDto>() 
+        val parentWorkflowDao = mockk<WorkflowDao>()
+        val childWorkflowDao = mockk<WorkflowDao>()
+        
+        // Create the parent phase first (will be found by ID)
+        val parentDto = PhaseDto(
+            id = 42L,
+            workflow = parentWorkflowDto,
+            parentPhase = null, 
+            name = "parentPhaseName",
+            description = "parentDescription",
+            displayOrder = 1
+        )
+        
+        // The existing parent entity that will be found
+        val parentEntity = mockk<PhaseDao>(relaxed = true)
+        
+        // Create the child phase that has the parent
+        val childDto = PhaseDto(
+            id = 0L,
+            workflow = childWorkflowDto,
+            parentPhase = parentDto,
+            name = "childPhaseName",
+            description = "childDescription",
+            displayOrder = 2
+        )
+        
+        // The new child entity that will be created
+        val childEntity = mockk<PhaseDao>(relaxed = true)
+        
+        // Set up all the mocks
+        mockkObject(PhaseDao)
+        every { PhaseDao.findById(42L) } returns parentEntity
+        every { factory.create() } returns childEntity
+        every { workflowMapper.toEntity(parentWorkflowDto) } returns parentWorkflowDao
+        every { workflowMapper.toEntity(childWorkflowDto) } returns childWorkflowDao
+        
+        // Execute the method for the child DTO
+        val result = mapper.toEntity(childDto)
+        
+        // Verify parent lookup and workflow mapping
+        verify { PhaseDao.findById(42L) }
+        verify { workflowMapper.toEntity(parentWorkflowDto) }
+        verify { parentEntity.workflow = parentWorkflowDao }
+        
+        // Verify child properties including parent assignment
+        verify { factory.create() }
+        verify { childEntity.workflow = childWorkflowDao }
+        verify { childEntity.parentPhase = parentEntity }
+        verify { childEntity.name = "childPhaseName" }
+        verify { childEntity.description = "childDescription" }
+        verify { childEntity.displayOrder = 2 }
+        
+        // Verify the result is the child entity
+        assertEquals(childEntity, result)
+        
+        unmockkObject(PhaseDao)
     }
 }

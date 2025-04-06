@@ -3,6 +3,7 @@ package com.wini.owle.services.workflows
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.PhaseDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.workflows.PhaseDao
 import com.wini.owle.mapper.workflows.PhasesMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +23,43 @@ import org.junit.jupiter.api.Test
 open class PhaseServiceTest {
     
     private lateinit var service: PhaseService
-    @MockK private lateinit var repository: PhaseRepository
-    @MockK private lateinit var mapper: PhasesMapper
-    @MockK private lateinit var idFactory: PhaseIdFactory
+    private lateinit var repository: PhaseRepository
+    private lateinit var mapper: PhasesMapper
+    private lateinit var idFactory: PhaseIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): PhaseDto = PhaseDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        workflow: WorkflowDto = mockk(),
+        parentPhase: PhaseDto? = null,
+        name: String = "Phase Name",
+        description: String? = "Phase Description",
+        displayOrder: Int = 1
+    ) : PhaseDto {
+        return PhaseDto(
+            id = id,
+            workflow = workflow,
+            parentPhase = parentPhase,
+            name = name,
+            description = description,
+            displayOrder = displayOrder
+        )
+    }
+
 
     fun createSampleEntity(): PhaseDao = mockk<PhaseDao>() {
         every { id } returns mockk()
+        every { workflow } returns mockk()
+        every { parentPhase } returns null
+        every { name } returns "Phase Name"
+        every { description } returns "Phase Description"
+        every { displayOrder } returns 1
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = PhaseService(repository, mapper, idFactory)
     }
 

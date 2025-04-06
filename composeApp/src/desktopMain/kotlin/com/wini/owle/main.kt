@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 fun main() = application {
 
     GlobalScope.launch {
-        startServerSafely()
+        Server.startServer()
     }
 
     Window(

@@ -3,6 +3,7 @@ package com.wini.owle.services.steps
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.ErrorWatchDto
+import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.entity.steps.ErrorWatchDao
 import com.wini.owle.mapper.steps.ErrorWatchesMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,21 +22,36 @@ import org.junit.jupiter.api.Test
 open class ErrorWatchServiceTest {
    
     private lateinit var service: ErrorWatchService
-    @MockK private lateinit var repository: ErrorWatchRepository
-    @MockK private lateinit var mapper: ErrorWatchesMapper
-    @MockK private lateinit var idFactory: ErrorWatchIdFactory
+    private lateinit var repository: ErrorWatchRepository
+    private lateinit var mapper: ErrorWatchesMapper
+    private lateinit var idFactory: ErrorWatchIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): ErrorWatchDto = ErrorWatchDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 11L,
+        step: StepDto = mockk(),
+        errorType: String = "RuntimeException",
+        triggerStep: StepDto = mockk()
+    ) : ErrorWatchDto {
+        return ErrorWatchDto(
+            id = id,
+            step = step,
+            errorType = errorType,
+            triggerStep = triggerStep
+        )
+    }
 
     fun createSampleEntity(): ErrorWatchDao = mockk<ErrorWatchDao>() {
         every { id } returns mockk()
+        every { step } returns mockk()
+        every { errorType } returns "RuntimeException"
+        every { onMetStep } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ErrorWatchService(repository, mapper, idFactory)
     }
 
@@ -214,7 +230,7 @@ open class ErrorWatchServiceTest {
         every { entity.id } returns entityId
         every { entityId.value } returns id
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(id) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
         every { repository.getById(entityId) } returns mockk()

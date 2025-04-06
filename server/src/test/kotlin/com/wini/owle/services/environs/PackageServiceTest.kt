@@ -3,6 +3,7 @@ package com.wini.owle.services.environs
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.environs.PackageDto
+import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.mapper.environs.PackagesMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +23,34 @@ import org.junit.jupiter.api.Test
 open class PackageServiceTest {
 
     private lateinit var service: PackageService
-    @MockK private lateinit var repository: PackageRepository
-    @MockK private lateinit var mapper: PackagesMapper
-    @MockK private lateinit var idFactory: PackageIdFactory
+    private lateinit var repository: PackageRepository
+    private lateinit var mapper: PackagesMapper
+    private lateinit var idFactory: PackageIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): PackageDto = PackageDto(
+    fun createSampleDto(
+        mockId: Long = 1L,
+        name: String = "Package Name",
+        disambiguation: String? = "As Opposed To Pkg Name",
+        versionSpec: VersionSpecDto = mockk()
+    ): PackageDto = PackageDto(
         id = mockId,
+        name = name,
+        disambiguation = disambiguation,
+        versionSpec = versionSpec
     )
 
     fun createSampleEntity(): PackageDao = mockk<PackageDao>() {
         every { id } returns mockk()
+        every { name } returns "Package Name"
+        every { disambiguation } returns "As Opposed To Pkg Name"
+        every { versionSpec } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = PackageService(repository, mapper, idFactory)
     }
 
@@ -94,6 +108,9 @@ open class PackageServiceTest {
         val entityId: EntityID<Long> = mockk()
         val entity: PackageDao = mockk<PackageDao>() {
             every { id } returns mockk()
+            every { name } returns "Package Name"
+            every { disambiguation } returns "As Opposed To Pkg Name"
+            every { versionSpec } returns mockk()
         }
 
         every { mapper.toEntity(dto) } returns entity

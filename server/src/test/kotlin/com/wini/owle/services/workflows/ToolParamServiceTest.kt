@@ -2,6 +2,8 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.entity.workflows.ToolParamDao
 import com.wini.owle.mapper.workflows.ToolParamsMapper
@@ -22,21 +24,39 @@ import org.junit.jupiter.api.Test
 open class ToolParamServiceTest {
     
     private lateinit var service: ToolParamService
-    @MockK private lateinit var repository: ToolParamRepository
-    @MockK private lateinit var mapper: ToolParamsMapper
-    @MockK private lateinit var idFactory: ToolParamIdFactory
+    private lateinit var repository: ToolParamRepository
+    private lateinit var mapper: ToolParamsMapper
+    private lateinit var idFactory: ToolParamIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): ToolParamDto = ToolParamDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Tool Param",
+        typeDeclaration: TypeDeclarationDto = mockk(),
+        tool: ToolDto = mockk(),
+        hasDefault: Boolean = true
+    ) : ToolParamDto {
+        return ToolParamDto(
+            id = id,
+            name = name,
+            typeDeclaration = typeDeclaration,
+            tool = tool,
+            hasDefault = hasDefault
+        )
+    }
 
     fun createSampleEntity(): ToolParamDao = mockk<ToolParamDao>() {
         every { id } returns mockk()
+        every { name } returns "Tool Param"
+        every { typeDeclaration } returns mockk()
+        every { tool } returns mockk()
+        every { hasDefault } returns true
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ToolParamService(repository, mapper, idFactory)
     }
 

@@ -2,7 +2,10 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.dto.workflows.ToolDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.workflows.StepDao
 import com.wini.owle.mapper.workflows.StepsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +25,50 @@ import org.junit.jupiter.api.Test
 open class StepServiceTest {
     
     private lateinit var service: StepService
-    @MockK private lateinit var repository: StepRepository
-    @MockK private lateinit var mapper: StepsMapper
-    @MockK private lateinit var idFactory: StepIdFactory
+    private lateinit var repository: StepRepository
+    private lateinit var mapper: StepsMapper
+    private lateinit var idFactory: StepIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): StepDto = StepDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 3L,
+        name: String = "Example Step",
+        description: String? = "A step in a workflow",
+        workflow: WorkflowDto = mockk(),
+        isWorkflowHead: Boolean = true,
+        tool: ToolDto = mockk(),
+        parentPhase: PhaseDto? = mockk(),
+        displayOrder: Int = 0,
+        nextStep: StepDto? = mockk()
+    ): StepDto {
+        return StepDto(
+            id = id,
+            name = name,
+            description = description,
+            workflow = workflow,
+            isWorkflowHead = isWorkflowHead,
+            tool = tool,
+            parentPhase = parentPhase,
+            displayOrder = displayOrder,
+            nextStep = nextStep
+        )
+    }
 
     fun createSampleEntity(): StepDao = mockk<StepDao>() {
         every { id } returns mockk()
+        every { name } returns "Example Step"
+        every { description } returns "A step in a workflow"
+        every { workflow } returns mockk()
+        every { isWorkflowHead } returns true
+        every { tool } returns mockk()
+        every { parentPhase } returns mockk()
+        every { displayOrder } returns 0
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = StepService(repository, mapper, idFactory)
     }
 
@@ -215,7 +247,7 @@ open class StepServiceTest {
         every { entity.id } returns entityId
         every { entityId.value } returns id
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(id) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
         every { repository.getById(entityId) } returns mockk()

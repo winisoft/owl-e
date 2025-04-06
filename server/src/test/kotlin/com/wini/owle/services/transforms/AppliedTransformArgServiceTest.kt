@@ -3,6 +3,8 @@ package com.wini.owle.services.transforms
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.transforms.AppliedTransformArgDto
+import com.wini.owle.dto.transforms.AppliedTransformDto
+import com.wini.owle.dto.transforms.TransformationArgDto
 import com.wini.owle.entity.transforms.AppliedTransformArgDao
 import com.wini.owle.mapper.transforms.AppliedTransformArgsMapper
 import com.wini.owle.repo.AppliedTransformArgIdFactory
@@ -22,21 +24,36 @@ import org.junit.jupiter.api.Test
 open class AppliedTransformArgServiceTest {
     
     private lateinit var service: AppliedTransformArgService
-    @MockK private lateinit var repository: AppliedTransformArgRepository
-    @MockK private lateinit var mapper: AppliedTransformArgsMapper
-    @MockK private lateinit var idFactory: AppliedTransformArgIdFactory
+    private lateinit var repository: AppliedTransformArgRepository
+    private lateinit var mapper: AppliedTransformArgsMapper
+    private lateinit var idFactory: AppliedTransformArgIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): AppliedTransformArgDto = AppliedTransformArgDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 0L,
+        appliedTransform: AppliedTransformDto = mockk(),
+        transformationArg: TransformationArgDto = mockk(),
+        value: String = ""
+    ) : AppliedTransformArgDto {
+        return AppliedTransformArgDto(
+            id = id,
+            appliedTransform = appliedTransform,
+            transformationArg = transformationArg,
+            value = value
+        )
+    }
 
     fun createSampleEntity(): AppliedTransformArgDao = mockk<AppliedTransformArgDao>() {
         every { id } returns mockk()
+        every { appliedTransform } returns mockk()
+        every { transformationArg } returns mockk()
+        every { value } returns ""
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = AppliedTransformArgService(repository, mapper, idFactory)
     }
 
@@ -215,7 +232,7 @@ open class AppliedTransformArgServiceTest {
         every { entity.id } returns entityId
         every { entityId.value } returns id
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(id) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
         every { repository.getById(entityId) } returns mockk()

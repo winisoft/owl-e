@@ -108,17 +108,8 @@ open class TransformationArgMapperTest {
         // Set up mocks for finding existing entity
         mockkObject(TransformationArgDao)
         every { TransformationArgDao.findById(42L) } returns existingEntity
-
-        // Capture the property updates
-        val transformationSlot = slot<TransformationDao>()
-        val typeDeclarationSlot = slot<TypeDeclarationDao>()
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-
-        every { existingEntity.transformation = capture(transformationSlot) } just runs
-        every { existingEntity.typeDeclaration = capture(typeDeclarationSlot) } just runs
-        every { existingEntity.name = capture(nameSlot) } just runs
-        every { existingEntity.description = capture(descriptionSlot) } just runs
+        every { transformationsMapper.toEntity(dto.transformation) } returns transformationDao
+        every { typeDeclarationsMapper.toEntity(dto.typeDeclaration) } returns typeDeclarationDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
@@ -129,12 +120,6 @@ open class TransformationArgMapperTest {
         verify { existingEntity.typeDeclaration = typeDeclarationDao }
         verify { existingEntity.name = "argName" }
         verify { existingEntity.description = "argDescription" }
-
-        // Verify the captured values
-        assertEquals(transformationDao, transformationSlot.captured)
-        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
-        assertEquals("argName", nameSlot.captured)
-        assertEquals("argDescription", descriptionSlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
@@ -162,17 +147,8 @@ open class TransformationArgMapperTest {
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
-
-        // Capture property assignments
-        val transformationSlot = slot<TransformationDao>()
-        val typeDeclarationSlot = slot<TypeDeclarationDao>()
-        val nameSlot = slot<String>()
-        val descriptionSlot = slot<String>()
-
-        every { newEntity.transformation = capture(transformationSlot) } just runs
-        every { newEntity.typeDeclaration = capture(typeDeclarationSlot) } just runs
-        every { newEntity.name = capture(nameSlot) } just runs
-        every { newEntity.description = capture(descriptionSlot) } just runs
+        every { transformationsMapper.toEntity(dto.transformation) } returns transformationDao
+        every { typeDeclarationsMapper.toEntity(dto.typeDeclaration) } returns typeDeclarationDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
@@ -185,12 +161,6 @@ open class TransformationArgMapperTest {
         verify { newEntity.typeDeclaration = typeDeclarationDao }
         verify { newEntity.name = "argName" }
         verify { newEntity.description = "argDescription" }
-
-        // Verify the captured values
-        assertEquals(transformationDao, transformationSlot.captured)
-        assertEquals(typeDeclarationDao, typeDeclarationSlot.captured)
-        assertEquals("argName", nameSlot.captured)
-        assertEquals("argDescription", descriptionSlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

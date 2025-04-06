@@ -3,6 +3,12 @@ package com.wini.owle.services.runs
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.TestCaseDto
+import com.wini.owle.dto.runs.TestExpectedOutcomeDto
+import com.wini.owle.dto.runs.TestInputDto
+import com.wini.owle.dto.runs.TestResultDto
+import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.runs.TestCaseDao
 import com.wini.owle.mapper.runs.TestCasesMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +28,48 @@ import org.junit.jupiter.api.Test
 open class TestCaseServiceTest {
 
     private lateinit var service: TestCaseService
-    @MockK private lateinit var repository: TestCaseRepository
-    @MockK private lateinit var mapper: TestCasesMapper
-    @MockK private lateinit var idFactory: TestCaseIdFactory
+    private lateinit var repository: TestCaseRepository
+    private lateinit var mapper: TestCasesMapper
+    private lateinit var idFactory: TestCaseIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TestCaseDto = TestCaseDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        user: UserDto = mockk(),
+        name: String = "Test Case Name",
+        description: String = "Test Case Description",
+        workflow: WorkflowDto = mockk(),
+        step: StepDto = mockk(),
+        inputs: List<TestInputDto> = mockk(),
+        expectedOutcomes: List<TestExpectedOutcomeDto> = mockk(),
+        results: List<TestResultDto> = mockk()
+    ) : TestCaseDto {
+        return TestCaseDto(
+            id = id,
+            user = user,
+            name = name,
+            description = description,
+            workflow = workflow,
+            step = step,
+            inputs = inputs,
+            expectedOutcomes = expectedOutcomes,
+            results = results
+        )
+    }
 
     fun createSampleEntity(): TestCaseDao = mockk<TestCaseDao>() {
         every { id } returns mockk()
+        every { user } returns mockk()
+        every { name } returns "Test Case Name"
+        every { description } returns "Test Case Description"
+        every { workflow } returns mockk()
+        every { step } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TestCaseService(repository, mapper, idFactory)
     }
 

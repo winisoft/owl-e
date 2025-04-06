@@ -3,6 +3,9 @@ package com.wini.owle.services.steps
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.ProvisionDto
+import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.entity.steps.ProvisionDao
 import com.wini.owle.mapper.steps.ProvisionsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,21 +24,36 @@ import org.junit.jupiter.api.Test
 open class ProvisionServiceTest {
     
     private lateinit var service: ProvisionService
-    @MockK private lateinit var repository: ProvisionRepository
-    @MockK private lateinit var mapper: ProvisionsMapper
-    @MockK private lateinit var idFactory: ProvisionIdFactory
+    private lateinit var repository: ProvisionRepository
+    private lateinit var mapper: ProvisionsMapper
+    private lateinit var idFactory: ProvisionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): ProvisionDto = ProvisionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        step: StepDto = mockk(),
+        toolParam: ToolParamDto = mockk(),
+        dataPoints: List<DataPointDto> = mockk()
+    ) : ProvisionDto {
+        return ProvisionDto(
+            id = id,
+            step = step,
+            toolParam = toolParam,
+            dataPoints = dataPoints
+        )
+    }
 
     fun createSampleEntity(): ProvisionDao = mockk<ProvisionDao>() {
         every { id } returns mockk()
+        every { step } returns mockk()
+        every { toolParam } returns mockk()
+        every { dataPoint } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ProvisionService(repository, mapper, idFactory)
     }
 

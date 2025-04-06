@@ -3,6 +3,7 @@ package com.wini.owle.services.environs
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.environs.PackageRepoDto
+import com.wini.owle.dto.environs.PackageRepoTypeDto
 import com.wini.owle.entity.environs.PackageRepoDao
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,23 +22,31 @@ import org.junit.jupiter.api.Test
 open class PackageRepoServiceTest {
 
     private lateinit var service: PackageRepoService
-    @MockK private lateinit var repository: PackageRepoRepository
-    @MockK private lateinit var mapper: PackageRepoMapper
-    @MockK private lateinit var idFactory: PackageRepoIdFactory
+    private lateinit var repository: PackageRepoRepository
+    private lateinit var mapper: PackageRepoMapper
+    private lateinit var idFactory: PackageRepoIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): PackageRepoDto = PackageRepoDto(
+    fun createSampleDto(
+        mockId: Long = 1L,
+        sourceType: PackageRepoTypeDto = PackageRepoTypeDto.Pypi,
+       sourceUrl: String? = "http://url.com"
+    ): PackageRepoDto = PackageRepoDto(
         id = mockId,
-
+        sourceType = sourceType,
+        sourceUrl = sourceUrl
     )
 
     fun createSampleEntity(): PackageRepoDao = mockk<PackageRepoDao>() {
         every { id } returns mockk()
-
+        every { sourceType } returns mockk()
+        every { sourceUrl } returns "http://url.com"
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = PackageRepoService(repository, mapper, idFactory)
     }
 
@@ -95,6 +104,8 @@ open class PackageRepoServiceTest {
         val entityId: EntityID<Long> = mockk()
         val entity: PackageRepoDao = mockk<PackageRepoDao>() {
             every { id } returns mockk()
+            every { sourceType } returns mockk()
+            every { sourceUrl } returns "http://url.com"
         }
 
         every { mapper.toEntity(dto) } returns entity

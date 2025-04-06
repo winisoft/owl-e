@@ -3,6 +3,8 @@ package com.wini.owle.services.steps
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.InquisitionDto
+import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.entity.steps.InquisitionDao
 import com.wini.owle.mapper.steps.InquisitionsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,21 +23,43 @@ import org.junit.jupiter.api.Test
 open class InquisitionServiceTest {
     
     private lateinit var service: InquisitionService
-    @MockK private lateinit var repository: InquisitionRepository
-    @MockK private lateinit var mapper: InquisitionsMapper
-    @MockK private lateinit var idFactory: InquisitionIdFactory
+    private lateinit var repository: InquisitionRepository
+    private lateinit var mapper: InquisitionsMapper
+    private lateinit var idFactory: InquisitionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): InquisitionDto = InquisitionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        step: StepDto = mockk(),
+        className: String = "Condition",
+        dataPoint: DataPointDto = mockk(),
+        onMetWorkflowStep: StepDto = mockk(),
+        executionOrder: Int = 1
+    ) : InquisitionDto {
+        return InquisitionDto(
+            id = id,
+            step = step,
+            className = className,
+            dataPoint = dataPoint,
+            onMetWorkflowStep = onMetWorkflowStep,
+            executionOrder = executionOrder
+        )
+    }
 
     fun createSampleEntity(): InquisitionDao = mockk<InquisitionDao>() {
         every { id } returns mockk()
+        every { onMetWorkflowStep } returns mockk()
+        every { workflowStep } returns mockk()
+        every { className } returns "Condition"
+        every { dataPoint } returns mockk()
+        every { onMetWorkflowStep } returns mockk()
+        every { executionOrder } returns 1
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = InquisitionService(repository, mapper, idFactory)
     }
 

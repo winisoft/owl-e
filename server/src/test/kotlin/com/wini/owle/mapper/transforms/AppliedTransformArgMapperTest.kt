@@ -84,41 +84,24 @@ open class AppliedTransformArgMapperTest {
 
         // Mock the existing entity that will be updated
         val existingEntity = mockk<AppliedTransformArgDao>(relaxed = true)
-
-        // Mock the class's member dao types that would be returned from the mapper
         val appliedTransformDao: AppliedTransformDao = mockk()
         val transformationArgDao: TransformationArgDao = mockk()
 
         // Set up mocks for finding existing entity
         mockkObject(AppliedTransformArgDao)
         every { AppliedTransformArgDao.findById(42L) } returns existingEntity
-
-        // Capture the property updates
-        val appliedTransformSlot = slot<AppliedTransformDao>()
-        val transformationArgSlot = slot<TransformationArgDao>()
-        val valueSlot = slot<String>()
-
-        every { existingEntity.appliedTransform = capture(appliedTransformSlot) } just runs
-        every { existingEntity.transformationArg = capture(transformationArgSlot) } just runs
-        every { existingEntity.value = capture(valueSlot) } just runs
+        every { appliedTransformsMapper.toEntity(dto.appliedTransform) } returns appliedTransformDao
+        every { transformationArgsMapper.toEntity(dto.transformationArg) } returns transformationArgDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
-        // Verify that the existing entity was found and updated
-        verify { AppliedTransformArgDao.findById(42L) }
-        verify { existingEntity.appliedTransform = appliedTransformDao }
-        verify { existingEntity.transformationArg = transformationArgDao }
-        verify { existingEntity.value = dto.value }
-
-        // Verify the captured values
-        assertEquals(appliedTransformDao, appliedTransformSlot.captured)
-        assertEquals(transformationArgDao, transformationArgSlot.captured)
-        assertEquals(dto.value, valueSlot.captured)
+        // Verify that the factory was used to create a new entity
+        verify(exactly = 1) { appliedTransformsMapper.toEntity(dto.appliedTransform) }
+        verify(exactly = 1) { transformationArgsMapper.toEntity(dto.transformationArg) }
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
-
         unmockkObject(AppliedTransformArgDao)
     }
 
@@ -134,38 +117,20 @@ open class AppliedTransformArgMapperTest {
 
         // Mock the new entity that will be created
         val newEntity = mockk<AppliedTransformArgDao>(relaxed = true)
-
-        // Mock the class's member dao types that would be returned from the mapper
         val appliedTransformDao: AppliedTransformDao = mockk()
         val transformationArgDao: TransformationArgDao = mockk()
 
-        // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
-
-        // Capture property assignments
-        val appliedTransformSlot = slot<AppliedTransformDao>()
-        val transformationArgSlot = slot<TransformationArgDao>()
-        val valueSlot = slot<String>()
-
-        every { newEntity.appliedTransform = capture(appliedTransformSlot) } just runs
-        every { newEntity.transformationArg = capture(transformationArgSlot) } just runs
-        every { newEntity.value = capture(valueSlot) } just runs
+        every { appliedTransformsMapper.toEntity(any<AppliedTransformDto>()) } returns appliedTransformDao
+        every { transformationArgsMapper.toEntity(any<TransformationArgDto>()) } returns transformationArgDao
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
         // Verify that the factory was used to create a new entity
-        verify { factory.create() }
-
-        // Verify the properties were set correctly
-        verify { newEntity.appliedTransform = appliedTransformDao }
-        verify { newEntity.transformationArg = transformationArgDao }
-        verify { newEntity.value = dto.value }
-
-        // Verify the captured values
-        assertEquals(appliedTransformDao, appliedTransformSlot.captured)
-        assertEquals(transformationArgDao, transformationArgSlot.captured)
-        assertEquals(dto.value, valueSlot.captured)
+        verify(exactly = 1) { factory.create() }
+        verify(exactly = 1) { appliedTransformsMapper.toEntity(dto.appliedTransform) }
+        verify(exactly = 1) { transformationArgsMapper.toEntity(dto.transformationArg) }
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

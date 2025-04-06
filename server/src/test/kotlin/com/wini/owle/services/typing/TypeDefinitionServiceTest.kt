@@ -2,6 +2,7 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.dto.typing.TypeDefinitionDto
 import com.wini.owle.entity.typing.TypeDefinitionDao
 import com.wini.owle.mapper.typing.TypeDefinitionsMapper
@@ -22,21 +23,36 @@ import org.junit.jupiter.api.Test
 open class TypeDefinitionServiceTest {
     
     private lateinit var service: TypeDefinitionService
-    @MockK private lateinit var repository: TypeDefinitionRepository
-    @MockK private lateinit var mapper: TypeDefinitionsMapper
-    @MockK private lateinit var idFactory: TypeDefinitionIdFactory
+    private lateinit var repository: TypeDefinitionRepository
+    private lateinit var mapper: TypeDefinitionsMapper
+    private lateinit var idFactory: TypeDefinitionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TypeDefinitionDto = TypeDefinitionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Type Definition Name",
+        namespace: String = "type.definition.namespace",
+        versionSpec: VersionSpecDto = mockk()
+    ) : TypeDefinitionDto {
+        return TypeDefinitionDto(
+            id = id,
+            name = name,
+            namespace = namespace,
+            versionSpec = versionSpec
+        )
+    }
 
     fun createSampleEntity(): TypeDefinitionDao = mockk<TypeDefinitionDao>() {
         every { id } returns mockk()
+        every { name } returns "Type Definition Name"
+        every { namespace } returns "type.definition.namespace"
+        every { versionSpec } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TypeDefinitionService(repository, mapper, idFactory)
     }
 

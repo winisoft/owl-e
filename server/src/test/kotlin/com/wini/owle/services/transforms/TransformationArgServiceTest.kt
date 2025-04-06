@@ -3,6 +3,8 @@ package com.wini.owle.services.transforms
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.transforms.TransformationArgDto
+import com.wini.owle.dto.transforms.TransformationDto
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.entity.transforms.TransformationArgDao
 import com.wini.owle.mapper.transforms.TransformationArgsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +24,39 @@ import org.junit.jupiter.api.Test
 open class TransformationArgServiceTest {
     
     private lateinit var service: TransformationArgService
-    @MockK private lateinit var repository: TransformationArgRepository
-    @MockK private lateinit var mapper: TransformationArgsMapper
-    @MockK private lateinit var idFactory: TransformationArgIdFactory
+    private lateinit var repository: TransformationArgRepository
+    private lateinit var mapper: TransformationArgsMapper
+    private lateinit var idFactory: TransformationArgIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TransformationArgDto = TransformationArgDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 0L,
+        transformation: TransformationDto = mockk(),
+        typeDeclaration: TypeDeclarationDto = mockk(),
+        name: String = "Transformation Arg Name",
+        description: String? = "Transformation Arg Description"
+    ): TransformationArgDto {
+        return TransformationArgDto(
+            id = id,
+            transformation = transformation,
+            typeDeclaration = typeDeclaration,
+            name = name,
+            description = description
+        )
+    }
 
     fun createSampleEntity(): TransformationArgDao = mockk<TransformationArgDao>() {
         every { id } returns mockk()
+        every { transformation } returns mockk()
+        every { typeDeclaration } returns mockk()
+        every { name } returns "Transformation Arg Name"
+        every { description } returns "Transformation Arg Description"
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TransformationArgService(repository, mapper, idFactory)
     }
 
@@ -215,7 +235,7 @@ open class TransformationArgServiceTest {
         every { entity.id } returns entityId
         every { entityId.value } returns id
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(id) } returns entityId
+        every { idFactory.build(dto.id) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
         every { repository.getById(entityId) } returns mockk()

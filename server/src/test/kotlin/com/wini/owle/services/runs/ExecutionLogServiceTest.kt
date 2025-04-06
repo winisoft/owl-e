@@ -3,11 +3,12 @@ package com.wini.owle.services.runs
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.ExecutionLogDto
+import com.wini.owle.dto.runs.LogLevelDto
+import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.entity.runs.ExecutionLogDao
 import com.wini.owle.mapper.runs.ExecutionLogMapper
 import com.wini.owle.repo.ExecutionLogsIdFactory
 import com.wini.owle.repo.runs.ExecutionLogRepository
-import com.wini.owle.services.runs.ExecutionLogService
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
@@ -21,21 +22,37 @@ import org.junit.jupiter.api.Test
 open class ExecutionLogServiceTest {
 
     private lateinit var service: ExecutionLogService
-    @MockK private lateinit var repository: ExecutionLogRepository
-    @MockK private lateinit var mapper: ExecutionLogMapper
-    @MockK private lateinit var idFactory: ExecutionLogsIdFactory
+    private lateinit var repository: ExecutionLogRepository
+    private lateinit var mapper: ExecutionLogMapper
+    private lateinit var idFactory: ExecutionLogsIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): ExecutionLogDto = ExecutionLogDto(
+    fun createSampleDto(
+        mockId: Long = 1L,
+        stepExecution: StepExecutionDto = mockk(),
+        timestamp: String = "2025-04-04T13:26:00Z",
+        logLevel: LogLevelDto = mockk(),
+        message: String = "Log line message content"
+    ): ExecutionLogDto = ExecutionLogDto(
         id = mockId,
+        stepExecution = stepExecution,
+        timestamp = timestamp,
+        logLevel = logLevel,
+        message = message
     )
 
     fun createSampleEntity(): ExecutionLogDao = mockk<ExecutionLogDao>() {
         every { id } returns mockk()
+        every { stepExecution } returns mockk()
+        every { timestamp } returns mockk()
+        every { logLevel } returns mockk()
+        every { message } returns "Log line message content"
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ExecutionLogService(repository, mapper, idFactory)
     }
 

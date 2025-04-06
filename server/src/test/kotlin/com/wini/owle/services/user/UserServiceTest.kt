@@ -2,6 +2,8 @@ package com.wini.owle.services.user
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.user.PaymentMethodDto
+import com.wini.owle.dto.user.SubscriptionStatusDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.user.UsersMapper
@@ -22,21 +24,56 @@ import org.junit.jupiter.api.Test
 open class UserServiceTest {
     
     private lateinit var service: UserService
-    @MockK private lateinit var repository: UserRepository
-    @MockK private lateinit var mapper: UsersMapper
-    @MockK private lateinit var idFactory: UserIdFactory
+    private lateinit var repository: UserRepository
+    private lateinit var mapper: UsersMapper
+    private lateinit var idFactory: UserIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): UserDto = UserDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        email: String = "jim@jim.com",
+        password: String = "secretStuff1!",
+        resetToken: String? = "3ij3oi2joi342j",
+        oauthProvider: String? = "Google",
+        oauthId: String? = "IROEJOWejofdjsojfoaj3ioj439u2jiof",
+        subscriptionStatus: SubscriptionStatusDto = mockk(),
+        apiKey: String? = "jowejrojoewjrew",
+        createdAt: String = "2024-12-24T15:00:00",
+        updatedAt: String = "2024-12-25T15:00:00",
+        paymentMethods: List<PaymentMethodDto> = mockk()
+    ) : UserDto {
+        return UserDto(
+            id = id,
+            email = email,
+            password = password,
+            resetToken = resetToken,
+            oauthProvider = oauthProvider,
+            oauthId = oauthId,
+            subscriptionStatus = subscriptionStatus,
+            apiKey = apiKey,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            paymentMethods = paymentMethods
+        )
+    }
 
     fun createSampleEntity(): UserDao = mockk<UserDao>() {
         every { id } returns mockk()
+        every { email } returns "jim@jim.com"
+        every { password } returns "secretStuff1!"
+        every { resetToken } returns "3ij3oi2joi342j"
+        every { oauthProvider } returns "Google"
+        every { oauthId } returns "IROEJOWejofdjsojfoaj3ioj439u2jiof"
+        every { subscriptionStatus } returns mockk()
+        every { apiKey } returns "jowejrojoewjrew"
+        every { createdAt } returns mockk()
+        every { updatedAt } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk()
+        mapper = mockk()
+        idFactory = mockk()
         service = UserService(repository, mapper, idFactory)
     }
 

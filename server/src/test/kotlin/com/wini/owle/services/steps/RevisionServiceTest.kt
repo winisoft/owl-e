@@ -3,6 +3,8 @@ package com.wini.owle.services.steps
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.RevisionDto
+import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.entity.Revisions
 import com.wini.owle.entity.steps.RevisionDao
 import com.wini.owle.mapper.steps.RevisionsMapper
@@ -23,14 +25,18 @@ import org.junit.jupiter.api.Test
 open class RevisionServiceTest {
 
     private lateinit var service: RevisionService
-    @MockK private lateinit var repository: RevisionRepository
-    @MockK private lateinit var mapper: RevisionsMapper
-    @MockK private lateinit var idFactory: RevisionIdFactory
+    private lateinit var repository: RevisionRepository
+    private lateinit var mapper: RevisionsMapper
+    private lateinit var idFactory: RevisionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): RevisionDto = RevisionDto(
+    fun createSampleDto(
+        mockId: Long = 1L,
+        dataPoint: DataPointDto = mockk(),
+        step: StepDto = mockk()
+    ): RevisionDto = RevisionDto(
         id = mockId,
-        dataPoint = mockk(),
-        step = mockk()
+        dataPoint = dataPoint,
+        step = step
     )
 
     fun createSampleEntity(): RevisionDao = mockk<RevisionDao>() {
@@ -41,7 +47,9 @@ open class RevisionServiceTest {
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = RevisionService(repository, mapper, idFactory)
     }
 

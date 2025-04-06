@@ -2,7 +2,11 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.runs.ExecutionStatusDto
+import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
+import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.runs.WorkflowExecutionsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +26,44 @@ import org.junit.jupiter.api.Test
 open class WorkflowExecutionServiceTest {
     
     private lateinit var service: WorkflowExecutionService
-    @MockK private lateinit var repository: WorkflowExecutionRepository
-    @MockK private lateinit var mapper: WorkflowExecutionsMapper
-    @MockK private lateinit var idFactory: WorkflowExecutionIdFactory
+    private lateinit var repository: WorkflowExecutionRepository
+    private lateinit var mapper: WorkflowExecutionsMapper
+    private lateinit var idFactory: WorkflowExecutionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): WorkflowExecutionDto = WorkflowExecutionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        workflow: WorkflowDto = mockk(),
+        user: UserDto = mockk(),
+        startedAt: String = "2024-12-21T10:00:00Z",
+        completedAt: String = "2024-12-21T10:00:00Z",
+        status: ExecutionStatusDto = mockk(),
+        stepExecutions: List<StepExecutionDto> = mockk()
+    ) : WorkflowExecutionDto {
+        return WorkflowExecutionDto(
+            id = id,
+            workflow = workflow,
+            user = user,
+            startedAt = startedAt,
+            completedAt = completedAt,
+            status = status,
+            stepExecutions = stepExecutions
+        )
+    }
 
     fun createSampleEntity(): WorkflowExecutionDao = mockk<WorkflowExecutionDao>() {
         every { id } returns mockk()
+        every { workflow } returns mockk()
+        every { user } returns mockk()
+        every { startedAt } returns mockk()
+        every { completedAt } returns mockk()
+        every { status } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = WorkflowExecutionService(repository, mapper, idFactory)
     }
 

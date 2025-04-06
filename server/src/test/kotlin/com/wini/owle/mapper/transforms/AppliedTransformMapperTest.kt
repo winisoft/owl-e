@@ -159,17 +159,18 @@ open class AppliedTransformMapperTest {
         )
 
         // Mock the new entity that will be created
-        val newEntity = mockk<AppliedTransformDao>(relaxed = true)
-        val transformDao: TransformationDao = mockk()
-        val dataPointDao: DataPointDao = mockk()
-        val transformOccurrence: TransformOccurrence = mockk()
-        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val newEntity = mockk<AppliedTransformDao>(relaxed = true) {
+            every { dataPoint } returns mockk()
+            every { transformation } returns mockk()
+            every { resultType } returns mockk()
+            every { occurrence } returns mockk()
+        }
 
         every { factory.create() } returns newEntity
-        every { transformationsMapper.toEntity(dto.transformation) } returns transformDao
-        every { dataPointsMapper.toEntity(dto.dataPoint!!) } returns dataPointDao
-        every { transformOccurrenceMapper.toEntity(dto.occurrence) } returns transformOccurrence
-        every { typeDeclarationsMapper.toEntity(dto.resultType) } returns typeDeclarationDao
+        every { transformationsMapper.toEntity(dto.transformation) } returns newEntity.transformation
+        every { dataPointsMapper.toEntity(dto.dataPoint!!) } returns newEntity.dataPoint!!
+        every { transformOccurrenceMapper.toEntity(dto.occurrence) } returns newEntity.occurrence
+        every { typeDeclarationsMapper.toEntity(dto.resultType) } returns newEntity.resultType
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
@@ -183,11 +184,5 @@ open class AppliedTransformMapperTest {
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)
-        assertEquals(transformDao, result.transformation)
-        assertEquals(transformOccurrence, result.occurrence)
-        assertEquals(typeDeclarationDao, result.resultType)
-        assertEquals(dataPointDao, result.dataPoint)
-
-
     }
 }

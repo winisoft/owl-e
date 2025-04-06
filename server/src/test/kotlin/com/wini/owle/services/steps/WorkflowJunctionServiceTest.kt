@@ -2,7 +2,10 @@ package com.wini.owle.services.steps
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.steps.InquisitionDto
 import com.wini.owle.dto.steps.WorkflowJunctionDto
+import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.steps.WorkflowJunctionDao
 import com.wini.owle.mapper.steps.WorkflowJunctionsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,21 +24,36 @@ import org.junit.jupiter.api.Test
 open class WorkflowJunctionServiceTest {
     
     private lateinit var service: WorkflowJunctionService
-    @MockK private lateinit var repository: WorkflowJunctionRepository
-    @MockK private lateinit var mapper: WorkflowJunctionsMapper
-    @MockK private lateinit var idFactory: WorkflowJunctionIdFactory
+    private lateinit var repository: WorkflowJunctionRepository
+    private lateinit var mapper: WorkflowJunctionsMapper
+    private lateinit var idFactory: WorkflowJunctionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): WorkflowJunctionDto = WorkflowJunctionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        sourceStep: StepDto = mockk(),
+        targetWorkflow: WorkflowDto = mockk(),
+        triggerInquisition: InquisitionDto = mockk()
+    ) : WorkflowJunctionDto {
+        return WorkflowJunctionDto(
+            id = id,
+            sourceStep = sourceStep,
+            targetWorkflow = targetWorkflow,
+            triggerInquisition = triggerInquisition
+        )
+    }
 
     fun createSampleEntity(): WorkflowJunctionDao = mockk<WorkflowJunctionDao>() {
         every { id } returns mockk()
+        every { sourceStep } returns mockk()
+        every { targetWorkflow } returns mockk()
+        every { triggerInquisition } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = WorkflowJunctionService(repository, mapper, idFactory)
     }
 

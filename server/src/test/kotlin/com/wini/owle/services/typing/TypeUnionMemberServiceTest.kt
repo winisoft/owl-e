@@ -21,9 +21,9 @@ import org.junit.jupiter.api.Test
 open class TypeUnionMemberServiceTest {
 
     private lateinit var service: TypeUnionMemberService
-    @MockK private lateinit var repository: TypeUnionMemberRepository
-    @MockK private lateinit var mapper: TypeUnionMembersMapper
-    @MockK private lateinit var idFactory: TypeUnionMemberIdFactory
+    private lateinit var repository: TypeUnionMemberRepository
+    private lateinit var mapper: TypeUnionMembersMapper
+    private lateinit var idFactory: TypeUnionMemberIdFactory
 
     fun createSampleDto(
         unionTypeDeclarationId: Long = 1L,
@@ -39,7 +39,9 @@ open class TypeUnionMemberServiceTest {
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TypeUnionMemberService(repository, mapper, idFactory)
     }
 
@@ -309,19 +311,13 @@ open class TypeUnionMemberServiceTest {
 
     @Test
     fun `test batch delete success`() {
-        // Arrange
         val compositeIds = listOf<CompositeID>(mockk(), mockk())
-        val entityId1: EntityID<CompositeID> = mockk() {
-            every { value } returns mockk()
-        }
-        val entityId2: EntityID<CompositeID> = mockk() {
-            every { value } returns mockk()
-        }
-        val entityIds = listOf<EntityID<CompositeID>>(entityId1, entityId2)
-
-        every { idFactory.build(entityId1.value) } returns entityId1
-        every { idFactory.build(entityId2.value) } returns entityId2
-        every { repository.delete(entityIds) } just runs
+        val entityIds = listOf<EntityID<CompositeID>>(
+            mockk { every { value } returns mockk() },
+            mockk { every { value } returns mockk() }
+        )
+        every { idFactory.build(any<CompositeID>()) }.returnsMany(entityIds[0], entityIds[1])
+        every { repository.delete(any<List<EntityID<CompositeID>>>()) } just runs
 
         // Act
         val result = service.delete(compositeIds)

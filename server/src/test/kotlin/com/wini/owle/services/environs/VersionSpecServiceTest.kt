@@ -21,21 +21,34 @@ import org.junit.jupiter.api.Test
 open class VersionSpecServiceTest {
 
     private lateinit var service: VersionSpecService
-    @MockK private lateinit var repository: VersionSpecRepository
-    @MockK private lateinit var mapper: VersionSpecsMapper
-    @MockK private lateinit var idFactory: VersionSpecIdFactory
+    private lateinit var repository: VersionSpecRepository
+    private lateinit var mapper: VersionSpecsMapper
+    private lateinit var idFactory: VersionSpecIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): VersionSpecDto = VersionSpecDto(
-        id = mockId
+    fun createSampleDto(
+        mockId: Long = 1L,
+        versionMin: String? = "1.0.0",
+        versionMax: String? = "2.0.0",
+        versionExact: String? = "3.0.0"
+    ): VersionSpecDto = VersionSpecDto(
+        id = mockId,
+        versionMin = versionMin,
+        versionMax = versionMax,
+        versionExact = versionExact
     )
 
     fun createSampleEntity(): VersionSpecDao = mockk<VersionSpecDao>() {
         every { id } returns mockk()
+        every { versionMin } returns "1.0.0"
+        every { versionMax } returns "2.0.0"
+        every { versionExact } returns "3.0.0"
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = VersionSpecService(repository, mapper, idFactory)
     }
 

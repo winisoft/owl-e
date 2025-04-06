@@ -3,6 +3,7 @@ package com.wini.owle.dll
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
 
+
 interface DLL<ID: Any, Dto: BaseDto> {
 
     fun getAll(): AsyncResult<List<Dto>>

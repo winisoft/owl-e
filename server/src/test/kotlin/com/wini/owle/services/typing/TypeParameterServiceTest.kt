@@ -2,6 +2,7 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.entity.typing.TypeParameterDao
 import com.wini.owle.mapper.typing.TypeParametersMapper
@@ -22,21 +23,36 @@ import org.junit.jupiter.api.Test
 open class TypeParameterServiceTest {
     
     private lateinit var service: TypeParameterService
-    @MockK private lateinit var repository: TypeParameterRepository
-    @MockK private lateinit var mapper: TypeParametersMapper
-    @MockK private lateinit var idFactory: TypeParameterIdFactory
+    private lateinit var repository: TypeParameterRepository
+    private lateinit var mapper: TypeParametersMapper
+    private lateinit var idFactory: TypeParameterIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TypeParameterDto = TypeParameterDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        typeDeclaration: TypeDeclarationDto = mockk(),
+        position: Int = 1,
+        parameterTypeDeclaration: TypeDeclarationDto = mockk()
+    ) : TypeParameterDto {
+        return TypeParameterDto(
+            id = id,
+            typeDeclaration = typeDeclaration,
+            position = position,
+            parameterTypeDeclaration = parameterTypeDeclaration
+        )
+    }
 
     fun createSampleEntity(): TypeParameterDao = mockk<TypeParameterDao>() {
         every { id } returns mockk()
+        every { typeDeclaration } returns mockk()
+        every { position } returns 1
+        every { parameterTypeDeclaration } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TypeParameterService(repository, mapper, idFactory)
     }
 

@@ -2,7 +2,10 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.runs.ExecutionStatusDto
 import com.wini.owle.dto.runs.StepExecutionDto
+import com.wini.owle.dto.runs.WorkflowExecutionDto
+import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.entity.runs.StepExecutionDao
 import com.wini.owle.mapper.runs.StepExecutionsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -22,21 +25,42 @@ import org.junit.jupiter.api.Test
 open class StepExecutionServiceTest {
 
     private lateinit var service: StepExecutionService
-    @MockK private lateinit var repository: StepExecutionRepository
-    @MockK private lateinit var mapper: StepExecutionsMapper
-    @MockK private lateinit var idFactory: StepExecutionIdFactory
+    private lateinit var repository: StepExecutionRepository
+    private lateinit var mapper: StepExecutionsMapper
+    private lateinit var idFactory: StepExecutionIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): StepExecutionDto = StepExecutionDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        workflowExecution: WorkflowExecutionDto = mockk(),
+        step: StepDto = mockk(),
+        startedAt: String = "2024-12-21T10:00:00Z",
+        completedAt: String = "2024-12-21T10:00:00Z",
+        status: ExecutionStatusDto = mockk()
+    ) : StepExecutionDto {
+        return StepExecutionDto(
+            id = id,
+            workflowExecution = workflowExecution,
+            step = step,
+            startedAt = startedAt,
+            completedAt = completedAt,
+            status = status
+        )
+    }
 
     fun createSampleEntity(): StepExecutionDao = mockk<StepExecutionDao>() {
         every { id } returns mockk()
+        every { workflowExecution } returns mockk()
+        every { step } returns mockk()
+        every { startedAt } returns mockk()
+        every { completedAt } returns mockk()
+        every { status } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = StepExecutionService(repository, mapper, idFactory)
     }
 

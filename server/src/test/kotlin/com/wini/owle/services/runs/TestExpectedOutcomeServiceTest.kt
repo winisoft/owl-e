@@ -2,6 +2,8 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.runs.ComparisonOperatorDto
+import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.dto.runs.TestExpectedOutcomeDto
 import com.wini.owle.entity.runs.TestExpectedOutcomeDao
 import com.wini.owle.mapper.runs.TestExpectedOutcomesMapper
@@ -22,21 +24,39 @@ import org.junit.jupiter.api.Test
 open class TestExpectedOutcomeServiceTest {
 
     private lateinit var service: TestExpectedOutcomeService
-    @MockK private lateinit var repository: TestExpectedOutcomeRepository
-    @MockK private lateinit var mapper: TestExpectedOutcomesMapper
-    @MockK private lateinit var idFactory: TestExpectedOutcomeIdFactory
+    private lateinit var repository: TestExpectedOutcomeRepository
+    private lateinit var mapper: TestExpectedOutcomesMapper
+    private lateinit var idFactory: TestExpectedOutcomeIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TestExpectedOutcomeDto = TestExpectedOutcomeDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        dataPointName: String = "output1",
+        expectedValue: String = "expectedValue1",
+        comparisonOperator: ComparisonOperatorDto = mockk(),
+        testCase: TestCaseDto = mockk()
+    ): TestExpectedOutcomeDto {
+        return TestExpectedOutcomeDto(
+            id = id,
+            dataPointName = dataPointName,
+            expectedValue = expectedValue,
+            comparisonOperator = comparisonOperator,
+            testCase = testCase
+        )
+    }
 
     fun createSampleEntity(): TestExpectedOutcomeDao = mockk<TestExpectedOutcomeDao>() {
         every { id } returns mockk()
+        every { dataPointName } returns "output1"
+        every { expectedValue } returns "expectedValue1"
+        every { comparisonOperator } returns mockk()
+        every { testCase } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TestExpectedOutcomeService(repository, mapper, idFactory)
     }
 

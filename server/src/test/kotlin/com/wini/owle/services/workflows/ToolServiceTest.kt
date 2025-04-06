@@ -2,6 +2,9 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dto.environs.ToolPackageDependencyDto
+import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.entity.workflows.ToolDao
 import com.wini.owle.mapper.workflows.ToolsMapper
@@ -22,21 +25,42 @@ import org.junit.jupiter.api.Test
 open class ToolServiceTest {
     
     private lateinit var service: ToolService
-    @MockK private lateinit var repository: ToolRepository
-    @MockK private lateinit var mapper: ToolsMapper
-    @MockK private lateinit var idFactory: ToolIdFactory
+    private lateinit var repository: ToolRepository
+    private lateinit var mapper: ToolsMapper
+    private lateinit var idFactory: ToolIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): ToolDto = ToolDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        name: String = "Tool Name",
+        description: String? = "Tool Description",
+        body: String = "a sample of code",
+        returnTypeDeclaration: TypeDeclarationDto? = mockk(),
+        steps: List<StepDto> = mockk(),
+        packageDependencies: List<ToolPackageDependencyDto> = mockk()
+    ): ToolDto {
+        return ToolDto(
+            id = id,
+            name = name,
+            description = description,
+            body = body,
+            returnTypeDeclaration = returnTypeDeclaration
+        )
+    }
 
     fun createSampleEntity(): ToolDao = mockk<ToolDao>() {
         every { id } returns mockk()
+        every { name } returns "Tool Name"
+        every { description } returns "Tool Description"
+        every { body } returns "a sample of code"
+        every { returnTypeDeclaration } returns mockk()
+        every { packageDependencies} returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = ToolService(repository, mapper, idFactory)
     }
 

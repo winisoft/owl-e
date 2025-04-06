@@ -3,6 +3,7 @@ package com.wini.owle.services.typing
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.typing.TypeBoundsDto
+import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.entity.typing.TypeBoundDao
 import com.wini.owle.mapper.typing.TypeBoundsMapper
 import com.wini.owle.repo.EntityIdFactory
@@ -21,21 +22,33 @@ import org.junit.jupiter.api.Test
 open class TypeBoundServiceTest {
     
     private lateinit var service: TypeBoundsService
-    @MockK private lateinit var repository: TypeBoundRepository
-    @MockK private lateinit var mapper: TypeBoundsMapper
-    @MockK private lateinit var idFactory: TypeBoundIdFactory
+    private lateinit var repository: TypeBoundRepository
+    private lateinit var mapper: TypeBoundsMapper
+    private lateinit var idFactory: TypeBoundIdFactory
 
-    fun createSampleDto(mockId: Long = 1L): TypeBoundsDto = TypeBoundsDto(
-        id = mockId,
-    )
+    fun createSampleDto(
+        id: Long = 1L,
+        boundTypeDeclaration: TypeDeclarationDto = mockk(),
+        typeVariableDeclaration: TypeDeclarationDto = mockk()
+    ) : TypeBoundsDto {
+        return TypeBoundsDto(
+            id = id,
+            boundTypeDeclaration = boundTypeDeclaration,
+            typeVariableDeclaration = typeVariableDeclaration
+        )
+    }
 
     fun createSampleEntity(): TypeBoundDao = mockk<TypeBoundDao>() {
         every { id } returns mockk()
+        every { boundTypeDeclaration } returns mockk()
+        every { typeVariableDeclaration } returns mockk()
     }
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        repository = mockk() 
+        mapper = mockk() 
+        idFactory = mockk()
         service = TypeBoundsService(repository, mapper, idFactory)
     }
 
