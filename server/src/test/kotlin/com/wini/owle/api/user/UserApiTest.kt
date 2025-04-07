@@ -1,6 +1,5 @@
 package com.wini.owle.api.user
 
-import com.wini.owle.api.BaseEndpointTest
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
 import com.wini.owle.dll.user.UserDll
@@ -10,7 +9,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 
-class UserApiTest : BaseLongPkApiTest<Long, UserDto, UserApi>() {
+open class UserApiTest : BaseLongPkApiTest<UserDto, UserApi>() {
 
     override val route: String = "/api/user"
 

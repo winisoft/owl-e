@@ -1,3 +1,4 @@
+// server/src/test/kotlin/com/wini/owle/api/typing/TypeDeclarationApiTest.kt
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -5,21 +6,16 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
-
-class TypeDeclarationApiTest : BaseLongPkApiTest<Long, TypeDeclarationDto, TypeDeclarationApi>() {
-    override val route: String
-        get() = "/api/type-declaration"
+open class TypeDeclarationApiTest : BaseLongPkApiTest<TypeDeclarationDto, TypeDeclarationApi>() {
+    override val route: String = "/api/type-declaration"
 
     override fun getDto(): TypeDeclarationDto = DtoTestInstanceFactory.typeDeclarationDto()
 
-    override val serializer: KSerializer<TypeDeclarationDto>
-        get() = TODO("Not yet implemented")
-    override val listSerializer: KSerializer<List<TypeDeclarationDto>>
-        get() = TODO("Not yet implemented")
+    override val serializer: KSerializer<TypeDeclarationDto> = TypeDeclarationDto.serializer()
+    
+    override val listSerializer: KSerializer<List<TypeDeclarationDto>> = ListSerializer(TypeDeclarationDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, TypeDeclarationDto>): TypeDeclarationApi {
-        TODO("Not yet implemented")
-    }
-
+    override fun getApiInstance(dll: DLL<Long, TypeDeclarationDto>): TypeDeclarationApi = TypeDeclarationApi(dll)
 }

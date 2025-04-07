@@ -13,6 +13,26 @@ import com.wini.owle.mapper.transforms.*
 @Suppress("UNCHECKED_CAST")
 object DtoTestInstanceFactory {
 
+    fun transformationTargetTypeDto(
+        transformationId: Long = 1L,
+        typeDeclarationId: Long = 2L
+    ): TransformationTargetTypeDto = TransformationTargetTypeDto(
+        transformationId = transformationId,
+        typeDeclarationId = typeDeclarationId
+    )
+
+    fun toolPackageDependencyDto(
+        toolId: Long = 1L,
+        packageId: Long = 2L,
+        versionSpecId: Long = 3L
+    ): ToolPackageDependencyDto {
+        return ToolPackageDependencyDto(
+            toolId = toolId,
+            packageId = packageId,
+            versionSpecId = versionSpecId
+        )
+    }
+
     fun packageDto(
         id: Long = 0L,
         name: String = "Package Name",

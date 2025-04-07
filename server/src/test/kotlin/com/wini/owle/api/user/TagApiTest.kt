@@ -1,3 +1,4 @@
+// server/src/test/kotlin/com/wini/owle/api/user/TagApiTest.kt
 package com.wini.owle.api.user
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -5,21 +6,16 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.TagDto
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
-
-class TagApiTest : BaseLongPkApiTest<Long, TagDto, TagApi>() {
-    override val route: String
-        get() = "/api/tag"
+open class TagApiTest : BaseLongPkApiTest<TagDto, TagApi>() {
+    override val route: String = "/api/tag"
 
     override fun getDto(): TagDto = DtoTestInstanceFactory.tagDto()
 
-    override val serializer: KSerializer<TagDto>
-        get() = TODO("Not yet implemented")
-    override val listSerializer: KSerializer<List<TagDto>>
-        get() = TODO("Not yet implemented")
+    override val serializer: KSerializer<TagDto> = TagDto.serializer()
+    
+    override val listSerializer: KSerializer<List<TagDto>> = ListSerializer(TagDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, TagDto>): TagApi {
-        TODO("Not yet implemented")
-    }
-
+    override fun getApiInstance(dll: DLL<Long, TagDto>): TagApi = TagApi(dll)
 }

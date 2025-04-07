@@ -8,7 +8,7 @@ import com.wini.owle.dto.runs.TestCaseDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
-class TestCaseApiTest : BaseLongPkApiTest<Long, TestCaseDto, TestCaseApi>() {
+open class TestCaseApiTest : BaseLongPkApiTest<TestCaseDto, TestCaseApi>() {
     override val route: String = "/api/test-case"
     
     override fun getDto(): TestCaseDto = DtoTestInstanceFactory.testCaseDto()

@@ -1,3 +1,4 @@
+// server/src/test/kotlin/com/wini/owle/api/typing/TypeUnionMemberApiTest.kt
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseCompositePkApiTest
@@ -5,21 +6,17 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeUnionMemberDto
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
 
-class TypeUnionMemberApiTest : BaseCompositePkApiTest<CompositeID, TypeUnionMemberDto, TypeUnionMemberApi>() {
-    override val route: String
-        get() = "/api/type-union-member"
+open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
+    override val route: String = "/api/type-union-member"
 
     override fun getDto(): TypeUnionMemberDto = DtoTestInstanceFactory.typeUnionMemberDto()
 
-    override val serializer: KSerializer<TypeUnionMemberDto>
-        get() = TODO("Not yet implemented")
-    override val listSerializer: KSerializer<List<TypeUnionMemberDto>>
-        get() = TODO("Not yet implemented")
+    override val serializer: KSerializer<TypeUnionMemberDto> = TypeUnionMemberDto.serializer()
+    
+    override val listSerializer: KSerializer<List<TypeUnionMemberDto>> = ListSerializer(TypeUnionMemberDto.serializer())
 
-    override fun getApiInstance(dll: DLL<CompositeID, TypeUnionMemberDto>): TypeUnionMemberApi {
-        TODO("Not yet implemented")
-    }
-
+    override fun getApiInstance(dll: DLL<CompositeID, TypeUnionMemberDto>): TypeUnionMemberApi = TypeUnionMemberApi(dll)
 }

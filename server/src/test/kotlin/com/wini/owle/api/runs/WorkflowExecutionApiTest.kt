@@ -9,7 +9,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 
-class WorkflowExecutionApiTest : BaseLongPkApiTest<Long, WorkflowExecutionDto, WorkflowExecutionApi>() {
+open class WorkflowExecutionApiTest : BaseLongPkApiTest<WorkflowExecutionDto, WorkflowExecutionApi>() {
 
     override val route: String = "/api/workflow-execution"
     

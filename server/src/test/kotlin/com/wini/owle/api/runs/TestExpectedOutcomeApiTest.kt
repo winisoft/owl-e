@@ -8,7 +8,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 
-class TestExpectedOutcomeApiTest : BaseLongPkApiTest<Long, TestExpectedOutcomeDto, TestExpectedOutcomeApi>() {
+open class TestExpectedOutcomeApiTest : BaseLongPkApiTest<TestExpectedOutcomeDto, TestExpectedOutcomeApi>() {
 
     override val route: String = "/api/test-expected-outcome"
     

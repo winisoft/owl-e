@@ -1,3 +1,4 @@
+// server/src/test/kotlin/com/wini/owle/api/steps/RevisionApiTest.kt
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -5,22 +6,16 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.RevisionDto
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
-
-class RevisionApiTest : BaseLongPkApiTest<Long, RevisionDto, RevisionApi>() {
-
-    override val route: String
-        get() = "/api/revision"
+open class RevisionApiTest : BaseLongPkApiTest<RevisionDto, RevisionApi>() {
+    override val route: String = "/api/revision"
 
     override fun getDto(): RevisionDto = DtoTestInstanceFactory.revisionDto()
 
-    override val serializer: KSerializer<RevisionDto>
-        get() = TODO("Not yet implemented")
-    override val listSerializer: KSerializer<List<RevisionDto>>
-        get() = TODO("Not yet implemented")
+    override val serializer: KSerializer<RevisionDto> = RevisionDto.serializer()
+    
+    override val listSerializer: KSerializer<List<RevisionDto>> = ListSerializer(RevisionDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, RevisionDto>): RevisionApi {
-        TODO("Not yet implemented")
-    }
-
+    override fun getApiInstance(dll: DLL<Long, RevisionDto>): RevisionApi = RevisionApi(dll)
 }

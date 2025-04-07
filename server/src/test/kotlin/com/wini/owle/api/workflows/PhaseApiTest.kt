@@ -1,6 +1,5 @@
 package com.wini.owle.api.workflows
 
-import com.wini.owle.api.BaseEndpointTest
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
@@ -9,7 +8,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 
-class PhaseApiTest : BaseLongPkApiTest<Long, PhaseDto, PhaseApi>() {
+open class PhaseApiTest : BaseLongPkApiTest<PhaseDto, PhaseApi>() {
 
     override val route: String = "/api/phase"
 

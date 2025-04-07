@@ -7,7 +7,8 @@ import com.wini.owle.dto.environs.PackageDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
-class PackageApiTest : BaseLongPkApiTest<Long, PackageDto, PackageApi>() {
+
+open class PackageApiTest : BaseLongPkApiTest<PackageDto, PackageApi>() {
 
     override val route: String = "/api/package"
     
