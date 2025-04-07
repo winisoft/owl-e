@@ -18,18 +18,13 @@ class WorkflowExecutionApi(
     serializer = WorkflowExecutionDto.serializer()
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<WorkflowExecutionDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     //"") { getAll(context.request.call) }
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-execution") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/workflow-execution/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -38,13 +33,13 @@ class WorkflowExecutionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/workflow-execution/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/workflow-execution") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/workflow-execution/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/workflow-execution/{id}") {
                 call.asyncResult(delete(call))

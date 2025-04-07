@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.serializer
 
 class PhaseApi(
@@ -20,17 +21,12 @@ class PhaseApi(
     validator = { _-> true }
 ) {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<PhaseDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/phase") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/phase/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -39,13 +35,13 @@ class PhaseApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/phase/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/phase") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/phase/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/phase/{id}") {
                 call.asyncResult(delete(call))

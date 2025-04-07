@@ -22,18 +22,6 @@ class TypeUnionMemberApi(
     validator = { _-> true }
 ) {
 
-    suspend fun getById(call: ApplicationCall): AsyncResult<TypeUnionMemberDto> {
-        return Json.decodeFromString<TypeUnionMemberDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::getById)
-    }
-
-    suspend fun delete(call: ApplicationCall): AsyncResult<Unit> {
-        return Json.decodeFromString<TypeUnionMemberDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::delete)
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             routing.apply {

@@ -22,18 +22,6 @@ class TagRelationApi(
     validator = { _-> true }
 ) {
 
-    suspend fun getById(call: ApplicationCall): AsyncResult<TagRelationDto> {
-        return Json.decodeFromString<TagRelationDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::getById)
-    }
-
-    suspend fun delete(call: ApplicationCall): AsyncResult<Unit> {
-        return Json.decodeFromString<TagRelationDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::delete)
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag-relation") { getAll() }
@@ -46,4 +34,5 @@ class TagRelationApi(
             delete("/api/tag-relation/batch") { deleteBatch(context.request.call) }
         }
     }
+
 }

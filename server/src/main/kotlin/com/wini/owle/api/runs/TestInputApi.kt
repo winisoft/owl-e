@@ -18,17 +18,12 @@ class TestInputApi(
     serializer = TestInputDto.serializer()
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TestInputDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-input") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/test-input/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -37,13 +32,13 @@ class TestInputApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/test-input/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/test-input") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/test-input/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/test-input/{id}") {
                 call.asyncResult(delete(call))

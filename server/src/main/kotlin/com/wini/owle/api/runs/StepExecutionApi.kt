@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class StepExecutionApi(
     dll: StepExecutionDll
@@ -19,17 +20,12 @@ class StepExecutionApi(
     validator = { _-> true }
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<StepExecutionDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/step-execution") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/step-execution/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -38,13 +34,13 @@ class StepExecutionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/step-execution/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/step-execution") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/step-execution/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/step-execution/{id}") {
                 call.asyncResult(delete(call))

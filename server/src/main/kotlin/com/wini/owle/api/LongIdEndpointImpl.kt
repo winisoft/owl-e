@@ -7,17 +7,19 @@ import com.wini.owle.dto.BaseDto
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
 
 abstract class LongIdEndpointImpl<T: BaseDto>(
     private val dll: DLL<Long, T>,
     serializer: KSerializer<T>,
-    val validator: (T) -> Boolean = { _-> true }
+    val validator: (T) -> Boolean = { _-> true },
 ): BaseEndpointImpl<Long, T>(
-    dll,
-    serializer,
-    validator
+    dll = dll,
+    validator = validator,
+    serializer = serializer,
+    listSerializer = ListSerializer(serializer)
 ) {
 
     suspend fun deleteBatch(call: ApplicationCall): AsyncResult<Unit> {

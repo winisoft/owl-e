@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class TestExpectedOutcomeApi(
     dll: TestExpectedOutcomeDll
@@ -19,17 +20,12 @@ class TestExpectedOutcomeApi(
     validator = { _-> true }
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TestExpectedOutcomeDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-expected-outcome") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/test-expected-outcome/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -38,13 +34,13 @@ class TestExpectedOutcomeApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/test-expected-outcome/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/test-expected-outcome") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/test-expected-outcome/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/test-expected-outcome/{id}") {
                 call.asyncResult(delete(call))

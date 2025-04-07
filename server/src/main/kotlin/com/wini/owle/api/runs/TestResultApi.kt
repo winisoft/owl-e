@@ -18,17 +18,12 @@ class TestResultApi(
     serializer = TestResultDto.serializer()
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TestResultDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
     
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-result") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/test-result/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -37,13 +32,13 @@ class TestResultApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/test-result/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/test-result") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/test-result/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/test-result/{id}") {
                 call.asyncResult(delete(call))

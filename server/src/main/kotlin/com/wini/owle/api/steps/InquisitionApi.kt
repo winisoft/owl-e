@@ -18,17 +18,12 @@ class InquisitionApi(
     serializer = InquisitionDto.serializer()
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<InquisitionDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
     
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/inquisition") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/inquisition/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -37,13 +32,13 @@ class InquisitionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/inquisition/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/inquisition") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/inquisition/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/inquisition/{id}") {
                 call.asyncResult(delete(call))

@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class TypeVarianceApi(
     dll: TypeVarianceDll
@@ -19,17 +20,12 @@ class TypeVarianceApi(
     validator = { _-> true }
 ) {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TypeVarianceDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
     
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-variance") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/type-variance/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -38,13 +34,13 @@ class TypeVarianceApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/type-variance/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/type-variance") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/type-variance/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/type-variance/{id}") {
                 call.asyncResult(delete(call))

@@ -24,22 +24,10 @@ class ProvisionDataPointApi(
     validator = { _-> true }
 ) {
 
-    suspend fun getById(call: ApplicationCall): AsyncResult<ProvisionDataPointDto> {
-        return Json.decodeFromString<ProvisionDataPointDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::getById)
-    }
-
-    suspend fun delete(call: ApplicationCall): AsyncResult<Unit> {
-        return Json.decodeFromString<ProvisionDataPointDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::delete)
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/provision-datapoint") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/provision-datapoint/{id}") {
                 getById(call)
@@ -48,13 +36,13 @@ class ProvisionDataPointApi(
                 create(call, validator)
             }
             post("/api/provision-datapoint/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/provision-datapoint") {
                 update(call, validator)
             }
             put("/api/provision-datapoint/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/provision-datapoint/{id}") {
                 call.asyncResult(delete(call))

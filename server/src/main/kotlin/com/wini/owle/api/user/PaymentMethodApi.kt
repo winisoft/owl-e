@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class PaymentMethodApi(
     dll: PaymentMethodDll
@@ -18,17 +19,12 @@ class PaymentMethodApi(
     serializer = PaymentMethodDto.serializer(),
     validator = { _-> true }
 ) {
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<PaymentMethodDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/payment-method") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/payment-method/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -37,13 +33,13 @@ class PaymentMethodApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/payment-method/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/payment-method") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/payment-method/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/payment-method/{id}") {
                 call.asyncResult(delete(call))

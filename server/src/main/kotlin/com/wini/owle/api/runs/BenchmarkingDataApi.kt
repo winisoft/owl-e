@@ -12,6 +12,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class BenchmarkingDataApi(
     dll: BenchmarkingDataDll
@@ -21,17 +22,10 @@ class BenchmarkingDataApi(
     validator = { _-> true }
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<BenchmarkingDataDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/benchmarking-data") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/benchmarking-data/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -40,13 +34,13 @@ class BenchmarkingDataApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/benchmarking-data/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/benchmarking-data") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/benchmarking-data/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/benchmarking-data/{id}") {
                 call.asyncResult(delete(call))

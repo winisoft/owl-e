@@ -4,6 +4,7 @@ import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.workflows.WorkflowDto
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -15,13 +16,52 @@ import kotlinx.serialization.json.Json
 
 abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     private val dll: DLL<ID, T>,
-    private val serializer: KSerializer<T>,
+    val serializer: KSerializer<T>,
+    val listSerializer: KSerializer<List<T>>,
     private val validator: (T) -> Boolean
 ): RoutedApi {
 
-    suspend fun ApplicationCall.asyncResult(result: AsyncResult<List<T>>, isCreate: Boolean = false) {
+    suspend fun ApplicationCall.asyncResultSingle(
+        result: AsyncResult<T>,
+        isCreate: Boolean = false
+    ) {
         when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
+            is AsyncResult.Success -> respondText(
+                contentType = ContentType.Application.Json,
+                status = if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK,
+                text = Json.encodeToString(serializer, result.data)
+            )
+            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
+        }
+    }
+
+    suspend fun ApplicationCall.asyncResultMany(
+        result: AsyncResult<List<T>>,
+        isCreate: Boolean = false
+    ) {
+        when (result) {
+            is AsyncResult.Success -> respondText(
+                contentType = ContentType.Application.Json,
+                status = if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK,
+                text = Json.encodeToString(listSerializer, result.data)
+            )
+            is AsyncResult.Failure -> respond(
+                status = result.error.httpStatusCode,
+                message = result.error
+            )
+        }
+    }
+
+    suspend fun ApplicationCall.asyncResultUnit(
+        result: AsyncResult<T>,
+        isCreate: Boolean = false
+    ) {
+        when (result) {
+            is AsyncResult.Success -> respondText(
+                contentType = ContentType.Application.Json,
+                status = if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK,
+                text = Json.encodeToString(serializer, result.data)
+            )
             is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
         }
     }
@@ -77,13 +117,11 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         return dll.getAll()
     }
 
-    private suspend fun <T> ApplicationCall.receiveObjectSafely(
-        serializer: KSerializer<T>
-    ): T? = runCatching { Json.decodeFromString(serializer, receiveText()) }.getOrNull()
+    private suspend fun <T> ApplicationCall.receiveObjectSafely(serializer: KSerializer<T>): T? =
+        runCatching { Json.decodeFromString(serializer, receiveText()) }.getOrNull()
 
-    private suspend fun <T> ApplicationCall.receiveObjectListSafely(
-        serializer: KSerializer<T>
-    ): List<T>? = runCatching { Json.decodeFromString(ListSerializer(serializer), receiveText()) }.getOrNull()
+    private suspend fun <T> ApplicationCall.receiveObjectListSafely(serializer: KSerializer<T>): List<T>? =
+        runCatching { Json.decodeFromString(ListSerializer(serializer), receiveText()) }.getOrNull()
 
     val AsyncError.httpStatusCode: HttpStatusCode
         get() = when (this) {

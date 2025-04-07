@@ -18,17 +18,12 @@ class ErrorWatchFnApi(
     serializer = ErrorWatchFnDto.serializer()
 )  {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<ErrorWatchFnDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("api/error-watch-fn") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("api/error-watch-fn/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -37,13 +32,13 @@ class ErrorWatchFnApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("api/error-watch-fn/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("api/error-watch-fn") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("api/error-watch-fn/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("api/error-watch-fn/{id}") {
                 call.asyncResult(delete(call))

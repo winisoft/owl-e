@@ -18,17 +18,12 @@ class ToolParamApi(
     serializer = ToolParamDto.serializer()
 ) {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<ToolParamDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
     
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool-param") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/tool-param/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -37,13 +32,13 @@ class ToolParamApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/tool-param/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/tool-param") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/tool-param/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/tool-param/{id}") {
                 call.asyncResult(delete(call))

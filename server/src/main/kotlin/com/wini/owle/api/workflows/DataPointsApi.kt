@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class DataPointsApi(
     dll: DataPointDll
@@ -19,17 +20,12 @@ class DataPointsApi(
     validator = { _-> true }
 ) {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<DataPointDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
+
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/data-points") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/data-points/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -38,13 +34,13 @@ class DataPointsApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/data-points/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/data-points") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/data-points/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/data-points/{id}") {
                 call.asyncResult(delete(call))

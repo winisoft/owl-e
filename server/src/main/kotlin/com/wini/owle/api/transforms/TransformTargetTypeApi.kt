@@ -22,18 +22,6 @@ class TransformTargetTypeApi(
     validator = { _-> true }
 ) {
 
-    suspend fun getById(call: ApplicationCall): AsyncResult<TransformationTargetTypeDto> {
-        return Json.decodeFromString<TransformationTargetTypeDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::getById)
-    }
-
-    suspend fun delete(call: ApplicationCall): AsyncResult<Unit> {
-        return Json.decodeFromString<TransformationTargetTypeDto>(call.receiveText())
-            .run { compositeIdFactory.idFromDto(this) }
-            .run(dll::delete)
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/transform-target-type") { getAll() }

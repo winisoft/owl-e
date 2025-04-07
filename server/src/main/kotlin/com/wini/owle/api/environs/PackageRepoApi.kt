@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 class PackageRepoApi(
     dll: PackageRepoDll
@@ -19,17 +20,10 @@ class PackageRepoApi(
     validator = { _-> true }
 ) {
 
-    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<PackageRepoDto>, isCreate: Boolean = false) {
-        when (result) {
-            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
-            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
-        }
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/package-repo") {
-                call.asyncResult(getAll())
+                call.asyncResultMany(getAll())
             }
             get("/api/package-repo/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -38,13 +32,13 @@ class PackageRepoApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/package-repo/batch") {
-                call.asyncResult(createBatch(call, validator), isCreate = true)
+                call.asyncResultMany(createBatch(call, validator), isCreate = true)
             }
             put("/api/package-repo") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/package-repo/batch") {
-                call.asyncResult(updateBatch(call, validator), isCreate = true)
+                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
             }
             delete("/api/package-repo/{id}") {
                 call.asyncResult(delete(call))
