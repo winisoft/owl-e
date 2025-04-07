@@ -20,8 +20,6 @@ class AppliedTransformArgApi(
     serializer = AppliedTransformArgDto.serializer()
 )  {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/applied-transform-arg") {

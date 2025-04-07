@@ -22,8 +22,6 @@ class TagApi(
     validator = { _-> true }
 ) {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag") {

@@ -14,8 +14,6 @@ class InquisitionApi(
     serializer = InquisitionDto.serializer()
 )  {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/inquisition") {

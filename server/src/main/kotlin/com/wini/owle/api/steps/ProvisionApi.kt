@@ -14,9 +14,6 @@ class ProvisionApi(
     serializer = ProvisionDto.serializer()
 ) {
 
-
-
-    //"") { getAll(context.request.call) }
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/provision") {

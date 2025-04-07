@@ -14,8 +14,6 @@ class PreReqInjectionApi(
     serializer = PreReqInjectionDto.serializer()
 ) {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/prereq-injection") {

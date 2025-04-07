@@ -24,7 +24,7 @@ class TransformationArgApi(
     
     override fun register(routing: Routing) {
         routing.apply {
-            get("/api/transformation-arg") {
+            get("/api/transformation") {
                 call.asyncResultMany(getAll())
             }
             get("/api/transformation-arg/{id}") {

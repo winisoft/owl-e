@@ -2,16 +2,17 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.PreReqInjectionDto
 import kotlinx.serialization.KSerializer
 
-class PreReqInjectionApiTest : BaseLongPkApiTest<Long, PreReqInjectionDto, PreReqInjectionApi>() {
-    override val route: String
-        get() = TODO("Not yet implemented")
 
-    override fun getDto(): PreReqInjectionDto {
-        TODO("Not yet implemented")
-    }
+class PreReqInjectionApiTest : BaseLongPkApiTest<Long, PreReqInjectionDto, PreReqInjectionApi>() {
+
+    override val route: String
+        get() ="/api/prereq-injection"
+
+    override fun getDto(): PreReqInjectionDto = DtoTestInstanceFactory.preReqInjectionDto()
 
     override val serializer: KSerializer<PreReqInjectionDto>
         get() = TODO("Not yet implemented")

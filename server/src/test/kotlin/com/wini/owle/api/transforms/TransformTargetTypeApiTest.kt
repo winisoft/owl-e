@@ -8,11 +8,9 @@ import kotlinx.serialization.KSerializer
 
 class TransformTargetTypeApiTest : BaseCompositePkApiTest<Long, TransformationTargetTypeDto, TransformTargetTypeApi>() {
     override val route: String
-        get() = TODO("Not yet implemented")
+        get() = "/api/transform-target-type"
 
-    override fun getDto(): TransformationTargetTypeDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): TransformationTargetTypeDto = DtoTestInstanceFactory.transformTargetTypeDto()
 
     override val serializer: KSerializer<TransformationTargetTypeDto>
         get() = TODO("Not yet implemented")

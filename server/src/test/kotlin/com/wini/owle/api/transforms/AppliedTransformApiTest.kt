@@ -2,17 +2,16 @@ package com.wini.owle.api.transforms
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.transforms.AppliedTransformDto
 import kotlinx.serialization.KSerializer
 
 
 class AppliedTransformApiTest : BaseLongPkApiTest<Long, AppliedTransformDto, AppliedTransformApi>() {
     override val route: String
-        get() = TODO("Not yet implemented")
+        get() = "/api/workflow-junction"
 
-    override fun getDto(): AppliedTransformDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): AppliedTransformDto = DtoTestInstanceFactory.appliedTransformDto()
 
     override val serializer: KSerializer<AppliedTransformDto>
         get() = TODO("Not yet implemented")

@@ -2,6 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.ToolDto
 import kotlinx.serialization.KSerializer
 
@@ -9,9 +10,7 @@ class ToolApiTest : BaseLongPkApiTest<Long, ToolDto, ToolApi>() {
     override val route: String
         get() = TODO("Not yet implemented")
 
-    override fun getDto(): ToolDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): ToolDto = DtoTestInstanceFactory.toolDto()
 
     override val serializer: KSerializer<ToolDto>
         get() = TODO("Not yet implemented")

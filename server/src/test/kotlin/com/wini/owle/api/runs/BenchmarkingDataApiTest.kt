@@ -2,17 +2,16 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.BenchmarkingDataDto
 import kotlinx.serialization.KSerializer
 
 
 class BenchmarkingDataApiTest : BaseLongPkApiTest<Long, BenchmarkingDataDto, BenchmarkingDataApi>() {
     override val route: String
-        get() = TODO("Not yet implemented")
+        get() = "/api/benchmarking-data"
 
-    override fun getDto(): BenchmarkingDataDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): BenchmarkingDataDto = DtoTestInstanceFactory.benchmarkingDataDto()
 
     override val serializer: KSerializer<BenchmarkingDataDto>
         get() = TODO("Not yet implemented")

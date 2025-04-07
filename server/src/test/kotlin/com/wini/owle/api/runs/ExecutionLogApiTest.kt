@@ -2,17 +2,16 @@ package com.wini.owle.api.runs
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.ExecutionLogDto
 import kotlinx.serialization.KSerializer
 
 
 class ExecutionLogApiTest : BaseLongPkApiTest<Long, ExecutionLogDto, ExecutionLogApi>() {
     override val route: String
-        get() = TODO("Not yet implemented")
+        get() = "/api/execution-log"
 
-    override fun getDto(): ExecutionLogDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): ExecutionLogDto = DtoTestInstanceFactory.executionLogDto()
 
     override val serializer: KSerializer<ExecutionLogDto>
         get() = TODO("Not yet implemented")

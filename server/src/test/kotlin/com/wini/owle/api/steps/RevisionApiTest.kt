@@ -2,17 +2,17 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.RevisionDto
 import kotlinx.serialization.KSerializer
 
 
 class RevisionApiTest : BaseLongPkApiTest<Long, RevisionDto, RevisionApi>() {
-    override val route: String
-        get() = TODO("Not yet implemented")
 
-    override fun getDto(): RevisionDto {
-        TODO("Not yet implemented")
-    }
+    override val route: String
+        get() = "/api/revision"
+
+    override fun getDto(): RevisionDto = DtoTestInstanceFactory.revisionDto()
 
     override val serializer: KSerializer<RevisionDto>
         get() = TODO("Not yet implemented")

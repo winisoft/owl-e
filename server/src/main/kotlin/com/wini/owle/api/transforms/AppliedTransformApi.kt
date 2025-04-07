@@ -20,11 +20,9 @@ class AppliedTransformApi(
     serializer = AppliedTransformDto.serializer()
 )  {
 
-
-
     override fun register(routing: Routing) {
         routing.apply {
-            get("/api/applied-transform") {
+            get("/api/workflow-junction") {
                 call.asyncResultMany(getAll())
             }
             get("/api/applied-transform/{id}") {

@@ -2,6 +2,7 @@ package com.wini.owle.api.transforms
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.transforms.TransformationArgDto
 import kotlinx.serialization.KSerializer
 
@@ -10,9 +11,7 @@ class TransformationArgApiTest : BaseLongPkApiTest<Long, TransformationArgDto, T
     override val route: String
         get() = TODO("Not yet implemented")
 
-    override fun getDto(): TransformationArgDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): TransformationArgDto = DtoTestInstanceFactory.transformationArgDto()
 
     override val serializer: KSerializer<TransformationArgDto>
         get() = TODO("Not yet implemented")

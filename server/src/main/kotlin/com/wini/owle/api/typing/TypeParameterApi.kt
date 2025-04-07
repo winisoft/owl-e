@@ -22,8 +22,6 @@ class TypeParameterApi(
     validator = { _-> true }
 )  {
 
-
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-parameter") {

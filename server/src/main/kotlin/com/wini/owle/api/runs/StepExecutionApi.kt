@@ -15,8 +15,6 @@ class StepExecutionApi(
     validator = { _-> true }
 )  {
 
-
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/step-execution") {

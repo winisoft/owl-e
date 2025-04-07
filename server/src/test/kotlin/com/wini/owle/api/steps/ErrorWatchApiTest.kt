@@ -2,17 +2,16 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.ErrorWatchDto
 import kotlinx.serialization.KSerializer
 
 
 class ErrorWatchApiTest : BaseLongPkApiTest<Long, ErrorWatchDto, ErrorWatchApi>() {
     override val route: String
-        get() = TODO("Not yet implemented")
+        get() = "/api/error-watch"
 
-    override fun getDto(): ErrorWatchDto {
-        TODO("Not yet implemented")
-    }
+    override fun getDto(): ErrorWatchDto = DtoTestInstanceFactory.errorWatchDto()
 
     override val serializer: KSerializer<ErrorWatchDto>
         get() = TODO("Not yet implemented")
