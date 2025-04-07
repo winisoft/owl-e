@@ -1,25 +1,56 @@
 package com.wini.owle.api.runs
 
-import com.wini.owle.api.GenericLongPkApi
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.runs.TestInputDll
 import com.wini.owle.dto.runs.TestInputDto
+import com.wini.owle.dto.workflows.WorkflowDto
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.KSerializer
 
-class TestInputApi(dll: TestInputDll) : GenericLongPkApi<TestInputDto>(
+class TestInputApi(
+    dll: TestInputDll
+) : LongIdEndpointImpl<TestInputDto>(
     dll = dll,
-    clazz = TestInputDto::class,
     serializer = TestInputDto.serializer()
 )  {
+
+    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TestInputDto>, isCreate: Boolean = false) {
+        when (result) {
+            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
+            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
+        }
+    }
+
     override fun register(routing: Routing) {
         routing.apply {
-            get("/api/test-input") { getAll(context.request.call) }
-            get("/api/test-input/{id}") { getById(context.request.call) }
-            post("/api/test-input") { create(context.request.call) }
-            post("/api/test-input/batch") { createBatch(context.request.call) }
-            put("/api/test-input") { update(context.request.call) }
-            put("/api/test-input/batch") { updateBatch(context.request.call) }
-            delete("/api/test-input/{id}") { super.delete(context.request.call) }
-            delete("/api/test-input/batch") { deleteBatch(context.request.call) }
+            get("/api/test-input") {
+                call.asyncResult(getAll())
+            }
+            get("/api/test-input/{id}") {
+                call.asyncResultSingle(getById(call))
+            }
+            post("/api/test-input") {
+                call.asyncResultSingle(create(call, validator), isCreate = true)
+            }
+            post("/api/test-input/batch") {
+                call.asyncResult(createBatch(call, validator), isCreate = true)
+            }
+            put("/api/test-input") {
+                call.asyncResultSingle(update(call, validator))
+            }
+            put("/api/test-input/batch") {
+                call.asyncResult(updateBatch(call, validator), isCreate = true)
+            }
+            delete("/api/test-input/{id}") {
+                call.asyncResult(delete(call))
+            }
+            delete("/api/test-input/batch") {
+                call.asyncResult(deleteBatch(call))
+            }
         }
     }
 }

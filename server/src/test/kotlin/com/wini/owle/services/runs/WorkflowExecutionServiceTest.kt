@@ -9,12 +9,9 @@ import com.wini.owle.dto.user.UserDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.runs.WorkflowExecutionDao
 import com.wini.owle.mapper.runs.WorkflowExecutionsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.WorkflowExecutionIdFactory
 import com.wini.owle.repo.runs.WorkflowExecutionRepository
-import com.wini.owle.services.runs.WorkflowExecutionService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -110,7 +107,7 @@ open class WorkflowExecutionServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -253,7 +250,7 @@ open class WorkflowExecutionServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -343,7 +340,7 @@ open class WorkflowExecutionServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

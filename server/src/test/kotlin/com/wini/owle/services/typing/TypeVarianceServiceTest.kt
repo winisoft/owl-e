@@ -7,12 +7,9 @@ import com.wini.owle.dto.typing.TypeVarianceDto
 import com.wini.owle.dto.typing.VarianceCardinalityDto
 import com.wini.owle.entity.typing.TypeVarianceDao
 import com.wini.owle.mapper.typing.TypeVariancesMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TypeVarianceIdFactory
 import com.wini.owle.repo.typing.TypeVarianceRepository
-import com.wini.owle.services.typing.TypeVarianceService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -97,7 +94,7 @@ open class TypeVarianceServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -240,7 +237,7 @@ open class TypeVarianceServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -330,7 +327,7 @@ open class TypeVarianceServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

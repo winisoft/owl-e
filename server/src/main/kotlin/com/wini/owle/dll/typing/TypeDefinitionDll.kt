@@ -10,12 +10,12 @@ class TypeDefinitionDll(
 ): DLL<Long, TypeDefinitionDto> {
 
     override fun getAll(): AsyncResult<List<TypeDefinitionDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<TypeDefinitionDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<TypeDefinitionDto> = service.getById(id)
     override fun create(dto: TypeDefinitionDto): AsyncResult<TypeDefinitionDto> = service.create(dto)
-    override fun create(dtos: List<TypeDefinitionDto>): AsyncResult<List<TypeDefinitionDto>> = service.create(dtos)
+    override fun createAll(dtos: List<TypeDefinitionDto>): AsyncResult<List<TypeDefinitionDto>> = service.create(dtos)
     override fun update(dto: TypeDefinitionDto): AsyncResult<TypeDefinitionDto> = service.update(dto)
-    override fun update(dtos: List<TypeDefinitionDto>): AsyncResult<List<TypeDefinitionDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<TypeDefinitionDto>): AsyncResult<List<TypeDefinitionDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

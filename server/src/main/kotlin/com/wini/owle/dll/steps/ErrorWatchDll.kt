@@ -10,12 +10,12 @@ class ErrorWatchDll(
 ): DLL<Long, ErrorWatchDto> {
 
     override fun getAll(): AsyncResult<List<ErrorWatchDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<ErrorWatchDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<ErrorWatchDto> = service.getById(id)
     override fun create(dto: ErrorWatchDto): AsyncResult<ErrorWatchDto> = service.create(dto)
-    override fun create(dtos: List<ErrorWatchDto>): AsyncResult<List<ErrorWatchDto>> = service.create(dtos)
+    override fun createAll(dtos: List<ErrorWatchDto>): AsyncResult<List<ErrorWatchDto>> = service.create(dtos)
     override fun update(dto: ErrorWatchDto): AsyncResult<ErrorWatchDto> = service.update(dto)
-    override fun update(dtos: List<ErrorWatchDto>): AsyncResult<List<ErrorWatchDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<ErrorWatchDto>): AsyncResult<List<ErrorWatchDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

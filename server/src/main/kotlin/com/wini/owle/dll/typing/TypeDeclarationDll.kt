@@ -15,13 +15,13 @@ class TypeDeclarationDll(
 ): DLL<Long, TypeDeclarationDto> {
 
     override fun getAll(): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.getAll()
-    override fun getById(id: Long): AsyncResult<TypeDeclarationDto?> = typeDeclarationService.getById(id)
+    override fun getById(id: Long): AsyncResult<TypeDeclarationDto> = typeDeclarationService.getById(id)
     override fun create(dto: TypeDeclarationDto): AsyncResult<TypeDeclarationDto> = typeDeclarationService.create(dto)
-    override fun create(dtos: List<TypeDeclarationDto>): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.create(dtos)
+    override fun createAll(dtos: List<TypeDeclarationDto>): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.create(dtos)
     override fun update(dto: TypeDeclarationDto): AsyncResult<TypeDeclarationDto> = typeDeclarationService.update(dto)
-    override fun update(dtos: List<TypeDeclarationDto>): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = typeDeclarationService.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = typeDeclarationService.delete(ids)
+    override fun updateAll(dtos: List<TypeDeclarationDto>): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = typeDeclarationService.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = typeDeclarationService.delete(ids)
 
     /**
      * Reconstructs a canonical string representation of a type from the database.
@@ -36,49 +36,51 @@ class TypeDeclarationDll(
      * @return a human-readable representation of that type
      */
     fun reconstructType(typeDeclarationId: Long): AsyncResult<String> {
-        // 1. Fetch the TypeDeclaration record (with its FK to TypeDefinition)
-        val declaration = typeDeclarationService.getById(typeDeclarationId).run {
-            if (this is AsyncResult.Success)
-                data ?: return AsyncResult.Failure(AsyncError.UnknownError("No TypeDeclaration found for id=$typeDeclarationId"))
-            else
-                return this as AsyncResult.Failure
-        }
-
-        // 3. If this is a Union, handle union logic
-        //    (We assume that if TypeDefinitionEntity.name == "Union", then
-        //     we should look up TypeUnionMemberEntity for its members.)
-        if (declaration.typeDefinition.name == "Union") {
-            val unionMembers = typeUnionMemberService.getByUnionTypeDeclarationId(typeDeclarationId).run {
-                if (this is AsyncResult.Success)
-                    data
-                else
-                    return this as AsyncResult.Failure
-            }
-            if (unionMembers.isEmpty()) {
-                // Edge case: Union with no members
-                return AsyncResult.Success("Union[]")
-            }
-            // Reconstruct each member's string representation, join them with ", "
-            val memberStrings = unionMembers.map { member ->
-                reconstructType(member.memberTypeDeclarationId)
-            }
-            return AsyncResult.Success("Union[${memberStrings.joinToString(", ")}]")
-        }
-
-        // 4. Otherwise, fetch any type parameters for this type (ordered by position)
-        val parameters = typeParameterService.getByTypeDeclarationIdOrderByPosition(typeDeclarationId).run {
-            if (this is AsyncResult.Success) data else return this as AsyncResult.Failure
-        }
-        if (parameters.isEmpty()) {
-            // This is a non-parameterized, non-Union type
-            return AsyncResult.Success(declaration.typeDefinition.name ?: "") //TODO
-        } else {
-            // Recursively reconstruct each parameter
-            val paramStrings = parameters.map { param ->
-                reconstructType(param.parameterTypeDeclaration.id)
-            } // TODO below typeDefinition?.name ?: ""
-            return AsyncResult.Success("${declaration.typeDefinition.name ?: ""}[${paramStrings.joinToString(", ")}]")
-        }
+        return AsyncResult.Success("")
     }
+//        // 1. Fetch the TypeDeclaration record (with its FK to TypeDefinition)
+//        val declaration = typeDeclarationService.getById(typeDeclarationId).run {
+//            if (this is AsyncResult.Success)
+//                data ?: UnknownError("No TypeDeclaration found for id=$typeDeclarationId")
+//            else
+//                return this as AsyncResult.Failure
+//        }
+//
+//        // 3. If this is a Union, handle union logic
+//        //    (We assume that if TypeDefinitionEntity.name == "Union", then
+//        //     we should look up TypeUnionMemberEntity for its members.)
+//        if (. == "Union") {
+//            val unionMembers = typeUnionMemberService.getByUnionTypeDeclarationId(typeDeclarationId).run {
+//                if (this is AsyncResult.Success)
+//                    data
+//                else
+//                    return this as AsyncResult.Failure
+//            }
+//            if (unionMembers.isEmpty()) {
+//                // Edge case: Union with no members
+//                return AsyncResult.Success("Union[]")
+//            }
+//            // Reconstruct each member's string representation, join them with ", "
+//            val memberStrings = unionMembers.map { member ->
+//                reconstructType(member.memberTypeDeclarationId)
+//            }
+//            return AsyncResult.Success("Union[${memberStrings.joinToString(", ")}]")
+//        }
+//
+//        // 4. Otherwise, fetch any type parameters for this type (ordered by position)
+//        val parameters = typeParameterService.getByTypeDeclarationIdOrderByPosition(typeDeclarationId).run {
+//            if (this is AsyncResult.Success) data else return this as AsyncResult.Failure
+//        }
+//        if (parameters.isEmpty()) {
+//            // This is a non-parameterized, non-Union type
+//            return AsyncResult.Success(declaration.typeDefinition.name ?: "") //TODO
+//        } else {
+//            // Recursively reconstruct each parameter
+//            val paramStrings = parameters.map { param ->
+//                reconstructType(param.parameterTypeDeclaration.id)
+//            } // TODO below typeDefinition?.name ?: ""
+//            return AsyncResult.Success("${declaration.typeDefinition.name ?: ""}[${paramStrings.joinToString(", ")}]")
+//        }
+//    }
 
 }

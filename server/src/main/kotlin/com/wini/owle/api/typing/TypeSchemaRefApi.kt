@@ -1,25 +1,57 @@
 package com.wini.owle.api.typing
 
-import com.wini.owle.api.GenericLongPkApi
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.typing.TypeSchemaRefDll
 import com.wini.owle.dto.typing.TypeSchemaRefDto
+import com.wini.owle.dto.workflows.WorkflowDto
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.KSerializer
 
-class TypeSchemaRefApi(dll: TypeSchemaRefDll) : GenericLongPkApi<TypeSchemaRefDto>(
+class TypeSchemaRefApi(
+    dll: TypeSchemaRefDll
+) : LongIdEndpointImpl<TypeSchemaRefDto>(
     dll = dll,
-    clazz = TypeSchemaRefDto::class,
-    serializer = TypeSchemaRefDto.serializer()
+    serializer = TypeSchemaRefDto.serializer(),
+    validator = { _-> true }
 ) {
+
+    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TypeSchemaRefDto>, isCreate: Boolean = false) {
+        when (result) {
+            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
+            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
+        }
+    }
+    
     override fun register(routing: Routing) {
         routing.apply {
-            get("/api/type-schema-ref") { getAll(context.request.call) }
-            get("/api/type-schema-ref/{id}") { getById(context.request.call) }
-            post("/api/type-schema-ref") { create(context.request.call) }
-            post("/api/type-schema-ref/batch") { createBatch(context.request.call) }
-            put("/api/type-schema-ref") { update(context.request.call) }
-            put("/api/type-schema-ref/batch") { updateBatch(context.request.call) }
-            delete("/api/type-schema-ref/{id}") { super.delete(context.request.call) }
-            delete("/api/type-schema-ref/batch") { deleteBatch(context.request.call) }
+            get("/api/type-schema-ref") {
+                call.asyncResult(getAll())
+            }
+            get("/api/type-schema-ref/{id}") {
+                call.asyncResultSingle(getById(call))
+            }
+            post("/api/type-schema-ref") {
+                call.asyncResultSingle(create(call, validator), isCreate = true)
+            }
+            post("/api/type-schema-ref/batch") {
+                call.asyncResult(createBatch(call, validator), isCreate = true)
+            }
+            put("/api/type-schema-ref") {
+                call.asyncResultSingle(update(call, validator))
+            }
+            put("/api/type-schema-ref/batch") {
+                call.asyncResult(updateBatch(call, validator), isCreate = true)
+            }
+            delete("/api/type-schema-ref/{id}") {
+                call.asyncResult(delete(call))
+            }
+            delete("/api/type-schema-ref/batch") {
+                call.asyncResult(deleteBatch(call))
+            }
         }
     }
 }

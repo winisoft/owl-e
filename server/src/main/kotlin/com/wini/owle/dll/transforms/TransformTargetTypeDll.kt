@@ -11,12 +11,12 @@ class TransformTargetTypeDll(
 ): DLL<CompositeID, TransformationTargetTypeDto> {
 
     override fun getAll(): AsyncResult<List<TransformationTargetTypeDto>> = service.getAll()
-    override fun getById(id: CompositeID): AsyncResult<TransformationTargetTypeDto?> = service.getById(id)
+    override fun getById(id: CompositeID): AsyncResult<TransformationTargetTypeDto> = service.getById(id)
     override fun create(dto: TransformationTargetTypeDto): AsyncResult<TransformationTargetTypeDto> = service.create(dto)
-    override fun create(dtos: List<TransformationTargetTypeDto>): AsyncResult<List<TransformationTargetTypeDto>> = service.create(dtos)
+    override fun createAll(dtos: List<TransformationTargetTypeDto>): AsyncResult<List<TransformationTargetTypeDto>> = service.create(dtos)
     override fun update(dto: TransformationTargetTypeDto): AsyncResult<TransformationTargetTypeDto> = service.update(dto)
-    override fun update(dtos: List<TransformationTargetTypeDto>): AsyncResult<List<TransformationTargetTypeDto>> = service.update(dtos)
-    override fun delete(id: CompositeID): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<CompositeID>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<TransformationTargetTypeDto>): AsyncResult<List<TransformationTargetTypeDto>> = service.update(dtos)
+    override fun delete(id: CompositeID): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<CompositeID>): AsyncResult<Unit> = service.delete(ids)
 
 }

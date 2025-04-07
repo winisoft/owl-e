@@ -1,25 +1,57 @@
 package com.wini.owle.api.runs
 
-import com.wini.owle.api.GenericLongPkApi
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.runs.TestExpectedOutcomeDll
 import com.wini.owle.dto.runs.TestExpectedOutcomeDto
+import com.wini.owle.dto.workflows.WorkflowDto
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.KSerializer
 
-class TestExpectedOutcomeApi(dll: TestExpectedOutcomeDll) : GenericLongPkApi<TestExpectedOutcomeDto>(
+class TestExpectedOutcomeApi(
+    dll: TestExpectedOutcomeDll
+) : LongIdEndpointImpl<TestExpectedOutcomeDto>(
     dll = dll,
-    clazz = TestExpectedOutcomeDto::class,
-    serializer = TestExpectedOutcomeDto.serializer()
+    serializer = TestExpectedOutcomeDto.serializer(),
+    validator = { _-> true }
 )  {
+
+    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<TestExpectedOutcomeDto>, isCreate: Boolean = false) {
+        when (result) {
+            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
+            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
+        }
+    }
+
     override fun register(routing: Routing) {
         routing.apply {
-            get("/api/test-expected-outcome") { getAll(context.request.call) }
-            get("/api/test-expected-outcome/{id}") { getById(context.request.call) }
-            post("/api/test-expected-outcome") { create(context.request.call) }
-            post("/api/test-expected-outcome/batch") { createBatch(context.request.call) }
-            put("/api/test-expected-outcome") { update(context.request.call) }
-            put("/api/test-expected-outcome/batch") { updateBatch(context.request.call) }
-            delete("/api/test-expected-outcome/{id}") { super.delete(context.request.call) }
-            delete("/api/test-expected-outcome/batch") { deleteBatch(context.request.call) }
+            get("/api/test-expected-outcome") {
+                call.asyncResult(getAll())
+            }
+            get("/api/test-expected-outcome/{id}") {
+                call.asyncResultSingle(getById(call))
+            }
+            post("/api/test-expected-outcome") {
+                call.asyncResultSingle(create(call, validator), isCreate = true)
+            }
+            post("/api/test-expected-outcome/batch") {
+                call.asyncResult(createBatch(call, validator), isCreate = true)
+            }
+            put("/api/test-expected-outcome") {
+                call.asyncResultSingle(update(call, validator))
+            }
+            put("/api/test-expected-outcome/batch") {
+                call.asyncResult(updateBatch(call, validator), isCreate = true)
+            }
+            delete("/api/test-expected-outcome/{id}") {
+                call.asyncResult(delete(call))
+            }
+            delete("/api/test-expected-outcome/batch") {
+                call.asyncResult(deleteBatch(call))
+            }
         }
     }
 }

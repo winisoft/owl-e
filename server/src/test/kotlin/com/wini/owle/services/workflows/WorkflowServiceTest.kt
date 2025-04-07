@@ -4,15 +4,11 @@ import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.dto.workflows.WorkflowFolderDto
-import com.wini.owle.dto.workflows.WorkflowMetadataDto
 import com.wini.owle.entity.workflows.WorkflowDao
 import com.wini.owle.mapper.workflows.WorkflowsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.WorkflowIdFactory
 import com.wini.owle.repo.workflows.WorkflowRepository
-import com.wini.owle.services.workflows.WorkflowService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -109,7 +105,7 @@ open class WorkflowServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -252,7 +248,7 @@ open class WorkflowServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -342,7 +338,7 @@ open class WorkflowServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

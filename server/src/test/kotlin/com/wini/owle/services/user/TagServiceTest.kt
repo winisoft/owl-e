@@ -6,12 +6,9 @@ import com.wini.owle.dto.user.TagDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.entity.user.TagDao
 import com.wini.owle.mapper.user.TagsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TagIdFactory
 import com.wini.owle.repo.user.TagRepository
-import com.wini.owle.services.user.TagService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -99,7 +96,7 @@ open class TagServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -242,7 +239,7 @@ open class TagServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -332,7 +329,7 @@ open class TagServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

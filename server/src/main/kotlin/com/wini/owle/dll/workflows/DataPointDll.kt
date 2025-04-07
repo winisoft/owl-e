@@ -10,12 +10,12 @@ class DataPointDll(
 ): DLL<Long, DataPointDto> {
 
     override fun getAll(): AsyncResult<List<DataPointDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<DataPointDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<DataPointDto> = service.getById(id)
     override fun create(dto: DataPointDto): AsyncResult<DataPointDto> = service.create(dto)
-    override fun create(dtos: List<DataPointDto>): AsyncResult<List<DataPointDto>> = service.create(dtos)
+    override fun createAll(dtos: List<DataPointDto>): AsyncResult<List<DataPointDto>> = service.create(dtos)
     override fun update(dto: DataPointDto): AsyncResult<DataPointDto> = service.update(dto)
-    override fun update(dtos: List<DataPointDto>): AsyncResult<List<DataPointDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<DataPointDto>): AsyncResult<List<DataPointDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

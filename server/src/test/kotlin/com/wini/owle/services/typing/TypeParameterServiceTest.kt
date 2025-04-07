@@ -6,12 +6,9 @@ import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.entity.typing.TypeParameterDao
 import com.wini.owle.mapper.typing.TypeParametersMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TypeParameterIdFactory
 import com.wini.owle.repo.typing.TypeParameterRepository
-import com.wini.owle.services.typing.TypeParameterService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -99,7 +96,7 @@ open class TypeParameterServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -242,7 +239,7 @@ open class TypeParameterServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -332,7 +329,7 @@ open class TypeParameterServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

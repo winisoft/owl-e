@@ -10,12 +10,12 @@ class WorkflowFolderDll(
 ): DLL<Long, WorkflowFolderDto> {
 
     override fun getAll(): AsyncResult<List<WorkflowFolderDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<WorkflowFolderDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<WorkflowFolderDto> = service.getById(id)
     override fun create(dto: WorkflowFolderDto): AsyncResult<WorkflowFolderDto> = service.create(dto)
-    override fun create(dtos: List<WorkflowFolderDto>): AsyncResult<List<WorkflowFolderDto>> = service.create(dtos)
+    override fun createAll(dtos: List<WorkflowFolderDto>): AsyncResult<List<WorkflowFolderDto>> = service.create(dtos)
     override fun update(dto: WorkflowFolderDto): AsyncResult<WorkflowFolderDto> = service.update(dto)
-    override fun update(dtos: List<WorkflowFolderDto>): AsyncResult<List<WorkflowFolderDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<WorkflowFolderDto>): AsyncResult<List<WorkflowFolderDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

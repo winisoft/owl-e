@@ -6,12 +6,9 @@ import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.dto.environs.VersionSpecDto
 import com.wini.owle.entity.environs.PackageDao
 import com.wini.owle.mapper.environs.PackagesMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.PackageIdFactory
 import com.wini.owle.repo.environs.PackageRepository
-import com.wini.owle.services.steps.RevisionService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -97,7 +94,7 @@ open class PackageServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -243,7 +240,7 @@ open class PackageServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -333,7 +330,7 @@ open class PackageServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

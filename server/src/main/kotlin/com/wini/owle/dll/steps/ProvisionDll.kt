@@ -11,12 +11,12 @@ class ProvisionDll(
 ): DLL<Long, ProvisionDto> {
 
     override fun getAll(): AsyncResult<List<ProvisionDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<ProvisionDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<ProvisionDto> = service.getById(id)
     override fun create(dto: ProvisionDto): AsyncResult<ProvisionDto> = service.create(dto)
-    override fun create(dtos: List<ProvisionDto>): AsyncResult<List<ProvisionDto>> = service.create(dtos)
+    override fun createAll(dtos: List<ProvisionDto>): AsyncResult<List<ProvisionDto>> = service.create(dtos)
     override fun update(dto: ProvisionDto): AsyncResult<ProvisionDto> = service.update(dto)
-    override fun update(dtos: List<ProvisionDto>): AsyncResult<List<ProvisionDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<ProvisionDto>): AsyncResult<List<ProvisionDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

@@ -10,12 +10,12 @@ class PaymentMethodDll(
 ): DLL<Long, PaymentMethodDto> {
 
     override fun getAll(): AsyncResult<List<PaymentMethodDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<PaymentMethodDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<PaymentMethodDto> = service.getById(id)
     override fun create(dto: PaymentMethodDto): AsyncResult<PaymentMethodDto> = service.create(dto)
-    override fun create(dtos: List<PaymentMethodDto>): AsyncResult<List<PaymentMethodDto>> = service.create(dtos)
+    override fun createAll(dtos: List<PaymentMethodDto>): AsyncResult<List<PaymentMethodDto>> = service.create(dtos)
     override fun update(dto: PaymentMethodDto): AsyncResult<PaymentMethodDto> = service.update(dto)
-    override fun update(dtos: List<PaymentMethodDto>): AsyncResult<List<PaymentMethodDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<PaymentMethodDto>): AsyncResult<List<PaymentMethodDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

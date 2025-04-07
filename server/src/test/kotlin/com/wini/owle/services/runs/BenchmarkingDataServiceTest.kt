@@ -6,12 +6,9 @@ import com.wini.owle.dto.runs.BenchmarkingDataDto
 import com.wini.owle.dto.runs.WorkflowExecutionDto
 import com.wini.owle.entity.runs.BenchmarkingDataDao
 import com.wini.owle.mapper.runs.BenchmarkingDataMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.BenchmarkingDataIdFactory
 import com.wini.owle.repo.runs.BenchmarkingDataRepository
-import com.wini.owle.services.runs.BenchmarkingDataService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -104,7 +101,7 @@ open class BenchmarkingDataServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -247,7 +244,7 @@ open class BenchmarkingDataServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -337,7 +334,7 @@ open class BenchmarkingDataServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

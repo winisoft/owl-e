@@ -5,12 +5,9 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.WorkflowFolderDto
 import com.wini.owle.entity.workflows.WorkflowFolderDao
 import com.wini.owle.mapper.workflows.WorkflowFoldersMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.WorkflowFolderIdFactory
 import com.wini.owle.repo.workflows.WorkflowFolderRepository
-import com.wini.owle.services.workflows.WorkflowFolderService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -107,7 +104,7 @@ open class WorkflowFolderServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -250,7 +247,7 @@ open class WorkflowFolderServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -340,7 +337,7 @@ open class WorkflowFolderServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

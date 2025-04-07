@@ -1,30 +1,49 @@
 package com.wini.owle.api.typing
 
-import com.wini.owle.api.GenericCompositeIdApi
+import com.wini.owle.api.CompositeIdEndpointImpl
+import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.typing.TypeUnionMemberDll
 import com.wini.owle.dto.typing.TypeUnionMemberDto
-import com.wini.owle.mapper.CompositeIdMap
+import com.wini.owle.mapper.CompositeIdFactory
+import com.wini.owle.mapper.TypeUnionMemberIdFactory
+import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
+
 
 class TypeUnionMemberApi(
-    typeUnionMemberDll: TypeUnionMemberDll,
-    compositeIdMap: CompositeIdMap<TypeUnionMemberDto>
-) : GenericCompositeIdApi<TypeUnionMemberDto>(
+    typeUnionMemberDll: TypeUnionMemberDll
+) : CompositeIdEndpointImpl<TypeUnionMemberDto>(
     dll = typeUnionMemberDll,
-    clazz = TypeUnionMemberDto::class,
     serializer = TypeUnionMemberDto.serializer(),
-    compositeIdMapper = compositeIdMap
+    compositeIdFactory = TypeUnionMemberIdFactory,
+    validator = { _-> true }
 ) {
+
+    suspend fun getById(call: ApplicationCall): AsyncResult<TypeUnionMemberDto> {
+        return Json.decodeFromString<TypeUnionMemberDto>(call.receiveText())
+            .run { compositeIdFactory.idFromDto(this) }
+            .run(dll::getById)
+    }
+
+    suspend fun delete(call: ApplicationCall): AsyncResult<Unit> {
+        return Json.decodeFromString<TypeUnionMemberDto>(call.receiveText())
+            .run { compositeIdFactory.idFromDto(this) }
+            .run(dll::delete)
+    }
+
     override fun register(routing: Routing) {
         routing.apply {
             routing.apply {
-                get("/api/type-union-member") { getAll(context.request.call) }
+                get("/api/type-union-member") { getAll() }
                 get("/api/type-union-member/{id}") { getById(context.request.call) }
                 post("/api/type-union-member") { create(context.request.call) }
                 post("/api/type-union-member/batch") { createBatch(context.request.call) }
                 put("/api/type-union-member") { update(context.request.call) }
                 put("/api/type-union-member/batch") { updateBatch(context.request.call) }
-                delete("/api/type-union-member/{id}") { super.delete(context.request.call) }
+                delete("/api/type-union-member/{id}") { delete(context.request.call) }
                 delete("/api/type-union-member/batch") { deleteBatch(context.request.call) }
             }
         }

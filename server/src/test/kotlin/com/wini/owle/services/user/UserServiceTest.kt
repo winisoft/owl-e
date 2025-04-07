@@ -7,12 +7,9 @@ import com.wini.owle.dto.user.SubscriptionStatusDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.entity.user.UserDao
 import com.wini.owle.mapper.user.UsersMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.UserIdFactory
 import com.wini.owle.repo.user.UserRepository
-import com.wini.owle.services.user.UserService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -120,7 +117,7 @@ open class UserServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -263,7 +260,7 @@ open class UserServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -353,7 +350,7 @@ open class UserServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

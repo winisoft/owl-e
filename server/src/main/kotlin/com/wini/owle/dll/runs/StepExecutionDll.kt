@@ -10,12 +10,12 @@ class StepExecutionDll(
 ): DLL<Long, StepExecutionDto> {
 
     override fun getAll(): AsyncResult<List<StepExecutionDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<StepExecutionDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<StepExecutionDto> = service.getById(id)
     override fun create(dto: StepExecutionDto): AsyncResult<StepExecutionDto> = service.create(dto)
-    override fun create(dtos: List<StepExecutionDto>): AsyncResult<List<StepExecutionDto>> = service.create(dtos)
+    override fun createAll(dtos: List<StepExecutionDto>): AsyncResult<List<StepExecutionDto>> = service.create(dtos)
     override fun update(dto: StepExecutionDto): AsyncResult<StepExecutionDto> = service.update(dto)
-    override fun update(dtos: List<StepExecutionDto>): AsyncResult<List<StepExecutionDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<StepExecutionDto>): AsyncResult<List<StepExecutionDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

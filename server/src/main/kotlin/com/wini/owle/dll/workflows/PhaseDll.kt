@@ -13,13 +13,13 @@ class PhaseDll(
 ): DLL<Long, PhaseDto> {
 
     override fun getAll(): AsyncResult<List<PhaseDto>> = phaseService.getAll()
-    override fun getById(id: Long): AsyncResult<PhaseDto?> = phaseService.getById(id)
+    override fun getById(id: Long): AsyncResult<PhaseDto> = phaseService.getById(id)
     override fun create(dto: PhaseDto): AsyncResult<PhaseDto> {
         val maxOrder = calculateMaxDisplayOrder(dto.workflow.id, dto.parentPhase?.id)
         val phase = dto.copy(displayOrder = maxOrder + 1)
         return phaseService.create(phase)
     }
-    override fun create(dtos: List<PhaseDto>): AsyncResult<List<PhaseDto>> {
+    override fun createAll(dtos: List<PhaseDto>): AsyncResult<List<PhaseDto>> {
         if (dtos.isEmpty()) return AsyncResult.Success(emptyList())
         // Group DTOs by (workflowId, parentPhaseId)
         val groupedDtos = dtos.groupBy { dto -> dto.workflow.id to dto.parentPhase?.id }
@@ -44,9 +44,9 @@ class PhaseDll(
         return AsyncResult.Success(allResults)
     }
     override fun update(dto: PhaseDto): AsyncResult<PhaseDto> = phaseService.update(dto)
-    override fun update(dtos: List<PhaseDto>): AsyncResult<List<PhaseDto>> = phaseService.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = phaseService.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = phaseService.delete(ids)
+    override fun updateAll(dtos: List<PhaseDto>): AsyncResult<List<PhaseDto>> = phaseService.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = phaseService.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = phaseService.delete(ids)
 
     private fun calculateMaxDisplayOrder(workflowId: Long, parentPhaseId: Long?): Int {
         val maxStepOrder: Int = stepService.getMaxDisplayOrder(workflowId, parentPhaseId)

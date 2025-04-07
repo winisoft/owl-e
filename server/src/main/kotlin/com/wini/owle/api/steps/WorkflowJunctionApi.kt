@@ -1,25 +1,56 @@
 package com.wini.owle.api.steps
 
-import com.wini.owle.api.GenericLongPkApi
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.steps.WorkflowJunctionDll
 import com.wini.owle.dto.steps.WorkflowJunctionDto
+import com.wini.owle.dto.workflows.WorkflowDto
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.KSerializer
 
-class WorkflowJunctionApi(dll: WorkflowJunctionDll) : GenericLongPkApi<WorkflowJunctionDto>(
+class WorkflowJunctionApi(
+    dll: WorkflowJunctionDll
+) : LongIdEndpointImpl<WorkflowJunctionDto>(
     dll = dll,
-    clazz = WorkflowJunctionDto::class,
     serializer = WorkflowJunctionDto.serializer()
 )  {
+
+    private suspend fun ApplicationCall.asyncResultSingle(result: AsyncResult<WorkflowJunctionDto>, isCreate: Boolean = false) {
+        when (result) {
+            is AsyncResult.Success -> respond(if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK, result.data)
+            is AsyncResult.Failure -> respond(result.error.httpStatusCode, result.error)
+        }
+    }
+
     override fun register(routing: Routing) {
         routing.apply {
-            get("/api/workflow-junction") { getAll(context.request.call) }
-            get("/api/workflow-junction/{id}") { getById(context.request.call) }
-            post("/api/workflow-junction") { create(context.request.call) }
-            post("/api/workflow-junction/batch") { createBatch(context.request.call) }
-            put("/api/workflow-junction") { update(context.request.call) }
-            put("/api/workflow-junction/batch") { updateBatch(context.request.call) }
-            delete("/api/workflow-junction/{id}") { super.delete(context.request.call) }
-            delete("/api/workflow-junction/batch") { deleteBatch(context.request.call) }
+            get("/api/workflow-junction") {
+                call.asyncResult(getAll())
+            }
+            get("/api/workflow-junction/{id}") {
+                call.asyncResultSingle(getById(call))
+            }
+            post("/api/workflow-junction") {
+                call.asyncResultSingle(create(call, validator), isCreate = true)
+            }
+            post("/api/workflow-junction/batch") {
+                call.asyncResult(createBatch(call, validator), isCreate = true)
+            }
+            put("/api/workflow-junction") {
+                call.asyncResultSingle(update(call, validator))
+            }
+            put("/api/workflow-junction/batch") {
+                call.asyncResult(updateBatch(call, validator), isCreate = true)
+            }
+            delete("/api/workflow-junction/{id}") {
+                call.asyncResult(delete(call))
+            }
+            delete("/api/workflow-junction/batch") {
+                call.asyncResult(deleteBatch(call))
+            }
         }
     }
 }

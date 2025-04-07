@@ -1,6 +1,6 @@
 package com.wini.owle.services
 
-import com.wini.owle.async.AsyncError.DatabaseError
+import com.wini.owle.async.AsyncError.Database
 import com.wini.owle.async.AsyncError.NoSuchIdError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
@@ -26,7 +26,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to create entity").asFailure()
+                Database(exception.message ?: "Unable to create entity").asFailure()
             }
         )
     }
@@ -40,12 +40,12 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to get all entities").asFailure()
+                Database(exception.message ?: "Unable to get all entities").asFailure()
             }
         )
     }
 
-    override fun getById(id: ID): AsyncResult<Dto?> {
+    override fun getById(id: ID): AsyncResult<Dto> {
         return runCatching {
             val entityID = idFactory.build(id)
             repository.getById(entityID)
@@ -58,7 +58,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                     } ?: NoSuchIdError("No such id: $id").asFailure()
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Failed to get id $id").asFailure()
+                Database(exception.message ?: "Failed to get id $id").asFailure()
             }
         )
     }
@@ -73,7 +73,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to create entities").asFailure()
+                Database(exception.message ?: "Unable to create entities").asFailure()
             }
         )
     }
@@ -88,7 +88,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
+                Database(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }
@@ -103,37 +103,35 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
+                Database(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }
 
-    override fun delete(id: ID): AsyncResult<Boolean> {
+    override fun delete(id: ID): AsyncResult<Unit> {
         return runCatching {
             val entityID = idFactory.build(id)
             repository.delete(entityID)
-            true
         }.fold(
             onSuccess = {
-                AsyncResult.Success(it)
+                AsyncResult.Success(Unit)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to delete entity $id").asFailure()
+                Database(exception.message ?: "Unable to delete entity $id").asFailure()
             }
         )
     }
 
-    override fun delete(ids: List<ID>): AsyncResult<Boolean> {
+    override fun delete(ids: List<ID>): AsyncResult<Unit> {
         return runCatching {
             val entityIds = ids.map { idFactory.build(it) }
             repository.delete(entityIds)
-            true
         }.fold(
             onSuccess = {
                 AsyncResult.Success(it)
             },
             onFailure = { exception ->
-                DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
+                Database(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }

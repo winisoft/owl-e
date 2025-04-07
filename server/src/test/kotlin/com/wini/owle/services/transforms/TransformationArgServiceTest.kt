@@ -7,12 +7,9 @@ import com.wini.owle.dto.transforms.TransformationDto
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.entity.transforms.TransformationArgDao
 import com.wini.owle.mapper.transforms.TransformationArgsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TransformationArgIdFactory
 import com.wini.owle.repo.transforms.TransformationArgRepository
-import com.wini.owle.services.transforms.TransformationArgService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -103,7 +100,7 @@ open class TransformationArgServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -246,7 +243,7 @@ open class TransformationArgServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -336,7 +333,7 @@ open class TransformationArgServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

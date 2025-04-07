@@ -7,12 +7,9 @@ import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.entity.workflows.ToolParamDao
 import com.wini.owle.mapper.workflows.ToolParamsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.ToolParamIdFactory
 import com.wini.owle.repo.workflows.ToolParamRepository
-import com.wini.owle.services.workflows.ToolParamService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -103,7 +100,7 @@ open class ToolParamServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -246,7 +243,7 @@ open class ToolParamServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -336,7 +333,7 @@ open class ToolParamServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

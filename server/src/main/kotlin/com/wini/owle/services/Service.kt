@@ -18,8 +18,8 @@ interface Service<ID: Any, Dto: BaseDto> {
 
     fun update(dtos: List<Dto>): AsyncResult<List<Dto>>
 
-    fun delete(id: ID): AsyncResult<Boolean>
+    fun delete(id: ID): AsyncResult<Unit>
 
-    fun delete(ids: List<ID>): AsyncResult<Boolean>
+    fun delete(ids: List<ID>): AsyncResult<Unit>
 
 }

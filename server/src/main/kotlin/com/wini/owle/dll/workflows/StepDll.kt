@@ -14,14 +14,14 @@ class StepDll(
 ): DLL<Long, StepDto> {
 
     override fun getAll(): AsyncResult<List<StepDto>> = stepService.getAll()
-    override fun getById(id: Long): AsyncResult<StepDto?> = stepService.getById(id)
+    override fun getById(id: Long): AsyncResult<StepDto> = stepService.getById(id)
 
     override fun create(dto: StepDto): AsyncResult<StepDto> {
         val maxOrder = calculateMaxDisplayOrder(dto.workflow.id, dto.parentPhase?.id)
         val stepEntity = dto.copy(displayOrder = maxOrder + 1)
         return stepService.create(stepEntity)
     }
-    override fun create(dtos: List<StepDto>): AsyncResult<List<StepDto>> {
+    override fun createAll(dtos: List<StepDto>): AsyncResult<List<StepDto>> {
         if (dtos.isEmpty()) return AsyncResult.Success(emptyList())
 
         // Group DTOs by (workflowId, parentPhaseId)
@@ -56,9 +56,9 @@ class StepDll(
 
 
     override fun update(dto: StepDto): AsyncResult<StepDto> = stepService.update(dto)
-    override fun update(dtos: List<StepDto>): AsyncResult<List<StepDto>> = stepService.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = stepService.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = stepService.delete(ids)
+    override fun updateAll(dtos: List<StepDto>): AsyncResult<List<StepDto>> = stepService.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = stepService.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = stepService.delete(ids)
 
     private fun calculateMaxDisplayOrder(workflowId: Long, parentPhaseId: Long?): Int {
         val maxStepOrder: Int = stepService.getMaxDisplayOrder(workflowId, parentPhaseId)

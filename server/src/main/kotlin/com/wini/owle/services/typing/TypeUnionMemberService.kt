@@ -5,7 +5,6 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.typing.TypeUnionMemberDto
 import com.wini.owle.entity.typing.TypeUnionMemberDao
 import com.wini.owle.mapper.typing.TypeUnionMembersMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TypeUnionMemberIdFactory
 import com.wini.owle.repo.typing.TypeUnionMemberRepository
 import com.wini.owle.services.BaseServiceImpl
@@ -31,7 +30,7 @@ class TypeUnionMemberService(
                 return AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                AsyncError.DatabaseError(exception.message ?: "Unable to delete entities").asFailure()
+                AsyncError.Database(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }

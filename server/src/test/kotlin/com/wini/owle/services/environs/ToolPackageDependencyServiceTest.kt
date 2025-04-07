@@ -8,7 +8,6 @@ import com.wini.owle.mapper.environs.ToolPackageDependencyMapper
 import com.wini.owle.repo.ToolPackageDependencyIdFactory
 import com.wini.owle.repo.environs.ToolPackageDependencyRepository
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
@@ -95,7 +94,7 @@ open class ToolPackageDependencyServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -245,7 +244,7 @@ open class ToolPackageDependencyServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -335,7 +334,7 @@ open class ToolPackageDependencyServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(compositeIds[0]) }

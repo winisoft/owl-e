@@ -10,12 +10,12 @@ class PackageRepoDll(
 ): DLL<Long, PackageRepoDto> {
 
     override fun getAll(): AsyncResult<List<PackageRepoDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<PackageRepoDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<PackageRepoDto> = service.getById(id)
     override fun create(dto: PackageRepoDto): AsyncResult<PackageRepoDto> = service.create(dto)
-    override fun create(dtos: List<PackageRepoDto>): AsyncResult<List<PackageRepoDto>> = service.create(dtos)
+    override fun createAll(dtos: List<PackageRepoDto>): AsyncResult<List<PackageRepoDto>> = service.create(dtos)
     override fun update(dto: PackageRepoDto): AsyncResult<PackageRepoDto> = service.update(dto)
-    override fun update(dtos: List<PackageRepoDto>): AsyncResult<List<PackageRepoDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
-
+    override fun updateAll(dtos: List<PackageRepoDto>): AsyncResult<List<PackageRepoDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
+    
 }

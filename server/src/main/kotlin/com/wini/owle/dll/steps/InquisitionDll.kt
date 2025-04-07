@@ -10,12 +10,12 @@ class InquisitionDll(
 ): DLL<Long, InquisitionDto> {
 
     override fun getAll(): AsyncResult<List<InquisitionDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<InquisitionDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<InquisitionDto> = service.getById(id)
     override fun create(dto: InquisitionDto): AsyncResult<InquisitionDto> = service.create(dto)
-    override fun create(dtos: List<InquisitionDto>): AsyncResult<List<InquisitionDto>> = service.create(dtos)
+    override fun createAll(dtos: List<InquisitionDto>): AsyncResult<List<InquisitionDto>> = service.create(dtos)
     override fun update(dto: InquisitionDto): AsyncResult<InquisitionDto> = service.update(dto)
-    override fun update(dtos: List<InquisitionDto>): AsyncResult<List<InquisitionDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<InquisitionDto>): AsyncResult<List<InquisitionDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

@@ -7,4 +7,11 @@ import kotlinx.serialization.Serializable
 data class TransformationTargetTypeDto(
     val transformationId: Long,
     val typeDeclarationId: Long
-) : BaseDto
+) : BaseDto {
+
+    @Serializable
+    data class IdDto(
+        val transformationId: Long,
+        val typeDeclarationId: Long
+    )
+}

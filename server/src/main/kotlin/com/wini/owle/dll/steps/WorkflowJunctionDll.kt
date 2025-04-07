@@ -10,12 +10,12 @@ class WorkflowJunctionDll(
 ): DLL<Long, WorkflowJunctionDto> {
 
     override fun getAll(): AsyncResult<List<WorkflowJunctionDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<WorkflowJunctionDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<WorkflowJunctionDto> = service.getById(id)
     override fun create(dto: WorkflowJunctionDto): AsyncResult<WorkflowJunctionDto> = service.create(dto)
-    override fun create(dtos: List<WorkflowJunctionDto>): AsyncResult<List<WorkflowJunctionDto>> = service.create(dtos)
+    override fun createAll(dtos: List<WorkflowJunctionDto>): AsyncResult<List<WorkflowJunctionDto>> = service.create(dtos)
     override fun update(dto: WorkflowJunctionDto): AsyncResult<WorkflowJunctionDto> = service.update(dto)
-    override fun update(dtos: List<WorkflowJunctionDto>): AsyncResult<List<WorkflowJunctionDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<WorkflowJunctionDto>): AsyncResult<List<WorkflowJunctionDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

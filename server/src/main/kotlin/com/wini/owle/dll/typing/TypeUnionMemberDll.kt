@@ -11,12 +11,12 @@ class TypeUnionMemberDll(
 ): DLL<CompositeID, TypeUnionMemberDto> {
 
     override fun getAll(): AsyncResult<List<TypeUnionMemberDto>> = service.getAll()
-    override fun getById(id: CompositeID): AsyncResult<TypeUnionMemberDto?> = service.getById(id)
+    override fun getById(id: CompositeID): AsyncResult<TypeUnionMemberDto> = service.getById(id)
     override fun create(dto: TypeUnionMemberDto): AsyncResult<TypeUnionMemberDto> = service.create(dto)
-    override fun create(dtos: List<TypeUnionMemberDto>): AsyncResult<List<TypeUnionMemberDto>> = service.create(dtos)
+    override fun createAll(dtos: List<TypeUnionMemberDto>): AsyncResult<List<TypeUnionMemberDto>> = service.create(dtos)
     override fun update(dto: TypeUnionMemberDto): AsyncResult<TypeUnionMemberDto> = service.update(dto)
-    override fun update(dtos: List<TypeUnionMemberDto>): AsyncResult<List<TypeUnionMemberDto>> = service.update(dtos)
-    override fun delete(id: CompositeID): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<CompositeID>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<TypeUnionMemberDto>): AsyncResult<List<TypeUnionMemberDto>> = service.update(dtos)
+    override fun delete(id: CompositeID): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<CompositeID>): AsyncResult<Unit> = service.delete(ids)
 
 }

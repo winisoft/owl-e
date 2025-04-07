@@ -6,12 +6,9 @@ import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.dto.workflows.WorkflowDto
 import com.wini.owle.entity.workflows.PhaseDao
 import com.wini.owle.mapper.workflows.PhasesMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.PhaseIdFactory
 import com.wini.owle.repo.workflows.PhaseRepository
-import com.wini.owle.services.workflows.PhaseService
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -106,7 +103,7 @@ open class PhaseServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -249,7 +246,7 @@ open class PhaseServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -339,7 +336,7 @@ open class PhaseServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

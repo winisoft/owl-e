@@ -8,18 +8,18 @@ interface DLL<ID: Any, Dto: BaseDto> {
 
     fun getAll(): AsyncResult<List<Dto>>
 
-    fun getById(id: ID): AsyncResult<Dto?>
+    fun getById(id: ID): AsyncResult<Dto>
 
     fun create(dto: Dto): AsyncResult<Dto>
 
-    fun create(dtos: List<Dto>): AsyncResult<List<Dto>>
+    fun createAll(dtos: List<Dto>): AsyncResult<List<Dto>>
 
     fun update(dto: Dto): AsyncResult<Dto>
 
-    fun update(dtos: List<Dto>): AsyncResult<List<Dto>>
+    fun updateAll(dtos: List<Dto>): AsyncResult<List<Dto>>
 
-    fun delete(id: ID): AsyncResult<Boolean>
+    fun delete(id: ID): AsyncResult<Unit>
 
-    fun delete(ids: List<ID>): AsyncResult<Boolean>
+    fun deleteAll(ids: List<ID>): AsyncResult<Unit>
 
 }

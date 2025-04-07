@@ -10,12 +10,12 @@ class TypeSchemaRefDll(
 ): DLL<Long, TypeSchemaRefDto> {
 
     override fun getAll(): AsyncResult<List<TypeSchemaRefDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<TypeSchemaRefDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<TypeSchemaRefDto> = service.getById(id)
     override fun create(dto: TypeSchemaRefDto): AsyncResult<TypeSchemaRefDto> = service.create(dto)
-    override fun create(dtos: List<TypeSchemaRefDto>): AsyncResult<List<TypeSchemaRefDto>> = service.create(dtos)
+    override fun createAll(dtos: List<TypeSchemaRefDto>): AsyncResult<List<TypeSchemaRefDto>> = service.create(dtos)
     override fun update(dto: TypeSchemaRefDto): AsyncResult<TypeSchemaRefDto> = service.update(dto)
-    override fun update(dtos: List<TypeSchemaRefDto>): AsyncResult<List<TypeSchemaRefDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<TypeSchemaRefDto>): AsyncResult<List<TypeSchemaRefDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

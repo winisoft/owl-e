@@ -6,11 +6,9 @@ import com.wini.owle.dto.steps.ErrorWatchDto
 import com.wini.owle.dto.steps.ErrorWatchFnDto
 import com.wini.owle.entity.steps.ErrorWatchFnDao
 import com.wini.owle.mapper.steps.ErrorWatchFnsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.ErrorWatchFnIdFactory
 import com.wini.owle.repo.steps.ErrorWatchFnRepository
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -98,7 +96,7 @@ open class ErrorWatchFnServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -241,7 +239,7 @@ open class ErrorWatchFnServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -331,7 +329,7 @@ open class ErrorWatchFnServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

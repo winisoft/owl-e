@@ -7,4 +7,12 @@ import kotlinx.serialization.Serializable
 data class TypeUnionMemberDto(
     val unionTypeDeclarationId: Long,
     val memberTypeDeclarationId: Long
-) : BaseDto
+) : BaseDto {
+
+    @Serializable
+    data class CompositeIdDto(
+        val unionTypeDeclarationId: Long,
+        val memberTypeDeclarationId: Long
+    )
+
+}

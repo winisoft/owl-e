@@ -7,11 +7,9 @@ import com.wini.owle.dto.steps.WorkflowJunctionDto
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.entity.steps.PreReqInjectionDao
 import com.wini.owle.mapper.steps.PreReqInjectionsMapper
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.PreReqInjectionIdFactory
 import com.wini.owle.repo.steps.PreReqInjectionRepository
 import io.mockk.*
-import io.mockk.impl.annotations.MockK
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -105,7 +103,7 @@ open class PreReqInjectionServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError)
+        assertTrue(error is AsyncError.Database)
         assertEquals("Database error", error.message)
     }
 
@@ -248,7 +246,7 @@ open class PreReqInjectionServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { repository.delete(entityId) }
@@ -338,7 +336,7 @@ open class PreReqInjectionServiceTest {
 
         // Assert
         assertTrue(result is AsyncResult.Success)
-        assertTrue((result as AsyncResult.Success).data)
+        assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
         verify { idFactory.build(1L) }

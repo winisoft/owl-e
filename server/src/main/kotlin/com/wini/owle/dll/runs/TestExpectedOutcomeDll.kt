@@ -10,12 +10,12 @@ class TestExpectedOutcomeDll(
 ): DLL<Long, TestExpectedOutcomeDto> {
 
     override fun getAll(): AsyncResult<List<TestExpectedOutcomeDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<TestExpectedOutcomeDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<TestExpectedOutcomeDto> = service.getById(id)
     override fun create(dto: TestExpectedOutcomeDto): AsyncResult<TestExpectedOutcomeDto> = service.create(dto)
-    override fun create(dtos: List<TestExpectedOutcomeDto>): AsyncResult<List<TestExpectedOutcomeDto>> = service.create(dtos)
+    override fun createAll(dtos: List<TestExpectedOutcomeDto>): AsyncResult<List<TestExpectedOutcomeDto>> = service.create(dtos)
     override fun update(dto: TestExpectedOutcomeDto): AsyncResult<TestExpectedOutcomeDto> = service.update(dto)
-    override fun update(dtos: List<TestExpectedOutcomeDto>): AsyncResult<List<TestExpectedOutcomeDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<TestExpectedOutcomeDto>): AsyncResult<List<TestExpectedOutcomeDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }

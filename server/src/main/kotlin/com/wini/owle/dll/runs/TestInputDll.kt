@@ -10,12 +10,12 @@ class TestInputDll(
 ): DLL<Long, TestInputDto> {
 
     override fun getAll(): AsyncResult<List<TestInputDto>> = service.getAll()
-    override fun getById(id: Long): AsyncResult<TestInputDto?> = service.getById(id)
+    override fun getById(id: Long): AsyncResult<TestInputDto> = service.getById(id)
     override fun create(dto: TestInputDto): AsyncResult<TestInputDto> = service.create(dto)
-    override fun create(dtos: List<TestInputDto>): AsyncResult<List<TestInputDto>> = service.create(dtos)
+    override fun createAll(dtos: List<TestInputDto>): AsyncResult<List<TestInputDto>> = service.create(dtos)
     override fun update(dto: TestInputDto): AsyncResult<TestInputDto> = service.update(dto)
-    override fun update(dtos: List<TestInputDto>): AsyncResult<List<TestInputDto>> = service.update(dtos)
-    override fun delete(id: Long): AsyncResult<Boolean> = service.delete(id)
-    override fun delete(ids: List<Long>): AsyncResult<Boolean> = service.delete(ids)
+    override fun updateAll(dtos: List<TestInputDto>): AsyncResult<List<TestInputDto>> = service.update(dtos)
+    override fun delete(id: Long): AsyncResult<Unit> = service.delete(id)
+    override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = service.delete(ids)
 
 }
