@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 
 abstract class LongIdEndpointImpl<T: BaseDto>(
-    private val dll: DLL<Long, T>,
+    val dll: DLL<Long, T>,
     serializer: KSerializer<T>,
     val validator: (T) -> Boolean = { _-> true },
 ): BaseEndpointImpl<Long, T>(

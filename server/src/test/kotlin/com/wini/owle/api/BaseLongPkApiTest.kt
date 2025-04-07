@@ -24,7 +24,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
-//
+abstract class BaseLongPkApiTest<ID: Any, T: BaseDto, R: RoutedApi>: BaseEndpointTest<ID, T, R>() {
+
+
+}
+
+
 //abstract class BaseLongPkApiTest<ID: Any, Dto : BaseDto, Api : LongIdEndpointImpl<Dto>> {
 //
 //    protected lateinit var mockDll: DLL<ID, Dto>
