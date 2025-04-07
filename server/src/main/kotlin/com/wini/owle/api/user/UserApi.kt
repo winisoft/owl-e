@@ -2,6 +2,7 @@ package com.wini.owle.api.user
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dll.DLL
 import com.wini.owle.dll.user.UserDll
 import com.wini.owle.dto.user.UserDto
 import io.ktor.http.*
@@ -12,7 +13,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 class UserApi(
-    dll: UserDll
+    dll: DLL<Long, UserDto>
 ) : LongIdEndpointImpl<UserDto>(
     dll = dll,
     serializer = UserDto.serializer(),

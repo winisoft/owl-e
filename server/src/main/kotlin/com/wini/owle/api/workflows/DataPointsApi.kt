@@ -2,6 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dll.DLL
 import com.wini.owle.dll.workflows.DataPointDll
 import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.dto.workflows.WorkflowDto
@@ -13,7 +14,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 class DataPointsApi(
-    dll: DataPointDll
+    dll: DLL<Long, DataPointDto>
 ) : LongIdEndpointImpl<DataPointDto>(
     dll = dll,
     serializer = DataPointDto.serializer(),

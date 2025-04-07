@@ -10,9 +10,11 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import com.wini.owle.dll.DLL
+
 
 class AppliedTransformArgApi(
-    dll: AppliedTransformArgDll
+    dll: DLL<Long, AppliedTransformArgDto>
 ) : LongIdEndpointImpl<AppliedTransformArgDto>(
     dll = dll,
     serializer = AppliedTransformArgDto.serializer()

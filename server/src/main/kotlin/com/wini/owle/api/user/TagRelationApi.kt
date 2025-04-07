@@ -11,12 +11,14 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
+import com.wini.owle.dll.DLL
+import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TagRelationApi(
-    tagRelationDll: TagRelationDll
+    dll: DLL<CompositeID, TagRelationDto>
 ) : CompositeIdEndpointImpl<TagRelationDto>(
-    dll = tagRelationDll,
+    dll = dll,
     serializer = TagRelationDto.serializer(),
     compositeIdFactory = TagRelationIdFactory,
     validator = { _-> true }

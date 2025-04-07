@@ -2,6 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.dll.DLL
 import com.wini.owle.dll.workflows.PhaseDll
 import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.dto.workflows.WorkflowDto
@@ -14,7 +15,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.serializer
 
 class PhaseApi(
-    dll: PhaseDll
+    dll: DLL<Long, PhaseDto>
 ) : LongIdEndpointImpl<PhaseDto>(
     dll = dll,
     serializer = PhaseDto.serializer(),

@@ -1,26 +1,25 @@
 package com.wini.owle.api.user
 
+import com.wini.owle.api.BaseEndpointTest
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
+import com.wini.owle.dll.user.UserDll
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.UserDto
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 
 
 class UserApiTest : BaseLongPkApiTest<Long, UserDto, UserApi>() {
-    override val route: String
-        get() = TODO("Not yet implemented")
 
-    override fun getDto(): UserDto {
-        TODO("Not yet implemented")
-    }
+    override val route: String = "/api/user"
 
-    override val serializer: KSerializer<UserDto>
-        get() = TODO("Not yet implemented")
-    override val listSerializer: KSerializer<List<UserDto>>
-        get() = TODO("Not yet implemented")
+    override fun getDto(): UserDto = DtoTestInstanceFactory.userDto()
 
-    override fun getApiInstance(dll: DLL<Long, UserDto>): UserApi {
-        TODO("Not yet implemented")
-    }
+    override val serializer: KSerializer<UserDto> = UserDto.serializer()
+    
+    override val listSerializer: KSerializer<List<UserDto>> = ListSerializer(UserDto.serializer())
+
+    override fun getApiInstance(dll: DLL<Long, UserDto>): UserApi = UserApi(dll as UserDll)
 
 }

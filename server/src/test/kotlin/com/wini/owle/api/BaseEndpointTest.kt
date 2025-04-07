@@ -27,6 +27,7 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import kotlin.test.*
 
+
 abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
 
     private val json = Json { prettyPrint = false; encodeDefaults = true }

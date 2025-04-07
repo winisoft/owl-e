@@ -11,9 +11,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.dll.DLL
+
 
 class TypeSchemaRefApi(
-    dll: TypeSchemaRefDll
+    dll: DLL<Long, TypeSchemaRefDto>
 ) : LongIdEndpointImpl<TypeSchemaRefDto>(
     dll = dll,
     serializer = TypeSchemaRefDto.serializer(),

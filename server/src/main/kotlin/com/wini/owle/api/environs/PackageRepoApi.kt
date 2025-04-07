@@ -1,19 +1,14 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.environs.PackageRepoDll
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.environs.PackageRepoDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
+
 
 class PackageRepoApi(
-    dll: PackageRepoDll
+    dll: DLL<Long, PackageRepoDto>
 ): LongIdEndpointImpl<PackageRepoDto>(
     dll = dll,
     serializer = PackageRepoDto.serializer(),

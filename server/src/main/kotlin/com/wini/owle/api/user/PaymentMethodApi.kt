@@ -11,9 +11,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.dll.DLL
+
 
 class PaymentMethodApi(
-    dll: PaymentMethodDll
+    dll: DLL<Long, PaymentMethodDto>
 ) : LongIdEndpointImpl<PaymentMethodDto>(
     dll = dll,
     serializer = PaymentMethodDto.serializer(),

@@ -11,12 +11,14 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import com.wini.owle.dll.DLL
+import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TypeUnionMemberApi(
-    typeUnionMemberDll: TypeUnionMemberDll
+    dll: DLL<CompositeID, TypeUnionMemberDto>
 ) : CompositeIdEndpointImpl<TypeUnionMemberDto>(
-    dll = typeUnionMemberDll,
+    dll = dll,
     serializer = TypeUnionMemberDto.serializer(),
     compositeIdFactory = TypeUnionMemberIdFactory,
     validator = { _-> true }

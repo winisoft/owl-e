@@ -1,22 +1,15 @@
 package com.wini.owle.api.runs
 
 import com.wini.owle.api.CompositeIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.steps.ProvisionDataPointDll
 import com.wini.owle.dto.steps.ProvisionDataPointDto
-import com.wini.owle.mapper.CompositeIdFactory
 import com.wini.owle.mapper.ProvisionDataPointIdFactory
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
-
+import com.wini.owle.dll.DLL
+import org.jetbrains.exposed.dao.id.CompositeID
 
 class ProvisionDataPointApi(
-    dll: ProvisionDataPointDll
+    dll: DLL<CompositeID, ProvisionDataPointDto>
 ) : CompositeIdEndpointImpl<ProvisionDataPointDto>(
     dll = dll,
     serializer = ProvisionDataPointDto.serializer(),

@@ -1,18 +1,14 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.steps.PreReqInjectionDll
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.steps.PreReqInjectionDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
+
 
 class PreReqInjectionApi(
-    dll: PreReqInjectionDll
+    dll: DLL<Long, PreReqInjectionDto>
 ): LongIdEndpointImpl<PreReqInjectionDto>(
     dll = dll,
     serializer = PreReqInjectionDto.serializer()

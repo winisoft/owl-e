@@ -1,19 +1,14 @@
 package com.wini.owle.api.runs
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.runs.TestExpectedOutcomeDll
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.runs.TestExpectedOutcomeDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
+
 
 class TestExpectedOutcomeApi(
-    dll: TestExpectedOutcomeDll
+    dll: DLL<Long,TestExpectedOutcomeDto >
 ) : LongIdEndpointImpl<TestExpectedOutcomeDto>(
     dll = dll,
     serializer = TestExpectedOutcomeDto.serializer(),

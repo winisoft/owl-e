@@ -1,18 +1,13 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.steps.ErrorWatchFnDll
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.steps.ErrorWatchFnDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
 
 class ErrorWatchFnApi(
-    dll: ErrorWatchFnDll
+    dll: DLL<Long, ErrorWatchFnDto>
 ) : LongIdEndpointImpl<ErrorWatchFnDto>(
     dll = dll,
     serializer = ErrorWatchFnDto.serializer()

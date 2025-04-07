@@ -1,22 +1,17 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.CompositeIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.environs.ToolPackageDependencyDll
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.mapper.CompositeIdFactory
 import com.wini.owle.mapper.ToolPackageDependencyIdFactory
-import com.wini.owle.models.ToolPackageDependency
-import io.ktor.server.application.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class ToolPackageDependencyApi(
-    toolPackageDependencyDll: ToolPackageDependencyDll
+    dll: DLL<CompositeID, ToolPackageDependencyDto>
 ) : CompositeIdEndpointImpl<ToolPackageDependencyDto>(
-    dll = toolPackageDependencyDll,
+    dll = dll,
     serializer = ToolPackageDependencyDto.serializer(),
     compositeIdFactory = ToolPackageDependencyIdFactory,
     validator = { _-> true }

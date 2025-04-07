@@ -11,9 +11,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.dll.DLL
+
 
 class TypeVarianceApi(
-    dll: TypeVarianceDll
+    dll: DLL<Long, TypeVarianceDto>
 ) : LongIdEndpointImpl<TypeVarianceDto>(
     dll = dll,
     serializer = TypeVarianceDto.serializer(),

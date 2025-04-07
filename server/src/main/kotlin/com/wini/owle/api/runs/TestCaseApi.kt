@@ -1,26 +1,18 @@
 package com.wini.owle.api.runs
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.runs.TestCaseDll
 import com.wini.owle.dto.runs.TestCaseDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.dll.DLL
 
 class TestCaseApi(
-    dll: TestCaseDll
+    dll: DLL<Long, TestCaseDto>
 ) : LongIdEndpointImpl<TestCaseDto>(
     dll = dll,
     serializer = TestCaseDto.serializer(),
     validator = { _-> true}
 )  {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {

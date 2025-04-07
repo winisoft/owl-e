@@ -1,19 +1,14 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.workflows.StepDll
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
+
 
 class StepApi(
-    dll: StepDll
+    dll: DLL<Long, StepDto>
 ) : LongIdEndpointImpl<StepDto>(
     dll = dll,
     serializer = StepDto.serializer(),

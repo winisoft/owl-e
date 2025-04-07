@@ -1,19 +1,14 @@
 package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.dll.workflows.WorkflowFolderDll
-import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.WorkflowFolderDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
+
 
 class WorkflowFolderApi(
-    dll: WorkflowFolderDll
+    dll: DLL<Long, WorkflowFolderDto>
 ) : LongIdEndpointImpl<WorkflowFolderDto>(
     dll = dll,
     serializer = WorkflowFolderDto.serializer(),

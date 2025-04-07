@@ -10,9 +10,9 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
-
+import com.wini.owle.dll.DLL
 class ToolParamApi(
-    dll: ToolParamDll
+    dll: DLL<Long, ToolParamDto>
 ) : LongIdEndpointImpl<ToolParamDto>(
     dll = dll,
     serializer = ToolParamDto.serializer()

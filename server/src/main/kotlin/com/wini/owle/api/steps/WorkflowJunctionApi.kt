@@ -10,15 +10,15 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
+import com.wini.owle.dll.DLL
+
 
 class WorkflowJunctionApi(
-    dll: WorkflowJunctionDll
+    dll: DLL<Long, WorkflowJunctionDto>
 ) : LongIdEndpointImpl<WorkflowJunctionDto>(
     dll = dll,
     serializer = WorkflowJunctionDto.serializer()
 )  {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {

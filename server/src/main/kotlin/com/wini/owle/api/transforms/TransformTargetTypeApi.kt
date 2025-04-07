@@ -11,12 +11,15 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import com.wini.owle.dll.DLL
+import org.jetbrains.exposed.dao.id.CompositeID
+
 
 
 class TransformTargetTypeApi(
-    toolPackageDependencyDll: TransformTargetTypeDll
+    dll: DLL<CompositeID, TransformationTargetTypeDto>
 ) : CompositeIdEndpointImpl<TransformationTargetTypeDto>(
-    dll = toolPackageDependencyDll,
+    dll = dll,
     serializer = TransformationTargetTypeDto.serializer(),
     compositeIdFactory = TransformTargetTypeIdFactory,
     validator = { _-> true }
