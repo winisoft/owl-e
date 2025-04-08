@@ -7,8 +7,9 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class TestInputApi(
-    dll: DLL<Long, TestInputDto>
-) : LongIdEndpointImpl<TestInputDto>(
+    dll: DLL<Long, TestInputDto>,
+    validator: (TestInputDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TestInputDto>(
     dll = dll,
     serializer = TestInputDto.serializer()
 )  {
@@ -19,22 +20,22 @@ class TestInputApi(
                 call.asyncResultList(getAll())
             }
             get("/api/test-input/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/test-input") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/test-input/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/test-input") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/test-input/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/test-input/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/test-input/batch") {
                 call.asyncResultUnit(deleteBatch(call))

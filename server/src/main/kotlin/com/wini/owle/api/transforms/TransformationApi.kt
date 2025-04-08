@@ -8,13 +8,13 @@ import com.wini.owle.dll.DLL
 
 
 class TransformationApi(
-    dll: DLL<Long, TransformationDto>
-) : LongIdEndpointImpl<TransformationDto>(
+    dll: DLL<Long, TransformationDto>,
+    validator: (TransformationDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TransformationDto>(
     dll = dll,
-    serializer = TransformationDto.serializer()
+    serializer = TransformationDto.serializer(),
+    validator = validator
 )  {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {
@@ -22,22 +22,22 @@ class TransformationApi(
                 call.asyncResultList(getAll())
             }
             get("/api/transformation/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/transformation") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/transformation/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/transformation") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/transformation/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/transformation/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/transformation/batch") {
                 call.asyncResultUnit(deleteBatch(call))

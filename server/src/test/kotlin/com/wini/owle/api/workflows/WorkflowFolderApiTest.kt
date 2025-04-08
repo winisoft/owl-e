@@ -16,5 +16,8 @@ open class WorkflowFolderApiTest : BaseLongPkApiTest<WorkflowFolderDto, Workflow
     
     override val listSerializer: KSerializer<List<WorkflowFolderDto>> = ListSerializer(WorkflowFolderDto.serializer())
     
-    override fun getApiInstance(dll: DLL<Long, WorkflowFolderDto>): WorkflowFolderApi = WorkflowFolderApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, WorkflowFolderDto>,
+        validator: (WorkflowFolderDto) -> Boolean
+    ): WorkflowFolderApi = WorkflowFolderApi(dll, validator)
 }

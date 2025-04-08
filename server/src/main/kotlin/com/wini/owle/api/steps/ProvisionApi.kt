@@ -8,10 +8,12 @@ import io.ktor.server.routing.*
 
 
 class ProvisionApi(
-    dll: DLL<Long, ProvisionDto>
+    dll: DLL<Long, ProvisionDto>,
+    validator: (ProvisionDto) -> Boolean = { _-> true }
 ): LongIdEndpointImpl<ProvisionDto>(
     dll = dll,
-    serializer = ProvisionDto.serializer()
+    serializer = ProvisionDto.serializer(),
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -20,22 +22,22 @@ class ProvisionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/provision/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/provision") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/provision/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/provision") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/provision/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/provision/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/provision/batch") {
                 call.asyncResultUnit(deleteBatch(call))

@@ -8,11 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class TagApi(
-    dll: DLL<Long, TagDto>
-) : LongIdEndpointImpl<TagDto>(
+    dll: DLL<Long, TagDto>,
+    validator: (TagDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TagDto>(
     dll = dll,
     serializer = TagDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -21,22 +22,22 @@ class TagApi(
                 call.asyncResultList(getAll())
             }
             get("/api/tag/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/tag") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/tag/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/tag") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/tag/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/tag/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tag/batch") {
                 call.asyncResultUnit(deleteBatch(call))

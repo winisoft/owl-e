@@ -18,6 +18,9 @@ open class TypeVarianceApiTest : BaseLongPkApiTest<TypeVarianceDto, TypeVariance
     
     override val listSerializer: KSerializer<List<TypeVarianceDto>> = ListSerializer(TypeVarianceDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, TypeVarianceDto>): TypeVarianceApi = TypeVarianceApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, TypeVarianceDto>,
+        validator: (TypeVarianceDto) -> Boolean
+    ): TypeVarianceApi = TypeVarianceApi(dll, validator)
 
 }

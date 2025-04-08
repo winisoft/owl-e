@@ -8,10 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class WorkflowJunctionApi(
-    dll: DLL<Long, WorkflowJunctionDto>
-) : LongIdEndpointImpl<WorkflowJunctionDto>(
+    dll: DLL<Long, WorkflowJunctionDto>,
+    validator: (WorkflowJunctionDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<WorkflowJunctionDto>(
     dll = dll,
-    serializer = WorkflowJunctionDto.serializer()
+    serializer = WorkflowJunctionDto.serializer(),
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -20,22 +22,22 @@ class WorkflowJunctionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/workflow-junction/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/workflow-junction") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/workflow-junction/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/workflow-junction") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/workflow-junction/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/workflow-junction/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/workflow-junction/batch") {
                 call.asyncResultUnit(deleteBatch(call))

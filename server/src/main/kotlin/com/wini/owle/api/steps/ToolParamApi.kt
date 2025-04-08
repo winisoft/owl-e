@@ -6,36 +6,36 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 class ToolParamApi(
-    dll: DLL<Long, ToolParamDto>
-) : LongIdEndpointImpl<ToolParamDto>(
+    dll: DLL<Long, ToolParamDto>,
+    validator: (ToolParamDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<ToolParamDto>(
     dll = dll,
-    serializer = ToolParamDto.serializer()
+    serializer = ToolParamDto.serializer(),
+    validator = validator
 ) {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool-param") {
                 call.asyncResultList(getAll())
             }
             get("/api/tool-param/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/tool-param") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/tool-param/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/tool-param") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/tool-param/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/tool-param/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tool-param/batch") {
                 call.asyncResultUnit(deleteBatch(call))

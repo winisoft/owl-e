@@ -18,6 +18,9 @@ open class StepApiTest : BaseLongPkApiTest<StepDto, StepApi>() {
     
     override val listSerializer: KSerializer<List<StepDto>> = ListSerializer(StepDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, StepDto>): StepApi = StepApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, StepDto>,
+        validator: (StepDto) -> Boolean
+    ): StepApi = StepApi(dll, validator)
 
 }

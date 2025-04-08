@@ -18,6 +18,9 @@ open class TypeParameterApiTest : BaseLongPkApiTest<TypeParameterDto, TypeParame
     
     override val listSerializer: KSerializer<List<TypeParameterDto>> = ListSerializer(TypeParameterDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, TypeParameterDto>): TypeParameterApi = TypeParameterApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, TypeParameterDto>,
+        validator: (TypeParameterDto) -> Boolean
+    ): TypeParameterApi = TypeParameterApi(dll, validator)
 
 }

@@ -7,10 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 
 class ExecutionLogApi(
-    dll: DLL<Long, ExecutionLogDto>
-) : LongIdEndpointImpl<ExecutionLogDto>(
+    dll: DLL<Long, ExecutionLogDto>,
+    validator: (ExecutionLogDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<ExecutionLogDto>(
     dll = dll,
-    serializer = ExecutionLogDto.serializer()
+    serializer = ExecutionLogDto.serializer(),
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -19,22 +21,22 @@ class ExecutionLogApi(
                 call.asyncResultList(getAll())
             }
             get("/api/execution-log/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/execution-log") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/execution-log/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/execution-log") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/execution-log/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/execution-log/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/execution-log/batch") {
                 call.asyncResultUnit(deleteBatch(call))

@@ -18,6 +18,9 @@ open class PreReqInjectionApiTest : BaseLongPkApiTest<PreReqInjectionDto, PreReq
     
     override val listSerializer: KSerializer<List<PreReqInjectionDto>> = ListSerializer(PreReqInjectionDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, PreReqInjectionDto>): PreReqInjectionApi = PreReqInjectionApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, PreReqInjectionDto>,
+        validator: (PreReqInjectionDto) -> Boolean
+    ): PreReqInjectionApi = PreReqInjectionApi(dll, validator)
 
 }

@@ -12,12 +12,13 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TransformTargetTypeApi(
-    dll: DLL<CompositeID, TransformationTargetTypeDto>
-) : CompositeIdEndpointImpl<TransformationTargetTypeDto>(
+    dll: DLL<CompositeID, TransformationTargetTypeDto>,
+    validator: (TransformationTargetTypeDto) -> Boolean = { _-> true}
+): CompositeIdEndpointImpl<TransformationTargetTypeDto>(
     dll = dll,
     serializer = TransformationTargetTypeDto.serializer(),
     compositeIdFactory = TransformTargetTypeIdFactory,
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun ApplicationCall.readId(): CompositeID? {
@@ -30,22 +31,22 @@ class TransformTargetTypeApi(
                 call.asyncResultList(getAll())
             }
             get("/api/transform-target-type/id?transformationId={transformationId}&eligibleTypeDeclarationId={eligibleTypeDeclarationId}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/transform-target-type") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/transform-target-type/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/transform-target-type") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/transform-target-type/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/transform-target-type/id?transformationId={transformationId}&eligibleTypeDeclarationId={eligibleTypeDeclarationId}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/transform-target-type/batch") {
                 call.asyncResultUnit(deleteBatch(call))

@@ -8,10 +8,12 @@ import io.ktor.server.routing.*
 
 
 class PreReqInjectionApi(
-    dll: DLL<Long, PreReqInjectionDto>
+    dll: DLL<Long, PreReqInjectionDto>,
+    validator: (PreReqInjectionDto) -> Boolean = { _-> true}
 ): LongIdEndpointImpl<PreReqInjectionDto>(
     dll = dll,
-    serializer = PreReqInjectionDto.serializer()
+    serializer = PreReqInjectionDto.serializer(),
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -20,22 +22,22 @@ class PreReqInjectionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/prereq-injection/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/prereq-injection") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/prereq-injection/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/prereq-injection") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/prereq-injection/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/prereq-injection/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/prereq-injection/batch") {
                 call.asyncResultUnit(deleteBatch(call))

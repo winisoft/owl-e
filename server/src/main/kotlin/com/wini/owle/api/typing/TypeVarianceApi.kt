@@ -8,37 +8,36 @@ import com.wini.owle.dll.DLL
 
 
 class TypeVarianceApi(
-    dll: DLL<Long, TypeVarianceDto>
-) : LongIdEndpointImpl<TypeVarianceDto>(
+    dll: DLL<Long, TypeVarianceDto>,
+    validator: (TypeVarianceDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TypeVarianceDto>(
     dll = dll,
     serializer = TypeVarianceDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-variance") {
                 call.asyncResultList(getAll())
             }
             get("/api/type-variance/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/type-variance") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/type-variance/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/type-variance") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/type-variance/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/type-variance/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-variance/batch") {
                 call.asyncResultUnit(deleteBatch(call))

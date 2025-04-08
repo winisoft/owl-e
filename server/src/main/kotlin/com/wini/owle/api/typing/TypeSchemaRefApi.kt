@@ -8,11 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class TypeSchemaRefApi(
-    dll: DLL<Long, TypeSchemaRefDto>
-) : LongIdEndpointImpl<TypeSchemaRefDto>(
+    dll: DLL<Long, TypeSchemaRefDto>,
+    validator: (TypeSchemaRefDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TypeSchemaRefDto>(
     dll = dll,
     serializer = TypeSchemaRefDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
 
@@ -23,22 +24,22 @@ class TypeSchemaRefApi(
                 call.asyncResultList(getAll())
             }
             get("/api/type-schema-ref/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/type-schema-ref") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/type-schema-ref/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/type-schema-ref") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/type-schema-ref/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/type-schema-ref/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-schema-ref/batch") {
                 call.asyncResultUnit(deleteBatch(call))

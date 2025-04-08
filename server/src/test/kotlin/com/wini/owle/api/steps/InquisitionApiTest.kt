@@ -18,6 +18,9 @@ open class InquisitionApiTest : BaseLongPkApiTest<InquisitionDto, InquisitionApi
     
     override val listSerializer: KSerializer<List<InquisitionDto>> = ListSerializer(InquisitionDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, InquisitionDto>): InquisitionApi = InquisitionApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, InquisitionDto>,
+        validator: (InquisitionDto) -> Boolean
+    ): InquisitionApi = InquisitionApi(dll, validator)
 
 }

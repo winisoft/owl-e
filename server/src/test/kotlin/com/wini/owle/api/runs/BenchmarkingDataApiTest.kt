@@ -18,6 +18,9 @@ open class BenchmarkingDataApiTest : BaseLongPkApiTest<BenchmarkingDataDto, Benc
     
     override val listSerializer: KSerializer<List<BenchmarkingDataDto>> = ListSerializer(BenchmarkingDataDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, BenchmarkingDataDto>): BenchmarkingDataApi = BenchmarkingDataApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, BenchmarkingDataDto>,
+        validator: (BenchmarkingDataDto) -> Boolean
+    ): BenchmarkingDataApi = BenchmarkingDataApi(dll, validator)
 
 }

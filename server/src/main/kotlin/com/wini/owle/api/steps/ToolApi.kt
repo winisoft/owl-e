@@ -7,13 +7,13 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class ToolApi(
-    dll: DLL<Long, ToolDto>
-) : LongIdEndpointImpl<ToolDto>(
+    dll: DLL<Long, ToolDto>,
+    validator: (ToolDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<ToolDto>(
     dll = dll,
-    serializer = ToolDto.serializer()
+    serializer = ToolDto.serializer(),
+    validator = validator
 ) {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {
@@ -21,22 +21,22 @@ class ToolApi(
                 call.asyncResultList(getAll())
             }
             get("/api/tool/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/tool") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/tool/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/tool") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/tool/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/tool/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tool/batch") {
                 call.asyncResultUnit(deleteBatch(call))

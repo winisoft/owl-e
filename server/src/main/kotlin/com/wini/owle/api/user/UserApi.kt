@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class UserApi(
-    dll: DLL<Long, UserDto>
-) : LongIdEndpointImpl<UserDto>(
+    dll: DLL<Long, UserDto>,
+    validator: (UserDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<UserDto>(
     dll = dll,
     serializer = UserDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -20,22 +21,22 @@ class UserApi(
                 call.asyncResultList(getAll())
             }
             get("/api/user/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/user") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/user/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/user") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/user/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/user/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/user/batch") {
                 call.asyncResultUnit(deleteBatch(call))

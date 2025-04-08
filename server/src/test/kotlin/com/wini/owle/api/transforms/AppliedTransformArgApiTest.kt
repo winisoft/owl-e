@@ -18,6 +18,9 @@ open class AppliedTransformArgApiTest : BaseLongPkApiTest<AppliedTransformArgDto
     
     override val listSerializer: KSerializer<List<AppliedTransformArgDto>> = ListSerializer(AppliedTransformArgDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, AppliedTransformArgDto>): AppliedTransformArgApi = AppliedTransformArgApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, AppliedTransformArgDto>,
+        validator: (AppliedTransformArgDto) -> Boolean
+    ): AppliedTransformArgApi = AppliedTransformArgApi(dll, validator)
 
 }

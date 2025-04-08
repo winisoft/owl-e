@@ -22,21 +22,21 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
     dtoListSerializer = ListSerializer(serializer)
 ) {
 
-    suspend fun deleteBatch(call: ApplicationCall): AsyncResult<*> {
-        return Json.decodeFromString<List<Long>>(call.receiveText())
-            .run(dll::deleteAll)
-    }
-
-    fun getById(call: ApplicationCall): AsyncResult<T> {
-        return call.readId()
+    fun ApplicationCall.getById(): AsyncResult<T> {
+        return readId()
             .let { it ?: return AsyncError.ApiRequest.LongIdInvalid.asFailure() }
             .run(dll::getById)
     }
 
-    fun delete(call: ApplicationCall): AsyncResult<*> {
-        return call.readId()
+    fun ApplicationCall.delete(): AsyncResult<*> {
+        return readId()
             .let { it ?: return AsyncError.ApiRequest.LongIdInvalid.asFailure() }
             .run(dll::delete)
+    }
+
+    suspend fun ApplicationCall.deleteBatch(): AsyncResult<*> {
+        return Json.decodeFromString<List<Long>>(receiveText())
+            .run(dll::deleteAll)
     }
 
     private fun ApplicationCall.readId(): Long? = parameters["id"]?.toLongOrNull()

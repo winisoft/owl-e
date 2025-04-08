@@ -18,6 +18,9 @@ open class ToolParamApiTest : BaseLongPkApiTest<ToolParamDto, ToolParamApi>() {
     
     override val listSerializer: KSerializer<List<ToolParamDto>> = ListSerializer(ToolParamDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, ToolParamDto>): ToolParamApi = ToolParamApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, ToolParamDto>,
+        validator: (ToolParamDto) -> Boolean
+    ): ToolParamApi = ToolParamApi(dll, validator)
 
 }

@@ -8,11 +8,12 @@ import io.ktor.server.routing.*
 
 
 class WorkflowFolderApi(
-    dll: DLL<Long, WorkflowFolderDto>
-) : LongIdEndpointImpl<WorkflowFolderDto>(
+    dll: DLL<Long, WorkflowFolderDto>,
+    validator: (WorkflowFolderDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<WorkflowFolderDto>(
     dll = dll,
     serializer = WorkflowFolderDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -21,22 +22,22 @@ class WorkflowFolderApi(
                 call.asyncResultList(getAll())
             }
             get("/api/workflow-folder/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/workflow-folder") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/workflow-folder/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/workflow-folder") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/workflow-folder/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/workflow-folder/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/workflow-folder/batch") {
                 call.asyncResultUnit(deleteBatch(call))

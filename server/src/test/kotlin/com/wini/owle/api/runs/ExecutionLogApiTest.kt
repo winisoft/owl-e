@@ -18,6 +18,9 @@ open class ExecutionLogApiTest : BaseLongPkApiTest<ExecutionLogDto, ExecutionLog
     
     override val listSerializer: KSerializer<List<ExecutionLogDto>> = ListSerializer(ExecutionLogDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, ExecutionLogDto>): ExecutionLogApi = ExecutionLogApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, ExecutionLogDto>,
+        validator: (ExecutionLogDto) -> Boolean
+    ): ExecutionLogApi = ExecutionLogApi(dll, validator)
 
 }

@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class DataPointsApi(
-    dll: DLL<Long, DataPointDto>
-) : LongIdEndpointImpl<DataPointDto>(
+    dll: DLL<Long, DataPointDto>,
+    validator: (DataPointDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<DataPointDto>(
     dll = dll,
     serializer = DataPointDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -20,22 +21,22 @@ class DataPointsApi(
                 call.asyncResultList(getAll())
             }
             get("/api/data-points/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/data-points") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/data-points/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/data-points") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/data-points/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/data-points/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/data-points/batch") {
                 call.asyncResultUnit(deleteBatch(call))

@@ -8,10 +8,12 @@ import io.ktor.server.routing.*
 
 
 class InquisitionApi(
-    dll: DLL<Long, InquisitionDto>
-) : LongIdEndpointImpl<InquisitionDto>(
+    dll: DLL<Long, InquisitionDto>,
+    validator: (InquisitionDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<InquisitionDto>(
     dll = dll,
-    serializer = InquisitionDto.serializer()
+    serializer = InquisitionDto.serializer(),
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -20,22 +22,22 @@ class InquisitionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/inquisition/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/inquisition") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/inquisition/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/inquisition") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/inquisition/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/inquisition/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/inquisition/batch") {
                 call.asyncResultUnit(deleteBatch(call))

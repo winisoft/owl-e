@@ -11,12 +11,13 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TypeUnionMemberApi(
-    dll: DLL<CompositeID, TypeUnionMemberDto>
-) : CompositeIdEndpointImpl<TypeUnionMemberDto>(
+    dll: DLL<CompositeID, TypeUnionMemberDto>,
+    validator: (TypeUnionMemberDto) -> Boolean = { _-> true}
+): CompositeIdEndpointImpl<TypeUnionMemberDto>(
     dll = dll,
     serializer = TypeUnionMemberDto.serializer(),
     compositeIdFactory = TypeUnionMemberIdFactory,
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun ApplicationCall.readId(): CompositeID? {
@@ -29,22 +30,22 @@ class TypeUnionMemberApi(
                 call.asyncResultList(getAll())
             }
             get("/api/type-union-member/id?unionTypeDeclarationId={unionTypeDeclarationId}&memberTypeDeclarationId={memberTypeDeclarationId}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/type-union-member") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/type-union-member/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/type-union-member") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/type-union-member/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/type-union-member/id?transformationId={transformationId}&eligibleTypeDeclarationId={eligibleTypeDeclarationId}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-union-member/batch") {
                 call.asyncResultUnit(deleteBatch(call))

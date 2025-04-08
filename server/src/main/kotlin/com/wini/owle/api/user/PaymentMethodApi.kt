@@ -8,11 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class PaymentMethodApi(
-    dll: DLL<Long, PaymentMethodDto>
-) : LongIdEndpointImpl<PaymentMethodDto>(
+    dll: DLL<Long, PaymentMethodDto>,
+    validator: (PaymentMethodDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<PaymentMethodDto>(
     dll = dll,
     serializer = PaymentMethodDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -21,22 +22,22 @@ class PaymentMethodApi(
                 call.asyncResultList(getAll())
             }
             get("/api/payment-method/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/payment-method") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/payment-method/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/payment-method") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/payment-method/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/payment-method/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/payment-method/batch") {
                 call.asyncResultUnit(deleteBatch(call))

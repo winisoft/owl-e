@@ -8,36 +8,36 @@ import io.ktor.server.routing.*
 
 
 class ErrorWatchApi(
-    dll: DLL<Long, ErrorWatchDto>
-) : LongIdEndpointImpl<ErrorWatchDto>(
+    dll: DLL<Long, ErrorWatchDto>,
+    validator: (ErrorWatchDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<ErrorWatchDto>(
     dll = dll,
-    serializer = ErrorWatchDto.serializer()
+    serializer = ErrorWatchDto.serializer(),
+    validator = validator
 )  {
 
-
-    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/error-watch") {
                 call.asyncResultList(getAll())
             }
             get("/api/error-watch/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/error-watch") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/error-watch/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/error-watch") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/error-watch/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/error-watch/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/error-watch/batch") {
                 call.asyncResultUnit(deleteBatch(call))

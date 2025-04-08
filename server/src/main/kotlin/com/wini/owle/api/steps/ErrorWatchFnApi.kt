@@ -7,13 +7,13 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class ErrorWatchFnApi(
-    dll: DLL<Long, ErrorWatchFnDto>
-) : LongIdEndpointImpl<ErrorWatchFnDto>(
+    dll: DLL<Long, ErrorWatchFnDto>,
+    validator: (ErrorWatchFnDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<ErrorWatchFnDto>(
     dll = dll,
-    serializer = ErrorWatchFnDto.serializer()
+    serializer = ErrorWatchFnDto.serializer(),
+    validator = validator
 )  {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {
@@ -21,22 +21,22 @@ class ErrorWatchFnApi(
                 call.asyncResultList(getAll())
             }
             get("api/error-watch-fn/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("api/error-watch-fn") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("api/error-watch-fn/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("api/error-watch-fn") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("api/error-watch-fn/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("api/error-watch-fn/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("api/error-watch-fn/batch") {
                 call.asyncResultUnit(deleteBatch(call))

@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/runs/TestInputApiTest.kt
 package com.wini.owle.api.runs
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -17,5 +16,8 @@ open class TestInputApiTest : BaseLongPkApiTest<TestInputDto, TestInputApi>() {
     
     override val listSerializer: KSerializer<List<TestInputDto>> = ListSerializer(TestInputDto.serializer())
     
-    override fun getApiInstance(dll: DLL<Long, TestInputDto>): TestInputApi = TestInputApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, TestInputDto>,
+        validator: (TestInputDto) -> Boolean
+    ): TestInputApi = TestInputApi(dll, validator)
 }

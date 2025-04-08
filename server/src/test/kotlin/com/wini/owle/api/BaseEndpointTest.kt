@@ -22,23 +22,24 @@ import org.junit.jupiter.api.Test
 
 abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
 
-    private val json = Json { prettyPrint = false; encodeDefaults = true }
+    protected val json = Json { prettyPrint = false; encodeDefaults = true }
 
-    private fun setupTestApp(
+    protected fun setupTestApp(
         dll: DLL<ID, T>,
+        validator: (T) -> Boolean = { _-> true },
         testBlock: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {
         application {
             install(ContentNegotiation) { json(json) }
             routing {
-                getApiInstance(dll).register(this)
+                getApiInstance(dll, validator).register(this)
             }
         }
         testBlock()
     }
 
     abstract val route: String
-    abstract fun getApiInstance(dll: DLL<ID, T>): R
+    abstract fun getApiInstance(dll: DLL<ID, T>, validator: (T) -> Boolean): R
     abstract fun getDto(): T
     abstract val serializer: KSerializer<T>
     abstract val listSerializer: KSerializer<List<T>>
@@ -78,4 +79,136 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertEquals(dtoList, json.decodeFromString(listSerializer, response.bodyAsText()))
         }
     }
+
+    @Test
+    fun `PUT update - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
+        val inputDto: T = getDto()
+        val dll = mockk<DLL<ID, T>> {
+            coEvery { update(inputDto) } returns AsyncResult.Success(inputDto)
+        }
+
+        setupTestApp(dll) {
+            val response = client.put(route) {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(serializer, inputDto))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+            Assertions.assertEquals(inputDto, json.decodeFromString(serializer, response.bodyAsText()))
+        }
+    }
+
+    @Test
+    fun `POST create batch - on success - returns HTTP Code 201, serialized list of DTO return val`() = runBlocking {
+        val dtoList = listOf(getDto(), getDto())
+        val dll = mockk<DLL<ID, T>> {
+            coEvery { createAll(dtoList) } returns AsyncResult.Success(dtoList)
+        }
+
+        setupTestApp(dll) {
+            val response = client.post("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(listSerializer, dtoList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.Created, response.status)
+            Assertions.assertEquals(dtoList, json.decodeFromString(listSerializer, response.bodyAsText()))
+        }
+    }
+
+    @Test
+    fun `PUT update batch - on success - returns HTTP Code 200, serialized list of DTO return val`() = runBlocking {
+        val dtoList = listOf(getDto(), getDto())
+        val dll = mockk<DLL<ID, T>> {
+            coEvery { updateAll(dtoList) } returns AsyncResult.Success(dtoList)
+        }
+
+        setupTestApp(dll) {
+            val response = client.put("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(listSerializer, dtoList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+            Assertions.assertEquals(dtoList, json.decodeFromString(listSerializer, response.bodyAsText()))
+        }
+    }
+
+    @Test
+    fun `POST create - on validation failure - returns HTTP Code 400, DtoConstraintError`() = runBlocking {
+        val inputDto: T = getDto()
+        val dll = mockk<DLL<ID, T>>()
+        val validator: (T) -> Boolean = { _-> false }
+        val apiInstance = getApiInstance(dll, validator)
+
+        testApplication {
+            application {
+                install(ContentNegotiation) { json(json) }
+                routing {
+                    apiInstance.register(this)
+                }
+            }
+            
+            val response = client.post(route) {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(serializer, inputDto))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("DtoConstraintError"))
+        }
+    }
+
+    @Test
+    fun `POST create - on serialization error - returns HTTP Code 400, SerializationError`() = runBlocking {
+        val dll = mockk<DLL<ID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.post(route) {
+                contentType(ContentType.Application.Json)
+                setBody("{ invalid json }")
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("SerializationError"))
+        }
+    }
+
+
+//    @Test
+//    fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
+//        val id = "non-existent-id" as ID
+//        val dll = mockk<DLL<ID, T>> {
+//            coEvery { getById(id) } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+//        }
+//
+//        setupTestApp(dll) {
+//            val response = client.get("$route/$id") {
+//                contentType(ContentType.Application.Json)
+//            }
+//
+//            Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
+//            val responseText = response.bodyAsText()
+//            Assertions.assertTrue(responseText.contains("NoSuchIdError"))
+//        }
+//    }
+
+//    @Test
+//    fun `DELETE by id - on success - returns HTTP Code 200, Unit`() = runBlocking {
+//        val id = "test-id" as ID
+//        val dll = mockk<DLL<ID, T>> {
+//            coEvery { deleteById(id) } returns AsyncResult.Success(Unit)
+//        }
+//
+//        setupTestApp(dll) {
+//            val response = client.delete("$route/$id") {
+//                contentType(ContentType.Application.Json)
+//            }
+//
+//            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+//        }
+//    }
+
 }

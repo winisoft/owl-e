@@ -18,6 +18,9 @@ open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRefDto, TypeSchema
     
     override val listSerializer: KSerializer<List<TypeSchemaRefDto>> = ListSerializer(TypeSchemaRefDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, TypeSchemaRefDto>): TypeSchemaRefApi = TypeSchemaRefApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, TypeSchemaRefDto>,
+        validator: (TypeSchemaRefDto) -> Boolean
+    ): TypeSchemaRefApi = TypeSchemaRefApi(dll, validator)
 
 }

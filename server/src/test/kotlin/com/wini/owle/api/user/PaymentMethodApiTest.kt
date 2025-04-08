@@ -16,5 +16,8 @@ open class PaymentMethodApiTest : BaseLongPkApiTest<PaymentMethodDto, PaymentMet
     
     override val listSerializer: KSerializer<List<PaymentMethodDto>> = ListSerializer(PaymentMethodDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, PaymentMethodDto>): PaymentMethodApi = PaymentMethodApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, PaymentMethodDto>,
+        validator: (PaymentMethodDto) -> Boolean
+    ): PaymentMethodApi = PaymentMethodApi(dll, validator)
 }

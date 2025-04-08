@@ -11,12 +11,13 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TagRelationApi(
-    dll: DLL<CompositeID, TagRelationDto>
-) : CompositeIdEndpointImpl<TagRelationDto>(
+    dll: DLL<CompositeID, TagRelationDto>,
+    validator: (TagRelationDto) -> Boolean = { _-> true}
+): CompositeIdEndpointImpl<TagRelationDto>(
     dll = dll,
     serializer = TagRelationDto.serializer(),
     compositeIdFactory = TagRelationIdFactory,
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun ApplicationCall.readId(): CompositeID? {
@@ -29,22 +30,22 @@ class TagRelationApi(
                 call.asyncResultList(getAll())
             }
             get("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/tag-relation") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/tag-relation/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/tag-relation") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/tag-relation/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tag-relation/batch") {
                 call.asyncResultUnit(deleteBatch(call))

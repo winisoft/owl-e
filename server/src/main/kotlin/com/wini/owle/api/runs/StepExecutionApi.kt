@@ -8,11 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class StepExecutionApi(
-    dll: DLL<Long, StepExecutionDto>
-) : LongIdEndpointImpl<StepExecutionDto>(
+    dll: DLL<Long, StepExecutionDto>,
+    validator: (StepExecutionDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<StepExecutionDto>(
     dll = dll,
     serializer = StepExecutionDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -21,22 +22,22 @@ class StepExecutionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/step-execution/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/step-execution") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/step-execution/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/step-execution") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/step-execution/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/step-execution/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/step-execution/batch") {
                 call.asyncResultUnit(deleteBatch(call))

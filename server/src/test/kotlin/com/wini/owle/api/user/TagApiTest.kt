@@ -16,5 +16,8 @@ open class TagApiTest : BaseLongPkApiTest<TagDto, TagApi>() {
     
     override val listSerializer: KSerializer<List<TagDto>> = ListSerializer(TagDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, TagDto>): TagApi = TagApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, TagDto>,
+        validator: (TagDto) -> Boolean
+    ): TagApi = TagApi(dll, validator)
 }

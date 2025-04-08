@@ -60,41 +60,37 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         }
     }
 
-    suspend fun create(
-        call: ApplicationCall,
+    suspend fun ApplicationCall.create(
         validator: (T) -> Boolean = { true }
     ): AsyncResult<T> {
-        return call.receiveObjectSafely(dtoSerializer)
+        return receiveObjectSafely(dtoSerializer)
             .let { it ?: return AsyncError.ApiRequest.SerializationError.asFailure() }
             .run { takeIf(validator) ?: return AsyncError.ApiRequest.DtoConstraintError.asFailure() }
             .run(dll::create)
     }
 
-    suspend fun createBatch(
-        call: ApplicationCall,
+    suspend fun ApplicationCall.createBatch(
         validator: (T) -> Boolean = { true }
     ): AsyncResult<List<T>> {
-        return call.receiveObjectListSafely(dtoSerializer)
+        return receiveObjectListSafely(dtoSerializer)
             .let { it ?: return AsyncError.ApiRequest.SerializationError.asFailure() }
             .run { takeIf { all(validator) } ?: return AsyncError.ApiRequest.SerializationError.asFailure() }
             .run(dll::createAll)
     }
 
-    suspend fun update(
-        call: ApplicationCall,
+    suspend fun ApplicationCall.update(
         validator: (T) -> Boolean = { true }
     ): AsyncResult<T> {
-        return call.receiveObjectSafely(dtoSerializer)
+        return receiveObjectSafely(dtoSerializer)
             .let { it ?: return AsyncError.ApiRequest.SerializationError.asFailure() }
             .run { takeIf(validator) ?: return AsyncError.ApiRequest.DtoConstraintError.asFailure() }
             .run(dll::update)
     }
 
-    suspend fun updateBatch(
-        call: ApplicationCall,
+    suspend fun ApplicationCall.updateBatch(
         validator: (T) -> Boolean = { true }
     ): AsyncResult<List<T>> {
-        return call.receiveObjectListSafely(dtoSerializer)
+        return receiveObjectListSafely(dtoSerializer)
             .let { it ?: return AsyncError.ApiRequest.SerializationError.asFailure() }
             .run { takeIf { all(validator) } ?: return AsyncError.ApiRequest.SerializationError.asFailure() }
             .run(dll::updateAll)

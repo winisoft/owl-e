@@ -7,11 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 
 class TestCaseApi(
-    dll: DLL<Long, TestCaseDto>
-) : LongIdEndpointImpl<TestCaseDto>(
+    dll: DLL<Long, TestCaseDto>,
+    validator: (TestCaseDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TestCaseDto>(
     dll = dll,
     serializer = TestCaseDto.serializer(),
-    validator = { _-> true}
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -20,22 +21,22 @@ class TestCaseApi(
                 call.asyncResultList(getAll())
             }
             get("/api/test-case/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/test-case") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/test-case/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/test-case") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/test-case/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/test-case/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/test-case/batch") {
                 call.asyncResultUnit(deleteBatch(call))

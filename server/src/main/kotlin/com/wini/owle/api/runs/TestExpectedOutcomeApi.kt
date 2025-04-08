@@ -8,11 +8,12 @@ import io.ktor.server.routing.*
 
 
 class TestExpectedOutcomeApi(
-    dll: DLL<Long,TestExpectedOutcomeDto >
+    dll: DLL<Long,TestExpectedOutcomeDto>,
+    validator: (TestExpectedOutcomeDto) -> Boolean = { _-> true }
 ) : LongIdEndpointImpl<TestExpectedOutcomeDto>(
     dll = dll,
     serializer = TestExpectedOutcomeDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
 
 
@@ -23,22 +24,22 @@ class TestExpectedOutcomeApi(
                 call.asyncResultList(getAll())
             }
             get("/api/test-expected-outcome/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/test-expected-outcome") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/test-expected-outcome/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/test-expected-outcome") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/test-expected-outcome/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/test-expected-outcome/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/test-expected-outcome/batch") {
                 call.asyncResultUnit(deleteBatch(call))

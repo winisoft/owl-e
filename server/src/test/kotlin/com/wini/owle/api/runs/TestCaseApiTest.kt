@@ -18,6 +18,9 @@ open class TestCaseApiTest : BaseLongPkApiTest<TestCaseDto, TestCaseApi>() {
     
     override val listSerializer: KSerializer<List<TestCaseDto>> = ListSerializer(TestCaseDto.serializer())
     
-    override fun getApiInstance(dll: DLL<Long, TestCaseDto>): TestCaseApi = TestCaseApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, TestCaseDto>,
+        validator: (TestCaseDto) -> Boolean
+    ): TestCaseApi = TestCaseApi(dll, validator)
 
 }

@@ -18,6 +18,9 @@ open class WorkflowJunctionApiTest : BaseLongPkApiTest<WorkflowJunctionDto, Work
     
     override val listSerializer: KSerializer<List<WorkflowJunctionDto>> = ListSerializer(WorkflowJunctionDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, WorkflowJunctionDto>): WorkflowJunctionApi = WorkflowJunctionApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, WorkflowJunctionDto>,
+        validator: (WorkflowJunctionDto) -> Boolean
+    ): WorkflowJunctionApi = WorkflowJunctionApi(dll, validator)
 
 }

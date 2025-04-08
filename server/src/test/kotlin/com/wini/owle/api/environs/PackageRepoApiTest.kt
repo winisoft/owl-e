@@ -18,6 +18,9 @@ open class PackageRepoApiTest : BaseLongPkApiTest<PackageRepoDto, PackageRepoApi
     
     override val listSerializer: KSerializer<List<PackageRepoDto>> = ListSerializer(PackageRepoDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, PackageRepoDto>): PackageRepoApi = PackageRepoApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, PackageRepoDto>,
+        validator: (PackageRepoDto) -> Boolean
+    ): PackageRepoApi = PackageRepoApi(dll, validator)
 
 }

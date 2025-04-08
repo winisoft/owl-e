@@ -12,7 +12,10 @@ open class WorkflowApiTest: BaseLongPkApiTest<WorkflowDto, WorkflowApi>() {
 
     override val route: String = "/api/workflow"
 
-    override fun getApiInstance(dll: DLL<Long, WorkflowDto>): WorkflowApi = WorkflowApi(dll = dll)
+    override fun getApiInstance(
+        dll: DLL<Long, WorkflowDto>,
+        validator: (WorkflowDto) -> Boolean
+    ): WorkflowApi = WorkflowApi(dll = dll)
 
     override fun getDto(): WorkflowDto = DtoTestInstanceFactory.workflowDto()
 

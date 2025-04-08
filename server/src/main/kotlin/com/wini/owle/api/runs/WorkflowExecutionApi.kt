@@ -7,10 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class WorkflowExecutionApi(
-    dll: DLL<Long, WorkflowExecutionDto>
-) : LongIdEndpointImpl<WorkflowExecutionDto>(
+    dll: DLL<Long, WorkflowExecutionDto>,
+    validator: (WorkflowExecutionDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<WorkflowExecutionDto>(
     dll = dll,
-    serializer = WorkflowExecutionDto.serializer()
+    serializer = WorkflowExecutionDto.serializer(),
+    validator = validator
 )  {
 
     //"") { getAll(context.request.call) }
@@ -20,22 +22,22 @@ class WorkflowExecutionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/workflow-execution/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/workflow-execution") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/workflow-execution/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/workflow-execution") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/workflow-execution/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/workflow-execution/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/workflow-execution/batch") {
                 call.asyncResultUnit(deleteBatch(call))

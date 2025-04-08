@@ -8,14 +8,13 @@ import io.ktor.server.routing.*
 
 
 class TypeBoundsApi(
-    dll: DLL<Long, TypeBoundsDto>
-) : LongIdEndpointImpl<TypeBoundsDto>(
+    dll: DLL<Long, TypeBoundsDto>,
+    validator: (TypeBoundsDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TypeBoundsDto>(
     dll = dll,
     serializer = TypeBoundsDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {
@@ -23,22 +22,22 @@ class TypeBoundsApi(
                 call.asyncResultList(getAll())
             }
             get("/api/type-bounds/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/type-bounds") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/type-bounds/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/type-bounds") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/type-bounds/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/type-bounds/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-bounds/batch") {
                 call.asyncResultUnit(deleteBatch(call))

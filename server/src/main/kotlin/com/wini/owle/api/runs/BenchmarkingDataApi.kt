@@ -8,11 +8,12 @@ import io.ktor.server.routing.*
 
 
 class BenchmarkingDataApi(
-    dll: DLL<Long, BenchmarkingDataDto>
-) : LongIdEndpointImpl<BenchmarkingDataDto>(
+    dll: DLL<Long, BenchmarkingDataDto>,
+    validator: (BenchmarkingDataDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<BenchmarkingDataDto>(
     dll = dll,
     serializer = BenchmarkingDataDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -21,22 +22,22 @@ class BenchmarkingDataApi(
                 call.asyncResultList(getAll())
             }
             get("/api/benchmarking-data/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/benchmarking-data") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/benchmarking-data/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/benchmarking-data") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/benchmarking-data/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/benchmarking-data/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/benchmarking-data/batch") {
                 call.asyncResultUnit(deleteBatch(call))

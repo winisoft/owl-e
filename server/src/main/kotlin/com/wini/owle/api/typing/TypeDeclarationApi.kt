@@ -8,14 +8,13 @@ import com.wini.owle.dll.DLL
 
 
 class TypeDeclarationApi(
-    dll: DLL<Long, TypeDeclarationDto>
-) : LongIdEndpointImpl<TypeDeclarationDto>(
+    dll: DLL<Long, TypeDeclarationDto>,
+    validator: (TypeDeclarationDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TypeDeclarationDto>(
     dll = dll,
     serializer = TypeDeclarationDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {
@@ -23,22 +22,22 @@ class TypeDeclarationApi(
                 call.asyncResultList(getAll())
             }
             get("/api/type-declaration/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/type-declaration") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/type-declaration/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/type-declaration") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/type-declaration/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/type-declaration/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-declaration/batch") {
                 call.asyncResultUnit(deleteBatch(call))

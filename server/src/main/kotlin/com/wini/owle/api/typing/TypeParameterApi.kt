@@ -8,11 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class TypeParameterApi(
-    dll: DLL<Long, TypeParameterDto>
-) : LongIdEndpointImpl<TypeParameterDto>(
+    dll: DLL<Long, TypeParameterDto>,
+    validator: (TypeParameterDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<TypeParameterDto>(
     dll = dll,
     serializer = TypeParameterDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -21,22 +22,22 @@ class TypeParameterApi(
                 call.asyncResultList(getAll())
             }
             get("/api/type-parameter/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/type-parameter") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/type-parameter/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/type-parameter") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/type-parameter/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/type-parameter/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-parameter/batch") {
                 call.asyncResultUnit(deleteBatch(call))

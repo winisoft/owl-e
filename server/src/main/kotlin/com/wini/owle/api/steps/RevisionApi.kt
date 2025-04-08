@@ -8,11 +8,12 @@ import io.ktor.server.routing.*
 
 
 class RevisionApi(
-    dll: DLL<Long, RevisionDto>
+    dll: DLL<Long, RevisionDto>,
+    validator: (RevisionDto) -> Boolean = { _-> true }
 ): LongIdEndpointImpl<RevisionDto>(
     dll = dll,
     serializer = RevisionDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
 
@@ -23,22 +24,22 @@ class RevisionApi(
                 call.asyncResultList(getAll())
             }
             get("/api/revision/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/revision") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/revision/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/revision") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/revision/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/revision/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/revision/batch") {
                 call.asyncResultUnit(deleteBatch(call))

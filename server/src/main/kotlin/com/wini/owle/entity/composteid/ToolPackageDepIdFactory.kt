@@ -6,6 +6,7 @@ import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 
+
 object ToolPackageDepIdFactory : CompositeIdFactoryImpl<ToolPackageDependencyDto>() {
 
     override fun fromDtoInstance(dto: ToolPackageDependencyDto): CompositeID {

@@ -8,11 +8,12 @@ import io.ktor.server.routing.*
 
 
 class PackageApi(
-    dll: DLL<Long, PackageDto>
+    dll: DLL<Long, PackageDto>,
+    validator: (PackageDto) -> Boolean = { _-> true}
 ): LongIdEndpointImpl<PackageDto>(
     dll = dll,
     serializer = PackageDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -21,25 +22,25 @@ class PackageApi(
                 call.asyncResultList(getAll())
             }
             get("/api/package/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/package") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/package/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/package") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/package/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/package/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/package/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) } 
             }
         }
     }

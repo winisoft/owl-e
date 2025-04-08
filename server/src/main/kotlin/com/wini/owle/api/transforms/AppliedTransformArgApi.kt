@@ -8,10 +8,12 @@ import com.wini.owle.dll.DLL
 
 
 class AppliedTransformArgApi(
-    dll: DLL<Long, AppliedTransformArgDto>
-) : LongIdEndpointImpl<AppliedTransformArgDto>(
+    dll: DLL<Long, AppliedTransformArgDto>,
+    validator: (AppliedTransformArgDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<AppliedTransformArgDto>(
     dll = dll,
-    serializer = AppliedTransformArgDto.serializer()
+    serializer = AppliedTransformArgDto.serializer(),
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -20,22 +22,22 @@ class AppliedTransformArgApi(
                 call.asyncResultList(getAll())
             }
             get("/api/applied-transform-arg/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/applied-transform-arg") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/applied-transform-arg/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/applied-transform-arg") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/applied-transform-arg/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/applied-transform-arg/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/applied-transform-arg/batch") {
                 call.asyncResultUnit(deleteBatch(call))

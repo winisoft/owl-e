@@ -8,15 +8,13 @@ import io.ktor.server.routing.*
 
 
 class StepApi(
-    dll: DLL<Long, StepDto>
-) : LongIdEndpointImpl<StepDto>(
+    dll: DLL<Long, StepDto>,
+    validator: (StepDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<StepDto>(
     dll = dll,
     serializer = StepDto.serializer(),
-    validator = { _-> true }
-
+    validator = validator
 ) {
-
-
 
     override fun register(routing: Routing) {
         routing.apply {
@@ -24,22 +22,22 @@ class StepApi(
                 call.asyncResultList(getAll())
             }
             get("/api/step/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/step") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/step/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/step") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/step/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/step/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/step/batch") {
                 call.asyncResultUnit(deleteBatch(call))

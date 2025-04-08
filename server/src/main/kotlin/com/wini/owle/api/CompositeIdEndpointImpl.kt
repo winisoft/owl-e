@@ -6,6 +6,7 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.entity.composteid.CompositeIdFactory
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.util.*
@@ -27,21 +28,21 @@ abstract class CompositeIdEndpointImpl<T: BaseDto>(
     dtoListSerializer = ListSerializer(serializer)
 ) {
 
-    suspend fun getById(call: ApplicationCall): AsyncResult<T> {
-        return compositeIdFactory.fromRequestParams(call.request.queryParameters.toMap())
+    fun ApplicationCall.getById(): AsyncResult<T> {
+        return compositeIdFactory.fromRequestParams(request.queryParameters.toMap())
             .let { it ?: return AsyncError.ApiRequest.CompositeIdError.asFailure() }
             .run(dll::getById)
     }
 
-    suspend fun delete(call: ApplicationCall): AsyncResult<*> {
-        return compositeIdFactory.fromRequestParams(call.request.queryParameters.toMap())
+    fun ApplicationCall.delete(): AsyncResult<*> {
+        return compositeIdFactory.fromRequestParams(request.queryParameters.toMap())
             .let { it ?: return AsyncError.ApiRequest.CompositeIdError.asFailure() }
             .run(dll::delete)
     }
 
-    suspend fun deleteBatch(call: ApplicationCall): AsyncResult<*> {
+    suspend fun ApplicationCall.deleteBatch(): AsyncResult<*> {
         return runCatching {
-            Json.decodeFromString(dtoListSerializer, call.receiveText())
+            Json.decodeFromString(dtoListSerializer, receiveText())
         }.getOrNull()
             ?.map { compositeIdFactory.fromDtoInstance(it) }
             .let { it ?: return AsyncError.ApiRequest.LongIdInvalid.asFailure()  }

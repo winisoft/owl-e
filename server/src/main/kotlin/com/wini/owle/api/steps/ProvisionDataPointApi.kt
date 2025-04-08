@@ -11,12 +11,13 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class ProvisionDataPointApi(
-    dll: DLL<CompositeID, ProvisionDataPointDto>
-) : CompositeIdEndpointImpl<ProvisionDataPointDto>(
+    dll: DLL<CompositeID, ProvisionDataPointDto>,
+    validator: (ProvisionDataPointDto) -> Boolean = { _-> true}
+): CompositeIdEndpointImpl<ProvisionDataPointDto>(
     dll = dll,
     serializer = ProvisionDataPointDto.serializer(),
     compositeIdFactory = ProvisionDataPointIdFactory,
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun ApplicationCall.readId(): CompositeID? {
@@ -29,22 +30,22 @@ class ProvisionDataPointApi(
                 call.asyncResultList(getAll())
             }
             get("/api/provision-datapoint/id?provisionId={provisionId}&dataPointId={dataPointId}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/provision-datapoint") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/provision-datapoint/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/provision-datapoint") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/provision-datapoint/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/provision-datapoint/id?provisionId={provisionId}&dataPointId={dataPointId}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/provision-datapoint/batch") {
                 call.asyncResultUnit(deleteBatch(call))

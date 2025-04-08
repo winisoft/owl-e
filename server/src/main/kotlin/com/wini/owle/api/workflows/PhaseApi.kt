@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 class PhaseApi(
-    dll: DLL<Long, PhaseDto>
-) : LongIdEndpointImpl<PhaseDto>(
+    dll: DLL<Long, PhaseDto>,
+    validator: (PhaseDto) -> Boolean = { _-> true}
+): LongIdEndpointImpl<PhaseDto>(
     dll = dll,
     serializer = PhaseDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 ) {
 
     override fun register(routing: Routing) {
@@ -20,22 +21,22 @@ class PhaseApi(
                 call.asyncResultList(getAll())
             }
             get("/api/phase/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/phase") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/phase/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/phase") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/phase/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/phase/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/phase/batch") {
                 call.asyncResultUnit(deleteBatch(call))

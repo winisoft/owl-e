@@ -7,11 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 
 class VersionSpecApi(
-    dll: DLL<Long, VersionSpecDto>
+    dll: DLL<Long, VersionSpecDto>,
+    validator: (VersionSpecDto) -> Boolean = { _-> true}
 ) : LongIdEndpointImpl<VersionSpecDto>(
     dll = dll,
     serializer = VersionSpecDto.serializer(),
-    validator = { _-> true }
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -20,25 +21,25 @@ class VersionSpecApi(
                 call.asyncResultList(getAll())
             }
             get("/api/version-spec/{id}") {
-                call.asyncResultSingle(getById(call))
+                call.apply { asyncResultSingle(getById()) }
             }
             post("/api/version-spec") {
-                call.asyncResultSingle(create(call, validator), isCreate = true)
+                call.apply { asyncResultSingle(create(validator), isCreate = true) }
             }
             post("/api/version-spec/batch") {
-                call.asyncResultList(createBatch(call, validator), isCreate = true)
+                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
             }
             put("/api/version-spec") {
-                call.asyncResultSingle(update(call, validator))
+                call.apply { asyncResultSingle(update(validator)) }
             }
             put("/api/version-spec/batch") {
-                call.asyncResultList(updateBatch(call, validator))
+                call.apply { asyncResultList(updateBatch(validator)) }
             }
             delete("/api/version-spec/{id}") {
-                call.asyncResultUnit(delete(call))
+                call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/version-spec/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) } 
             }
         }
     }

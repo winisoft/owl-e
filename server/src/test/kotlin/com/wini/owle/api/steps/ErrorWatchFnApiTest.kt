@@ -18,6 +18,9 @@ open class ErrorWatchFnApiTest : BaseLongPkApiTest<ErrorWatchFnDto, ErrorWatchFn
     
     override val listSerializer: KSerializer<List<ErrorWatchFnDto>> = ListSerializer(ErrorWatchFnDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, ErrorWatchFnDto>): ErrorWatchFnApi = ErrorWatchFnApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, ErrorWatchFnDto>,
+        validator: (ErrorWatchFnDto) -> Boolean
+    ): ErrorWatchFnApi = ErrorWatchFnApi(dll, validator)
 
 }

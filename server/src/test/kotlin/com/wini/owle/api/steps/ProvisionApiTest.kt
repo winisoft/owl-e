@@ -18,6 +18,9 @@ open class ProvisionApiTest : BaseLongPkApiTest<ProvisionDto, ProvisionApi>() {
     
     override val listSerializer: KSerializer<List<ProvisionDto>> = ListSerializer(ProvisionDto.serializer())
 
-    override fun getApiInstance(dll: DLL<Long, ProvisionDto>): ProvisionApi = ProvisionApi(dll)
+    override fun getApiInstance(
+        dll: DLL<Long, ProvisionDto>,
+        validator: (ProvisionDto) -> Boolean
+    ): ProvisionApi = ProvisionApi(dll, validator)
 
 }
