@@ -1,6 +1,6 @@
 package com.wini.owle.services
 
-import com.wini.owle.async.AsyncError.Database
+import com.wini.owle.async.AsyncError.DatabaseError
 import com.wini.owle.async.AsyncError.NoSuchIdError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
@@ -26,7 +26,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to create entity").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to create entity").asFailure()
             }
         )
     }
@@ -40,7 +40,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to get all entities").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to get all entities").asFailure()
             }
         )
     }
@@ -58,7 +58,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                     } ?: NoSuchIdError("No such id: $id").asFailure()
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Failed to get id $id").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Failed to get id $id").asFailure()
             }
         )
     }
@@ -73,7 +73,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to create entities").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to create entities").asFailure()
             }
         )
     }
@@ -88,7 +88,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }
@@ -103,7 +103,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }
@@ -117,7 +117,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(Unit)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to delete entity $id").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to delete entity $id").asFailure()
             }
         )
     }
@@ -131,7 +131,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(it)
             },
             onFailure = { exception ->
-                Database(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Unspecified(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }

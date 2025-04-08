@@ -24,13 +24,13 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
 
     fun ApplicationCall.getById(): AsyncResult<T> {
         return readId()
-            .let { it ?: return AsyncError.ApiRequest.LongIdInvalid.asFailure() }
+            .let { it ?: return AsyncError.ApiRequest.InvalidLongId.asFailure() }
             .run(dll::getById)
     }
 
     fun ApplicationCall.delete(): AsyncResult<*> {
         return readId()
-            .let { it ?: return AsyncError.ApiRequest.LongIdInvalid.asFailure() }
+            .let { it ?: return AsyncError.ApiRequest.InvalidLongId.asFailure() }
             .run(dll::delete)
     }
 

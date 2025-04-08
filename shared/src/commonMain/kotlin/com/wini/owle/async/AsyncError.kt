@@ -1,12 +1,13 @@
 package com.wini.owle.async
 
+import com.wini.owle.dto.BaseDto
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 sealed class AsyncError {
 
-    abstract val message: String?
+    abstract val errorCode: String
 
     /**
      * Convenience method called from the site of a detected AsyncError that points to its containing AsyncResult.Failure
@@ -15,21 +16,44 @@ sealed class AsyncError {
      * type will be resulting.
      */
     fun asFailure(): AsyncResult.Failure {
-        return  AsyncResult.Failure(this)
+        return AsyncResult.Failure(this)
     }
+
+    /**
+     * Subclasses of AsyncError, rooted in invariant failure, illegal state, or domain misuse.
+     */
+    @Serializable
+    data class InvariantViolation(
+        val invariant: String,
+        val message: String? = null
+    ) : AsyncError() {
+        override val errorCode: String get() = "INVARIANT_VIOLATION"
+    }
+
+    @Serializable
+    data class InvalidStateTransition(
+        val fromState: String,
+        val toState: String,
+        val message: String? = null
+    ) : AsyncError() {
+        override val errorCode: String get() = "INVALID_STATE_TRANSITION"
+    }
+
+
 
     /**
      * The highest order of error, the 'last line of defense' that represents a complete failure to anticipate the
      * error that occurred at any and every layer of dependencies it may have been introduced
      */
     @Serializable
-    data class ApplicationError(override val message: String) : AsyncError()
+    data class ApplicationError(val message: String) : AsyncError() {
+        override val errorCode: String get() = "APPLICATION_ERROR"
+    }
 
-    /**
-     * Errors that represent any failure taking place in the workings of the MySQL persistence layer
-     */
     @Serializable
-    data class Database(override val message: String) : AsyncError()
+    data object DbTransactionError : AsyncError() {
+        override val errorCode: String get() = "DB_TRANSACTION_ERROR"
+    }
 
     /**
      * An error whose origin is in the repository layer, which presumably has faithfully informed that the id that had
@@ -37,58 +61,151 @@ sealed class AsyncError {
      * with the database and the application's efficacy representing the concurrent operations globally
      */
     @Serializable
-    data class NoSuchIdError(override val message: String) : AsyncError()
-
-
-    @Serializable
-    data class NetworkError(
-        override val message: String?,
-        val statusCode: Int
-    ) : AsyncError()
+    data class NoSuchIdError(val id: String) : AsyncError() {
+        override val errorCode: String get() = "NO_SUCH_ID"
+    }
 
     @Serializable
-    data class AuthenticationError(override val message: String) : AsyncError()
+    data object AuthenticationError : AsyncError() {
+        override val errorCode: String get() = "AUTHENTICATION_ERROR"
+    }
 
     @Serializable
-    data class AuthorizationError(override val message: String) : AsyncError()
+    data object AuthorizationError : AsyncError() {
+        override val errorCode: String get() = "AUTHORIZATION_ERROR"
+    }
 
     @Serializable
-    data class ValidationError(override val message: String, val validationErrors: List<String>) : AsyncError()
-
-    @Serializable
-    sealed class ApiRequest: AsyncError() {
+    sealed class ApiRequest : AsyncError() {
 
         @Serializable
-        data object LongIdInvalid: ApiRequest() {
-            override val message: String = "The expected default parameter with Long type named 'id' was not provided or invalid"
+        data object MissingId : ApiRequest() {
+            override val errorCode: String get() = "MISSING_ID"
         }
 
         @Serializable
-        data object SerializationError: ApiRequest() {
-            override val message: String = "The HTTP call's json body was not legal structurally to fulfill the contract of the controller"
+        data object InvalidLongId : ApiRequest() {
+            override val errorCode: String get() = "INVALID_ID"
         }
 
         @Serializable
-        data object DtoConstraintError: ApiRequest() {
-            override val message: String = "The validation function of the DTO class detected data that violates a constraint on it"
+        data object MalformedBodyData : ApiRequest() {
+            override val errorCode: String get() = "MALFORMED_REQUEST_BODY"
         }
 
         @Serializable
-        data object CompositeIdError: ApiRequest() {
-            override val message: String = "One or more of the expected request parameters specifying the composite id element values by name was not provided or invalid"
+        data object ConstraintViolationData : ApiRequest() {
+            override val errorCode: String get() = "OBJECT_CONSTRAINT_VIOLATION"
         }
 
         @Serializable
-        data object EmptyList: ApiRequest() {
-            override val message: String = "The expected list of references to data members to operate on contained no values"
+        data object MissingCompositeIdElement : ApiRequest() {
+            override val errorCode: String get() = "MISSING_COMPOSITE_ID_ELEMENT"
         }
+
+        @Serializable
+        data class InvalidCompositeIdElement(val paramName: String) : ApiRequest() {
+            override val errorCode: String get() = "INVALID_COMPOSITE_ID_ELEMENT"
+        }
+
+        @Serializable
+        data class UnexpectedField(val field: String) : ApiRequest() {
+            override val errorCode: String get() = "UNEXPECTED_FIELD"
+        }
+
+        @Serializable
+        data class MissingField(val field: String) : ApiRequest() {
+            override val errorCode: String get() = "MISSING_FIELD"
+        }
+
+        @Serializable
+        data class InvalidField(val field: String, val reason: String) : ApiRequest() {
+            override val errorCode: String get() = "INVALID_FIELD"
+        }
+
 
     }
 
+    @Serializable
+    data object ServiceLayerError : AsyncError() {
+        override val errorCode: String get() = "SERVICE_FAILURE"
+    }
 
+    @Serializable
+    sealed class DatabaseError : AsyncError() {
+        override val errorCode: String get() = "DATABASE_ERROR"
+
+        @Serializable
+        data class ConstraintViolation(
+            val message: String? = "The operation violated a database constraint."
+        ) : DatabaseError() {
+            override val errorCode: String get() = "DB_CONSTRAINT_VIOLATION"
+        }
+
+        @Serializable
+        data class Unspecified(
+            val message: String? = "The operation could not be completed."
+        ) : DatabaseError() {
+            override val errorCode: String get() = "DB_UNSPECIFIED"
+        }
+
+        @Serializable
+        data class ConnectionFailure(
+            val message: String? = "Could not connect to the database."
+        ) : DatabaseError() {
+            override val errorCode: String get() = "DB_CONNECTION_FAILURE"
+        }
+
+        @Serializable
+        data class Timeout(
+            val message: String? = "The database operation timed out."
+        ) : DatabaseError() {
+            override val errorCode: String get() = "DB_TIMEOUT"
+        }
+
+        @Serializable
+        data class DeadlockDetected(
+            val message: String? = "A deadlock was detected and the transaction was rolled back."
+        ) : DatabaseError() {
+            override val errorCode: String get() = "DB_DEADLOCK"
+        }
+    }
 
 
     @Serializable
-    data class ServiceLayerError(override val message: String) : AsyncError()
+    data class PartialFailure<T : BaseDto>(
+        val failed: List<Pair<T, AsyncError>>,
+        val successful: List<T>
+    ) : AsyncError() {
+        override val errorCode: String get() = "PARTIAL_FAILURE"
+    }
+
+
+    @Serializable
+    data class ValidationError(
+        val fieldErrors: Map<String, String>
+    ) : AsyncError() {
+        override val errorCode: String get() = "VALIDATION_ERROR"
+    }
+
+    @Serializable
+    sealed class ExternalDependencyError : AsyncError() {
+        @Serializable
+        data class HttpFailure(val service: String, val status: Int, val body: String? = null) : ExternalDependencyError() {
+            override val errorCode: String get() = "EXTERNAL_HTTP_FAILURE"
+        }
+
+        @Serializable
+        data class Timeout(val service: String) : ExternalDependencyError() {
+            override val errorCode: String get() = "EXTERNAL_TIMEOUT"
+        }
+
+        @Serializable
+        data class UnexpectedResponse(val service: String, val detail: String) : ExternalDependencyError() {
+            override val errorCode: String get() = "EXTERNAL_BAD_RESPONSE"
+        }
+    }
+
 
 }
+

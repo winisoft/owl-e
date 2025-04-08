@@ -1,5 +1,6 @@
 package com.wini.owle.api
 
+import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
@@ -176,4 +177,106 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
         }
     }
 
+    @Test
+    fun `PUT update - on validation failure - returns HTTP Code 400, DtoConstraintError`() = runBlocking {
+        val inputDto: T = getDto()
+        val dll = mockk<DLL<ID, T>>()
+        val validator: (T) -> Boolean = { _-> false }
+
+        setupTestApp(dll, validator) {
+            val response = client.put(route) {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(serializer, inputDto))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("DtoConstraintError"))
+        }
+    }
+
+    @Test
+    fun `POST create batch - on validation failure - returns HTTP Code 400, DtoConstraintError`() = runBlocking {
+        val dtoList = listOf(getDto(), getDto())
+        val dll = mockk<DLL<ID, T>>()
+        val validator: (T) -> Boolean = { _-> false }
+
+        setupTestApp(dll, validator) {
+            val response = client.post("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(listSerializer, dtoList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("DtoConstraintError"))
+        }
+    }
+
+    @Test
+    fun `PUT update batch - on validation failure - returns HTTP Code 400, DtoConstraintError`() = runBlocking {
+        val dtoList = listOf(getDto(), getDto())
+        val dll = mockk<DLL<ID, T>>()
+        val validator: (T) -> Boolean = { _-> false }
+
+        setupTestApp(dll, validator) {
+            val response = client.put("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(listSerializer, dtoList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("DtoConstraintError"))
+        }
+    }
+
+    @Test
+    fun `POST create batch - on serialization error - returns HTTP Code 400, SerializationError`() = runBlocking {
+        val dll = mockk<DLL<ID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.post("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody("{ invalid json }")
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("SerializationError"))
+        }
+    }
+
+    @Test
+    fun `PUT update batch - on serialization error - returns HTTP Code 400, SerializationError`() = runBlocking {
+        val dll = mockk<DLL<ID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.put("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody("{ invalid json }")
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("SerializationError"))
+        }
+    }
+
+    @Test
+    fun `POST create batch - on empty list - returns HTTP Code 400, EmptyList`() = runBlocking {
+        val emptyList = emptyList<T>()
+        val dll = mockk<DLL<ID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.post("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(listSerializer, emptyList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("EmptyList"))
+        }
+    }
 }

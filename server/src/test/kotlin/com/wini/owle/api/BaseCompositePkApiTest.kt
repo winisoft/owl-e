@@ -17,6 +17,18 @@ import org.junit.jupiter.api.Test
 
 abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<CompositeID, T, R>() {
 
+    // This should be overridden by subclasses to create a valid route for GET by ID
+    protected open val getByIdRoute: String
+        get() = "$route/id"
+
+    // This should be overridden by subclasses to create a valid route for DELETE by ID
+    protected open val deleteByIdRoute: String
+        get() = "$route/id"
+    
+    // This should be overridden by subclasses to create a route with missing parameters for testing CompositeIdError
+    protected open val invalidIdRoute: String
+        get() = "$route/missing-params"
+
     @Test
     open fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
         val dto: T = getDto()
@@ -26,7 +38,7 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTes
         }
 
         setupTestApp(dll) {
-            val response = client.get("$route/$id") {
+            val response = client.get(getByIdRoute) {
                 contentType(ContentType.Application.Json)
             }
 
@@ -45,7 +57,7 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTes
         }
 
         setupTestApp(dll) {
-            val response = client.get("$route/$id") {
+            val response = client.get(getByIdRoute) {
                 contentType(ContentType.Application.Json)
             }
 
@@ -63,7 +75,7 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTes
         }
 
         setupTestApp(dll) {
-            val response = client.delete("$route/$id") {
+            val response = client.delete(deleteByIdRoute) {
                 contentType(ContentType.Application.Json)
             }
 
@@ -71,4 +83,66 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTes
         }
     }
 
+    @Test
+    open fun `GET by id - with missing parameters - returns HTTP Code 400, CompositeIdError`() = runBlocking {
+        val dll = mockk<DLL<CompositeID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.get(invalidIdRoute) {
+                contentType(ContentType.Application.Json)
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("CompositeIdError"))
+        }
+    }
+
+    @Test
+    open fun `DELETE by id - with missing parameters - returns HTTP Code 400, CompositeIdError`() = runBlocking {
+        val dll = mockk<DLL<CompositeID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.delete(invalidIdRoute) {
+                contentType(ContentType.Application.Json)
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("CompositeIdError"))
+        }
+    }
+
+    @Test
+    fun `DELETE batch - on success - returns HTTP Code 200, Unit`() = runBlocking {
+        val dtoList = listOf(getDto(), getDto())
+        val dll = mockk<DLL<CompositeID, T>> {
+            coEvery { deleteAll(any()) } returns AsyncResult.Success(Unit)
+        }
+
+        setupTestApp(dll) {
+            val response = client.delete("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(listSerializer, dtoList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+        }
+    }
+
+    @Test
+    fun `DELETE batch - on serialization error - returns HTTP Code 400, SerializationError`() = runBlocking {
+        val dll = mockk<DLL<CompositeID, T>>()
+
+        setupTestApp(dll) {
+            val response = client.delete("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody("{ invalid json }")
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("SerializationError"))
+        }
+    }
 }

@@ -32,7 +32,7 @@ class TypeParameterService(
                 return AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                AsyncError.Database(exception.message ?: "Unable to get TypeParameter entities").asFailure()
+                AsyncError.DatabaseError.Unspecified(exception.message ?: "Unable to get TypeParameter entities").asFailure()
             }
         )
     }

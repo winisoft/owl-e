@@ -11,6 +11,9 @@ import io.ktor.http.*
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -72,4 +75,66 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
         }
     }
 
+    @Test
+    fun `GET by id - with invalid id format - returns HTTP Code 400, LongIdInvalid`() = runBlocking {
+        val dll = mockk<DLL<Long, T>>()
+
+        setupTestApp(dll) {
+            val response = client.get("$route/not-a-number") {
+                contentType(ContentType.Application.Json)
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("LongIdInvalid"))
+        }
+    }
+
+    @Test
+    fun `DELETE by id - with invalid id format - returns HTTP Code 400, LongIdInvalid`() = runBlocking {
+        val dll = mockk<DLL<Long, T>>()
+
+        setupTestApp(dll) {
+            val response = client.delete("$route/not-a-number") {
+                contentType(ContentType.Application.Json)
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("LongIdInvalid"))
+        }
+    }
+
+    @Test
+    fun `DELETE batch - on success - returns HTTP Code 200, Unit`() = runBlocking {
+        val idList = listOf(1L, 2L, 3L)
+        val dll = mockk<DLL<Long, T>> {
+            coEvery { deleteAll(idList) } returns AsyncResult.Success(Unit)
+        }
+
+        setupTestApp(dll) {
+            val response = client.delete("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody(Json.encodeToString(ListSerializer(Long.serializer()), idList))
+            }
+
+            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+        }
+    }
+
+    @Test
+    fun `DELETE batch - on serialization error - returns HTTP Code 400, SerializationError`() = runBlocking {
+        val dll = mockk<DLL<Long, T>>()
+
+        setupTestApp(dll) {
+            val response = client.delete("$route/batch") {
+                contentType(ContentType.Application.Json)
+                setBody("{ invalid json }")
+            }
+
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            val responseText = response.bodyAsText()
+            Assertions.assertTrue(responseText.contains("SerializationError"))
+        }
+    }
 }
