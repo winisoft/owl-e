@@ -40,7 +40,7 @@ class ErrorWatchApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/error-watch/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

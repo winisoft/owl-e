@@ -39,7 +39,7 @@ class ErrorWatchFnApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("api/error-watch-fn/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

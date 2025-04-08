@@ -39,7 +39,7 @@ class PhaseApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/phase/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

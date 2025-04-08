@@ -39,7 +39,7 @@ class WorkflowApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/workflow/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

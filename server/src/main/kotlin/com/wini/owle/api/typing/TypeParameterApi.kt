@@ -40,7 +40,7 @@ class TypeParameterApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-parameter/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

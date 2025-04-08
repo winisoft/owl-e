@@ -39,7 +39,7 @@ class ExecutionLogApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/execution-log/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

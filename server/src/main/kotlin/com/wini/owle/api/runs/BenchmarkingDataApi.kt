@@ -40,7 +40,7 @@ class BenchmarkingDataApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/benchmarking-data/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

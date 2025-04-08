@@ -48,7 +48,7 @@ class TagRelationApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tag-relation/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

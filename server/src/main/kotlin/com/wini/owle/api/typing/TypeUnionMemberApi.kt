@@ -48,7 +48,7 @@ class TypeUnionMemberApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-union-member/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

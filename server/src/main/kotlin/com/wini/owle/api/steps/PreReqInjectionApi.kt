@@ -40,7 +40,7 @@ class PreReqInjectionApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/prereq-injection/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

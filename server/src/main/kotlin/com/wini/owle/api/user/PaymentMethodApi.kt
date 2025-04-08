@@ -40,7 +40,7 @@ class PaymentMethodApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/payment-method/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

@@ -38,7 +38,7 @@ class ToolParamApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tool-param/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

@@ -39,7 +39,7 @@ class TestCaseApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/test-case/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

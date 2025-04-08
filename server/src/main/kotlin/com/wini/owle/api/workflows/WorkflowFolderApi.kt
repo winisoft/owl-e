@@ -40,7 +40,7 @@ class WorkflowFolderApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/workflow-folder/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

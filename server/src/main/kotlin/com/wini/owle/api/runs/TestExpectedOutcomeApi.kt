@@ -16,8 +16,6 @@ class TestExpectedOutcomeApi(
     validator = validator
 )  {
 
-
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-expected-outcome") {
@@ -42,7 +40,7 @@ class TestExpectedOutcomeApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/test-expected-outcome/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

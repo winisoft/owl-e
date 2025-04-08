@@ -34,7 +34,6 @@ open class ToolPackageDependencyApiTest : BaseCompositePkApiTest<ToolPackageDepe
         validator: (ToolPackageDependencyDto) -> Boolean
     ): ToolPackageDependencyApi = ToolPackageDependencyApi(dll, validator)
 
-
     @Test
     override fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
         val dto: ToolPackageDependencyDto = getDto()

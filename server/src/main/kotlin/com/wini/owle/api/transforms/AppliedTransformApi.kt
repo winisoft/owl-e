@@ -40,7 +40,7 @@ class AppliedTransformApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/applied-transform/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

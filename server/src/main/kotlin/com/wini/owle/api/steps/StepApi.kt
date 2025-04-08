@@ -40,7 +40,7 @@ class StepApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/step/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

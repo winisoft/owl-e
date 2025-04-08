@@ -48,7 +48,7 @@ class ProvisionDataPointApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/provision-datapoint/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

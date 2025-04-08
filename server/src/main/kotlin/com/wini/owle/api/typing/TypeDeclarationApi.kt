@@ -40,7 +40,7 @@ class TypeDeclarationApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-declaration/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

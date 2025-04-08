@@ -40,7 +40,7 @@ class TypeVarianceApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/type-variance/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

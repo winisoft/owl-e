@@ -55,4 +55,20 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTes
         }
     }
 
+    @Test
+    fun `DELETE by id - on success - returns HTTP Code 200, Unit`() = runBlocking {
+        val id: CompositeID = mockk()
+        val dll = mockk<DLL<CompositeID, T>> {
+            coEvery { delete(id) } returns AsyncResult.Success(Unit)
+        }
+
+        setupTestApp(dll) {
+            val response = client.delete("$route/$id") {
+                contentType(ContentType.Application.Json)
+            }
+
+            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+        }
+    }
+
 }

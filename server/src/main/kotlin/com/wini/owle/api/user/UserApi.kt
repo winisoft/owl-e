@@ -39,7 +39,7 @@ class UserApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/user/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

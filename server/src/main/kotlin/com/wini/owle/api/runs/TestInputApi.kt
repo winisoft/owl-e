@@ -11,7 +11,8 @@ class TestInputApi(
     validator: (TestInputDto) -> Boolean = { _-> true}
 ): LongIdEndpointImpl<TestInputDto>(
     dll = dll,
-    serializer = TestInputDto.serializer()
+    serializer = TestInputDto.serializer(),
+    validator = validator
 )  {
 
     override fun register(routing: Routing) {
@@ -38,7 +39,7 @@ class TestInputApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/test-input/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

@@ -40,7 +40,7 @@ class TagApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/tag/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

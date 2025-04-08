@@ -49,7 +49,7 @@ class TransformTargetTypeApi(
                 call.apply { asyncResultUnit(delete()) }
             }
             delete("/api/transform-target-type/batch") {
-                call.asyncResultUnit(deleteBatch(call))
+                call.apply { asyncResultUnit(deleteBatch()) }
             }
         }
     }

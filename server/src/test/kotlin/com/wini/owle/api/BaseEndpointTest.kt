@@ -176,39 +176,4 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
         }
     }
 
-
-//    @Test
-//    fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
-//        val id = "non-existent-id" as ID
-//        val dll = mockk<DLL<ID, T>> {
-//            coEvery { getById(id) } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
-//        }
-//
-//        setupTestApp(dll) {
-//            val response = client.get("$route/$id") {
-//                contentType(ContentType.Application.Json)
-//            }
-//
-//            Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
-//            val responseText = response.bodyAsText()
-//            Assertions.assertTrue(responseText.contains("NoSuchIdError"))
-//        }
-//    }
-
-//    @Test
-//    fun `DELETE by id - on success - returns HTTP Code 200, Unit`() = runBlocking {
-//        val id = "test-id" as ID
-//        val dll = mockk<DLL<ID, T>> {
-//            coEvery { deleteById(id) } returns AsyncResult.Success(Unit)
-//        }
-//
-//        setupTestApp(dll) {
-//            val response = client.delete("$route/$id") {
-//                contentType(ContentType.Application.Json)
-//            }
-//
-//            Assertions.assertEquals(HttpStatusCode.OK, response.status)
-//        }
-//    }
-
 }
