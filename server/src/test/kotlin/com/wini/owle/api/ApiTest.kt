@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Nested
 
 @Nested
 @DisplayName("API Tests")
-open class  ApiTests {
+open class  ApiTest {
     
     @Nested
     @DisplayName("Environs Module")

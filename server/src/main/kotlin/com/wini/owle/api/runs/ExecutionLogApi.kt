@@ -16,7 +16,7 @@ class ExecutionLogApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/execution-log") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/execution-log/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -25,19 +25,19 @@ class ExecutionLogApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/execution-log/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/execution-log") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/execution-log/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/execution-log/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/execution-log/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

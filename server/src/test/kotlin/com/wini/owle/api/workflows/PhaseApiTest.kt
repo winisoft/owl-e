@@ -19,4 +19,5 @@ open class PhaseApiTest : BaseLongPkApiTest<PhaseDto, PhaseApi>() {
     override val listSerializer: KSerializer<List<PhaseDto>> = ListSerializer(PhaseDto.serializer())
 
     override fun getApiInstance(dll: DLL<Long, PhaseDto>): PhaseApi = PhaseApi(dll)
+
 }

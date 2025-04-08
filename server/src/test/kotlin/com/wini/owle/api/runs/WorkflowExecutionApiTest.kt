@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/runs/WorkflowExecutionApiTest.kt
 package com.wini.owle.api.runs
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -20,4 +19,5 @@ open class WorkflowExecutionApiTest : BaseLongPkApiTest<WorkflowExecutionDto, Wo
     override val listSerializer: KSerializer<List<WorkflowExecutionDto>> = ListSerializer(WorkflowExecutionDto.serializer())
     
     override fun getApiInstance(dll: DLL<Long, WorkflowExecutionDto>): WorkflowExecutionApi = WorkflowExecutionApi(dll)
+
 }

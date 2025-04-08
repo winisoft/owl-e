@@ -17,7 +17,7 @@ class PreReqInjectionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/prereq-injection") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/prereq-injection/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -26,19 +26,19 @@ class PreReqInjectionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/prereq-injection/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/prereq-injection") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/prereq-injection/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/prereq-injection/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/prereq-injection/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

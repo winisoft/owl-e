@@ -6,14 +6,15 @@ import com.wini.owle.mapper.workflows.WorkflowMetadataMapper
 import com.wini.owle.repo.WorkflowMetadataIdFactory
 import com.wini.owle.repo.workflows.WorkflowMetadataRepository
 import com.wini.owle.services.BaseServiceImpl
+import com.wini.owle.repo.EntityIdFactory
 
 
 class WorkflowMetadataService(
     repository: WorkflowMetadataRepository,
     mapper: WorkflowMetadataMapper,
-    entityIdFactory: WorkflowMetadataIdFactory
+    entityIdFactory: EntityIdFactory<Long>
 ): BaseServiceImpl<Long, WorkflowMetadataDto, WorkflowMetadataDao>(
-    repository,
-    mapper,
-    entityIdFactory
+    repository = repository,
+    mapper = mapper,
+    entityIdFactory = entityIdFactory
 )

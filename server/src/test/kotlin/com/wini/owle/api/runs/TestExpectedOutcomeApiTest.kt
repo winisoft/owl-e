@@ -19,4 +19,5 @@ open class TestExpectedOutcomeApiTest : BaseLongPkApiTest<TestExpectedOutcomeDto
     override val listSerializer: KSerializer<List<TestExpectedOutcomeDto>> = ListSerializer(TestExpectedOutcomeDto.serializer())
     
     override fun getApiInstance(dll: DLL<Long, TestExpectedOutcomeDto>): TestExpectedOutcomeApi = TestExpectedOutcomeApi(dll)
+
 }

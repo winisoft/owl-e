@@ -6,6 +6,7 @@ import com.wini.owle.mapper.workflows.StepsMapper
 import com.wini.owle.repo.StepIdFactory
 import com.wini.owle.repo.workflows.StepRepository
 import com.wini.owle.services.BaseServiceImpl
+import com.wini.owle.repo.EntityIdFactory
 
 
 class StepService(
@@ -13,9 +14,9 @@ class StepService(
     private val mapper: StepsMapper,
     private val entityIdFactory: StepIdFactory
 ): BaseServiceImpl<Long, StepDto, StepDao>(
-    repository,
-    mapper,
-    entityIdFactory
+    repository = repository,
+    mapper = mapper,
+    entityIdFactory = entityIdFactory
 ) {
 
     fun getMaxDisplayOrder(workflowId: Long, parentPhaseId: Long?): Int {

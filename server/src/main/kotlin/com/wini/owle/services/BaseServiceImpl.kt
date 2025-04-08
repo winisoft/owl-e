@@ -13,7 +13,7 @@ import org.jetbrains.exposed.dao.Entity
 open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
     private val repository: OwleRepo<ID, T>,
     private val mapper: DbMapper<Dto, T>,
-    private val idFactory: EntityIdFactory<ID>
+    private val entityIdFactory: EntityIdFactory<ID>
 ) : Service<ID, Dto> {
 
     override fun create(dto: Dto): AsyncResult<Dto> {
@@ -47,7 +47,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun getById(id: ID): AsyncResult<Dto> {
         return runCatching {
-            val entityID = idFactory.build(id)
+            val entityID = entityIdFactory.build(id)
             repository.getById(entityID)
         }.fold(
             onSuccess = { entity ->
@@ -110,7 +110,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun delete(id: ID): AsyncResult<Unit> {
         return runCatching {
-            val entityID = idFactory.build(id)
+            val entityID = entityIdFactory.build(id)
             repository.delete(entityID)
         }.fold(
             onSuccess = {
@@ -124,7 +124,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
 
     override fun delete(ids: List<ID>): AsyncResult<Unit> {
         return runCatching {
-            val entityIds = ids.map { idFactory.build(it) }
+            val entityIds = ids.map { entityIdFactory.build(it) }
             repository.delete(entityIds)
         }.fold(
             onSuccess = {

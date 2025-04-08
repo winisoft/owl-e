@@ -18,6 +18,7 @@ class TypeUnionMemberDao(
 
         fun buildId(unionTypeId: Long, memberTypeId: Long): CompositeID {
             return CompositeID {
+
                 it[TypeUnionMembers.unionTypeDeclaration] = unionTypeId
                 it[TypeUnionMembers.memberTypeDeclaration] = memberTypeId
             }

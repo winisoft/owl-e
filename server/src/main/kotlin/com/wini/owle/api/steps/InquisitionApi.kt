@@ -17,7 +17,7 @@ class InquisitionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/inquisition") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/inquisition/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -26,19 +26,19 @@ class InquisitionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/inquisition/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/inquisition") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/inquisition/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/inquisition/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/inquisition/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

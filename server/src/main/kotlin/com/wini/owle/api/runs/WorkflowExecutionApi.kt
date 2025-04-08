@@ -17,7 +17,7 @@ class WorkflowExecutionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-execution") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/workflow-execution/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -26,19 +26,19 @@ class WorkflowExecutionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/workflow-execution/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/workflow-execution") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/workflow-execution/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/workflow-execution/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/workflow-execution/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

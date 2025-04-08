@@ -20,7 +20,7 @@ class TypeBoundsApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-bounds") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/type-bounds/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -29,19 +29,19 @@ class TypeBoundsApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/type-bounds/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/type-bounds") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/type-bounds/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/type-bounds/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/type-bounds/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

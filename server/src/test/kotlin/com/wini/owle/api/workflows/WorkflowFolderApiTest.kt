@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/workflows/WorkflowFolderApiTest.kt
 package com.wini.owle.api.workflows
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -9,7 +8,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 open class WorkflowFolderApiTest : BaseLongPkApiTest<WorkflowFolderDto, WorkflowFolderApi>() {
-    override val route: String = "/api/workflowfolder"
+    override val route: String = "/api/workflow-folder"
     
     override fun getDto(): WorkflowFolderDto = DtoTestInstanceFactory.workflowFolderDto()
     

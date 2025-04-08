@@ -8,17 +8,18 @@ import com.wini.owle.mapper.typing.TypeParametersMapper
 import com.wini.owle.repo.TypeParameterIdFactory
 import com.wini.owle.repo.typing.TypeParameterRepository
 import com.wini.owle.services.BaseServiceImpl
+import com.wini.owle.repo.EntityIdFactory
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeParameterService(
     private val repository: TypeParameterRepository,
     private val mapper: TypeParametersMapper,
-    entityIdFactory: TypeParameterIdFactory
+    entityIdFactory: EntityIdFactory<Long>
 ): BaseServiceImpl<Long, TypeParameterDto, TypeParameterDao>(
-    repository,
-    mapper,
-    entityIdFactory
+    repository = repository,
+    mapper = mapper,
+    entityIdFactory = entityIdFactory
 ) {
 
     fun getByTypeDeclarationIdOrderByPosition(typeDeclarationId: Long): AsyncResult<List<TypeParameterDto>> {

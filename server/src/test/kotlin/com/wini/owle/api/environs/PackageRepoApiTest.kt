@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/environs/PackageRepoApiTest.kt
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -7,6 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.PackageRepoDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+
 
 open class PackageRepoApiTest : BaseLongPkApiTest<PackageRepoDto, PackageRepoApi>() {
 
@@ -19,4 +19,5 @@ open class PackageRepoApiTest : BaseLongPkApiTest<PackageRepoDto, PackageRepoApi
     override val listSerializer: KSerializer<List<PackageRepoDto>> = ListSerializer(PackageRepoDto.serializer())
 
     override fun getApiInstance(dll: DLL<Long, PackageRepoDto>): PackageRepoApi = PackageRepoApi(dll)
+
 }

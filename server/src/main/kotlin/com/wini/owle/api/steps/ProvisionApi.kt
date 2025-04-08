@@ -17,7 +17,7 @@ class ProvisionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/provision") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/provision/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -26,19 +26,19 @@ class ProvisionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/provision/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/provision") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/provision/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/provision/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/provision/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

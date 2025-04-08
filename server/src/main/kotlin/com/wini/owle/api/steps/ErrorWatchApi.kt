@@ -19,7 +19,7 @@ class ErrorWatchApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/error-watch") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/error-watch/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -28,19 +28,19 @@ class ErrorWatchApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/error-watch/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/error-watch") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/error-watch/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/error-watch/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/error-watch/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

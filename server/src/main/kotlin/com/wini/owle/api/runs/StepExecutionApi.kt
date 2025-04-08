@@ -18,7 +18,7 @@ class StepExecutionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/step-execution") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/step-execution/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -27,19 +27,19 @@ class StepExecutionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/step-execution/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/step-execution") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/step-execution/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/step-execution/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/step-execution/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

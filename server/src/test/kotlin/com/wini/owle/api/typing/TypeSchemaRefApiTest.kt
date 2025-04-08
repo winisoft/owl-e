@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/typing/TypeSchemaRefApiTest.kt
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -8,7 +7,9 @@ import com.wini.owle.dto.typing.TypeSchemaRefDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
+
 open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRefDto, TypeSchemaRefApi>() {
+
     override val route: String = "/api/type-schema-ref"
 
     override fun getDto(): TypeSchemaRefDto = DtoTestInstanceFactory.typeSchemaRefDto()
@@ -18,4 +19,5 @@ open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRefDto, TypeSchema
     override val listSerializer: KSerializer<List<TypeSchemaRefDto>> = ListSerializer(TypeSchemaRefDto.serializer())
 
     override fun getApiInstance(dll: DLL<Long, TypeSchemaRefDto>): TypeSchemaRefApi = TypeSchemaRefApi(dll)
+
 }

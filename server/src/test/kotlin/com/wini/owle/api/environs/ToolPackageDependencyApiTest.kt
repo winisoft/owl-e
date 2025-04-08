@@ -16,11 +16,10 @@ open class ToolPackageDependencyApiTest : BaseCompositePkApiTest<ToolPackageDepe
     override fun getDto(): ToolPackageDependencyDto = DtoTestInstanceFactory.toolPackageDependencyDto()
 
     override val serializer: KSerializer<ToolPackageDependencyDto> = ToolPackageDependencyDto.serializer()
+
     override val listSerializer: KSerializer<List<ToolPackageDependencyDto>> = ListSerializer(ToolPackageDependencyDto.serializer())
 
-    override fun getApiInstance(dll: DLL<CompositeID, ToolPackageDependencyDto>): ToolPackageDependencyApi {
-        return ToolPackageDependencyApi(dll)
-    }
+    override fun getApiInstance(dll: DLL<CompositeID, ToolPackageDependencyDto>): ToolPackageDependencyApi = ToolPackageDependencyApi(dll)
 
 }
 

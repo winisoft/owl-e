@@ -18,7 +18,7 @@ class BenchmarkingDataApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/benchmarking-data") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/benchmarking-data/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -27,19 +27,19 @@ class BenchmarkingDataApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/benchmarking-data/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/benchmarking-data") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/benchmarking-data/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/benchmarking-data/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/benchmarking-data/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

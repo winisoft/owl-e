@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/runs/StepExecutionApiTest.kt
 package com.wini.owle.api.runs
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -8,7 +7,9 @@ import com.wini.owle.dto.runs.StepExecutionDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
+
 open class StepExecutionApiTest : BaseLongPkApiTest<StepExecutionDto, StepExecutionApi>() {
+
     override val route: String = "/api/step-execution"
 
     override fun getDto(): StepExecutionDto = DtoTestInstanceFactory.stepExecutionDto()
@@ -18,4 +19,5 @@ open class StepExecutionApiTest : BaseLongPkApiTest<StepExecutionDto, StepExecut
     override val listSerializer: KSerializer<List<StepExecutionDto>> = ListSerializer(StepExecutionDto.serializer())
 
     override fun getApiInstance(dll: DLL<Long, StepExecutionDto>): StepExecutionApi = StepExecutionApi(dll)
+
 }

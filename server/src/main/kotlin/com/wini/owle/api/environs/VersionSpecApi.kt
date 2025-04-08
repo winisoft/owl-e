@@ -17,7 +17,7 @@ class VersionSpecApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/version-spec") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/version-spec/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -26,19 +26,19 @@ class VersionSpecApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/version-spec/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/version-spec") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/version-spec/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/version-spec/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/version-spec/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

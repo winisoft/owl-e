@@ -1,12 +1,14 @@
-package com.wini.owle.api.runs
+package com.wini.owle.api.steps
 
 import com.wini.owle.api.CompositeIdEndpointImpl
 import com.wini.owle.dto.steps.ProvisionDataPointDto
-import com.wini.owle.mapper.ProvisionDataPointIdFactory
+import com.wini.owle.entity.composteid.ProvisionDataPointIdFactory
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
+import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
+
 
 class ProvisionDataPointApi(
     dll: DLL<CompositeID, ProvisionDataPointDto>
@@ -17,31 +19,35 @@ class ProvisionDataPointApi(
     validator = { _-> true }
 ) {
 
+    override fun ApplicationCall.readId(): CompositeID? {
+        return compositeIdFactory.fromRequestParams(params = parameters.toMap())
+    }
+
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/provision-datapoint") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
-            get("/api/provision-datapoint/{id}") {
-                getById(call)
+            get("/api/provision-datapoint/id?provisionId={provisionId}&dataPointId={dataPointId}") {
+                call.asyncResultSingle(getById(call))
             }
             post("/api/provision-datapoint") {
-                create(call, validator)
+                call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/provision-datapoint/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/provision-datapoint") {
-                update(call, validator)
+                call.asyncResultSingle(update(call, validator))
             }
             put("/api/provision-datapoint/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
-            delete("/api/provision-datapoint/{id}") {
-                call.asyncResult(delete(call))
+            delete("/api/provision-datapoint/id?provisionId={provisionId}&dataPointId={dataPointId}") {
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/provision-datapoint/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

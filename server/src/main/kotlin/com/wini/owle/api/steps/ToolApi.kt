@@ -1,16 +1,10 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dll.workflows.ToolDll
 import com.wini.owle.dto.workflows.ToolDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.KSerializer
 
 class ToolApi(
     dll: DLL<Long, ToolDto>
@@ -24,7 +18,7 @@ class ToolApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/tool/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -33,19 +27,19 @@ class ToolApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/tool/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/tool") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/tool/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/tool/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/tool/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

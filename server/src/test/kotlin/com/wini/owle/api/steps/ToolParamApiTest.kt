@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/steps/ToolParamApiTest.kt
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -8,7 +7,9 @@ import com.wini.owle.dto.workflows.ToolParamDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
+
 open class ToolParamApiTest : BaseLongPkApiTest<ToolParamDto, ToolParamApi>() {
+
     override val route: String = "api/tool-param"
 
     override fun getDto(): ToolParamDto = DtoTestInstanceFactory.toolParamDto()
@@ -18,4 +19,5 @@ open class ToolParamApiTest : BaseLongPkApiTest<ToolParamDto, ToolParamApi>() {
     override val listSerializer: KSerializer<List<ToolParamDto>> = ListSerializer(ToolParamDto.serializer())
 
     override fun getApiInstance(dll: DLL<Long, ToolParamDto>): ToolParamApi = ToolParamApi(dll)
+
 }

@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/transforms/TransformTargetTypeApiTest.kt
 package com.wini.owle.api.transforms
 
 import com.wini.owle.api.BaseCompositePkApiTest
@@ -21,4 +20,5 @@ open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTar
     override val listSerializer: KSerializer<List<TransformationTargetTypeDto>> = ListSerializer(TransformationTargetTypeDto.serializer())
 
     override fun getApiInstance(dll: DLL<CompositeID, TransformationTargetTypeDto>): TransformTargetTypeApi = TransformTargetTypeApi(dll)
+
 }

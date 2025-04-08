@@ -1,5 +1,6 @@
 package com.wini.owle
 
+import com.wini.owle.api.ApiTest
 import com.wini.owle.dto.DtoTest
 import com.wini.owle.mapper.MapperTests
 import com.wini.owle.repo.RepositoryTest
@@ -9,6 +10,10 @@ import org.junit.jupiter.api.Nested
 
 
 class OwleTest {
+
+    @Nested
+    @DisplayName("API Tests")
+    inner class ApiTests: ApiTest()
 
     @Nested
     @DisplayName("DTO Serialization Tests")

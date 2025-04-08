@@ -65,7 +65,6 @@ val idFactoryModule = module {
 
 }
 
-
 val repositoryModule = module {
 
     single<PackageRepoRepository> { PackageRepoRepository() }

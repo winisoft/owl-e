@@ -6,15 +6,16 @@ import com.wini.owle.entity.user.TagRelationDao
 import com.wini.owle.mapper.user.TagRelationsMapper
 import com.wini.owle.repo.user.TagRelationRepository
 import com.wini.owle.services.BaseServiceImpl
+import com.wini.owle.repo.EntityIdFactory
 import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TagRelationService(
     repository: TagRelationRepository,
     mapper: TagRelationsMapper,
-    entityIdFactory: TagRelationIdFactory
+    entityIdFactory: EntityIdFactory<CompositeID>
 ): BaseServiceImpl<CompositeID, TagRelationDto, TagRelationDao>(
-    repository,
-    mapper,
-    entityIdFactory
+    repository = repository,
+    mapper = mapper,
+    entityIdFactory = entityIdFactory
 )

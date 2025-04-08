@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/typing/TypeBoundsApiTest.kt
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -9,6 +8,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
 open class TypeBoundsApiTest : BaseLongPkApiTest<TypeBoundsDto, TypeBoundsApi>() {
+
     override val route: String = "/api/type-bounds"
 
     override fun getDto(): TypeBoundsDto = DtoTestInstanceFactory.typeBoundDto()

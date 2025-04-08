@@ -20,7 +20,7 @@ class TestExpectedOutcomeApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-expected-outcome") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/test-expected-outcome/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -29,19 +29,19 @@ class TestExpectedOutcomeApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/test-expected-outcome/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/test-expected-outcome") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/test-expected-outcome/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/test-expected-outcome/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/test-expected-outcome/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

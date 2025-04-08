@@ -18,11 +18,11 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
 ): BaseEndpointImpl<Long, T>(
     dll = dll,
     validator = validator,
-    serializer = serializer,
-    listSerializer = ListSerializer(serializer)
+    dtoSerializer = serializer,
+    dtoListSerializer = ListSerializer(serializer)
 ) {
 
-    suspend fun deleteBatch(call: ApplicationCall): AsyncResult<Unit> {
+    suspend fun deleteBatch(call: ApplicationCall): AsyncResult<*> {
         return Json.decodeFromString<List<Long>>(call.receiveText())
             .run(dll::deleteAll)
     }
@@ -33,7 +33,7 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
             .run(dll::getById)
     }
 
-    fun delete(call: ApplicationCall): AsyncResult<Unit> {
+    fun delete(call: ApplicationCall): AsyncResult<*> {
         return call.readId()
             .let { it ?: return AsyncError.ApiRequest.LongIdInvalid.asFailure() }
             .run(dll::delete)

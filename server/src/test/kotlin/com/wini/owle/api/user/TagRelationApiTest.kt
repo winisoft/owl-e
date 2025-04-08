@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/user/TagRelationApiTest.kt
 package com.wini.owle.api.user
 
 import com.wini.owle.api.BaseCompositePkApiTest

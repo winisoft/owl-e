@@ -15,12 +15,10 @@ class WorkflowFolderApi(
     validator = { _-> true }
 ) {
 
-
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-folder") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/workflow-folder/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -29,19 +27,19 @@ class WorkflowFolderApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/workflow-folder/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/workflow-folder") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/workflow-folder/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/workflow-folder/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/workflow-folder/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

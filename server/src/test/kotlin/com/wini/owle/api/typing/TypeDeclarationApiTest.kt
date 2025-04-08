@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/typing/TypeDeclarationApiTest.kt
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseLongPkApiTest
@@ -8,7 +7,9 @@ import com.wini.owle.dto.typing.TypeDeclarationDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
+
 open class TypeDeclarationApiTest : BaseLongPkApiTest<TypeDeclarationDto, TypeDeclarationApi>() {
+
     override val route: String = "/api/type-declaration"
 
     override fun getDto(): TypeDeclarationDto = DtoTestInstanceFactory.typeDeclarationDto()
@@ -18,4 +19,5 @@ open class TypeDeclarationApiTest : BaseLongPkApiTest<TypeDeclarationDto, TypeDe
     override val listSerializer: KSerializer<List<TypeDeclarationDto>> = ListSerializer(TypeDeclarationDto.serializer())
 
     override fun getApiInstance(dll: DLL<Long, TypeDeclarationDto>): TypeDeclarationApi = TypeDeclarationApi(dll)
+
 }

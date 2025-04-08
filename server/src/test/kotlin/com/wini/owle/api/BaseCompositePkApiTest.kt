@@ -59,11 +59,11 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi> {
             }
 
             Assertions.assertEquals(HttpStatusCode.Created, response.status)
-            Assertions.assertEquals(json.encodeToString(serializer, inputDto), response.bodyAsText())
+            Assertions.assertEquals(inputDto, json.decodeFromString(serializer, response.bodyAsText()))
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun `GET all - on success - returns HTTP Code 200, serialized list of DTO return val`() = runBlocking {
         val dtoList = listOf(getDto(), getDto())
         val dll = mock<DLL<CompositeID, T>> {
@@ -77,7 +77,7 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi> {
             }
 
             Assertions.assertEquals(HttpStatusCode.OK, response.status)
-            Assertions.assertEquals(json.encodeToString(listSerializer, dtoList), response.bodyAsText())
+            Assertions.assertEquals(dtoList, json.decodeFromString(listSerializer, response.bodyAsText()))
         }
     }
 

@@ -17,7 +17,7 @@ class TestCaseApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-case") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/test-case/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -26,19 +26,19 @@ class TestCaseApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/test-case/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/test-case") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/test-case/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/test-case/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/test-case/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

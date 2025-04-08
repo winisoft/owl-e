@@ -20,7 +20,7 @@ class RevisionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/revision") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/revision/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -29,19 +29,19 @@ class RevisionApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/revision/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/revision") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/revision/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/revision/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/revision/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

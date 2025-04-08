@@ -1,4 +1,3 @@
-// server/src/test/kotlin/com/wini/owle/api/workflows/DataPointsApiTest.kt
 package com.wini.owle.api.workflows
 
 import com.wini.owle.api.BaseLongPkApiTest

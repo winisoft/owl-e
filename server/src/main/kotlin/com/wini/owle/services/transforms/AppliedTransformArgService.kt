@@ -4,17 +4,17 @@ import com.wini.owle.dto.transforms.AppliedTransformArgDto
 import com.wini.owle.entity.transforms.AppliedTransformArgDao
 import com.wini.owle.mapper.transforms.AppliedTransformArgsMapper
 import com.wini.owle.repo.AppliedTransformArgIdFactory
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.transforms.AppliedTransformArgRepository
 import com.wini.owle.services.BaseServiceImpl
+import com.wini.owle.repo.EntityIdFactory
 
 
 class AppliedTransformArgService(
     repository: AppliedTransformArgRepository,
     mapper: AppliedTransformArgsMapper,
-    entityIdFactory: AppliedTransformArgIdFactory
+    entityIdFactory: EntityIdFactory<Long>
 ): BaseServiceImpl<Long, AppliedTransformArgDto, AppliedTransformArgDao>(
-    repository,
-    mapper,
-    entityIdFactory
+    repository = repository,
+    mapper = mapper,
+    entityIdFactory = entityIdFactory
 )

@@ -18,7 +18,7 @@ class PackageRepoApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/package-repo") {
-                call.asyncResultMany(getAll())
+                call.asyncResultList(getAll())
             }
             get("/api/package-repo/{id}") {
                 call.asyncResultSingle(getById(call))
@@ -27,19 +27,19 @@ class PackageRepoApi(
                 call.asyncResultSingle(create(call, validator), isCreate = true)
             }
             post("/api/package-repo/batch") {
-                call.asyncResultMany(createBatch(call, validator), isCreate = true)
+                call.asyncResultList(createBatch(call, validator), isCreate = true)
             }
             put("/api/package-repo") {
                 call.asyncResultSingle(update(call, validator))
             }
             put("/api/package-repo/batch") {
-                call.asyncResultMany(updateBatch(call, validator), isCreate = true)
+                call.asyncResultList(updateBatch(call, validator))
             }
             delete("/api/package-repo/{id}") {
-                call.asyncResult(delete(call))
+                call.asyncResultUnit(delete(call))
             }
             delete("/api/package-repo/batch") {
-                call.asyncResult(deleteBatch(call))
+                call.asyncResultUnit(deleteBatch(call))
             }
         }
     }

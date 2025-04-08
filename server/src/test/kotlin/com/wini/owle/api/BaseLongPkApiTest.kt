@@ -59,7 +59,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi> {
             }
 
             Assertions.assertEquals(HttpStatusCode.Created, response.status)
-            Assertions.assertEquals(json.encodeToString(serializer, inputDto), response.bodyAsText())
+            Assertions.assertEquals(inputDto, json.decodeFromString(serializer, response.bodyAsText()))
         }
     }
 
@@ -77,7 +77,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi> {
             }
 
             Assertions.assertEquals(HttpStatusCode.OK, response.status)
-            Assertions.assertEquals(json.encodeToString(listSerializer, dtoList), response.bodyAsText())
+            Assertions.assertEquals(dtoList, json.decodeFromString(listSerializer, response.bodyAsText()))
         }
     }
     
