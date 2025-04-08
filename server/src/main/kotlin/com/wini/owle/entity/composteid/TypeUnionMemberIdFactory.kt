@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.Column
 
 object TypeUnionMemberIdFactory : CompositeIdFactoryImpl<TypeUnionMemberDto>() {
 
-    override fun fromDtoInstance(dto: TypeUnionMemberDto): CompositeID? {
+    override fun fromDtoInstance(dto: TypeUnionMemberDto): CompositeID {
         return CompositeID {
             it[TypeUnionMembers.unionTypeDeclaration] = dto.unionTypeDeclarationId
             it[TypeUnionMembers.memberTypeDeclaration] = dto.memberTypeDeclarationId

@@ -11,14 +11,13 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 import io.ktor.server.testing.*
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
 
 
 abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
@@ -47,8 +46,8 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     @Test
     fun `POST create - on success - returns HTTP Code 201, serialized DTO return val`() = runBlocking {
         val inputDto: T = getDto()
-        val dll = mock<DLL<ID, T>> {
-            onBlocking { create(eq(inputDto)) } doReturn AsyncResult.Success(inputDto)
+        val dll = mockk<DLL<ID, T>> {
+            coEvery { create(inputDto) } returns AsyncResult.Success(inputDto)
         }
 
         setupTestApp(dll) {
@@ -65,8 +64,8 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     @Test
     fun `GET all - on success - returns HTTP Code 200, serialized list of DTO return val`() = runBlocking {
         val dtoList = listOf(getDto(), getDto())
-        val dll = mock<DLL<ID, T>> {
-            onBlocking { getAll() } doReturn AsyncResult.Success(data = dtoList)
+        val dll = mockk<DLL<ID, T>> {
+            coEvery { getAll() } returns AsyncResult.Success(data = dtoList)
         }
 
         setupTestApp(dll) {

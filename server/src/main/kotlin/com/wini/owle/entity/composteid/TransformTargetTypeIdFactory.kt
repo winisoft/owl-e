@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.Column
 
 object TransformTargetTypeIdFactory: CompositeIdFactoryImpl<TransformationTargetTypeDto>() {
 
-    override fun fromDtoInstance(dto: TransformationTargetTypeDto): CompositeID? {
+    override fun fromDtoInstance(dto: TransformationTargetTypeDto): CompositeID {
         return CompositeID {
             it[TransformTargetTypes.transformation] to dto.transformationId
             it[TransformTargetTypes.eligibleTypeDeclaration] to dto.typeDeclarationId

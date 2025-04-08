@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.Column
 
 object ToolPackageDepIdFactory : CompositeIdFactoryImpl<ToolPackageDependencyDto>() {
 
-    override fun fromDtoInstance(dto: ToolPackageDependencyDto): CompositeID? {
+    override fun fromDtoInstance(dto: ToolPackageDependencyDto): CompositeID {
         return CompositeID {
             it[ToolPackageDependencies.tool] = dto.packageId
             it[ToolPackageDependencies.packageEntity] = dto.packageId

@@ -6,9 +6,10 @@ import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 
+
 object TagRelationIdFactory: CompositeIdFactoryImpl<TagRelationDto>() {
 
-    override fun fromDtoInstance(dto: TagRelationDto): CompositeID? {
+    override fun fromDtoInstance(dto: TagRelationDto): CompositeID {
         return CompositeID {
             it[TagRelations.parentTag] = dto.parentTagId
             it[TagRelations.childTag] = dto.childTagId
