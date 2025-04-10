@@ -68,9 +68,9 @@ val apiModule = module {
     single<LongIdEndpointImpl<ToolDto>> { ToolApi(get(), get()) }
     single<LongIdEndpointImpl<WorkflowFolderDto>> { WorkflowFolderApi(get(), get()) }
     single<LongIdEndpointImpl<WorkflowDto>> { WorkflowApi(get(), get()) }
-    single<CompositeIdEndpointImpl<ProvisionDataPointDto>> { ProvisionDataPointApi(get(), get()) }
-    single<CompositeIdEndpointImpl<TypeUnionMemberDto>> { TypeUnionMemberApi(get(), get()) }
-    single<CompositeIdEndpointImpl<TagRelationDto>> { TagRelationApi(get(), get()) }
-    single<CompositeIdEndpointImpl<TransformationTargetTypeDto>> { TransformTargetTypeApi(get(), get()) }
-    single<CompositeIdEndpointImpl<ToolPackageDependencyDto>> { ToolPackageDependencyApi(get(), get()) }
+    single<CompositeIdEndpointImpl<ProvisionDataPointDto>> { ProvisionDataPointApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<TypeUnionMemberDto>> { TypeUnionMemberApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<TagRelationDto>> { TagRelationApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<TransformationTargetTypeDto>> { TransformTargetTypeApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<ToolPackageDependencyDto>> { ToolPackageDependencyApi(get(), get(), get()) }
 }

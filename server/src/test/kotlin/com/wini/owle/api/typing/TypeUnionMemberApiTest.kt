@@ -1,41 +1,37 @@
 package com.wini.owle.api.typing
 
-import com.wini.owle.api.ApiError
-import com.wini.owle.api.BaseCompositePkApiTest
+import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.async.AsyncError
-import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.dto.typing.TypeUnionMemberDto
 import com.wini.owle.entity.TypeUnionMembers
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 import com.wini.owle.validators.DtoValidator
-import kotlinx.serialization.json.Json
 
 
-open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
+open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
 
-    override val route: String = "/api/type-union-member"
-
-    override val malformedParamsRoute: String
-        get() = "$route/id?unionTypeDeclarationId=Text&memberTypeDeclarationId=Text"
 
     override fun getDto(id1: Long, id2: Long): TypeUnionMemberDto = DtoTestInstanceFactory.typeUnionMemberDto(
         unionTypeDeclarationId = id1,
         memberTypeDeclarationId = id2
     )
+
+    override fun getApiInstance(
+        dll: DLL<CompositeID, TypeUnionMemberDto>,
+        validator: DtoValidator<TypeUnionMemberDto>,
+        compositeIdFactory: CompositeIdFactory<TypeUnionMemberDto>
+    ): TypeUnionMemberApi {
+        return TypeUnionMemberApi(
+            dll = dll,
+            validator = validator,
+            compositeIdFactory = compositeIdFactory
+        )
+    }
 
     override fun compositeId1(): CompositeID {
         return CompositeID {
@@ -55,24 +51,37 @@ open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, T
     
     override val listSerializer: KSerializer<List<TypeUnionMemberDto>> = ListSerializer(TypeUnionMemberDto.serializer())
 
-    override fun getApiInstance(
-        dll: DLL<CompositeID, TypeUnionMemberDto>,
-        validator: DtoValidator<TypeUnionMemberDto>
-    ): TypeUnionMemberApi = TypeUnionMemberApi(dll, validator)
-
-    override fun missingParamErrors(): List<ApiError> {
+    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
         return listOf(
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("unionTypeDeclarationId")),
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("memberTypeDeclarationId"))
+            AsyncError.ApiRequestError.MissingParameter("memberTypeDeclarationId")
         )
     }
 
-    override fun improperParameters(): List<ApiError> {
+    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
         return listOf(
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("unionTypeDeclarationId")),
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("memberTypeDeclarationId"))
+            AsyncError.ApiRequestError.ParamValueMalformedLong("unionTypeDeclarationId"),
+            AsyncError.ApiRequestError.ParamValueMalformedLong("memberTypeDeclarationId")
         )
     }
 
 
+    override val route: String = "/api/type-union-member"
+
+    override val malformedParamsRoute: String
+        get() = "$route/id?unionTypeDeclarationId=Text&memberTypeDeclarationId=Text"
+
+    override val getByIdRoute: String
+        get() = getDto(1, 1).run {
+            "$route/id?unionTypeDeclarationId=${unionTypeDeclarationId}&memberTypeDeclarationId=${memberTypeDeclarationId}"
+        }
+
+    override val deleteByIdRoute: String
+        get() = getDto(1, 1).run {
+            "$route/id?unionTypeDeclarationId=${unionTypeDeclarationId}&memberTypeDeclarationId=${memberTypeDeclarationId}"
+        }
+
+    override val onlyFirstParamRoute: String
+        get() = getDto(1, 1).run {
+            "$route/id?unionTypeDeclarationId=${unionTypeDeclarationId}"
+        }
 }

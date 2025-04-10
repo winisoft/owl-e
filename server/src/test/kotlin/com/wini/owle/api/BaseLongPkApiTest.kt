@@ -4,9 +4,15 @@ import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.validators.DtoValidator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.routing.*
+import io.ktor.server.testing.*
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
@@ -23,6 +29,24 @@ import org.junit.jupiter.api.Test
 abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Long, T, R>() {
 
     abstract fun getDto(id: Long): T
+    abstract fun getApiInstance(
+        dll: DLL<Long, T>,
+        validator: DtoValidator<T>
+    ): R
+
+    protected fun setupTestApp(
+        dll: DLL<Long, T>,
+        validator: DtoValidator<T> = DtoValidator.alwaysValid(),
+        testBlock: suspend ApplicationTestBuilder.() -> Unit
+    ) = testApplication {
+        application {
+            install(ContentNegotiation) { json(json) }
+            routing {
+                getApiInstance(dll, validator).register(this)
+            }
+        }
+        testBlock()
+    }
 
     @Nested
     @DisplayName("Success")
@@ -516,7 +540,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
                 val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.NoSuchIdError))
                 val dll = mockk<DLL<Long, T>> {
                     coEvery {
-                        getById(any<Long>())
+                        delete(id)
                     } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
                 }
 

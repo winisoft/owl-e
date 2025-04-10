@@ -4,6 +4,7 @@ import com.wini.owle.api.CompositeIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
+import com.wini.owle.entity.composteid.CompositeIdFactory
 import com.wini.owle.entity.composteid.ToolPackageDepIdFactory
 import com.wini.owle.validators.DtoValidator
 import io.ktor.server.application.*
@@ -13,11 +14,12 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 class ToolPackageDependencyApi(
     dll: DLL<CompositeID, ToolPackageDependencyDto>,
-    validator: DtoValidator<ToolPackageDependencyDto>
+    validator: DtoValidator<ToolPackageDependencyDto>,
+    compositeIdFactory: CompositeIdFactory<ToolPackageDependencyDto>
 ) : CompositeIdEndpointImpl<ToolPackageDependencyDto>(
     dll = dll,
     serializer = ToolPackageDependencyDto.serializer(),
-    compositeIdFactory = ToolPackageDepIdFactory,
+    compositeIdFactory = compositeIdFactory,
     validator = validator
 ) {
 
@@ -26,7 +28,7 @@ class ToolPackageDependencyApi(
             get("/api/tool-package-dep") {
                 call.execute(OwleApiCall.GetMany(ToolPackageDependencyDto::class))
             }
-            get("/api/tool-package-dep/id?toolId={toolId}&packageId={packageId}&versionSpecId={versionSpecId}") {
+            get("/api/tool-package-dep/id") {
                 call.execute(OwleApiCall.GetOne(ToolPackageDependencyDto::class))
             }
             post("/api/tool-package-dep") {
@@ -41,7 +43,7 @@ class ToolPackageDependencyApi(
             put("/api/tool-package-dep/batch") {
                 call.execute(OwleApiCall.UpdateMany(ToolPackageDependencyDto::class))
             }
-            delete("/api/tool-package-dep/tool-package-dep/id?toolId={toolId}&packageId={packageId}&versionSpecId={versionSpecId}") {
+            delete("/api/tool-package-dep/id") {
                 call.execute(OwleApiCall.DeleteOne(ToolPackageDependencyDto::class))
             }
             delete("/api/tool-package-dep/batch") {

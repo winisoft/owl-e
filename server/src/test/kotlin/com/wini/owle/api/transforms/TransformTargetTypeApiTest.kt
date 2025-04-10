@@ -1,41 +1,56 @@
 package com.wini.owle.api.transforms
 
-import com.wini.owle.api.ApiError
-import com.wini.owle.api.BaseCompositePkApiTest
+import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.async.AsyncError
-import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.steps.ProvisionDataPointDto
 import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.entity.TransformTargetTypes
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
 import com.wini.owle.validators.DtoValidator
-import kotlinx.serialization.json.Json
 
 
-open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTargetTypeDto, TransformTargetTypeApi>() {
+open class TransformTargetTypeApiTest : Base2IdCompositeApiTest<TransformationTargetTypeDto, TransformTargetTypeApi>() {
 
     override val route: String = "/api/transform-target-type"
 
     override val malformedParamsRoute: String
-        get() = "$route/id?unionTypeDeclarationId=Text&typeDeclarationId=Text"
+        get() = "$route/id?unionTypeDeclarationId={Text}&typeDeclarationId={Text}"
+
+    override val getByIdRoute: String
+        get() = getDto(1, 1).run {
+            "$route/id?transformationId=${transformationId}&typeDeclarationId=${typeDeclarationId}"
+        } //
+
+    override val deleteByIdRoute: String
+        get() = getDto(1, 1).run {
+            "$route/id?transformationId=${transformationId}&typeDeclarationId=${typeDeclarationId}"
+        }
+
+    override val onlyFirstParamRoute: String
+        get() = getDto(1, 1).run {
+            "$route/id?transformationId=${transformationId}"
+        }
 
     override fun getDto(id1: Long, id2: Long): TransformationTargetTypeDto = DtoTestInstanceFactory.transformationTargetTypeDto(
         transformationId = id1,
         typeDeclarationId = id2
     )
+
+    override fun getApiInstance(
+        dll: DLL<CompositeID, TransformationTargetTypeDto>,
+        validator: DtoValidator<TransformationTargetTypeDto>,
+        compositeIdFactory: CompositeIdFactory<TransformationTargetTypeDto>
+    ): TransformTargetTypeApi {
+        return TransformTargetTypeApi(
+            dll = dll,
+            validator = validator,
+            compositeIdFactory = compositeIdFactory
+        )
+    }
 
     override fun compositeId1(): CompositeID {
         return CompositeID {
@@ -55,22 +70,16 @@ open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTar
     
     override val listSerializer: KSerializer<List<TransformationTargetTypeDto>> = ListSerializer(TransformationTargetTypeDto.serializer())
 
-    override fun getApiInstance(
-        dll: DLL<CompositeID, TransformationTargetTypeDto>,
-        validator: DtoValidator<TransformationTargetTypeDto>
-    ): TransformTargetTypeApi = TransformTargetTypeApi(dll, validator)
-
-    override fun missingParamErrors(): List<ApiError> {
+    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
         return listOf(
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("transformationId")),
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("typeDeclarationId"))
+            AsyncError.ApiRequestError.MissingParameter("typeDeclarationId")
         )
     }
 
-    override fun improperParameters(): List<ApiError> {
+    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
         return listOf(
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("transformationId")),
-            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("typeDeclarationId"))
+            AsyncError.ApiRequestError.ParamValueMalformedLong("transformationId"),
+            AsyncError.ApiRequestError.ParamValueMalformedLong("typeDeclarationId")
         )
     }
 }

@@ -10,16 +10,18 @@ import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.entity.composteid.CompositeIdFactory
 import com.wini.owle.validators.DtoValidator
 
 
 class TagRelationApi(
     dll: DLL<CompositeID, TagRelationDto>,
-    validator: DtoValidator<TagRelationDto>
+    validator: DtoValidator<TagRelationDto>,
+    compositeIdFactory: CompositeIdFactory<TagRelationDto>
 ): CompositeIdEndpointImpl<TagRelationDto>(
     dll = dll,
     serializer = TagRelationDto.serializer(),
-    compositeIdFactory = TagRelationIdFactory,
+    compositeIdFactory = compositeIdFactory,
     validator = validator
 ) {
 
@@ -28,7 +30,7 @@ class TagRelationApi(
             get("/api/tag-relation") {
                 call.execute(OwleApiCall.GetMany(TagRelationDto::class))
             }
-            get("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
+            get("/api/tag-relation/id") {
                 call.execute(OwleApiCall.GetOne(TagRelationDto::class))
             }
             post("/api/tag-relation") {
@@ -43,7 +45,7 @@ class TagRelationApi(
             put("/api/tag-relation/batch") {
                 call.execute(OwleApiCall.UpdateMany(TagRelationDto::class))
             }
-            delete("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
+            delete("/api/tag-relation/id") {
                 call.execute(OwleApiCall.DeleteOne(TagRelationDto::class)) 
             }
             delete("/api/tag-relation/batch") {
