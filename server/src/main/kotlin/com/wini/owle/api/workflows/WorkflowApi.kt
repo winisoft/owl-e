@@ -6,11 +6,12 @@ import com.wini.owle.dto.workflows.WorkflowDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
+import com.wini.owle.validators.DtoValidator
 
 
 class WorkflowApi(
     dll: DLL<Long, WorkflowDto>,
-    validator: (WorkflowDto) -> Boolean = { _-> true }
+    validator: DtoValidator<WorkflowDto>
 ): LongIdEndpointImpl<WorkflowDto>(
     dll = dll,
     serializer = WorkflowDto.serializer(),

@@ -11,7 +11,7 @@ import com.wini.owle.validators.DtoValidator
 
 class DataPointsApi(
     dll: DLL<Long, DataPointDto>,
-    validator: DtoValidator<>
+    validator: DtoValidator<DataPointDto>
 ): LongIdEndpointImpl<DataPointDto>(
     dll = dll,
     serializer = DataPointDto.serializer(),

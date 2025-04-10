@@ -11,7 +11,7 @@ import com.wini.owle.validators.DtoValidator
 
 class PhaseApi(
     dll: DLL<Long, PhaseDto>,
-    validator: DtoValidator<>
+    validator: DtoValidator<PhaseDto>
 ): LongIdEndpointImpl<PhaseDto>(
     dll = dll,
     serializer = PhaseDto.serializer(),

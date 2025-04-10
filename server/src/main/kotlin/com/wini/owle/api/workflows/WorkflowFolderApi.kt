@@ -12,7 +12,7 @@ import com.wini.owle.validators.DtoValidator
 
 class WorkflowFolderApi(
     dll: DLL<Long, WorkflowFolderDto>,
-    validator: DtoValidator<>
+    validator: DtoValidator<WorkflowFolderDto>
 ): LongIdEndpointImpl<WorkflowFolderDto>(
     dll = dll,
     serializer = WorkflowFolderDto.serializer(),

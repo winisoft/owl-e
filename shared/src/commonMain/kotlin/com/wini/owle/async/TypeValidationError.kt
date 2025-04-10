@@ -93,4 +93,66 @@ sealed class TypeValidation : ApiRequestError() {
         override val message: String get() = "Must not be an empty list."
         override val detail: String? get() = null
     }
+
+    @Serializable
+    data class InvalidEmail(
+        val idString: String,
+        val fieldName: String
+    ): TypeValidation() {
+        override val errorCode: String get() = "TYPE_INVALID_EMAIL"
+        override val message: String get() = "Must be a valid email address."
+        override val detail: String? get() = null
+    }
+
+    @Serializable
+    data class InvalidUrl(
+        val idString: String,
+        val fieldName: String
+    ): TypeValidation() {
+        override val errorCode: String get() = "TYPE_INVALID_URL"
+        override val message: String get() = "Must be a valid URL."
+        override val detail: String? get() = null
+    }
+
+    @Serializable
+    data class Generic(
+        val idString: String,
+        val fieldName: String,
+        override val message: String
+    ): TypeValidation() {
+        override val errorCode: String get() = "TYPE_INVALID_GENERIC"
+        override val detail: String? get() = null
+    }
+
+    @Serializable
+    data class InvalidVersion(
+        val idString: String,
+        val fieldName: String,
+        val format: String
+    ): TypeValidation() {
+        override val errorCode: String get() = "TYPE_INVALID_VERSION"
+        override val message: String get() = "Must be a valid version string in format: $format"
+        override val detail: String? get() = null
+    }
+
+    @Serializable
+    data class RequiredField(
+        val idString: String,
+        val fieldName: String
+    ): TypeValidation() {
+        override val errorCode: String get() = "TYPE_REQUIRED_FIELD"
+        override val message: String get() = "Field is required and must not be null."
+        override val detail: String? get() = null
+    }
+
+    @Serializable
+    data class InvalidEnum(
+        val idString: String,
+        val fieldName: String,
+        val allowedValues: List<String>
+    ): TypeValidation() {
+        override val errorCode: String get() = "TYPE_INVALID_ENUM"
+        override val message: String get() = "Must be one of: ${allowedValues.joinToString(", ")}"
+        override val detail: String? get() = null
+    }
 }
