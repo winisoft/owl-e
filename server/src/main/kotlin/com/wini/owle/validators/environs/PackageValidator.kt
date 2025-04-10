@@ -5,9 +5,8 @@ import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-
 class PackageValidator(
-    private val versionSpecValidator: VersionSpecValidator
+    val versionSpecValidator: VersionSpecValidator
 ) : BaseValidator<PackageDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
@@ -34,10 +33,7 @@ class PackageValidator(
             }
         }
 
-        // versionSpec is required (based on non-nullable reference in Packages table)
-        if (dto.versionSpec == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "versionSpec"))
-        }
+        violations.addAll(versionSpecValidator.validate(dto.versionSpec).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }
