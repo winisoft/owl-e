@@ -1,5 +1,6 @@
 package com.wini.owle.dto.user
 
+import com.wini.owle.dto.CompositeDto
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
@@ -7,4 +8,9 @@ import kotlinx.serialization.Serializable
 data class WorkflowTagDto(
     val workflowId: Long,
     val tagId: Long
-) : StandardDto
+) : CompositeDto {
+
+    override fun idToString(): String {
+        return "workflowId={$workflowId}&tagId={$tagId}"
+    }
+}
