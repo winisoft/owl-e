@@ -34,7 +34,7 @@ object DtoTestInstanceFactory {
     }
 
     fun packageDto(
-        id: Long = 0L,
+        id: Long = 1L,
         name: String = "Package Name",
         disambiguation: String = "Package Disambiguation",
         versionSpec: VersionSpecDto = versionSpecDto()

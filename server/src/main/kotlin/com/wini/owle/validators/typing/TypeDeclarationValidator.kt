@@ -15,14 +15,14 @@ class TypeDeclarationValidator(
     override fun validate(dto: TypeDeclarationDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // typeDefinition is required (non-nullable reference)
-        if (dto.typeDefinition == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeDefinition"))
-        }
+        // Validate nested typeDefinition
+        violations.addAll(typeDefinitionValidator.validate(dto.typeDefinition).violations)
 
         // alias is optional but has max length if present
-        if (dto.alias != null && dto.alias!!.length > MAX_ALIAS_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "alias", MAX_ALIAS_LENGTH))
+        dto.alias?.let { alias ->
+            if (alias.length > MAX_ALIAS_LENGTH) {
+                violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "alias", MAX_ALIAS_LENGTH))
+            }
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

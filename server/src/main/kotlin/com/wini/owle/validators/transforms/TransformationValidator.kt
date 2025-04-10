@@ -18,20 +18,21 @@ class TransformationValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
         // description is required (non-nullable text)
         if (dto.description.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "description"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "description"))
         }
 
-        // examples is optional (nullable text)
-
-        // returnsTypeDeclaration is optional (nullable reference)
+        // Validate optional returnsType if present
+        dto.returnsType?.let { returnsType ->
+            violations.addAll(returnsTypeValidator.validate(returnsType).violations)
+        }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

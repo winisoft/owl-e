@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.TestCaseDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class TestCaseApiTest : BaseLongPkApiTest<TestCaseDto, TestCaseApi>() {
 
     override val route: String = "/api/test-case"
     
-    override fun getDto(): TestCaseDto = DtoTestInstanceFactory.testCaseDto()
+    override fun getDto(id: Long): TestCaseDto = DtoTestInstanceFactory.testCaseDto(
+        id = id
+    )
     
     override val serializer: KSerializer<TestCaseDto> = TestCaseDto.serializer()
     
@@ -20,7 +23,7 @@ open class TestCaseApiTest : BaseLongPkApiTest<TestCaseDto, TestCaseApi>() {
     
     override fun getApiInstance(
         dll: DLL<Long, TestCaseDto>,
-        validator: (TestCaseDto) -> Boolean
+        validator: DtoValidator<TestCaseDto>
     ): TestCaseApi = TestCaseApi(dll, validator)
 
 }

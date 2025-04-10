@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.transforms.TransformationArgDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class TransformationArgApiTest : BaseLongPkApiTest<TransformationArgDto, TransformationArgApi>() {
 
     override val route: String = "/api/transformation-arg"
 
-    override fun getDto(): TransformationArgDto = DtoTestInstanceFactory.transformationArgDto()
+    override fun getDto(id: Long): TransformationArgDto = DtoTestInstanceFactory.transformationArgDto(
+        id = id
+    )
 
     override val serializer: KSerializer<TransformationArgDto> = TransformationArgDto.serializer()
     
@@ -20,7 +23,7 @@ open class TransformationArgApiTest : BaseLongPkApiTest<TransformationArgDto, Tr
 
     override fun getApiInstance(
         dll: DLL<Long, TransformationArgDto>,
-        validator: (TransformationArgDto) -> Boolean
+        validator: DtoValidator<TransformationArgDto>
     ): TransformationArgApi = TransformationArgApi(dll, validator)
 
 }

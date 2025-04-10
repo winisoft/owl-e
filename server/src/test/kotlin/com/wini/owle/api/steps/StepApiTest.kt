@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.StepDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class StepApiTest : BaseLongPkApiTest<StepDto, StepApi>() {
 
     override val route: String = "/api/step"
 
-    override fun getDto(): StepDto = DtoTestInstanceFactory.stepDto()
+    override fun getDto(id: Long): StepDto = DtoTestInstanceFactory.stepDto(
+        id = id
+    )
 
     override val serializer: KSerializer<StepDto> = StepDto.serializer()
     
@@ -20,7 +23,7 @@ open class StepApiTest : BaseLongPkApiTest<StepDto, StepApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, StepDto>,
-        validator: (StepDto) -> Boolean
+        validator: DtoValidator<StepDto>
     ): StepApi = StepApi(dll, validator)
 
 }

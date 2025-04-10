@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeDefinitionDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class TypeDefinitionApiTest : BaseLongPkApiTest<TypeDefinitionDto, TypeDefinitionApi>() {
 
     override val route: String = "/api/type-definition"
 
-    override fun getDto(): TypeDefinitionDto = DtoTestInstanceFactory.typeDefinitionDto()
+    override fun getDto(id: Long): TypeDefinitionDto = DtoTestInstanceFactory.typeDefinitionDto(
+        id = id
+    )
 
     override val serializer: KSerializer<TypeDefinitionDto> = TypeDefinitionDto.serializer()
     
@@ -20,7 +23,7 @@ open class TypeDefinitionApiTest : BaseLongPkApiTest<TypeDefinitionDto, TypeDefi
 
     override fun getApiInstance(
         dll: DLL<Long, TypeDefinitionDto>,
-        validator: (TypeDefinitionDto) -> Boolean
+        validator: DtoValidator<TypeDefinitionDto>
     ): TypeDefinitionApi = TypeDefinitionApi(dll, validator)
 
 }

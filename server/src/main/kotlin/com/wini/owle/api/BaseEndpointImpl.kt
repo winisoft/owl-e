@@ -30,7 +30,9 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     suspend fun ApplicationCall.execute(owleCall: OwleApiCall) {
         when (owleCall) {
             is OwleApiCall.GetMany ->
-                methodCallRespond(owleCall, responseManySerializer) { dll.getAll() }
+                methodCallRespond(owleCall, responseManySerializer) {
+                    dll.getAll()
+                }
             is OwleApiCall.GetOne ->
                 when (val idResult = readId()) {
                     is AsyncResult.Failure -> failureRespond(idResult, responseOneSerializer)
@@ -38,42 +40,48 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
                         dll.getById(idResult.data)
                     }
                 }
-            is OwleApiCall.DeleteOne -> when (val idResult = readId()) {
-                is AsyncResult.Failure -> failureRespond(idResult, responseNoneSerializer)
-                is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
-                    dll.delete(idResult.data)
+            is OwleApiCall.DeleteOne ->
+                when (val idResult = readId()) {
+                    is AsyncResult.Failure -> failureRespond(idResult, responseNoneSerializer)
+                    is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
+                        dll.delete(idResult.data)
+                    }
                 }
-            }
-            is OwleApiCall.CreateOne -> when (val dtoResult = readDto(dtoSerializer, validator)) {
-                is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
-                is AsyncResult.Success<T> -> methodCallRespond(owleCall, responseOneSerializer) {
-                    dll.create(dtoResult.data)
+            is OwleApiCall.CreateOne ->
+                when (val dtoResult = readDto(dtoSerializer, validator)) {
+                    is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
+                    is AsyncResult.Success<T> -> methodCallRespond(owleCall, responseOneSerializer) {
+                        dll.create(dtoResult.data)
+                    }
                 }
-            }
-            is OwleApiCall.UpdateOne -> when (val dtoResult = readDto(dtoSerializer, validator)) {
-                is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
-                is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
-                    dll.update(dtoResult.data)
+            is OwleApiCall.UpdateOne ->
+                when (val dtoResult = readDto(dtoSerializer, validator)) {
+                    is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
+                    is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
+                        dll.update(dtoResult.data)
+                    }
                 }
-            }
-            is OwleApiCall.DeleteMany -> when (val idsResult = readIds()) {
-                is AsyncResult.Failure -> failureRespond(idsResult, responseNoneSerializer)
-                is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
-                    dll.deleteAll(idsResult.data)
+            is OwleApiCall.DeleteMany ->
+                when (val idsResult = readIds()) {
+                    is AsyncResult.Failure -> failureRespond(idsResult, responseNoneSerializer)
+                    is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
+                        dll.deleteAll(idsResult.data)
+                    }
                 }
-            }
-            is OwleApiCall.CreateMany -> when (val dtosResult = readDtos(dtoListSerializer, validator)) {
-                is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
-                is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
-                    dll.createAll(dtosResult.data)
+            is OwleApiCall.CreateMany ->
+                when (val dtosResult = readDtos(dtoListSerializer, validator)) {
+                    is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
+                    is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
+                        dll.createAll(dtosResult.data)
+                    }
                 }
-            }
-            is OwleApiCall.UpdateMany -> when (val dtosResult = readDtos(dtoListSerializer, validator)) {
-                is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
-                is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
-                    dll.updateAll(dtosResult.data)
+            is OwleApiCall.UpdateMany ->
+                when (val dtosResult = readDtos(dtoListSerializer, validator)) {
+                    is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
+                    is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
+                        dll.updateAll(dtosResult.data)
+                    }
                 }
-            }
         }
     }
 
@@ -82,14 +90,13 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         serializer: KSerializer<ApiResponse<T>>
     ) {
         val statusCode = when (failure.error) {
-            in listOf(
-                ApiRequestError.MissingParameter,
-                ApiRequestError.ParamValueMalformedLong,
-                ApiRequestError.RequestBodyMalformed,
-                ApiRequestError.EmptyListNotAllowed,
-                ApiRequestError.MultipleParamFailure,
-                ApiRequestError.MultipleTypeValidations
-            ) ->
+            is ApiRequestError.MissingParameter,
+            is ApiRequestError.ParamValueMalformedLong,
+            is ApiRequestError.RequestBodyMalformed,
+            is ApiRequestError.EmptyListNotAllowed,
+            is ApiRequestError.MultipleParamFailure,
+            is AsyncError.NoSuchIdError,
+            is ApiRequestError.MultipleTypeValidations ->
                 HttpStatusCode.BadRequest
             else ->
                 HttpStatusCode.InternalServerError

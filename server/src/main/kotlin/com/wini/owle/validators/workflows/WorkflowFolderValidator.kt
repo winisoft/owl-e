@@ -6,6 +6,7 @@ import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
+
 class WorkflowFolderValidator(
     private val dateTimeConverter: DateTimeConverter
 ) : BaseValidator<WorkflowFolderDto>() {
@@ -18,16 +19,20 @@ class WorkflowFolderValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
         // parentFolder is optional (nullable reference)
+        dto.parentFolder?.apply {
+            violations.addAll(validate(this).violations)
+        }
 
         // timestamps (createdAt, updatedAt)
-        // TODO
+        dateTimeConverter.fromString(dto.createdAt) <= dateTimeConverter.fromString(dto.updatedAt)
+
 
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

@@ -4,15 +4,14 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.steps.StepValidator
 import com.wini.owle.validators.user.UserValidator
 import com.wini.owle.validators.workflows.WorkflowValidator
 
 class TestCaseValidator(
     private val userValidator: UserValidator,
     private val workflowValidator: WorkflowValidator,
-    private val inputsValidator: TestInputValidator,
-    private val expectedOutcomesValidator: TestExpectedOutcomeValidator,
-    private val resultsValidator: TestResultValidator
+    private val stepValidator: StepValidator
 ) : BaseValidator<TestCaseDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
@@ -21,28 +20,32 @@ class TestCaseValidator(
     override fun validate(dto: TestCaseDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // user is required (non-nullable reference)
-        if (dto.user == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "user"))
-        }
+        // Validate nested user
+        violations.addAll(userValidator.validate(dto.user).violations)
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
-        // description is optional (nullable text)
-        
-        // workflow and step are optional (nullable references)
-        // but at least one should be present
+        // Validate optional workflow if present
+        dto.workflow?.let { workflow ->
+            violations.addAll(workflowValidator.validate(workflow).violations)
+        }
+
+        // Validate optional step if present
+        dto.step?.let { step ->
+            violations.addAll(stepValidator.validate(step).violations)
+        }
+
+        // Either workflow or step must be present
         if (dto.workflow == null && dto.step == null) {
-            violations.add(TypeValidation.Generic(
-                dto.idToString(),
-                "target",
-                "Either workflow or step must be specified"
+            violations.add(TypeValidation.TestCaseSubject(
+                dto.typeName,
+                dto.idToString()
             ))
         }
 

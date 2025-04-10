@@ -6,6 +6,7 @@ package com.wini.owle.dto
  */
 interface BaseDto {
     fun idToString(): String
+    val typeName: String get() = this::class.simpleName?.removeSuffix("Dto") ?: "Type Name Unavailable"
 }
 
 interface StandardDto: BaseDto {

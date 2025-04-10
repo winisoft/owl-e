@@ -15,24 +15,15 @@ class TestInputValidator(
     override fun validate(dto: TestInputDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // testCase is required (non-nullable reference)
-        if (dto.testCase == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "testCase"))
-        }
+        // Validate nested testCase
+        violations.addAll(testCaseValidator.validate(dto.testCase).violations)
 
         // dataPointName is required and has max length
         if (dto.dataPointName.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "dataPointName"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "dataPointName"))
         }
         if (dto.dataPointName.length > MAX_DATAPOINT_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "dataPointName", MAX_DATAPOINT_NAME_LENGTH))
-        }
-
-        // value is optional (nullable text)
-
-        // generationMethod is required (non-nullable enum)
-        if (dto.generationMethod == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "generationMethod"))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "dataPointName", MAX_DATAPOINT_NAME_LENGTH))
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

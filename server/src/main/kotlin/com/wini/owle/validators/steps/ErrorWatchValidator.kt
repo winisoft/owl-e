@@ -16,23 +16,19 @@ class ErrorWatchValidator(
     override fun validate(dto: ErrorWatchDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // step is required (non-nullable reference)
-        if (dto.step == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "step"))
-        }
+        // Validate nested step
+        violations.addAll(stepValidator.validate(dto.step).violations)
 
         // errorType is required and has max length
         if (dto.errorType.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "errorType"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "errorType"))
         }
         if (dto.errorType.length > MAX_ERROR_TYPE_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "errorType", MAX_ERROR_TYPE_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "errorType", MAX_ERROR_TYPE_LENGTH))
         }
 
-        // onMetStep is required (non-nullable reference)
-        if (dto.triggerStep == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "onMetStep"))
-        }
+        // Validate nested triggerStep
+        violations.addAll(triggerStepValidator.validate(dto.triggerStep).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

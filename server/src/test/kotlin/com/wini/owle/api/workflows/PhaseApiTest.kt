@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.PhaseDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class PhaseApiTest : BaseLongPkApiTest<PhaseDto, PhaseApi>() {
 
     override val route: String = "/api/phase"
 
-    override fun getDto(): PhaseDto = DtoTestInstanceFactory.phaseDto()
+    override fun getDto(id: Long): PhaseDto = DtoTestInstanceFactory.phaseDto(
+        id = id
+    )
 
     override val serializer: KSerializer<PhaseDto> = PhaseDto.serializer()
     
@@ -20,7 +23,7 @@ open class PhaseApiTest : BaseLongPkApiTest<PhaseDto, PhaseApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, PhaseDto>,
-        validator: (PhaseDto) -> Boolean
+        validator: DtoValidator<PhaseDto>
     ): PhaseApi = PhaseApi(dll, validator)
 
 }

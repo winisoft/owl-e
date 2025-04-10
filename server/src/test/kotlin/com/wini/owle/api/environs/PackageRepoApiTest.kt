@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.PackageRepoDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class PackageRepoApiTest : BaseLongPkApiTest<PackageRepoDto, PackageRepoApi>() {
 
     override val route: String = "/api/package-repo"
 
-    override fun getDto(): PackageRepoDto = DtoTestInstanceFactory.packageRepoDto()
+    override fun getDto(id: Long): PackageRepoDto = DtoTestInstanceFactory.packageRepoDto(
+        id = id
+    )
 
     override val serializer: KSerializer<PackageRepoDto> = PackageRepoDto.serializer()
     
@@ -20,7 +23,7 @@ open class PackageRepoApiTest : BaseLongPkApiTest<PackageRepoDto, PackageRepoApi
 
     override fun getApiInstance(
         dll: DLL<Long, PackageRepoDto>,
-        validator: (PackageRepoDto) -> Boolean
+        validator: DtoValidator<PackageRepoDto>
     ): PackageRepoApi = PackageRepoApi(dll, validator)
 
 }

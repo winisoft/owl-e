@@ -10,10 +10,17 @@ data class ApiError(
     val detail: String? = null
 ) {
 
+    constructor(asyncError: AsyncError): this(
+        code = asyncError.errorCode,
+        message = asyncError.message,
+        detail = asyncError.detail
+    )
+
     fun fromAsyncError(asyncError: AsyncError): ApiError {
         return ApiError(
             code = asyncError.errorCode,
-            message = asyncError.message
+            message = asyncError.message,
+            detail = asyncError.detail
         )
     }
 
@@ -21,7 +28,8 @@ data class ApiError(
         fun fromAsyncError(error: AsyncError): ApiError {
             return ApiError(
                 code = error.errorCode,
-                message = error.message
+                message = error.message,
+                detail = error.detail
             )
         }
     }

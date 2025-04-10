@@ -6,6 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.WorkflowDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class WorkflowApiTest: BaseLongPkApiTest<WorkflowDto, WorkflowApi>() {
@@ -14,10 +15,12 @@ open class WorkflowApiTest: BaseLongPkApiTest<WorkflowDto, WorkflowApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, WorkflowDto>,
-        validator: (WorkflowDto) -> Boolean
-    ): WorkflowApi = WorkflowApi(dll = dll)
+        validator: DtoValidator<WorkflowDto>
+    ): WorkflowApi = WorkflowApi(dll = dll, validator = validator)
 
-    override fun getDto(): WorkflowDto = DtoTestInstanceFactory.workflowDto()
+    override fun getDto(id: Long): WorkflowDto = DtoTestInstanceFactory.workflowDto(
+        id = id
+    )
 
     override val serializer: KSerializer<WorkflowDto> = WorkflowDto.serializer()
 

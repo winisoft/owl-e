@@ -12,7 +12,7 @@ class PackageRepoValidator: BaseValidator<PackageRepoDto>() {
         // sourceUrl is optional but if present should be a valid URL
         dto.sourceUrl?.let { url ->
             if (!isValidUrl(url)) {
-                violations.add(TypeValidation.InvalidUrl(dto.idToString(), "sourceUrl"))
+                violations.add(TypeValidation.InvalidUrl(dto.typeName, dto.idToString(), "sourceUrl"))
             }
         }
 

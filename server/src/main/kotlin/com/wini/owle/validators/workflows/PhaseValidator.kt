@@ -6,8 +6,8 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class PhaseValidator(
-    private  val parentPhaseValidator: PhaseValidator,
-    private  val workflowValidator: WorkflowValidator
+    private val workflowValidator: WorkflowValidator,
+    private val parentPhaseValidator: PhaseValidator
 ) : BaseValidator<PhaseDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
@@ -18,22 +18,24 @@ class PhaseValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
+        // displayOrder must be non-negative
         if (dto.displayOrder < 0) {
-            violations.add(TypeValidation.LongRange(dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
+            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
         }
 
-        // parentPhase is optional (nullable reference)
-
-        // workflow is required (non-nullable reference)
-        if (dto.workflow == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "workflow"))
+        // Validate optional parentPhase if present
+        dto.parentPhase?.let { phase ->
+            violations.addAll(parentPhaseValidator.validate(phase).violations)
         }
+
+        // Validate nested workflow
+        violations.addAll(workflowValidator.validate(dto.workflow).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

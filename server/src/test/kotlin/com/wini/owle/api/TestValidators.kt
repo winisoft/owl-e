@@ -1,7 +1,14 @@
 package com.wini.owle.api
 
+import com.wini.owle.async.AsyncError
+import com.wini.owle.async.TypeValidation
 import com.wini.owle.validators.DtoValidator
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.ValidationResult
+import com.wini.owle.async.TypeValidation.StringEmpty
+import com.wini.owle.async.TypeValidation.ListNotEmpty
+
 
 /**
  * Utility class to create test validators for the test suite.
@@ -14,32 +21,31 @@ object TestValidators {
      * @return A validator that always returns true
      */
     fun <T : BaseDto> alwaysValid(): DtoValidator<T> = DtoValidator.alwaysValid()
-    
-    /**
-     * Creates a validator that always fails validation.
-     * 
-     * @return A validator that always returns false
-     */
-    fun <T : BaseDto> alwaysFailing(): DtoValidator<T> = object : DtoValidator<T> {
-        override fun validate(dto: T): Boolean = false
-    }
-    
+
     /**
      * Creates a validator that returns the specified result.
-     * 
+     *
      * @param result The result to return from the validator
      * @return A validator that returns the specified result
      */
-    fun <T : BaseDto> fixed(result: Boolean): DtoValidator<T> = object : DtoValidator<T> {
-        override fun validate(dto: T): Boolean = result
+    fun <T : BaseDto> stringEmptyWithId1OnName(
+        stringEmpty: StringEmpty = StringEmpty(TYPE_NAME, ID_STRING, FIELD_NAME)
+    ): DtoValidator<T> = object : DtoValidator<T> {
+        override fun validate(dto: T): ValidationResult = ValidationResult(
+            listOf(
+                stringEmpty
+            )
+        )
     }
-    
-    /**
-     * Creates a validator that delegates to the provided function.
-     * 
-     * @param validator The function to call to validate the DTO
-     * @return A validator that calls the provided function
-     */
-    fun <T : BaseDto> fromFunction(validator: (T) -> Boolean): DtoValidator<T> =
-        DtoValidator.fromFunction(validator)
+
+    val TYPE_NAME = "FakeType"
+    val ID_STRING = "id={1}"
+    val FIELD_NAME = "description"
+    val TYPE_VALID_ERR_STR_EMPTY = StringEmpty(TYPE_NAME, ID_STRING, FIELD_NAME)
+    val API_ERRORS_1_STR_EMPTY = listOf(ApiError(
+        code = TYPE_VALID_ERR_STR_EMPTY.errorCode,
+        message = TYPE_VALID_ERR_STR_EMPTY.message,
+        detail = "Id: [$ID_STRING] Field: [$FIELD_NAME]"
+    ))
+
 } 

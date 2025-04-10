@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.RevisionDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class RevisionApiTest : BaseLongPkApiTest<RevisionDto, RevisionApi>() {
 
     override val route: String = "/api/revision"
 
-    override fun getDto(): RevisionDto = DtoTestInstanceFactory.revisionDto()
+    override fun getDto(id: Long): RevisionDto = DtoTestInstanceFactory.revisionDto(
+        id = id
+    )
 
     override val serializer: KSerializer<RevisionDto> = RevisionDto.serializer()
     
@@ -20,7 +23,7 @@ open class RevisionApiTest : BaseLongPkApiTest<RevisionDto, RevisionApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, RevisionDto>,
-        validator: (RevisionDto) -> Boolean
+        validator: DtoValidator<RevisionDto>
     ): RevisionApi = RevisionApi(dll, validator)
 
 }

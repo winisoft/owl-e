@@ -8,6 +8,7 @@ import com.wini.owle.validators.typing.TypeDeclarationValidator
 
 
 class ToolParamValidator(
+    private val toolValidator: ToolValidator,
     private val typeDeclarationValidator: TypeDeclarationValidator
 ) : BaseValidator<ToolParamDto>() {
     companion object {
@@ -19,24 +20,17 @@ class ToolParamValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
-        // tool is required (non-nullable reference)
-        if (dto.tool == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "tool"))
-        }
+        // Validate nested tool
+        violations.addAll(toolValidator.validate(dto.tool).violations)
 
-        // typeDeclaration is required (non-nullable reference)
-        if (dto.typeDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeDeclaration"))
-        }
-
-        // hasDefault is required (non-nullable boolean)
-        // No validation needed as it's a primitive boolean
+        // Validate nested typeDeclaration
+        violations.addAll(typeDeclarationValidator.validate(dto.typeDeclaration).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

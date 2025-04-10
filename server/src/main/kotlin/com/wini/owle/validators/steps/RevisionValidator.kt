@@ -13,17 +13,9 @@ class RevisionValidator(
     override fun validate(dto: RevisionDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // dataPoint is required (non-nullable reference)
-        if (dto.dataPoint == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "dataPoint"))
-        }
+        violations.addAll(dataPointValidator.validate(dto.dataPoint).violations)
 
-        // step is required (non-nullable reference)
-        if (dto.step == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "step"))
-        }
-
-        // transformation is optional (nullable reference)
+        violations.addAll(stepValidator.validate(dto.step).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

@@ -14,17 +14,16 @@ class WorkflowJunctionValidator(
     override fun validate(dto: WorkflowJunctionDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // sourceStep is required (non-nullable reference)
-        if (dto.sourceStep == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "sourceStep"))
-        }
+        // Validate nested sourceStep
+        violations.addAll(sourceStepValidator.validate(dto.sourceStep).violations)
 
-        // targetWorkflow is required (non-nullable reference)
-        if (dto.targetWorkflow == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "targetWorkflow"))
-        }
+        // Validate nested targetWorkflow
+        violations.addAll(targetWorkflowValidator.validate(dto.targetWorkflow).violations)
 
-        // triggerInquisition is optional (nullable reference)
+        // Validate optional triggerInquisition if present
+        dto.triggerInquisition?.let { inquisition ->
+            violations.addAll(triggerInquisitionValidator.validate(inquisition).violations)
+        }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

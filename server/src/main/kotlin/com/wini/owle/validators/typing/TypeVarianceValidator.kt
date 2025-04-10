@@ -11,10 +11,11 @@ class TypeVarianceValidator(
     override fun validate(dto: TypeVarianceDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // typeVariableDeclaration is required (non-nullable reference)
-        if (dto.typeVariableDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeVariableDeclaration"))
-        }
+        // Validate nested typeVariableDeclaration
+        violations.addAll(typeVariableDeclarationValidator.validate(dto.typeVariableDeclaration).violations)
+
+        // variance is required (non-nullable enum)
+        // No validation needed as it's a non-nullable enum that will have a default value
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

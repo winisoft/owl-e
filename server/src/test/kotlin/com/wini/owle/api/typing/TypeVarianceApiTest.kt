@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeVarianceDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class TypeVarianceApiTest : BaseLongPkApiTest<TypeVarianceDto, TypeVarianceApi>() {
 
     override val route: String = "/api/type-variance"
 
-    override fun getDto(): TypeVarianceDto = DtoTestInstanceFactory.typeVarianceDto()
+    override fun getDto(id: Long): TypeVarianceDto = DtoTestInstanceFactory.typeVarianceDto(
+        id = id
+    )
 
     override val serializer: KSerializer<TypeVarianceDto> = TypeVarianceDto.serializer()
     
@@ -20,7 +23,7 @@ open class TypeVarianceApiTest : BaseLongPkApiTest<TypeVarianceDto, TypeVariance
 
     override fun getApiInstance(
         dll: DLL<Long, TypeVarianceDto>,
-        validator: (TypeVarianceDto) -> Boolean
+        validator: DtoValidator<TypeVarianceDto>
     ): TypeVarianceApi = TypeVarianceApi(dll, validator)
 
 }

@@ -8,7 +8,7 @@ import com.wini.owle.dto.BaseDto
 /**
  * Container for validation results that can hold multiple validation errors.
  */
-class ValidationResult private constructor(
+class ValidationResult(
     val violations: List<TypeValidation>
 ) {
     /**
@@ -89,26 +89,6 @@ interface DtoValidator<T : BaseDto> {
          */
         fun <T : BaseDto> alwaysValid(): DtoValidator<T> = object : DtoValidator<T> {
             override fun validate(dto: T): ValidationResult = ValidationResult.valid()
-        }
-        
-        /**
-         * Creates a validator from a function.
-         * Useful for simple validation cases or for backward compatibility.
-         */
-        fun <T : BaseDto> fromFunction(validatorFn: (T) -> Boolean): DtoValidator<T> = object : DtoValidator<T> {
-            override fun validate(dto: T): ValidationResult {
-                return if (validatorFn(dto)) {
-                    ValidationResult.valid()
-                } else {
-                    ValidationResult.invalid(
-                        TypeValidation.Generic(
-                            idString = dto.idToString(),
-                            fieldName = "unknown",
-                            message = "Validation failed"
-                        )
-                    )
-                }
-            }
         }
     }
 } 

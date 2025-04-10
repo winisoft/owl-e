@@ -15,22 +15,20 @@ class ErrorWatchFnValidator(
     override fun validate(dto: ErrorWatchFnDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // errorWatch is required (non-nullable reference)
-        if (dto.errorWatch == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "errorWatch"))
-        }
+        // Validate nested errorWatch
+        violations.addAll(errorWatchValidator.validate(dto.errorWatch).violations)
 
         // functionName is required and has max length
         if (dto.functionName.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "functionName"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "functionName"))
         }
         if (dto.functionName.length > MAX_FUNCTION_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "functionName", MAX_FUNCTION_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "functionName", MAX_FUNCTION_NAME_LENGTH))
         }
 
         // position must be non-negative
         if (dto.position < 0) {
-            violations.add(TypeValidation.LongRange(dto.idToString(), "position", 0, Int.MAX_VALUE.toLong()))
+            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "position", 0, Int.MAX_VALUE.toLong()))
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

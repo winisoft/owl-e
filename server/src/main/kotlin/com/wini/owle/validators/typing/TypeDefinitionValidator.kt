@@ -19,21 +19,24 @@ class TypeDefinitionValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
         // namespace is required and has max length
         if (dto.namespace.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "namespace"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "namespace"))
         }
         if (dto.namespace.length > MAX_NAMESPACE_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "namespace", MAX_NAMESPACE_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "namespace", MAX_NAMESPACE_LENGTH))
         }
 
-        // versionSpec is optional (nullable reference)
+        // Validate optional versionSpec if present
+        dto.versionSpec?.let { versionSpec ->
+            violations.addAll(versionSpecValidator.validate(versionSpec).violations)
+        }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

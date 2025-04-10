@@ -12,19 +12,15 @@ class AppliedTransformArgValidator(
     override fun validate(dto: AppliedTransformArgDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // appliedTransform is required (non-nullable reference)
-        if (dto.appliedTransform == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "appliedTransform"))
-        }
+        // Validate nested appliedTransform
+        violations.addAll(appliedTransformValidator.validate(dto.appliedTransform).violations)
 
-        // transformationArg is required (non-nullable reference)
-        if (dto.transformationArg == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "transformationArg"))
-        }
+        // Validate nested transformationArg
+        violations.addAll(transformationArgValidator.validate(dto.transformationArg).violations)
 
         // value is required (non-nullable text)
         if (dto.value.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "value"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "value"))
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

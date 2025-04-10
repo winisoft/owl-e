@@ -14,20 +14,11 @@ class ProvisionValidator(
     override fun validate(dto: ProvisionDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // step is required (non-nullable reference)
-        if (dto.step == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "step"))
-        }
+        violations.addAll(stepValidator.validate(dto.step).violations)
 
-        // toolParam is required (non-nullable reference)
-        if (dto.toolParam == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "toolParam"))
-        }
+        violations.addAll(toolParamValidator.validate(dto.toolParam).violations)
 
-        // dataPoints list is required but can be empty
-        if (dto.dataPoints == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "dataPoints"))
-        }
+        violations.addAll(dataPointsValidator.validateAll(dto.dataPoints).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

@@ -8,6 +8,7 @@ import com.wini.owle.api.transforms.*
 import com.wini.owle.api.typing.*
 import com.wini.owle.api.user.*
 import com.wini.owle.api.workflows.*
+import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 

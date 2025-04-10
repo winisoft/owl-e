@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.ExecutionLogDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class ExecutionLogApiTest : BaseLongPkApiTest<ExecutionLogDto, ExecutionLogApi>() {
 
     override val route: String = "/api/execution-log"
 
-    override fun getDto(): ExecutionLogDto = DtoTestInstanceFactory.executionLogDto()
+    override fun getDto(id: Long): ExecutionLogDto = DtoTestInstanceFactory.executionLogDto(
+        id = id
+    )
 
     override val serializer: KSerializer<ExecutionLogDto> = ExecutionLogDto.serializer()
     
@@ -20,7 +23,7 @@ open class ExecutionLogApiTest : BaseLongPkApiTest<ExecutionLogDto, ExecutionLog
 
     override fun getApiInstance(
         dll: DLL<Long, ExecutionLogDto>,
-        validator: (ExecutionLogDto) -> Boolean
+        validator: DtoValidator<ExecutionLogDto>
     ): ExecutionLogApi = ExecutionLogApi(dll, validator)
 
 }

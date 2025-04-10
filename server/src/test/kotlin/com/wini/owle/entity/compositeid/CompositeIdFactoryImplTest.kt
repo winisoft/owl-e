@@ -47,6 +47,9 @@ class CompositeIdFactoryImplTest {
     private class TestDto : BaseDto {
         var id1: EntityID<Long> = mockk()
         var id2: EntityID<Long> = mockk()
+        override fun idToString(): String {
+            return "id={1}"
+        }
     }
 
     private lateinit var factory: TestCompositeIdFactoryImpl

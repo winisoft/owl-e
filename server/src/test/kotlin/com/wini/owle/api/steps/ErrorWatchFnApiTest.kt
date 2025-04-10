@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.ErrorWatchFnDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class ErrorWatchFnApiTest : BaseLongPkApiTest<ErrorWatchFnDto, ErrorWatchFnApi>() {
 
     override val route: String = "api/error-watch-fn"
 
-    override fun getDto(): ErrorWatchFnDto = DtoTestInstanceFactory.errorWatchFnDto()
+    override fun getDto(id: Long): ErrorWatchFnDto = DtoTestInstanceFactory.errorWatchFnDto(
+        id = id
+    )
 
     override val serializer: KSerializer<ErrorWatchFnDto> = ErrorWatchFnDto.serializer()
     
@@ -20,7 +23,7 @@ open class ErrorWatchFnApiTest : BaseLongPkApiTest<ErrorWatchFnDto, ErrorWatchFn
 
     override fun getApiInstance(
         dll: DLL<Long, ErrorWatchFnDto>,
-        validator: (ErrorWatchFnDto) -> Boolean
+        validator: DtoValidator<ErrorWatchFnDto>
     ): ErrorWatchFnApi = ErrorWatchFnApi(dll, validator)
 
 }

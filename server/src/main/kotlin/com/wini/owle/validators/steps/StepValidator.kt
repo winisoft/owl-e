@@ -5,9 +5,11 @@ import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.workflows.PhaseValidator
-
+import com.wini.owle.validators.workflows.WorkflowValidator
 
 class StepValidator(
+    private val workflowValidator: WorkflowValidator,
+    private val toolValidator: ToolValidator,
     private val parentPhaseValidator: PhaseValidator
 ) : BaseValidator<StepDto>() {
     companion object {
@@ -19,31 +21,26 @@ class StepValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
-        // description is optional (nullable text)
-
-        // parentPhase is optional (nullable reference)
-
-        // workflow is required (non-nullable reference)
-        if (dto.workflow == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "workflow"))
+        // Validate optional parentPhase if present
+        dto.parentPhase?.let { phase ->
+            violations.addAll(parentPhaseValidator.validate(phase).violations)
         }
 
-        // tool is required (non-nullable reference)
-        if (dto.tool == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "tool"))
-        }
+        // Validate nested workflow
+        violations.addAll(workflowValidator.validate(dto.workflow).violations)
 
-        // defaultNext is optional (nullable reference)
+        // Validate nested tool
+        violations.addAll(toolValidator.validate(dto.tool).violations)
 
         // displayOrder must be non-negative
         if (dto.displayOrder < 0) {
-            violations.add(TypeValidation.LongRange(dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
+            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

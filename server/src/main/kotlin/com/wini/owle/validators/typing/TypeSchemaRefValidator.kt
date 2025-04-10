@@ -7,8 +7,7 @@ import com.wini.owle.validators.ValidationResult
 
 class TypeSchemaRefValidator(
     private val parentRefValidator: TypeSchemaRefValidator,
-    private val typeDeclarationValidator: TypeDeclarationValidator,
-    private val childRefsValidator: TypeSchemaRefValidator
+    private val typeDeclarationValidator: TypeDeclarationValidator
 ) : BaseValidator<TypeSchemaRefDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
@@ -17,20 +16,21 @@ class TypeSchemaRefValidator(
     override fun validate(dto: TypeSchemaRefDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // parentRef is optional (nullable reference)
+        // Validate optional parentRef if present
+        dto.parentRef?.let { parentRef ->
+            violations.addAll(parentRefValidator.validate(parentRef).violations)
+        }
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
-        // typeDeclaration is required (non-nullable reference)
-        if (dto.typeDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeDeclaration"))
-        }
+        // Validate nested typeDeclaration
+        violations.addAll(typeDeclarationValidator.validate(dto.typeDeclaration).violations)
 
         // description is optional (nullable text)
 

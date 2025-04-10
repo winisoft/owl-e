@@ -6,20 +6,20 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class BenchmarkingDataValidator(
-    private val workflowExecutionValidator: WorkflowExecutionValidator,
+    private val workflowExecutionValidator: WorkflowExecutionValidator
 ) : BaseValidator<BenchmarkingDataDto>() {
+
     override fun validate(dto: BenchmarkingDataDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // workflowExecution is required (non-nullable reference)
-        if (dto.workflowExecution == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "workflowExecution"))
-        }
+        // Validate nested workflowExecution
+        violations.addAll(workflowExecutionValidator.validate(dto.workflowExecution).violations)
 
         // totalExecutionTime must be positive and reasonable
         // Using decimal(10,3) in DB suggests max ~9999999.999
         if (dto.totalExecutionTime < 0 || dto.totalExecutionTime > 9999999.999) {
             violations.add(TypeValidation.DoubleRange(
+                dto.typeName,
                 dto.idToString(),
                 "totalExecutionTime",
                 0.0,
@@ -29,40 +29,57 @@ class BenchmarkingDataValidator(
 
         // totalSteps must be non-negative
         if (dto.totalSteps < 0) {
-            violations.add(TypeValidation.LongRange(
+            violations.add(TypeValidation.LongMin(
+                dto.typeName,
                 dto.idToString(),
                 "totalSteps",
-                0,
-                Int.MAX_VALUE.toLong()
+                0
             ))
         }
 
         // aiDeterminedSteps must be non-negative and not exceed totalSteps
         if (dto.aiDeterminedSteps < 0 || dto.aiDeterminedSteps > dto.totalSteps) {
-            violations.add(TypeValidation.LongRange(
+            violations.add(TypeValidation.LongMin(
+                dto.typeName,
                 dto.idToString(),
                 "aiDeterminedSteps",
-                0,
-                dto.totalSteps.toLong()
+                0
             ))
         }
 
         // predeterminedSteps must be non-negative and not exceed totalSteps
-        if (dto.predeterminedSteps < 0 || dto.predeterminedSteps > dto.totalSteps) {
-            violations.add(TypeValidation.LongRange(
+        if (dto.predeterminedSteps < 0) {
+            violations.add(TypeValidation.LongMin(
+                dto.typeName,
                 dto.idToString(),
                 "predeterminedSteps",
-                0,
-                dto.totalSteps.toLong()
+                0
+            ))
+        }
+
+        if (dto.predeterminedSteps > dto.totalSteps) {
+            violations.add(TypeValidation.PartGreaterThanTotal(
+                dto.typeName,
+                dto.idToString(),
+                "predeterminedSteps",
+                dto.totalSteps
+            ))
+        }
+
+        if (dto.aiDeterminedSteps > dto.totalSteps) {
+            violations.add(TypeValidation.PartGreaterThanTotal(
+                dto.typeName,
+                dto.idToString(),
+                "aiDeterminedSteps",
+                dto.totalSteps
             ))
         }
 
         // Sum of aiDetermined and predeterminedSteps should equal totalSteps
         if (dto.aiDeterminedSteps + dto.predeterminedSteps != dto.totalSteps) {
-            violations.add(TypeValidation.Generic(
-                dto.idToString(),
-                "steps",
-                "Sum of AI-determined and predetermined steps must equal total steps"
+            violations.add(TypeValidation.BenchmarkingSteps(
+                dto.typeName,
+                dto.idToString()
             ))
         }
 

@@ -6,12 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.DataPointDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
+
 
 open class DataPointsApiTest : BaseLongPkApiTest<DataPointDto, DataPointsApi>() {
 
     override val route: String = "/api/data-points"
 
-    override fun getDto(): DataPointDto = DtoTestInstanceFactory.dataPointDto()
+    override fun getDto(id: Long): DataPointDto = DtoTestInstanceFactory.dataPointDto(
+        id = id
+    )
 
     override val serializer: KSerializer<DataPointDto> = DataPointDto.serializer()
     
@@ -19,6 +23,6 @@ open class DataPointsApiTest : BaseLongPkApiTest<DataPointDto, DataPointsApi>() 
 
     override fun getApiInstance(
         dll: DLL<Long, DataPointDto>,
-        validator: (DataPointDto) -> Boolean
+        validator: DtoValidator<DataPointDto>
     ): DataPointsApi = DataPointsApi(dll, validator)
 }

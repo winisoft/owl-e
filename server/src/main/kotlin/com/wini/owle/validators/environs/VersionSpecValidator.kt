@@ -22,10 +22,9 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
         
         // At least one version field must be specified
         if (dto.versionMin == null && dto.versionMax == null && dto.versionExact == null) {
-            violations.add(TypeValidation.Generic(
-                idString = dto.idToString(),
-                fieldName = "version",
-                message = "At least one version constraint must be specified"
+            violations.add(TypeValidation.VersionSpecUndefined(
+                typeName = dto.typeName,
+                idString = dto.idToString()
             ))
         }
         
@@ -33,6 +32,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
         dto.versionMin?.let { version ->
             if (!validateMaxLength(version, MAX_VERSION_LENGTH, "versionMin")) {
                 violations.add(TypeValidation.MaxLength(
+                    typeName = dto.typeName,
                     idString = dto.idToString(),
                     fieldName = "versionMin",
                     max = MAX_VERSION_LENGTH
@@ -40,6 +40,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
             }
             if (!isValidVersionFormat(version)) {
                 violations.add(TypeValidation.InvalidVersion(
+                    typeName = dto.typeName,
                     idString = dto.idToString(),
                     fieldName = "versionMin",
                     format = "x.y.z"
@@ -51,6 +52,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
         dto.versionMax?.let { version ->
             if (!validateMaxLength(version, MAX_VERSION_LENGTH, "versionMax")) {
                 violations.add(TypeValidation.MaxLength(
+                    typeName = dto.typeName,
                     idString = dto.idToString(),
                     fieldName = "versionMax",
                     max = MAX_VERSION_LENGTH
@@ -58,6 +60,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
             }
             if (!isValidVersionFormat(version)) {
                 violations.add(TypeValidation.InvalidVersion(
+                    typeName = dto.typeName,
                     idString = dto.idToString(),
                     fieldName = "versionMax",
                     format = "x.y.z"
@@ -69,6 +72,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
         dto.versionExact?.let { version ->
             if (!validateMaxLength(version, MAX_VERSION_LENGTH, "versionExact")) {
                 violations.add(TypeValidation.MaxLength(
+                    typeName = dto.typeName,
                     idString = dto.idToString(),
                     fieldName = "versionExact",
                     max = MAX_VERSION_LENGTH
@@ -76,6 +80,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
             }
             if (!isValidVersionFormat(version)) {
                 violations.add(TypeValidation.InvalidVersion(
+                    typeName = dto.typeName,
                     idString = dto.idToString(),
                     fieldName = "versionExact",
                     format = "x.y.z"

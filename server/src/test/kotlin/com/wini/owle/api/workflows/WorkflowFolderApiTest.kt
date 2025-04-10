@@ -6,11 +6,15 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.WorkflowFolderDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
+
 
 open class WorkflowFolderApiTest : BaseLongPkApiTest<WorkflowFolderDto, WorkflowFolderApi>() {
     override val route: String = "/api/workflow-folder"
     
-    override fun getDto(): WorkflowFolderDto = DtoTestInstanceFactory.workflowFolderDto()
+    override fun getDto(id: Long): WorkflowFolderDto = DtoTestInstanceFactory.workflowFolderDto(
+        id = id
+    )
     
     override val serializer: KSerializer<WorkflowFolderDto> = WorkflowFolderDto.serializer()
     
@@ -18,6 +22,6 @@ open class WorkflowFolderApiTest : BaseLongPkApiTest<WorkflowFolderDto, Workflow
     
     override fun getApiInstance(
         dll: DLL<Long, WorkflowFolderDto>,
-        validator: (WorkflowFolderDto) -> Boolean
+        validator: DtoValidator<WorkflowFolderDto>
     ): WorkflowFolderApi = WorkflowFolderApi(dll, validator)
 }

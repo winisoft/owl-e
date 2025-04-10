@@ -12,15 +12,11 @@ class TypeBoundsValidator(
     override fun validate(dto: TypeBoundsDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // typeVariableDeclaration is required (non-nullable reference)
-        if (dto.typeVariableDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeVariableDeclaration"))
-        }
+        // Validate nested typeVariableDeclaration
+        violations.addAll(typeVariableDeclarationValidator.validate(dto.typeVariableDeclaration).violations)
 
-        // boundTypeDeclaration is required (non-nullable reference)
-        if (dto.boundTypeDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "boundTypeDeclaration"))
-        }
+        // Validate nested boundTypeDeclaration
+        violations.addAll(boundTypeDeclarationValidator.validate(dto.boundTypeDeclaration).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

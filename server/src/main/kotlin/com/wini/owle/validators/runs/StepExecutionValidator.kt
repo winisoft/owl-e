@@ -5,37 +5,29 @@ import com.wini.owle.dto.runs.StepExecutionDto
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.steps.StepValidator
+
 
 class StepExecutionValidator(
     private val workflowExecutionValidator: WorkflowExecutionValidator,
+    private val stepValidator: StepValidator,
     private val dateTimeConverter: DateTimeConverter
 ): BaseValidator<StepExecutionDto>() {
     override fun validate(dto: StepExecutionDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // workflowExecution is required (non-nullable reference)
-        if (dto.workflowExecution == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "workflowExecution"))
-        }
+        // Validate nested workflowExecution
+        violations.addAll(workflowExecutionValidator.validate(dto.workflowExecution).violations)
 
-        // step is required (non-nullable reference)
-        if (dto.step == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "step"))
-        }
+        // Validate nested step
+        violations.addAll(stepValidator.validate(dto.step).violations)
 
-        // startedAt is required (non-nullable timestamp)
-        if (dto.startedAt == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "startedAt"))
-        }
-
-        // completedAt is optional (nullable timestamp)
-        // but if present, must be after startedAt
-        if (dto.completedAt != null) {
-            if (dateTimeConverter.fromString(dto.completedAt!!) <= dateTimeConverter.fromString(dto.startedAt)) {
-                violations.add(TypeValidation.Generic(
-                    dto.idToString(),
-                    "completedAt",
-                    "Completion time must be after start time"
+        // completedAt if present, must be after startedAt
+        dto.completedAt?.apply {
+            if (dateTimeConverter.fromString(this) <= dateTimeConverter.fromString(dto.startedAt)) {
+                violations.add(TypeValidation.StartedAndCompletedTimestamp(
+                    dto.typeName,
+                    dto.idToString()
                 ))
             }
         }

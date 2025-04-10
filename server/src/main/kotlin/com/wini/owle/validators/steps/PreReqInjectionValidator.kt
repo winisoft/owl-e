@@ -8,7 +8,7 @@ import com.wini.owle.validators.workflows.DataPointValidator
 
 class PreReqInjectionValidator(
     private val junctionValidator: WorkflowJunctionValidator,
-    private val dataPointValidator: DataPointValidator
+    private val dataPointValidator: DataPointValidator,
 ) : BaseValidator<PreReqInjectionDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
@@ -17,25 +17,19 @@ class PreReqInjectionValidator(
     override fun validate(dto: PreReqInjectionDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // junction is required (non-nullable reference)
-        if (dto.junction == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "junction"))
-        }
+        // Validate nested junction
+        violations.addAll(junctionValidator.validate(dto.junction).violations)
 
-        // sourceDataPoint is required (non-nullable reference)
-        if (dto.sourceDataPoint == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "sourceDataPoint"))
-        }
+        // Validate nested sourceDataPoint
+        violations.addAll(dataPointValidator.validate(dto.sourceDataPoint).violations)
 
-        // injectedDataPoint is required (non-nullable reference)
-        if (dto.injectedDataPoint == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "injectedDataPoint"))
-        }
+        // Validate nested injectedDataPoint
+        violations.addAll(dataPointValidator.validate(dto.injectedDataPoint).violations)
 
         // name is optional but has max length if present
         dto.name?.let { name ->
             if (name.length > MAX_NAME_LENGTH) {
-                violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+                violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
             }
         }
 

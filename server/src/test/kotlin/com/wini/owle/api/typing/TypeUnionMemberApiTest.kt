@@ -18,13 +18,17 @@ import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import com.wini.owle.validators.DtoValidator
 
 
 open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
 
     override val route: String = "/api/type-union-member"
 
-    override fun getDto(): TypeUnionMemberDto = DtoTestInstanceFactory.typeUnionMemberDto()
+    override fun getDto(id1: Long, id2: Long): TypeUnionMemberDto = DtoTestInstanceFactory.typeUnionMemberDto(
+        unionTypeDeclarationId = id1,
+        memberTypeDeclarationId = id2
+    )
 
     override val serializer: KSerializer<TypeUnionMemberDto> = TypeUnionMemberDto.serializer()
     
@@ -32,12 +36,12 @@ open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, T
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TypeUnionMemberDto>,
-        validator: (TypeUnionMemberDto) -> Boolean
+        validator: DtoValidator<TypeUnionMemberDto>
     ): TypeUnionMemberApi = TypeUnionMemberApi(dll, validator)
 
     @Test
     override fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-        val dto: TypeUnionMemberDto = getDto()
+        val dto: TypeUnionMemberDto = getDto(1, 1)
         val id: CompositeID = mockk()
         val dll = mockk<DLL<CompositeID, TypeUnionMemberDto>> {
             coEvery { getById(id) } returns AsyncResult.Success(dto)

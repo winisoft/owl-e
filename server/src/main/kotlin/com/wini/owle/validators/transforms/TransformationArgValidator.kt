@@ -17,25 +17,19 @@ class TransformationArgValidator(
     override fun validate(dto: TransformationArgDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // transformation is required (non-nullable reference)
-        if (dto.transformation == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "transformation"))
-        }
+        // Validate nested transformation
+        violations.addAll(transformationValidator.validate(dto.transformation).violations)
 
-        // typeDeclaration is required (non-nullable reference)
-        if (dto.typeDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeDeclaration"))
-        }
+        // Validate nested typeDeclaration
+        violations.addAll(typeDeclarationValidator.validate(dto.typeDeclaration).violations)
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
-
-        // description is optional (nullable text)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

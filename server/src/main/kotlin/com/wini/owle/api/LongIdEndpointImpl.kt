@@ -12,6 +12,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 
@@ -86,12 +87,14 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
         }
 
     override suspend fun ApplicationCall.readIds(): AsyncResult<List<Long>> {
-        return Json.decodeFromString<List<Long>>(receiveText()).ifNullExit {
+        runCatching {
+            Json.decodeFromString(ListSerializer(Long.serializer()), receiveText())
+        }.getOrElse {
             return ApiRequestError.RequestBodyMalformed.asFailure()
         }.takeIf { it.isNotEmpty() }.ifNullExit {
             return ApiRequestError.EmptyListNotAllowed.asFailure()
         }.let {
-            AsyncResult.Success(it)
+            return AsyncResult.Success(it)
         }
     }
 }

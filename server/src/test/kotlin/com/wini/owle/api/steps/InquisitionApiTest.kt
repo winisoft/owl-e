@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.InquisitionDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class InquisitionApiTest : BaseLongPkApiTest<InquisitionDto, InquisitionApi>() {
 
     override val route: String = "/api/inquisition"
 
-    override fun getDto(): InquisitionDto = DtoTestInstanceFactory.inquisitionDto()
+    override fun getDto(id: Long): InquisitionDto = DtoTestInstanceFactory.inquisitionDto(
+        id = id
+    )
 
     override val serializer: KSerializer<InquisitionDto> = InquisitionDto.serializer()
     
@@ -20,7 +23,7 @@ open class InquisitionApiTest : BaseLongPkApiTest<InquisitionDto, InquisitionApi
 
     override fun getApiInstance(
         dll: DLL<Long, InquisitionDto>,
-        validator: (InquisitionDto) -> Boolean
+        validator: DtoValidator<InquisitionDto>
     ): InquisitionApi = InquisitionApi(dll, validator)
 
 }

@@ -18,13 +18,17 @@ import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import com.wini.owle.validators.DtoValidator
 
 
 open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTargetTypeDto, TransformTargetTypeApi>() {
 
     override val route: String = "/api/transform-target-type"
 
-    override fun getDto(): TransformationTargetTypeDto = DtoTestInstanceFactory.transformationTargetTypeDto()
+    override fun getDto(id1: Long, id2: Long): TransformationTargetTypeDto = DtoTestInstanceFactory.transformationTargetTypeDto(
+        transformationId = id1,
+        typeDeclarationId = id2
+    )
 
     override val serializer: KSerializer<TransformationTargetTypeDto> = TransformationTargetTypeDto.serializer()
     
@@ -32,12 +36,12 @@ open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTar
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TransformationTargetTypeDto>,
-        validator: (TransformationTargetTypeDto) -> Boolean
+        validator: DtoValidator<TransformationTargetTypeDto>
     ): TransformTargetTypeApi = TransformTargetTypeApi(dll, validator)
 
     @Test
     override fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-        val dto: TransformationTargetTypeDto = getDto()
+        val dto: TransformationTargetTypeDto = getDto(1, 1)
         val id: CompositeID = mockk()
         val dll = mockk<DLL<CompositeID, TransformationTargetTypeDto>> {
             coEvery { getById(id) } returns AsyncResult.Success(dto)

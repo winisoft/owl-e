@@ -12,20 +12,16 @@ class TypeParameterValidator(
     override fun validate(dto: TypeParameterDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // typeDeclaration is required (non-nullable reference)
-        if (dto.typeDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "typeDeclaration"))
-        }
+        // Validate nested typeDeclaration
+        violations.addAll(typeDeclarationValidator.validate(dto.typeDeclaration).violations)
 
         // position must be non-negative
         if (dto.position < 0) {
-            violations.add(TypeValidation.LongRange(dto.idToString(), "position", 0, Int.MAX_VALUE.toLong()))
+            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "position", 0, Int.MAX_VALUE.toLong()))
         }
 
-        // parameterTypeDeclaration is required (non-nullable reference)
-        if (dto.parameterTypeDeclaration == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "parameterTypeDeclaration"))
-        }
+        // Validate nested parameterTypeDeclaration
+        violations.addAll(parameterTypeDeclarationValidator.validate(dto.parameterTypeDeclaration).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

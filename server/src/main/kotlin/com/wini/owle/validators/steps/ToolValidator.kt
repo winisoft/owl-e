@@ -18,15 +18,20 @@ class ToolValidator(
 
         // name is required and has max length
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
         // body is required (non-nullable text)
         if (dto.body.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "body"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "body"))
+        }
+
+        // Validate optional returnTypeDeclaration if present
+        dto.returnTypeDeclaration?.let { typeDecl ->
+            violations.addAll(returnTypeDeclarationValidator.validate(typeDecl).violations)
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

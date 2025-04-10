@@ -18,18 +18,18 @@ class PackageValidator(
 
         // Name is required and must not be blank
         if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "name"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
         }
 
         // Check name length
         if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
+            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
         // Check disambiguation length if present
         dto.disambiguation?.let { disambiguation ->
             if (disambiguation.length > MAX_DISAMBIGUATION_LENGTH) {
-                violations.add(TypeValidation.MaxLength(dto.idToString(), "disambiguation", MAX_DISAMBIGUATION_LENGTH))
+                violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "disambiguation", MAX_DISAMBIGUATION_LENGTH))
             }
         }
 

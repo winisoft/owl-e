@@ -6,11 +6,15 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.PaymentMethodDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
+
 
 open class PaymentMethodApiTest : BaseLongPkApiTest<PaymentMethodDto, PaymentMethodApi>() {
     override val route: String = "/api/payment-method"
 
-    override fun getDto(): PaymentMethodDto = DtoTestInstanceFactory.paymentMethodDto()
+    override fun getDto(id: Long): PaymentMethodDto = DtoTestInstanceFactory.paymentMethodDto(
+        id = id
+    )
 
     override val serializer: KSerializer<PaymentMethodDto> = PaymentMethodDto.serializer()
     
@@ -18,6 +22,6 @@ open class PaymentMethodApiTest : BaseLongPkApiTest<PaymentMethodDto, PaymentMet
 
     override fun getApiInstance(
         dll: DLL<Long, PaymentMethodDto>,
-        validator: (PaymentMethodDto) -> Boolean
+        validator: DtoValidator<PaymentMethodDto>
     ): PaymentMethodApi = PaymentMethodApi(dll, validator)
 }

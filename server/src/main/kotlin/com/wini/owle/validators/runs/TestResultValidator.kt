@@ -12,19 +12,13 @@ class TestResultValidator(
     override fun validate(dto: TestResultDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // testCase is required (non-nullable reference)
-        if (dto.testCase == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "testCase"))
-        }
+        // Validate nested testCase
+        violations.addAll(testCaseValidator.validate(dto.testCase).violations)
 
-        // workflowExecution is required (non-nullable reference)
-        if (dto.workflowExecution == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "workflowExecution"))
-        }
+        // Validate nested workflowExecution
+        violations.addAll(workflowExecutionValidator.validate(dto.workflowExecution).violations)
 
-        // passed is required (non-nullable boolean)
-        // No validation needed as it's a primitive boolean
-
+        // passed is a primitive boolean, no validation needed
         // executedAt is handled by DB default
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

@@ -11,19 +11,12 @@ class ExecutionLogValidator(
     override fun validate(dto: ExecutionLogDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
-        // stepExecution is required (non-nullable reference)
-        if (dto.stepExecution == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "stepExecution"))
-        }
-
-        // logLevel is required (non-nullable enum)
-        if (dto.logLevel == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "logLevel"))
-        }
+        // Validate nested stepExecution
+        violations.addAll(stepExecutionValidator.validate(dto.stepExecution).violations)
 
         // message is required (non-nullable text)
         if (dto.message.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.idToString(), "message"))
+            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "message"))
         }
 
         // timestamp is handled by DB default if not provided

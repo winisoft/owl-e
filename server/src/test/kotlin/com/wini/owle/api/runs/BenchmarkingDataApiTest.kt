@@ -6,13 +6,16 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.BenchmarkingDataDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
+import com.wini.owle.validators.DtoValidator
 
 
 open class BenchmarkingDataApiTest : BaseLongPkApiTest<BenchmarkingDataDto, BenchmarkingDataApi>() {
 
     override val route: String = "/api/benchmarking-data"
 
-    override fun getDto(): BenchmarkingDataDto = DtoTestInstanceFactory.benchmarkingDataDto()
+    override fun getDto(id: Long): BenchmarkingDataDto = DtoTestInstanceFactory.benchmarkingDataDto(
+        id = id
+    )
 
     override val serializer: KSerializer<BenchmarkingDataDto> = BenchmarkingDataDto.serializer()
     
@@ -20,7 +23,7 @@ open class BenchmarkingDataApiTest : BaseLongPkApiTest<BenchmarkingDataDto, Benc
 
     override fun getApiInstance(
         dll: DLL<Long, BenchmarkingDataDto>,
-        validator: (BenchmarkingDataDto) -> Boolean
+        validator: DtoValidator<BenchmarkingDataDto>
     ): BenchmarkingDataApi = BenchmarkingDataApi(dll, validator)
 
 }
