@@ -1,5 +1,6 @@
 package com.wini.owle.api
 
+import com.wini.owle.api.OwleApiCall.Companion.successStatus
 import com.wini.owle.validators.DtoValidator
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncError.ApiRequestError
@@ -27,115 +28,71 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
 
     abstract suspend fun ApplicationCall.readIds(): AsyncResult<List<ID>>
 
-    suspend fun ApplicationCall.execute(owleCall: OwleApiCall) {
+    suspend fun ApplicationCall.execute(owleCall: OwleApiCall<T>) {
+
         when (owleCall) {
             is OwleApiCall.GetMany ->
-                methodCallRespond(owleCall, responseManySerializer) {
+                methodCallRespond(owleCall, owleCall.responseSerializer(dtoSerializer, dtoListSerializer, Unit.serializer())) {
                     dll.getAll()
                 }
             is OwleApiCall.GetOne ->
-                when (val idResult = readId()) {
-                    is AsyncResult.Failure -> failureRespond(idResult, responseOneSerializer)
-                    is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
-                        dll.getById(idResult.data)
-                    }
-                }
+                handle(readId(), owleCall) { dll.getById(it) }
+
             is OwleApiCall.DeleteOne ->
-                when (val idResult = readId()) {
-                    is AsyncResult.Failure -> failureRespond(idResult, responseNoneSerializer)
-                    is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
-                        dll.delete(idResult.data)
-                    }
-                }
+                handle(readId(), owleCall) { dll.delete(it) }
+
             is OwleApiCall.CreateOne ->
-                when (val dtoResult = readDto(dtoSerializer, validator)) {
-                    is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
-                    is AsyncResult.Success<T> -> methodCallRespond(owleCall, responseOneSerializer) {
-                        dll.create(dtoResult.data)
-                    }
-                }
+                handle(readDto(dtoSerializer, validator), owleCall) { dll.create(it) }
+
             is OwleApiCall.UpdateOne ->
-                when (val dtoResult = readDto(dtoSerializer, validator)) {
-                    is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
-                    is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
-                        dll.update(dtoResult.data)
-                    }
-                }
+                handle(readDto(dtoSerializer, validator), owleCall) { dll.update(it) }
+
             is OwleApiCall.DeleteMany ->
-                when (val idsResult = readIds()) {
-                    is AsyncResult.Failure -> failureRespond(idsResult, responseNoneSerializer)
-                    is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
-                        dll.deleteAll(idsResult.data)
-                    }
-                }
+                handle(readIds(), owleCall) { dll.deleteAll(it) }
+
             is OwleApiCall.CreateMany ->
-                when (val dtosResult = readDtos(dtoListSerializer, validator)) {
-                    is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
-                    is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
-                        dll.createAll(dtosResult.data)
-                    }
-                }
+                handle(readDtos(dtoListSerializer, validator), owleCall) { dll.createAll(it) }
+
             is OwleApiCall.UpdateMany ->
-                when (val dtosResult = readDtos(dtoListSerializer, validator)) {
-                    is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
-                    is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
-                        dll.updateAll(dtosResult.data)
-                    }
-                }
+                handle(readDtos(dtoListSerializer, validator), owleCall) { dll.updateAll(it) }
         }
     }
 
-    suspend fun <T> ApplicationCall.failureRespond(
+    private suspend fun <D> ApplicationCall.failureRespond(
         failure: AsyncResult.Failure,
-        serializer: KSerializer<ApiResponse<T>>
+        serializer: KSerializer<ApiResponse<D>>
     ) {
-        val statusCode = when (failure.error) {
+        val apiResponse = ApiResponse<D>(
+            success = false,
+            message = failure.error.message,
+            errors = when (failure.error) {
+                is ApiRequestError.MultipleTypeValidations ->
+                    (failure.error as ApiRequestError.MultipleTypeValidations).violations
+                is ApiRequestError.MultipleParamFailure ->
+                    (failure.error as ApiRequestError.MultipleParamFailure).failed
+                else ->
+                    listOf(failure.error)
+            }.map {
+                ApiError.fromAsyncError(it)
+            }
+        )
+
+        respond(failure.toStatusCode(), Json.encodeToString(serializer, apiResponse))
+    }
+
+    private fun AsyncResult.Failure.toStatusCode(): HttpStatusCode {
+        return when (error) {
             is ApiRequestError.MissingParameter,
             is ApiRequestError.ParamValueMalformedLong,
             is ApiRequestError.RequestBodyMalformed,
             is ApiRequestError.EmptyListNotAllowed,
             is ApiRequestError.MultipleParamFailure,
-            is AsyncError.NoSuchIdError,
             is ApiRequestError.MultipleTypeValidations ->
                 HttpStatusCode.BadRequest
+            is AsyncError.NoSuchIdError ->
+                HttpStatusCode.NotFound
             else ->
                 HttpStatusCode.InternalServerError
-        }
-
-        val message = failure.error.message
-        val asyncErrors = when (failure.error) {
-            is ApiRequestError.MultipleTypeValidations ->
-                (failure.error as ApiRequestError.MultipleTypeValidations).violations
-            is ApiRequestError.MultipleParamFailure ->
-                (failure.error as ApiRequestError.MultipleParamFailure).failed
-            else ->
-                listOf(failure.error)
-        }
-
-
-        val apiErrors = asyncErrors.map { ApiError.fromAsyncError(it as AsyncError) }
-        val responseBody = Json.encodeToString(serializer, ApiResponse(
-            success = false,
-            message = message,
-            errors = apiErrors
-        ))
-
-        respond(statusCode, responseBody)
-    }
-
-    suspend fun <T> ApplicationCall.methodCallRespond(
-        owleCall: OwleApiCall,
-        serializer: KSerializer<ApiResponse<T>>,
-        resultFn: () -> AsyncResult<T>
-    ){
-        when (val result = resultFn()) {
-            is AsyncResult.Failure -> failureRespond(result, serializer)
-            is AsyncResult.Success -> Json.encodeToString(serializer,
-                ApiResponse(
-                    success = true,
-                    data = if (owleCall.successStatus != HttpStatusCode.NoContent) result.data else null
-                )
-            ).apply { respond(owleCall.successStatus, this) }
         }
     }
 
@@ -177,7 +134,58 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         }
     }
 
-    private val responseOneSerializer: KSerializer<ApiResponse<T>> = ApiResponse.serializer(dtoSerializer)
-    private val responseManySerializer: KSerializer<ApiResponse<List<T>>> = ApiResponse.serializer(dtoListSerializer)
-    private val responseNoneSerializer: KSerializer<ApiResponse<Unit>> = ApiResponse.serializer(Unit.serializer())
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : BaseDto, D> OwleApiCall<T>.responseSerializer(
+        one: KSerializer<T>,
+        many: KSerializer<List<T>>,
+        none: KSerializer<Unit>
+    ): KSerializer<ApiResponse<D>> = when (this) {
+        is OwleApiCall.GetOne,
+        is OwleApiCall.CreateOne,
+        is OwleApiCall.UpdateOne ->
+            ApiResponse.serializer(one) as KSerializer<ApiResponse<D>>
+
+        is OwleApiCall.GetMany,
+        is OwleApiCall.CreateMany,
+        is OwleApiCall.UpdateMany ->
+            ApiResponse.serializer(many) as KSerializer<ApiResponse<D>>
+
+        is OwleApiCall.DeleteOne,
+        is OwleApiCall.DeleteMany ->
+            ApiResponse.serializer(none) as KSerializer<ApiResponse<D>>
+    }
+
+    private suspend fun <I, R> ApplicationCall.handle(
+        input: AsyncResult<I>,
+        owleCall: OwleApiCall<T>,
+        block: suspend (I) -> AsyncResult<R>
+    ) {
+        val serializer = owleCall.responseSerializerForCall<R>()
+        when (input) {
+            is AsyncResult.Failure -> failureRespond(input, serializer)
+            is AsyncResult.Success -> methodCallRespond(owleCall, serializer) { block(input.data) }
+        }
+    }
+
+    private suspend fun <D> ApplicationCall.methodCallRespond(
+        owleCall: OwleApiCall<*>,
+        serializer: KSerializer<ApiResponse<D>>,
+        resultFn: suspend () -> AsyncResult<D>
+    ){
+        when (val result = resultFn()) {
+            is AsyncResult.Failure -> failureRespond(result, serializer)
+            is AsyncResult.Success -> Json.encodeToString(serializer,
+                ApiResponse(
+                    success = true,
+                    data = if (owleCall.successStatus != HttpStatusCode.NoContent) result.data else null
+                )
+            ).apply { respond(owleCall.successStatus, this) }
+        }
+    }
+
+    private fun <D> OwleApiCall<T>.responseSerializerForCall(): KSerializer<ApiResponse<D>> {
+        return responseSerializer<T, D>(dtoSerializer, dtoListSerializer, Unit.serializer())
+    }
+
 }
