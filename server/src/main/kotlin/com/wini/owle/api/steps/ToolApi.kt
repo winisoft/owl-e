@@ -5,11 +5,12 @@ import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.ToolDto
 import io.ktor.server.application.*
-import io.ktor.server.routing.*
+import io.ktor.server.routing.*import com.wini.owle.validators.DtoValidator
+
 
 class ToolApi(
     dll: DLL<Long, ToolDto>,
-    validator: (ToolDto) -> Boolean = { _-> true}
+    validator: DtoValidator<ToolDto>
 ): LongIdEndpointImpl<ToolDto>(
     dll = dll,
     serializer = ToolDto.serializer(),

@@ -6,11 +6,12 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.user.UserDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.validators.DtoValidator
 
 
 class UserApi(
     dll: DLL<Long, UserDto>,
-    validator: (UserDto) -> Boolean = { _-> true}
+    validator: DtoValidator<UserDto>
 ): LongIdEndpointImpl<UserDto>(
     dll = dll,
     serializer = UserDto.serializer(),

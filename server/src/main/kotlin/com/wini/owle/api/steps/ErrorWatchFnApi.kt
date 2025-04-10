@@ -6,11 +6,12 @@ import com.wini.owle.dto.steps.ErrorWatchFnDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
+import com.wini.owle.validators.DtoValidator
 
 
 class ErrorWatchFnApi(
     dll: DLL<Long, ErrorWatchFnDto>,
-    validator: (ErrorWatchFnDto) -> Boolean = { _-> true}
+    validator: DtoValidator<ErrorWatchFnDto>
 ): LongIdEndpointImpl<ErrorWatchFnDto>(
     dll = dll,
     serializer = ErrorWatchFnDto.serializer(),

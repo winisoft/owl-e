@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class WorkflowFolderApi(
     dll: DLL<Long, WorkflowFolderDto>,
-    validator: (WorkflowFolderDto) -> Boolean = { _-> true}
+    validator: DtoValidator<>
 ): LongIdEndpointImpl<WorkflowFolderDto>(
     dll = dll,
     serializer = WorkflowFolderDto.serializer(),

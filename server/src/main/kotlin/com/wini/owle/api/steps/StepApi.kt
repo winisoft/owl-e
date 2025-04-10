@@ -6,11 +6,12 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.StepDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.validators.DtoValidator
 
 
 class StepApi(
     dll: DLL<Long, StepDto>,
-    validator: (StepDto) -> Boolean = { _-> true}
+    validator: DtoValidator<StepDto>
 ): LongIdEndpointImpl<StepDto>(
     dll = dll,
     serializer = StepDto.serializer(),

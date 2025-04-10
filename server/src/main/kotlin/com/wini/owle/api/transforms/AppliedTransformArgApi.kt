@@ -7,11 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class AppliedTransformArgApi(
     dll: DLL<Long, AppliedTransformArgDto>,
-    validator: (AppliedTransformArgDto) -> Boolean = { _-> true}
+    validator: DtoValidator<AppliedTransformArgDto>
 ): LongIdEndpointImpl<AppliedTransformArgDto>(
     dll = dll,
     serializer = AppliedTransformArgDto.serializer(),

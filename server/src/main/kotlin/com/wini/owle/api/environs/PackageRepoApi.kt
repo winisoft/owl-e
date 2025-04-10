@@ -2,17 +2,17 @@ package com.wini.owle.api.environs
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.dto.environs.PackageRepoDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class PackageRepoApi(
     dll: DLL<Long, PackageRepoDto>,
-    validator: (PackageRepoDto) -> Boolean = { _-> true}
+    validator: DtoValidator<PackageRepoDto>
 ): LongIdEndpointImpl<PackageRepoDto>(
     dll = dll,
     serializer = PackageRepoDto.serializer(),

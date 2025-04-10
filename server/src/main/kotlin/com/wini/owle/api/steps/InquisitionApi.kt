@@ -6,11 +6,12 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.steps.InquisitionDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.validators.DtoValidator
 
 
 class InquisitionApi(
     dll: DLL<Long, InquisitionDto>,
-    validator: (InquisitionDto) -> Boolean = { _-> true}
+    validator: DtoValidator<InquisitionDto>
 ): LongIdEndpointImpl<InquisitionDto>(
     dll = dll,
     serializer = InquisitionDto.serializer(),

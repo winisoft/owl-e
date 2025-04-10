@@ -6,11 +6,12 @@ import com.wini.owle.dto.runs.TestInputDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
+import com.wini.owle.validators.DtoValidator
 
 
 class TestInputApi(
     dll: DLL<Long, TestInputDto>,
-    validator: (TestInputDto) -> Boolean = { _-> true}
+    validator: DtoValidator<TestInputDto>
 ): LongIdEndpointImpl<TestInputDto>(
     dll = dll,
     serializer = TestInputDto.serializer(),

@@ -6,11 +6,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 import com.wini.owle.api.OwleApiCall
+import com.wini.owle.validators.DtoValidator
 
 
 class VersionSpecApi(
     dll: DLL<Long, VersionSpecDto>,
-    validator: (VersionSpecDto) -> Boolean = { _-> true}
+    validator: DtoValidator<VersionSpecDto>
 ) : LongIdEndpointImpl<VersionSpecDto>(
     dll = dll,
     serializer = VersionSpecDto.serializer(),

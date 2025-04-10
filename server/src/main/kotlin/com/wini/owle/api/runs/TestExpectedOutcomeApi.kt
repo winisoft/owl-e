@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class TestExpectedOutcomeApi(
     dll: DLL<Long,TestExpectedOutcomeDto>,
-    validator: (TestExpectedOutcomeDto) -> Boolean = { _-> true }
+    validator: DtoValidator<TestExpectedOutcomeDto>
 ) : LongIdEndpointImpl<TestExpectedOutcomeDto>(
     dll = dll,
     serializer = TestExpectedOutcomeDto.serializer(),

@@ -6,11 +6,12 @@ import com.wini.owle.dto.workflows.DataPointDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
+import com.wini.owle.validators.DtoValidator
 
 
 class DataPointsApi(
     dll: DLL<Long, DataPointDto>,
-    validator: (DataPointDto) -> Boolean = { _-> true}
+    validator: DtoValidator<>
 ): LongIdEndpointImpl<DataPointDto>(
     dll = dll,
     serializer = DataPointDto.serializer(),

@@ -7,11 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class PaymentMethodApi(
     dll: DLL<Long, PaymentMethodDto>,
-    validator: (PaymentMethodDto) -> Boolean = { _-> true}
+    validator: DtoValidator<PaymentMethodDto>
 ): LongIdEndpointImpl<PaymentMethodDto>(
     dll = dll,
     serializer = PaymentMethodDto.serializer(),

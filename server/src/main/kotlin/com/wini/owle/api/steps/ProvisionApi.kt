@@ -6,11 +6,12 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.steps.ProvisionDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.validators.DtoValidator
 
 
 class ProvisionApi(
     dll: DLL<Long, ProvisionDto>,
-    validator: (ProvisionDto) -> Boolean = { _-> true }
+    validator: DtoValidator<ProvisionDto>
 ): LongIdEndpointImpl<ProvisionDto>(
     dll = dll,
     serializer = ProvisionDto.serializer(),

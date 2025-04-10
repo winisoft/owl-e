@@ -1,5 +1,6 @@
 package com.wini.owle.api
 
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
@@ -13,9 +14,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import io.mockk.coEvery
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -29,7 +28,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
 
     protected fun setupTestApp(
         dll: DLL<ID, T>,
-        validator: (T) -> Boolean = { _-> true },
+        validator: DtoValidator<T> = DtoValidator.alwaysValid(),
         testBlock: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {
         application {
@@ -45,7 +44,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     val apiResponseListSerializer get() = ApiResponse.serializer(listSerializer)
 
     abstract val route: String
-    abstract fun getApiInstance(dll: DLL<ID, T>, validator: (T) -> Boolean): R
+    abstract fun getApiInstance(dll: DLL<ID, T>, validator: DtoValidator<T>): R
     abstract fun getDto(): T
     abstract val serializer: KSerializer<T>
     abstract val listSerializer: KSerializer<List<T>>
@@ -164,18 +163,15 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
         val inputDto: T = getDto()
         val expectedResponse = ApiResponse<T>(success = false, errors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.TypeDefinitionValidation)))
         val dll = mockk<DLL<ID, T>>()
-        coEvery { dll.create(inputDto) } returns AsyncResult.Success<T>(inputDto)
-        val validator: (T) -> Boolean = { _-> false }
-        val apiInstance = getApiInstance(dll, validator)
+        // We won't need this mock since validation should fail before DLL is called
+        // coEvery { dll.create(inputDto) } returns AsyncResult.Success<T>(inputDto)
+        
+        // Create a validator that always fails
+        val failingValidator = object : DtoValidator<T> {
+            override fun validate(dto: T): Boolean = false
+        }
 
-        testApplication {
-            application {
-                install(ContentNegotiation) { json(json) }
-                routing {
-                    apiInstance.register(this)
-                }
-            }
-            
+        setupTestApp(dll, failingValidator) {
             val response = client.post(route) {
                 contentType(ContentType.Application.Json)
                 setBody(json.encodeToString(serializer, inputDto))
@@ -195,18 +191,15 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
         val inputDto: T = getDto()
         val expectedResponse = ApiResponse<T>(success = false, errors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.TypeDefinitionValidation)))
         val dll = mockk<DLL<ID, T>>()
-        coEvery { dll.createAll(listOf(inputDto)) } returns AsyncResult.Success<List<T>>(listOf(inputDto))
-        val validator: (T) -> Boolean = { _-> false }
-        val apiInstance = getApiInstance(dll, validator)
+        // We won't need this mock since validation should fail before DLL is called
+        // coEvery { dll.createAll(listOf(inputDto)) } returns AsyncResult.Success<List<T>>(listOf(inputDto))
+        
+        // Create a validator that always fails
+        val failingValidator = object : DtoValidator<T> {
+            override fun validate(dto: T): Boolean = false
+        }
 
-        testApplication {
-            application {
-                install(ContentNegotiation) { json(json) }
-                routing {
-                    apiInstance.register(this)
-                }
-            }
-
+        setupTestApp(dll, failingValidator) {
             val response = client.post("$route/batch") {
                 contentType(ContentType.Application.Json)
                 setBody(json.encodeToString(listSerializer, listOf(inputDto)))
@@ -224,20 +217,17 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     @Test
     fun `PUT update - on validation failure - returns HTTP Code 400, TypeDefinitionValidation`() = runBlocking {
         val inputDto: T = getDto()
-        val expectedResponse = ApiResponse<T>(success = false, errors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.TypeDefinitionValidation)))
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.TypeDefinitionValidation))
         val dll = mockk<DLL<ID, T>>()
-        coEvery { dll.update(inputDto) } returns AsyncResult.Success<T>(inputDto)
-        val validator: (T) -> Boolean = { _-> false }
-        val apiInstance = getApiInstance(dll, validator)
+        // We won't need this mock since validation should fail before DLL is called
+        // coEvery { dll.update(inputDto) } returns AsyncResult.Success(inputDto)
+        
+        // Create a validator that always fails
+        val failingValidator = object : DtoValidator<T> {
+            override fun validate(dto: T): Boolean = false
+        }
 
-        testApplication {
-            application {
-                install(ContentNegotiation) { json(json) }
-                routing {
-                    apiInstance.register(this)
-                }
-            }
-
+        setupTestApp(dll, failingValidator) {
             val response = client.put(route) {
                 contentType(ContentType.Application.Json)
                 setBody(json.encodeToString(serializer, inputDto))
@@ -248,27 +238,24 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
-            Assertions.assertEquals(error, apiResponse.errors)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
     @Test
     fun `PUT updateBatch - on validation failure - returns HTTP Code 400, TypeDefinitionValidation`() = runBlocking {
         val inputDto: T = getDto()
-        val expectedResponse = ApiResponse<T>(success = false, errors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.TypeDefinitionValidation)))
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.TypeDefinitionValidation))
         val dll = mockk<DLL<ID, T>>()
-        coEvery { dll.updateAll(listOf(inputDto)) } returns AsyncResult.Success<List<T>>(listOf(inputDto))
-        val validator: (T) -> Boolean = { _-> false }
-        val apiInstance = getApiInstance(dll, validator)
+        // We won't need this mock since validation should fail before DLL is called
+        // coEvery { dll.updateAll(any()) } returns AsyncResult.Success(emptyList())
+        
+        // Create a validator that always fails
+        val failingValidator = object : DtoValidator<T> {
+            override fun validate(dto: T): Boolean = false
+        }
 
-        testApplication {
-            application {
-                install(ContentNegotiation) { json(json) }
-                routing {
-                    apiInstance.register(this)
-                }
-            }
-
+        setupTestApp(dll, failingValidator) {
             val response = client.put("$route/batch") {
                 contentType(ContentType.Application.Json)
                 setBody(json.encodeToString(listSerializer, listOf(inputDto)))
@@ -279,13 +266,14 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
-            Assertions.assertEquals(error, apiResponse.errors)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
     @Test
     fun `POST create - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
         val dll = mockk<DLL<ID, T>>()
+        val expectedErrors = AsyncError.ApiRequest.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
         setupTestApp(dll) {
             val response = client.post(route) {
@@ -294,11 +282,11 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             }
 
             val apiResponse = json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-            val error = AsyncError.ApiRequest.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
-            Assertions.assertEquals(error, apiResponse.errors)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
@@ -306,7 +294,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     fun `POST createBatch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
         val dll = mockk<DLL<ID, T>>()
         val reqError = AsyncError.ApiRequest.RequestBodyMalformed
-        val expectedResponse = ApiResponse<T>(success = false, message = reqError.message, errors = listOf(ApiError.fromAsyncError(reqError)))
+        val expectedErrors = AsyncError.ApiRequest.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
         setupTestApp(dll) {
             val response = client.post("$route/batch") {
@@ -319,7 +307,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
             Assertions.assertEquals(apiResponse.message, reqError.message)
-            Assertions.assertEquals(expectedResponse.errors, apiResponse.errors)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
@@ -327,7 +315,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     fun `PUT update - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
         val dll = mockk<DLL<ID, T>>()
         val apiError = AsyncError.ApiRequest.RequestBodyMalformed.run { ApiError(errorCode, message) }
-        val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
+        val expectedErrors = AsyncError.ApiRequest.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
         setupTestApp(dll) {
             val response = client.put(route) {
@@ -340,15 +328,16 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
             Assertions.assertEquals(apiResponse.message, apiError.message)
-            Assertions.assertEquals(expectedResponse.errors, apiResponse.errors)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
     @Test
     fun `PUT updateBatch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
         val dll = mockk<DLL<ID, T>>()
+        coEvery { dll.updateAll(any()) } returns AsyncResult.Success(emptyList())
         val apiError = AsyncError.ApiRequest.RequestBodyMalformed.run { ApiError(errorCode, message) }
-        val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
+        val expectedErrors = listOf(AsyncError.ApiRequest.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) })
 
         setupTestApp(dll) {
             val response = client.put("$route/batch") {
@@ -361,7 +350,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
             Assertions.assertEquals(apiResponse.message, apiError.message)
-            Assertions.assertEquals(expectedResponse.errors, apiResponse.errors)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
@@ -369,9 +358,7 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
     fun `POST create batch - on empty list - returns HTTP Code 400, EmptyList`() = runBlocking {
         val emptyList = emptyList<T>()
         val dll = mockk<DLL<ID, T>>()
-        coEvery { dll.createAll(emptyList()) } returns AsyncResult.Success(emptyList())
-        val apiError = AsyncError.ApiRequest.EmptyListNotAllowed.run { ApiError(errorCode, message) }
-        val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
+        val expectedErrors = listOf(AsyncError.ApiRequest.EmptyListNotAllowed.run { ApiError(errorCode, message) })
 
         setupTestApp(dll) {
             val response = client.post("$route/batch") {
@@ -384,8 +371,8 @@ abstract class BaseEndpointTest<ID: Any, T: BaseDto, R: RoutedApi> {
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertNull(apiResponse.data)
-            Assertions.assertEquals(apiResponse.message, apiError.message)
-            Assertions.assertEquals(expectedResponse.errors, apiResponse.errors)
+            Assertions.assertEquals(AsyncError.ApiRequest.EmptyListNotAllowed.message, apiResponse.message)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 

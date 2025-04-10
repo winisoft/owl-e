@@ -6,11 +6,12 @@ import com.wini.owle.dto.workflows.PhaseDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
+import com.wini.owle.validators.DtoValidator
 
 
 class PhaseApi(
     dll: DLL<Long, PhaseDto>,
-    validator: (PhaseDto) -> Boolean = { _-> true}
+    validator: DtoValidator<>
 ): LongIdEndpointImpl<PhaseDto>(
     dll = dll,
     serializer = PhaseDto.serializer(),

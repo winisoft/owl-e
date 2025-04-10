@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class BenchmarkingDataApi(
     dll: DLL<Long, BenchmarkingDataDto>,
-    validator: (BenchmarkingDataDto) -> Boolean = { _-> true}
+    validator: DtoValidator<BenchmarkingDataDto>
 ): LongIdEndpointImpl<BenchmarkingDataDto>(
     dll = dll,
     serializer = BenchmarkingDataDto.serializer(),

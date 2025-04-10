@@ -7,11 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class TypeVarianceApi(
     dll: DLL<Long, TypeVarianceDto>,
-    validator: (TypeVarianceDto) -> Boolean = { _-> true}
+    validator: DtoValidator<TypeVarianceDto>
 ): LongIdEndpointImpl<TypeVarianceDto>(
     dll = dll,
     serializer = TypeVarianceDto.serializer(),

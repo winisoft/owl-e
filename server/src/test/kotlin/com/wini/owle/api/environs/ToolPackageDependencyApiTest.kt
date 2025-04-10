@@ -1,6 +1,7 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.BaseCompositePkApiTest
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
@@ -14,7 +15,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.serializer
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -47,7 +47,7 @@ open class ToolPackageDependencyApiTest : BaseCompositePkApiTest<ToolPackageDepe
 
     override fun getApiInstance(
         dll: DLL<CompositeID, ToolPackageDependencyDto>,
-        validator: (ToolPackageDependencyDto) -> Boolean
+        validator: DtoValidator<ToolPackageDependencyDto>
     ): ToolPackageDependencyApi = ToolPackageDependencyApi(dll, validator)
 
     @Test

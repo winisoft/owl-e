@@ -10,11 +10,12 @@ import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.validators.DtoValidator
 
 
 class TypeUnionMemberApi(
     dll: DLL<CompositeID, TypeUnionMemberDto>,
-    validator: (TypeUnionMemberDto) -> Boolean = { _-> true}
+    validator: DtoValidator<TypeUnionMemberDto>
 ): CompositeIdEndpointImpl<TypeUnionMemberDto>(
     dll = dll,
     serializer = TypeUnionMemberDto.serializer(),

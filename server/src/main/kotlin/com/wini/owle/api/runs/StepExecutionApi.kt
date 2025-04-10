@@ -7,11 +7,12 @@ import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class StepExecutionApi(
     dll: DLL<Long, StepExecutionDto>,
-    validator: (StepExecutionDto) -> Boolean = { _-> true}
+    validator: DtoValidator<StepExecutionDto>
 ): LongIdEndpointImpl<StepExecutionDto>(
     dll = dll,
     serializer = StepExecutionDto.serializer(),

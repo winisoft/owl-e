@@ -10,11 +10,12 @@ import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.async.AsyncResult
+import com.wini.owle.validators.DtoValidator
 
 
 class TagRelationApi(
     dll: DLL<CompositeID, TagRelationDto>,
-    validator: (TagRelationDto) -> Boolean = { _-> true}
+    validator: DtoValidator<TagRelationDto>
 ): CompositeIdEndpointImpl<TagRelationDto>(
     dll = dll,
     serializer = TagRelationDto.serializer(),

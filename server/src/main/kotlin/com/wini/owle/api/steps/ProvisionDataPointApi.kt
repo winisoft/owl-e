@@ -11,11 +11,12 @@ import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class ProvisionDataPointApi(
     dll: DLL<CompositeID, ProvisionDataPointDto>,
-    validator: (ProvisionDataPointDto) -> Boolean = { _-> true}
+    validator: DtoValidator<ProvisionDataPointDto>
 ): CompositeIdEndpointImpl<ProvisionDataPointDto>(
     dll = dll,
     serializer = ProvisionDataPointDto.serializer(),

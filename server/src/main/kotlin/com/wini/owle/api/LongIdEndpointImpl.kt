@@ -1,5 +1,6 @@
 package com.wini.owle.api
 
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.async.AsyncError.ApiRequest
 import com.wini.owle.async.AsyncError.ApiRequest.MissingParameter
 import com.wini.owle.async.AsyncError.ApiRequest.ParamValueMalformed
@@ -7,10 +8,8 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.ifNullExit
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -19,7 +18,7 @@ import kotlinx.serialization.json.Json
 abstract class LongIdEndpointImpl<T: BaseDto>(
     override val dll: DLL<Long, T>,
     serializer: KSerializer<T>,
-    override val validator: (T) -> Boolean = { _-> true },
+    override val validator: DtoValidator<T> = DtoValidator.alwaysValid(),
 ): BaseEndpointImpl<Long, T>(
     dll = dll,
     validator = validator,

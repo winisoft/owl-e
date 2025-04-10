@@ -7,11 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
+import com.wini.owle.validators.DtoValidator
 
 
 class ErrorWatchApi(
     dll: DLL<Long, ErrorWatchDto>,
-    validator: (ErrorWatchDto) -> Boolean = { _-> true}
+    validator: DtoValidator<ErrorWatchDto>
 ): LongIdEndpointImpl<ErrorWatchDto>(
     dll = dll,
     serializer = ErrorWatchDto.serializer(),

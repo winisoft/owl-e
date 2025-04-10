@@ -6,11 +6,12 @@ import com.wini.owle.dto.steps.WorkflowJunctionDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
+import com.wini.owle.validators.DtoValidator
 
 
 class WorkflowJunctionApi(
     dll: DLL<Long, WorkflowJunctionDto>,
-    validator: (WorkflowJunctionDto) -> Boolean = { _-> true}
+    validator: DtoValidator<WorkflowJunctionDto>
 ): LongIdEndpointImpl<WorkflowJunctionDto>(
     dll = dll,
     serializer = WorkflowJunctionDto.serializer(),

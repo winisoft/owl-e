@@ -1,5 +1,6 @@
 package com.wini.owle.api
 
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncError.ApiRequest
 import com.wini.owle.async.AsyncResult
@@ -19,7 +20,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     open val dll: DLL<ID, T>,
     val dtoSerializer: KSerializer<T>,
     val dtoListSerializer: KSerializer<List<T>>,
-    open val validator: (T) -> Boolean
+    open val validator: DtoValidator<T>
 ): RoutedApi {
 
     abstract fun ApplicationCall.readId(): AsyncResult<ID>
@@ -128,15 +129,13 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
 
     private suspend inline fun ApplicationCall.readDto(
         dtoSerializer: KSerializer<T>,
-        crossinline validator: (T) -> Boolean
+        validator: DtoValidator<T>
     ): AsyncResult<T> {
         return runCatching {
             Json.decodeFromString(dtoSerializer, receiveText())
         }.getOrElse {
             return ApiRequest.RequestBodyMalformed.asFailure()
-        }.takeIf {
-            validator(it)
-        }.ifNullExit {
+        }.takeIf { validator.validate(it) }.ifNullExit {
             return ApiRequest.TypeDefinitionValidation.asFailure()
         }.let {
             AsyncResult.Success(it)
@@ -145,15 +144,15 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
 
     protected suspend inline fun ApplicationCall.readDtos(
         dtoListSerializer: KSerializer<List<T>>,
-        crossinline validator: (T) -> Boolean
+        validator: DtoValidator<T>
     ): AsyncResult<List<T>> {
         return runCatching {
             Json.decodeFromString(dtoListSerializer, receiveText())
         }.getOrElse {
             return ApiRequest.RequestBodyMalformed.asFailure()
-        }.takeIf {
-            it.all(validator)
-        }.ifNullExit {
+        }.takeIf { it.isNotEmpty() }.ifNullExit {
+            return ApiRequest.EmptyListNotAllowed.asFailure()
+        }.takeIf { validator.validateAll(it) }.ifNullExit {
             return ApiRequest.TypeDefinitionValidation.asFailure()
         }.let {
             AsyncResult.Success(it)
@@ -163,6 +162,4 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     private val responseOneSerializer: KSerializer<ApiResponse<T>> = ApiResponse.serializer(dtoSerializer)
     private val responseManySerializer: KSerializer<ApiResponse<List<T>>> = ApiResponse.serializer(dtoListSerializer)
     private val responseNoneSerializer: KSerializer<ApiResponse<Unit>> = ApiResponse.serializer(Unit.serializer())
-
-
 }

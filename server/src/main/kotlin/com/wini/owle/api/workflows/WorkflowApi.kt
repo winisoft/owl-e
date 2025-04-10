@@ -8,7 +8,6 @@ import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
 
-
 class WorkflowApi(
     dll: DLL<Long, WorkflowDto>,
     validator: (WorkflowDto) -> Boolean = { _-> true }
