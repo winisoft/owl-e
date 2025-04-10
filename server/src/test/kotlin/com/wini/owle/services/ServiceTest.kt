@@ -16,6 +16,7 @@ import com.wini.owle.services.workflows.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
+@Nested
 @DisplayName("Service Layer Tests")
 open class ServiceTest {
 

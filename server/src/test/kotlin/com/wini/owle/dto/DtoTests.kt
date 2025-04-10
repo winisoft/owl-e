@@ -11,7 +11,8 @@ import com.wini.owle.dto.runs.TestCaseDto
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
-
+@Nested
+@DisplayName("DTO Tests")
 open class DtoTest {
 
     @Nested

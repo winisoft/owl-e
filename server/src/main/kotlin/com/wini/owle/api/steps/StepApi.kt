@@ -21,28 +21,28 @@ class StepApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/step") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(StepDto::class))
             }
             get("/api/step/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(StepDto::class))
             }
             post("/api/step") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(StepDto::class))
             }
             post("/api/step/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(StepDto::class))
             }
             put("/api/step") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(StepDto::class))
             }
             put("/api/step/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(StepDto::class))
             }
             delete("/api/step/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(StepDto::class)) 
             }
             delete("/api/step/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(StepDto::class))
             }
         }
     }

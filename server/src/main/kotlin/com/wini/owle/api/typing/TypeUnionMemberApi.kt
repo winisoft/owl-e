@@ -30,28 +30,28 @@ class TypeUnionMemberApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-union-member") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TypeUnionMemberDto::class))
             }
             get("/api/type-union-member/id?unionTypeDeclarationId={unionTypeDeclarationId}&memberTypeDeclarationId={memberTypeDeclarationId}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TypeUnionMemberDto::class))
             }
             post("/api/type-union-member") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TypeUnionMemberDto::class))
             }
             post("/api/type-union-member/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TypeUnionMemberDto::class))
             }
             put("/api/type-union-member") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TypeUnionMemberDto::class))
             }
             put("/api/type-union-member/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TypeUnionMemberDto::class))
             }
             delete("/api/type-union-member/id?transformationId={transformationId}&eligibleTypeDeclarationId={eligibleTypeDeclarationId}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TypeUnionMemberDto::class)) 
             }
             delete("/api/type-union-member/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TypeUnionMemberDto::class))
             }
         }
     }

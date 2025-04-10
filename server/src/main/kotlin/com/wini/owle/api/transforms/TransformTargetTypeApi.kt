@@ -30,28 +30,28 @@ class TransformTargetTypeApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/transform-target-type") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TransformationTargetTypeDto::class))
             }
             get("/api/transform-target-type/id?transformationId={transformationId}&eligibleTypeDeclarationId={eligibleTypeDeclarationId}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TransformationTargetTypeDto::class))
             }
             post("/api/transform-target-type") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TransformationTargetTypeDto::class))
             }
             post("/api/transform-target-type/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TransformationTargetTypeDto::class))
             }
             put("/api/transform-target-type") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TransformationTargetTypeDto::class))
             }
             put("/api/transform-target-type/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TransformationTargetTypeDto::class))
             }
             delete("/api/transform-target-type/id?transformationId={transformationId}&eligibleTypeDeclarationId={eligibleTypeDeclarationId}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TransformationTargetTypeDto::class)) 
             }
             delete("/api/transform-target-type/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TransformationTargetTypeDto::class))
             }
         }
     }

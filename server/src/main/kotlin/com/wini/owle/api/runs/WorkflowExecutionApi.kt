@@ -17,33 +17,32 @@ class WorkflowExecutionApi(
     serializer = WorkflowExecutionDto.serializer(),
     validator = validator
 )  {
-
-    //"") { getAll(context.request.call) }
+    
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-execution") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(WorkflowExecutionDto::class))
             }
             get("/api/workflow-execution/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(WorkflowExecutionDto::class))
             }
             post("/api/workflow-execution") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(WorkflowExecutionDto::class))
             }
             post("/api/workflow-execution/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(WorkflowExecutionDto::class))
             }
             put("/api/workflow-execution") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(WorkflowExecutionDto::class))
             }
             put("/api/workflow-execution/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(WorkflowExecutionDto::class))
             }
             delete("/api/workflow-execution/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(WorkflowExecutionDto::class))
             }
             delete("/api/workflow-execution/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(WorkflowExecutionDto::class))
             }
         }
     }

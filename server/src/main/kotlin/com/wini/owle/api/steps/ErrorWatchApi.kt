@@ -22,28 +22,28 @@ class ErrorWatchApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/error-watch") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(ErrorWatchDto::class))
             }
             get("/api/error-watch/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(ErrorWatchDto::class))
             }
             post("/api/error-watch") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(ErrorWatchDto::class))
             }
             post("/api/error-watch/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(ErrorWatchDto::class))
             }
             put("/api/error-watch") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(ErrorWatchDto::class))
             }
             put("/api/error-watch/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(ErrorWatchDto::class))
             }
             delete("/api/error-watch/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(ErrorWatchDto::class)) 
             }
             delete("/api/error-watch/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(ErrorWatchDto::class))
             }
         }
     }

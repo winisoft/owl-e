@@ -22,28 +22,28 @@ class TypeParameterApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-parameter") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TypeParameterDto::class))
             }
             get("/api/type-parameter/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TypeParameterDto::class))
             }
             post("/api/type-parameter") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TypeParameterDto::class))
             }
             post("/api/type-parameter/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TypeParameterDto::class))
             }
             put("/api/type-parameter") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TypeParameterDto::class))
             }
             put("/api/type-parameter/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TypeParameterDto::class))
             }
             delete("/api/type-parameter/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TypeParameterDto::class)) 
             }
             delete("/api/type-parameter/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TypeParameterDto::class))
             }
         }
     }

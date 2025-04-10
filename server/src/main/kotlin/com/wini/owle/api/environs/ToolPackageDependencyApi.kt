@@ -5,6 +5,7 @@ import com.wini.owle.validators.DtoValidator
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.environs.PackageRepoDto
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import com.wini.owle.entity.composteid.ToolPackageDepIdFactory
 import io.ktor.server.application.*
@@ -30,28 +31,28 @@ class ToolPackageDependencyApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool-package-dep") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(PackageRepoDto::class))
             }
             get("/api/tool-package-dep/id?toolId={toolId}&packageId={packageId}&versionSpecId={versionSpecId}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(PackageRepoDto::class))
             }
             post("/api/tool-package-dep") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(PackageRepoDto::class))
             }
             post("/api/tool-package-dep/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(PackageRepoDto::class))
             }
             put("/api/tool-package-dep") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(PackageRepoDto::class))
             }
             put("/api/tool-package-dep/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(PackageRepoDto::class))
             }
             delete("/api/tool-package-dep/tool-package-dep/id?toolId={toolId}&packageId={packageId}&versionSpecId={versionSpecId}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(PackageRepoDto::class))
             }
             delete("/api/tool-package-dep/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(PackageRepoDto::class))
             }
         }
     }

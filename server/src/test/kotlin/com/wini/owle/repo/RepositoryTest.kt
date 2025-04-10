@@ -3,7 +3,7 @@ package com.wini.owle.repo
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
-
+@Nested
 @DisplayName("Repository Tests")
 open class RepositoryTest {
 

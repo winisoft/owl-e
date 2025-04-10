@@ -1,12 +1,15 @@
 package com.wini.owle.api.transforms
 
+import com.wini.owle.api.ApiError
 import com.wini.owle.api.BaseCompositePkApiTest
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
+import com.wini.owle.dto.steps.ProvisionDataPointDto
 import com.wini.owle.dto.transforms.TransformationTargetTypeDto
+import com.wini.owle.entity.TransformTargetTypes
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -19,16 +22,34 @@ import org.jetbrains.exposed.dao.id.CompositeID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import com.wini.owle.validators.DtoValidator
+import kotlinx.serialization.json.Json
 
 
 open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTargetTypeDto, TransformTargetTypeApi>() {
 
     override val route: String = "/api/transform-target-type"
 
+    override val malformedParamsRoute: String
+        get() = "$route/id?unionTypeDeclarationId=Text&typeDeclarationId=Text"
+
     override fun getDto(id1: Long, id2: Long): TransformationTargetTypeDto = DtoTestInstanceFactory.transformationTargetTypeDto(
         transformationId = id1,
         typeDeclarationId = id2
     )
+
+    override fun compositeId1(): CompositeID {
+        return CompositeID {
+            it[TransformTargetTypes.transformation] = 1
+            it[TransformTargetTypes.eligibleTypeDeclaration] = 1
+        }
+    }
+
+    override fun compositeId2(): CompositeID {
+        return CompositeID {
+            it[TransformTargetTypes.transformation] = 2
+            it[TransformTargetTypes.eligibleTypeDeclaration] = 2
+        }
+    }
 
     override val serializer: KSerializer<TransformationTargetTypeDto> = TransformationTargetTypeDto.serializer()
     
@@ -39,42 +60,17 @@ open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTar
         validator: DtoValidator<TransformationTargetTypeDto>
     ): TransformTargetTypeApi = TransformTargetTypeApi(dll, validator)
 
-    @Test
-    override fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-        val dto: TransformationTargetTypeDto = getDto(1, 1)
-        val id: CompositeID = mockk()
-        val dll = mockk<DLL<CompositeID, TransformationTargetTypeDto>> {
-            coEvery { getById(id) } returns AsyncResult.Success(dto)
-        }
-
-        setupTestApp(dll) {
-            val response = client.get("$route/id?transformationId={${dto.transformationId}}&eligibleTypeDeclarationId={${dto.typeDeclarationId}}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            Assertions.assertEquals(HttpStatusCode.OK, response.status)
-            Assertions.assertEquals(dto, json.decodeFromString(serializer, response.bodyAsText()))
-        }
+    override fun missingParamErrors(): List<ApiError> {
+        return listOf(
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("transformationId")),
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("typeDeclarationId"))
+        )
     }
 
-    @Test
-    override fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
-        val id: CompositeID = mockk()
-        val dll = mockk<DLL<CompositeID, TransformationTargetTypeDto>> {
-            coEvery {
-                getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
-        }
-
-        setupTestApp(dll) {
-            val response = client.get("$route/id?transformationId={${Long.MAX_VALUE}}&eligibleTypeDeclarationId={${Long.MAX_VALUE}}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("NoSuchIdError"))
-        }
+    override fun improperParameters(): List<ApiError> {
+        return listOf(
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("transformationId")),
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("typeDeclarationId"))
+        )
     }
-
 }

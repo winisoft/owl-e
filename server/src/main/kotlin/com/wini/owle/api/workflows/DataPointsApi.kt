@@ -21,28 +21,28 @@ class DataPointsApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/data-points") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(DataPointDto::class))
             }
             get("/api/data-points/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(DataPointDto::class))
             }
             post("/api/data-points") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(DataPointDto::class))
             }
             post("/api/data-points/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(DataPointDto::class))
             }
             put("/api/data-points") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(DataPointDto::class))
             }
             put("/api/data-points/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(DataPointDto::class))
             }
             delete("/api/data-points/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(DataPointDto::class)) 
             }
             delete("/api/data-points/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(DataPointDto::class))
             }
         }
     }

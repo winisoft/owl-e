@@ -21,28 +21,28 @@ class PhaseApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/phase") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(PhaseDto::class))
             }
             get("/api/phase/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(PhaseDto::class))
             }
             post("/api/phase") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(PhaseDto::class))
             }
             post("/api/phase/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(PhaseDto::class))
             }
             put("/api/phase") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(PhaseDto::class))
             }
             put("/api/phase/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(PhaseDto::class))
             }
             delete("/api/phase/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(PhaseDto::class)) 
             }
             delete("/api/phase/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(PhaseDto::class))
             }
         }
     }

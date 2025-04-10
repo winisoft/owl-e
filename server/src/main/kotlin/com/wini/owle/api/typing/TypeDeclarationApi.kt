@@ -22,28 +22,28 @@ class TypeDeclarationApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-declaration") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TypeDeclarationDto::class))
             }
             get("/api/type-declaration/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TypeDeclarationDto::class))
             }
             post("/api/type-declaration") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TypeDeclarationDto::class))
             }
             post("/api/type-declaration/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TypeDeclarationDto::class))
             }
             put("/api/type-declaration") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TypeDeclarationDto::class))
             }
             put("/api/type-declaration/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TypeDeclarationDto::class))
             }
             delete("/api/type-declaration/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TypeDeclarationDto::class)) 
             }
             delete("/api/type-declaration/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TypeDeclarationDto::class))
             }
         }
     }

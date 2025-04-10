@@ -20,28 +20,28 @@ class WorkflowApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(WorkflowDto::class))
             }
             get("/api/workflow/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(WorkflowDto::class))
             }
             post("/api/workflow") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(WorkflowDto::class))
             }
             post("/api/workflow/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(WorkflowDto::class))
             }
             put("/api/workflow") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(WorkflowDto::class))
             }
             put("/api/workflow/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(WorkflowDto::class))
             }
             delete("/api/workflow/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(WorkflowDto::class)) 
             }
             delete("/api/workflow/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(WorkflowDto::class))
             }
         }
     }

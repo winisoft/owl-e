@@ -30,28 +30,28 @@ class TagRelationApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag-relation") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TagRelationDto::class))
             }
             get("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TagRelationDto::class))
             }
             post("/api/tag-relation") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TagRelationDto::class))
             }
             post("/api/tag-relation/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TagRelationDto::class))
             }
             put("/api/tag-relation") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TagRelationDto::class))
             }
             put("/api/tag-relation/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TagRelationDto::class))
             }
             delete("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TagRelationDto::class)) 
             }
             delete("/api/tag-relation/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TagRelationDto::class))
             }
         }
     }

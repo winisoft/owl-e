@@ -27,56 +27,6 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
     dtoListSerializer = ListSerializer(serializer)
 ) {
 
-//    suspend fun ApplicationCall.execute(owleCall: OwleApiCall) {
-//        when (owleCall) {
-//            is OwleApiCall.GetMany ->
-//                methodCallRespond(owleCall, responseManySerializer) { dll.getAll() }
-//            is OwleApiCall.GetOne ->
-//                when (val idResult = readId()) {
-//                    is AsyncResult.Failure -> failureRespond(idResult, responseOneSerializer)
-//                    is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
-//                        dll.getById(idResult.data)
-//                    }
-//                }
-//            is OwleApiCall.DeleteOne -> when (val idResult = readId()) {
-//                is AsyncResult.Failure -> failureRespond(idResult, responseNoneSerializer)
-//                is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
-//                    dll.delete(idResult.data)
-//                }
-//            }
-//            is OwleApiCall.CreateOne -> when (val dtoResult: AsyncResult<T> = readDto(dtoSerializer, validator)) {
-//                is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
-//                is AsyncResult.Success<T> -> methodCallRespond(owleCall, responseOneSerializer) {
-//                    dll.create(dtoResult.data)
-//                }
-//            }
-//            is OwleApiCall.UpdateOne -> when (val dtoResult = readDto(dtoSerializer, validator)) {
-//                is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
-//                is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
-//                    dll.update(dtoResult.data)
-//                }
-//            }
-//            is OwleApiCall.DeleteMany -> when (val idsResult = readIds()) {
-//                is AsyncResult.Failure -> failureRespond(idsResult, responseNoneSerializer)
-//                is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
-//                    dll.deleteAll(idsResult.data)
-//                }
-//            }
-//            is OwleApiCall.CreateMany -> when (val dtosResult = readDtos(dtoListSerializer, validator)) {
-//                is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
-//                is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
-//                    dll.createAll(dtosResult.data)
-//                }
-//            }
-//            is OwleApiCall.UpdateMany -> when (val dtosResult = readDtos(dtoListSerializer, validator)) {
-//                is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
-//                is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
-//                    dll.createAll(dtosResult.data)
-//                }
-//            }
-//        }
-//    }
-
     override fun ApplicationCall.readId(): AsyncResult<Long> = parameters["id"]
         .ifNullExit {
             return AsyncResult.Failure(error = MissingParameter("id"))

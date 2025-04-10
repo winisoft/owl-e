@@ -22,28 +22,28 @@ class PackageRepoApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/package-repo") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(PackageRepoDto::class))
             }
             get("/api/package-repo/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(PackageRepoDto::class))
             }
             post("/api/package-repo") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(PackageRepoDto::class))
             }
             post("/api/package-repo/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(PackageRepoDto::class))
             }
             put("/api/package-repo") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(PackageRepoDto::class))
             }
             put("/api/package-repo/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(PackageRepoDto::class))
             }
             delete("/api/package-repo/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(PackageRepoDto::class))
             }
             delete("/api/package-repo/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(PackageRepoDto::class))
             }
         }
     }

@@ -3,6 +3,7 @@ package com.wini.owle.api.environs
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
+import com.wini.owle.dto.BaseDto
 import com.wini.owle.dto.environs.PackageDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -21,28 +22,28 @@ class PackageApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/package") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(PackageDto::class))
             }
             get("/api/package/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(PackageDto::class))
             }
             post("/api/package") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(PackageDto::class))
             }
             post("/api/package/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(PackageDto::class))
             }
             put("/api/package") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(PackageDto::class))
             }
             put("/api/package/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(PackageDto::class))
             }
             delete("/api/package/{id}") {
-                call.execute(OwleApiCall.DeleteOne)
+                call.execute(OwleApiCall.DeleteOne(PackageDto::class))
             }
             delete("/api/package/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(PackageDto::class))
             }
         }
     }

@@ -21,28 +21,28 @@ class ErrorWatchFnApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("api/error-watch-fn") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(ErrorWatchFnDto::class))
             }
             get("api/error-watch-fn/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(ErrorWatchFnDto::class))
             }
             post("api/error-watch-fn") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(ErrorWatchFnDto::class))
             }
             post("api/error-watch-fn/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(ErrorWatchFnDto::class))
             }
             put("api/error-watch-fn") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(ErrorWatchFnDto::class))
             }
             put("api/error-watch-fn/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(ErrorWatchFnDto::class))
             }
             delete("api/error-watch-fn/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(ErrorWatchFnDto::class)) 
             }
             delete("api/error-watch-fn/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(ErrorWatchFnDto::class))
             }
         }
     }

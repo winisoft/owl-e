@@ -23,28 +23,28 @@ class RevisionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/revision") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(RevisionDto::class))
             }
             get("/api/revision/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(RevisionDto::class))
             }
             post("/api/revision") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(RevisionDto::class))
             }
             post("/api/revision/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(RevisionDto::class))
             }
             put("/api/revision") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(RevisionDto::class))
             }
             put("/api/revision/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(RevisionDto::class))
             }
             delete("/api/revision/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(RevisionDto::class)) 
             }
             delete("/api/revision/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(RevisionDto::class))
             }
         }
     }

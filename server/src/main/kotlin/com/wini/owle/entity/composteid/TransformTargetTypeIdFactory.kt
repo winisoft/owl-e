@@ -11,8 +11,8 @@ object TransformTargetTypeIdFactory: CompositeIdFactoryImpl<TransformationTarget
 
     override fun fromDtoInstance(dto: TransformationTargetTypeDto): CompositeID {
         return CompositeID {
-            it[TransformTargetTypes.transformation] to dto.transformationId
-            it[TransformTargetTypes.eligibleTypeDeclaration] to dto.typeDeclarationId
+            it[TransformTargetTypes.transformation] = dto.transformationId
+            it[TransformTargetTypes.eligibleTypeDeclaration] = dto.typeDeclarationId
         }
     }
 

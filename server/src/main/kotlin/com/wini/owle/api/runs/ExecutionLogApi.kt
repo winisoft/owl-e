@@ -21,28 +21,28 @@ class ExecutionLogApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/execution-log") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(ExecutionLogDto::class))
             }
             get("/api/execution-log/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(ExecutionLogDto::class))
             }
             post("/api/execution-log") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(ExecutionLogDto::class))
             }
             post("/api/execution-log/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(ExecutionLogDto::class))
             }
             put("/api/execution-log") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(ExecutionLogDto::class))
             }
             put("/api/execution-log/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(ExecutionLogDto::class))
             }
             delete("/api/execution-log/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(ExecutionLogDto::class))
             }
             delete("/api/execution-log/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(ExecutionLogDto::class))
             }
         }
     }

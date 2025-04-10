@@ -63,7 +63,7 @@ sealed class AsyncError {
         ) : ApiRequestError() {
             override val errorCode: String get() = "MISSING_PARAM_VALUE"
             override val message: String get() = "Missing required parameter"
-            override val detail: String? get() = "'$paramKey' was not provided"
+            override val detail: String get() = "'$paramKey' was not provided"
         }
 
         @Serializable

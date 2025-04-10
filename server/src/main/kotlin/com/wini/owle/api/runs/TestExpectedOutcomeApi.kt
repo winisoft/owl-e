@@ -22,28 +22,28 @@ class TestExpectedOutcomeApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-expected-outcome") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TestExpectedOutcomeDto::class))
             }
             get("/api/test-expected-outcome/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TestExpectedOutcomeDto::class))
             }
             post("/api/test-expected-outcome") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TestExpectedOutcomeDto::class))
             }
             post("/api/test-expected-outcome/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TestExpectedOutcomeDto::class))
             }
             put("/api/test-expected-outcome") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TestExpectedOutcomeDto::class))
             }
             put("/api/test-expected-outcome/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TestExpectedOutcomeDto::class))
             }
             delete("/api/test-expected-outcome/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TestExpectedOutcomeDto::class))
             }
             delete("/api/test-expected-outcome/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TestExpectedOutcomeDto::class))
             }
         }
     }

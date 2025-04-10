@@ -24,28 +24,28 @@ class TypeSchemaRefApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-schema-ref") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TypeSchemaRefDto::class))
             }
             get("/api/type-schema-ref/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TypeSchemaRefDto::class))
             }
             post("/api/type-schema-ref") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TypeSchemaRefDto::class))
             }
             post("/api/type-schema-ref/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TypeSchemaRefDto::class))
             }
             put("/api/type-schema-ref") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TypeSchemaRefDto::class))
             }
             put("/api/type-schema-ref/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TypeSchemaRefDto::class))
             }
             delete("/api/type-schema-ref/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TypeSchemaRefDto::class)) 
             }
             delete("/api/type-schema-ref/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TypeSchemaRefDto::class))
             }
         }
     }

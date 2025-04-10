@@ -22,28 +22,28 @@ class TagApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag") {
-                call.execute(OwleApiCall.GetMany)
+                call.execute(OwleApiCall.GetMany(TagDto::class))
             }
             get("/api/tag/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                call.execute(OwleApiCall.GetOne(TagDto::class))
             }
             post("/api/tag") {
-                call.execute(OwleApiCall.CreateOne)
+                call.execute(OwleApiCall.CreateOne(TagDto::class))
             }
             post("/api/tag/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                call.execute(OwleApiCall.CreateMany(TagDto::class))
             }
             put("/api/tag") {
-                call.execute(OwleApiCall.UpdateOne)
+                call.execute(OwleApiCall.UpdateOne(TagDto::class))
             }
             put("/api/tag/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                call.execute(OwleApiCall.UpdateMany(TagDto::class))
             }
             delete("/api/tag/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                call.execute(OwleApiCall.DeleteOne(TagDto::class)) 
             }
             delete("/api/tag/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                call.execute(OwleApiCall.DeleteMany(TagDto::class))
             }
         }
     }

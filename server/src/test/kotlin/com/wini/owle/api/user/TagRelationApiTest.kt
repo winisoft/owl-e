@@ -1,34 +1,43 @@
 package com.wini.owle.api.user
 
+import com.wini.owle.api.ApiError
 import com.wini.owle.api.BaseCompositePkApiTest
 import com.wini.owle.async.AsyncError
-import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import com.wini.owle.dto.user.TagRelationDto
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.mockk.coEvery
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import com.wini.owle.entity.TagRelations
+import com.wini.owle.validators.DtoValidator
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import com.wini.owle.validators.DtoValidator
 
 
-open class TagRelationApiTest : BaseCompositePkApiTest<TagRelationDto, TagRelationApi>() {
+open class TagRelationApiTest: BaseCompositePkApiTest<TagRelationDto, TagRelationApi>() {
 
     override val route: String = "/api/tag-relation"
+
+    override val malformedParamsRoute: String
+        get() = "$route/id?parentTagId=Text&childTagId=Text"
 
     override fun getDto(id1: Long, id2: Long): TagRelationDto = DtoTestInstanceFactory.tagRelationDto(
         parentTagId = id1,
         childTagId = id2
     )
+
+    override fun compositeId1(): CompositeID {
+        return CompositeID {
+            it[TagRelations.parentTag] = 1
+            it[TagRelations.childTag] = 1
+        }
+    }
+
+    override fun compositeId2(): CompositeID {
+        return CompositeID {
+            it[TagRelations.parentTag] = 2
+            it[TagRelations.childTag] = 2
+        }
+    }
 
     override val serializer: KSerializer<TagRelationDto> = TagRelationDto.serializer()
     
@@ -39,42 +48,19 @@ open class TagRelationApiTest : BaseCompositePkApiTest<TagRelationDto, TagRelati
         validator: DtoValidator<TagRelationDto>
     ): TagRelationApi = TagRelationApi(dll, validator)
 
-    @Test
-    override fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-        val dto: TagRelationDto = getDto(1, 1)
-        val id: CompositeID = mockk()
-        val dll = mockk<DLL<CompositeID, TagRelationDto>> {
-            coEvery { getById(id) } returns AsyncResult.Success(dto)
-        }
-
-        setupTestApp(dll) {
-            val response = client.get("$route/id?parentTagId={${dto.parentTagId}}&childTagId={${dto.childTagId}}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            Assertions.assertEquals(HttpStatusCode.OK, response.status)
-            Assertions.assertEquals(dto, json.decodeFromString(serializer, response.bodyAsText()))
-        }
+    override fun improperParameters(): List<ApiError> {
+        return listOf(
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("parentTagId")),
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("childTagId"))
+        )
     }
 
-    @Test
-    override fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
-        val id: CompositeID = mockk()
-        val dll = mockk<DLL<CompositeID, TagRelationDto>> {
-            coEvery {
-                getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
-        }
-
-        setupTestApp(dll) {
-            val response = client.get("$route/id?parentTagId={${Long.MAX_VALUE}}&childTagId={${Long.MAX_VALUE}}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("NoSuchIdError"))
-        }
+    override fun missingParamErrors(): List<ApiError> {
+        return listOf(
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("parentTagId")),
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("childTagId"))
+        )
     }
+
 
 }

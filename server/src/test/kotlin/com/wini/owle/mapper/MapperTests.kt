@@ -27,7 +27,7 @@ import com.wini.owle.mapper.workflows.enums.StoreMethodMapperTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
-
+@Nested
 @DisplayName("Mapper Tests")
 open class MapperTests {
 
@@ -39,72 +39,44 @@ open class MapperTests {
     @DisplayName("Enum Mapper Tests")
     inner class EnumMapperTests {
 
-        @Nested
-        inner class
-        PackageRepoTypeMapperTests: PackageRepoTypeMapperTest()
+        @Nested inner class PackageRepoTypeMapperTests: PackageRepoTypeMapperTest()
 
-        @Nested
-        inner class
-        ComparisonOperatorMapperTests: ComparisonOperatorMapperTest()
+        @Nested inner class ComparisonOperatorMapperTests: ComparisonOperatorMapperTest()
 
-        @Nested
-        inner class
-        ExecutionStatusMapperTests: ExecutionStatusMapperTest()
+        @Nested inner class ExecutionStatusMapperTests: ExecutionStatusMapperTest()
 
-        @Nested
-        inner class
-        GenerationMethodMapperTests: GenerationMethodMapperTest()
+        @Nested inner class GenerationMethodMapperTests: GenerationMethodMapperTest()
 
-        @Nested
-        inner class
-        LogLevelMapperTests: LogLevelMapperTest()
+        @Nested inner class LogLevelMapperTests: LogLevelMapperTest()
 
-        @Nested
-        inner class
-        TransformOccurrenceMapperTests: TransformOccurrenceMapperTest()
+        @Nested inner class TransformOccurrenceMapperTests: TransformOccurrenceMapperTest()
 
-        @Nested
-        inner class
-        VarianceCardinalityMapperTests: VarianceCardinalityMapperTest()
+        @Nested inner class VarianceCardinalityMapperTests: VarianceCardinalityMapperTest()
 
-        @Nested
-        inner class
-        CardBrandMapperTests: CardBrandMapperTest()
+        @Nested inner class CardBrandMapperTests: CardBrandMapperTest()
 
-        @Nested
-        inner class
-        SubscriptionStatusMapperTests: SubscriptionStatusMapperTest()
+        @Nested inner class SubscriptionStatusMapperTests: SubscriptionStatusMapperTest()
 
-        @Nested
-        inner class
-        AuthorshipCreditMapperTests: AuthorshipCreditMapperTest()
+        @Nested inner class AuthorshipCreditMapperTests: AuthorshipCreditMapperTest()
 
-        @Nested
-        inner class
-        CommercialUseMapperTests: CommercialUseMapperTest()
+        @Nested inner class CommercialUseMapperTests: CommercialUseMapperTest()
 
-        @Nested
-        inner class
-        ModificationTermsMapperTests: ModificationTermsMapperTest()
+        @Nested inner class ModificationTermsMapperTests: ModificationTermsMapperTest()
 
-        @Nested
-        inner class StoreMethodMapperTests: StoreMethodMapperTest()
+        @Nested inner class StoreMethodMapperTests: StoreMethodMapperTest()
     }
 
     @Nested
     @DisplayName("Environs Module")
     inner class MapperEnvironsModuleTest {
 
-        @Nested
-        @DisplayName("PackageRepoMapper")
+        @Nested @DisplayName("PackageRepoMapper")
         inner class PackageRepoTest: PackageRepoMapperTest()
 
-        @Nested
-        @DisplayName("PackageMapper")
+        @Nested @DisplayName("PackageMapper")
         inner class PackageTest: PackageMapperTest()
 
-        @Nested
-        @DisplayName("VersionSpecMapper")
+        @Nested @DisplayName("VersionSpecMapper")
         inner class VersionSpecTest: VersionSpecsMapperTest()
 
     }
@@ -113,40 +85,31 @@ open class MapperTests {
     @DisplayName("Runs Module")
     inner class MapperRunsModuleTest {
 
-        @Nested
-        @DisplayName("BenchmarkingDataMapper")
+        @Nested @DisplayName("BenchmarkingDataMapper")
         inner class BenchmarkingDataTest: BenchmarkingDataMapperTest()
 
-        @Nested
-        @DisplayName("ExecutionLogMapper")
+        @Nested @DisplayName("ExecutionLogMapper")
         inner class ExecutionLogTest: ExecutionLogMapperTest()
 
-        @Nested
-        @DisplayName("StepBenchmarkingDataMapper")
+        @Nested @DisplayName("StepBenchmarkingDataMapper")
         inner class StepBenchmarkingTest: StepBenchmarkingDataMapperTest()
 
-        @Nested
-        @DisplayName("StepExecutionMapper")
+        @Nested @DisplayName("StepExecutionMapper")
         inner class StepExecutionTest: StepExecutionMapperTest()
 
-        @Nested
-        @DisplayName("TestCaseMapper")
+        @Nested @DisplayName("TestCaseMapper")
         inner class TestCaseTest: TestCaseMapperTest()
 
-        @Nested
-        @DisplayName("TestExpectedOutcomeMapper")
+        @Nested @DisplayName("TestExpectedOutcomeMapper")
         inner class TestExpectedOutcomeTest: TestExpectedOutcomeMapperTest()
 
-        @Nested
-        @DisplayName("TestInputMapper")
+        @Nested @DisplayName("TestInputMapper")
         inner class TestInputTest: TestInputMapperTest()
 
-        @Nested
-        @DisplayName("TestResultMapper")
+        @Nested @DisplayName("TestResultMapper")
         inner class TestResultTest: TestResultMapperTest()
 
-        @Nested
-        @DisplayName("WorkflowExecutionMapper")
+        @Nested @DisplayName("WorkflowExecutionMapper")
         inner class WorkflowExecutionTest: WorkflowExecutionMapperTest()
 
     }
@@ -155,32 +118,25 @@ open class MapperTests {
     @DisplayName("Steps Module")
     inner class MapperStepsModuleTest {
 
-        @Nested
-        @DisplayName("ErrorWatchMapper")
+        @Nested @DisplayName("ErrorWatchMapper")
         inner class ErrorWatchTest: ErrorWatchMapperTest()
 
-        @Nested
-        @DisplayName("ErrorWatchFnMapper")
+        @Nested @DisplayName("ErrorWatchFnMapper")
         inner class ErrorWatchFnTest: ErrorWatchFnMapperTest()
 
-        @Nested
-        @DisplayName("InquisitionMapper")
+        @Nested @DisplayName("InquisitionMapper")
         inner class InquisitionTest: InquisitionMapperTest()
 
-        @Nested
-        @DisplayName("PreReqInjectionMapper")
+        @Nested @DisplayName("PreReqInjectionMapper")
         inner class PreReqInjectionTest: PreReqInjectionMapperTest()
 
-        @Nested
-        @DisplayName("ProvisionMapper")
+        @Nested @DisplayName("ProvisionMapper")
         inner class ProvisionTest: ProvisionMapperTest()
 
-        @Nested
-        @DisplayName("RevisionMapper")
+        @Nested @DisplayName("RevisionMapper")
         inner class RevisionTest: RevisionMapperTest()
 
-        @Nested
-        @DisplayName("WorkflowJunctionMapper")
+        @Nested @DisplayName("WorkflowJunctionMapper")
         inner class WorkflowJunctionTest: WorkflowJunctionMapperTest()
 
     }
@@ -189,20 +145,16 @@ open class MapperTests {
     @DisplayName("Transforms Module")
     inner class MapperTransformsModuleTest {
 
-        @Nested
-        @DisplayName("AppliedTransformArgMapper")
+        @Nested @DisplayName("AppliedTransformArgMapper")
         inner class AppliedTransformArgTest: AppliedTransformArgMapperTest()
 
-        @Nested
-        @DisplayName("AppliedTransformMapper")
+        @Nested @DisplayName("AppliedTransformMapper")
         inner class AppliedTransformTest: AppliedTransformMapperTest()
 
-        @Nested
-        @DisplayName("TransformationArgMapper")
+        @Nested @DisplayName("TransformationArgMapper")
         inner class TransformationArgTest: TransformationArgMapperTest()
 
-        @Nested
-        @DisplayName("TransformationMapper")
+        @Nested @DisplayName("TransformationMapper")
         inner class TransformationTest: TransformationMapperTest()
 
     }
@@ -211,28 +163,22 @@ open class MapperTests {
     @DisplayName("Typing Module")
     inner class MapperTypingModuleTests {
 
-        @Nested
-        @DisplayName("TypeBoundMapper")
+        @Nested @DisplayName("TypeBoundMapper")
         inner class TypeBoundTest: TypeBoundMapperTest()
 
-        @Nested
-        @DisplayName("TypeDeclaratonMapper")
+        @Nested @DisplayName("TypeDeclaratonMapper")
         inner class TypeDeclarationTest: TypeDeclarationMapperTest()
 
-        @Nested
-        @DisplayName("TypeDefinitionMapper")
+        @Nested @DisplayName("TypeDefinitionMapper")
         inner class TypeDefinitionTest: TypeDefinitionMapperTest()
 
-        @Nested
-        @DisplayName("TypeParameterMapper")
+        @Nested @DisplayName("TypeParameterMapper")
         inner class TypeParameterTest: TypeParameterMapperTest()
 
-        @Nested
-        @DisplayName("TypeSchemaRefMapper")
+        @Nested @DisplayName("TypeSchemaRefMapper")
         inner class TypeSchemaRefTest: TypeSchemaRefMapperTest()
 
-        @Nested
-        @DisplayName("TypeVarianceMapper")
+        @Nested @DisplayName("TypeVarianceMapper")
         inner class TypeVariancesTest: TypeVariancesMapperTest()
 
     }
@@ -241,16 +187,13 @@ open class MapperTests {
     @DisplayName("User Module")
     inner class MapperUserModuleTest {
 
-        @Nested
-        @DisplayName("PaymentMethodMapper")
+        @Nested @DisplayName("PaymentMethodMapper")
         inner class PaymentMethodTest: PaymentMethodMapperTest()
 
-        @Nested
-        @DisplayName("TagMapper")
+        @Nested @DisplayName("TagMapper")
         inner class TagTest: TagsMapperTest()
 
-        @Nested
-        @DisplayName("UserMapper")
+        @Nested @DisplayName("UserMapper")
         inner class UserTest: UserMapperTest()
 
     }
@@ -259,32 +202,25 @@ open class MapperTests {
     @DisplayName("Workflows Module")
     inner class MapperWorkflowsModuleTest {
 
-        @Nested
-        @DisplayName("DataPointMapper")
+        @Nested @DisplayName("DataPointMapper")
         inner class DataPointTest: DataPointMapperTest()
 
-        @Nested
-        @DisplayName("PhaseMapper")
+        @Nested @DisplayName("PhaseMapper")
         inner class PhaseTest: PhaseMapperTest()
 
-        @Nested
-        @DisplayName("StepMapper")
+        @Nested @DisplayName("StepMapper")
         inner class StepTest: StepMapperTest()
 
-        @Nested
-        @DisplayName("ToolParamMapper")
+        @Nested @DisplayName("ToolParamMapper")
         inner class ToolParamTest: ToolParamMapperTest()
 
-        @Nested
-        @DisplayName("ToolMapper")
+        @Nested @DisplayName("ToolMapper")
         inner class ToolTest: ToolMapperTest()
 
-        @Nested
-        @DisplayName("WorkflowFolderMapper")
+        @Nested @DisplayName("WorkflowFolderMapper")
         inner class WorkflowFolderTest: WorkflowFolderMapperTest()
 
-        @Nested
-        @DisplayName("WorkflowMapper")
+        @Nested @DisplayName("WorkflowMapper")
         inner class WorkflowTest: WorkflowsMapperTest()
 
     }

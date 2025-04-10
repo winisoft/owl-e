@@ -1,12 +1,15 @@
 package com.wini.owle.api.typing
 
+import com.wini.owle.api.ApiError
 import com.wini.owle.api.BaseCompositePkApiTest
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
+import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.dto.typing.TypeUnionMemberDto
+import com.wini.owle.entity.TypeUnionMembers
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -19,16 +22,34 @@ import org.jetbrains.exposed.dao.id.CompositeID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import com.wini.owle.validators.DtoValidator
+import kotlinx.serialization.json.Json
 
 
 open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
 
     override val route: String = "/api/type-union-member"
 
+    override val malformedParamsRoute: String
+        get() = "$route/id?unionTypeDeclarationId=Text&memberTypeDeclarationId=Text"
+
     override fun getDto(id1: Long, id2: Long): TypeUnionMemberDto = DtoTestInstanceFactory.typeUnionMemberDto(
         unionTypeDeclarationId = id1,
         memberTypeDeclarationId = id2
     )
+
+    override fun compositeId1(): CompositeID {
+        return CompositeID {
+            it[TypeUnionMembers.unionTypeDeclaration] = 1
+            it[TypeUnionMembers.memberTypeDeclaration] = 1
+        }
+    }
+
+    override fun compositeId2(): CompositeID {
+        return CompositeID {
+            it[TypeUnionMembers.unionTypeDeclaration] = 2
+            it[TypeUnionMembers.memberTypeDeclaration] = 2
+        }
+    }
 
     override val serializer: KSerializer<TypeUnionMemberDto> = TypeUnionMemberDto.serializer()
     
@@ -39,42 +60,19 @@ open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, T
         validator: DtoValidator<TypeUnionMemberDto>
     ): TypeUnionMemberApi = TypeUnionMemberApi(dll, validator)
 
-    @Test
-    override fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-        val dto: TypeUnionMemberDto = getDto(1, 1)
-        val id: CompositeID = mockk()
-        val dll = mockk<DLL<CompositeID, TypeUnionMemberDto>> {
-            coEvery { getById(id) } returns AsyncResult.Success(dto)
-        }
-
-        setupTestApp(dll) {
-            val response = client.get("$route/id?unionTypeDeclarationId={${dto.unionTypeDeclarationId}}&memberTypeDeclarationId={${dto.memberTypeDeclarationId}}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            Assertions.assertEquals(HttpStatusCode.OK, response.status)
-            Assertions.assertEquals(dto, json.decodeFromString(serializer, response.bodyAsText()))
-        }
+    override fun missingParamErrors(): List<ApiError> {
+        return listOf(
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("unionTypeDeclarationId")),
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.MissingParameter("memberTypeDeclarationId"))
+        )
     }
 
-    @Test
-    override fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
-        val id: CompositeID = mockk()
-        val dll = mockk<DLL<CompositeID, TypeUnionMemberDto>> {
-            coEvery {
-                getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
-        }
-
-        setupTestApp(dll) {
-            val response = client.get("$route/id?unionTypeDeclarationId={unionTypeDeclarationId}&memberTypeDeclarationId={memberTypeDeclarationId}") {
-                contentType(ContentType.Application.Json)
-            }
-
-            Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("NoSuchIdError"))
-        }
+    override fun improperParameters(): List<ApiError> {
+        return listOf(
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("unionTypeDeclarationId")),
+            ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("memberTypeDeclarationId"))
+        )
     }
+
 
 }
