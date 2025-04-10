@@ -59,7 +59,7 @@ open class ProvisionDataPointApiTest : BaseCompositePkApiTest<ProvisionDataPoint
         val dll = mockk<DLL<CompositeID, ProvisionDataPointDto>> {
             coEvery {
                 getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
         }
 
         setupTestApp(dll) {

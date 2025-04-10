@@ -5,7 +5,6 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.entity.typing.TypeParameterDao
 import com.wini.owle.mapper.typing.TypeParametersMapper
-import com.wini.owle.repo.TypeParameterIdFactory
 import com.wini.owle.repo.typing.TypeParameterRepository
 import com.wini.owle.services.BaseServiceImpl
 import com.wini.owle.repo.EntityIdFactory
@@ -32,7 +31,7 @@ class TypeParameterService(
                 return AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                AsyncError.DatabaseError.Unspecified(exception.message ?: "Unable to get TypeParameter entities").asFailure()
+                AsyncError.DatabaseError.Generic(exception.message ?: "Unable to get TypeParameter entities").asFailure()
             }
         )
     }

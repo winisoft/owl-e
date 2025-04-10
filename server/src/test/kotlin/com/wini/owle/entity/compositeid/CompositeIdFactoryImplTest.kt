@@ -28,9 +28,9 @@ class CompositeIdFactoryImplTest {
             mockk<Column<EntityID<Long>>>() to "id2"
         )
 
-        override fun fromDtoInstance(dto: TestDto): CompositeID? {
-            val id1 = dto.id1 ?: return null
-            val id2 = dto.id2 ?: return null
+        override fun fromDtoInstance(dto: TestDto): CompositeID {
+            val id1 = dto.id1
+            val id2 = dto.id2
 
             return CompositeID {
                 for ((entityIdColumn, columnName) in fkReferences) {
@@ -45,8 +45,8 @@ class CompositeIdFactoryImplTest {
 
     // Simple DTO for testing
     private class TestDto : BaseDto {
-        var id1: Long? = null
-        var id2: Long? = null
+        var id1: EntityID<Long> = mockk()
+        var id2: EntityID<Long> = mockk()
     }
 
     private lateinit var factory: TestCompositeIdFactoryImpl
@@ -155,7 +155,9 @@ class CompositeIdFactoryImplTest {
     @Test
     fun `fromDtoInstance - when any required DTO ID field is null - returns null`() {
         val dto = TestDto().apply {
-            id1 = 123L
+            id1 = mockk {
+                every { value } returns 123L
+            }
             // id2 is null
         }
         val result = factory.fromDtoInstance(dto)
@@ -166,8 +168,12 @@ class CompositeIdFactoryImplTest {
     fun `fromDtoInstance - passed a valid DTO - returns appropriate CompositeID`() {
         // Setup
         val dto = TestDto().apply {
-            id1 = 123L
-            id2 = 456L
+            id1 = mockk {
+                every { value } returns 123L
+            }
+            id2 = mockk {
+                every { value } returns 456L
+            }
         }
         
         // Mock the CompositeID creation

@@ -5,6 +5,8 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.DataPointDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.api.OwleApiCall
+
 
 class DataPointsApi(
     dll: DLL<Long, DataPointDto>,
@@ -18,28 +20,28 @@ class DataPointsApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/data-points") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/data-points/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/data-points") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/data-points/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/data-points") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/data-points/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/data-points/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/data-points/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

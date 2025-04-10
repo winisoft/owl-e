@@ -5,6 +5,8 @@ import com.wini.owle.dto.typing.TypeDefinitionDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
+import com.wini.owle.api.OwleApiCall
+
 
 
 class TypeDefinitionApi(
@@ -19,28 +21,28 @@ class TypeDefinitionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-definition") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/type-definition/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/type-definition") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/type-definition/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/type-definition") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/type-definition/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/type-definition/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/type-definition/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

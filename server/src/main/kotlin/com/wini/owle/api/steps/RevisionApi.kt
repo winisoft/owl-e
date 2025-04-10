@@ -1,6 +1,7 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.steps.RevisionDto
 import io.ktor.server.application.*
@@ -21,28 +22,28 @@ class RevisionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/revision") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/revision/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/revision") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/revision/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/revision") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/revision/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/revision/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/revision/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

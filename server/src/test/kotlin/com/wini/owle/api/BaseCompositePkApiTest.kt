@@ -53,7 +53,7 @@ abstract class BaseCompositePkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTes
         val dll = mockk<DLL<CompositeID, T>> {
             coEvery {
                 getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
         }
 
         setupTestApp(dll) {

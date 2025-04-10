@@ -5,6 +5,8 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.typing.TypeBoundsDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.api.OwleApiCall
+
 
 
 class TypeBoundsApi(
@@ -19,28 +21,28 @@ class TypeBoundsApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-bounds") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/type-bounds/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/type-bounds") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/type-bounds/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/type-bounds") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/type-bounds/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/type-bounds/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/type-bounds/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

@@ -5,6 +5,8 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.WorkflowFolderDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.api.OwleApiCall
+
 
 
 class WorkflowFolderApi(
@@ -19,28 +21,28 @@ class WorkflowFolderApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-folder") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/workflow-folder/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/workflow-folder") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/workflow-folder/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/workflow-folder") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/workflow-folder/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/workflow-folder/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/workflow-folder/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

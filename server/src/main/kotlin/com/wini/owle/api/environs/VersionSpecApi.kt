@@ -5,6 +5,8 @@ import com.wini.owle.dto.environs.VersionSpecDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
+import com.wini.owle.api.OwleApiCall
+
 
 class VersionSpecApi(
     dll: DLL<Long, VersionSpecDto>,
@@ -18,28 +20,28 @@ class VersionSpecApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/version-spec") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/version-spec/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/version-spec") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/version-spec/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/version-spec") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/version-spec/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/version-spec/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/version-spec/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) } 
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

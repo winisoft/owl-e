@@ -26,7 +26,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to create entity").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to create entity").asFailure()
             }
         )
     }
@@ -40,7 +40,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to get all entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to get all entities").asFailure()
             }
         )
     }
@@ -55,10 +55,10 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                     ?.let {
                         val data = mapper.toDto(it)
                         AsyncResult.Success(data)
-                    } ?: NoSuchIdError("No such id: $id").asFailure()
+                    } ?: NoSuchIdError.asFailure()
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Failed to get id $id").asFailure()
+                DatabaseError.Generic(exception.message ?: "Failed to get id $id").asFailure()
             }
         )
     }
@@ -73,7 +73,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to create entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to create entities").asFailure()
             }
         )
     }
@@ -88,7 +88,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }
@@ -103,7 +103,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }
@@ -117,7 +117,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(Unit)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to delete entity $id").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to delete entity $id").asFailure()
             }
         )
     }
@@ -131,7 +131,7 @@ open class BaseServiceImpl<ID: Any, Dto: BaseDto, T: Entity<ID>>(
                 AsyncResult.Success(it)
             },
             onFailure = { exception ->
-                DatabaseError.Unspecified(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }

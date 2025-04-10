@@ -8,6 +8,8 @@ import com.wini.owle.dll.DLL
 import io.ktor.server.application.*
 import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
+import com.wini.owle.api.OwleApiCall
+import com.wini.owle.async.AsyncResult
 
 
 class TagRelationApi(
@@ -20,35 +22,35 @@ class TagRelationApi(
     validator = validator
 ) {
 
-    override fun ApplicationCall.readId(): CompositeID? {
+    override fun ApplicationCall.readId(): AsyncResult<CompositeID> {
         return compositeIdFactory.fromRequestParams(params = parameters.toMap())
     }
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag-relation") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/tag-relation") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/tag-relation/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/tag-relation") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/tag-relation/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/tag-relation/id?parentTagId={parentTagId}&childTagId={childTagId}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/tag-relation/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

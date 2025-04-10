@@ -1,6 +1,7 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.environs.PackageDto
 import io.ktor.server.application.*
@@ -19,28 +20,28 @@ class PackageApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/package") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/package/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/package") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/package/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/package") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/package/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/package/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/package/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) } 
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

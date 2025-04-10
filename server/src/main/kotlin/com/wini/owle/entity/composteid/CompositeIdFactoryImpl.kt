@@ -1,5 +1,7 @@
 package com.wini.owle.entity.composteid
 
+import com.wini.owle.async.AsyncError
+import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
@@ -20,29 +22,40 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
      * identifying the type represented by the classes generic parameter type, returning null if the required parameters
      * are either not found or malformed.
      */
-    override fun fromRequestParams(params: Map<String, List<String>>): CompositeID? {
+    override fun fromRequestParams(params: Map<String, List<String>>): AsyncResult<CompositeID> {
+        val failed = mutableListOf<AsyncError.ApiRequest>()
+
         // map the names of the relevant db table columns to values found under that key in the request query params
         return fkReferences.values.associateWith {
             params[it]
         // return null if the query parameters come in an unexpected format
         }.mapNotNull { (key: String, values: List<String>?) ->
-            if (values == null || values.firstOrNull() == null || values.first().toLongOrNull() == null)
-                return null
-            else
-                key to values[0].toLong()
-        }.takeIf {
+            when {
+                values == null || values.firstOrNull() == null -> {
+                    failed.add(AsyncError.ApiRequest.MissingParameter(key))
+                    null
+                }
+                values.first().toLongOrNull() == null -> {
+                    failed.add(AsyncError.ApiRequest.ParamValueMalformed(key))
+                    null
+                }
+                else -> key to values[0].toLong()
+            }
+        }.also {
             // logically 'short-circuits' further consideration of the already-determined invalid data provided
-            it.size == fkReferences.size
-        }?.associate {
+            if (failed.isNotEmpty())
+                return AsyncError.MultipleParamFailure(failed = failed.toList()).asFailure()
+        }.associate {
             // map the key under which the parameter was provided (its db column name) to the valid Long value it offered
             it.first to it.second
-        }?.let { validatedParams: Map<String, Long> ->
-            CompositeID {
+        }.let { validatedParams: Map<String, Long> ->
+            val id = CompositeID {
                 // construct the CompositeId by assigning to its columns the valid Long value collected from query params
                 for ((entityIdColumn, columnName) in fkReferences) {
                     it[entityIdColumn] = validatedParams[columnName]!!
                 }
             }
+            AsyncResult.Success(id)
         }
     }
 }

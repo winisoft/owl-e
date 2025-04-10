@@ -32,35 +32,44 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
         setupTestApp(dll) {
             val response = client.get("$route/$id") {
                 contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(serializer, dto))
             }
 
+            val apiResponse = json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
             Assertions.assertEquals(HttpStatusCode.OK, response.status)
-            Assertions.assertEquals(dto, json.decodeFromString(serializer, response.bodyAsText()))
+            Assertions.assertTrue(apiResponse.success)
+            Assertions.assertEquals(dto, apiResponse.data)
+            Assertions.assertNull(apiResponse.errors)
+
         }
     }
 
     @Test
-    fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
+    fun `GET by id - on not found - returns HTTP Code 400, NoSuchIdError`() = runBlocking {
         val id = 1L
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.NoSuchIdError))
         val dll = mockk<DLL<Long, T>> {
             coEvery {
-                getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+                getById(any<Long>())
+            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
         }
 
         setupTestApp(dll) {
             val response = client.get("$route/$id") {
                 contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(serializer, getDto()))
             }
 
-            Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("NoSuchIdError"))
+            val apiResponse = json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
+            Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+            Assertions.assertEquals("Entity with id $id not found", apiResponse.message)
+            Assertions.assertFalse(apiResponse.success)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
         }
     }
 
     @Test
-    fun `DELETE by id - on success - returns HTTP Code 200, Unit`() = runBlocking {
+    fun `DELETE by id - on success - returns HTTP Code 204, Unit`() = runBlocking {
         val id = 1L
         val dll = mockk<DLL<Long, T>> {
             coEvery { delete(id) } returns AsyncResult.Success(Unit)
@@ -71,13 +80,18 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
                 contentType(ContentType.Application.Json)
             }
 
-            Assertions.assertEquals(HttpStatusCode.OK, response.status)
+            val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
+            Assertions.assertEquals(HttpStatusCode.NoContent, response.status)
+            Assertions.assertTrue(apiResponse.success)
+            Assertions.assertNull(apiResponse.data)
+            Assertions.assertNull(apiResponse.errors)
         }
     }
 
     @Test
-    fun `GET by id - with invalid id format - returns HTTP Code 400, LongIdInvalid`() = runBlocking {
+    fun `GET by id - with invalid id format - returns HTTP Code 400, ParamValueMalformed`() = runBlocking {
         val dll = mockk<DLL<Long, T>>()
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.ParamValueMalformed("id")))
 
         setupTestApp(dll) {
             val response = client.get("$route/not-a-number") {
@@ -85,14 +99,17 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             }
 
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("LongIdInvalid"))
+            val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
+            Assertions.assertFalse(apiResponse.success)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
+            Assertions.assertNull(apiResponse.data)
         }
     }
 
     @Test
-    fun `DELETE by id - with invalid id format - returns HTTP Code 400, LongIdInvalid`() = runBlocking {
+    fun `DELETE by id - with invalid id format - returns HTTP Code 400, ParamValueMalformed`() = runBlocking {
         val dll = mockk<DLL<Long, T>>()
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.ParamValueMalformed("id")))
 
         setupTestApp(dll) {
             val response = client.delete("$route/not-a-number") {
@@ -100,8 +117,10 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             }
 
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("LongIdInvalid"))
+            val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
+            Assertions.assertFalse(apiResponse.success)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
+            Assertions.assertNull(apiResponse.data)
         }
     }
 
@@ -119,12 +138,17 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             }
 
             Assertions.assertEquals(HttpStatusCode.OK, response.status)
+            val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
+            Assertions.assertNull(apiResponse.errors)
+            Assertions.assertNull(apiResponse.data)
+            Assertions.assertTrue(apiResponse.success)
         }
     }
 
     @Test
-    fun `DELETE batch - on serialization error - returns HTTP Code 400, SerializationError`() = runBlocking {
+    fun `DELETE batch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
         val dll = mockk<DLL<Long, T>>()
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.RequestBodyMalformed))
 
         setupTestApp(dll) {
             val response = client.delete("$route/batch") {
@@ -133,8 +157,11 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             }
 
             Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-            val responseText = response.bodyAsText()
-            Assertions.assertTrue(responseText.contains("SerializationError"))
+            val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
+            Assertions.assertNull(apiResponse.data)
+            Assertions.assertFalse(apiResponse.success)
+            Assertions.assertEquals(expectedErrors, apiResponse.errors)
+            Assertions.assertEquals(AsyncError.ApiRequest.RequestBodyMalformed.message, apiResponse.message)
         }
     }
 }

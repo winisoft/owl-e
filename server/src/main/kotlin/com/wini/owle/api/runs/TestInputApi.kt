@@ -5,6 +5,8 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.runs.TestInputDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import com.wini.owle.api.OwleApiCall
+
 
 class TestInputApi(
     dll: DLL<Long, TestInputDto>,
@@ -18,28 +20,28 @@ class TestInputApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-input") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/test-input/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/test-input") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/test-input/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/test-input") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/test-input/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/test-input/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/test-input/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

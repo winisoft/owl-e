@@ -58,7 +58,7 @@ open class TagRelationApiTest : BaseCompositePkApiTest<TagRelationDto, TagRelati
         val dll = mockk<DLL<CompositeID, TagRelationDto>> {
             coEvery {
                 getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
         }
 
         setupTestApp(dll) {

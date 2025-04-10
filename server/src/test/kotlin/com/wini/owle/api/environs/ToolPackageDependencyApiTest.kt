@@ -73,7 +73,7 @@ open class ToolPackageDependencyApiTest : BaseCompositePkApiTest<ToolPackageDepe
         val dll = mockk<DLL<CompositeID, ToolPackageDependencyDto>> {
             coEvery {
                 getById(any())
-            } returns AsyncError.NoSuchIdError("Entity with composite id not found").asFailure()
+            } returns AsyncError.NoSuchIdError.asFailure()
         }
 
         setupTestApp(dll) {

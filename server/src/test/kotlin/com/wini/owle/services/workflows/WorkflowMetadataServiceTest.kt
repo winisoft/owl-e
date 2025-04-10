@@ -129,8 +129,8 @@ open class WorkflowMetadataServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.Database)
-        assertEquals("Database error", error.message)
+        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertEquals("The operation could not be completed.", error.message)
     }
 
     @Test

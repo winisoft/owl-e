@@ -59,7 +59,7 @@ open class TransformTargetTypeApiTest : BaseCompositePkApiTest<TransformationTar
         val dll = mockk<DLL<CompositeID, TransformationTargetTypeDto>> {
             coEvery {
                 getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
         }
 
         setupTestApp(dll) {

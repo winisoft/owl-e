@@ -1,10 +1,12 @@
 package com.wini.owle.api.user
 
+import com.wini.owle.api.OwleApiCall
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.user.UserDto
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+
 
 class UserApi(
     dll: DLL<Long, UserDto>,
@@ -18,28 +20,28 @@ class UserApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/user") {
-                call.asyncResultList(getAll())
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/user/{id}") {
-                call.apply { asyncResultSingle(getById()) }
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/user") {
-                call.apply { asyncResultSingle(create(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/user/batch") {
-                call.apply { asyncResultList(createBatch(validator), isCreate = true) }
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/user") {
-                call.apply { asyncResultSingle(update(validator)) }
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/user/batch") {
-                call.apply { asyncResultList(updateBatch(validator)) }
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/user/{id}") {
-                call.apply { asyncResultUnit(delete()) }
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/user/batch") {
-                call.apply { asyncResultUnit(deleteBatch()) }
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

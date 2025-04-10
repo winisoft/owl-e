@@ -59,7 +59,7 @@ open class TypeUnionMemberApiTest : BaseCompositePkApiTest<TypeUnionMemberDto, T
         val dll = mockk<DLL<CompositeID, TypeUnionMemberDto>> {
             coEvery {
                 getById(id)
-            } returns AsyncResult.Failure(AsyncError.NoSuchIdError("Entity with id $id not found"))
+            } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
         }
 
         setupTestApp(dll) {

@@ -5,283 +5,164 @@ import com.wini.owle.async.AsyncError.ApiRequest
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.ifNullExit
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 
 abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
-    private val dll: DLL<ID, T>,
+    open val dll: DLL<ID, T>,
     val dtoSerializer: KSerializer<T>,
     val dtoListSerializer: KSerializer<List<T>>,
-    private val validator: (T) -> Boolean
+    open val validator: (T) -> Boolean
 ): RoutedApi {
 
-    suspend fun ApplicationCall.asyncResultUnit(
-        result: AsyncResult<*>
-    ) {
-        when (result) {
-            is AsyncResult.Success -> respond(HttpStatusCode.NoContent)
-            is AsyncResult.Failure -> respond(result.error.toHttpStatus(), result.error)
-        }
-    }
+    abstract fun ApplicationCall.readId(): AsyncResult<ID>
 
-    suspend fun ApplicationCall.asyncResultSingle(
-        result: AsyncResult<T>,
-        isCreate: Boolean = false
-    ) {
-        when (result) {
-            is AsyncResult.Success -> respondText(
-                contentType = ContentType.Application.Json,
-                status = if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK,
-                text = Json.encodeToString(dtoSerializer, result.data)
-            )
-            is AsyncResult.Failure -> respond(result.error.toHttpStatus(), result.error)
-        }
-    }
+    abstract suspend fun ApplicationCall.readIds(): AsyncResult<List<ID>>
 
-    suspend fun ApplicationCall.asyncResultList(
-        result: AsyncResult<List<T>>,
-        isCreate: Boolean = false
-    ) {
-        when (result) {
-            is AsyncResult.Success -> {
-                val apiResponse = ApiResponse(
-                    success = true,
-                    data = result.data,
-                )
-                respondText(
-                    contentType = ContentType.Application.Json,
-                    status = if (isCreate) HttpStatusCode.Created else HttpStatusCode.OK,
-                    text = Json.encodeToString(dtoListSerializer, result.data)
-                )
-            }
-            is AsyncResult.Failure -> {
-                respond(
-                    status = result.error.toHttpStatus(),
-                    message = ApiResponse<T>(
-                        success = false,
-                        message = result.error.toApiResponseMessage(),
-                        errors = result.error.toApiErrors()
-                    )
-                )
-            }
-        }
-    }
-
-    suspend fun ApplicationCall.create(
-        validator: (T) -> Boolean = { true }
-    ): AsyncResult<T> {
-        return receiveObjectSafely(dtoSerializer).run {
-            when {
-                this == null -> return ApiRequest.MalformedBodyData.asFailure()
-                !validator(this) -> return ApiRequest.ConstraintViolationData.asFailure()
-                else -> dll.create(this)
-            }
-        }
-    }
-
-    suspend fun ApplicationCall.createBatch(
-        validator: (T) -> Boolean = { true }
-    ): AsyncResult<List<T>> {
-        return receiveObjectListSafely(dtoSerializer).run {
-            when {
-                isNullOrEmpty() -> return ApiRequest.MalformedBodyData.asFailure()
-                any { !validator(it) } -> return ApiRequest.ConstraintViolationData.asFailure()
-                else -> dll.createAll(this)
-            }
-        }
-    }
-
-    suspend fun ApplicationCall.update(
-        validator: (T) -> Boolean = { true }
-    ): AsyncResult<T> {
-        return receiveObjectSafely(dtoSerializer).run {
-            when {
-                this == null -> return ApiRequest.MalformedBodyData.asFailure()
-                !validator(this) -> return ApiRequest.ConstraintViolationData.asFailure()
-                else -> dll.update(this)
-            }
-        }
-    }
-
-    suspend fun ApplicationCall.updateBatch(
-        validator: (T) -> Boolean = { true }
-    ): AsyncResult<List<T>> {
-        return receiveObjectListSafely(dtoSerializer).run {
-            when {
-                isNullOrEmpty() -> return ApiRequest.MalformedBodyData.asFailure()
-                any { !validator(it) } -> return ApiRequest.ConstraintViolationData.asFailure()
-                else -> dll.createAll(this)
-            }
-        }
-    }
-
-    fun getAll(): AsyncResult<List<T>> {
-        return dll.getAll()
-    }
-
-    private suspend fun <T> ApplicationCall.receiveObjectSafely(serializer: KSerializer<T>): T? =
-        runCatching { Json.decodeFromString(serializer, receiveText()) }.getOrNull()
-
-    private suspend fun <T> ApplicationCall.receiveObjectListSafely(serializer: KSerializer<T>): List<T>? =
-        runCatching { Json.decodeFromString(ListSerializer(serializer), receiveText()) }.getOrNull()
-
-
-    fun ApplicationCall.toApiResponse(result: AsyncResult<T>): Pair<HttpStatusCode, ApiResponse<T>> {
-        return when (result) {
-            is AsyncResult.Success<T> -> {
-                request.httpMethod.toHttpStatusOnSuccess() to ApiResponse(
-                    success = true,
-                    data = if (request.httpMethod == HttpMethod.Delete) null else result.data
-                )
-            }
-            is AsyncResult.Failure -> {
-                result.error.toHttpStatus() to ApiResponse<T>(
-                    success = false,
-                    message = result.error.toApiResponseMessage(),
-                    errors = result.error.toApiErrors()
-                )
-            }
-        }
-    }
-
-    fun AsyncError.toApiResponseMessage() : String {
-        return when (this) {
-            is AsyncError.ApplicationError,
-            is AsyncError.ServiceLayerError,
-            is ApiRequest.InvalidLongId,
-            is AsyncError.AuthenticationError,
-            is AsyncError.AuthorizationError,
-            is ApiRequest.ConstraintViolationData,
-            is ApiRequest.InvalidCompositeIdElement,
-            is ApiRequest.MalformedBodyData,
-            is ApiRequest.MissingCompositeIdElement,
-            is ApiRequest.MissingId,
-            is AsyncError.DbTransactionError,
-            is AsyncError.DatabaseError,
-            is AsyncError.NoSuchIdError -> "Simple summary of the meaning of the constituent erros taken altogether, e.g. 'Some deletions failed' or 'No valid data provided'."
-
-            is ApiRequest.InvalidField -> TODO()
-            is ApiRequest.MissingField -> TODO()
-            is ApiRequest.UnexpectedField -> TODO()
-            is AsyncError.ExternalDependencyError.HttpFailure -> TODO()
-            is AsyncError.ExternalDependencyError.Timeout -> TODO()
-            is AsyncError.ExternalDependencyError.UnexpectedResponse -> TODO()
-            is AsyncError.InvalidStateTransition -> TODO()
-            is AsyncError.InvariantViolation -> TODO()
-            is AsyncError.PartialFailure<*> -> TODO()
-            is AsyncError.ValidationError -> TODO()
-        }
-    }
-
-    fun AsyncError.toApiErrorMessage(): String {
-        return when (this) {
-            is AsyncError.ApplicationError,
-            is AsyncError.ServiceLayerError,
-            is ApiRequest.InvalidLongId,
-            is AsyncError.AuthenticationError,
-            is AsyncError.AuthorizationError,
-            is ApiRequest.ConstraintViolationData,
-            is ApiRequest.InvalidCompositeIdElement,
-            is ApiRequest.MalformedBodyData,
-            is ApiRequest.MissingCompositeIdElement,
-            is ApiRequest.MissingId,
-            is AsyncError.DbTransactionError,
-            is AsyncError.DatabaseError,
-            is AsyncError.NoSuchIdError -> "Simple summary of the specific error condition, e.g. 'ID list cannot be empty.' or 'ID 789 not found.'"
-
-            is ApiRequest.InvalidField -> TODO()
-            is ApiRequest.MissingField -> TODO()
-            is ApiRequest.UnexpectedField -> TODO()
-            is AsyncError.ExternalDependencyError.HttpFailure -> TODO()
-            is AsyncError.ExternalDependencyError.Timeout -> TODO()
-            is AsyncError.ExternalDependencyError.UnexpectedResponse -> TODO()
-            is AsyncError.InvalidStateTransition -> TODO()
-            is AsyncError.InvariantViolation -> TODO()
-            is AsyncError.PartialFailure<*> -> TODO()
-            is AsyncError.ValidationError -> TODO()
-        }
-    }
-
-    /**
-     * Determines the appropriate HTTP status to communicate successful execution of the request to the user
-     */
-    private fun HttpMethod.toHttpStatusOnSuccess(): HttpStatusCode = when (this) {
-        HttpMethod.Get,
-        HttpMethod.Put -> HttpStatusCode.OK
-        HttpMethod.Post -> HttpStatusCode.Created
-        HttpMethod.Delete -> HttpStatusCode.NoContent
-        else -> throw IllegalStateException("Unsupported HTTP method: $value")
-    }
-
-    /**
-     * Determines the appropriate 'high-level' articulation of the error and the appropriate status to associate with it
-     */
-    fun AsyncError.toHttpStatus(): HttpStatusCode = when (this) {
-        is AsyncError.ApplicationError,
-        is ApiRequest.ConstraintViolationData,
-        is ApiRequest.InvalidCompositeIdElement,
-        is ApiRequest.MalformedBodyData,
-        is ApiRequest.MissingCompositeIdElement,
-        is ApiRequest.MissingId,
-        is AsyncError.NoSuchIdError,
-        is AsyncError.DatabaseError,
-        is ApiRequest.InvalidLongId-> HttpStatusCode.BadRequest
-        is AsyncError.AuthenticationError -> HttpStatusCode.Unauthorized
-        is AsyncError.AuthorizationError -> HttpStatusCode.Forbidden
-        is AsyncError.DbTransactionError -> HttpStatusCode.InternalServerError
-        is AsyncError.ServiceLayerError -> HttpStatusCode.ServiceUnavailable
-        is ApiRequest.InvalidField -> TODO()
-        is ApiRequest.MissingField -> TODO()
-        is ApiRequest.UnexpectedField -> TODO()
-        is AsyncError.ExternalDependencyError.HttpFailure -> TODO()
-        is AsyncError.ExternalDependencyError.Timeout -> TODO()
-        is AsyncError.ExternalDependencyError.UnexpectedResponse -> TODO()
-        is AsyncError.InvalidStateTransition -> TODO()
-        is AsyncError.InvariantViolation -> TODO()
-        is AsyncError.PartialFailure<*> -> TODO()
-        is AsyncError.ValidationError -> TODO()
-    }
-
-    /**
-     * Utilizes the data collected at the site of the error to build a list of errors contributing to the ApiResponse's
-     * general but conclusive articulated failure.
-     */
-    fun AsyncError.toApiErrors(): List<ApiError> {
-        return listOf(
-            ApiError(
-                code = errorCode,
-                message = when (this) {
-                    is ApiRequest.MissingId -> "The expected primary key 'id' was not provided."
-                    is ApiRequest.InvalidLongId -> "The expected primary key 'id' was provided in an invalid format."
-                    is AsyncError.NoSuchIdError -> "The specified ID: [$id] does not exist."
-                    is ApiRequest.MalformedBodyData ->  "Illegal request body data."
-                    is ApiRequest.ConstraintViolationData -> "The request body data violated constraints on its permissible values"
-                    is ApiRequest.MissingCompositeIdElement -> "A required composite ID element was not provided"
-                    is ApiRequest.InvalidCompositeIdElement -> "A required composite ID element was provided in an invalid format."
-                    is AsyncError.ApplicationError -> "The application suffered a catastrophic failure."
-                    is AsyncError.AuthenticationError -> "The user is unauthenticated."
-                    is AsyncError.AuthorizationError -> "The user is not authorized to take the specified action."
-                    is AsyncError.DbTransactionError -> "The database transaction failed."
-                    is AsyncError.ServiceLayerError -> "The server was not ready to handle the request."
-                    is AsyncError.DatabaseError -> "The database failed to perform the operation."
-                    is ApiRequest.InvalidField -> TODO()
-                    is ApiRequest.MissingField -> TODO()
-                    is ApiRequest.UnexpectedField -> TODO()
-                    is AsyncError.ExternalDependencyError.HttpFailure -> TODO()
-                    is AsyncError.ExternalDependencyError.Timeout -> TODO()
-                    is AsyncError.ExternalDependencyError.UnexpectedResponse -> TODO()
-                    is AsyncError.InvalidStateTransition -> TODO()
-                    is AsyncError.InvariantViolation -> TODO()
-                    is AsyncError.PartialFailure<*> -> TODO()
-                    is AsyncError.ValidationError -> TODO()
+    suspend fun ApplicationCall.execute(owleCall: OwleApiCall) {
+        when (owleCall) {
+            is OwleApiCall.GetMany ->
+                methodCallRespond(owleCall, responseManySerializer) { dll.getAll() }
+            is OwleApiCall.GetOne ->
+                when (val idResult = readId()) {
+                    is AsyncResult.Failure -> failureRespond(idResult, responseOneSerializer)
+                    is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
+                        dll.getById(idResult.data)
+                    }
                 }
-            )
-        )
+            is OwleApiCall.DeleteOne -> when (val idResult = readId()) {
+                is AsyncResult.Failure -> failureRespond(idResult, responseNoneSerializer)
+                is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
+                    dll.delete(idResult.data)
+                }
+            }
+            is OwleApiCall.CreateOne -> when (val dtoResult = readDto(dtoSerializer, validator)) {
+                is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
+                is AsyncResult.Success<T> -> methodCallRespond(owleCall, responseOneSerializer) {
+                    dll.create(dtoResult.data)
+                }
+            }
+            is OwleApiCall.UpdateOne -> when (val dtoResult = readDto(dtoSerializer, validator)) {
+                is AsyncResult.Failure -> failureRespond(dtoResult, responseOneSerializer)
+                is AsyncResult.Success -> methodCallRespond(owleCall, responseOneSerializer) {
+                    dll.update(dtoResult.data)
+                }
+            }
+            is OwleApiCall.DeleteMany -> when (val idsResult = readIds()) {
+                is AsyncResult.Failure -> failureRespond(idsResult, responseNoneSerializer)
+                is AsyncResult.Success -> methodCallRespond(owleCall, responseNoneSerializer) {
+                    dll.deleteAll(idsResult.data)
+                }
+            }
+            is OwleApiCall.CreateMany -> when (val dtosResult = readDtos(dtoListSerializer, validator)) {
+                is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
+                is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
+                    dll.createAll(dtosResult.data)
+                }
+            }
+            is OwleApiCall.UpdateMany -> when (val dtosResult = readDtos(dtoListSerializer, validator)) {
+                is AsyncResult.Failure -> failureRespond(dtosResult, responseManySerializer)
+                is AsyncResult.Success -> methodCallRespond(owleCall, responseManySerializer) {
+                    dll.updateAll(dtosResult.data)
+                }
+            }
+        }
     }
+
+    suspend fun <T> ApplicationCall.failureRespond(
+        failure: AsyncResult.Failure,
+        serializer: KSerializer<ApiResponse<T>>
+    ) {
+        val statusCode = when (failure.error) {
+            in listOf(
+                ApiRequest.MissingParameter,
+                ApiRequest.ParamValueMalformed,
+                ApiRequest.RequestBodyMalformed,
+                ApiRequest.EmptyListNotAllowed,
+                AsyncError.MultipleParamFailure,
+                ApiRequest.TypeDefinitionValidation
+            ) ->
+                HttpStatusCode.BadRequest
+            else ->
+                HttpStatusCode.InternalServerError
+        }
+
+        val message = failure.error.message
+        val asyncErrors = if (failure.error is AsyncError.MultipleParamFailure)
+            listOf((failure.error as AsyncError.MultipleParamFailure).failed)
+        else
+            listOf(failure.error)
+
+        val apiErrors = asyncErrors.map { ApiError.fromAsyncError(it as AsyncError) }
+        val responseBody = Json.encodeToString(serializer, ApiResponse(
+            success = false,
+            message = message,
+            errors = apiErrors
+        ))
+
+        respond(statusCode, responseBody)
+    }
+
+    suspend fun <T> ApplicationCall.methodCallRespond(
+        owleCall: OwleApiCall,
+        serializer: KSerializer<ApiResponse<T>>,
+        resultFn: () -> AsyncResult<T>
+    ){
+        when (val result = resultFn()) {
+            is AsyncResult.Failure -> failureRespond(result, serializer)
+            is AsyncResult.Success -> Json.encodeToString(serializer,
+                ApiResponse(
+                    success = true,
+                    data = if (owleCall.successStatus != HttpStatusCode.NoContent) result.data else null
+                )
+            ).apply { respond(owleCall.successStatus, this) }
+        }
+    }
+
+    private suspend inline fun ApplicationCall.readDto(
+        dtoSerializer: KSerializer<T>,
+        crossinline validator: (T) -> Boolean
+    ): AsyncResult<T> {
+        return runCatching {
+            Json.decodeFromString(dtoSerializer, receiveText())
+        }.getOrElse {
+            return ApiRequest.RequestBodyMalformed.asFailure()
+        }.takeIf {
+            validator(it)
+        }.ifNullExit {
+            return ApiRequest.TypeDefinitionValidation.asFailure()
+        }.let {
+            AsyncResult.Success(it)
+        }
+    }
+
+    protected suspend inline fun ApplicationCall.readDtos(
+        dtoListSerializer: KSerializer<List<T>>,
+        crossinline validator: (T) -> Boolean
+    ): AsyncResult<List<T>> {
+        return runCatching {
+            Json.decodeFromString(dtoListSerializer, receiveText())
+        }.getOrElse {
+            return ApiRequest.RequestBodyMalformed.asFailure()
+        }.takeIf {
+            it.all(validator)
+        }.ifNullExit {
+            return ApiRequest.TypeDefinitionValidation.asFailure()
+        }.let {
+            AsyncResult.Success(it)
+        }
+    }
+
+    private val responseOneSerializer: KSerializer<ApiResponse<T>> = ApiResponse.serializer(dtoSerializer)
+    private val responseManySerializer: KSerializer<ApiResponse<List<T>>> = ApiResponse.serializer(dtoListSerializer)
+    private val responseNoneSerializer: KSerializer<ApiResponse<Unit>> = ApiResponse.serializer(Unit.serializer())
+
+
 }
