@@ -84,15 +84,15 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
         }
         
         // If both min and max are specified, ensure min <= max
-        if (dto.versionMin != null && dto.versionMax != null) {
-            if (!isVersionLessOrEqual(dto.versionMin, dto.versionMax)) {
-                violations.add(TypeValidation.Generic(
-                    idString = dto.idToString(),
-                    fieldName = "version",
-                    message = "Minimum version must be less than or equal to maximum version"
-                ))
-            }
-        }
+//        if (dto.versionMin != null && dto.versionMax != null) {
+//            if (!isVersionLessOrEqual(dto.versionMin.toInt(), dto.versionMax.toInt())) {
+//                violations.add(TypeValidation.Generic(
+//                    idString = dto.idToString(),
+//                    fieldName = "version",
+//                    message = "Minimum version must be less than or equal to maximum version"
+//                ))
+//            }
+//        }
         
         return if (violations.isEmpty()) {
             ValidationResult.valid()

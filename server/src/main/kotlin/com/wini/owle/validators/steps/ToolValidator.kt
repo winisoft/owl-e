@@ -1,11 +1,14 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.steps.ToolDto
+import com.wini.owle.dto.workflows.ToolDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.typing.TypeDeclarationValidator
 
-class ToolValidator : BaseValidator<ToolDto>() {
+class ToolValidator(
+    private val returnTypeDeclarationValidator: TypeDeclarationValidator
+) : BaseValidator<ToolDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
     }
@@ -21,14 +24,10 @@ class ToolValidator : BaseValidator<ToolDto>() {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
-        // description is optional (nullable text)
-
         // body is required (non-nullable text)
         if (dto.body.isBlank()) {
             violations.add(TypeValidation.StringBlank(dto.idToString(), "body"))
         }
-
-        // returnTypeDeclaration is optional (nullable reference)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

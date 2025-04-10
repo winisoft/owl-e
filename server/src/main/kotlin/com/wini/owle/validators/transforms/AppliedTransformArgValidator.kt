@@ -5,7 +5,10 @@ import com.wini.owle.dto.transforms.AppliedTransformArgDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class AppliedTransformArgValidator : BaseValidator<AppliedTransformArgDto>() {
+class AppliedTransformArgValidator(
+    private val appliedTransformValidator: AppliedTransformValidator,
+    private val transformationArgValidator: TransformationArgValidator
+) : BaseValidator<AppliedTransformArgDto>() {
     override fun validate(dto: AppliedTransformArgDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 

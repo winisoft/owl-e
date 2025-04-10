@@ -5,7 +5,11 @@ import com.wini.owle.dto.typing.TypeSchemaRefDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class TypeSchemaRefValidator : BaseValidator<TypeSchemaRefDto>() {
+class TypeSchemaRefValidator(
+    private val parentRefValidator: TypeSchemaRefValidator,
+    private val typeDeclarationValidator: TypeDeclarationValidator,
+    private val childRefsValidator: TypeSchemaRefValidator
+) : BaseValidator<TypeSchemaRefDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }

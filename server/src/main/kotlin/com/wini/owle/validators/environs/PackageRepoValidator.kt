@@ -5,14 +5,9 @@ import com.wini.owle.dto.environs.PackageRepoDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class PackageRepoValidator : BaseValidator<PackageRepoDto>() {
+class PackageRepoValidator: BaseValidator<PackageRepoDto>() {
     override fun validate(dto: PackageRepoDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
-
-        // sourceType is required (based on non-nullable field in PackageRepositories table)
-        if (dto.sourceType == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "sourceType"))
-        }
 
         // sourceUrl is optional but if present should be a valid URL
         dto.sourceUrl?.let { url ->

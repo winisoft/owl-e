@@ -5,7 +5,10 @@ import com.wini.owle.dto.workflows.PhaseDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class PhaseValidator : BaseValidator<PhaseDto>() {
+class PhaseValidator(
+    private  val parentPhaseValidator: PhaseValidator,
+    private  val workflowValidator: WorkflowValidator
+) : BaseValidator<PhaseDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
     }
@@ -21,9 +24,6 @@ class PhaseValidator : BaseValidator<PhaseDto>() {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
         }
 
-        // description is optional (nullable text)
-
-        // displayOrder must be non-negative
         if (dto.displayOrder < 0) {
             violations.add(TypeValidation.LongRange(dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
         }

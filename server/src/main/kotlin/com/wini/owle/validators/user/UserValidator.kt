@@ -5,7 +5,9 @@ import com.wini.owle.dto.user.UserDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class UserValidator : BaseValidator<UserDto>() {
+class UserValidator(
+    private val paymentMethodsValidator: PaymentMethodValidator
+) : BaseValidator<UserDto>() {
     companion object {
         const val MAX_EMAIL_LENGTH = 255
         const val MAX_PASSWORD_LENGTH = 255
@@ -38,27 +40,22 @@ class UserValidator : BaseValidator<UserDto>() {
         }
 
         // resetToken is optional but has max length if present
-        if (dto.resetToken != null && dto.resetToken.length > MAX_RESET_TOKEN_LENGTH) {
+        if (dto.resetToken != null && dto.resetToken!!.length > MAX_RESET_TOKEN_LENGTH) {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "resetToken", MAX_RESET_TOKEN_LENGTH))
         }
 
         // oauthProvider is optional but has max length if present
-        if (dto.oauthProvider != null && dto.oauthProvider.length > MAX_OAUTH_PROVIDER_LENGTH) {
+        if (dto.oauthProvider != null && dto.oauthProvider!!.length > MAX_OAUTH_PROVIDER_LENGTH) {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "oauthProvider", MAX_OAUTH_PROVIDER_LENGTH))
         }
 
         // oauthId is optional but has max length if present
-        if (dto.oauthId != null && dto.oauthId.length > MAX_OAUTH_ID_LENGTH) {
+        if (dto.oauthId != null && dto.oauthId!!.length > MAX_OAUTH_ID_LENGTH) {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "oauthId", MAX_OAUTH_ID_LENGTH))
         }
 
-        // subscriptionStatus is required (non-nullable enum)
-        if (dto.subscriptionStatus == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "subscriptionStatus"))
-        }
-
         // apiKey is optional but has max length if present
-        if (dto.apiKey != null && dto.apiKey.length > MAX_API_KEY_LENGTH) {
+        if (dto.apiKey != null && dto.apiKey!!.length > MAX_API_KEY_LENGTH) {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "apiKey", MAX_API_KEY_LENGTH))
         }
 

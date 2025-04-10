@@ -5,7 +5,9 @@ import com.wini.owle.dto.typing.TypeDeclarationDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class TypeDeclarationValidator : BaseValidator<TypeDeclarationDto>() {
+class TypeDeclarationValidator(
+    private val typeDefinitionValidator: TypeDefinitionValidator
+) : BaseValidator<TypeDeclarationDto>() {
     companion object {
         const val MAX_ALIAS_LENGTH = 255
     }
@@ -19,7 +21,7 @@ class TypeDeclarationValidator : BaseValidator<TypeDeclarationDto>() {
         }
 
         // alias is optional but has max length if present
-        if (dto.alias != null && dto.alias.length > MAX_ALIAS_LENGTH) {
+        if (dto.alias != null && dto.alias!!.length > MAX_ALIAS_LENGTH) {
             violations.add(TypeValidation.MaxLength(dto.idToString(), "alias", MAX_ALIAS_LENGTH))
         }
 

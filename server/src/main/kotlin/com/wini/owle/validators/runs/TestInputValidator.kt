@@ -5,7 +5,9 @@ import com.wini.owle.dto.runs.TestInputDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class TestInputValidator : BaseValidator<TestInputDto>() {
+class TestInputValidator(
+    private val testCaseValidator: TestCaseValidator
+) : BaseValidator<TestInputDto>() {
     companion object {
         const val MAX_DATAPOINT_NAME_LENGTH = 255
     }

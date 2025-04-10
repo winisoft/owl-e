@@ -4,8 +4,12 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.steps.PreReqInjectionDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.workflows.DataPointValidator
 
-class PreReqInjectionValidator : BaseValidator<PreReqInjectionDto>() {
+class PreReqInjectionValidator(
+    private val junctionValidator: WorkflowJunctionValidator,
+    private val dataPointValidator: DataPointValidator
+) : BaseValidator<PreReqInjectionDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }

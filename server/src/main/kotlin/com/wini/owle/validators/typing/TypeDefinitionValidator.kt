@@ -4,8 +4,11 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.typing.TypeDefinitionDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.environs.VersionSpecValidator
 
-class TypeDefinitionValidator : BaseValidator<TypeDefinitionDto>() {
+class TypeDefinitionValidator(
+    private val versionSpecValidator: VersionSpecValidator
+) : BaseValidator<TypeDefinitionDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
         const val MAX_NAMESPACE_LENGTH = 512

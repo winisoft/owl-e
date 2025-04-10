@@ -1,11 +1,15 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.steps.ToolParamDto
+import com.wini.owle.dto.workflows.ToolParamDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.typing.TypeDeclarationValidator
 
-class ToolParamValidator : BaseValidator<ToolParamDto>() {
+
+class ToolParamValidator(
+    private val typeDeclarationValidator: TypeDeclarationValidator
+) : BaseValidator<ToolParamDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }

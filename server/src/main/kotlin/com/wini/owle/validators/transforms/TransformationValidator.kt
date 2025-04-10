@@ -4,8 +4,11 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.transforms.TransformationDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.typing.TypeDeclarationValidator
 
-class TransformationValidator : BaseValidator<TransformationDto>() {
+class TransformationValidator(
+    private val returnsTypeValidator: TypeDeclarationValidator
+) : BaseValidator<TransformationDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }

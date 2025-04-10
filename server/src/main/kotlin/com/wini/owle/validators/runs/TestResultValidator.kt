@@ -5,7 +5,10 @@ import com.wini.owle.dto.runs.TestResultDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class TestResultValidator : BaseValidator<TestResultDto>() {
+class TestResultValidator(
+    private val testCaseValidator: TestCaseValidator,
+    private val workflowExecutionValidator: WorkflowExecutionValidator
+) : BaseValidator<TestResultDto>() {
     override fun validate(dto: TestResultDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 

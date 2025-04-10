@@ -5,7 +5,9 @@ import com.wini.owle.dto.steps.ErrorWatchFnDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class ErrorWatchFnValidator : BaseValidator<ErrorWatchFnDto>() {
+class ErrorWatchFnValidator(
+    private val errorWatchValidator: ErrorWatchValidator
+) : BaseValidator<ErrorWatchFnDto>() {
     companion object {
         const val MAX_FUNCTION_NAME_LENGTH = 255
     }

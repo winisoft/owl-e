@@ -4,8 +4,12 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.steps.InquisitionDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.workflows.DataPointValidator
 
-class InquisitionValidator : BaseValidator<InquisitionDto>() {
+class InquisitionValidator(
+    private val dataPointValidator: DataPointValidator,
+    private val onMetWorkflowStepValidator: StepValidator
+) : BaseValidator<InquisitionDto>() {
     companion object {
         const val MAX_CLASS_LENGTH = 255
     }

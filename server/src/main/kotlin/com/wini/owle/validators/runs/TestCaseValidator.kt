@@ -4,8 +4,16 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.runs.TestCaseDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.user.UserValidator
+import com.wini.owle.validators.workflows.WorkflowValidator
 
-class TestCaseValidator : BaseValidator<TestCaseDto>() {
+class TestCaseValidator(
+    private val userValidator: UserValidator,
+    private val workflowValidator: WorkflowValidator,
+    private val inputsValidator: TestInputValidator,
+    private val expectedOutcomesValidator: TestExpectedOutcomeValidator,
+    private val resultsValidator: TestResultValidator
+) : BaseValidator<TestCaseDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }

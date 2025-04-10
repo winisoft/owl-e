@@ -5,7 +5,9 @@ import com.wini.owle.dto.runs.ExecutionLogDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class ExecutionLogValidator : BaseValidator<ExecutionLogDto>() {
+class ExecutionLogValidator(
+    private val stepExecutionValidator: StepExecutionValidator
+) : BaseValidator<ExecutionLogDto>() {
     override fun validate(dto: ExecutionLogDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 

@@ -5,7 +5,9 @@ import com.wini.owle.dto.runs.BenchmarkingDataDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class BenchmarkingDataValidator : BaseValidator<BenchmarkingDataDto>() {
+class BenchmarkingDataValidator(
+    private val workflowExecutionValidator: WorkflowExecutionValidator,
+) : BaseValidator<BenchmarkingDataDto>() {
     override fun validate(dto: BenchmarkingDataDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 

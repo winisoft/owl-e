@@ -5,7 +5,10 @@ import com.wini.owle.dto.steps.ErrorWatchDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class ErrorWatchValidator : BaseValidator<ErrorWatchDto>() {
+class ErrorWatchValidator(
+    private val stepValidator: StepValidator,
+    private val triggerStepValidator: StepValidator
+) : BaseValidator<ErrorWatchDto>() {
     companion object {
         const val MAX_ERROR_TYPE_LENGTH = 255
     }
@@ -27,7 +30,7 @@ class ErrorWatchValidator : BaseValidator<ErrorWatchDto>() {
         }
 
         // onMetStep is required (non-nullable reference)
-        if (dto.onMetStep == null) {
+        if (dto.triggerStep == null) {
             violations.add(TypeValidation.RequiredField(dto.idToString(), "onMetStep"))
         }
 

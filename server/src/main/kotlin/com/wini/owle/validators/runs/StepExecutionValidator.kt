@@ -7,8 +7,9 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class StepExecutionValidator(
-    val dateTimeConverter: DateTimeConverter
-) : BaseValidator<StepExecutionDto>() {
+    private val workflowExecutionValidator: WorkflowExecutionValidator,
+    private val dateTimeConverter: DateTimeConverter
+): BaseValidator<StepExecutionDto>() {
     override fun validate(dto: StepExecutionDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
@@ -37,11 +38,6 @@ class StepExecutionValidator(
                     "Completion time must be after start time"
                 ))
             }
-        }
-
-        // status is required (non-nullable enum with default)
-        if (dto.status == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "status"))
         }
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)

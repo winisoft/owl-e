@@ -1,13 +1,17 @@
 package com.wini.owle.validators.workflows
 
+import com.wini.owle.async.TypeValidation
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.validators.ValidationResult
 
 /**
  * Validator for Workflow DTOs.
  * Validates workflow data against business rules and constraints.
  */
-class WorkflowValidator : BaseValidator<WorkflowDto>() {
+class WorkflowValidator(
+    private val parentFolderValidator: WorkflowFolderValidator
+) : BaseValidator<WorkflowDto>() {
     
     companion object {
         // Constants derived from ExposedTables.kt
@@ -15,26 +19,20 @@ class WorkflowValidator : BaseValidator<WorkflowDto>() {
         const val MIN_PYTHON_VERSION_LENGTH = 3
     }
     
-    override fun validate(dto: WorkflowDto): Boolean {
+    override fun validate(dto: WorkflowDto): ValidationResult {
+        val violations = mutableListOf<TypeValidation>()
+
         // Validate required fields
         if (!validateStringNotEmpty(dto.name, "name")) {
-            return false
+            violations.add(TypeValidation.StringEmpty(dto.idToString(), "name"))
         }
         
         // Validate field lengths
         if (!validateMaxLength(dto.name, MAX_NAME_LENGTH, "name")) {
-            return false
+            violations.add(TypeValidation.MaxLength(dto.idToString(), "name", MAX_NAME_LENGTH))
         }
-        
-        // Validate python version format if present
-        if (dto.pythonVersion != null) {
-            if (!isPythonVersionValid(dto.pythonVersion)) {
-                return false
-            }
-        }
-        
-        // All validations passed
-        return true
+
+        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }
     
     /**

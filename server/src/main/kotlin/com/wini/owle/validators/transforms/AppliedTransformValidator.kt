@@ -4,8 +4,14 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.transforms.AppliedTransformDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.typing.TypeDeclarationValidator
+import com.wini.owle.validators.workflows.DataPointValidator
 
-class AppliedTransformValidator : BaseValidator<AppliedTransformDto>() {
+class AppliedTransformValidator(
+    private val transformationValidator: TransformationValidator,
+    private val resultTypeValidator: TypeDeclarationValidator,
+    private val dataPointValidator: DataPointValidator
+) : BaseValidator<AppliedTransformDto>() {
     override fun validate(dto: AppliedTransformDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
@@ -22,7 +28,7 @@ class AppliedTransformValidator : BaseValidator<AppliedTransformDto>() {
         // previousTransform is optional (nullable reference)
 
         // resultTypeDeclaration is required (non-nullable reference)
-        if (dto.resultTypeDeclaration == null) {
+        if (dto.resultType == null) {
             violations.add(TypeValidation.RequiredField(dto.idToString(), "resultTypeDeclaration"))
         }
 

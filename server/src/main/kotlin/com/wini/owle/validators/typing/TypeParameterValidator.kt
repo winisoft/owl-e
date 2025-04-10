@@ -5,7 +5,10 @@ import com.wini.owle.dto.typing.TypeParameterDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class TypeParameterValidator : BaseValidator<TypeParameterDto>() {
+class TypeParameterValidator(
+    private val typeDeclarationValidator: TypeDeclarationValidator,
+    private val parameterTypeDeclarationValidator: TypeDeclarationValidator
+) : BaseValidator<TypeParameterDto>() {
     override fun validate(dto: TypeParameterDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 

@@ -5,7 +5,9 @@ import com.wini.owle.dto.user.TagDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class TagValidator : BaseValidator<TagDto>() {
+class TagValidator(
+    private val userValidator: UserValidator
+) : BaseValidator<TagDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }

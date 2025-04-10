@@ -4,9 +4,12 @@ import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.workflows.StepDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.workflows.PhaseValidator
 
 
-class StepValidator : BaseValidator<StepDto>() {
+class StepValidator(
+    private val parentPhaseValidator: PhaseValidator
+) : BaseValidator<StepDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
     }

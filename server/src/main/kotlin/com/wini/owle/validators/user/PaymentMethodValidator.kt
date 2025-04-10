@@ -23,16 +23,13 @@ class PaymentMethodValidator : BaseValidator<PaymentMethodDto>() {
         // cardBrand is optional (nullable enum)
 
         // lastFour is optional but must be exactly 4 characters if present
-        if (dto.lastFour != null && dto.lastFour.length != LAST_FOUR_LENGTH) {
+        if (dto.lastFour != null && dto.lastFour!!.length != LAST_FOUR_LENGTH) {
             violations.add(TypeValidation.Generic(
                 dto.idToString(),
                 "lastFour",
                 "Must be exactly $LAST_FOUR_LENGTH characters long"
             ))
         }
-
-        // isDefault is required (non-nullable boolean)
-        // No validation needed as it's a primitive boolean
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

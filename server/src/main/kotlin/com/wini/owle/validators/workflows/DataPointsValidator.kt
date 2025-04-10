@@ -5,8 +5,11 @@ import com.wini.owle.dto.workflows.DataPointDto
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.entity.workflows.enums.StoreMethod
+import com.wini.owle.validators.typing.TypeDeclarationValidator
 
-class DataPointValidator : BaseValidator<DataPointDto>() {
+class DataPointValidator(
+    private val typeDeclarationValidator: TypeDeclarationValidator
+) : BaseValidator<DataPointDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
@@ -28,11 +31,6 @@ class DataPointValidator : BaseValidator<DataPointDto>() {
         }
 
         // presetValue is optional (nullable text)
-
-        // storeMethod is required (non-nullable enum with default)
-        if (dto.storeMethod == null) {
-            violations.add(TypeValidation.RequiredField(dto.idToString(), "storeMethod"))
-        }
 
         // typeDeclaration is required (non-nullable reference)
         if (dto.typeDeclaration == null) {
