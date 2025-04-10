@@ -2,7 +2,7 @@ package com.wini.owle.api
 
 import com.wini.owle.validators.DtoValidator
 import com.wini.owle.async.AsyncError
-import com.wini.owle.async.AsyncError.ApiRequest
+import com.wini.owle.async.AsyncError.ApiRequestError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
@@ -83,12 +83,12 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     ) {
         val statusCode = when (failure.error) {
             in listOf(
-                ApiRequest.MissingParameter,
-                ApiRequest.ParamValueMalformed,
-                ApiRequest.RequestBodyMalformed,
-                ApiRequest.EmptyListNotAllowed,
-                AsyncError.MultipleParamFailure,
-                ApiRequest.TypeDefinitionValidation
+                ApiRequestError.MissingParameter,
+                ApiRequestError.ParamValueMalformedLong,
+                ApiRequestError.RequestBodyMalformed,
+                ApiRequestError.EmptyListNotAllowed,
+                ApiRequestError.MultipleParamFailure,
+                ApiRequestError.MultipleTypeValidations
             ) ->
                 HttpStatusCode.BadRequest
             else ->
@@ -96,10 +96,15 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         }
 
         val message = failure.error.message
-        val asyncErrors = if (failure.error is AsyncError.MultipleParamFailure)
-            listOf((failure.error as AsyncError.MultipleParamFailure).failed)
-        else
-            listOf(failure.error)
+        val asyncErrors = when (failure.error) {
+            is ApiRequestError.MultipleTypeValidations ->
+                (failure.error as ApiRequestError.MultipleTypeValidations).violations
+            is ApiRequestError.MultipleParamFailure ->
+                (failure.error as ApiRequestError.MultipleParamFailure).failed
+            else ->
+                listOf(failure.error)
+        }
+
 
         val apiErrors = asyncErrors.map { ApiError.fromAsyncError(it as AsyncError) }
         val responseBody = Json.encodeToString(serializer, ApiResponse(
@@ -134,11 +139,14 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         return runCatching {
             Json.decodeFromString(dtoSerializer, receiveText())
         }.getOrElse {
-            return ApiRequest.RequestBodyMalformed.asFailure()
-        }.takeIf { validator.validate(it) }.ifNullExit {
-            return ApiRequest.TypeDefinitionValidation.asFailure()
-        }.let {
-            AsyncResult.Success(it)
+            return ApiRequestError.RequestBodyMalformed.asFailure()
+        }.run {
+            this to validator.validate(this)
+        }.let { (items, validationResult) ->
+            if (validationResult.violations.isNotEmpty())
+                validationResult.asFailure()
+            else
+                AsyncResult.Success(items)
         }
     }
 
@@ -149,13 +157,16 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         return runCatching {
             Json.decodeFromString(dtoListSerializer, receiveText())
         }.getOrElse {
-            return ApiRequest.RequestBodyMalformed.asFailure()
+            return ApiRequestError.RequestBodyMalformed.asFailure()
         }.takeIf { it.isNotEmpty() }.ifNullExit {
-            return ApiRequest.EmptyListNotAllowed.asFailure()
-        }.takeIf { validator.validateAll(it) }.ifNullExit {
-            return ApiRequest.TypeDefinitionValidation.asFailure()
-        }.let {
-            AsyncResult.Success(it)
+            return ApiRequestError.EmptyListNotAllowed.asFailure()
+        }.run {
+            this to validator.validateAll(this)
+        }.let { (items, validationResult) ->
+            if (validationResult.violations.isNotEmpty())
+                validationResult.asFailure()
+            else
+                AsyncResult.Success(items)
         }
     }
 

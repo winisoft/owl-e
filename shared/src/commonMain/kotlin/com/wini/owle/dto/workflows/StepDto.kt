@@ -1,11 +1,11 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class StepDto(
-    val id: Long,
+    override val id: Long,
     val name: String,
     val description: String?,
     val parentPhase: PhaseDto?,
@@ -14,4 +14,4 @@ data class StepDto(
     val isWorkflowHead: Boolean,
     val tool: ToolDto,
     val nextStep: StepDto?
-) : BaseDto
+) : StandardDto

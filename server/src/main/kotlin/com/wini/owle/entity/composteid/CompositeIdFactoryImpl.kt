@@ -23,7 +23,7 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
      * are either not found or malformed.
      */
     override fun fromRequestParams(params: Map<String, List<String>>): AsyncResult<CompositeID> {
-        val failed = mutableListOf<AsyncError.ApiRequest>()
+        val failed = mutableListOf<AsyncError.ApiRequestError>()
 
         // map the names of the relevant db table columns to values found under that key in the request query params
         return fkReferences.values.associateWith {
@@ -32,11 +32,11 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
         }.mapNotNull { (key: String, values: List<String>?) ->
             when {
                 values == null || values.firstOrNull() == null -> {
-                    failed.add(AsyncError.ApiRequest.MissingParameter(key))
+                    failed.add(AsyncError.ApiRequestError.MissingParameter(key))
                     null
                 }
                 values.first().toLongOrNull() == null -> {
-                    failed.add(AsyncError.ApiRequest.ParamValueMalformed(key))
+                    failed.add(AsyncError.ApiRequestError.ParamValueMalformedLong(key))
                     null
                 }
                 else -> key to values[0].toLong()
@@ -44,7 +44,7 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
         }.also {
             // logically 'short-circuits' further consideration of the already-determined invalid data provided
             if (failed.isNotEmpty())
-                return AsyncError.MultipleParamFailure(failed = failed.toList()).asFailure()
+                return AsyncError.ApiRequestError.MultipleParamFailure(failed = failed.toList()).asFailure()
         }.associate {
             // map the key under which the parameter was provided (its db column name) to the valid Long value it offered
             it.first to it.second

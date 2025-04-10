@@ -1,6 +1,6 @@
 package com.wini.owle.dto.environs
 
-import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable
 
 
@@ -9,4 +9,9 @@ data class ToolPackageDependencyDto(
     val toolId: Long,
     val packageId: Long,
     val versionSpecId: Long
-) : BaseDto
+) : CompositeDto {
+
+    override fun idToString(): String {
+        return "toolId={$toolId}&packageId={$packageId}&versionSpecId={$versionSpecId}"
+    }
+}

@@ -1,9 +1,9 @@
 package com.wini.owle.api
 
 import com.wini.owle.validators.DtoValidator
-import com.wini.owle.async.AsyncError.ApiRequest
-import com.wini.owle.async.AsyncError.ApiRequest.MissingParameter
-import com.wini.owle.async.AsyncError.ApiRequest.ParamValueMalformed
+import com.wini.owle.async.AsyncError.ApiRequestError
+import com.wini.owle.async.AsyncError.ApiRequestError.MissingParameter
+import com.wini.owle.async.AsyncError.ApiRequestError.ParamValueMalformedLong
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
@@ -80,16 +80,16 @@ abstract class LongIdEndpointImpl<T: BaseDto>(
         .ifNullExit {
             return AsyncResult.Failure(error = MissingParameter("id"))
         }.toLongOrNull().ifNullExit {
-            return AsyncResult.Failure(error = ParamValueMalformed("id"))
+            return AsyncResult.Failure(error = ParamValueMalformedLong("id"))
         }.let {
             AsyncResult.Success(it)
         }
 
     override suspend fun ApplicationCall.readIds(): AsyncResult<List<Long>> {
         return Json.decodeFromString<List<Long>>(receiveText()).ifNullExit {
-            return ApiRequest.RequestBodyMalformed.asFailure()
+            return ApiRequestError.RequestBodyMalformed.asFailure()
         }.takeIf { it.isNotEmpty() }.ifNullExit {
-            return ApiRequest.EmptyListNotAllowed.asFailure()
+            return ApiRequestError.EmptyListNotAllowed.asFailure()
         }.let {
             AsyncResult.Success(it)
         }

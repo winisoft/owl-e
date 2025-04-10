@@ -1,11 +1,11 @@
 package com.wini.owle.dto.user
 
-import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PaymentMethodDto(
-    val id: Long,
+    override val id: Long,
     val stripePaymentMethodId: String?,
     val user: UserDto,
     val cardBrand: CardBrandDto?,
@@ -13,4 +13,4 @@ data class PaymentMethodDto(
     val isDefault: Boolean,
     val createdAt: String,
     val updatedAt: String
-) : BaseDto
+) : StandardDto

@@ -1,6 +1,6 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.UserDto
 import kotlinx.serialization.Serializable
 
@@ -27,7 +27,7 @@ sealed class CommercialUseDto {
 
 @Serializable
 data class WorkflowMetadataDto(
-    val id: Long,
+    override val id: Long,
 
     /**
      * The name of the entity (e.g., workflow or step).
@@ -118,4 +118,4 @@ data class WorkflowMetadataDto(
      */
     val excludedSteps: List<StepDto> = emptyList(),
 
-) : BaseDto
+) : StandardDto

@@ -6,7 +6,6 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.client.utils.EmptyContent.contentType
 import io.ktor.http.*
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -91,7 +90,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
     @Test
     fun `GET by id - with invalid id format - returns HTTP Code 400, ParamValueMalformed`() = runBlocking {
         val dll = mockk<DLL<Long, T>>()
-        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.ParamValueMalformed("id")))
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("id")))
 
         setupTestApp(dll) {
             val response = client.get("$route/not-a-number") {
@@ -109,7 +108,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
     @Test
     fun `DELETE by id - with invalid id format - returns HTTP Code 400, ParamValueMalformed`() = runBlocking {
         val dll = mockk<DLL<Long, T>>()
-        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.ParamValueMalformed("id")))
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("id")))
 
         setupTestApp(dll) {
             val response = client.delete("$route/not-a-number") {
@@ -148,7 +147,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
     @Test
     fun `DELETE batch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
         val dll = mockk<DLL<Long, T>>()
-        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequest.RequestBodyMalformed))
+        val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.RequestBodyMalformed))
 
         setupTestApp(dll) {
             val response = client.delete("$route/batch") {
@@ -161,7 +160,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             Assertions.assertNull(apiResponse.data)
             Assertions.assertFalse(apiResponse.success)
             Assertions.assertEquals(expectedErrors, apiResponse.errors)
-            Assertions.assertEquals(AsyncError.ApiRequest.RequestBodyMalformed.message, apiResponse.message)
+            Assertions.assertEquals(AsyncError.ApiRequestError.RequestBodyMalformed.message, apiResponse.message)
         }
     }
 }

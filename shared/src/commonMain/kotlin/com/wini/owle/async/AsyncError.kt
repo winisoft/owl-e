@@ -55,42 +55,58 @@ sealed class AsyncError {
     }
 
     @Serializable
-    sealed class ApiRequest : AsyncError() {
+    sealed class ApiRequestError : AsyncError() {
 
         @Serializable
         data class MissingParameter(
             val paramKey: String
-        ) : ApiRequest() {
+        ) : ApiRequestError() {
             override val errorCode: String get() = "MISSING_PARAM_VALUE"
-            override val message: String get() = "Missing required parameter '$paramKey'"
-            override val detail: String? get() = null
+            override val message: String get() = "Missing required parameter"
+            override val detail: String? get() = "'$paramKey' was not provided"
         }
 
         @Serializable
-        data class ParamValueMalformed(
+        data class ParamValueMalformedLong(
             val paramKey: String,
             val formatDescr: String = "number"
-        ) : ApiRequest() {
+        ) : ApiRequestError() {
             override val errorCode: String get() = "MALFORMED_PARAM_VALUE"
-            override val message: String get() = "Parameter '$paramKey' must be a valid $formatDescr"
-            override val detail: String? get() = null
+            override val message: String get() = "Parameter provided in an invalid format."
+            override val detail: String? get() = "'$paramKey' must be a valid whole number."
         }
 
         @Serializable
-        data object EmptyListNotAllowed : ApiRequest() {
+        data object EmptyListNotAllowed : ApiRequestError() {
             override val errorCode: String get() = "BODY_EMPTY_LIST"
             override val message: String get() = "Request body contained no items"
             override val detail: String? get() = null
         }
 
         @Serializable
-        data object RequestBodyMalformed : ApiRequest() {
+        data object RequestBodyMalformed : ApiRequestError() {
             override val errorCode: String get() = "MALFORMED_REQUEST_BODY"
             override val message: String get() = "Request body is missing or not readable as JSON"
             override val detail: String? get() = null
         }
 
+        @Serializable
+        data class MultipleParamFailure(
+            val failed: List<ApiRequestError>
+        ) : ApiRequestError() {
+            override val errorCode: String get() = "MULTI_PARAM_FAILURE"
+            override val message: String get() = "The required values were not provided in valid format."
+            override val detail: String? get() = null
+        }
 
+        @Serializable
+        data class MultipleTypeValidations(
+            val violations: List<TypeValidation>
+        ): ApiRequestError() {
+            override val errorCode: String get() = "TYPE_INVALID"
+            override val message: String get() = "One or more of the constraints on valid type definitions was violated."
+            override val detail: String? get() = null
+        }
 
     }
 
@@ -131,6 +147,7 @@ sealed class AsyncError {
             override val message: String get() = "A deadlock was detected and the transaction was rolled back."
             override val detail: String? get() = null
         }
+
     }
 
     @Serializable
@@ -139,15 +156,6 @@ sealed class AsyncError {
         val successful: List<T>
     ) : AsyncError() {
         override val errorCode: String get() = "PARTIAL_REQ_BODY_FAILURE"
-        override val message: String get() = ""
-        override val detail: String? get() = null
-    }
-
-    @Serializable
-    data class MultipleParamFailure(
-        val failed: List<AsyncError.ApiRequest>
-    ) : AsyncError() {
-        override val errorCode: String get() = "MULTI_PARAM_FAILURE"
         override val message: String get() = ""
         override val detail: String? get() = null
     }
