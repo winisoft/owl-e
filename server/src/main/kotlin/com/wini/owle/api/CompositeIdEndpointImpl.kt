@@ -6,6 +6,7 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import io.ktor.server.application.*
+import io.ktor.util.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
@@ -23,7 +24,9 @@ abstract class CompositeIdEndpointImpl<T: BaseDto>(
     dtoListSerializer = ListSerializer(serializer)
 ) {
 
-    abstract override fun ApplicationCall.readId(): AsyncResult<CompositeID>
+    override fun ApplicationCall.readId(): AsyncResult<CompositeID> {
+        return compositeIdFactory.fromRequestParams(params = request.queryParameters.toMap())
+    }
 
     override suspend fun ApplicationCall.readIds(): AsyncResult<List<CompositeID>> {
         return when(val dtosResult = readDtos(dtoListSerializer, validator)) {

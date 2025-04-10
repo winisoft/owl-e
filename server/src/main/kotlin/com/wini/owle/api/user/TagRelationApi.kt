@@ -23,10 +23,6 @@ class TagRelationApi(
     validator = validator
 ) {
 
-    override fun ApplicationCall.readId(): AsyncResult<CompositeID> {
-        return compositeIdFactory.fromRequestParams(params = parameters.toMap())
-    }
-
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag-relation") {

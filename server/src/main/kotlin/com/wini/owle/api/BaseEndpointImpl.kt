@@ -80,20 +80,18 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         respond(failure.toStatusCode(), Json.encodeToString(serializer, apiResponse))
     }
 
-    private fun AsyncResult.Failure.toStatusCode(): HttpStatusCode {
-        return when (error) {
-            is ApiRequestError.MissingParameter,
-            is ApiRequestError.ParamValueMalformedLong,
-            is ApiRequestError.RequestBodyMalformed,
-            is ApiRequestError.EmptyListNotAllowed,
-            is ApiRequestError.MultipleParamFailure,
-            is ApiRequestError.MultipleTypeValidations ->
-                HttpStatusCode.BadRequest
-            is AsyncError.NoSuchIdError ->
-                HttpStatusCode.NotFound
-            else ->
-                HttpStatusCode.InternalServerError
-        }
+    private fun AsyncResult.Failure.toStatusCode(): HttpStatusCode = when (error) {
+        is ApiRequestError.MissingParameter,
+        is ApiRequestError.ParamValueMalformedLong,
+        is ApiRequestError.RequestBodyMalformed,
+        is ApiRequestError.EmptyListNotAllowed,
+        is ApiRequestError.MultipleParamFailure,
+        is ApiRequestError.MultipleTypeValidations ->
+            HttpStatusCode.BadRequest
+        is AsyncError.NoSuchIdError ->
+            HttpStatusCode.NotFound
+        else ->
+            HttpStatusCode.InternalServerError
     }
 
     private suspend inline fun ApplicationCall.readDto(
@@ -134,7 +132,6 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         }
     }
 
-
     @Suppress("UNCHECKED_CAST")
     private fun <T : BaseDto, D> OwleApiCall<T>.responseSerializer(
         one: KSerializer<T>,
@@ -145,12 +142,10 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         is OwleApiCall.CreateOne,
         is OwleApiCall.UpdateOne ->
             ApiResponse.serializer(one) as KSerializer<ApiResponse<D>>
-
         is OwleApiCall.GetMany,
         is OwleApiCall.CreateMany,
         is OwleApiCall.UpdateMany ->
             ApiResponse.serializer(many) as KSerializer<ApiResponse<D>>
-
         is OwleApiCall.DeleteOne,
         is OwleApiCall.DeleteMany ->
             ApiResponse.serializer(none) as KSerializer<ApiResponse<D>>
@@ -176,10 +171,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         when (val result = resultFn()) {
             is AsyncResult.Failure -> failureRespond(result, serializer)
             is AsyncResult.Success -> Json.encodeToString(serializer,
-                ApiResponse(
-                    success = true,
-                    data = if (owleCall.successStatus != HttpStatusCode.NoContent) result.data else null
-                )
+                ApiResponse(true, data = if (owleCall.successStatus != HttpStatusCode.NoContent) result.data else null)
             ).apply { respond(owleCall.successStatus, this) }
         }
     }

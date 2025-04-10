@@ -1,15 +1,13 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.CompositeIdEndpointImpl
-import com.wini.owle.validators.DtoValidator
 import com.wini.owle.api.OwleApiCall
-import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import com.wini.owle.entity.composteid.ToolPackageDepIdFactory
+import com.wini.owle.validators.DtoValidator
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
 
 
@@ -22,10 +20,6 @@ class ToolPackageDependencyApi(
     compositeIdFactory = ToolPackageDepIdFactory,
     validator = validator
 ) {
-
-    override fun ApplicationCall.readId(): AsyncResult<CompositeID> {
-        return compositeIdFactory.fromRequestParams(params = parameters.toMap())
-    }
 
     override fun register(routing: Routing) {
         routing.apply {

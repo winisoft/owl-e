@@ -1,16 +1,14 @@
 package com.wini.owle.api.transforms
 
 import com.wini.owle.api.CompositeIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
+import com.wini.owle.dll.DLL
 import com.wini.owle.dto.transforms.TransformationTargetTypeDto
 import com.wini.owle.entity.composteid.TransformTargetTypeIdFactory
+import com.wini.owle.validators.DtoValidator
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
-import com.wini.owle.dll.DLL
-import io.ktor.util.*
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.api.OwleApiCall
-import com.wini.owle.async.AsyncResult
-import com.wini.owle.validators.DtoValidator
 
 
 class TransformTargetTypeApi(
@@ -22,10 +20,6 @@ class TransformTargetTypeApi(
     compositeIdFactory = TransformTargetTypeIdFactory,
     validator = validator
 ) {
-
-    override fun ApplicationCall.readId(): AsyncResult<CompositeID> {
-        return compositeIdFactory.fromRequestParams(params = parameters.toMap())
-    }
 
     override fun register(routing: Routing) {
         routing.apply {
