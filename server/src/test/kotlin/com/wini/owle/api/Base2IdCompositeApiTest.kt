@@ -17,9 +17,14 @@ import io.ktor.server.testing.*
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.CompositeID
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -54,7 +59,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
     protected fun setupTestApp(
         dll: DLL<CompositeID, T>,
         validator: DtoValidator<T> = DtoValidator.alwaysValid(),
-        compositeIdFactory: CompositeIdFactory<T>,
+        compositeIdFactory: CompositeIdFactory<T> = mockk(),
         testBlock: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {
         application {
@@ -70,197 +75,355 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
         testBlock()
     }
 
+    lateinit var dto: T
+    lateinit var dtoList: List<T>
+    lateinit var id: CompositeID
+    lateinit var compositeIdFactory: CompositeIdFactory<T>
+    lateinit var dll: DLL<CompositeID, T>
+    lateinit var response: HttpResponse
+
+    fun HttpResponse.parseOne(): ApiResponse<T> = runBlocking {
+        Json.decodeFromString(apiResponseOneSerializer, bodyAsText())
+    }
+
+    fun HttpResponse.parseMany(): ApiResponse<List<T>> = runBlocking {
+        Json.decodeFromString(apiResponseListSerializer, bodyAsText())
+    }
+
     @Nested
     @DisplayName("Success")
     inner class Success {
 
-        @Test
-        fun `GET by id - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-            val dto: T = getDto(1, 1)
-            val id: CompositeID = compositeId1()
-            val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                coEvery { fromRequestParams(any()) } returns AsyncResult.Success(id)
-            }
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { getById(id) } returns AsyncResult.Success(dto)
-            }
+        @Nested
+        @DisplayName("GET one")
+        inner class GetOne {
 
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.get(getByIdRoute) {
-                    contentType(ContentType.Application.Json)
+            @BeforeEach
+            fun setUp() {
+                dto = getDto(1, 1)
+                id = compositeId1()
+                compositeIdFactory = mockk() {
+                    coEvery { fromRequestParams(any()) } returns AsyncResult.Success(id)
                 }
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { getById(id) } returns AsyncResult.Success(dto)
+                }
+                setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
+                    response = client.get(getByIdRoute) {
+                        contentType(ContentType.Application.Json)
+                    }
+                }
+            }
 
-                val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.OK, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertNull(apiResponse.message)
-                Assertions.assertEquals(dto, apiResponse.data)
+            @Test
+            fun `Returns HTTP Code 200`() = runBlocking {
+                assertEquals(HttpStatusCode.OK, response.status)
+            }
+
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(response.parseOne().success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(response.parseOne().errors)
+            }
+
+            @Test
+            fun `Returns data with expected DTO object`() = runBlocking {
+                assertEquals(dto, response.parseOne().data)
             }
         }
 
-        @Test
-        fun `GET all - on success - returns HTTP Code 200, serialized list of DTO return val`() = runBlocking {
-            val dtoList = listOf(getDto(1, 1), getDto(2, 2))
-            val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { getAll() } returns AsyncResult.Success(data = dtoList)
+        @Nested
+        @DisplayName("GET many")
+        inner class GetMany {
+
+            @BeforeEach
+            fun setUp() {
+                dtoList = listOf(getDto(1, 1), getDto(2, 2))
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { getAll() } returns AsyncResult.Success(data = dtoList)
+                }
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { getAll() } returns AsyncResult.Success(dtoList)
+                }
+                setupTestApp(dll = dll) {
+                    response = client.get(route) {
+                        contentType(ContentType.Application.Json)
+                    }
+                }
             }
 
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.get(route) {
-                    contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(listSerializer, dtoList))
-                }
+            @Test
+            fun `Returns HTTP Code 200`() = runBlocking {
+                assertEquals(HttpStatusCode.OK, response.status)
+            }
 
-                val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.OK, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertEquals(dtoList, apiResponse.data)
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(response.parseMany().success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(response.parseMany().errors)
+            }
+
+            @Test
+            fun `Returns data with expected DTO object`() = runBlocking {
+                assertEquals(dtoList, response.parseMany().data)
             }
         }
 
-        @Test
-        fun `POST create - on success - returns HTTP Code 201, serialized DTO return val`() = runBlocking {
-            val inputDto: T = getDto(1, 1)
-            val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { create(inputDto) } returns AsyncResult.Success(inputDto)
-            }
+        @Nested
+        @DisplayName("POST one")
+        inner class PostOne {
 
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.post(route) {
-                    contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(serializer, inputDto))
+            @BeforeEach
+            fun setUp() {
+                dto = getDto(1, 1)
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { create(dto) } returns AsyncResult.Success(dto)
                 }
 
-                val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.Created, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertEquals(inputDto, apiResponse.data)
+                setupTestApp(dll = dll) {
+                    response = client.post(route) {
+                        contentType(ContentType.Application.Json)
+                        setBody(Json.encodeToString(serializer, dto))
+                    }
+                }
+            }
+
+            @Test
+            fun `Returns HTTP Code 201`() = runBlocking {
+                assertEquals(HttpStatusCode.Created, response.status)
+            }
+
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(response.parseOne().success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(response.parseOne().errors)
+            }
+
+            @Test
+            fun `Returns data with expected DTO object`() = runBlocking {
+                assertEquals(dto, response.parseOne().data)
+            }
+
+        }
+
+        @Nested
+        @DisplayName("POST batch")
+        inner class PostBatch {
+
+            @BeforeEach
+            fun setUp() {
+                dtoList = listOf(getDto(1, 1), getDto(2, 2))
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { createAll(dtoList) } returns AsyncResult.Success(dtoList)
+                }
+
+                setupTestApp(dll = dll) {
+                    response = client.post("$route/batch") {
+                        contentType(ContentType.Application.Json)
+                        setBody(Json.encodeToString(listSerializer, dtoList))
+                    }
+                }
+            }
+
+            @Test
+            fun `Returns HTTP Code 201`() = runBlocking {
+                assertEquals(HttpStatusCode.Created, response.status)
+            }
+
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(response.parseMany().success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(response.parseMany().errors)
+            }
+
+            @Test
+            fun `Returns data with expected DTO object`() = runBlocking {
+                assertEquals(dtoList, response.parseMany().data)
+            }
+
+        }
+
+        @Nested
+        @DisplayName("PUT one")
+        inner class PutOne {
+
+            @BeforeEach
+            fun setUp() {
+                dto = getDto(1, 1)
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { update(dto) } returns AsyncResult.Success(dto)
+                }
+                setupTestApp(dll = dll) {
+                    response = client.put(route) {
+                        contentType(ContentType.Application.Json)
+                        setBody(Json.encodeToString(serializer, dto))
+                    }
+                }
+            }
+
+            @Test
+            fun `Returns HTTP Code 200`() = runBlocking {
+                assertEquals(HttpStatusCode.OK, response.status)
+            }
+
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(response.parseOne().success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(response.parseOne().errors)
+            }
+
+            @Test
+            fun `Returns data with expected DTO object`() = runBlocking {
+                assertEquals(dto, response.parseOne().data)
             }
         }
 
-        @Test
-        fun `POST create batch - on success - returns HTTP Code 201, serialized list of DTO return val`() = runBlocking {
-            val dtoList = listOf(getDto(1, 1), getDto(2, 2))
-            val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { createAll(dtoList) } returns AsyncResult.Success(dtoList)
+        @Nested
+        @DisplayName("PUT batch")
+        inner class PutBatch {
+
+            @BeforeEach
+            fun setUp() {
+                dtoList = listOf(getDto(1, 1), getDto(2, 2))
+                dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { updateAll(dtoList) } returns AsyncResult.Success(dtoList)
+                }
+                setupTestApp(dll = dll) {
+                    response = client.put("$route/batch") {
+                        contentType(ContentType.Application.Json)
+                        setBody(Json.encodeToString(listSerializer, dtoList))
+                    }
+                }
             }
 
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.post("$route/batch") {
-                    contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(listSerializer, dtoList))
-                }
+            @Test
+            fun `Returns HTTP Code 200`() = runBlocking {
+                assertEquals(HttpStatusCode.OK, response.status)
+            }
 
-                val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.Created, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertEquals(dtoList, apiResponse.data)
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(response.parseMany().success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(response.parseMany().errors)
+            }
+
+            @Test
+            fun `Returns data with expected DTO object`() = runBlocking {
+                assertEquals(dtoList, response.parseMany().data)
+            }
+
+        }
+
+        @Nested
+        @DisplayName("DELETE one")
+        inner class DeleteOne {
+
+            @BeforeEach
+            fun setUp() {
+                id = compositeId1()
+                compositeIdFactory = mockk() {
+                    coEvery { fromRequestParams(any()) } returns AsyncResult.Success(id)
+                }
+                dll = mockk() {
+                    coEvery { delete(id) } returns AsyncResult.Success(Unit)
+                }
+                setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
+                    response = client.delete(deleteByIdRoute) {
+                        contentType(ContentType.Application.Json)
+                    }
+                }
+            }
+            
+            @Test
+            fun `Returns HTTP Code 204`() = runBlocking {
+                assertEquals(HttpStatusCode.NoContent, response.status)
+            }
+            
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText()).success)
+            }
+            
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText()).errors)
+            }
+            
+            @Test
+            fun `Returns ApiResponse with null data`() = runBlocking {
+                assertNull(Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText()).data)
             }
         }
 
-        @Test
-        fun `PUT update batch - on success - returns HTTP Code 200, serialized list of DTO return val`() = runBlocking {
-            val dtoList = listOf(getDto(1, 1), getDto(2, 2))
-            val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { updateAll(dtoList) } returns AsyncResult.Success(dtoList)
-            }
+        @Nested
+        @DisplayName("DELETE batch")
+        inner class DeleteMany {
 
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.put("$route/batch") {
-                    contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(listSerializer, dtoList))
+            @BeforeEach
+            fun setUp() {
+                dtoList = listOf(getDto(1, 1), getDto(2, 2))
+                val id1 = compositeId1()
+                val id2 = compositeId2()
+                val compositeIdFactory: CompositeIdFactory<T> = mockk() {
+                    coEvery { fromDtoInstance(dtoList[0]) } returns id1
+                    coEvery { fromDtoInstance(dtoList[1]) } returns id2
+                }
+                val dll = mockk<DLL<CompositeID, T>> {
+                    coEvery { deleteAll(any()) } returns AsyncResult.Success(Unit)
                 }
 
-                val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.OK, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertEquals(dtoList, apiResponse.data)
-            }
-        }
-
-        @Test
-        fun `PUT update - on success - returns HTTP Code 200, serialized DTO return val`() = runBlocking {
-            val inputDto: T = getDto(1, 1)
-            val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { update(inputDto) } returns AsyncResult.Success(inputDto)
-            }
-
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.put(route) {
-                    contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(serializer, inputDto))
+                setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
+                    response = client.delete("$route/batch") {
+                        contentType(ContentType.Application.Json)
+                        setBody(json.encodeToString(listSerializer, dtoList))
+                    }
                 }
+            }
 
-                val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.OK, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertEquals(inputDto, apiResponse.data)
+            @Test
+            fun `Returns HTTP Code 204`() = runBlocking {
+                assertEquals(HttpStatusCode.NoContent, response.status)
+            }
+
+            @Test
+            fun `Returns ApiResponse success == true`() = runBlocking {
+                assertTrue(Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText()).success)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null errors`() = runBlocking {
+                assertNull(Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText()).errors)
+            }
+
+            @Test
+            fun `Returns ApiResponse with null data`() = runBlocking {
+                assertNull(Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText()).data)
             }
         }
-
-        @Test
-        fun `DELETE - on success - returns HTTP Code 204, empty data`() = runBlocking {
-            val inputDto: T = getDto(1, 1)
-            val compositeId = compositeId1()
-            val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                coEvery { fromRequestParams(any()) } returns AsyncResult.Success(compositeId)
-            }
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { delete(compositeId) } returns AsyncResult.Success(Unit)
-            }
-
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.delete(deleteByIdRoute) {
-                    contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(serializer, inputDto))
-                }
-
-                val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.NoContent, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertNull(apiResponse.data)
-            }
-        }
-
-        @Test
-        fun `DELETE batch - on success - returns HTTP Code 204, empty data`() = runBlocking {
-            val dtoList = listOf(getDto(1,1), getDto(2, 2))
-            val id1 = compositeId1()
-            val id2 = compositeId2()
-            val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                coEvery { fromDtoInstance(dtoList[0]) } returns id1
-                coEvery { fromDtoInstance(dtoList[1]) } returns id2
-            }
-            val dll = mockk<DLL<CompositeID, T>> {
-                coEvery { deleteAll(any()) } returns AsyncResult.Success(Unit)
-            }
-
-            setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
-                val response = client.delete("$route/batch") {
-                    contentType(ContentType.Application.Json)
-                    setBody(json.encodeToString(listSerializer, dtoList))
-                }
-
-                val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.NoContent, response.status)
-                Assertions.assertTrue(apiResponse.success)
-                Assertions.assertNull(apiResponse.errors)
-                Assertions.assertNull(apiResponse.data)
-            }
-        }
-
     }
 
     @Nested
@@ -282,10 +445,10 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
             }
         }
 
@@ -305,10 +468,10 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
             }
         }
 
@@ -328,10 +491,10 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
             }
         }
 
@@ -351,10 +514,10 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(TestValidators.API_ERRORS_1_STR_EMPTY, apiResponse.errors)
             }
         }
 
@@ -376,11 +539,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                     setBody("{ invalid json }")
                 }
 
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(expectedErrors, apiResponse.errors)
             }
         }
 
@@ -399,10 +562,10 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
 
                 val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
 
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(expectedErrors, apiResponse.errors)
             }
         }
 
@@ -420,11 +583,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(apiResponse.message, reqError.message)
-                Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(apiResponse.message, reqError.message)
+                assertEquals(expectedErrors, apiResponse.errors)
             }
         }
 
@@ -442,11 +605,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(apiResponse.message, apiError.message)
-                Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(apiResponse.message, apiError.message)
+                assertEquals(expectedErrors, apiResponse.errors)
             }
         }
 
@@ -465,11 +628,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(apiResponse.message, apiError.message)
-                Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(apiResponse.message, apiError.message)
+                assertEquals(expectedErrors, apiResponse.errors)
             }
         }
 
@@ -501,11 +664,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                         contentType(ContentType.Application.Json)
                     }
 
-                    Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
+                    assertEquals(HttpStatusCode.NotFound, response.status)
                     val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                    Assertions.assertFalse(apiResponse.success)
-                    Assertions.assertNull(apiResponse.data)
-                    Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                    assertFalse(apiResponse.success)
+                    assertNull(apiResponse.data)
+                    assertEquals(expectedErrors, apiResponse.errors)
                 }
             }
 
@@ -524,12 +687,12 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                         contentType(ContentType.Application.Json)
                     }
 
-                    Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+                    assertEquals(HttpStatusCode.BadRequest, response.status)
                     val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                    Assertions.assertFalse(apiResponse.success)
-                    Assertions.assertEquals("The required values were not provided in valid format.", apiResponse.message)
-                    Assertions.assertNull(apiResponse.data)
-                    Assertions.assertEquals(apiErrors, apiResponse.errors)
+                    assertFalse(apiResponse.success)
+                    assertEquals("The required values were not provided in valid format.", apiResponse.message)
+                    assertNull(apiResponse.data)
+                    assertEquals(apiErrors, apiResponse.errors)
                 }
             }
 
@@ -547,11 +710,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                         contentType(ContentType.Application.Json)
                     }
 
-                    Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+                    assertEquals(HttpStatusCode.BadRequest, response.status)
                     val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                    Assertions.assertFalse(apiResponse.success)
-                    Assertions.assertNull(apiResponse.data)
-                    Assertions.assertEquals(apiErrors, apiResponse.errors)
+                    assertFalse(apiResponse.success)
+                    assertNull(apiResponse.data)
+                    assertEquals(apiErrors, apiResponse.errors)
                 }
             }
 
@@ -577,11 +740,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                         contentType(ContentType.Application.Json)
                     }
 
-                    Assertions.assertEquals(HttpStatusCode.NotFound, response.status)
+                    assertEquals(HttpStatusCode.NotFound, response.status)
                     val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                    Assertions.assertFalse(apiResponse.success)
-                    Assertions.assertNull(apiResponse.data)
-                    Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                    assertFalse(apiResponse.success)
+                    assertNull(apiResponse.data)
+                    assertEquals(expectedErrors, apiResponse.errors)
                 }
             }
 
@@ -599,12 +762,12 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                         contentType(ContentType.Application.Json)
                     }
 
-                    Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+                    assertEquals(HttpStatusCode.BadRequest, response.status)
                     val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                    Assertions.assertFalse(apiResponse.success)
-                    Assertions.assertEquals("The required values were not provided in valid format.", apiResponse.message)
-                    Assertions.assertNull(apiResponse.data)
-                    Assertions.assertEquals(apiErrors, apiResponse.errors)
+                    assertFalse(apiResponse.success)
+                    assertEquals("The required values were not provided in valid format.", apiResponse.message)
+                    assertNull(apiResponse.data)
+                    assertEquals(apiErrors, apiResponse.errors)
                 }
             }
 
@@ -622,11 +785,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                         contentType(ContentType.Application.Json)
                     }
 
-                    Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
+                    assertEquals(HttpStatusCode.BadRequest, response.status)
                     val apiResponse = Json.decodeFromString(apiResponseOneSerializer, response.bodyAsText())
-                    Assertions.assertFalse(apiResponse.success)
-                    Assertions.assertEquals(apiErrors, apiResponse.errors)
-                    Assertions.assertNull(apiResponse.data)
+                    assertFalse(apiResponse.success)
+                    assertEquals(apiErrors, apiResponse.errors)
+                    assertNull(apiResponse.data)
                 }
             }
 
@@ -652,11 +815,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(AsyncError.ApiRequestError.EmptyListNotAllowed.message, apiResponse.message)
-                Assertions.assertEquals(expectedErrors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(AsyncError.ApiRequestError.EmptyListNotAllowed.message, apiResponse.message)
+                assertEquals(expectedErrors, apiResponse.errors)
             }
         }
 
@@ -676,11 +839,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(apiResponse.message, apiError.message)
-                Assertions.assertEquals(expectedResponse.errors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(apiResponse.message, apiError.message)
+                assertEquals(expectedResponse.errors, apiResponse.errors)
             }
         }
 
@@ -700,11 +863,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 }
 
                 val apiResponse = Json.decodeFromString(apiResponseListSerializer, response.bodyAsText())
-                Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
-                Assertions.assertFalse(apiResponse.success)
-                Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(apiResponse.message, apiError.message)
-                Assertions.assertEquals(expectedResponse.errors, apiResponse.errors)
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertFalse(apiResponse.success)
+                assertNull(apiResponse.data)
+                assertEquals(apiResponse.message, apiError.message)
+                assertEquals(expectedResponse.errors, apiResponse.errors)
             }
         }
 
