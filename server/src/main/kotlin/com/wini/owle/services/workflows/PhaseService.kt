@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class PhaseService(
     private val repository: PhaseRepository,
     private val mapper: PhasesMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: PhaseIdFactory
 ): BaseServiceImpl<Long, PhaseDto, PhaseDao>(
     repository = repository,
     mapper = mapper,

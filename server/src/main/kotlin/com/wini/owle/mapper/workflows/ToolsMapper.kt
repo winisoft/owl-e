@@ -9,8 +9,7 @@ import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 
 class ToolsMapper(
     private val daoFactory: DaoFactory<ToolDao, Long>,
-    private val typeDeclarationMapper: TypeDeclarationsMapper,
-    private val toolParamMapper: ToolParamsMapper
+    private val typeDeclarationMapper: TypeDeclarationsMapper
 ) : DbMapper<ToolDto, ToolDao>() {
 
     override fun toEntity(dto: ToolDto): ToolDao {

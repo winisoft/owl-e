@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class InquisitionService(
     repository: InquisitionRepository,
     mapper: InquisitionsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: InquisitionIdFactory
 ): BaseServiceImpl<Long, InquisitionDto, InquisitionDao>(
     repository = repository,
     mapper = mapper,

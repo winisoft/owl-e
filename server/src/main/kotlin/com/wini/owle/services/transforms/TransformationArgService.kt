@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TransformationArgService(
     repository: TransformationArgRepository,
     mapper: TransformationArgsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TransformationArgIdFactory
 ): BaseServiceImpl<Long, TransformationArgDto, TransformationArgDao>(
     repository = repository,
     mapper = mapper,

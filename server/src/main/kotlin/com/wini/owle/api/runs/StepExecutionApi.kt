@@ -22,28 +22,28 @@ class StepExecutionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/step-execution") {
-                call.execute(OwleApiCall.GetMany(StepExecutionDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/step-execution/{id}") {
-                call.execute(OwleApiCall.GetOne(StepExecutionDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/step-execution") {
-                call.execute(OwleApiCall.CreateOne(StepExecutionDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/step-execution/batch") {
-                call.execute(OwleApiCall.CreateMany(StepExecutionDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/step-execution") {
-                call.execute(OwleApiCall.UpdateOne(StepExecutionDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/step-execution/batch") {
-                call.execute(OwleApiCall.UpdateMany(StepExecutionDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/step-execution/{id}") {
-                call.execute(OwleApiCall.DeleteOne(StepExecutionDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/step-execution/batch") {
-                call.execute(OwleApiCall.DeleteMany(StepExecutionDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

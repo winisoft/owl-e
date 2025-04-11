@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class WorkflowService(
     repository: WorkflowRepository,
     mapper: WorkflowsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: WorkflowIdFactory
 ): BaseServiceImpl<Long, WorkflowDto, WorkflowDao>(
     repository = repository,
     mapper = mapper,

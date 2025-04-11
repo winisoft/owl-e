@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class ProvisionService(
     repository: ProvisionRepository,
     mapper: ProvisionsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: ProvisionIdFactory
 ): BaseServiceImpl<Long, ProvisionDto, ProvisionDao>(
     repository = repository,
     mapper = mapper,

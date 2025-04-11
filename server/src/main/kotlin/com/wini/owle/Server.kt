@@ -1,20 +1,20 @@
 package com.wini.owle
 
-import com.wini.owle.api.environs.PackageApi
-import com.wini.owle.api.environs.PackageRepoApi
-import com.wini.owle.api.environs.ToolPackageDependencyApi
-import com.wini.owle.api.environs.VersionSpecApi
+import com.wini.owle.api.CompositeIdEndpointImpl
+import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.api.runs.*
 import com.wini.owle.api.steps.*
 import com.wini.owle.api.transforms.*
 import com.wini.owle.api.typing.*
-import com.wini.owle.api.user.PaymentMethodApi
-import com.wini.owle.api.user.TagApi
-import com.wini.owle.api.user.TagRelationApi
-import com.wini.owle.api.user.UserApi
-import com.wini.owle.api.workflows.PhaseApi
-import com.wini.owle.api.workflows.WorkflowApi
-import com.wini.owle.api.workflows.WorkflowFolderApi
+import com.wini.owle.dto.environs.*
+import com.wini.owle.dto.runs.*
+import com.wini.owle.dto.steps.*
+import com.wini.owle.dto.transforms.*
+import com.wini.owle.dto.typing.*
+import com.wini.owle.dto.user.*
+import com.wini.owle.dto.workflows.*
+import com.wini.owle.dto.environs.PackageRepoDto
+import com.wini.owle.dto.environs.ToolPackageDependencyDto
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -24,7 +24,7 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
 import org.koin.core.KoinApplication
 import org.koin.core.context.GlobalContext.startKoin
-import org.koin.ktor.ext.get
+import org.koin.core.logger.Level
 
 
 object Server {
@@ -44,7 +44,10 @@ object Server {
         }
     }
 
-    private val koinApp: KoinApplication = startKoin { modules(appModule) }
+    private val koinApp: KoinApplication = startKoin {
+        printLogger(Level.DEBUG) // Add this
+        modules(appModule)
+    }
 
     private fun Application.ktorModule() {
 
@@ -55,43 +58,43 @@ object Server {
             }
 
             koinApp.koin.run {
-                get<PackageRepoApi>().register(this@routing)
-                get<PackageApi>().register(this@routing)
-                get<VersionSpecApi>().register(this@routing)
-                get<ToolPackageDependencyApi>().register(this@routing)
-                get<BenchmarkingDataApi>().register(this@routing)
-                get<ExecutionLogApi>().register(this@routing)
-                get<StepExecutionApi>().register(this@routing)
-                get<TestCaseApi>().register(this@routing)
-                get<TestExpectedOutcomeApi>().register(this@routing)
-                get<TestInputApi>().register(this@routing)
-                get<TestResultApi>().register(this@routing)
-                get<WorkflowExecutionApi>().register(this@routing)
-                get<ErrorWatchFnApi>().register(this@routing)
-                get<ErrorWatchApi>().register(this@routing)
-                get<InquisitionApi>().register(this@routing)
-                get<WorkflowJunctionApi>().register(this@routing)
-                get<AppliedTransformArgApi>().register(this@routing)
-                get<AppliedTransformApi>().register(this@routing)
-                get<TransformationArgApi>().register(this@routing)
-                get<TransformTargetTypeApi>().register(this@routing)
-                get<TransformationApi>().register(this@routing)
-                get<TypeDeclarationApi>().register(this@routing)
-                get<TypeDefinitionApi>().register(this@routing)
-                get<TypeParameterApi>().register(this@routing)
-                get<TypeSchemaRefApi>().register(this@routing)
-                get<TypeVarianceApi>().register(this@routing)
-                get<TypeUnionMemberApi>().register(this@routing)
-                get<PaymentMethodApi>().register(this@routing)
-                get<TagApi>().register(this@routing)
-                get<UserApi>().register(this@routing)
-                get<TagRelationApi>().register(this@routing)
-                get<PhaseApi>().register(this@routing)
-                get<StepApi>().register(this@routing)
-                get<ToolParamApi>().register(this@routing)
-                get<ToolApi>().register(this@routing)
-                get<WorkflowFolderApi>().register(this@routing)
-                get<WorkflowApi>().register(this@routing)
+                get<LongIdEndpointImpl<PackageRepoDto>>().register(this@routing)
+                get<LongIdEndpointImpl<PackageDto>>().register(this@routing)
+                get<LongIdEndpointImpl<VersionSpecDto>>().register(this@routing)
+                get<CompositeIdEndpointImpl<ToolPackageDependencyDto>>().register(this@routing)
+                get<LongIdEndpointImpl<BenchmarkingDataDto>>().register(this@routing)
+                get<LongIdEndpointImpl<ExecutionLogDto>>().register(this@routing)
+                get<LongIdEndpointImpl<StepExecutionDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TestCaseDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TestExpectedOutcomeDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TestInputDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TestResultDto>>().register(this@routing)
+                get<LongIdEndpointImpl<WorkflowExecutionDto>>().register(this@routing)
+                get<LongIdEndpointImpl<ErrorWatchFnDto>>().register(this@routing)
+                get<LongIdEndpointImpl<ErrorWatchDto>>().register(this@routing)
+                get<LongIdEndpointImpl<InquisitionDto>>().register(this@routing)
+                get<LongIdEndpointImpl<WorkflowJunctionDto>>().register(this@routing)
+                get<LongIdEndpointImpl<AppliedTransformArgDto>>().register(this@routing)
+                get<LongIdEndpointImpl<AppliedTransformDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TransformationArgDto>>().register(this@routing)
+                get<CompositeIdEndpointImpl<TransformationTargetTypeDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TransformationDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TypeDeclarationDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TypeDefinitionDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TypeParameterDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TypeSchemaRefDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TypeVarianceDto>>().register(this@routing)
+                get<CompositeIdEndpointImpl<TypeUnionMemberDto>>().register(this@routing)
+                get<LongIdEndpointImpl<PaymentMethodDto>>().register(this@routing)
+                get<LongIdEndpointImpl<TagDto>>().register(this@routing)
+                get<LongIdEndpointImpl<UserDto>>().register(this@routing)
+                get<CompositeIdEndpointImpl<TagRelationDto>>().register(this@routing)
+                get<LongIdEndpointImpl<PhaseDto>>().register(this@routing)
+                get<LongIdEndpointImpl<StepDto>>().register(this@routing)
+                get<LongIdEndpointImpl<ToolParamDto>>().register(this@routing)
+                get<LongIdEndpointImpl<ToolDto>>().register(this@routing)
+                get<LongIdEndpointImpl<WorkflowFolderDto>>().register(this@routing)
+                get<LongIdEndpointImpl<WorkflowDto>>().register(this@routing)
             }
         }
     }

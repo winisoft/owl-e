@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeSchemaRefDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRefDto, TypeSchemaRefApi>() {
@@ -23,7 +23,7 @@ open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRefDto, TypeSchema
 
     override fun getApiInstance(
         dll: DLL<Long, TypeSchemaRefDto>,
-        validator: DtoValidator<TypeSchemaRefDto>
+        validator: BaseValidator<TypeSchemaRefDto>
     ): TypeSchemaRefApi = TypeSchemaRefApi(dll, validator)
 
 }

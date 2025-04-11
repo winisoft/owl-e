@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class PreReqInjectionService(
     repository: PreReqInjectionRepository,
     mapper: PreReqInjectionsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: PreReqInjectionIdFactory
 ): BaseServiceImpl<Long, PreReqInjectionDto, PreReqInjectionDao>(
     repository = repository,
     mapper = mapper,

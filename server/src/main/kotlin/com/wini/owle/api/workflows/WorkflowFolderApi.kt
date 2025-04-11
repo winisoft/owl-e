@@ -22,28 +22,28 @@ class WorkflowFolderApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-folder") {
-                call.execute(OwleApiCall.GetMany(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/workflow-folder/{id}") {
-                call.execute(OwleApiCall.GetOne(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/workflow-folder") {
-                call.execute(OwleApiCall.CreateOne(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/workflow-folder/batch") {
-                call.execute(OwleApiCall.CreateMany(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/workflow-folder") {
-                call.execute(OwleApiCall.UpdateOne(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/workflow-folder/batch") {
-                call.execute(OwleApiCall.UpdateMany(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/workflow-folder/{id}") {
-                call.execute(OwleApiCall.DeleteOne(WorkflowFolderDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/workflow-folder/batch") {
-                call.execute(OwleApiCall.DeleteMany(WorkflowFolderDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

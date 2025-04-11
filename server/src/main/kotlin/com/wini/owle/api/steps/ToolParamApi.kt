@@ -21,28 +21,28 @@ class ToolParamApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool-param") {
-                call.execute(OwleApiCall.GetMany(ToolParamDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/tool-param/{id}") {
-                call.execute(OwleApiCall.GetOne(ToolParamDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/tool-param") {
-                call.execute(OwleApiCall.CreateOne(ToolParamDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/tool-param/batch") {
-                call.execute(OwleApiCall.CreateMany(ToolParamDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/tool-param") {
-                call.execute(OwleApiCall.UpdateOne(ToolParamDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/tool-param/batch") {
-                call.execute(OwleApiCall.UpdateMany(ToolParamDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/tool-param/{id}") {
-                call.execute(OwleApiCall.DeleteOne(ToolParamDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/tool-param/batch") {
-                call.execute(OwleApiCall.DeleteMany(ToolParamDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

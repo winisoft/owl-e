@@ -16,6 +16,7 @@ import com.wini.owle.validators.validatorsModule
 import com.wini.owle.api.workflows.PhaseApi
 import com.wini.owle.api.workflows.WorkflowApi
 import com.wini.owle.api.workflows.WorkflowFolderApi
+import com.wini.owle.dll.dllModule
 import com.wini.owle.dto.environs.PackageDto
 import com.wini.owle.dto.environs.PackageRepoDto
 import com.wini.owle.dto.environs.ToolPackageDependencyDto
@@ -29,11 +30,12 @@ import com.wini.owle.dto.user.TagDto
 import com.wini.owle.dto.user.TagRelationDto
 import com.wini.owle.dto.user.UserDto
 import com.wini.owle.dto.workflows.*
+import com.wini.owle.entity.composteid.compositeIdFactoryModule
 import org.koin.dsl.module
 
 
 val apiModule = module {
-    includes(validatorsModule)
+    includes(validatorsModule, dllModule, compositeIdFactoryModule)
 
     single<LongIdEndpointImpl<PackageRepoDto>> { PackageRepoApi(get(), get()) }
     single<LongIdEndpointImpl<PackageDto>> { PackageApi(get(), get()) }
@@ -73,4 +75,49 @@ val apiModule = module {
     single<CompositeIdEndpointImpl<TagRelationDto>> { TagRelationApi(get(), get(), get()) }
     single<CompositeIdEndpointImpl<TransformationTargetTypeDto>> { TransformTargetTypeApi(get(), get(), get()) }
     single<CompositeIdEndpointImpl<ToolPackageDependencyDto>> { ToolPackageDependencyApi(get(), get(), get()) }
+    single<ProvisionDataPointApi> { ProvisionDataPointApi(get(), get(), get()) }
+    single<TypeUnionMemberApi> { TypeUnionMemberApi(get(), get(), get()) }
+    single<TagRelationApi> { TagRelationApi(get(), get(), get()) }
+    single<TransformTargetTypeApi> { TransformTargetTypeApi(get(), get(), get()) }
+    single<ToolPackageDependencyApi> { ToolPackageDependencyApi(get(), get(), get()) }
+
 }
+
+// single<PackageRepoApi> { PackageRepoApi(get(), get()) }
+//    single<PackageApi> { PackageApi(get(), get()) }
+//    single<VersionSpecApi> { VersionSpecApi(get(), get()) }
+//    single<BenchmarkingDataApi> { BenchmarkingDataApi(get(), get()) }
+//    single<ExecutionLogApi> { ExecutionLogApi(get(), get()) }
+//    single<StepExecutionApi> { StepExecutionApi(get(), get()) }
+//    single<TestCaseApi> { TestCaseApi(get(), get()) }
+//    single<TestExpectedOutcomeApi> { TestExpectedOutcomeApi(get(), get()) }
+//    single<TestInputApi> { TestInputApi(get(), get()) }
+//    single<TestResultApi> { TestResultApi(get(), get()) }
+//    single<WorkflowExecutionApi> { WorkflowExecutionApi(get(), get()) }
+//    single<ErrorWatchFnApi> { ErrorWatchFnApi(get(), get()) }
+//    single<ErrorWatchApi> { ErrorWatchApi(get(), get()) }
+//    single<InquisitionApi> { InquisitionApi(get(), get()) }
+//    single<WorkflowJunctionApi> { WorkflowJunctionApi(get(), get()) }
+//    single<AppliedTransformArgApi> { AppliedTransformArgApi(get(), get()) }
+//    single<AppliedTransformApi> { AppliedTransformApi(get(), get()) }
+//    single<TransformationArgApi> { TransformationArgApi(get(), get()) }
+//    single<TransformationApi> { TransformationApi(get(), get()) }
+//    single<TypeDeclarationApi> { TypeDeclarationApi(get(), get()) }
+//    single<TypeDefinitionApi> { TypeDefinitionApi(get(), get()) }
+//    single<TypeParameterApi> { TypeParameterApi(get(), get()) }
+//    single<TypeSchemaRefApi> { TypeSchemaRefApi(get(), get()) }
+//    single<TypeVarianceApi> { TypeVarianceApi(get(), get()) }
+//    single<PaymentMethodApi> { PaymentMethodApi(get(), get()) }
+//    single<TagApi> { TagApi(get(), get()) }
+//    single<UserApi> { UserApi(get(), get()) }
+//    single<PhaseApi> { PhaseApi(get(), get()) }
+//    single<StepApi> { StepApi(get(), get()) }
+//    single<ToolParamApi> { ToolParamApi(get(), get()) }
+//    single<ToolApi> { ToolApi(get(), get()) }
+//    single<WorkflowFolderApi> { WorkflowFolderApi(get(), get()) }
+//    single<WorkflowApi> { WorkflowApi(get(), get()) }
+//    single<ProvisionDataPointApi> { ProvisionDataPointApi(get(), get(), get()) }
+//    single<TypeUnionMemberApi> { TypeUnionMemberApi(get(), get(), get()) }
+//    single<TagRelationApi> { TagRelationApi(get(), get(), get()) }
+//    single<TransformTargetTypeApi> { TransformTargetTypeApi(get(), get(), get()) }
+//    single<ToolPackageDependencyApi> { ToolPackageDependencyApi(get(), get(), get()) }

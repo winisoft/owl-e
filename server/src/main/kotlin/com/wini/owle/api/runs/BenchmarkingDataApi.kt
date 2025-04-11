@@ -22,28 +22,28 @@ class BenchmarkingDataApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/benchmarking-data") {
-                call.execute(OwleApiCall.GetMany(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/benchmarking-data/{id}") {
-                call.execute(OwleApiCall.GetOne(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/benchmarking-data") {
-                call.execute(OwleApiCall.CreateOne(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/benchmarking-data/batch") {
-                call.execute(OwleApiCall.CreateMany(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/benchmarking-data") {
-                call.execute(OwleApiCall.UpdateOne(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/benchmarking-data/batch") {
-                call.execute(OwleApiCall.UpdateMany(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/benchmarking-data/{id}") {
-                call.execute(OwleApiCall.DeleteOne(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/benchmarking-data/batch") {
-                call.execute(OwleApiCall.DeleteMany(BenchmarkingDataDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

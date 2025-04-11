@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TypeDefinitionService(
     repository: TypeDefinitionRepository,
     mapper: TypeDefinitionsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TypeDefinitionIdFactory
 ): BaseServiceImpl<Long, TypeDefinitionDto, TypeDefinitionDao>(
     repository = repository,
     mapper = mapper,

@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.DataPointDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class DataPointsApiTest : BaseLongPkApiTest<DataPointDto, DataPointsApi>() {
@@ -23,6 +23,6 @@ open class DataPointsApiTest : BaseLongPkApiTest<DataPointDto, DataPointsApi>() 
 
     override fun getApiInstance(
         dll: DLL<Long, DataPointDto>,
-        validator: DtoValidator<DataPointDto>
+        validator: BaseValidator<DataPointDto>
     ): DataPointsApi = DataPointsApi(dll, validator)
 }

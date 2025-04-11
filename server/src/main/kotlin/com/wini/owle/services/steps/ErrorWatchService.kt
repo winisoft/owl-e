@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class ErrorWatchService(
     repository: ErrorWatchRepository,
     mapper: ErrorWatchesMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: ErrorWatchIdFactory
 ): BaseServiceImpl<Long, ErrorWatchDto, ErrorWatchDao>(
     repository = repository,
     mapper = mapper,

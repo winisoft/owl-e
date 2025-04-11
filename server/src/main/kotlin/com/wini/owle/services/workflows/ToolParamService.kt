@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class ToolParamService(
     repository: ToolParamRepository,
     mapper: ToolParamsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: ToolParamIdFactory
 ): BaseServiceImpl<Long, ToolParamDto, ToolParamDao>(
     repository = repository,
     mapper = mapper,

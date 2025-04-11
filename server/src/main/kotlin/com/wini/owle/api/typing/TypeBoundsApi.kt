@@ -22,28 +22,28 @@ class TypeBoundsApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-bounds") {
-                call.execute(OwleApiCall.GetMany(TypeBoundsDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/type-bounds/{id}") {
-                call.execute(OwleApiCall.GetOne(TypeBoundsDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/type-bounds") {
-                call.execute(OwleApiCall.CreateOne(TypeBoundsDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/type-bounds/batch") {
-                call.execute(OwleApiCall.CreateMany(TypeBoundsDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/type-bounds") {
-                call.execute(OwleApiCall.UpdateOne(TypeBoundsDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/type-bounds/batch") {
-                call.execute(OwleApiCall.UpdateMany(TypeBoundsDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/type-bounds/{id}") {
-                call.execute(OwleApiCall.DeleteOne(TypeBoundsDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/type-bounds/batch") {
-                call.execute(OwleApiCall.DeleteMany(TypeBoundsDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

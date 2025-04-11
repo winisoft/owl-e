@@ -6,17 +6,16 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TypeBoundsValidator(
-    private val boundTypeDeclarationValidator: TypeDeclarationValidator,
-    private val typeVariableDeclarationValidator: TypeDeclarationValidator
+    private val typeDeclarationValidator: TypeDeclarationValidator
 ) : BaseValidator<TypeBoundsDto>() {
     override fun validate(dto: TypeBoundsDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested typeVariableDeclaration
-        violations.addAll(typeVariableDeclarationValidator.validate(dto.typeVariableDeclaration).violations)
+        violations.addAll(typeDeclarationValidator.validate(dto.typeVariableDeclaration).violations)
 
         // Validate nested boundTypeDeclaration
-        violations.addAll(boundTypeDeclarationValidator.validate(dto.boundTypeDeclaration).violations)
+        violations.addAll(typeDeclarationValidator.validate(dto.boundTypeDeclaration).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

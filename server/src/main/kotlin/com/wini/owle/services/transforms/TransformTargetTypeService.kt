@@ -13,7 +13,7 @@ import org.jetbrains.exposed.dao.id.CompositeID
 class TransformTargetTypeService(
     repository: TransformTargetTypeRepository,
     mapper: TransformTargetTypesMapper,
-    entityIdFactory: EntityIdFactory<CompositeID>
+    entityIdFactory: TransformTargetTypeIdFactory
 ): BaseServiceImpl<CompositeID, TransformationTargetTypeDto, TransformTargetTypeDao>(
     repository = repository,
     mapper = mapper,

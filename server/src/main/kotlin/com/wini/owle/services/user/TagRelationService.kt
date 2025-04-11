@@ -13,7 +13,7 @@ import org.jetbrains.exposed.dao.id.CompositeID
 class TagRelationService(
     repository: TagRelationRepository,
     mapper: TagRelationsMapper,
-    entityIdFactory: EntityIdFactory<CompositeID>
+    entityIdFactory: TagRelationIdFactory
 ): BaseServiceImpl<CompositeID, TagRelationDto, TagRelationDao>(
     repository = repository,
     mapper = mapper,

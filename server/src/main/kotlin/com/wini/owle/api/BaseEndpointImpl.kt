@@ -28,7 +28,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
 
     abstract suspend fun ApplicationCall.readIds(): AsyncResult<List<ID>>
 
-    suspend fun ApplicationCall.execute(owleCall: OwleApiCall<T>) {
+    suspend fun ApplicationCall.execute(owleCall: OwleApiCall) {
 
         when (owleCall) {
             is OwleApiCall.GetMany ->
@@ -133,7 +133,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T : BaseDto, D> OwleApiCall<T>.responseSerializer(
+    private fun <T : BaseDto, D> OwleApiCall.responseSerializer(
         one: KSerializer<T>,
         many: KSerializer<List<T>>,
         none: KSerializer<Unit>
@@ -153,7 +153,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
 
     private suspend fun <I, R> ApplicationCall.handle(
         input: AsyncResult<I>,
-        owleCall: OwleApiCall<T>,
+        owleCall: OwleApiCall,
         block: suspend (I) -> AsyncResult<R>
     ) {
         val serializer = owleCall.responseSerializerForCall<R>()
@@ -164,7 +164,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     }
 
     private suspend fun <D> ApplicationCall.methodCallRespond(
-        owleCall: OwleApiCall<*>,
+        owleCall: OwleApiCall,
         serializer: KSerializer<ApiResponse<D>>,
         resultFn: suspend () -> AsyncResult<D>
     ){
@@ -176,7 +176,7 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         }
     }
 
-    private fun <D> OwleApiCall<T>.responseSerializerForCall(): KSerializer<ApiResponse<D>> {
+    private fun <D> OwleApiCall.responseSerializerForCall(): KSerializer<ApiResponse<D>> {
         return responseSerializer<T, D>(dtoSerializer, dtoListSerializer, Unit.serializer())
     }
 

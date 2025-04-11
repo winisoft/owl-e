@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class UserService(
     repository: UserRepository,
     mapper: UsersMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: UserIdFactory
 ): BaseServiceImpl<Long, UserDto, UserDao>(
     repository = repository,
     mapper = mapper,

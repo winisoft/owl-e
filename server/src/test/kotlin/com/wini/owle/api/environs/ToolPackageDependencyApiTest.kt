@@ -1,8 +1,7 @@
 package com.wini.owle.api.environs
 
-import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.api.Base3IdCompositeApiTest
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 import com.wini.owle.async.AsyncError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
@@ -28,7 +27,7 @@ open class ToolPackageDependencyApiTest : Base3IdCompositeApiTest<ToolPackageDep
 
     override fun getApiInstance(
         dll: DLL<CompositeID, ToolPackageDependencyDto>,
-        validator: DtoValidator<ToolPackageDependencyDto>,
+        validator: BaseValidator<ToolPackageDependencyDto>,
         compositeIdFactory: CompositeIdFactory<ToolPackageDependencyDto>
     ): ToolPackageDependencyApi {
         return ToolPackageDependencyApi(

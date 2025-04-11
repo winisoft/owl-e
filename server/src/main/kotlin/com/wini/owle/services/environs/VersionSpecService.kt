@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class VersionSpecService(
     repository: VersionSpecRepository,
     mapper: VersionSpecsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: VersionSpecIdFactory
 ): BaseServiceImpl<Long, VersionSpecDto, VersionSpecDao>(
     repository = repository,
     mapper = mapper,

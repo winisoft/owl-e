@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.BenchmarkingDataDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class BenchmarkingDataApiTest : BaseLongPkApiTest<BenchmarkingDataDto, BenchmarkingDataApi>() {
@@ -23,7 +23,7 @@ open class BenchmarkingDataApiTest : BaseLongPkApiTest<BenchmarkingDataDto, Benc
 
     override fun getApiInstance(
         dll: DLL<Long, BenchmarkingDataDto>,
-        validator: DtoValidator<BenchmarkingDataDto>
+        validator: BaseValidator<BenchmarkingDataDto>
     ): BenchmarkingDataApi = BenchmarkingDataApi(dll, validator)
 
 }

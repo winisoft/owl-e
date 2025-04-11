@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.PreReqInjectionDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class PreReqInjectionApiTest : BaseLongPkApiTest<PreReqInjectionDto, PreReqInjectionApi>() {
@@ -23,7 +23,7 @@ open class PreReqInjectionApiTest : BaseLongPkApiTest<PreReqInjectionDto, PreReq
 
     override fun getApiInstance(
         dll: DLL<Long, PreReqInjectionDto>,
-        validator: DtoValidator<PreReqInjectionDto>
+        validator: BaseValidator<PreReqInjectionDto>
     ): PreReqInjectionApi = PreReqInjectionApi(dll, validator)
 
 }

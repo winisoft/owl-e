@@ -13,7 +13,7 @@ import org.jetbrains.exposed.dao.id.CompositeID
 class ProvisionDataPointService(
     repository: ProvisionDataPointRepository,
     mapper: ProvisionDataPointMapper,
-    entityIdFactory: EntityIdFactory<CompositeID>
+    entityIdFactory: ProvisionDataPointIdFactory
 ): BaseServiceImpl<CompositeID, ProvisionDataPointDto, ProvisionDataPointDao>(
     repository = repository,
     mapper = mapper,

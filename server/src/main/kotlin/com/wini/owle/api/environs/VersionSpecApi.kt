@@ -21,28 +21,28 @@ class VersionSpecApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/version-spec") {
-                call.execute(OwleApiCall.GetMany(VersionSpecDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/version-spec/{id}") {
-                call.execute(OwleApiCall.GetOne(VersionSpecDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/version-spec") {
-                call.execute(OwleApiCall.CreateOne(VersionSpecDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/version-spec/batch") {
-                call.execute(OwleApiCall.CreateMany(VersionSpecDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/version-spec") {
-                call.execute(OwleApiCall.UpdateOne(VersionSpecDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/version-spec/batch") {
-                call.execute(OwleApiCall.UpdateMany(VersionSpecDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/version-spec/{id}") {
-                call.execute(OwleApiCall.DeleteOne(VersionSpecDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/version-spec/batch") {
-                call.execute(OwleApiCall.DeleteMany(VersionSpecDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

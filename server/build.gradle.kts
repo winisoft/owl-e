@@ -1,4 +1,5 @@
 plugins {
+    application
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerialization)
 }
@@ -26,7 +27,6 @@ sourceSets {
             implementation(libs.koin.ktor)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.stripe.java)
-
         }
     }
     test {
@@ -49,7 +49,6 @@ sourceSets {
             testImplementation("org.mockito:mockito-core:5.6.0") // Adjust to latest version
             testImplementation("org.mockito:mockito-inline:5.2.0") // For mocking final classes
             testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-
         }
     }
 }
@@ -60,4 +59,8 @@ tasks.test {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("com.wini.owle.MainKt")
 }

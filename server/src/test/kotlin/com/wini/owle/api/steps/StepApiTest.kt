@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.StepDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class StepApiTest : BaseLongPkApiTest<StepDto, StepApi>() {
@@ -23,7 +23,7 @@ open class StepApiTest : BaseLongPkApiTest<StepDto, StepApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, StepDto>,
-        validator: DtoValidator<StepDto>
+        validator: BaseValidator<StepDto>
     ): StepApi = StepApi(dll, validator)
 
 }

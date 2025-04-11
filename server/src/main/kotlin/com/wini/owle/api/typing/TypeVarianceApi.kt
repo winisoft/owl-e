@@ -22,28 +22,28 @@ class TypeVarianceApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-variance") {
-                call.execute(OwleApiCall.GetMany(TypeVarianceDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/type-variance/{id}") {
-                call.execute(OwleApiCall.GetOne(TypeVarianceDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/type-variance") {
-                call.execute(OwleApiCall.CreateOne(TypeVarianceDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/type-variance/batch") {
-                call.execute(OwleApiCall.CreateMany(TypeVarianceDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/type-variance") {
-                call.execute(OwleApiCall.UpdateOne(TypeVarianceDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/type-variance/batch") {
-                call.execute(OwleApiCall.UpdateMany(TypeVarianceDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/type-variance/{id}") {
-                call.execute(OwleApiCall.DeleteOne(TypeVarianceDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/type-variance/batch") {
-                call.execute(OwleApiCall.DeleteMany(TypeVarianceDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

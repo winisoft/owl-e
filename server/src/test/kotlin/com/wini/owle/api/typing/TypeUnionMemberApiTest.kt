@@ -10,7 +10,7 @@ import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
@@ -23,7 +23,7 @@ open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMemberDto, 
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TypeUnionMemberDto>,
-        validator: DtoValidator<TypeUnionMemberDto>,
+        validator: BaseValidator<TypeUnionMemberDto>,
         compositeIdFactory: CompositeIdFactory<TypeUnionMemberDto>
     ): TypeUnionMemberApi {
         return TypeUnionMemberApi(

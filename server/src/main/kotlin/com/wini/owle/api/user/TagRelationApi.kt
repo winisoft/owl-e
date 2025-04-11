@@ -28,28 +28,28 @@ class TagRelationApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tag-relation") {
-                call.execute(OwleApiCall.GetMany(TagRelationDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/tag-relation/id") {
-                call.execute(OwleApiCall.GetOne(TagRelationDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/tag-relation") {
-                call.execute(OwleApiCall.CreateOne(TagRelationDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/tag-relation/batch") {
-                call.execute(OwleApiCall.CreateMany(TagRelationDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/tag-relation") {
-                call.execute(OwleApiCall.UpdateOne(TagRelationDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/tag-relation/batch") {
-                call.execute(OwleApiCall.UpdateMany(TagRelationDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/tag-relation/id") {
-                call.execute(OwleApiCall.DeleteOne(TagRelationDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/tag-relation/batch") {
-                call.execute(OwleApiCall.DeleteMany(TagRelationDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

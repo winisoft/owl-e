@@ -21,28 +21,28 @@ class ProvisionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/provision") {
-                call.execute(OwleApiCall.GetMany(ProvisionDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/provision/{id}") {
-                call.execute(OwleApiCall.GetOne(ProvisionDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/provision") {
-                call.execute(OwleApiCall.CreateOne(ProvisionDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/provision/batch") {
-                call.execute(OwleApiCall.CreateMany(ProvisionDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/provision") {
-                call.execute(OwleApiCall.UpdateOne(ProvisionDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/provision/batch") {
-                call.execute(OwleApiCall.UpdateMany(ProvisionDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/provision/{id}") {
-                call.execute(OwleApiCall.DeleteOne(ProvisionDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/provision/batch") {
-                call.execute(OwleApiCall.DeleteMany(ProvisionDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

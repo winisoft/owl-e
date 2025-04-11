@@ -20,28 +20,28 @@ class ToolApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool") {
-                call.execute(OwleApiCall.GetMany(ToolDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/tool/{id}") {
-                call.execute(OwleApiCall.GetOne(ToolDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/tool") {
-                call.execute(OwleApiCall.CreateOne(ToolDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/tool/batch") {
-                call.execute(OwleApiCall.CreateMany(ToolDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/tool") {
-                call.execute(OwleApiCall.UpdateOne(ToolDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/tool/batch") {
-                call.execute(OwleApiCall.UpdateMany(ToolDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/tool/{id}") {
-                call.execute(OwleApiCall.DeleteOne(ToolDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/tool/batch") {
-                call.execute(OwleApiCall.DeleteMany(ToolDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

@@ -6,7 +6,7 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class PackageValidator(
-    val versionSpecValidator: VersionSpecValidator
+    private val versionSpecValidator: VersionSpecValidator
 ) : BaseValidator<PackageDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255

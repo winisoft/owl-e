@@ -10,7 +10,7 @@ import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class TransformTargetTypeApiTest : Base2IdCompositeApiTest<TransformationTargetTypeDto, TransformTargetTypeApi>() {
@@ -42,7 +42,7 @@ open class TransformTargetTypeApiTest : Base2IdCompositeApiTest<TransformationTa
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TransformationTargetTypeDto>,
-        validator: DtoValidator<TransformationTargetTypeDto>,
+        validator: BaseValidator<TransformationTargetTypeDto>,
         compositeIdFactory: CompositeIdFactory<TransformationTargetTypeDto>
     ): TransformTargetTypeApi {
         return TransformTargetTypeApi(

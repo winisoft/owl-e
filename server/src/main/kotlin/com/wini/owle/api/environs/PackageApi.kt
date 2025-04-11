@@ -22,28 +22,28 @@ class PackageApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/package") {
-                call.execute(OwleApiCall.GetMany(PackageDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/package/{id}") {
-                call.execute(OwleApiCall.GetOne(PackageDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/package") {
-                call.execute(OwleApiCall.CreateOne(PackageDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/package/batch") {
-                call.execute(OwleApiCall.CreateMany(PackageDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/package") {
-                call.execute(OwleApiCall.UpdateOne(PackageDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/package/batch") {
-                call.execute(OwleApiCall.UpdateMany(PackageDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/package/{id}") {
-                call.execute(OwleApiCall.DeleteOne(PackageDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/package/batch") {
-                call.execute(OwleApiCall.DeleteMany(PackageDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

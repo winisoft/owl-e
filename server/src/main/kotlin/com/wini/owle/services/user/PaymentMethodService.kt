@@ -13,7 +13,7 @@ import org.jetbrains.exposed.dao.id.CompositeID
 class PaymentMethodService(
     repository: PaymentMethodRepository,
     mapper: PaymentMethodsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: PaymentMethodIdFactory
 ): BaseServiceImpl<Long, PaymentMethodDto, PaymentMethodDao>(
     repository = repository,
     mapper = mapper,

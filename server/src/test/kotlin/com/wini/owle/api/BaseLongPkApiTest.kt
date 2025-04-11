@@ -4,7 +4,7 @@ import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -19,7 +19,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.dao.id.CompositeID
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -31,12 +30,12 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
     abstract fun getDto(id: Long): T
     abstract fun getApiInstance(
         dll: DLL<Long, T>,
-        validator: DtoValidator<T>
+        validator: BaseValidator<T>
     ): R
 
     protected fun setupTestApp(
         dll: DLL<Long, T>,
-        validator: DtoValidator<T> = DtoValidator.alwaysValid(),
+        validator: BaseValidator<T> = BaseValidator.alwaysValid(),
         testBlock: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {
         application {

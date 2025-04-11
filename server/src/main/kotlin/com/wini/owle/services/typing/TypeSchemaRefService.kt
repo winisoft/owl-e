@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TypeSchemaRefService(
     repository: TypeSchemaRefRepository,
     mapper: TypeSchemaRefsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TypeSchemaRefIdFactory
 ): BaseServiceImpl<Long, TypeSchemaRefDto, TypeSchemaRefDao>(
     repository = repository,
     mapper = mapper,

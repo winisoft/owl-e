@@ -21,28 +21,28 @@ class WorkflowExecutionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-execution") {
-                call.execute(OwleApiCall.GetMany(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/workflow-execution/{id}") {
-                call.execute(OwleApiCall.GetOne(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/workflow-execution") {
-                call.execute(OwleApiCall.CreateOne(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/workflow-execution/batch") {
-                call.execute(OwleApiCall.CreateMany(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/workflow-execution") {
-                call.execute(OwleApiCall.UpdateOne(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/workflow-execution/batch") {
-                call.execute(OwleApiCall.UpdateMany(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/workflow-execution/{id}") {
-                call.execute(OwleApiCall.DeleteOne(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/workflow-execution/batch") {
-                call.execute(OwleApiCall.DeleteMany(WorkflowExecutionDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

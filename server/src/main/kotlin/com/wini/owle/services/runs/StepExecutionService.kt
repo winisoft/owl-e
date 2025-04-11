@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class StepExecutionService(
     repository: StepExecutionRepository,
     mapper: StepExecutionsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: StepExecutionIdFactory
 ): BaseServiceImpl<Long, StepExecutionDto, StepExecutionDao>(
     repository = repository,
     mapper = mapper,

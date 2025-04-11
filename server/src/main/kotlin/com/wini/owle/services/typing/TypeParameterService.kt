@@ -8,13 +8,14 @@ import com.wini.owle.mapper.typing.TypeParametersMapper
 import com.wini.owle.repo.typing.TypeParameterRepository
 import com.wini.owle.services.BaseServiceImpl
 import com.wini.owle.repo.EntityIdFactory
+import com.wini.owle.repo.TypeParameterIdFactory
 import org.jetbrains.exposed.dao.id.EntityID
 
 
 class TypeParameterService(
     private val repository: TypeParameterRepository,
     private val mapper: TypeParametersMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TypeParameterIdFactory
 ): BaseServiceImpl<Long, TypeParameterDto, TypeParameterDao>(
     repository = repository,
     mapper = mapper,

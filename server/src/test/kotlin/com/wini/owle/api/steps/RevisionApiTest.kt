@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.RevisionDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class RevisionApiTest : BaseLongPkApiTest<RevisionDto, RevisionApi>() {
@@ -23,7 +23,7 @@ open class RevisionApiTest : BaseLongPkApiTest<RevisionDto, RevisionApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, RevisionDto>,
-        validator: DtoValidator<RevisionDto>
+        validator: BaseValidator<RevisionDto>
     ): RevisionApi = RevisionApi(dll, validator)
 
 }

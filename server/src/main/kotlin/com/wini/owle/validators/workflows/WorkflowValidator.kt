@@ -2,11 +2,13 @@ package com.wini.owle.validators.workflows
 
 import com.wini.owle.async.TypeValidation
 import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.dto.workflows.WorkflowFolderDto
 import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.validators.ValidationResult
 
 class WorkflowValidator(
-    private val parentFolderValidator: WorkflowFolderValidator
+    //private val parentFolderValidator: DtoValidator<WorkflowFolderDto>
 ) : BaseValidator<WorkflowDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
@@ -26,7 +28,7 @@ class WorkflowValidator(
 
         // Validate optional parentFolder if present
         dto.parentFolder?.let { folder ->
-            violations.addAll(parentFolderValidator.validate(folder).violations)
+            //violations.addAll(parentFolderValidator.validate(folder).violations)
         }
 
         // pythonVersion must be valid format

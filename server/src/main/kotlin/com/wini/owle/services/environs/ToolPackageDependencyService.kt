@@ -13,7 +13,7 @@ import org.jetbrains.exposed.dao.id.CompositeID
 class ToolPackageDependencyService(
     repository: ToolPackageDependencyRepository,
     mapper: ToolPackageDependencyMapper,
-    entityIdFactory: EntityIdFactory<CompositeID>
+    entityIdFactory: ToolPackageDependencyIdFactory
 ): BaseServiceImpl<CompositeID, ToolPackageDependencyDto, ToolPackageDependencyDao>(
     repository = repository,
     mapper = mapper,

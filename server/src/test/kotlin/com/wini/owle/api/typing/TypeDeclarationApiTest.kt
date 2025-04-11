@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeDeclarationDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class TypeDeclarationApiTest : BaseLongPkApiTest<TypeDeclarationDto, TypeDeclarationApi>() {
@@ -23,7 +23,7 @@ open class TypeDeclarationApiTest : BaseLongPkApiTest<TypeDeclarationDto, TypeDe
 
     override fun getApiInstance(
         dll: DLL<Long, TypeDeclarationDto>,
-        validator: DtoValidator<TypeDeclarationDto>
+        validator: BaseValidator<TypeDeclarationDto>
     ): TypeDeclarationApi = TypeDeclarationApi(dll, validator)
 
 }

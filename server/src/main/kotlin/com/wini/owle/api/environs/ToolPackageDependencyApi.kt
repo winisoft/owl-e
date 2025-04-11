@@ -26,28 +26,28 @@ class ToolPackageDependencyApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/tool-package-dep") {
-                call.execute(OwleApiCall.GetMany(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/tool-package-dep/id") {
-                call.execute(OwleApiCall.GetOne(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/tool-package-dep") {
-                call.execute(OwleApiCall.CreateOne(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/tool-package-dep/batch") {
-                call.execute(OwleApiCall.CreateMany(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/tool-package-dep") {
-                call.execute(OwleApiCall.UpdateOne(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/tool-package-dep/batch") {
-                call.execute(OwleApiCall.UpdateMany(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/tool-package-dep/id") {
-                call.execute(OwleApiCall.DeleteOne(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/tool-package-dep/batch") {
-                call.execute(OwleApiCall.DeleteMany(ToolPackageDependencyDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

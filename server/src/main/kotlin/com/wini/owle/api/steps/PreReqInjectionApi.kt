@@ -21,28 +21,28 @@ class PreReqInjectionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/prereq-injection") {
-                call.execute(OwleApiCall.GetMany(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/prereq-injection/{id}") {
-                call.execute(OwleApiCall.GetOne(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/prereq-injection") {
-                call.execute(OwleApiCall.CreateOne(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/prereq-injection/batch") {
-                call.execute(OwleApiCall.CreateMany(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/prereq-injection") {
-                call.execute(OwleApiCall.UpdateOne(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/prereq-injection/batch") {
-                call.execute(OwleApiCall.UpdateMany(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/prereq-injection/{id}") {
-                call.execute(OwleApiCall.DeleteOne(PreReqInjectionDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/prereq-injection/batch") {
-                call.execute(OwleApiCall.DeleteMany(PreReqInjectionDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

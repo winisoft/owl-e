@@ -22,28 +22,28 @@ class PaymentMethodApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/payment-method") {
-                call.execute(OwleApiCall.GetMany(PaymentMethodDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/payment-method/{id}") {
-                call.execute(OwleApiCall.GetOne(PaymentMethodDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/payment-method") {
-                call.execute(OwleApiCall.CreateOne(PaymentMethodDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/payment-method/batch") {
-                call.execute(OwleApiCall.CreateMany(PaymentMethodDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/payment-method") {
-                call.execute(OwleApiCall.UpdateOne(PaymentMethodDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/payment-method/batch") {
-                call.execute(OwleApiCall.UpdateMany(PaymentMethodDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/payment-method/{id}") {
-                call.execute(OwleApiCall.DeleteOne(PaymentMethodDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/payment-method/batch") {
-                call.execute(OwleApiCall.DeleteMany(PaymentMethodDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

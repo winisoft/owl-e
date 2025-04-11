@@ -6,8 +6,7 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class ErrorWatchValidator(
-    private val stepValidator: StepValidator,
-    private val triggerStepValidator: StepValidator
+    private val stepValidator: StepValidator
 ) : BaseValidator<ErrorWatchDto>() {
     companion object {
         const val MAX_ERROR_TYPE_LENGTH = 255
@@ -28,7 +27,7 @@ class ErrorWatchValidator(
         }
 
         // Validate nested triggerStep
-        violations.addAll(triggerStepValidator.validate(dto.triggerStep).violations)
+        violations.addAll(stepValidator.validate(dto.triggerStep).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

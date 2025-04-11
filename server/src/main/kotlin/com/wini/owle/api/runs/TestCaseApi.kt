@@ -21,28 +21,28 @@ class TestCaseApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-case") {
-                call.execute(OwleApiCall.GetMany(TestCaseDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/test-case/{id}") {
-                call.execute(OwleApiCall.GetOne(TestCaseDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/test-case") {
-                call.execute(OwleApiCall.CreateOne(TestCaseDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/test-case/batch") {
-                call.execute(OwleApiCall.CreateMany(TestCaseDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/test-case") {
-                call.execute(OwleApiCall.UpdateOne(TestCaseDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/test-case/batch") {
-                call.execute(OwleApiCall.UpdateMany(TestCaseDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/test-case/{id}") {
-                call.execute(OwleApiCall.DeleteOne(TestCaseDto::class))
+                call.execute(OwleApiCall.DeleteOne)
             }
             delete("/api/test-case/batch") {
-                call.execute(OwleApiCall.DeleteMany(TestCaseDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

@@ -1,13 +1,9 @@
 package com.wini.owle.api
 
-import com.wini.owle.async.AsyncError
-import com.wini.owle.async.TypeValidation
-import com.wini.owle.validators.DtoValidator
-import com.wini.owle.dto.BaseDto
 import com.wini.owle.validators.BaseValidator
+import com.wini.owle.dto.BaseDto
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.async.TypeValidation.StringEmpty
-import com.wini.owle.async.TypeValidation.ListNotEmpty
 
 
 /**
@@ -20,7 +16,7 @@ object TestValidators {
      * 
      * @return A validator that always returns true
      */
-    fun <T : BaseDto> alwaysValid(): DtoValidator<T> = DtoValidator.alwaysValid()
+    fun <T : BaseDto> alwaysValid(): BaseValidator<T> = BaseValidator.alwaysValid()
 
     /**
      * Creates a validator that returns the specified result.
@@ -30,7 +26,7 @@ object TestValidators {
      */
     fun <T : BaseDto> stringEmptyWithId1OnName(
         stringEmpty: StringEmpty = StringEmpty(TYPE_NAME, ID_STRING, FIELD_NAME)
-    ): DtoValidator<T> = object : DtoValidator<T> {
+    ): BaseValidator<T> = object : BaseValidator<T> {
         override fun validate(dto: T): ValidationResult = ValidationResult(
             listOf(
                 stringEmpty

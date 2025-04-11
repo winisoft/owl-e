@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.ErrorWatchDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class ErrorWatchApiTest : BaseLongPkApiTest<ErrorWatchDto, ErrorWatchApi>() {
@@ -24,7 +24,7 @@ open class ErrorWatchApiTest : BaseLongPkApiTest<ErrorWatchDto, ErrorWatchApi>()
     override fun getApiInstance(
         
         dll: DLL<Long, ErrorWatchDto>,
-        validator: DtoValidator<ErrorWatchDto>
+        validator: BaseValidator<ErrorWatchDto>
     ): ErrorWatchApi = ErrorWatchApi(dll, validator)
 
 }

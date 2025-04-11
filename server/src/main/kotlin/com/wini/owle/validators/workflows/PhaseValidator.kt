@@ -6,8 +6,7 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class PhaseValidator(
-    private val workflowValidator: WorkflowValidator,
-    private val parentPhaseValidator: PhaseValidator
+    private val workflowValidator: WorkflowValidator
 ) : BaseValidator<PhaseDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
@@ -31,7 +30,7 @@ class PhaseValidator(
 
         // Validate optional parentPhase if present
         dto.parentPhase?.let { phase ->
-            violations.addAll(parentPhaseValidator.validate(phase).violations)
+            violations.addAll(validate(phase).violations)
         }
 
         // Validate nested workflow

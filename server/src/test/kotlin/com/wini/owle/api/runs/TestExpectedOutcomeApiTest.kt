@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.TestExpectedOutcomeDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class TestExpectedOutcomeApiTest : BaseLongPkApiTest<TestExpectedOutcomeDto, TestExpectedOutcomeApi>() {
@@ -23,7 +23,7 @@ open class TestExpectedOutcomeApiTest : BaseLongPkApiTest<TestExpectedOutcomeDto
     
     override fun getApiInstance(
         dll: DLL<Long, TestExpectedOutcomeDto>,
-        validator: DtoValidator<TestExpectedOutcomeDto>
+        validator: BaseValidator<TestExpectedOutcomeDto>
     ): TestExpectedOutcomeApi = TestExpectedOutcomeApi(dll, validator)
 
 }

@@ -132,7 +132,7 @@ val mapperModule = module {
     single<TypeSchemaRefsMapper> { TypeSchemaRefsMapper(get(), get()) }
     single<StepBenchmarkingDataMapper> { StepBenchmarkingDataMapper(get(), get()) }
     single<DataPointsMapper> { DataPointsMapper(get(), get(), get(), get()) }
-    single<ToolsMapper> { ToolsMapper(get(), get(), get()) }
+    single<ToolsMapper> { ToolsMapper(get(), get()) }
     single<ToolPackageDependencyMapper> { ToolPackageDependencyMapper(get()) }
     single<PackageRepoMapper> { PackageRepoMapper(get(), get()) }
     single<TransformationsMapper> { TransformationsMapper(get(), get()) }

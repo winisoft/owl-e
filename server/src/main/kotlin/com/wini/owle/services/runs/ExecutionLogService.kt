@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class ExecutionLogService(
     repository: ExecutionLogRepository,
     mapper: ExecutionLogMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: ExecutionLogsIdFactory
 ): BaseServiceImpl<Long, ExecutionLogDto, ExecutionLogDao>(
     repository = repository,
     mapper = mapper,

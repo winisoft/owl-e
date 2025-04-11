@@ -6,7 +6,6 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TypeSchemaRefValidator(
-    private val parentRefValidator: TypeSchemaRefValidator,
     private val typeDeclarationValidator: TypeDeclarationValidator
 ) : BaseValidator<TypeSchemaRefDto>() {
     companion object {
@@ -18,7 +17,7 @@ class TypeSchemaRefValidator(
 
         // Validate optional parentRef if present
         dto.parentRef?.let { parentRef ->
-            violations.addAll(parentRefValidator.validate(parentRef).violations)
+            violations.addAll(validate(parentRef).violations)
         }
 
         // name is required and has max length

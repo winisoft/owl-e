@@ -10,7 +10,7 @@ import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class ProvisionDataPointApiTest : Base2IdCompositeApiTest<ProvisionDataPointDto, ProvisionDataPointApi>() {
@@ -24,7 +24,7 @@ open class ProvisionDataPointApiTest : Base2IdCompositeApiTest<ProvisionDataPoin
 
     override fun getApiInstance(
         dll: DLL<CompositeID, ProvisionDataPointDto>,
-        validator: DtoValidator<ProvisionDataPointDto>,
+        validator: BaseValidator<ProvisionDataPointDto>,
         compositeIdFactory: CompositeIdFactory<ProvisionDataPointDto>
     ): ProvisionDataPointApi {
         return ProvisionDataPointApi(

@@ -6,7 +6,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.workflows.ToolParamDto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 
 
 open class ToolParamApiTest : BaseLongPkApiTest<ToolParamDto, ToolParamApi>() {
@@ -23,7 +23,7 @@ open class ToolParamApiTest : BaseLongPkApiTest<ToolParamDto, ToolParamApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, ToolParamDto>,
-        validator: DtoValidator<ToolParamDto>
+        validator: BaseValidator<ToolParamDto>
     ): ToolParamApi = ToolParamApi(dll, validator)
 
 }

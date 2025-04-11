@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TestResultService(
     repository: TestResultRepository,
     mapper: TestResultsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TestResultIdFactory
 ): BaseServiceImpl<Long, TestResultDto, TestResultDao>(
     repository = repository,
     mapper = mapper,

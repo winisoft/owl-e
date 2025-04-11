@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TypeVarianceService(
     repository: TypeVarianceRepository,
     mapper: TypeVariancesMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TypeVarianceIdFactory
 ): BaseServiceImpl<Long, TypeVarianceDto, TypeVarianceDao>(
     repository = repository,
     mapper = mapper,

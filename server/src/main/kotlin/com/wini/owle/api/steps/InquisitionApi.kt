@@ -21,28 +21,28 @@ class InquisitionApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/inquisition") {
-                call.execute(OwleApiCall.GetMany(InquisitionDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/inquisition/{id}") {
-                call.execute(OwleApiCall.GetOne(InquisitionDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/inquisition") {
-                call.execute(OwleApiCall.CreateOne(InquisitionDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/inquisition/batch") {
-                call.execute(OwleApiCall.CreateMany(InquisitionDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/inquisition") {
-                call.execute(OwleApiCall.UpdateOne(InquisitionDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/inquisition/batch") {
-                call.execute(OwleApiCall.UpdateMany(InquisitionDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/inquisition/{id}") {
-                call.execute(OwleApiCall.DeleteOne(InquisitionDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/inquisition/batch") {
-                call.execute(OwleApiCall.DeleteMany(InquisitionDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

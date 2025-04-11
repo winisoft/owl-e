@@ -7,7 +7,7 @@ import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.TagRelationDto
 import com.wini.owle.entity.TagRelations
 import com.wini.owle.entity.composteid.CompositeIdFactory
-import com.wini.owle.validators.DtoValidator
+import com.wini.owle.validators.BaseValidator
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
@@ -22,7 +22,7 @@ open class TagRelationApiTest: Base2IdCompositeApiTest<TagRelationDto, TagRelati
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TagRelationDto>,
-        validator: DtoValidator<TagRelationDto>,
+        validator: BaseValidator<TagRelationDto>,
         compositeIdFactory: CompositeIdFactory<TagRelationDto>
     ): TagRelationApi {
         return TagRelationApi(

@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TestInputService(
     repository: TestInputRepository,
     mapper: TestInputsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TestInputIdFactory
 ): BaseServiceImpl<Long, TestInputDto, TestInputDao>(
     repository = repository,
     mapper = mapper,

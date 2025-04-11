@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class TagService(
     repository: TagRepository,
     mapper: TagsMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: TagIdFactory
 ): BaseServiceImpl<Long, TagDto, TagDao>(
     repository = repository,
     mapper = mapper,

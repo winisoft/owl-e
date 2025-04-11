@@ -11,8 +11,7 @@ import com.wini.owle.validators.workflows.DataPointValidator
 class AppliedTransformValidator(
     private val transformationValidator: TransformationValidator,
     private val resultTypeValidator: TypeDeclarationValidator,
-    private val dataPointValidator: DataPointValidator,
-    private val toolResultStepValidator: StepValidator
+    private val dataPointValidator: DataPointValidator
 ) : BaseValidator<AppliedTransformDto>() {
     override fun validate(dto: AppliedTransformDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()

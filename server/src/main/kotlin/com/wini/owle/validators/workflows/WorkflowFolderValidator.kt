@@ -7,9 +7,7 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 
-class WorkflowFolderValidator(
-    private val dateTimeConverter: DateTimeConverter
-) : BaseValidator<WorkflowFolderDto>() {
+class WorkflowFolderValidator: BaseValidator<WorkflowFolderDto>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
@@ -31,7 +29,7 @@ class WorkflowFolderValidator(
         }
 
         // timestamps (createdAt, updatedAt)
-        dateTimeConverter.fromString(dto.createdAt) <= dateTimeConverter.fromString(dto.updatedAt)
+        DateTimeConverter.fromString(dto.createdAt) <= DateTimeConverter.fromString(dto.updatedAt)
 
 
 

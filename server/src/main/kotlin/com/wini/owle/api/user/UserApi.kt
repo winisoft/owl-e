@@ -21,28 +21,28 @@ class UserApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/user") {
-                call.execute(OwleApiCall.GetMany(UserDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/user/{id}") {
-                call.execute(OwleApiCall.GetOne(UserDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/user") {
-                call.execute(OwleApiCall.CreateOne(UserDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/user/batch") {
-                call.execute(OwleApiCall.CreateMany(UserDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/user") {
-                call.execute(OwleApiCall.UpdateOne(UserDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/user/batch") {
-                call.execute(OwleApiCall.UpdateMany(UserDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/user/{id}") {
-                call.execute(OwleApiCall.DeleteOne(UserDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/user/batch") {
-                call.execute(OwleApiCall.DeleteMany(UserDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

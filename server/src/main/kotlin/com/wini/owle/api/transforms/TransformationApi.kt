@@ -22,28 +22,28 @@ class TransformationApi(
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/transformation") {
-                call.execute(OwleApiCall.GetMany(TransformationDto::class))
+                call.execute(OwleApiCall.GetMany)
             }
             get("/api/transformation/{id}") {
-                call.execute(OwleApiCall.GetOne(TransformationDto::class))
+                call.execute(OwleApiCall.GetOne)
             }
             post("/api/transformation") {
-                call.execute(OwleApiCall.CreateOne(TransformationDto::class))
+                call.execute(OwleApiCall.CreateOne)
             }
             post("/api/transformation/batch") {
-                call.execute(OwleApiCall.CreateMany(TransformationDto::class))
+                call.execute(OwleApiCall.CreateMany)
             }
             put("/api/transformation") {
-                call.execute(OwleApiCall.UpdateOne(TransformationDto::class))
+                call.execute(OwleApiCall.UpdateOne)
             }
             put("/api/transformation/batch") {
-                call.execute(OwleApiCall.UpdateMany(TransformationDto::class))
+                call.execute(OwleApiCall.UpdateMany)
             }
             delete("/api/transformation/{id}") {
-                call.execute(OwleApiCall.DeleteOne(TransformationDto::class)) 
+                call.execute(OwleApiCall.DeleteOne) 
             }
             delete("/api/transformation/batch") {
-                call.execute(OwleApiCall.DeleteMany(TransformationDto::class))
+                call.execute(OwleApiCall.DeleteMany)
             }
         }
     }

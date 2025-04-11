@@ -12,7 +12,7 @@ import com.wini.owle.repo.EntityIdFactory
 class BenchmarkingDataService(
     repository: BenchmarkingDataRepository,
     mapper: BenchmarkingDataMapper,
-    entityIdFactory: EntityIdFactory<Long>
+    entityIdFactory: BenchmarkingDataIdFactory
 ): BaseServiceImpl<Long, BenchmarkingDataDto, BenchmarkingDataDao>(
     repository = repository,
     mapper = mapper,

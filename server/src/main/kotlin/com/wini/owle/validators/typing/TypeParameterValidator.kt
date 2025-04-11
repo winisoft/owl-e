@@ -6,8 +6,7 @@ import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TypeParameterValidator(
-    private val typeDeclarationValidator: TypeDeclarationValidator,
-    private val parameterTypeDeclarationValidator: TypeDeclarationValidator
+    private val typeDeclarationValidator: TypeDeclarationValidator
 ) : BaseValidator<TypeParameterDto>() {
     override fun validate(dto: TypeParameterDto): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
@@ -21,7 +20,7 @@ class TypeParameterValidator(
         }
 
         // Validate nested parameterTypeDeclaration
-        violations.addAll(parameterTypeDeclarationValidator.validate(dto.parameterTypeDeclaration).violations)
+        violations.addAll(typeDeclarationValidator.validate(dto.parameterTypeDeclaration).violations)
 
         return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
     }

@@ -69,4 +69,5 @@ val serviceModule = module {
     single<TransformTargetTypeService> { TransformTargetTypeService(get(), get(), get()) }
     single<ToolPackageDependencyService> { ToolPackageDependencyService(get(), get(), get()) }
     single<ProvisionDataPointService> { ProvisionDataPointService(get(), get(), get()) }
+    single<PreReqInjectionService> { PreReqInjectionService(get(), get(), get()) }
 }
