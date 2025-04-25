@@ -2,8 +2,8 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.typing.TypeUnionMemberDto
-import com.wini.owle.entity.typing.TypeUnionMemberDao
+import com.wini.owle.dto.typing.TypeUnionMember
+import com.wini.owle.entity.typing.TypeUnionMemberEntity
 import com.wini.owle.mapper.typing.TypeUnionMembersMapper
 import com.wini.owle.repo.TypeUnionMemberIdFactory
 import com.wini.owle.repo.typing.TypeUnionMemberRepository
@@ -27,12 +27,12 @@ open class TypeUnionMemberServiceTest {
     fun createSampleDto(
         unionTypeDeclarationId: Long = 1L,
         memberTypeDeclarationId: Long = 2L
-    ): TypeUnionMemberDto = TypeUnionMemberDto(
+    ): TypeUnionMember = TypeUnionMember(
         unionTypeDeclarationId = unionTypeDeclarationId,
         memberTypeDeclarationId = memberTypeDeclarationId
     )
 
-    fun createSampleEntity(): TypeUnionMemberDao = mockk<TypeUnionMemberDao>() {
+    fun createSampleEntity(): TypeUnionMemberEntity = mockk<TypeUnionMemberEntity>() {
         every { id } returns mockk()
     }
 
@@ -47,8 +47,8 @@ open class TypeUnionMemberServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: TypeUnionMemberDto = mockk()
-        val entity: TypeUnionMemberDao = mockk()
+        val dto: TypeUnionMember = mockk()
+        val entity: TypeUnionMemberEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -70,8 +70,8 @@ open class TypeUnionMemberServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: TypeUnionMemberDto = mockk()
-        val entity: TypeUnionMemberDao = mockk()
+        val dto: TypeUnionMember = mockk()
+        val entity: TypeUnionMemberEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -94,11 +94,11 @@ open class TypeUnionMemberServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: TypeUnionMemberDto = createSampleDto()
+        val dto: TypeUnionMember = createSampleDto()
         val entityId: EntityID<CompositeID> = mockk() {
             every { value } returns mockk()
         }
-        val entity: TypeUnionMemberDao = mockk<TypeUnionMemberDao>() {
+        val entity: TypeUnionMemberEntity = mockk<TypeUnionMemberEntity>() {
             every { id } returns mockk()
         }
 
@@ -147,7 +147,7 @@ open class TypeUnionMemberServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(), createSampleDto())
-        val entities: List<TypeUnionMemberDao> = mockk()
+        val entities: List<TypeUnionMemberEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -168,8 +168,8 @@ open class TypeUnionMemberServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<TypeUnionMemberDao>()
-        val emptyDtoList = emptyList<TypeUnionMemberDto>()
+        val emptyList = emptyList<TypeUnionMemberEntity>()
+        val emptyDtoList = emptyList<TypeUnionMember>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -217,7 +217,7 @@ open class TypeUnionMemberServiceTest {
         val entityId: EntityID<CompositeID> = mockk() {
             every { value } returns mockk()
         }
-        val entityClass: EntityClass<CompositeID, TypeUnionMemberDao> = mockk()
+        val entityClass: EntityClass<CompositeID, TypeUnionMemberEntity> = mockk()
         val id = 1L
 
         every { entity.id } returns entityId
@@ -265,8 +265,8 @@ open class TypeUnionMemberServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<TypeUnionMemberDto>()
-        val emptyEntityList = emptyList<TypeUnionMemberDao>()
+        val emptyDtoList = emptyList<TypeUnionMember>()
+        val emptyEntityList = emptyList<TypeUnionMemberEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

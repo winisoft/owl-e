@@ -2,9 +2,9 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.workflows.WorkflowDto
-import com.wini.owle.dto.workflows.WorkflowFolderDto
-import com.wini.owle.entity.workflows.WorkflowDao
+import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.dto.workflows.WorkflowFolder
+import com.wini.owle.entity.workflows.WorkflowEntity
 import com.wini.owle.mapper.workflows.WorkflowsMapper
 import com.wini.owle.repo.WorkflowIdFactory
 import com.wini.owle.repo.workflows.WorkflowRepository
@@ -29,11 +29,11 @@ open class WorkflowServiceTest {
         name: String = "Example Workflow",
         description: String? = "A sample workflow description",
         pythonVersion: String = "3.9",
-        parentFolder: WorkflowFolderDto? = mockk(),
+        parentFolder: WorkflowFolder? = mockk(),
         createdAt: String = "2024-12-20T15:00:00Z",
         updatedAt: String = "2024-12-21T15:00:00Z"
-    ): WorkflowDto {
-        return WorkflowDto(
+    ): Workflow {
+        return Workflow(
             id = id,
             name = name,
             description = description,
@@ -44,7 +44,7 @@ open class WorkflowServiceTest {
         )
     }
 
-    fun createSampleEntity(): WorkflowDao = mockk<WorkflowDao>() {
+    fun createSampleEntity(): WorkflowEntity = mockk<WorkflowEntity>() {
         every { id } returns mockk()
         every { name } returns "Example Workflow"
         every { description } returns "A sample workflow description"
@@ -65,8 +65,8 @@ open class WorkflowServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: WorkflowDto = mockk()
-        val entity: WorkflowDao = mockk()
+        val dto: Workflow = mockk()
+        val entity: WorkflowEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -88,8 +88,8 @@ open class WorkflowServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: WorkflowDto = mockk()
-        val entity: WorkflowDao = mockk()
+        val dto: Workflow = mockk()
+        val entity: WorkflowEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -112,9 +112,9 @@ open class WorkflowServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: WorkflowDto = createSampleDto()
+        val dto: Workflow = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: WorkflowDao = mockk<WorkflowDao>() {
+        val entity: WorkflowEntity = mockk<WorkflowEntity>() {
             every { id } returns mockk()
         }
 
@@ -163,7 +163,7 @@ open class WorkflowServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<WorkflowDao> = mockk()
+        val entities: List<WorkflowEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -184,8 +184,8 @@ open class WorkflowServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<WorkflowDao>()
-        val emptyDtoList = emptyList<WorkflowDto>()
+        val emptyList = emptyList<WorkflowEntity>()
+        val emptyDtoList = emptyList<Workflow>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -230,7 +230,7 @@ open class WorkflowServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, WorkflowDao> = mockk()
+        val entityClass: EntityClass<Long, WorkflowEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -280,8 +280,8 @@ open class WorkflowServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<WorkflowDto>()
-        val emptyEntityList = emptyList<WorkflowDao>()
+        val emptyDtoList = emptyList<Workflow>()
+        val emptyEntityList = emptyList<WorkflowEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

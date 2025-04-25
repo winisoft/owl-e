@@ -1,10 +1,17 @@
 package com.wini.owle.api
 
-import com.wini.owle.api.environs.PackageApi
-import com.wini.owle.api.environs.PackageRepoApi
-import com.wini.owle.api.environs.ToolPackageDependencyApi
+import com.wini.owle.api.environs.PyPackageApi
+import com.wini.owle.api.environs.PyPackageRepoApi
+import com.wini.owle.api.environs.ToolPyPackDepApi
 import com.wini.owle.api.environs.VersionSpecApi
-import com.wini.owle.api.runs.*
+import com.wini.owle.api.runs.step.StepRunApi
+import com.wini.owle.api.runs.step.StepRunLogLineApi
+import com.wini.owle.api.runs.test.BenchmarkReportApi
+import com.wini.owle.api.runs.test.TestCaseApi
+import com.wini.owle.api.runs.test.TestExpectationApi
+import com.wini.owle.api.runs.test.TestInputApi
+import com.wini.owle.api.runs.workflow.WorkflowExecutionApi
+import com.wini.owle.api.runs.workflow.WorkflowTestResultApi
 import com.wini.owle.api.steps.*
 import com.wini.owle.api.transforms.*
 import com.wini.owle.api.typing.*
@@ -17,18 +24,22 @@ import com.wini.owle.api.workflows.PhaseApi
 import com.wini.owle.api.workflows.WorkflowApi
 import com.wini.owle.api.workflows.WorkflowFolderApi
 import com.wini.owle.dll.dllModule
-import com.wini.owle.dto.environs.PackageDto
-import com.wini.owle.dto.environs.PackageRepoDto
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.environs.VersionSpecDto
-import com.wini.owle.dto.runs.*
+import com.wini.owle.dto.environs.PyPackage
+import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.VersionSpec
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRunLogLine
+import com.wini.owle.dto.runs.test.*
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
+import com.wini.owle.dto.runs.workflow.WorkflowTestResult
 import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.transforms.*
 import com.wini.owle.dto.typing.*
-import com.wini.owle.dto.user.PaymentMethodDto
-import com.wini.owle.dto.user.TagDto
-import com.wini.owle.dto.user.TagRelationDto
-import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.user.PaymentMethod
+import com.wini.owle.dto.user.tags.Tag
+import com.wini.owle.dto.user.tags.TagRelation
+import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.*
 import com.wini.owle.entity.composteid.compositeIdFactoryModule
 import org.koin.dsl.module
@@ -37,49 +48,49 @@ import org.koin.dsl.module
 val apiModule = module {
     includes(validatorsModule, dllModule, compositeIdFactoryModule)
 
-    single<LongIdEndpointImpl<PackageRepoDto>> { PackageRepoApi(get(), get()) }
-    single<LongIdEndpointImpl<PackageDto>> { PackageApi(get(), get()) }
-    single<LongIdEndpointImpl<VersionSpecDto>> { VersionSpecApi(get(), get()) }
-    single<LongIdEndpointImpl<BenchmarkingDataDto>> { BenchmarkingDataApi(get(), get()) }
-    single<LongIdEndpointImpl<ExecutionLogDto>> { ExecutionLogApi(get(), get()) }
-    single<LongIdEndpointImpl<StepExecutionDto>> { StepExecutionApi(get(), get()) }
-    single<LongIdEndpointImpl<TestCaseDto>> { TestCaseApi(get(), get()) }
-    single<LongIdEndpointImpl<TestExpectedOutcomeDto>> { TestExpectedOutcomeApi(get(), get()) }
-    single<LongIdEndpointImpl<TestInputDto>> { TestInputApi(get(), get()) }
-    single<LongIdEndpointImpl<TestResultDto>> { TestResultApi(get(), get()) }
-    single<LongIdEndpointImpl<WorkflowExecutionDto>> { WorkflowExecutionApi(get(), get()) }
-    single<LongIdEndpointImpl<ErrorWatchFnDto>> { ErrorWatchFnApi(get(), get()) }
-    single<LongIdEndpointImpl<ErrorWatchDto>> { ErrorWatchApi(get(), get()) }
-    single<LongIdEndpointImpl<InquisitionDto>> { InquisitionApi(get(), get()) }
-    single<LongIdEndpointImpl<WorkflowJunctionDto>> { WorkflowJunctionApi(get(), get()) }
-    single<LongIdEndpointImpl<AppliedTransformArgDto>> { AppliedTransformArgApi(get(), get()) }
-    single<LongIdEndpointImpl<AppliedTransformDto>> { AppliedTransformApi(get(), get()) }
-    single<LongIdEndpointImpl<TransformationArgDto>> { TransformationArgApi(get(), get()) }
-    single<LongIdEndpointImpl<TransformationDto>> { TransformationApi(get(), get()) }
-    single<LongIdEndpointImpl<TypeDeclarationDto>> { TypeDeclarationApi(get(), get()) }
-    single<LongIdEndpointImpl<TypeDefinitionDto>> { TypeDefinitionApi(get(), get()) }
-    single<LongIdEndpointImpl<TypeParameterDto>> { TypeParameterApi(get(), get()) }
-    single<LongIdEndpointImpl<TypeSchemaRefDto>> { TypeSchemaRefApi(get(), get()) }
-    single<LongIdEndpointImpl<TypeVarianceDto>> { TypeVarianceApi(get(), get()) }
-    single<LongIdEndpointImpl<PaymentMethodDto>> { PaymentMethodApi(get(), get()) }
-    single<LongIdEndpointImpl<TagDto>> { TagApi(get(), get()) }
-    single<LongIdEndpointImpl<UserDto>> { UserApi(get(), get()) }
-    single<LongIdEndpointImpl<PhaseDto>> { PhaseApi(get(), get()) }
-    single<LongIdEndpointImpl<StepDto>> { StepApi(get(), get()) }
-    single<LongIdEndpointImpl<ToolParamDto>> { ToolParamApi(get(), get()) }
-    single<LongIdEndpointImpl<ToolDto>> { ToolApi(get(), get()) }
-    single<LongIdEndpointImpl<WorkflowFolderDto>> { WorkflowFolderApi(get(), get()) }
-    single<LongIdEndpointImpl<WorkflowDto>> { WorkflowApi(get(), get()) }
-    single<CompositeIdEndpointImpl<ProvisionDataPointDto>> { ProvisionDataPointApi(get(), get(), get()) }
-    single<CompositeIdEndpointImpl<TypeUnionMemberDto>> { TypeUnionMemberApi(get(), get(), get()) }
-    single<CompositeIdEndpointImpl<TagRelationDto>> { TagRelationApi(get(), get(), get()) }
-    single<CompositeIdEndpointImpl<TransformationTargetTypeDto>> { TransformTargetTypeApi(get(), get(), get()) }
-    single<CompositeIdEndpointImpl<ToolPackageDependencyDto>> { ToolPackageDependencyApi(get(), get(), get()) }
+    single<LongIdEndpointImpl<PyPackageRepo>> { PyPackageRepoApi(get(), get()) }
+    single<LongIdEndpointImpl<PyPackage>> { PyPackageApi(get(), get()) }
+    single<LongIdEndpointImpl<VersionSpec>> { VersionSpecApi(get(), get()) }
+    single<LongIdEndpointImpl<BenchmarkReport>> { BenchmarkReportApi(get(), get()) }
+    single<LongIdEndpointImpl<StepRunLogLine>> { StepRunLogLineApi(get(), get()) }
+    single<LongIdEndpointImpl<StepExecution>> { StepRunApi(get(), get()) }
+    single<LongIdEndpointImpl<TestCase>> { TestCaseApi(get(), get()) }
+    single<LongIdEndpointImpl<TestExpectation>> { TestExpectationApi(get(), get()) }
+    single<LongIdEndpointImpl<TestInput>> { TestInputApi(get(), get()) }
+    single<LongIdEndpointImpl<WorkflowTestResult>> { WorkflowTestResultApi(get(), get()) }
+    single<LongIdEndpointImpl<WorkflowExecution>> { WorkflowExecutionApi(get(), get()) }
+    single<LongIdEndpointImpl<ErrorWatchFn>> { ErrorWatchFnApi(get(), get()) }
+    single<LongIdEndpointImpl<ErrorWatch>> { ErrorWatchApi(get(), get()) }
+    single<LongIdEndpointImpl<Inquisition>> { InquisitionApi(get(), get()) }
+    single<LongIdEndpointImpl<WorkflowJunction>> { WorkflowJunctionApi(get(), get()) }
+    single<LongIdEndpointImpl<AppliedTransformArg>> { AppliedTransformArgApi(get(), get()) }
+    single<LongIdEndpointImpl<AppliedTransform>> { AppliedTransformApi(get(), get()) }
+    single<LongIdEndpointImpl<TransformArg>> { TransformationArgApi(get(), get()) }
+    single<LongIdEndpointImpl<Transform>> { TransformationApi(get(), get()) }
+    single<LongIdEndpointImpl<TypeDeclaration>> { TypeDeclarationApi(get(), get()) }
+    single<LongIdEndpointImpl<TypeDefinition>> { TypeDefinitionApi(get(), get()) }
+    single<LongIdEndpointImpl<TypeParameter>> { TypeParameterApi(get(), get()) }
+    single<LongIdEndpointImpl<TypeSchemaRef>> { TypeSchemaRefApi(get(), get()) }
+    single<LongIdEndpointImpl<TypeVariance>> { TypeVarianceApi(get(), get()) }
+    single<LongIdEndpointImpl<PaymentMethod>> { PaymentMethodApi(get(), get()) }
+    single<LongIdEndpointImpl<Tag>> { TagApi(get(), get()) }
+    single<LongIdEndpointImpl<User>> { UserApi(get(), get()) }
+    single<LongIdEndpointImpl<Phase>> { PhaseApi(get(), get()) }
+    single<LongIdEndpointImpl<Step>> { StepApi(get(), get()) }
+    single<LongIdEndpointImpl<ToolParam>> { ToolParamApi(get(), get()) }
+    single<LongIdEndpointImpl<Tool>> { ToolApi(get(), get()) }
+    single<LongIdEndpointImpl<WorkflowFolder>> { WorkflowFolderApi(get(), get()) }
+    single<LongIdEndpointImpl<Workflow>> { WorkflowApi(get(), get()) }
+    single<CompositeIdEndpointImpl<ProvisionDataPoint>> { ProvisionDataPointApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<TypeUnionMember>> { TypeUnionMemberApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<TagRelation>> { TagRelationApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<TransformTargetType>> { TransformTargetTypeApi(get(), get(), get()) }
+    single<CompositeIdEndpointImpl<ToolPyPackDep>> { ToolPyPackDepApi(get(), get(), get()) }
     single<ProvisionDataPointApi> { ProvisionDataPointApi(get(), get(), get()) }
     single<TypeUnionMemberApi> { TypeUnionMemberApi(get(), get(), get()) }
     single<TagRelationApi> { TagRelationApi(get(), get(), get()) }
     single<TransformTargetTypeApi> { TransformTargetTypeApi(get(), get(), get()) }
-    single<ToolPackageDependencyApi> { ToolPackageDependencyApi(get(), get(), get()) }
+    single<ToolPyPackDepApi> { ToolPyPackDepApi(get(), get(), get()) }
 
 }
 

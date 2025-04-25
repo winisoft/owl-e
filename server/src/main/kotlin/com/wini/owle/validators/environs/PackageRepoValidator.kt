@@ -1,12 +1,12 @@
 package com.wini.owle.validators.environs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.environs.PackageRepoDto
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class PackageRepoValidator: BaseValidator<PackageRepoDto>() {
-    override fun validate(dto: PackageRepoDto): ValidationResult {
+class PackageRepoValidator: BaseValidator<PyPackageRepo>() {
+    override fun validate(dto: PyPackageRepo): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // sourceUrl is optional but if present should be a valid URL

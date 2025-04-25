@@ -2,7 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.workflows.WorkflowFolderDto
+import com.wini.owle.dto.workflows.WorkflowFolder
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
@@ -11,11 +11,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class WorkflowFolderApi(
-    dll: DLL<Long, WorkflowFolderDto>,
-    validator: DtoValidator<WorkflowFolderDto>
-): LongIdEndpointImpl<WorkflowFolderDto>(
+    dll: DLL<Long, WorkflowFolder>,
+    validator: DtoValidator<WorkflowFolder>
+): LongIdEndpointImpl<WorkflowFolder>(
     dll = dll,
-    serializer = WorkflowFolderDto.serializer(),
+    serializer = WorkflowFolder.serializer(),
     validator = validator
 ) {
 

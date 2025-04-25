@@ -2,7 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.workflows.PhaseDto
+import com.wini.owle.dto.workflows.Phase
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
@@ -10,11 +10,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class PhaseApi(
-    dll: DLL<Long, PhaseDto>,
-    validator: DtoValidator<PhaseDto>
-): LongIdEndpointImpl<PhaseDto>(
+    dll: DLL<Long, Phase>,
+    validator: DtoValidator<Phase>
+): LongIdEndpointImpl<Phase>(
     dll = dll,
-    serializer = PhaseDto.serializer(),
+    serializer = Phase.serializer(),
     validator = validator
 ) {
 

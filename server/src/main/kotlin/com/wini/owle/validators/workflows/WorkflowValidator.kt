@@ -1,21 +1,19 @@
 package com.wini.owle.validators.workflows
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.workflows.WorkflowDto
-import com.wini.owle.dto.workflows.WorkflowFolderDto
+import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.DtoValidator
 import com.wini.owle.validators.ValidationResult
 
 class WorkflowValidator(
     //private val parentFolderValidator: DtoValidator<WorkflowFolderDto>
-) : BaseValidator<WorkflowDto>() {
+) : BaseValidator<Workflow>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
         const val MIN_PYTHON_VERSION_LENGTH = 3
     }
 
-    override fun validate(dto: WorkflowDto): ValidationResult {
+    override fun validate(dto: Workflow): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // name is required and has max length

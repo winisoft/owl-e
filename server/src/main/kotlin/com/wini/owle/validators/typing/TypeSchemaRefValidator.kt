@@ -1,18 +1,18 @@
 package com.wini.owle.validators.typing
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.typing.TypeSchemaRefDto
+import com.wini.owle.dto.typing.TypeSchemaRef
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TypeSchemaRefValidator(
     private val typeDeclarationValidator: TypeDeclarationValidator
-) : BaseValidator<TypeSchemaRefDto>() {
+) : BaseValidator<TypeSchemaRef>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: TypeSchemaRefDto): ValidationResult {
+    override fun validate(dto: TypeSchemaRef): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate optional parentRef if present

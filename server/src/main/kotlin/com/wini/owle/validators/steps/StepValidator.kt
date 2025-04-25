@@ -1,7 +1,7 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.workflows.StepDto
+import com.wini.owle.dto.workflows.Step
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.workflows.PhaseValidator
@@ -11,12 +11,12 @@ class StepValidator(
     private val workflowValidator: WorkflowValidator,
     private val toolValidator: ToolValidator,
     private val parentPhaseValidator: PhaseValidator
-) : BaseValidator<StepDto>() {
+) : BaseValidator<Step>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
     }
 
-    override fun validate(dto: StepDto): ValidationResult {
+    override fun validate(dto: Step): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // name is required and has max length

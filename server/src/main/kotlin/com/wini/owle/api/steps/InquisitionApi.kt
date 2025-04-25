@@ -3,18 +3,18 @@ package com.wini.owle.api.steps
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.steps.InquisitionDto
+import com.wini.owle.dto.steps.Inquisition
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.validators.DtoValidator
 
 
 class InquisitionApi(
-    dll: DLL<Long, InquisitionDto>,
-    validator: DtoValidator<InquisitionDto>
-): LongIdEndpointImpl<InquisitionDto>(
+    dll: DLL<Long, Inquisition>,
+    validator: DtoValidator<Inquisition>
+): LongIdEndpointImpl<Inquisition>(
     dll = dll,
-    serializer = InquisitionDto.serializer(),
+    serializer = Inquisition.serializer(),
     validator = validator
 )  {
 

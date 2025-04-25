@@ -1,18 +1,18 @@
 package com.wini.owle.validators.workflows
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.workflows.PhaseDto
+import com.wini.owle.dto.workflows.Phase
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class PhaseValidator(
     private val workflowValidator: WorkflowValidator
-) : BaseValidator<PhaseDto>() {
+) : BaseValidator<Phase>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
     }
 
-    override fun validate(dto: PhaseDto): ValidationResult {
+    override fun validate(dto: Phase): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // name is required and has max length

@@ -1,7 +1,7 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.steps.InquisitionDto
+import com.wini.owle.dto.steps.Inquisition
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.workflows.DataPointValidator
@@ -9,12 +9,12 @@ import com.wini.owle.validators.workflows.DataPointValidator
 class InquisitionValidator(
     private val stepValidator: StepValidator,
     private val dataPointValidator: DataPointValidator
-) : BaseValidator<InquisitionDto>() {
+) : BaseValidator<Inquisition>() {
     companion object {
         const val MAX_CLASS_LENGTH = 255
     }
 
-    override fun validate(dto: InquisitionDto): ValidationResult {
+    override fun validate(dto: Inquisition): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested step

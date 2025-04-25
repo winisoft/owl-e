@@ -2,10 +2,10 @@ package com.wini.owle.services.steps
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.steps.RevisionDto
-import com.wini.owle.dto.workflows.DataPointDto
-import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.entity.steps.RevisionDao
+import com.wini.owle.dto.steps.DataPointSave
+import com.wini.owle.dto.workflows.DataPoint
+import com.wini.owle.dto.workflows.Step
+import com.wini.owle.entity.steps.DataPointSaveEntity
 import com.wini.owle.mapper.steps.RevisionsMapper
 import com.wini.owle.repo.RevisionIdFactory
 import com.wini.owle.repo.steps.RevisionRepository
@@ -27,17 +27,17 @@ open class RevisionServiceTest {
 
     fun createSampleDto(
         mockId: Long = 1L,
-        dataPoint: DataPointDto = mockk(),
-        step: StepDto = mockk()
-    ): RevisionDto = RevisionDto(
+        dataPoint: DataPoint = mockk(),
+        step: Step = mockk()
+    ): DataPointSave = DataPointSave(
         id = mockId,
         dataPoint = dataPoint,
         step = step
     )
 
-    fun createSampleEntity(): RevisionDao = mockk<RevisionDao>() {
+    fun createSampleEntity(): DataPointSaveEntity = mockk<DataPointSaveEntity>() {
         every { id } returns mockk()
-        every { dataPoint } returns mockk()
+        every { dataPointEntity } returns mockk()
         every { step } returns mockk()
     }
 
@@ -52,8 +52,8 @@ open class RevisionServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: RevisionDto = mockk()
-        val entity: RevisionDao = mockk()
+        val dto: DataPointSave = mockk()
+        val entity: DataPointSaveEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -75,8 +75,8 @@ open class RevisionServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: RevisionDto = mockk()
-        val entity: RevisionDao = mockk()
+        val dto: DataPointSave = mockk()
+        val entity: DataPointSaveEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -99,15 +99,15 @@ open class RevisionServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: RevisionDto = RevisionDto(
+        val dto: DataPointSave = DataPointSave(
             id = 1L,
             dataPoint = mockk(),
             step = mockk()
         )
         val entityId: EntityID<Long> = mockk()
-        val entity: RevisionDao = mockk<RevisionDao>() {
+        val entity: DataPointSaveEntity = mockk<DataPointSaveEntity>() {
             every { id } returns mockk()
-            every { dataPoint } returns mockk()
+            every { dataPointEntity } returns mockk()
             every { step } returns mockk()
         }
 
@@ -156,7 +156,7 @@ open class RevisionServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<RevisionDao> = mockk()
+        val entities: List<DataPointSaveEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -177,8 +177,8 @@ open class RevisionServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<RevisionDao>()
-        val emptyDtoList = emptyList<RevisionDto>()
+        val emptyList = emptyList<DataPointSaveEntity>()
+        val emptyDtoList = emptyList<DataPointSave>()
         
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -223,7 +223,7 @@ open class RevisionServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, RevisionDao> = mockk()
+        val entityClass: EntityClass<Long, DataPointSaveEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -273,8 +273,8 @@ open class RevisionServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<RevisionDto>()
-        val emptyEntityList = emptyList<RevisionDao>()
+        val emptyDtoList = emptyList<DataPointSave>()
+        val emptyEntityList = emptyList<DataPointSaveEntity>()
         
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

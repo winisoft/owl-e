@@ -1,10 +1,9 @@
 package com.wini.owle.validators.transforms
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.transforms.AppliedTransformDto
+import com.wini.owle.dto.transforms.AppliedTransform
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
-import com.wini.owle.validators.steps.StepValidator
 import com.wini.owle.validators.typing.TypeDeclarationValidator
 import com.wini.owle.validators.workflows.DataPointValidator
 
@@ -12,8 +11,8 @@ class AppliedTransformValidator(
     private val transformationValidator: TransformationValidator,
     private val resultTypeValidator: TypeDeclarationValidator,
     private val dataPointValidator: DataPointValidator
-) : BaseValidator<AppliedTransformDto>() {
-    override fun validate(dto: AppliedTransformDto): ValidationResult {
+) : BaseValidator<AppliedTransform>() {
+    override fun validate(dto: AppliedTransform): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested transformation

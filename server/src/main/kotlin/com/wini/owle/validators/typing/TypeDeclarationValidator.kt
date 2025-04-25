@@ -1,18 +1,18 @@
 package com.wini.owle.validators.typing
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TypeDeclarationValidator(
     private val typeDefinitionValidator: TypeDefinitionValidator
-) : BaseValidator<TypeDeclarationDto>() {
+) : BaseValidator<TypeDeclaration>() {
     companion object {
         const val MAX_ALIAS_LENGTH = 255
     }
 
-    override fun validate(dto: TypeDeclarationDto): ValidationResult {
+    override fun validate(dto: TypeDeclaration): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested typeDefinition

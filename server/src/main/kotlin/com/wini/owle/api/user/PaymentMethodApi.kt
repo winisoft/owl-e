@@ -1,7 +1,7 @@
 package com.wini.owle.api.user
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.dto.user.PaymentMethodDto
+import com.wini.owle.dto.user.PaymentMethod
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
@@ -11,11 +11,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class PaymentMethodApi(
-    dll: DLL<Long, PaymentMethodDto>,
-    validator: DtoValidator<PaymentMethodDto>
-): LongIdEndpointImpl<PaymentMethodDto>(
+    dll: DLL<Long, PaymentMethod>,
+    validator: DtoValidator<PaymentMethod>
+): LongIdEndpointImpl<PaymentMethod>(
     dll = dll,
-    serializer = PaymentMethodDto.serializer(),
+    serializer = PaymentMethod.serializer(),
     validator = validator
 ) {
 

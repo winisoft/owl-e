@@ -1,19 +1,18 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.dto.steps.InquisitionDto
-import com.wini.owle.entity.steps.InquisitionDao
+import com.wini.owle.dto.steps.Inquisition
+import com.wini.owle.entity.steps.InquisitionEntity
 import com.wini.owle.mapper.steps.InquisitionsMapper
 import com.wini.owle.repo.InquisitionIdFactory
 import com.wini.owle.repo.steps.InquisitionRepository
 import com.wini.owle.services.BaseServiceImpl
-import com.wini.owle.repo.EntityIdFactory
 
 
 class InquisitionService(
     repository: InquisitionRepository,
     mapper: InquisitionsMapper,
     entityIdFactory: InquisitionIdFactory
-): BaseServiceImpl<Long, InquisitionDto, InquisitionDao>(
+): BaseServiceImpl<Long, Inquisition, InquisitionEntity>(
     repository = repository,
     mapper = mapper,
     entityIdFactory = entityIdFactory

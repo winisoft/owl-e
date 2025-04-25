@@ -5,7 +5,6 @@ import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.dataPointDao
 import com.wini.owle.entity.EntityTestInstanceFactory.revisionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
-import com.wini.owle.repo.OwleRepoImplTest
 import com.wini.owle.repo.workflows.DataPointRepository
 import com.wini.owle.repo.workflows.StepRepository
 import org.jetbrains.exposed.dao.id.EntityID
@@ -44,7 +43,7 @@ open class RevisionDbIntegrationTest {
     fun `test 'on delete' of dependent DataPoint cascades to Revision`() {
         transaction {
             val dataPoint = dataPointDao()
-            val revision = revisionDao(dataPoint = dataPoint)
+            val revision = revisionDao(dataPointEntity = dataPoint)
             val revisionId = revision.id.value
 
             DataPointRepository().delete(dataPoint.id)

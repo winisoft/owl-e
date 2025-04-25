@@ -1,10 +1,9 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.BenchmarkingDataDto
-import com.wini.owle.dto.runs.WorkflowExecutionDto
-import com.wini.owle.entity.WorkflowExecutions
-import com.wini.owle.entity.runs.BenchmarkingDataDao
-import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.dto.runs.test.BenchmarkReport
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
+import com.wini.owle.entity.runs.test.BenchmarkReportEntity
+import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
@@ -18,7 +17,7 @@ open class BenchmarkingDataMapperTest {
 
     private lateinit var mapper: BenchmarkingDataMapper
     private val workflowExecutionsMapper: WorkflowExecutionsMapper = mockk()
-    private val factory: DaoFactory<BenchmarkingDataDao, Long> = mockk()
+    private val factory: DaoFactory<BenchmarkReportEntity, Long> = mockk()
 
     @BeforeEach
     fun setUp() {
@@ -28,10 +27,10 @@ open class BenchmarkingDataMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
-        val dto = BenchmarkingDataDto(
+        val workflowExecution = mockk<WorkflowExecution>()
+        val dto = BenchmarkReport(
             id = 99L,
-            workflowExecution = workflowExecutionDto,
+            workflowExecution = workflowExecution,
             totalExecutionTime = 100.012,
             totalSteps = 10,
             aiDeterminedSteps = 5,
@@ -39,12 +38,12 @@ open class BenchmarkingDataMapperTest {
         )
 
         // Mock the behavior of findById to return null (not found)
-        mockkObject(BenchmarkingDataDao)
-        every { BenchmarkingDataDao.findById(99L) } returns null
+        mockkObject(BenchmarkReportEntity)
+        every { BenchmarkReportEntity.findById(99L) } returns null
         
         // Mock the dependency mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
-        every { workflowExecutionsMapper.toEntity(any()) } returns workflowExecutionDao
+        val workflowRunEntity: WorkflowRunEntity = mockk()
+        every { workflowExecutionsMapper.toEntity(any()) } returns workflowRunEntity
 
         // Verify that the exception is thrown with the correct message
         val exception = assertThrows<IllegalStateException> {
@@ -52,13 +51,13 @@ open class BenchmarkingDataMapperTest {
         }
 
         assertEquals("BenchmarkingData with id=99 not found", exception.message)
-        unmockkObject(BenchmarkingDataDao)
+        unmockkObject(BenchmarkReportEntity)
     }
 
     @Test
     fun `toDto should correctly map entity to dto`() {
         // Create mock dao objects
-        val entity = mockk<BenchmarkingDataDao> {
+        val entity = mockk<BenchmarkReportEntity> {
             every { id.value } returns 1L
             every { workflowExecution } returns mockk()
             every { totalExecutionTime } returns 123.456.toBigDecimal()
@@ -68,15 +67,15 @@ open class BenchmarkingDataMapperTest {
         }
 
         // Mock the behavior of workflowExecutionsMapper
-        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
-        every { workflowExecutionsMapper.toDto(entity.workflowExecution) } returns workflowExecutionDto
+        val workflowExecution = mockk<WorkflowExecution>()
+        every { workflowExecutionsMapper.toDto(entity.workflowExecution) } returns workflowExecution
 
         // Call the method under test
         val result = mapper.toDto(entity)
 
         // Verify the result
         assertEquals(1L, result.id)
-        assertEquals(workflowExecutionDto, result.workflowExecution)
+        assertEquals(workflowExecution, result.workflowExecution)
         assertEquals(123.456, result.totalExecutionTime)
         assertEquals(10, result.totalSteps)
         assertEquals(5, result.aiDeterminedSteps)
@@ -86,10 +85,10 @@ open class BenchmarkingDataMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
-        val dto = BenchmarkingDataDto(
+        val workflowExecution = mockk<WorkflowExecution>()
+        val dto = BenchmarkReport(
             id = 42L,
-            workflowExecution = workflowExecutionDto,
+            workflowExecution = workflowExecution,
             totalExecutionTime = 200.456,
             totalSteps = 20,
             aiDeterminedSteps = 10,
@@ -97,20 +96,20 @@ open class BenchmarkingDataMapperTest {
         )
 
         // Mock the existing entity that will be updated
-        val existingEntity = mockk<BenchmarkingDataDao>(relaxed = true)
+        val existingEntity = mockk<BenchmarkReportEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        val workflowRunEntity: WorkflowRunEntity = mockk()
 
         // Set up mocks for finding existing entity
-        mockkObject(BenchmarkingDataDao)
-        every { BenchmarkingDataDao.findById(42L) } returns existingEntity
+        mockkObject(BenchmarkReportEntity)
+        every { BenchmarkReportEntity.findById(42L) } returns existingEntity
         
         // Set up the workflowExecutionsMapper to return the mocked workflowExecutionDao
-        every { workflowExecutionsMapper.toEntity(workflowExecutionDto) } returns workflowExecutionDao
+        every { workflowExecutionsMapper.toEntity(workflowExecution) } returns workflowRunEntity
 
         // Capture the property updates
-        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
+        val workflowExecutionSlot = slot<WorkflowRunEntity>()
         val totalExecutionTimeSlot = slot<BigDecimal>()
         val totalStepsSlot = slot<Int>()
         val aiDeterminedStepsSlot = slot<Int>()
@@ -126,15 +125,15 @@ open class BenchmarkingDataMapperTest {
         val result = mapper.toEntity(dto)
 
         // Verify that the existing entity was found and updated
-        verify { BenchmarkingDataDao.findById(42L) }
-        verify { existingEntity.workflowExecution = workflowExecutionDao }
+        verify { BenchmarkReportEntity.findById(42L) }
+        verify { existingEntity.workflowExecution = workflowRunEntity }
         verify { existingEntity.totalExecutionTime = dto.totalExecutionTime.toBigDecimal() }
         verify { existingEntity.totalSteps = dto.totalSteps }
         verify { existingEntity.aiDeterminedSteps = dto.aiDeterminedSteps }
         verify { existingEntity.predeterminedSteps = dto.predeterminedSteps }
 
         // Verify the captured values
-        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
+        assertEquals(workflowRunEntity, workflowExecutionSlot.captured)
         assertEquals(dto.totalExecutionTime.toBigDecimal(), totalExecutionTimeSlot.captured)
         assertEquals(dto.totalSteps, totalStepsSlot.captured)
         assertEquals(dto.aiDeterminedSteps, aiDeterminedStepsSlot.captured)
@@ -143,16 +142,16 @@ open class BenchmarkingDataMapperTest {
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(BenchmarkingDataDao)
+        unmockkObject(BenchmarkReportEntity)
     }
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val workflowExecutionDto = mockk<WorkflowExecutionDto>()
-        val dto = BenchmarkingDataDto(
+        val workflowExecution = mockk<WorkflowExecution>()
+        val dto = BenchmarkReport(
             id = 0L,
-            workflowExecution = workflowExecutionDto,
+            workflowExecution = workflowExecution,
             totalExecutionTime = 300.987,
             totalSteps = 30,
             aiDeterminedSteps = 15,
@@ -160,19 +159,19 @@ open class BenchmarkingDataMapperTest {
         )
 
         // Mock the new entity that will be created
-        val newEntity = mockk<BenchmarkingDataDao>(relaxed = true)
+        val newEntity = mockk<BenchmarkReportEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        val workflowRunEntity: WorkflowRunEntity = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
         
         // Set up the workflowExecutionsMapper to return the mocked workflowExecutionDao
-        every { workflowExecutionsMapper.toEntity(workflowExecutionDto) } returns workflowExecutionDao
+        every { workflowExecutionsMapper.toEntity(workflowExecution) } returns workflowRunEntity
 
         // Capture property assignments
-        val workflowExecutionSlot = slot<WorkflowExecutionDao>()
+        val workflowExecutionSlot = slot<WorkflowRunEntity>()
         val totalExecutionTimeSlot = slot<BigDecimal>()
         val totalStepsSlot = slot<Int>()
         val aiDeterminedStepsSlot = slot<Int>()
@@ -191,14 +190,14 @@ open class BenchmarkingDataMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.workflowExecution = workflowExecutionDao }
+        verify { newEntity.workflowExecution = workflowRunEntity }
         verify { newEntity.totalExecutionTime = dto.totalExecutionTime.toBigDecimal() }
         verify { newEntity.totalSteps = dto.totalSteps }
         verify { newEntity.aiDeterminedSteps = dto.aiDeterminedSteps }
         verify { newEntity.predeterminedSteps = dto.predeterminedSteps }
 
         // Verify the captured values
-        assertEquals(workflowExecutionDao, workflowExecutionSlot.captured)
+        assertEquals(workflowRunEntity, workflowExecutionSlot.captured)
         assertEquals(dto.totalExecutionTime.toBigDecimal(), totalExecutionTimeSlot.captured)
         assertEquals(dto.totalSteps, totalStepsSlot.captured)
         assertEquals(dto.aiDeterminedSteps, aiDeterminedStepsSlot.captured)

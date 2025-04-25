@@ -1,7 +1,7 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.WorkflowMetadataDto
-import com.wini.owle.entity.workflows.WorkflowMetadataDao
+import com.wini.owle.dto.workflows.WorkflowMetadata
+import com.wini.owle.entity.workflows.WorkflowMetadataEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
@@ -11,16 +11,16 @@ import com.wini.owle.mapper.workflows.enums.ModificationTermsMapper
 
 
 class WorkflowMetadataMapper(
-    private val daoFactory: DaoFactory<WorkflowMetadataDao, Long>,
+    private val daoFactory: DaoFactory<WorkflowMetadataEntity, Long>,
     private val workflowsMapper: WorkflowsMapper,
     private val commercialUserMapper: CommercialUseMapper,
     private val authorshipCreditMapper: AuthorshipCreditMapper,
     private val modificationTermsMapper: ModificationTermsMapper,
     private val dateTimeConverter: DateTimeConverter
-) : DbMapper<WorkflowMetadataDto, WorkflowMetadataDao>() {
+) : DbMapper<WorkflowMetadata, WorkflowMetadataEntity>() {
 
-    override fun toEntity(dto: WorkflowMetadataDto): WorkflowMetadataDao {
-        val applyProps: WorkflowMetadataDao.() -> Unit = {
+    override fun toEntity(dto: WorkflowMetadata): WorkflowMetadataEntity {
+        val applyProps: WorkflowMetadataEntity.() -> Unit = {
             name = dto.name
             version = dto.version
             copyrightInformation = dto.copyrightInformation
@@ -39,13 +39,13 @@ class WorkflowMetadataMapper(
         return if (dto.id == 0L)
             daoFactory.create().apply(applyProps)
         else
-            WorkflowMetadataDao.findById(dto.id)
+            WorkflowMetadataEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("WorkflowMetadata with id=${dto.id} not found")
     }
 
-    override fun toDto(entity: WorkflowMetadataDao): WorkflowMetadataDto {
-        return WorkflowMetadataDto(
+    override fun toDto(entity: WorkflowMetadataEntity): WorkflowMetadata {
+        return WorkflowMetadata(
             id = entity.id.value,
             name = entity.name,
             version = entity.version,

@@ -2,7 +2,6 @@ package com.wini.owle.repo.typing
 
 import com.wini.owle.TestHelper
 import com.wini.owle.entity.*
-import com.wini.owle.repo.OwleRepoImplTest
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach
@@ -24,8 +23,8 @@ open class TypeParameterDbIntegrationTest {
     fun `test 'on delete' of dependent TypeDefinition entity cascades to TypeParameter`() {
         transaction {
             val typeDefinition = EntityTestInstanceFactory.typeDefinitionDao()
-            val typeDeclaration = EntityTestInstanceFactory.typeDeclarationDao(typeDefinition = typeDefinition)
-            val typeParameter = EntityTestInstanceFactory.typeParameterDao(typeDeclaration = typeDeclaration)
+            val typeDeclaration = EntityTestInstanceFactory.typeDeclarationDao(typeDefinitionEntity = typeDefinition)
+            val typeParameter = EntityTestInstanceFactory.typeParameterDao(typeDeclarationEntity = typeDeclaration)
             val typeParameterId = typeParameter.id.value
 
             TypeDefinitionRepository().delete(typeDefinition.id)
@@ -43,7 +42,7 @@ open class TypeParameterDbIntegrationTest {
     fun `test 'on delete' of dependent TypeDeclaration entity cascades to TypeParameter`() {
         transaction {
             val typeDeclaration = EntityTestInstanceFactory.typeDeclarationDao()
-            val typeParameter = EntityTestInstanceFactory.typeParameterDao(typeDeclaration = typeDeclaration)
+            val typeParameter = EntityTestInstanceFactory.typeParameterDao(typeDeclarationEntity = typeDeclaration)
             val typeParameterId = typeParameter.id.value
 
             TypeDeclarationRepository().delete(typeDeclaration.id)

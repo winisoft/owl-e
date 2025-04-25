@@ -1,9 +1,9 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.WorkflowDto
-import com.wini.owle.dto.workflows.WorkflowFolderDto
-import com.wini.owle.entity.workflows.WorkflowDao
-import com.wini.owle.entity.workflows.WorkflowFolderDao
+import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.dto.workflows.WorkflowFolder
+import com.wini.owle.entity.workflows.WorkflowEntity
+import com.wini.owle.entity.workflows.WorkflowFolderEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import io.mockk.*
@@ -18,7 +18,7 @@ open class WorkflowsMapperTest {
 
     private lateinit var mapper: WorkflowsMapper
     private val workflowFoldersMapper: WorkflowFoldersMapper = mockk()
-    private val factory: DaoFactory<WorkflowDao, Long> = mockk()
+    private val factory: DaoFactory<WorkflowEntity, Long> = mockk()
     private val dateTimeConverter: DateTimeConverter = mockk()
 
     @BeforeEach
@@ -33,7 +33,7 @@ open class WorkflowsMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTO
-        val dto = WorkflowDto(
+        val dto = Workflow(
             id = 99L,
             name = "workflowName",
             description = "description",
@@ -44,8 +44,8 @@ open class WorkflowsMapperTest {
         )
 
         // Mock behavior for findById to return null (not found)
-        mockkObject(WorkflowDao)
-        every { WorkflowDao.findById(99L) } returns null
+        mockkObject(WorkflowEntity)
+        every { WorkflowEntity.findById(99L) } returns null
 
         // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
@@ -53,13 +53,13 @@ open class WorkflowsMapperTest {
         }
 
         assertEquals("Workflow with id=99 not found", exception.message)
-        unmockkObject(WorkflowDao)
+        unmockkObject(WorkflowEntity)
     }
 
     @Test
     fun `toDto should correctly delegate to collaborators`() {
         // Setup mocks
-        val entity = mockk<WorkflowDao> {
+        val entity = mockk<WorkflowEntity> {
             every { id.value } returns 1L
             every { name } returns "workflowName"
             every { description } returns "description"
@@ -70,7 +70,7 @@ open class WorkflowsMapperTest {
         }
 
         // Setup mock responses from collaborators
-        val parentFolderDto = mockk<WorkflowFolderDto>()
+        val parentFolderDto = mockk<WorkflowFolder>()
         val createdAtStr = "2023-01-01T00:00:00"
         val updatedAtStr = "2023-01-02T00:00:00"
         
@@ -101,7 +101,7 @@ open class WorkflowsMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTO
-        val dto = WorkflowDto(
+        val dto = Workflow(
             id = 42L,
             name = "workflowName",
             description = "description",
@@ -112,10 +112,10 @@ open class WorkflowsMapperTest {
         )
 
         // Create mock existing entity to update
-        val existingEntity = mockk<WorkflowDao>(relaxed = true)
+        val existingEntity = mockk<WorkflowEntity>(relaxed = true)
 
         // Setup mock responses from collaborators
-        val parentFolderDao = mockk<WorkflowFolderDao>()
+        val parentFolderDao = mockk<WorkflowFolderEntity>()
         val createdAt = mockk<Instant>()
         val updatedAt = mockk<Instant>()
         
@@ -124,8 +124,8 @@ open class WorkflowsMapperTest {
         every { dateTimeConverter.fromString(dto.updatedAt) } returns updatedAt
 
         // Mock finding existing entity
-        mockkObject(WorkflowDao)
-        every { WorkflowDao.findById(42L) } returns existingEntity
+        mockkObject(WorkflowEntity)
+        every { WorkflowEntity.findById(42L) } returns existingEntity
 
         // Execute method under test
         val result = mapper.toEntity(dto)
@@ -148,13 +148,13 @@ open class WorkflowsMapperTest {
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(WorkflowDao)
+        unmockkObject(WorkflowEntity)
     }
 
     @Test
     fun `toEntity should create a new entity when id is zero`() {
         // Create test DTO
-        val dto = WorkflowDto(
+        val dto = Workflow(
             id = 0L,
             name = "workflowName",
             description = "description",
@@ -165,10 +165,10 @@ open class WorkflowsMapperTest {
         )
 
         // Create mock new entity
-        val newEntity = mockk<WorkflowDao>(relaxed = true)
+        val newEntity = mockk<WorkflowEntity>(relaxed = true)
 
         // Setup mock responses from collaborators
-        val parentFolderDao = mockk<WorkflowFolderDao>()
+        val parentFolderDao = mockk<WorkflowFolderEntity>()
         val createdAt = mockk<Instant>()
         val updatedAt = mockk<Instant>()
         

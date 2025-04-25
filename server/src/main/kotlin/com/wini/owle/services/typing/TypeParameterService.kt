@@ -2,12 +2,11 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.typing.TypeParameterDto
-import com.wini.owle.entity.typing.TypeParameterDao
+import com.wini.owle.dto.typing.TypeParameter
+import com.wini.owle.entity.typing.TypeParameterEntity
 import com.wini.owle.mapper.typing.TypeParametersMapper
 import com.wini.owle.repo.typing.TypeParameterRepository
 import com.wini.owle.services.BaseServiceImpl
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TypeParameterIdFactory
 import org.jetbrains.exposed.dao.id.EntityID
 
@@ -16,13 +15,13 @@ class TypeParameterService(
     private val repository: TypeParameterRepository,
     private val mapper: TypeParametersMapper,
     entityIdFactory: TypeParameterIdFactory
-): BaseServiceImpl<Long, TypeParameterDto, TypeParameterDao>(
+): BaseServiceImpl<Long, TypeParameter, TypeParameterEntity>(
     repository = repository,
     mapper = mapper,
     entityIdFactory = entityIdFactory
 ) {
 
-    fun getByTypeDeclarationIdOrderByPosition(typeDeclarationId: Long): AsyncResult<List<TypeParameterDto>> {
+    fun getByTypeDeclarationIdOrderByPosition(typeDeclarationId: Long): AsyncResult<List<TypeParameter>> {
         return runCatching {
             val id = EntityID(typeDeclarationId, repository.entityClass.table)
             repository.getByTypeDeclarationIdOrderByPosition(id)

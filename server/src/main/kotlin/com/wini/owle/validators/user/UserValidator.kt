@@ -1,11 +1,11 @@
 package com.wini.owle.validators.user
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.user.User
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class UserValidator : BaseValidator<UserDto>() {
+class UserValidator : BaseValidator<User>() {
     companion object {
         const val MAX_EMAIL_LENGTH = 255
         const val MAX_PASSWORD_LENGTH = 255
@@ -15,7 +15,7 @@ class UserValidator : BaseValidator<UserDto>() {
         const val MAX_API_KEY_LENGTH = 255
     }
 
-    override fun validate(dto: UserDto): ValidationResult {
+    override fun validate(dto: User): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // email is required, must be valid email format, and has max length

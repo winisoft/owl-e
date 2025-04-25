@@ -1,20 +1,19 @@
 package com.wini.owle.entity.composteid
 
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.steps.ProvisionDataPointDto
-import com.wini.owle.dto.transforms.TransformationTargetTypeDto
-import com.wini.owle.dto.typing.TypeUnionMemberDto
-import com.wini.owle.dto.user.TagRelationDto
+import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.steps.ProvisionDataPoint
+import com.wini.owle.dto.transforms.TransformTargetType
+import com.wini.owle.dto.typing.TypeUnionMember
+import com.wini.owle.dto.user.tags.TagRelation
 import org.koin.dsl.module
-import com.wini.owle.entity.composteid.TypeUnionMemberIdFactory
 
 val compositeIdFactoryModule = module {
 
-    single<CompositeIdFactory<ProvisionDataPointDto>> { ProvisionDataPointIdFactory }
-    single<CompositeIdFactory<TagRelationDto>> { TagRelationIdFactory }
-    single<CompositeIdFactory<ToolPackageDependencyDto>> { ToolPackageDepIdFactory }
-    single<CompositeIdFactory<TransformationTargetTypeDto>> { TransformTargetTypeIdFactory }
-    single<CompositeIdFactory<TypeUnionMemberDto>> { TypeUnionMemberIdFactory }
+    single<CompositeIdFactory<ProvisionDataPoint>> { ProvisionDataPointIdFactory }
+    single<CompositeIdFactory<TagRelation>> { TagRelationIdFactory }
+    single<CompositeIdFactory<ToolPyPackDep>> { ToolPackageDepIdFactory }
+    single<CompositeIdFactory<TransformTargetType>> { TransformTargetTypeIdFactory }
+    single<CompositeIdFactory<TypeUnionMember>> { TypeUnionMemberIdFactory }
 
     single<ProvisionDataPointIdFactory> { ProvisionDataPointIdFactory }
     single<TagRelationIdFactory> { TagRelationIdFactory }

@@ -1,7 +1,7 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.steps.PreReqInjectionDto
+import com.wini.owle.dto.steps.InitialDataPointInjector
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.workflows.DataPointValidator
@@ -9,12 +9,12 @@ import com.wini.owle.validators.workflows.DataPointValidator
 class PreReqInjectionValidator(
     private val junctionValidator: WorkflowJunctionValidator,
     private val dataPointValidator: DataPointValidator,
-) : BaseValidator<PreReqInjectionDto>() {
+) : BaseValidator<InitialDataPointInjector>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: PreReqInjectionDto): ValidationResult {
+    override fun validate(dto: InitialDataPointInjector): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested junction

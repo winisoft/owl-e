@@ -1,8 +1,8 @@
 package com.wini.owle.mapper.environs
 
-import com.wini.owle.dto.environs.VersionSpecDto
-import com.wini.owle.entity.environs.VersionSpecDao
-import com.wini.owle.entity.runs.WorkflowExecutionDao
+import com.wini.owle.dto.environs.VersionSpec
+import com.wini.owle.entity.environs.VersionSpecEntity
+import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
 import com.wini.owle.mapper.ExposedDaoFactory
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.assertThrows
 open class VersionSpecsMapperTest {
 
     private lateinit var mapper: VersionSpecsMapper
-    private val factory: ExposedDaoFactory<VersionSpecDao, Long, VersionSpecDao.Companion> = mockk()
+    private val factory: ExposedDaoFactory<VersionSpecEntity, Long, VersionSpecEntity.Companion> = mockk()
 
     @BeforeEach
     fun setUp() {
@@ -22,22 +22,22 @@ open class VersionSpecsMapperTest {
 
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
-        val dto = VersionSpecDto(id = 99L, versionMin = "2.0", versionMax = "3.0", versionExact = "2.5")
+        val dto = VersionSpec(id = 99L, versionMin = "2.0", versionMax = "3.0", versionExact = "2.5")
 
-        mockkObject(VersionSpecDao)
-        every { VersionSpecDao.findById(99L) } returns null
+        mockkObject(VersionSpecEntity)
+        every { VersionSpecEntity.findById(99L) } returns null
 
         val exception = assertThrows<IllegalStateException> {
             mapper.toEntity(dto)
         }
 
         assertEquals("VersionSpec with id=99 not found", exception.message)
-        unmockkObject(VersionSpecDao)
+        unmockkObject(VersionSpecEntity)
     }
 
     @Test
     fun `toDto should correctly map entity to dto`() {
-        val entity = mockk<VersionSpecDao> {
+        val entity = mockk<VersionSpecEntity> {
             every { id.value } returns 1L
             every { versionMin } returns "1.0"
             every { versionMax } returns "2.0"
@@ -55,17 +55,17 @@ open class VersionSpecsMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create a DTO with non-zero ID
-        val dto = VersionSpecDto(id = 42L, versionMin = "1.5", versionMax = "3.0", versionExact = "2.0")
+        val dto = VersionSpec(id = 42L, versionMin = "1.5", versionMax = "3.0", versionExact = "2.0")
 
         // Mock the existing entity that will be updated
-        val existingEntity = mockk<VersionSpecDao>(relaxed = true)
+        val existingEntity = mockk<VersionSpecEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        val workflowRunEntity: WorkflowRunEntity = mockk()
 
         // Set up mocks
-        mockkObject(VersionSpecDao)
-        every { VersionSpecDao.findById(42L) } returns existingEntity
+        mockkObject(VersionSpecEntity)
+        every { VersionSpecEntity.findById(42L) } returns existingEntity
 
         // Capture the property updates
         val minVersionSlot = slot<String>()
@@ -80,7 +80,7 @@ open class VersionSpecsMapperTest {
         val result = mapper.toEntity(dto)
 
         // Verify that the existing entity was found and updated
-        verify { VersionSpecDao.findById(42L) }
+        verify { VersionSpecEntity.findById(42L) }
         verify { existingEntity.versionMin = "1.5" }
         verify { existingEntity.versionMax = "3.0" }
         verify { existingEntity.versionExact = "2.0" }
@@ -93,19 +93,19 @@ open class VersionSpecsMapperTest {
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(VersionSpecDao)
+        unmockkObject(VersionSpecEntity)
     }
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create a DTO with zero ID (indicating new entity)
-        val dto = VersionSpecDto(id = 0L, versionMin = "2.0", versionMax = "4.0", versionExact = "3.0")
+        val dto = VersionSpec(id = 0L, versionMin = "2.0", versionMax = "4.0", versionExact = "3.0")
 
         // Mock the new entity that will be created
-        val newEntity = mockk<VersionSpecDao>(relaxed = true)
+        val newEntity = mockk<VersionSpecEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val workflowExecutionDao: WorkflowExecutionDao = mockk()
+        val workflowRunEntity: WorkflowRunEntity = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity

@@ -1,7 +1,7 @@
 package com.wini.owle.api.transforms
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.dto.transforms.AppliedTransformDto
+import com.wini.owle.dto.transforms.AppliedTransform
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
@@ -11,11 +11,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class AppliedTransformApi(
-    dll: DLL<Long, AppliedTransformDto>,
-    validator: DtoValidator<AppliedTransformDto>
-): LongIdEndpointImpl<AppliedTransformDto>(
+    dll: DLL<Long, AppliedTransform>,
+    validator: DtoValidator<AppliedTransform>
+): LongIdEndpointImpl<AppliedTransform>(
     dll = dll,
-    serializer = AppliedTransformDto.serializer(),
+    serializer = AppliedTransform.serializer(),
     validator = validator
 )  {
 

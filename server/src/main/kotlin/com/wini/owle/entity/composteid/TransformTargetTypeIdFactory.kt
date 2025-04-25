@@ -1,15 +1,15 @@
 package com.wini.owle.entity.composteid
 
-import com.wini.owle.dto.transforms.TransformationTargetTypeDto
+import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.entity.TransformTargetTypes
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 
 
-object TransformTargetTypeIdFactory: CompositeIdFactoryImpl<TransformationTargetTypeDto>() {
+object TransformTargetTypeIdFactory: CompositeIdFactoryImpl<TransformTargetType>() {
 
-    override fun fromDtoInstance(dto: TransformationTargetTypeDto): CompositeID {
+    override fun fromDtoInstance(dto: TransformTargetType): CompositeID {
         return CompositeID {
             it[TransformTargetTypes.transformation] = dto.transformationId
             it[TransformTargetTypes.eligibleTypeDeclaration] = dto.typeDeclarationId

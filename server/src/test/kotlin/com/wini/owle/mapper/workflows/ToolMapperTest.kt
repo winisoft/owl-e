@@ -1,11 +1,9 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.ToolDto
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.entity.TypeDeclarations
-import com.wini.owle.entity.runs.WorkflowExecutionDao
-import com.wini.owle.entity.typing.TypeDeclarationDao
-import com.wini.owle.entity.workflows.ToolDao
+import com.wini.owle.dto.workflows.Tool
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.entity.typing.TypeDeclarationEntity
+import com.wini.owle.entity.workflows.ToolEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import io.mockk.every
@@ -27,7 +25,7 @@ open class ToolMapperTest {
     private lateinit var mapper: ToolsMapper
     private val typeDeclarationMapper: TypeDeclarationsMapper = mockk()
     private val toolParamMapper: ToolParamsMapper = mockk()
-    private val factory: DaoFactory<ToolDao, Long> = mockk()
+    private val factory: DaoFactory<ToolEntity, Long> = mockk()
 
     @BeforeEach
     fun setUp() {
@@ -37,7 +35,7 @@ open class ToolMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val dto = ToolDto(
+        val dto = Tool(
             id = 99L,
             name = "toolName",
             description = "description",
@@ -46,8 +44,8 @@ open class ToolMapperTest {
         )
 
         // Mock the behavior of findById to return null (not found)
-        mockkObject(ToolDao)
-        every { ToolDao.findById(99L) } returns null
+        mockkObject(ToolEntity)
+        every { ToolEntity.findById(99L) } returns null
 
         // Verify that the exception is thrown with the correct message
         val exception = assertThrows<IllegalStateException> {
@@ -55,23 +53,23 @@ open class ToolMapperTest {
         }
 
         assertEquals("Tool with id=99 not found", exception.message)
-        unmockkObject(ToolDao)
+        unmockkObject(ToolEntity)
     }
 
     @Test
     fun `toDto should correctly map entity to dto`() {
         // Create mock dao objects
-        val entity = mockk<ToolDao> {
+        val entity = mockk<ToolEntity> {
             every { id.value } returns 1L
             every { name } returns "toolName"
             every { description } returns "description"
             every { body } returns "body"
-            every { returnTypeDeclaration } returns mockk()
+            every { returnTypeDeclarationEntity } returns mockk()
         }
 
         // Mock the behavior of typeDeclarationMapper
-        val returnTypeDeclarationDto = mockk<TypeDeclarationDto>()
-        every { typeDeclarationMapper.toDto(any<TypeDeclarationDao>()) } returns returnTypeDeclarationDto
+        val returnTypeDeclaration = mockk<TypeDeclaration>()
+        every { typeDeclarationMapper.toDto(any<TypeDeclarationEntity>()) } returns returnTypeDeclaration
 
         // Call the method under test
         val result = mapper.toDto(entity)
@@ -81,13 +79,13 @@ open class ToolMapperTest {
         assertEquals("toolName", result.name)
         assertEquals("description", result.description)
         assertEquals("body", result.body)
-        assertEquals(returnTypeDeclarationDto, result.returnTypeDeclaration)
+        assertEquals(returnTypeDeclaration, result.returnTypeDeclaration)
     }
 
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val dto = ToolDto(
+        val dto = Tool(
             id = 42L,
             name = "toolName",
             description = "description",
@@ -96,55 +94,55 @@ open class ToolMapperTest {
         )
 
         // Mock the existing entity that will be updated
-        val existingEntity = mockk<ToolDao>(relaxed = true)
+        val existingEntity = mockk<ToolEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val typeDeclarationEntity: TypeDeclarationEntity = mockk()
 
         // Mock the behavior of typeDeclarationMapper.toEntity
-        every { typeDeclarationMapper.toEntity(any()) } returns typeDeclarationDao
+        every { typeDeclarationMapper.toEntity(any()) } returns typeDeclarationEntity
 
         // Set up mocks for finding existing entity
-        mockkObject(ToolDao)
-        every { ToolDao.findById(42L) } returns existingEntity
+        mockkObject(ToolEntity)
+        every { ToolEntity.findById(42L) } returns existingEntity
 
         // Capture the property updates
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val bodySlot = slot<String>()
-        val returnTypeDeclarationSlot = slot<TypeDeclarationDao>()
+        val returnTypeDeclarationEntitySlot = slot<TypeDeclarationEntity>()
 
         every { existingEntity.name = capture(nameSlot) } just runs
         every { existingEntity.description = capture(descriptionSlot) } just runs
         every { existingEntity.body = capture(bodySlot) } just runs
-        every { existingEntity.returnTypeDeclaration = capture(returnTypeDeclarationSlot) } just runs
+        every { existingEntity.returnTypeDeclarationEntity = capture(returnTypeDeclarationEntitySlot) } just runs
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
         // Verify that the existing entity was found and updated
-        verify { ToolDao.findById(42L) }
+        verify { ToolEntity.findById(42L) }
         verify { existingEntity.name = "toolName" }
         verify { existingEntity.description = "description" }
         verify { existingEntity.body = "body" }
-        verify { existingEntity.returnTypeDeclaration = typeDeclarationDao }
+        verify { existingEntity.returnTypeDeclarationEntity = typeDeclarationEntity }
 
         // Verify the captured values
         assertEquals("toolName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
         assertEquals("body", bodySlot.captured)
-        assertEquals(typeDeclarationDao, returnTypeDeclarationSlot.captured)
+        assertEquals(typeDeclarationEntity, returnTypeDeclarationEntitySlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(ToolDao)
+        unmockkObject(ToolEntity)
     }
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = ToolDto(
+        val dto = Tool(
             id = 0L,
             name = "toolName",
             description = "description",
@@ -153,13 +151,13 @@ open class ToolMapperTest {
         )
 
         // Mock the new entity that will be created
-        val newEntity = mockk<ToolDao>(relaxed = true)
+        val newEntity = mockk<ToolEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val typeDeclarationEntity: TypeDeclarationEntity = mockk()
 
         // Mock the behavior of typeDeclarationMapper.toEntity
-        every { typeDeclarationMapper.toEntity(any()) } returns typeDeclarationDao
+        every { typeDeclarationMapper.toEntity(any()) } returns typeDeclarationEntity
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -168,12 +166,12 @@ open class ToolMapperTest {
         val nameSlot = slot<String>()
         val descriptionSlot = slot<String>()
         val bodySlot = slot<String>()
-        val returnTypeDeclarationSlot = slot<TypeDeclarationDao>()
+        val returnTypeDeclarationEntitySlot = slot<TypeDeclarationEntity>()
 
         every { newEntity.name = capture(nameSlot) } just runs
         every { newEntity.description = capture(descriptionSlot) } just runs
         every { newEntity.body = capture(bodySlot) } just runs
-        every { newEntity.returnTypeDeclaration = capture(returnTypeDeclarationSlot) } just runs
+        every { newEntity.returnTypeDeclarationEntity = capture(returnTypeDeclarationEntitySlot) } just runs
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
@@ -185,13 +183,13 @@ open class ToolMapperTest {
         verify { newEntity.name = "toolName" }
         verify { newEntity.description = "description" }
         verify { newEntity.body = "body" }
-        verify { newEntity.returnTypeDeclaration = typeDeclarationDao }
+        verify { newEntity.returnTypeDeclarationEntity = typeDeclarationEntity }
 
         // Verify the captured values
         assertEquals("toolName", nameSlot.captured)
         assertEquals("description", descriptionSlot.captured)
         assertEquals("body", bodySlot.captured)
-        assertEquals(typeDeclarationDao, returnTypeDeclarationSlot.captured)
+        assertEquals(typeDeclarationEntity, returnTypeDeclarationEntitySlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

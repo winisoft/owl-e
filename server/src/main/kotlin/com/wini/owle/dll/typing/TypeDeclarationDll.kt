@@ -1,9 +1,8 @@
 package com.wini.owle.dll.typing
 
-import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.typing.TypeDeclarationDto
+import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.services.typing.TypeDeclarationService
 import com.wini.owle.services.typing.TypeParameterService
 import com.wini.owle.services.typing.TypeUnionMemberService
@@ -12,14 +11,14 @@ class TypeDeclarationDll(
     private val typeDeclarationService: TypeDeclarationService,
     private val typeUnionMemberService: TypeUnionMemberService,
     private val typeParameterService: TypeParameterService
-): DLL<Long, TypeDeclarationDto> {
+): DLL<Long, TypeDeclaration> {
 
-    override fun getAll(): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.getAll()
-    override fun getById(id: Long): AsyncResult<TypeDeclarationDto> = typeDeclarationService.getById(id)
-    override fun create(dto: TypeDeclarationDto): AsyncResult<TypeDeclarationDto> = typeDeclarationService.create(dto)
-    override fun createAll(dtos: List<TypeDeclarationDto>): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.create(dtos)
-    override fun update(dto: TypeDeclarationDto): AsyncResult<TypeDeclarationDto> = typeDeclarationService.update(dto)
-    override fun updateAll(dtos: List<TypeDeclarationDto>): AsyncResult<List<TypeDeclarationDto>> = typeDeclarationService.update(dtos)
+    override fun getAll(): AsyncResult<List<TypeDeclaration>> = typeDeclarationService.getAll()
+    override fun getById(id: Long): AsyncResult<TypeDeclaration> = typeDeclarationService.getById(id)
+    override fun create(dto: TypeDeclaration): AsyncResult<TypeDeclaration> = typeDeclarationService.create(dto)
+    override fun createAll(dtos: List<TypeDeclaration>): AsyncResult<List<TypeDeclaration>> = typeDeclarationService.create(dtos)
+    override fun update(dto: TypeDeclaration): AsyncResult<TypeDeclaration> = typeDeclarationService.update(dto)
+    override fun updateAll(dtos: List<TypeDeclaration>): AsyncResult<List<TypeDeclaration>> = typeDeclarationService.update(dtos)
     override fun delete(id: Long): AsyncResult<Unit> = typeDeclarationService.delete(id)
     override fun deleteAll(ids: List<Long>): AsyncResult<Unit> = typeDeclarationService.delete(ids)
 

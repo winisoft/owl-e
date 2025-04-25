@@ -1,19 +1,19 @@
 package com.wini.owle.validators.transforms
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.transforms.TransformationDto
+import com.wini.owle.dto.transforms.Transform
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.typing.TypeDeclarationValidator
 
 class TransformationValidator(
     private val returnsTypeValidator: TypeDeclarationValidator
-) : BaseValidator<TransformationDto>() {
+) : BaseValidator<Transform>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: TransformationDto): ValidationResult {
+    override fun validate(dto: Transform): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // name is required and has max length

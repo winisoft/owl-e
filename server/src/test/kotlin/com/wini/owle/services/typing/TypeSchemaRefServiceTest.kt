@@ -2,9 +2,9 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.dto.typing.TypeSchemaRefDto
-import com.wini.owle.entity.typing.TypeSchemaRefDao
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.dto.typing.TypeSchemaRef
+import com.wini.owle.entity.typing.TypeSchemaRefEntity
 import com.wini.owle.mapper.typing.TypeSchemaRefsMapper
 import com.wini.owle.repo.TypeSchemaRefIdFactory
 import com.wini.owle.repo.typing.TypeSchemaRefRepository
@@ -26,13 +26,13 @@ open class TypeSchemaRefServiceTest {
 
     fun createSampleDto(
         id: Long = 1L,
-        parentRef: TypeSchemaRefDto? = null,
+        parentRef: TypeSchemaRef? = null,
         name: String = "exampleSchema",
-        typeDeclaration: TypeDeclarationDto = mockk(),
+        typeDeclaration: TypeDeclaration = mockk(),
         description: String = "Schema reference description",
-        childRefs: List<TypeSchemaRefDto> = emptyList()
-    ) : TypeSchemaRefDto {
-        return TypeSchemaRefDto(
+        childRefs: List<TypeSchemaRef> = emptyList()
+    ) : TypeSchemaRef {
+        return TypeSchemaRef(
             id = id,
             parentRef = parentRef,
             name = name,
@@ -42,11 +42,11 @@ open class TypeSchemaRefServiceTest {
         )
     }
 
-    fun createSampleEntity(): TypeSchemaRefDao = mockk<TypeSchemaRefDao>() {
+    fun createSampleEntity(): TypeSchemaRefEntity = mockk<TypeSchemaRefEntity>() {
         every { id } returns mockk()
         every { parentRef } returns mockk()
         every { name } returns "exampleSchema"
-        every { typeDeclaration } returns mockk()
+        every { typeDeclarationEntity } returns mockk()
         every { description } returns "Schema reference description"
     }
 
@@ -61,8 +61,8 @@ open class TypeSchemaRefServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: TypeSchemaRefDto = mockk()
-        val entity: TypeSchemaRefDao = mockk()
+        val dto: TypeSchemaRef = mockk()
+        val entity: TypeSchemaRefEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -84,8 +84,8 @@ open class TypeSchemaRefServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: TypeSchemaRefDto = mockk()
-        val entity: TypeSchemaRefDao = mockk()
+        val dto: TypeSchemaRef = mockk()
+        val entity: TypeSchemaRefEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -108,9 +108,9 @@ open class TypeSchemaRefServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: TypeSchemaRefDto = createSampleDto()
+        val dto: TypeSchemaRef = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: TypeSchemaRefDao = mockk<TypeSchemaRefDao>() {
+        val entity: TypeSchemaRefEntity = mockk<TypeSchemaRefEntity>() {
             every { id } returns mockk()
         }
 
@@ -159,7 +159,7 @@ open class TypeSchemaRefServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<TypeSchemaRefDao> = mockk()
+        val entities: List<TypeSchemaRefEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -180,8 +180,8 @@ open class TypeSchemaRefServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<TypeSchemaRefDao>()
-        val emptyDtoList = emptyList<TypeSchemaRefDto>()
+        val emptyList = emptyList<TypeSchemaRefEntity>()
+        val emptyDtoList = emptyList<TypeSchemaRef>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -226,7 +226,7 @@ open class TypeSchemaRefServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, TypeSchemaRefDao> = mockk()
+        val entityClass: EntityClass<Long, TypeSchemaRefEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -276,8 +276,8 @@ open class TypeSchemaRefServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<TypeSchemaRefDto>()
-        val emptyEntityList = emptyList<TypeSchemaRefDao>()
+        val emptyDtoList = emptyList<TypeSchemaRef>()
+        val emptyEntityList = emptyList<TypeSchemaRefEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

@@ -3,18 +3,18 @@ package com.wini.owle.api.steps
 import com.wini.owle.validators.DtoValidator
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
-import com.wini.owle.dto.workflows.ToolParamDto
+import com.wini.owle.dto.workflows.ToolParam
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 
 
 class ToolParamApi(
-    dll: DLL<Long, ToolParamDto>,
-    validator: DtoValidator<ToolParamDto>
-): LongIdEndpointImpl<ToolParamDto>(
+    dll: DLL<Long, ToolParam>,
+    validator: DtoValidator<ToolParam>
+): LongIdEndpointImpl<ToolParam>(
     dll = dll,
-    serializer = ToolParamDto.serializer(),
+    serializer = ToolParam.serializer(),
     validator = validator
 ) {
 

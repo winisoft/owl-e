@@ -1,9 +1,6 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.StepBenchmarkingDataDto
-import com.wini.owle.dto.runs.StepExecutionDto
-import com.wini.owle.entity.runs.StepBenchmarkingDataDao
-import com.wini.owle.entity.runs.StepExecutionDao
+import com.wini.owle.entity.runs.step.StepRunEntity
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
@@ -93,9 +90,9 @@ open class StepBenchmarkingDataMapperTest {
         val existingEntity = mockk<StepBenchmarkingDataDao>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val stepExecutionDao: StepExecutionDao = mockk()
+        val stepRunEntity: StepRunEntity = mockk()
         // Mock the stepExecutionsMapper.toEntity method to return the mock entity
-        every { stepExecutionsMapper.toEntity(any()) } returns stepExecutionDao
+        every { stepExecutionsMapper.toEntity(any()) } returns stepRunEntity
 
         // Set up mocks for finding existing entity
         mockkObject(StepBenchmarkingDataDao)
@@ -105,7 +102,7 @@ open class StepBenchmarkingDataMapperTest {
         val expectedBigDecimal = BigDecimal("200.234")
 
         // Capture the property updates
-        val stepExecutionSlot = slot<StepExecutionDao>()
+        val stepExecutionSlot = slot<StepRunEntity>()
         val executionTimeSlot = slot<BigDecimal>()
 
         every { existingEntity.stepExecution = capture(stepExecutionSlot) } just runs
@@ -116,7 +113,7 @@ open class StepBenchmarkingDataMapperTest {
 
         // Verify that the existing entity was found and updated
         verify { StepBenchmarkingDataDao.findById(42L) }
-        verify { existingEntity.stepExecution = stepExecutionDao }
+        verify { existingEntity.stepExecution = stepRunEntity }
         
         // Use custom verification for BigDecimal
         verify { existingEntity.executionTime = withArg { bigDecimal ->
@@ -125,7 +122,7 @@ open class StepBenchmarkingDataMapperTest {
         }}
 
         // Verify the captured values
-        assertEquals(stepExecutionDao, stepExecutionSlot.captured)
+        assertEquals(stepRunEntity, stepExecutionSlot.captured)
         // Compare as strings to avoid precision issues
         assertEquals(expectedBigDecimal.toString(), executionTimeSlot.captured.toString())
 
@@ -148,9 +145,9 @@ open class StepBenchmarkingDataMapperTest {
         val newEntity = mockk<StepBenchmarkingDataDao>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val stepExecutionDao: StepExecutionDao = mockk()
+        val stepRunEntity: StepRunEntity = mockk()
         // Mock the stepExecutionsMapper.toEntity method to return the mock entity
-        every { stepExecutionsMapper.toEntity(any()) } returns stepExecutionDao
+        every { stepExecutionsMapper.toEntity(any()) } returns stepRunEntity
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
@@ -159,7 +156,7 @@ open class StepBenchmarkingDataMapperTest {
         val expectedBigDecimal = BigDecimal("300.345")
 
         // Capture property assignments
-        val stepExecutionSlot = slot<StepExecutionDao>()
+        val stepExecutionSlot = slot<StepRunEntity>()
         val executionTimeSlot = slot<BigDecimal>()
 
         every { newEntity.stepExecution = capture(stepExecutionSlot) } just runs
@@ -172,7 +169,7 @@ open class StepBenchmarkingDataMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.stepExecution = stepExecutionDao }
+        verify { newEntity.stepExecution = stepRunEntity }
         
         // Use custom verification for BigDecimal
         verify { newEntity.executionTime = withArg { bigDecimal ->
@@ -181,7 +178,7 @@ open class StepBenchmarkingDataMapperTest {
         }}
 
         // Verify the captured values
-        assertEquals(stepExecutionDao, stepExecutionSlot.captured)
+        assertEquals(stepRunEntity, stepExecutionSlot.captured)
         // Compare as strings to avoid precision issues
         assertEquals(expectedBigDecimal.toString(), executionTimeSlot.captured.toString())
 

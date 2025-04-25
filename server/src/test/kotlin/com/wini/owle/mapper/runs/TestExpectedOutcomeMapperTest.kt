@@ -1,11 +1,11 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.ComparisonOperatorDto
-import com.wini.owle.dto.runs.TestCaseDto
-import com.wini.owle.dto.runs.TestExpectedOutcomeDto
-import com.wini.owle.entity.runs.enums.ComparisonOperator
-import com.wini.owle.entity.runs.TestCaseDao
-import com.wini.owle.entity.runs.TestExpectedOutcomeDao
+import com.wini.owle.dto.runs.enums.ComparisonOperator
+import com.wini.owle.dto.runs.test.TestCase
+import com.wini.owle.dto.runs.test.TestExpectation
+import com.wini.owle.entity.runs.enums.ComparisonOperatorEntity
+import com.wini.owle.entity.runs.test.TestCaseEntity
+import com.wini.owle.entity.runs.test.TestExpectationEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.runs.enums.ComparisonOperatorMapper
 import io.mockk.*
@@ -19,7 +19,7 @@ open class TestExpectedOutcomeMapperTest {
 
     private lateinit var mapper: TestExpectedOutcomesMapper
     private val testCasesMapper: TestCasesMapper = mockk()
-    private val factory: DaoFactory<TestExpectedOutcomeDao, Long> = mockk()
+    private val factory: DaoFactory<TestExpectationEntity, Long> = mockk()
     private val comparisonOperatorMapper: ComparisonOperatorMapper = mockk()
 
     @BeforeEach
@@ -34,7 +34,7 @@ open class TestExpectedOutcomeMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTO
-        val dto = TestExpectedOutcomeDto(
+        val dto = TestExpectation(
             id = 99L,
             testCase = mockk(),
             dataPointName = "Data Point",
@@ -43,8 +43,8 @@ open class TestExpectedOutcomeMapperTest {
         )
 
         // Mock behavior for findById to return null (not found)
-        mockkObject(TestExpectedOutcomeDao)
-        every { TestExpectedOutcomeDao.findById(99L) } returns null
+        mockkObject(TestExpectationEntity)
+        every { TestExpectationEntity.findById(99L) } returns null
 
         // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
@@ -52,36 +52,36 @@ open class TestExpectedOutcomeMapperTest {
         }
 
         assertEquals("TestExpectedOutcome with id=99 not found", exception.message)
-        unmockkObject(TestExpectedOutcomeDao)
+        unmockkObject(TestExpectationEntity)
     }
 
     @Test
     fun `toDto should correctly delegate to collaborators`() {
         // Setup mocks
-        val entity = mockk<TestExpectedOutcomeDao> {
+        val entity = mockk<TestExpectationEntity> {
             every { id.value } returns 1L
-            every { testCase } returns mockk()
+            every { testCaseEntity } returns mockk()
             every { dataPointName } returns "Data Point"
             every { expectedValue } returns "Expected Value"
             every { comparisonOperator } returns mockk()
         }
 
         // Setup mock responses from collaborators
-        val testCaseDto = mockk<TestCaseDto>()
-        val comparisonOperatorDto = ComparisonOperatorDto.Equals
+        val testCase = mockk<TestCase>()
+        val comparisonOperatorDto = ComparisonOperator.Equals
         
-        every { testCasesMapper.toDto(entity.testCase) } returns testCaseDto
+        every { testCasesMapper.toDto(entity.testCaseEntity) } returns testCase
         every { comparisonOperatorMapper.toDto(entity.comparisonOperator) } returns comparisonOperatorDto
 
         // Call method under test
         val result = mapper.toDto(entity)
 
         // Verify collaborators were called with correct arguments
-        verify(exactly = 1) { testCasesMapper.toDto(entity.testCase) }
+        verify(exactly = 1) { testCasesMapper.toDto(entity.testCaseEntity) }
         verify(exactly = 1) { comparisonOperatorMapper.toDto(entity.comparisonOperator) }
 
         // Verify result contains values from collaborators
-        assertEquals(testCaseDto, result.testCase)
+        assertEquals(testCase, result.testCase)
         assertEquals(comparisonOperatorDto, result.comparisonOperator)
         
         // Verify direct property mappings
@@ -93,7 +93,7 @@ open class TestExpectedOutcomeMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTO
-        val dto = TestExpectedOutcomeDto(
+        val dto = TestExpectation(
             id = 42L,
             testCase = mockk(),
             dataPointName = "Updated Data Point",
@@ -102,18 +102,18 @@ open class TestExpectedOutcomeMapperTest {
         )
 
         // Create mock existing entity to update
-        val existingEntity = mockk<TestExpectedOutcomeDao>(relaxed = true)
+        val existingEntity = mockk<TestExpectationEntity>(relaxed = true)
 
         // Setup mock responses from collaborators
-        val testCaseDao = mockk<TestCaseDao>()
-        val comparisonOperator = ComparisonOperator.EQUALS
+        val testCaseEntity = mockk<TestCaseEntity>()
+        val comparisonOperator = ComparisonOperatorEntity.EQUALS
         
-        every { testCasesMapper.toEntity(dto.testCase) } returns testCaseDao
+        every { testCasesMapper.toEntity(dto.testCase) } returns testCaseEntity
         every { comparisonOperatorMapper.toEntity(dto.comparisonOperator) } returns comparisonOperator
 
         // Mock finding existing entity
-        mockkObject(TestExpectedOutcomeDao)
-        every { TestExpectedOutcomeDao.findById(42L) } returns existingEntity
+        mockkObject(TestExpectationEntity)
+        every { TestExpectationEntity.findById(42L) } returns existingEntity
 
         // Execute method under test
         val result = mapper.toEntity(dto)
@@ -123,7 +123,7 @@ open class TestExpectedOutcomeMapperTest {
         verify(exactly = 1) { comparisonOperatorMapper.toEntity(dto.comparisonOperator) }
 
         // Verify entity fields were set with values from collaborators
-        verify { existingEntity.testCase = testCaseDao }
+        verify { existingEntity.testCaseEntity = testCaseEntity }
         verify { existingEntity.comparisonOperator = comparisonOperator }
         
         // Verify other fields were set correctly
@@ -133,13 +133,13 @@ open class TestExpectedOutcomeMapperTest {
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(TestExpectedOutcomeDao)
+        unmockkObject(TestExpectationEntity)
     }
 
     @Test
     fun `toEntity should create a new entity when id is zero`() {
         // Create test DTO
-        val dto = TestExpectedOutcomeDto(
+        val dto = TestExpectation(
             id = 0L,
             testCase = mockk(),
             dataPointName = "New Data Point",
@@ -148,13 +148,13 @@ open class TestExpectedOutcomeMapperTest {
         )
 
         // Create mock new entity
-        val newEntity = mockk<TestExpectedOutcomeDao>(relaxed = true)
+        val newEntity = mockk<TestExpectationEntity>(relaxed = true)
 
         // Setup mock responses from collaborators
-        val testCaseDao = mockk<TestCaseDao>()
-        val comparisonOperator = ComparisonOperator.EQUALS
+        val testCaseEntity = mockk<TestCaseEntity>()
+        val comparisonOperator = ComparisonOperatorEntity.EQUALS
         
-        every { testCasesMapper.toEntity(dto.testCase) } returns testCaseDao
+        every { testCasesMapper.toEntity(dto.testCase) } returns testCaseEntity
         every { comparisonOperatorMapper.toEntity(dto.comparisonOperator) } returns comparisonOperator
         
         // Setup factory mock
@@ -171,7 +171,7 @@ open class TestExpectedOutcomeMapperTest {
         verify(exactly = 1) { comparisonOperatorMapper.toEntity(dto.comparisonOperator) }
 
         // Verify entity fields were set with values from collaborators
-        verify { newEntity.testCase = testCaseDao }
+        verify { newEntity.testCaseEntity = testCaseEntity }
         verify { newEntity.comparisonOperator = comparisonOperator }
         
         // Verify other fields were set correctly

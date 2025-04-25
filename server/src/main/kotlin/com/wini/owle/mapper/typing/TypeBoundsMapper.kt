@@ -1,35 +1,35 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.typing.TypeBoundsDto
-import com.wini.owle.entity.typing.TypeBoundDao
+import com.wini.owle.dto.typing.TypeBound
+import com.wini.owle.entity.typing.TypeBoundEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 
 
 class TypeBoundsMapper(
-    private val daoFactory: DaoFactory<TypeBoundDao, Long>,
+    private val daoFactory: DaoFactory<TypeBoundEntity, Long>,
     private val typeDeclarationMapper: TypeDeclarationsMapper
-): DbMapper<TypeBoundsDto, TypeBoundDao>() {
+): DbMapper<TypeBound, TypeBoundEntity>() {
 
-    override fun toEntity(dto: TypeBoundsDto): TypeBoundDao {
-        val applyProps: TypeBoundDao.() -> Unit = {
+    override fun toEntity(dto: TypeBound): TypeBoundEntity {
+        val applyProps: TypeBoundEntity.() -> Unit = {
             typeVariableDeclaration = typeDeclarationMapper.toEntity(dto.typeVariableDeclaration)
-            boundTypeDeclaration = typeDeclarationMapper.toEntity(dto.boundTypeDeclaration)
+            boundTypeDeclarationEntity = typeDeclarationMapper.toEntity(dto.boundTypeDeclaration)
         }
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            TypeBoundDao.findById(dto.id)
+            TypeBoundEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("TypeBound with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: TypeBoundDao): TypeBoundsDto {
-        return TypeBoundsDto(
+    override fun toDto(entity: TypeBoundEntity): TypeBound {
+        return TypeBound(
             id = entity.id.value,
             typeVariableDeclaration = typeDeclarationMapper.toDto(entity.typeVariableDeclaration),
-            boundTypeDeclaration = typeDeclarationMapper.toDto(entity.boundTypeDeclaration)
+            boundTypeDeclaration = typeDeclarationMapper.toDto(entity.boundTypeDeclarationEntity)
         )
     }
 }

@@ -7,7 +7,19 @@ import com.wini.owle.entity.transforms.*
 import com.wini.owle.entity.typing.*
 import com.wini.owle.entity.user.*
 import com.wini.owle.entity.workflows.*
-import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.entity.environs.VersionSpecEntity
+import com.wini.owle.entity.runs.step.StepRunEntity
+import com.wini.owle.entity.runs.step.StepRunLogLineEntity
+import com.wini.owle.entity.runs.test.BenchmarkReportEntity
+import com.wini.owle.entity.runs.test.TestCaseEntity
+import com.wini.owle.entity.runs.test.TestExpectationEntity
+import com.wini.owle.entity.runs.test.TestInputEntity
+import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
+import com.wini.owle.entity.runs.workflow.WorkflowTestResultEntity
+import com.wini.owle.entity.user.tags.StepTagEntity
+import com.wini.owle.entity.user.tags.TagEntity
+import com.wini.owle.entity.user.tags.TagRelationEntity
+import com.wini.owle.entity.user.tags.WorkflowTagEntity
 import com.wini.owle.mapper.environs.PackageRepoMapper
 import com.wini.owle.mapper.environs.PackagesMapper
 import com.wini.owle.mapper.environs.ToolPackageDependencyMapper
@@ -36,53 +48,53 @@ import org.koin.dsl.module
 
 
 val daoFactoryModule = module {
-    single<DaoFactory<VersionSpecDao, Long>> { ExposedDaoFactory(VersionSpecDao) }
-    single<DaoFactory<PackageRepoDao, Long>> { ExposedDaoFactory(PackageRepoDao) }
-    single<DaoFactory<PackageDao, Long>> { ExposedDaoFactory(PackageDao) }
-    single<DaoFactory<ToolPackageDependencyDao, CompositeID>> { ExposedDaoFactory(ToolPackageDependencyDao) }
-    single<DaoFactory<BenchmarkingDataDao, Long>> { ExposedDaoFactory(BenchmarkingDataDao) }
-    single<DaoFactory<ExecutionLogDao, Long>> { ExposedDaoFactory(ExecutionLogDao) }
+    single<DaoFactory<VersionSpecEntity, Long>> { ExposedDaoFactory(VersionSpecEntity) }
+    single<DaoFactory<PyPackageRepoEntity, Long>> { ExposedDaoFactory(PyPackageRepoEntity) }
+    single<DaoFactory<PyPackageEntity, Long>> { ExposedDaoFactory(PyPackageEntity) }
+    single<DaoFactory<ToolPyPackDepEntity, CompositeID>> { ExposedDaoFactory(ToolPyPackDepEntity) }
+    single<DaoFactory<BenchmarkReportEntity, Long>> { ExposedDaoFactory(BenchmarkReportEntity) }
+    single<DaoFactory<StepRunLogLineEntity, Long>> { ExposedDaoFactory(StepRunLogLineEntity) }
     single<DaoFactory<StepBenchmarkingDataDao, Long>> { ExposedDaoFactory(StepBenchmarkingDataDao) }
-    single<DaoFactory<StepExecutionDao, Long>> { ExposedDaoFactory(StepExecutionDao) }
-    single<DaoFactory<TestCaseDao, Long>> { ExposedDaoFactory(TestCaseDao) }
-    single<DaoFactory<TestExpectedOutcomeDao, Long>> { ExposedDaoFactory(TestExpectedOutcomeDao) }
-    single<DaoFactory<TestInputDao, Long>> { ExposedDaoFactory(TestInputDao) }
-    single<DaoFactory<TestResultDao, Long>> { ExposedDaoFactory(TestResultDao) }
-    single<DaoFactory<WorkflowExecutionDao, Long>> { ExposedDaoFactory(WorkflowExecutionDao) }
-    single<DaoFactory<ErrorWatchDao, Long>> { ExposedDaoFactory(ErrorWatchDao) }
-    single<DaoFactory<ErrorWatchFnDao, Long>> { ExposedDaoFactory(ErrorWatchFnDao) }
-    single<DaoFactory<InquisitionDao, Long>> { ExposedDaoFactory(InquisitionDao) }
-    single<DaoFactory<PreReqInjectionDao, Long>> { ExposedDaoFactory(PreReqInjectionDao) }
-    single<DaoFactory<ProvisionDataPointDao, CompositeID>> { ExposedDaoFactory(ProvisionDataPointDao) }
-    single<DaoFactory<ProvisionDao, Long>> { ExposedDaoFactory(ProvisionDao) }
-    single<DaoFactory<RevisionDao, Long>> { ExposedDaoFactory(RevisionDao) }
-    single<DaoFactory<WorkflowJunctionDao, Long>> { ExposedDaoFactory(WorkflowJunctionDao) }
-    single<DaoFactory<AppliedTransformArgDao, Long>> { ExposedDaoFactory(AppliedTransformArgDao) }
-    single<DaoFactory<AppliedTransformDao, Long>> { ExposedDaoFactory(AppliedTransformDao) }
-    single<DaoFactory<TransformationArgDao, Long>> { ExposedDaoFactory(TransformationArgDao) }
-    single<DaoFactory<TransformationDao, Long>> { ExposedDaoFactory(TransformationDao) }
-    single<DaoFactory<TransformTargetTypeDao, CompositeID>> { ExposedDaoFactory(TransformTargetTypeDao) }
-    single<DaoFactory<TypeBoundDao, Long>> { ExposedDaoFactory(TypeBoundDao) }
-    single<DaoFactory<TypeDeclarationDao, Long>> { ExposedDaoFactory(TypeDeclarationDao) }
-    single<DaoFactory<TypeDefinitionDao, Long>> { ExposedDaoFactory(TypeDefinitionDao) }
-    single<DaoFactory<TypeParameterDao, Long>> { ExposedDaoFactory(TypeParameterDao) }
-    single<DaoFactory<TypeSchemaRefDao, Long>> { ExposedDaoFactory(TypeSchemaRefDao) }
-    single<DaoFactory<TypeUnionMemberDao, CompositeID>> { ExposedDaoFactory(TypeUnionMemberDao) }
-    single<DaoFactory<TypeVarianceDao, Long>> { ExposedDaoFactory(TypeVarianceDao) }
-    single<DaoFactory<PaymentMethodDao, Long>> { ExposedDaoFactory(PaymentMethodDao) }
-    single<DaoFactory<StepTagDao, CompositeID>> { ExposedDaoFactory(StepTagDao) }
-    single<DaoFactory<TagRelationDao, CompositeID>> { ExposedDaoFactory(TagRelationDao) }
-    single<DaoFactory<TagDao, Long>> { ExposedDaoFactory(TagDao) }
-    single<DaoFactory<UserDao, Long>> { ExposedDaoFactory(UserDao) }
-    single<DaoFactory<WorkflowTagDao, CompositeID>> { ExposedDaoFactory(WorkflowTagDao) }
-    single<DaoFactory<DataPointDao, Long>> { ExposedDaoFactory(DataPointDao) }
-    single<DaoFactory<PhaseDao, Long>> { ExposedDaoFactory(PhaseDao) }
-    single<DaoFactory<StepDao, Long>> { ExposedDaoFactory(StepDao) }
-    single<DaoFactory<ToolParamDao, Long>> { ExposedDaoFactory(ToolParamDao) }
-    single<DaoFactory<ToolDao, Long>> { ExposedDaoFactory(ToolDao) }
-    single<DaoFactory<WorkflowFolderDao, Long>> { ExposedDaoFactory(WorkflowFolderDao) }
-    single<DaoFactory<WorkflowDao, Long>> { ExposedDaoFactory(WorkflowDao) }
-    single<DaoFactory<WorkflowMetadataDao, Long>> { ExposedDaoFactory(WorkflowMetadataDao) }
+    single<DaoFactory<StepRunEntity, Long>> { ExposedDaoFactory(StepRunEntity) }
+    single<DaoFactory<TestCaseEntity, Long>> { ExposedDaoFactory(TestCaseEntity) }
+    single<DaoFactory<TestExpectationEntity, Long>> { ExposedDaoFactory(TestExpectationEntity) }
+    single<DaoFactory<TestInputEntity, Long>> { ExposedDaoFactory(TestInputEntity) }
+    single<DaoFactory<WorkflowTestResultEntity, Long>> { ExposedDaoFactory(WorkflowTestResultEntity) }
+    single<DaoFactory<WorkflowRunEntity, Long>> { ExposedDaoFactory(WorkflowRunEntity) }
+    single<DaoFactory<ErrorWatchEntity, Long>> { ExposedDaoFactory(ErrorWatchEntity) }
+    single<DaoFactory<ErrorWatchFnEntity, Long>> { ExposedDaoFactory(ErrorWatchFnEntity) }
+    single<DaoFactory<InquisitionEntity, Long>> { ExposedDaoFactory(InquisitionEntity) }
+    single<DaoFactory<InitialDataPointInjectorEntity, Long>> { ExposedDaoFactory(InitialDataPointInjectorEntity) }
+    single<DaoFactory<ProvisionDataPointEntity, CompositeID>> { ExposedDaoFactory(ProvisionDataPointEntity) }
+    single<DaoFactory<ToolParamDataPointEntity, Long>> { ExposedDaoFactory(ToolParamDataPointEntity) }
+    single<DaoFactory<DataPointSaveEntity, Long>> { ExposedDaoFactory(DataPointSaveEntity) }
+    single<DaoFactory<WorkflowJunctionEntity, Long>> { ExposedDaoFactory(WorkflowJunctionEntity) }
+    single<DaoFactory<AppliedTransformArgEntity, Long>> { ExposedDaoFactory(AppliedTransformArgEntity) }
+    single<DaoFactory<AppliedTransformEntity, Long>> { ExposedDaoFactory(AppliedTransformEntity) }
+    single<DaoFactory<TransformArgEntity, Long>> { ExposedDaoFactory(TransformArgEntity) }
+    single<DaoFactory<TransformEntity, Long>> { ExposedDaoFactory(TransformEntity) }
+    single<DaoFactory<TransformTargetTypeEntity, CompositeID>> { ExposedDaoFactory(TransformTargetTypeEntity) }
+    single<DaoFactory<TypeBoundEntity, Long>> { ExposedDaoFactory(TypeBoundEntity) }
+    single<DaoFactory<TypeDeclarationEntity, Long>> { ExposedDaoFactory(TypeDeclarationEntity) }
+    single<DaoFactory<TypeDefinitionEntity, Long>> { ExposedDaoFactory(TypeDefinitionEntity) }
+    single<DaoFactory<TypeParameterEntity, Long>> { ExposedDaoFactory(TypeParameterEntity) }
+    single<DaoFactory<TypeSchemaRefEntity, Long>> { ExposedDaoFactory(TypeSchemaRefEntity) }
+    single<DaoFactory<TypeUnionMemberEntity, CompositeID>> { ExposedDaoFactory(TypeUnionMemberEntity) }
+    single<DaoFactory<TypeVarianceEntity, Long>> { ExposedDaoFactory(TypeVarianceEntity) }
+    single<DaoFactory<PaymentMethodEntity, Long>> { ExposedDaoFactory(PaymentMethodEntity) }
+    single<DaoFactory<StepTagEntity, CompositeID>> { ExposedDaoFactory(StepTagEntity) }
+    single<DaoFactory<TagRelationEntity, CompositeID>> { ExposedDaoFactory(TagRelationEntity) }
+    single<DaoFactory<TagEntity, Long>> { ExposedDaoFactory(TagEntity) }
+    single<DaoFactory<UserEntity, Long>> { ExposedDaoFactory(UserEntity) }
+    single<DaoFactory<WorkflowTagEntity, CompositeID>> { ExposedDaoFactory(WorkflowTagEntity) }
+    single<DaoFactory<DataPointEntity, Long>> { ExposedDaoFactory(DataPointEntity) }
+    single<DaoFactory<PhaseEntity, Long>> { ExposedDaoFactory(PhaseEntity) }
+    single<DaoFactory<StepEntity, Long>> { ExposedDaoFactory(StepEntity) }
+    single<DaoFactory<ToolParamEntity, Long>> { ExposedDaoFactory(ToolParamEntity) }
+    single<DaoFactory<ToolEntity, Long>> { ExposedDaoFactory(ToolEntity) }
+    single<DaoFactory<WorkflowFolderEntity, Long>> { ExposedDaoFactory(WorkflowFolderEntity) }
+    single<DaoFactory<WorkflowEntity, Long>> { ExposedDaoFactory(WorkflowEntity) }
+    single<DaoFactory<WorkflowMetadataEntity, Long>> { ExposedDaoFactory(WorkflowMetadataEntity) }
 }
 
 val mapperModule = module {
@@ -90,7 +102,7 @@ val mapperModule = module {
     includes(daoFactoryModule)
 
     single<VersionSpecsMapper> { VersionSpecsMapper(get()) }
-    factory<DaoFactory<VersionSpecDao, Long>> { ExposedDaoFactory(VersionSpecDao) }
+    factory<DaoFactory<VersionSpecEntity, Long>> { ExposedDaoFactory(VersionSpecEntity) }
     single<TypeUnionMembersMapper> { TypeUnionMembersMapper(get()) }
     single<TransformTargetTypesMapper> { TransformTargetTypesMapper(get()) }
     single<TagRelationsMapper> { TagRelationsMapper(get()) }

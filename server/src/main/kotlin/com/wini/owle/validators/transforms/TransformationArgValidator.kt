@@ -1,7 +1,7 @@
 package com.wini.owle.validators.transforms
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.transforms.TransformationArgDto
+import com.wini.owle.dto.transforms.TransformArg
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.typing.TypeDeclarationValidator
@@ -9,12 +9,12 @@ import com.wini.owle.validators.typing.TypeDeclarationValidator
 class TransformationArgValidator(
     private val transformationValidator: TransformationValidator,
     private val typeDeclarationValidator: TypeDeclarationValidator
-) : BaseValidator<TransformationArgDto>() {
+) : BaseValidator<TransformArg>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: TransformationArgDto): ValidationResult {
+    override fun validate(dto: TransformArg): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested transformation

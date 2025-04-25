@@ -1,17 +1,17 @@
 package com.wini.owle.services
 
-import com.wini.owle.services.environs.PackageRepoServiceTest
-import com.wini.owle.services.environs.PackageServiceTest
-import com.wini.owle.services.environs.ToolPackageDependencyServiceTest
+import com.wini.owle.services.environs.PyPackageRepoServiceTest
+import com.wini.owle.services.environs.PyPackageServiceTest
+import com.wini.owle.services.environs.ToolPyPackageDependencyServiceTest
 import com.wini.owle.services.environs.VersionSpecServiceTest
 import com.wini.owle.services.runs.*
 import com.wini.owle.services.steps.*
 import com.wini.owle.services.transforms.*
 import com.wini.owle.services.typing.*
-import com.wini.owle.services.user.PaymentMethodServiceTest
-import com.wini.owle.services.user.TagRelationServiceTest
-import com.wini.owle.services.user.TagServiceTest
-import com.wini.owle.services.user.UserServiceTest
+import com.wini.owle.services.user.PaymentMethodEntityServiceTest
+import com.wini.owle.services.user.TagEntityRelationServiceTest
+import com.wini.owle.services.user.TagEntityServiceTest
+import com.wini.owle.services.user.UserEntityServiceTest
 import com.wini.owle.services.workflows.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -26,15 +26,15 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("PackageRepoService")
-        inner class PackageRepoTest: PackageRepoServiceTest()
+        inner class PyPackageRepoTest: PyPackageRepoServiceTest()
 
         @Nested
         @DisplayName("PackageService")
-        inner class PackageTest: PackageServiceTest()
+        inner class PyPackageTest: PyPackageServiceTest()
 
         @Nested
         @DisplayName("ToolPackageDependency")
-        inner class ToolPackageDepServiceTest: ToolPackageDependencyServiceTest()
+        inner class ToolPyPackageDepServiceTest: ToolPyPackageDependencyServiceTest()
 
         @Nested
         @DisplayName("VersionSpecService")
@@ -60,7 +60,7 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("TestCaseService")
-        inner class TestCaseTest: TestCaseServiceTest()
+        inner class TestCaseTestEntity: TestCaseServiceTestEntity()
 
         @Nested
         @DisplayName("TestExpectedOutcomeService")
@@ -68,11 +68,11 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("TestInputService")
-        inner class TestInputTest: TestInputServiceTest()
+        inner class TestInputTestEntity: TestInputServiceTestEntity()
 
         @Nested
         @DisplayName("TestResultService")
-        inner class TestResultTest: TestResultServiceTest()
+        inner class TestResultWorkflowTest: TestResultServiceWorkflowTest()
 
         @Nested
         @DisplayName("WorkflowExecutionService")
@@ -86,15 +86,15 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("ErrorWatchService")
-        inner class ErrorWatchTest: ErrorWatchServiceTest()
+        inner class ErrorWatchEntityTest: ErrorWatchEntityServiceTest()
 
         @Nested
         @DisplayName("ErrorWatchFnService")
-        inner class ErrorWatchFnTest: ErrorWatchFnServiceTest()
+        inner class ErrorWatchEntityFnTest: ErrorWatchEntityFnServiceTest()
 
         @Nested
         @DisplayName("InquisitionService")
-        inner class InquisitionTest: InquisitionServiceTest()
+        inner class InquisitionEntityTest: InquisitionEntityServiceTest()
 
         @Nested
         @DisplayName("PreReqInjectionService")
@@ -106,7 +106,7 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("ProvisionDataPointService")
-        inner class ProvisionDataPointTest: ProvisionDataPointServiceTest()
+        inner class ProvisionDataPointEntityTest: ProvisionDataPointEntityServiceTest()
 
         @Nested
         @DisplayName("RevisionService")
@@ -124,11 +124,11 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("AppliedTransformArgService")
-        inner class AppliedTransformArgTest: AppliedTransformArgServiceTest()
+        inner class AppliedTransformEntityEntityArgTest: AppliedTransformEntityEntityArgServiceTest()
 
         @Nested
         @DisplayName("AppliedTransformService")
-        inner class AppliedTransformTest: AppliedTransformServiceTest()
+        inner class AppliedTransformEntityEntityTest: AppliedTransformEntityEntityServiceTest()
 
         @Nested
         @DisplayName("TransformationArgService")
@@ -140,7 +140,7 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("TransformArgTargetTypeService")
-        inner class TransformationTargetTypeTest: TransformArgTargetTypeServiceTest()
+        inner class TransformationTargetTypeTest: TransformEntityArgTargetTypeServiceTest()
 
     }
 
@@ -150,15 +150,15 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("TypeBoundService")
-        inner class TypeBoundTest: TypeBoundServiceTest()
+        inner class TypeBoundEntityTest: TypeBoundEntityServiceTest()
 
         @Nested
         @DisplayName("TypeDeclarationService")
-        inner class TypeDeclarationTest: TypeDeclarationServiceTest()
+        inner class TypeDeclarationEntityTest: TypeDeclarationEntityServiceTest()
 
         @Nested
         @DisplayName("TypeDefinitionService")
-        inner class TypeDefinitionTest: TypeDefinitionServiceTest()
+        inner class TypeDefinitionEntityTest: TypeDefinitionEntityServiceTest()
 
         @Nested
         @DisplayName("TypeParameterService")
@@ -180,23 +180,23 @@ open class ServiceTest {
 
     @Nested
     @DisplayName("User Module")
-    inner class ServiceUserModuleTest {
+    inner class ServiceUserEntityModuleTest {
 
         @Nested
         @DisplayName("PaymentMethodService")
-        inner class PaymentMethodTest: PaymentMethodServiceTest()
+        inner class PaymentMethodEntityTest: PaymentMethodEntityServiceTest()
 
         @Nested
         @DisplayName("TagRelationService")
-        inner class TagRelationTest: TagRelationServiceTest()
+        inner class TagEntityRelationTest: TagEntityRelationServiceTest()
 
         @Nested
         @DisplayName("TagService")
-        inner class TagTest: TagServiceTest()
+        inner class TagEntityTest: TagEntityServiceTest()
 
         @Nested
         @DisplayName("UserService")
-        inner class UserTest: UserServiceTest()
+        inner class UserEntityTest: UserEntityServiceTest()
 
     }
 
@@ -206,7 +206,7 @@ open class ServiceTest {
 
         @Nested
         @DisplayName("DataPointService")
-        inner class DataPointTest: DataPointServiceTest()
+        inner class DataPointEntityTest: DataPointEntityServiceTest()
 
         @Nested
         @DisplayName("PhaseService")

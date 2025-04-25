@@ -1,11 +1,11 @@
 package com.wini.owle.mapper.typing
 
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.dto.typing.TypeVarianceDto
-import com.wini.owle.dto.typing.VarianceCardinalityDto
-import com.wini.owle.entity.typing.TypeDeclarationDao
-import com.wini.owle.entity.typing.TypeVarianceDao
-import com.wini.owle.entity.typing.enums.VarianceCardinality
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.dto.typing.TypeVariance
+import com.wini.owle.dto.typing.enums.VarianceCardinalityDto
+import com.wini.owle.entity.typing.TypeDeclarationEntity
+import com.wini.owle.entity.typing.TypeVarianceEntity
+import com.wini.owle.entity.typing.enums.VarianceCardinalityEntity
 import com.wini.owle.mapper.DaoFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +25,7 @@ open class TypeVariancesMapperTest {
 
     private lateinit var mapper: TypeVariancesMapper
     private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()
-    private val factory: DaoFactory<TypeVarianceDao, Long> = mockk()
+    private val factory: DaoFactory<TypeVarianceEntity, Long> = mockk()
 
     @BeforeEach
     fun setUp() {
@@ -35,15 +35,15 @@ open class TypeVariancesMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val dto = TypeVarianceDto(
+        val dto = TypeVariance(
             id = 99L,
             typeVariableDeclaration = mockk(),
             varianceCardinality = VarianceCardinalityDto.Covariant
         )
 
         // Mock the behavior of findById to return null (not found)
-        mockkObject(TypeVarianceDao)
-        every { TypeVarianceDao.findById(99L) } returns null
+        mockkObject(TypeVarianceEntity)
+        every { TypeVarianceEntity.findById(99L) } returns null
 
         // Verify that the exception is thrown with the correct message
         val exception = assertThrows<IllegalStateException> {
@@ -51,20 +51,20 @@ open class TypeVariancesMapperTest {
         }
 
         assertEquals("TypeVariance with id=99 not found", exception.message)
-        unmockkObject(TypeVarianceDao)
+        unmockkObject(TypeVarianceEntity)
     }
 
     @Test
     fun `toDto should correctly map entity to dto`() {
         // Create mock dao objects
-        val entity = mockk<TypeVarianceDao> {
+        val entity = mockk<TypeVarianceEntity> {
             every { id.value } returns 1L
             every { typeVariableDeclaration } returns mockk()
-            every { varianceCardinality } returns VarianceCardinality.COVARIANT
+            every { varianceCardinality } returns VarianceCardinalityEntity.COVARIANT
         }
 
         // Mock the behavior of typeDeclarationsMapper
-        val typeVariableDeclarationDto = mockk<TypeDeclarationDto>()
+        val typeVariableDeclarationDto = mockk<TypeDeclaration>()
         every { typeDeclarationsMapper.toDto(entity.typeVariableDeclaration) } returns typeVariableDeclarationDto
 
         // Call the method under test
@@ -79,25 +79,25 @@ open class TypeVariancesMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val dto = TypeVarianceDto(id = 42L, typeVariableDeclaration = mockk(), varianceCardinality = VarianceCardinalityDto.Covariant)
+        val dto = TypeVariance(id = 42L, typeVariableDeclaration = mockk(), varianceCardinality = VarianceCardinalityDto.Covariant)
 
         // Mock the existing entity that will be updated
-        val existingEntity = mockk<TypeVarianceDao>(relaxed = true)
+        val existingEntity = mockk<TypeVarianceEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val varianceCardinality: VarianceCardinality = mockk()
-        val typeVariableDeclaration: TypeDeclarationDao = mockk()
+        val varianceCardinality: VarianceCardinalityEntity = mockk()
+        val typeVariableDeclaration: TypeDeclarationEntity = mockk()
 
         // Mock the behavior of typeDeclarationsMapper.toEntity
         every { typeDeclarationsMapper.toEntity(any()) } returns typeVariableDeclaration
 
         // Set up mocks for finding existing entity
-        mockkObject(TypeVarianceDao)
-        every { TypeVarianceDao.findById(42L) } returns existingEntity
+        mockkObject(TypeVarianceEntity)
+        every { TypeVarianceEntity.findById(42L) } returns existingEntity
 
         // Capture the property updates
-        val typeVariableDeclarationSlot = slot<TypeDeclarationDao>()
-        val varianceCardinalitySlot = slot<VarianceCardinality>()
+        val typeVariableDeclarationSlot = slot<TypeDeclarationEntity>()
+        val varianceCardinalitySlot = slot<VarianceCardinalityEntity>()
 
         every { existingEntity.typeVariableDeclaration = capture(typeVariableDeclarationSlot) } just runs
         every { existingEntity.varianceCardinality = capture(varianceCardinalitySlot) } just runs
@@ -106,34 +106,34 @@ open class TypeVariancesMapperTest {
         val result = mapper.toEntity(dto)
 
         // Verify that the existing entity was found and updated
-        verify { TypeVarianceDao.findById(42L) }
+        verify { TypeVarianceEntity.findById(42L) }
         verify { existingEntity.typeVariableDeclaration = typeVariableDeclaration }
-        verify { existingEntity.varianceCardinality = VarianceCardinality.COVARIANT }
+        verify { existingEntity.varianceCardinality = VarianceCardinalityEntity.COVARIANT }
 
         // Verify the captured values
         assertEquals(typeVariableDeclaration, typeVariableDeclarationSlot.captured)
-        assertEquals(VarianceCardinality.COVARIANT, varianceCardinalitySlot.captured)
+        assertEquals(VarianceCardinalityEntity.COVARIANT, varianceCardinalitySlot.captured)
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(TypeVarianceDao)
+        unmockkObject(TypeVarianceEntity)
     }
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = TypeVarianceDto(
+        val dto = TypeVariance(
             id = 0L,
             typeVariableDeclaration = mockk(),
             varianceCardinality = VarianceCardinalityDto.Covariant
         )
 
         // Mock the new entity that will be created
-        val newEntity = mockk<TypeVarianceDao>(relaxed = true)
+        val newEntity = mockk<TypeVarianceEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val typeVariableDeclaration: TypeDeclarationDao = mockk()
+        val typeVariableDeclaration: TypeDeclarationEntity = mockk()
 
         // Mock the behavior of typeDeclarationsMapper.toEntity
         every { typeDeclarationsMapper.toEntity(any()) } returns typeVariableDeclaration
@@ -142,8 +142,8 @@ open class TypeVariancesMapperTest {
         every { factory.create() } returns newEntity
 
         // Capture property assignments
-        val typeVariableDeclarationSlot = slot<TypeDeclarationDao>()
-        val varianceCardinalitySlot = slot<VarianceCardinality>()
+        val typeVariableDeclarationSlot = slot<TypeDeclarationEntity>()
+        val varianceCardinalitySlot = slot<VarianceCardinalityEntity>()
 
         every { newEntity.typeVariableDeclaration = capture(typeVariableDeclarationSlot) } just runs
         every { newEntity.varianceCardinality = capture(varianceCardinalitySlot) } just runs
@@ -156,11 +156,11 @@ open class TypeVariancesMapperTest {
 
         // Verify the properties were set correctly
         verify { newEntity.typeVariableDeclaration = typeVariableDeclaration }
-        verify { newEntity.varianceCardinality = VarianceCardinality.COVARIANT }
+        verify { newEntity.varianceCardinality = VarianceCardinalityEntity.COVARIANT }
 
         // Verify the captured values
         assertEquals(typeVariableDeclaration, typeVariableDeclarationSlot.captured)
-        assertEquals(VarianceCardinality.COVARIANT, varianceCardinalitySlot.captured)
+        assertEquals(VarianceCardinalityEntity.COVARIANT, varianceCardinalitySlot.captured)
 
         // Verify the result is the new entity
         assertEquals(newEntity, result)

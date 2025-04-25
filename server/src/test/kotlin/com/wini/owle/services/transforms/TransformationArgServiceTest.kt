@@ -2,10 +2,10 @@ package com.wini.owle.services.transforms
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.transforms.TransformationArgDto
-import com.wini.owle.dto.transforms.TransformationDto
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.entity.transforms.TransformationArgDao
+import com.wini.owle.dto.transforms.TransformArg
+import com.wini.owle.dto.transforms.Transform
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.entity.transforms.TransformArgEntity
 import com.wini.owle.mapper.transforms.TransformationArgsMapper
 import com.wini.owle.repo.TransformationArgIdFactory
 import com.wini.owle.repo.transforms.TransformationArgRepository
@@ -27,12 +27,12 @@ open class TransformationArgServiceTest {
 
     fun createSampleDto(
         id: Long = 0L,
-        transformation: TransformationDto = mockk(),
-        typeDeclaration: TypeDeclarationDto = mockk(),
+        transformation: Transform = mockk(),
+        typeDeclaration: TypeDeclaration = mockk(),
         name: String = "Transformation Arg Name",
         description: String? = "Transformation Arg Description"
-    ): TransformationArgDto {
-        return TransformationArgDto(
+    ): TransformArg {
+        return TransformArg(
             id = id,
             transformation = transformation,
             typeDeclaration = typeDeclaration,
@@ -41,10 +41,10 @@ open class TransformationArgServiceTest {
         )
     }
 
-    fun createSampleEntity(): TransformationArgDao = mockk<TransformationArgDao>() {
+    fun createSampleEntity(): TransformArgEntity = mockk<TransformArgEntity>() {
         every { id } returns mockk()
         every { transformation } returns mockk()
-        every { typeDeclaration } returns mockk()
+        every { typeDeclarationEntity } returns mockk()
         every { name } returns "Transformation Arg Name"
         every { description } returns "Transformation Arg Description"
     }
@@ -60,8 +60,8 @@ open class TransformationArgServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: TransformationArgDto = mockk()
-        val entity: TransformationArgDao = mockk()
+        val dto: TransformArg = mockk()
+        val entity: TransformArgEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -83,8 +83,8 @@ open class TransformationArgServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: TransformationArgDto = mockk()
-        val entity: TransformationArgDao = mockk()
+        val dto: TransformArg = mockk()
+        val entity: TransformArgEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -107,9 +107,9 @@ open class TransformationArgServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: TransformationArgDto = createSampleDto()
+        val dto: TransformArg = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: TransformationArgDao = mockk<TransformationArgDao>() {
+        val entity: TransformArgEntity = mockk<TransformArgEntity>() {
             every { id } returns mockk()
         }
 
@@ -158,7 +158,7 @@ open class TransformationArgServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<TransformationArgDao> = mockk()
+        val entities: List<TransformArgEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -179,8 +179,8 @@ open class TransformationArgServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<TransformationArgDao>()
-        val emptyDtoList = emptyList<TransformationArgDto>()
+        val emptyList = emptyList<TransformArgEntity>()
+        val emptyDtoList = emptyList<TransformArg>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -225,7 +225,7 @@ open class TransformationArgServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, TransformationArgDao> = mockk()
+        val entityClass: EntityClass<Long, TransformArgEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -275,8 +275,8 @@ open class TransformationArgServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<TransformationArgDto>()
-        val emptyEntityList = emptyList<TransformationArgDao>()
+        val emptyDtoList = emptyList<TransformArg>()
+        val emptyEntityList = emptyList<TransformArgEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

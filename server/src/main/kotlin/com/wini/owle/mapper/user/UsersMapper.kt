@@ -1,7 +1,7 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.dto.user.UserDto
-import com.wini.owle.entity.user.UserDao
+import com.wini.owle.dto.user.User
+import com.wini.owle.entity.user.UserEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
@@ -9,13 +9,13 @@ import com.wini.owle.mapper.user.enums.SubscriptionStatusMapper
 
 
 class UsersMapper(
-    private val daoFactory: DaoFactory<UserDao, Long>,
+    private val daoFactory: DaoFactory<UserEntity, Long>,
     private val subscriptionStatusMapper: SubscriptionStatusMapper,
     private val dateTimeConverter: DateTimeConverter
-): DbMapper<UserDto, UserDao>() {
+): DbMapper<User, UserEntity>() {
 
-    override fun toEntity(dto: UserDto): UserDao {
-        val applyProps: UserDao.() -> Unit = {
+    override fun toEntity(dto: User): UserEntity {
+        val applyProps: UserEntity.() -> Unit = {
             email = dto.email
             password = dto.password
             resetToken = dto.resetToken
@@ -29,14 +29,14 @@ class UsersMapper(
         return if (dto.id == 0L)
             daoFactory.create().apply(applyProps)
         else {
-            UserDao.findById(dto.id)
+            UserEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("User with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: UserDao): UserDto {
-        return UserDto(
+    override fun toDto(entity: UserEntity): User {
+        return User(
             id = entity.id.value,
             email = entity.email,
             password = entity.password, // Be cautious about exposing password hashes

@@ -2,10 +2,10 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.runs.ExecutionLogDto
-import com.wini.owle.dto.runs.LogLevelDto
-import com.wini.owle.dto.runs.StepExecutionDto
-import com.wini.owle.entity.runs.ExecutionLogDao
+import com.wini.owle.dto.runs.step.StepRunLogLine
+import com.wini.owle.dto.runs.enums.LogLevel
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.entity.runs.step.StepRunLogLineEntity
 import com.wini.owle.mapper.runs.ExecutionLogMapper
 import com.wini.owle.repo.ExecutionLogsIdFactory
 import com.wini.owle.repo.runs.ExecutionLogRepository
@@ -27,11 +27,11 @@ open class ExecutionLogServiceTest {
 
     fun createSampleDto(
         mockId: Long = 1L,
-        stepExecution: StepExecutionDto = mockk(),
+        stepExecution: StepExecution = mockk(),
         timestamp: String = "2025-04-04T13:26:00Z",
-        logLevel: LogLevelDto = mockk(),
+        logLevel: LogLevel = mockk(),
         message: String = "Log line message content"
-    ): ExecutionLogDto = ExecutionLogDto(
+    ): StepRunLogLine = StepRunLogLine(
         id = mockId,
         stepExecution = stepExecution,
         timestamp = timestamp,
@@ -39,7 +39,7 @@ open class ExecutionLogServiceTest {
         message = message
     )
 
-    fun createSampleEntity(): ExecutionLogDao = mockk<ExecutionLogDao>() {
+    fun createSampleEntity(): StepRunLogLineEntity = mockk<StepRunLogLineEntity>() {
         every { id } returns mockk()
         every { stepExecution } returns mockk()
         every { timestamp } returns mockk()
@@ -58,8 +58,8 @@ open class ExecutionLogServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: ExecutionLogDto = mockk()
-        val entity: ExecutionLogDao = mockk()
+        val dto: StepRunLogLine = mockk()
+        val entity: StepRunLogLineEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -81,8 +81,8 @@ open class ExecutionLogServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: ExecutionLogDto = mockk()
-        val entity: ExecutionLogDao = mockk()
+        val dto: StepRunLogLine = mockk()
+        val entity: StepRunLogLineEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -105,9 +105,9 @@ open class ExecutionLogServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: ExecutionLogDto = createSampleDto()
+        val dto: StepRunLogLine = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: ExecutionLogDao = mockk<ExecutionLogDao>() {
+        val entity: StepRunLogLineEntity = mockk<StepRunLogLineEntity>() {
             every { id } returns mockk()
         }
 
@@ -156,7 +156,7 @@ open class ExecutionLogServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<ExecutionLogDao> = mockk()
+        val entities: List<StepRunLogLineEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -177,8 +177,8 @@ open class ExecutionLogServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<ExecutionLogDao>()
-        val emptyDtoList = emptyList<ExecutionLogDto>()
+        val emptyList = emptyList<StepRunLogLineEntity>()
+        val emptyDtoList = emptyList<StepRunLogLine>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -223,7 +223,7 @@ open class ExecutionLogServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, ExecutionLogDao> = mockk()
+        val entityClass: EntityClass<Long, StepRunLogLineEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -273,8 +273,8 @@ open class ExecutionLogServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<ExecutionLogDto>()
-        val emptyEntityList = emptyList<ExecutionLogDao>()
+        val emptyDtoList = emptyList<StepRunLogLine>()
+        val emptyEntityList = emptyList<StepRunLogLineEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

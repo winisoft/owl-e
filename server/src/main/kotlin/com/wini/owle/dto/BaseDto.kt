@@ -9,12 +9,3 @@ interface BaseDto {
     val typeName: String get() = this::class.simpleName?.removeSuffix("Dto") ?: "Type Name Unavailable"
 }
 
-interface StandardDto: BaseDto {
-    val id: Long
-
-    override fun idToString(): String {
-        return "id={$id}"
-    }
-}
-
-interface CompositeDto: BaseDto

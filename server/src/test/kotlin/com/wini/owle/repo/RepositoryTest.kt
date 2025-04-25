@@ -13,11 +13,11 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("PackageRepoRepository")
-        inner class PackageRepoRepositoryTest: OwleRepoImplTest()
+        inner class PyPackageRepoRepositoryTest: OwleRepoImplTest()
 
         @Nested
         @DisplayName("PackageRepository")
-        inner class PackageRepositoryTest: OwleRepoImplTest()
+        inner class PyPackageRepositoryTest: OwleRepoImplTest()
 
         @Nested
         @DisplayName("VersionSpecRepository")
@@ -47,7 +47,7 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("TestCaseRepository")
-        inner class TestCaseRepositoryTest: OwleRepoImplTest()
+        inner class TestCaseRepositoryTestEntity: OwleRepoImplTest()
 
         @Nested
         @DisplayName("TestExpectedOutcomeRepository")
@@ -55,11 +55,11 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("TestInputRepository")
-        inner class TestInputRepositoryTest: OwleRepoImplTest()
+        inner class TestInputRepositoryTestEntity: OwleRepoImplTest()
 
         @Nested
         @DisplayName("TestResultRepository")
-        inner class TestResultRepositoryTest: OwleRepoImplTest()
+        inner class TestResultRepositoryWorkflowTest: OwleRepoImplTest()
 
         @Nested
         @DisplayName("WorkflowExecutionRepository")
@@ -73,15 +73,15 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("ErrorWatchRepository")
-        inner class ErrorWatchRepositoryTests: OwleRepoImplTest()
+        inner class ErrorWatchEntityRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("ErrorWatchFnRepository")
-        inner class ErrorWatchFnRepositoryTests: OwleRepoImplTest()
+        inner class ErrorWatchEntityFnRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("InquisitionRepository")
-        inner class InquisitionRepositoryTests: OwleRepoImplTest()
+        inner class InquisitionEntityRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("PreReqInjectionRepository")
@@ -107,11 +107,11 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("AppliedTransformArgRepository")
-        inner class AppliedTransformArgRepositoryTest: OwleRepoImplTest()
+        inner class AppliedTransformEntityEntityArgRepositoryTest: OwleRepoImplTest()
 
         @Nested
         @DisplayName("AppliedTransformRepository")
-        inner class AppliedTransformRepositoryTest: OwleRepoImplTest()
+        inner class AppliedTransformEntityEntityRepositoryTest: OwleRepoImplTest()
 
         @Nested
         @DisplayName("TransformationArgRepository")
@@ -133,15 +133,15 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("TypeBoundRepository")
-        inner class TypeBoundRepositoryTests: OwleRepoImplTest()
+        inner class TypeBoundEntityRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("TypeDeclarationRepository")
-        inner class TypeDeclarationRepositoryTests: OwleRepoImplTest()
+        inner class TypeDeclarationEntityRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("TypeDefinitionRepository")
-        inner class TypeDefinitionRepositoryTests: OwleRepoImplTest()
+        inner class TypeDefinitionEntityRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("TypeParameterRepository")
@@ -159,19 +159,19 @@ open class RepositoryTest {
 
     @Nested
     @DisplayName("User Module")
-    inner class RepositoryUserModuleTest {
+    inner class RepositoryUserEntityModuleTest {
 
         @Nested
         @DisplayName("PaymentMethodRepository")
-        inner class PaymentMethodRepositoryTests: OwleRepoImplTest()
+        inner class PaymentMethodEntityRepositoryTests: OwleRepoImplTest()
         
         @Nested
         @DisplayName("TagRepository")
-        inner class TagRepositoryTest: OwleRepoImplTest()
+        inner class TagEntityRepositoryTest: OwleRepoImplTest()
 
         @Nested
         @DisplayName("UserRepository")
-        inner class UserRepositoryTest: OwleRepoImplTest()
+        inner class UserEntityRepositoryTest: OwleRepoImplTest()
 
     }
 
@@ -181,7 +181,7 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("DataPointRepository")
-        inner class DataPointRepositoryTests: OwleRepoImplTest()
+        inner class DataPointEntityRepositoryTests: OwleRepoImplTest()
 
         @Nested
         @DisplayName("PhaseRepository")

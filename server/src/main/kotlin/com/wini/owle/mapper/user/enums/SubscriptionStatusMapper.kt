@@ -1,25 +1,25 @@
 package com.wini.owle.mapper.user.enums
 
-import com.wini.owle.dto.user.SubscriptionStatusDto
-import com.wini.owle.entity.user.enums.SubscriptionStatus
+import com.wini.owle.dto.user.enums.SubscriptionStatus
+import com.wini.owle.entity.user.enums.SubscriptionStatusEntity
 
 class SubscriptionStatusMapper {
 
-    fun toEntity(dto: SubscriptionStatusDto): SubscriptionStatus {
+    fun toEntity(dto: SubscriptionStatus): SubscriptionStatusEntity {
         return when (dto) {
-            SubscriptionStatusDto.Registered -> SubscriptionStatus.REGISTERED
-            SubscriptionStatusDto.Active -> SubscriptionStatus.ACTIVE
-            SubscriptionStatusDto.Cancelled -> SubscriptionStatus.CANCELLED
-            SubscriptionStatusDto.OnHold -> SubscriptionStatus.ON_HOLD
+            SubscriptionStatus.REGISTERED -> SubscriptionStatusEntity.REGISTERED
+            SubscriptionStatus.ACTIVE -> SubscriptionStatusEntity.ACTIVE
+            SubscriptionStatus.CANCELLED -> SubscriptionStatusEntity.CANCELLED
+            SubscriptionStatus.ON_HOLD -> SubscriptionStatusEntity.ON_HOLD
         }
     }
 
-    fun toDto(entity: SubscriptionStatus): SubscriptionStatusDto {
+    fun toDto(entity: SubscriptionStatusEntity): SubscriptionStatus {
         return when(entity){
-            SubscriptionStatus.REGISTERED -> SubscriptionStatusDto.Registered
-            SubscriptionStatus.ACTIVE -> SubscriptionStatusDto.Active
-            SubscriptionStatus.CANCELLED -> SubscriptionStatusDto.Cancelled
-            SubscriptionStatus.ON_HOLD -> SubscriptionStatusDto.OnHold
+            SubscriptionStatusEntity.REGISTERED -> SubscriptionStatus.REGISTERED
+            SubscriptionStatusEntity.ACTIVE -> SubscriptionStatus.ACTIVE
+            SubscriptionStatusEntity.CANCELLED -> SubscriptionStatus.CANCELLED
+            SubscriptionStatusEntity.ON_HOLD -> SubscriptionStatus.ON_HOLD
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.dto.environs.VersionSpecDto
+import com.wini.owle.dto.environs.VersionSpec
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
@@ -10,11 +10,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class VersionSpecApi(
-    dll: DLL<Long, VersionSpecDto>,
-    validator: DtoValidator<VersionSpecDto>
-) : LongIdEndpointImpl<VersionSpecDto>(
+    dll: DLL<Long, VersionSpec>,
+    validator: DtoValidator<VersionSpec>
+) : LongIdEndpointImpl<VersionSpec>(
     dll = dll,
-    serializer = VersionSpecDto.serializer(),
+    serializer = VersionSpec.serializer(),
     validator = validator
 )  {
 

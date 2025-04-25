@@ -2,8 +2,8 @@ package com.wini.owle.services.environs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.environs.VersionSpecDto
-import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.dto.environs.VersionSpec
+import com.wini.owle.entity.environs.VersionSpecEntity
 import com.wini.owle.mapper.environs.VersionSpecsMapper
 import com.wini.owle.repo.VersionSpecIdFactory
 import com.wini.owle.repo.environs.VersionSpecRepository
@@ -28,14 +28,14 @@ open class VersionSpecServiceTest {
         versionMin: String? = "1.0.0",
         versionMax: String? = "2.0.0",
         versionExact: String? = "3.0.0"
-    ): VersionSpecDto = VersionSpecDto(
+    ): VersionSpec = VersionSpec(
         id = mockId,
         versionMin = versionMin,
         versionMax = versionMax,
         versionExact = versionExact
     )
 
-    fun createSampleEntity(): VersionSpecDao = mockk<VersionSpecDao>() {
+    fun createSampleEntity(): VersionSpecEntity = mockk<VersionSpecEntity>() {
         every { id } returns mockk()
         every { versionMin } returns "1.0.0"
         every { versionMax } returns "2.0.0"
@@ -53,8 +53,8 @@ open class VersionSpecServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: VersionSpecDto = createSampleDto()
-        val entity: VersionSpecDao = createSampleEntity()
+        val dto: VersionSpec = createSampleDto()
+        val entity: VersionSpecEntity = createSampleEntity()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -76,8 +76,8 @@ open class VersionSpecServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: VersionSpecDto = mockk()
-        val entity: VersionSpecDao = mockk()
+        val dto: VersionSpec = mockk()
+        val entity: VersionSpecEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -100,11 +100,11 @@ open class VersionSpecServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: VersionSpecDto = VersionSpecDto(
+        val dto: VersionSpec = VersionSpec(
             id = 1L,
         )
         val entityId: EntityID<Long> = mockk()
-        val entity: VersionSpecDao = mockk<VersionSpecDao>() {
+        val entity: VersionSpecEntity = mockk<VersionSpecEntity>() {
             every { id } returns mockk()
         }
 
@@ -153,7 +153,7 @@ open class VersionSpecServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<VersionSpecDao> = mockk()
+        val entities: List<VersionSpecEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -174,8 +174,8 @@ open class VersionSpecServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<VersionSpecDao>()
-        val emptyDtoList = emptyList<VersionSpecDto>()
+        val emptyList = emptyList<VersionSpecEntity>()
+        val emptyDtoList = emptyList<VersionSpec>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -220,7 +220,7 @@ open class VersionSpecServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, VersionSpecDao> = mockk()
+        val entityClass: EntityClass<Long, VersionSpecEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -270,8 +270,8 @@ open class VersionSpecServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<VersionSpecDto>()
-        val emptyEntityList = emptyList<VersionSpecDao>()
+        val emptyDtoList = emptyList<VersionSpec>()
+        val emptyEntityList = emptyList<VersionSpecEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

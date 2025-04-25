@@ -1,7 +1,7 @@
 package com.wini.owle.validators.environs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.environs.VersionSpecDto
+import com.wini.owle.dto.environs.VersionSpec
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
@@ -9,7 +9,7 @@ import com.wini.owle.validators.ValidationResult
  * Validator for VersionSpec DTOs.
  * Validates version specification data against business rules and constraints.
  */
-class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
+class VersionSpecValidator : BaseValidator<VersionSpec>() {
     
     companion object {
         // Constants derived from ExposedTables.kt
@@ -17,7 +17,7 @@ class VersionSpecValidator : BaseValidator<VersionSpecDto>() {
         private val VERSION_REGEX = Regex("^\\d+(\\.\\d+)*$")
     }
     
-    override fun validate(dto: VersionSpecDto): ValidationResult {
+    override fun validate(dto: VersionSpec): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
         
         // At least one version field must be specified

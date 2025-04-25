@@ -2,10 +2,10 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.dto.typing.TypeVarianceDto
-import com.wini.owle.dto.typing.VarianceCardinalityDto
-import com.wini.owle.entity.typing.TypeVarianceDao
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.dto.typing.TypeVariance
+import com.wini.owle.dto.typing.enums.VarianceCardinalityDto
+import com.wini.owle.entity.typing.TypeVarianceEntity
 import com.wini.owle.mapper.typing.TypeVariancesMapper
 import com.wini.owle.repo.TypeVarianceIdFactory
 import com.wini.owle.repo.typing.TypeVarianceRepository
@@ -27,17 +27,17 @@ open class TypeVarianceServiceTest {
 
     fun createSampleDto(
         id: Long = 23L,
-        typeVariableDeclaration: TypeDeclarationDto = mockk(),
+        typeVariableDeclaration: TypeDeclaration = mockk(),
         varianceCardinality: VarianceCardinalityDto = mockk()
-    ): TypeVarianceDto {
-        return TypeVarianceDto(
+    ): TypeVariance {
+        return TypeVariance(
             id = id,
             typeVariableDeclaration = typeVariableDeclaration,
             varianceCardinality = varianceCardinality
         )
     }
 
-    fun createSampleEntity(): TypeVarianceDao = mockk<TypeVarianceDao>() {
+    fun createSampleEntity(): TypeVarianceEntity = mockk<TypeVarianceEntity>() {
         every { id } returns mockk()
         every { typeVariableDeclaration } returns mockk()
         every { varianceCardinality } returns mockk()
@@ -54,8 +54,8 @@ open class TypeVarianceServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: TypeVarianceDto = mockk()
-        val entity: TypeVarianceDao = mockk()
+        val dto: TypeVariance = mockk()
+        val entity: TypeVarianceEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -77,8 +77,8 @@ open class TypeVarianceServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: TypeVarianceDto = mockk()
-        val entity: TypeVarianceDao = mockk()
+        val dto: TypeVariance = mockk()
+        val entity: TypeVarianceEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -101,9 +101,9 @@ open class TypeVarianceServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: TypeVarianceDto = createSampleDto()
+        val dto: TypeVariance = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: TypeVarianceDao = mockk<TypeVarianceDao>() {
+        val entity: TypeVarianceEntity = mockk<TypeVarianceEntity>() {
             every { id } returns mockk()
         }
 
@@ -152,7 +152,7 @@ open class TypeVarianceServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<TypeVarianceDao> = mockk()
+        val entities: List<TypeVarianceEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -173,8 +173,8 @@ open class TypeVarianceServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<TypeVarianceDao>()
-        val emptyDtoList = emptyList<TypeVarianceDto>()
+        val emptyList = emptyList<TypeVarianceEntity>()
+        val emptyDtoList = emptyList<TypeVariance>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -219,7 +219,7 @@ open class TypeVarianceServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, TypeVarianceDao> = mockk()
+        val entityClass: EntityClass<Long, TypeVarianceEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -269,8 +269,8 @@ open class TypeVarianceServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<TypeVarianceDto>()
-        val emptyEntityList = emptyList<TypeVarianceDao>()
+        val emptyDtoList = emptyList<TypeVariance>()
+        val emptyEntityList = emptyList<TypeVarianceEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

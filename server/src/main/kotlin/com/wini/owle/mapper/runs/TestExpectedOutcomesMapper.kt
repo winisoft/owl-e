@@ -1,22 +1,21 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.TestExpectedOutcomeDto
-import com.wini.owle.entity.runs.enums.ComparisonOperator
-import com.wini.owle.entity.runs.TestExpectedOutcomeDao
+import com.wini.owle.dto.runs.test.TestExpectation
+import com.wini.owle.entity.runs.test.TestExpectationEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.runs.enums.ComparisonOperatorMapper
 
 
 class TestExpectedOutcomesMapper(
-    private val daoFactory: DaoFactory<TestExpectedOutcomeDao, Long>,
+    private val daoFactory: DaoFactory<TestExpectationEntity, Long>,
     private val testCasesMapper: TestCasesMapper,
     private val comparisonOperatorMapper: ComparisonOperatorMapper
-): DbMapper<TestExpectedOutcomeDto, TestExpectedOutcomeDao>() {
+): DbMapper<TestExpectation, TestExpectationEntity>() {
 
-    override fun toEntity(dto: TestExpectedOutcomeDto): TestExpectedOutcomeDao {
-        val applyProps: TestExpectedOutcomeDao.() -> Unit = {
-            testCase = testCasesMapper.toEntity(dto.testCase)
+    override fun toEntity(dto: TestExpectation): TestExpectationEntity {
+        val applyProps: TestExpectationEntity.() -> Unit = {
+            testCaseEntity = testCasesMapper.toEntity(dto.testCase)
             dataPointName = dto.dataPointName
             expectedValue = dto.expectedValue
             comparisonOperator = comparisonOperatorMapper.toEntity(dto.comparisonOperator)
@@ -24,16 +23,16 @@ class TestExpectedOutcomesMapper(
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            TestExpectedOutcomeDao.findById(dto.id)
+            TestExpectationEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("TestExpectedOutcome with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: TestExpectedOutcomeDao): TestExpectedOutcomeDto {
-        return TestExpectedOutcomeDto(
+    override fun toDto(entity: TestExpectationEntity): TestExpectation {
+        return TestExpectation(
             id = entity.id.value,
-            testCase = testCasesMapper.toDto(entity.testCase),
+            testCase = testCasesMapper.toDto(entity.testCaseEntity),
             dataPointName = entity.dataPointName,
             expectedValue = entity.expectedValue,
             comparisonOperator = comparisonOperatorMapper.toDto(entity.comparisonOperator)

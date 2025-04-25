@@ -13,18 +13,22 @@ import com.wini.owle.dll.user.TagDll
 import com.wini.owle.dll.user.TagRelationDll
 import com.wini.owle.dll.user.UserDll
 import com.wini.owle.dll.workflows.*
-import com.wini.owle.dto.environs.PackageDto
-import com.wini.owle.dto.environs.PackageRepoDto
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.environs.VersionSpecDto
-import com.wini.owle.dto.runs.*
+import com.wini.owle.dto.environs.PyPackage
+import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.VersionSpec
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRunLogLine
+import com.wini.owle.dto.runs.test.*
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
+import com.wini.owle.dto.runs.workflow.WorkflowTestResult
 import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.transforms.*
 import com.wini.owle.dto.typing.*
-import com.wini.owle.dto.user.PaymentMethodDto
-import com.wini.owle.dto.user.TagDto
-import com.wini.owle.dto.user.TagRelationDto
-import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.user.PaymentMethod
+import com.wini.owle.dto.user.tags.Tag
+import com.wini.owle.dto.user.tags.TagRelation
+import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.*
 import com.wini.owle.services.serviceModule
 import org.jetbrains.exposed.dao.id.CompositeID
@@ -34,43 +38,43 @@ import org.koin.dsl.module
 val dllModule = module {
     includes(serviceModule)
 
-    single<DLL<Long, PackageRepoDto>> { PackageRepoDll(get()) }
-    single<DLL<Long, PackageDto>> { PackageDll(get()) }
-    single<DLL<Long, VersionSpecDto>> { VersionSpecDll(get()) }
-    single<DLL<Long, BenchmarkingDataDto>> { BenchmarkingDataDll(get()) }
-    single<DLL<Long, ExecutionLogDto>> { ExecutionLogDll(get()) }
-    single<DLL<Long, StepExecutionDto>> { StepExecutionDll(get()) }
-    single<DLL<Long, TestCaseDto>> { TestCaseDll(get()) }
-    single<DLL<Long, TestExpectedOutcomeDto>> { TestExpectedOutcomeDll(get()) }
-    single<DLL<Long, TestInputDto>> { TestInputDll(get()) }
-    single<DLL<Long, TestResultDto>> { TestResultDll(get()) }
-    single<DLL<Long, WorkflowExecutionDto>> { WorkflowExecutionDll(get()) }
-    single<DLL<Long, ErrorWatchFnDto>> { ErrorWatchFnDll(get()) }
-    single<DLL<Long, ErrorWatchDto>> { ErrorWatchDll(get()) }
-    single<DLL<Long, InquisitionDto>> { InquisitionDll(get()) }
-    single<DLL<Long, WorkflowJunctionDto>> { WorkflowJunctionDll(get()) }
-    single<DLL<Long, AppliedTransformArgDto>> { AppliedTransformArgDll(get()) }
-    single<DLL<Long, AppliedTransformDto>> { AppliedTransformDll(get()) }
-    single<DLL<Long, TransformationArgDto>> { TransformationArgDll(get()) }
-    single<DLL<Long, TransformationDto>> { TransformationDll(get()) }
-    single<DLL<Long, TypeDeclarationDto>> { TypeDeclarationDll(get(), get(), get()) }
-    single<DLL<Long, TypeDefinitionDto>> { TypeDefinitionDll(get()) }
-    single<DLL<Long, TypeParameterDto>> { TypeParameterDll(get()) }
-    single<DLL<Long, TypeSchemaRefDto>> { TypeSchemaRefDll(get()) }
-    single<DLL<Long, TypeVarianceDto>> { TypeVarianceDll(get()) }
-    single<DLL<Long, PaymentMethodDto>> { PaymentMethodDll(get()) }
-    single<DLL<Long, TagDto>> { TagDll(get()) }
-    single<DLL<Long, UserDto>> { UserDll(get()) }
-    single<DLL<Long, PhaseDto>> { PhaseDll(get(), get()) }
-    single<DLL<Long, StepDto>> { StepDll(get(), get()) }
-    single<DLL<Long, ToolParamDto>> { ToolParamDll(get()) }
-    single<DLL<Long, ToolDto>> { ToolDll(get()) }
-    single<DLL<Long, WorkflowFolderDto>> { WorkflowFolderDll(get()) }
-    single<DLL<Long, WorkflowDto>> { WorkflowDll(get()) }
-    single<DLL<CompositeID, TagRelationDto>> { TagRelationDll(get()) }
-    single<DLL<CompositeID, ToolPackageDependencyDto>> { ToolPackageDependencyDll(get()) }
-    single<DLL<CompositeID, TypeUnionMemberDto>> { TypeUnionMemberDll(get()) }
-    single<DLL<CompositeID, TransformationTargetTypeDto>> { TransformTargetTypeDll(get()) }
-    single<DLL<CompositeID, ProvisionDataPointDto>> { ProvisionDataPointDll(get()) }
-    single<DLL<Long, PreReqInjectionDto>> { PreReqInjectionDll(get()) }
+    single<DLL<Long, PyPackageRepo>> { PackageRepoDll(get()) }
+    single<DLL<Long, PyPackage>> { PackageDll(get()) }
+    single<DLL<Long, VersionSpec>> { VersionSpecDll(get()) }
+    single<DLL<Long, BenchmarkReport>> { BenchmarkingDataDll(get()) }
+    single<DLL<Long, StepRunLogLine>> { ExecutionLogDll(get()) }
+    single<DLL<Long, StepExecution>> { StepExecutionDll(get()) }
+    single<DLL<Long, TestCase>> { TestCaseDll(get()) }
+    single<DLL<Long, TestExpectation>> { TestExpectedOutcomeDll(get()) }
+    single<DLL<Long, TestInput>> { TestInputDll(get()) }
+    single<DLL<Long, WorkflowTestResult>> { TestResultDll(get()) }
+    single<DLL<Long, WorkflowExecution>> { WorkflowExecutionDll(get()) }
+    single<DLL<Long, ErrorWatchFn>> { ErrorWatchFnDll(get()) }
+    single<DLL<Long, ErrorWatch>> { ErrorWatchDll(get()) }
+    single<DLL<Long, Inquisition>> { InquisitionDll(get()) }
+    single<DLL<Long, WorkflowJunction>> { WorkflowJunctionDll(get()) }
+    single<DLL<Long, AppliedTransformArg>> { AppliedTransformArgDll(get()) }
+    single<DLL<Long, AppliedTransform>> { AppliedTransformDll(get()) }
+    single<DLL<Long, TransformArg>> { TransformationArgDll(get()) }
+    single<DLL<Long, Transform>> { TransformationDll(get()) }
+    single<DLL<Long, TypeDeclaration>> { TypeDeclarationDll(get(), get(), get()) }
+    single<DLL<Long, TypeDefinition>> { TypeDefinitionDll(get()) }
+    single<DLL<Long, TypeParameter>> { TypeParameterDll(get()) }
+    single<DLL<Long, TypeSchemaRef>> { TypeSchemaRefDll(get()) }
+    single<DLL<Long, TypeVariance>> { TypeVarianceDll(get()) }
+    single<DLL<Long, PaymentMethod>> { PaymentMethodDll(get()) }
+    single<DLL<Long, Tag>> { TagDll(get()) }
+    single<DLL<Long, User>> { UserDll(get()) }
+    single<DLL<Long, Phase>> { PhaseDll(get(), get()) }
+    single<DLL<Long, Step>> { StepDll(get(), get()) }
+    single<DLL<Long, ToolParam>> { ToolParamDll(get()) }
+    single<DLL<Long, Tool>> { ToolDll(get()) }
+    single<DLL<Long, WorkflowFolder>> { WorkflowFolderDll(get()) }
+    single<DLL<Long, Workflow>> { WorkflowDll(get()) }
+    single<DLL<CompositeID, TagRelation>> { TagRelationDll(get()) }
+    single<DLL<CompositeID, ToolPyPackDep>> { ToolPackageDependencyDll(get()) }
+    single<DLL<CompositeID, TypeUnionMember>> { TypeUnionMemberDll(get()) }
+    single<DLL<CompositeID, TransformTargetType>> { TransformTargetTypeDll(get()) }
+    single<DLL<CompositeID, ProvisionDataPoint>> { ProvisionDataPointDll(get()) }
+    single<DLL<Long, InitialDataPointInjector>> { PreReqInjectionDll(get()) }
 }

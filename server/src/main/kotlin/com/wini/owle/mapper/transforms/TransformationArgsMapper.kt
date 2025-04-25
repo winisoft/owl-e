@@ -1,7 +1,7 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.dto.transforms.TransformationArgDto
-import com.wini.owle.entity.transforms.TransformationArgDao
+import com.wini.owle.dto.transforms.TransformArg
+import com.wini.owle.entity.transforms.TransformArgEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
@@ -9,32 +9,32 @@ import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 
 
 class TransformationArgsMapper(
-    private val daoFactory: DaoFactory<TransformationArgDao, Long>,
+    private val daoFactory: DaoFactory<TransformArgEntity, Long>,
     private val transformationsMapper: TransformationsMapper,
     private val typeDeclarationsMapper: TypeDeclarationsMapper
-): DbMapper<TransformationArgDto, TransformationArgDao>() {
+): DbMapper<TransformArg, TransformArgEntity>() {
 
-    override fun toEntity(dto: TransformationArgDto): TransformationArgDao {
-        val applyProps: TransformationArgDao.() -> Unit = {
+    override fun toEntity(dto: TransformArg): TransformArgEntity {
+        val applyProps: TransformArgEntity.() -> Unit = {
             transformation = transformationsMapper.toEntity(dto.transformation)
-            typeDeclaration = typeDeclarationsMapper.toEntity(dto.typeDeclaration)
+            typeDeclarationEntity = typeDeclarationsMapper.toEntity(dto.typeDeclaration)
             name = dto.name
             description = dto.description
         }
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            TransformationArgDao.findById(dto.id)
+            TransformArgEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("TransformationArg with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: TransformationArgDao): TransformationArgDto {
-        return TransformationArgDto(
+    override fun toDto(entity: TransformArgEntity): TransformArg {
+        return TransformArg(
             id = entity.id.value,
             transformation = transformationsMapper.toDto(entity.transformation),
-            typeDeclaration = typeDeclarationsMapper.toDto(entity.typeDeclaration),
+            typeDeclaration = typeDeclarationsMapper.toDto(entity.typeDeclarationEntity),
             name = entity.name,
             description = entity.description
         )

@@ -1,7 +1,7 @@
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.LongIdEndpointImpl
-import com.wini.owle.dto.typing.TypeDefinitionDto
+import com.wini.owle.dto.typing.TypeDefinition
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
@@ -11,11 +11,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class TypeDefinitionApi(
-    dll: DLL<Long, TypeDefinitionDto>,
-    validator: DtoValidator<TypeDefinitionDto>
-): LongIdEndpointImpl<TypeDefinitionDto>(
+    dll: DLL<Long, TypeDefinition>,
+    validator: DtoValidator<TypeDefinition>
+): LongIdEndpointImpl<TypeDefinition>(
     dll = dll,
-    serializer = TypeDefinitionDto.serializer(),
+    serializer = TypeDefinition.serializer(),
     validator = validator
 )  {
 

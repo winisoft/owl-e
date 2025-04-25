@@ -2,12 +2,11 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.typing.TypeUnionMemberDto
-import com.wini.owle.entity.typing.TypeUnionMemberDao
+import com.wini.owle.dto.typing.TypeUnionMember
+import com.wini.owle.entity.typing.TypeUnionMemberEntity
 import com.wini.owle.mapper.typing.TypeUnionMembersMapper
 import com.wini.owle.repo.typing.TypeUnionMemberRepository
 import com.wini.owle.services.BaseServiceImpl
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.TypeUnionMemberIdFactory
 import org.jetbrains.exposed.dao.id.CompositeID
 
@@ -16,13 +15,13 @@ class TypeUnionMemberService(
     private val repository: TypeUnionMemberRepository,
     private val mapper: TypeUnionMembersMapper,
     entityIdFactory: TypeUnionMemberIdFactory
-): BaseServiceImpl<CompositeID, TypeUnionMemberDto, TypeUnionMemberDao>(
+): BaseServiceImpl<CompositeID, TypeUnionMember, TypeUnionMemberEntity>(
     repository = repository,
     mapper = mapper,
     entityIdFactory = entityIdFactory
 ) {
 
-    fun getByUnionTypeDeclarationId(typeDeclarationId: Long): AsyncResult<List<TypeUnionMemberDto>> {
+    fun getByUnionTypeDeclarationId(typeDeclarationId: Long): AsyncResult<List<TypeUnionMember>> {
         return runCatching {
             repository.getByUnionTypeDeclarationId(typeDeclarationId)
         }.fold(

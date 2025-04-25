@@ -1,22 +1,22 @@
 package com.wini.owle.mapper.workflows.enums
 
-import com.wini.owle.dto.workflows.AuthorshipCreditDto
-import com.wini.owle.entity.workflows.enums.AuthorshipCredit
+import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto
+import com.wini.owle.entity.workflows.enums.AuthorshipCreditEntity
 
 
 class AuthorshipCreditMapper {
 
-    fun toEntity(dto: AuthorshipCreditDto): AuthorshipCredit {
+    fun toEntity(dto: AuthorshipCreditDto): AuthorshipCreditEntity {
         return when(dto) {
-            AuthorshipCreditDto.Required -> AuthorshipCredit.REQUIRED
-            AuthorshipCreditDto.Unnecessary -> AuthorshipCredit.UNNECESSARY
+            AuthorshipCreditDto.REQUIRED -> AuthorshipCreditEntity.REQUIRED
+            AuthorshipCreditDto.UNNECESSARY -> AuthorshipCreditEntity.UNNECESSARY
         }
     }
 
-    fun toDto(entity: AuthorshipCredit): AuthorshipCreditDto {
+    fun toDto(entity: AuthorshipCreditEntity): AuthorshipCreditDto {
         return when(entity) {
-            AuthorshipCredit.REQUIRED -> AuthorshipCreditDto.Required
-            AuthorshipCredit.UNNECESSARY -> AuthorshipCreditDto.Unnecessary
+            AuthorshipCreditEntity.REQUIRED -> AuthorshipCreditDto.REQUIRED
+            AuthorshipCreditEntity.UNNECESSARY -> AuthorshipCreditDto.UNNECESSARY
         }
     }
 

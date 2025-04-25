@@ -2,10 +2,10 @@ package com.wini.owle.services.steps
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.steps.PreReqInjectionDto
-import com.wini.owle.dto.steps.WorkflowJunctionDto
-import com.wini.owle.dto.workflows.DataPointDto
-import com.wini.owle.entity.steps.PreReqInjectionDao
+import com.wini.owle.dto.steps.InitialDataPointInjector
+import com.wini.owle.dto.steps.WorkflowJunction
+import com.wini.owle.dto.workflows.DataPoint
+import com.wini.owle.entity.steps.InitialDataPointInjectorEntity
 import com.wini.owle.mapper.steps.PreReqInjectionsMapper
 import com.wini.owle.repo.PreReqInjectionIdFactory
 import com.wini.owle.repo.steps.PreReqInjectionRepository
@@ -27,13 +27,13 @@ open class PreReqInjectionServiceTest {
 
     fun createSampleDto(
         id: Long = 1L,
-        junction: WorkflowJunctionDto = mockk(),
-        sourceDataPoint: DataPointDto = mockk(),
-        injectedDataPoint: DataPointDto = mockk(),
+        junction: WorkflowJunction = mockk(),
+        sourceDataPoint: DataPoint = mockk(),
+        injectedDataPoint: DataPoint = mockk(),
         name: String = "Name",
         description: String? = "Description"
-    ) : PreReqInjectionDto {
-        return PreReqInjectionDto(
+    ) : InitialDataPointInjector {
+        return InitialDataPointInjector(
             id = id,
             junction = junction,
             sourceDataPoint = sourceDataPoint,
@@ -43,11 +43,11 @@ open class PreReqInjectionServiceTest {
         )
     }
 
-    fun createSampleEntity(): PreReqInjectionDao = mockk<PreReqInjectionDao>() {
+    fun createSampleEntity(): InitialDataPointInjectorEntity = mockk<InitialDataPointInjectorEntity>() {
         every { id } returns mockk()
         every { junction } returns mockk()
-        every { sourceDataPoint } returns mockk()
-        every { injectedDataPoint } returns mockk()
+        every { sourceDataPointEntity } returns mockk()
+        every { injectedDataPointEntity } returns mockk()
         every { name } returns "Name"
         every { description } returns "Description"
     }
@@ -63,8 +63,8 @@ open class PreReqInjectionServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: PreReqInjectionDto = mockk()
-        val entity: PreReqInjectionDao = mockk()
+        val dto: InitialDataPointInjector = mockk()
+        val entity: InitialDataPointInjectorEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -86,8 +86,8 @@ open class PreReqInjectionServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: PreReqInjectionDto = mockk()
-        val entity: PreReqInjectionDao = mockk()
+        val dto: InitialDataPointInjector = mockk()
+        val entity: InitialDataPointInjectorEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -110,9 +110,9 @@ open class PreReqInjectionServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: PreReqInjectionDto = createSampleDto()
+        val dto: InitialDataPointInjector = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: PreReqInjectionDao = mockk<PreReqInjectionDao>() {
+        val entity: InitialDataPointInjectorEntity = mockk<InitialDataPointInjectorEntity>() {
             every { id } returns mockk()
         }
 
@@ -161,7 +161,7 @@ open class PreReqInjectionServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<PreReqInjectionDao> = mockk()
+        val entities: List<InitialDataPointInjectorEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -182,8 +182,8 @@ open class PreReqInjectionServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<PreReqInjectionDao>()
-        val emptyDtoList = emptyList<PreReqInjectionDto>()
+        val emptyList = emptyList<InitialDataPointInjectorEntity>()
+        val emptyDtoList = emptyList<InitialDataPointInjector>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -228,7 +228,7 @@ open class PreReqInjectionServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, PreReqInjectionDao> = mockk()
+        val entityClass: EntityClass<Long, InitialDataPointInjectorEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -278,8 +278,8 @@ open class PreReqInjectionServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<PreReqInjectionDto>()
-        val emptyEntityList = emptyList<PreReqInjectionDao>()
+        val emptyDtoList = emptyList<InitialDataPointInjector>()
+        val emptyEntityList = emptyList<InitialDataPointInjectorEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

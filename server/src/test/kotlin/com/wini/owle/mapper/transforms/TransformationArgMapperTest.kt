@@ -1,12 +1,11 @@
 package com.wini.owle.mapper.transforms
 
-import com.wini.owle.dto.transforms.TransformationArgDto
-import com.wini.owle.dto.transforms.TransformationDto
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.entity.runs.WorkflowExecutionDao
-import com.wini.owle.entity.transforms.TransformationArgDao
-import com.wini.owle.entity.transforms.TransformationDao
-import com.wini.owle.entity.typing.TypeDeclarationDao
+import com.wini.owle.dto.transforms.TransformArg
+import com.wini.owle.dto.transforms.Transform
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.entity.transforms.TransformArgEntity
+import com.wini.owle.entity.transforms.TransformEntity
+import com.wini.owle.entity.typing.TypeDeclarationEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import io.mockk.every
@@ -14,9 +13,6 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import io.mockk.verify
-import io.mockk.slot
-import io.mockk.just
-import io.mockk.runs
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,7 +24,7 @@ open class TransformationArgMapperTest {
     private lateinit var mapper: TransformationArgsMapper
     private val transformationsMapper: TransformationsMapper = mockk()
     private val typeDeclarationsMapper: TypeDeclarationsMapper = mockk()
-    private val factory: DaoFactory<TransformationArgDao, Long> = mockk()
+    private val factory: DaoFactory<TransformArgEntity, Long> = mockk()
 
     @BeforeEach
     fun setUp() {
@@ -38,7 +34,7 @@ open class TransformationArgMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTOs
-        val dto = TransformationArgDto(
+        val dto = TransformArg(
             id = 99L,
             transformation = mockk(),
             typeDeclaration = mockk(),
@@ -47,8 +43,8 @@ open class TransformationArgMapperTest {
         )
 
         // Mock the behavior of findById to return null (not found)
-        mockkObject(TransformationArgDao)
-        every { TransformationArgDao.findById(99L) } returns null
+        mockkObject(TransformArgEntity)
+        every { TransformArgEntity.findById(99L) } returns null
 
         // Verify that the exception is thrown with the correct message
         val exception = assertThrows<IllegalStateException> {
@@ -56,33 +52,33 @@ open class TransformationArgMapperTest {
         }
 
         assertEquals("TransformationArg with id=99 not found", exception.message)
-        unmockkObject(TransformationArgDao)
+        unmockkObject(TransformArgEntity)
     }
 
     @Test
     fun `toDto should correctly map entity to dto`() {
         // Create mock dao objects
-        val entity = mockk<TransformationArgDao> {
+        val entity = mockk<TransformArgEntity> {
             every { id.value } returns 1L
             every { transformation } returns mockk()
-            every { typeDeclaration } returns mockk()
+            every { typeDeclarationEntity } returns mockk()
             every { name } returns "argName"
             every { description } returns "argDescription"
         }
 
         // Mock the behavior of transformationsMapper and typeDeclarationsMapper
-        val transformationDto = mockk<TransformationDto>()
-        val typeDeclarationDto = mockk<TypeDeclarationDto>()
-        every { transformationsMapper.toDto(entity.transformation) } returns transformationDto
-        every { typeDeclarationsMapper.toDto(entity.typeDeclaration) } returns typeDeclarationDto
+        val transform = mockk<Transform>()
+        val typeDeclaration = mockk<TypeDeclaration>()
+        every { transformationsMapper.toDto(entity.transformation) } returns transform
+        every { typeDeclarationsMapper.toDto(entity.typeDeclarationEntity) } returns typeDeclaration
 
         // Call the method under test
         val result = mapper.toDto(entity)
 
         // Verify the result
         assertEquals(1L, result.id)
-        assertEquals(transformationDto, result.transformation)
-        assertEquals(typeDeclarationDto, result.typeDeclaration)
+        assertEquals(transform, result.transformation)
+        assertEquals(typeDeclaration, result.typeDeclaration)
         assertEquals("argName", result.name)
         assertEquals("argDescription", result.description)
     }
@@ -90,7 +86,7 @@ open class TransformationArgMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTOs
-        val dto = TransformationArgDto(
+        val dto = TransformArg(
             id = 42L,
             transformation = mockk(),
             typeDeclaration = mockk(),
@@ -99,38 +95,38 @@ open class TransformationArgMapperTest {
         )
 
         // Mock the existing entity that will be updated
-        val existingEntity = mockk<TransformationArgDao>(relaxed = true)
+        val existingEntity = mockk<TransformArgEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val transformationDao: TransformationDao = mockk()
-        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val transformEntity: TransformEntity = mockk()
+        val typeDeclarationEntity: TypeDeclarationEntity = mockk()
 
         // Set up mocks for finding existing entity
-        mockkObject(TransformationArgDao)
-        every { TransformationArgDao.findById(42L) } returns existingEntity
-        every { transformationsMapper.toEntity(dto.transformation) } returns transformationDao
-        every { typeDeclarationsMapper.toEntity(dto.typeDeclaration) } returns typeDeclarationDao
+        mockkObject(TransformArgEntity)
+        every { TransformArgEntity.findById(42L) } returns existingEntity
+        every { transformationsMapper.toEntity(dto.transformation) } returns transformEntity
+        every { typeDeclarationsMapper.toEntity(dto.typeDeclaration) } returns typeDeclarationEntity
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
 
         // Verify that the existing entity was found and updated
-        verify { TransformationArgDao.findById(42L) }
-        verify { existingEntity.transformation = transformationDao }
-        verify { existingEntity.typeDeclaration = typeDeclarationDao }
+        verify { TransformArgEntity.findById(42L) }
+        verify { existingEntity.transformation = transformEntity }
+        verify { existingEntity.typeDeclarationEntity = typeDeclarationEntity }
         verify { existingEntity.name = "argName" }
         verify { existingEntity.description = "argDescription" }
 
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(TransformationArgDao)
+        unmockkObject(TransformArgEntity)
     }
 
     @Test
     fun `toEntity should create a correctly mapped entity when id is zero`() {
         // Create test DTOs
-        val dto = TransformationArgDto(
+        val dto = TransformArg(
             id = 0L,
             transformation = mockk(),
             typeDeclaration = mockk(),
@@ -139,16 +135,16 @@ open class TransformationArgMapperTest {
         )
 
         // Mock the new entity that will be created
-        val newEntity = mockk<TransformationArgDao>(relaxed = true)
+        val newEntity = mockk<TransformArgEntity>(relaxed = true)
 
         // Mock the class's member dao types that would be returned from the mapper
-        val transformationDao: TransformationDao = mockk()
-        val typeDeclarationDao: TypeDeclarationDao = mockk()
+        val transformEntity: TransformEntity = mockk()
+        val typeDeclarationEntity: TypeDeclarationEntity = mockk()
 
         // Set up the factory mock to return our mock entity
         every { factory.create() } returns newEntity
-        every { transformationsMapper.toEntity(dto.transformation) } returns transformationDao
-        every { typeDeclarationsMapper.toEntity(dto.typeDeclaration) } returns typeDeclarationDao
+        every { transformationsMapper.toEntity(dto.transformation) } returns transformEntity
+        every { typeDeclarationsMapper.toEntity(dto.typeDeclaration) } returns typeDeclarationEntity
 
         // Execute the method under test
         val result = mapper.toEntity(dto)
@@ -157,8 +153,8 @@ open class TransformationArgMapperTest {
         verify { factory.create() }
 
         // Verify the properties were set correctly
-        verify { newEntity.transformation = transformationDao }
-        verify { newEntity.typeDeclaration = typeDeclarationDao }
+        verify { newEntity.transformation = transformEntity }
+        verify { newEntity.typeDeclarationEntity = typeDeclarationEntity }
         verify { newEntity.name = "argName" }
         verify { newEntity.description = "argDescription" }
 

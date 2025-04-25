@@ -1,19 +1,19 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.workflows.ToolDto
+import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.typing.TypeDeclarationValidator
 
 class ToolValidator(
     private val returnTypeDeclarationValidator: TypeDeclarationValidator
-) : BaseValidator<ToolDto>() {
+) : BaseValidator<Tool>() {
     companion object {
         const val MAX_NAME_LENGTH = 512
     }
 
-    override fun validate(dto: ToolDto): ValidationResult {
+    override fun validate(dto: Tool): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // name is required and has max length

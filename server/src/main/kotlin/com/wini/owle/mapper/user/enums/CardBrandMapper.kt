@@ -1,37 +1,37 @@
 package com.wini.owle.mapper.user.enums
 
-import com.wini.owle.dto.user.CardBrandDto
-import com.wini.owle.entity.user.enums.CardBrand
+import com.wini.owle.dto.user.enums.CardBrand
+import com.wini.owle.entity.user.enums.CardBrandEntity
 
 class CardBrandMapper {
 
-    fun toEntity(dto: CardBrandDto): CardBrand {
+    fun toEntity(dto: CardBrand): CardBrandEntity {
         return when (dto) {
-            CardBrandDto.AmericanExpress -> CardBrand.AMERICAN_EXPRESS
-            CardBrandDto.DinersClub -> CardBrand.DINERS_CLUB
-            CardBrandDto.Discover -> CardBrand.DISCOVER
-            CardBrandDto.EftposAustralia -> CardBrand.EFTPOS_AUSTRALIA
-            CardBrandDto.Girocard -> CardBrand.GIROCARD
-            CardBrandDto.Jcb -> CardBrand.JCB
-            CardBrandDto.Mastercard -> CardBrand.MASTERCARD
-            CardBrandDto.UnionPay -> CardBrand.UNIONPAY
-            CardBrandDto.Visa -> CardBrand.VISA
-            CardBrandDto.Unknown -> CardBrand.UNKNOWN
+            CardBrand.AMERICAN_EXPRESS -> CardBrandEntity.AMERICAN_EXPRESS
+            CardBrand.DINERS_CLUB -> CardBrandEntity.DINERS_CLUB
+            CardBrand.DISCOVER -> CardBrandEntity.DISCOVER
+            CardBrand.EFTPOS_AUSTRALIA -> CardBrandEntity.EFTPOS_AUSTRALIA
+            CardBrand.GIROCARD -> CardBrandEntity.GIROCARD
+            CardBrand.JCB -> CardBrandEntity.JCB
+            CardBrand.MASTERCARD -> CardBrandEntity.MASTERCARD
+            CardBrand.UNIONPAY -> CardBrandEntity.UNIONPAY
+            CardBrand.VISA -> CardBrandEntity.VISA
+            CardBrand.UNKNOWN -> CardBrandEntity.UNKNOWN
         }
     }
 
-    fun toDto(entity: CardBrand): CardBrandDto {
+    fun toDto(entity: CardBrandEntity): CardBrand {
         return when (entity) {
-            CardBrand.AMERICAN_EXPRESS -> CardBrandDto.AmericanExpress
-            CardBrand.DINERS_CLUB -> CardBrandDto.DinersClub
-            CardBrand.DISCOVER -> CardBrandDto.Discover
-            CardBrand.EFTPOS_AUSTRALIA -> CardBrandDto.EftposAustralia
-            CardBrand.GIROCARD -> CardBrandDto.Girocard
-            CardBrand.JCB -> CardBrandDto.Jcb
-            CardBrand.MASTERCARD -> CardBrandDto.Mastercard
-            CardBrand.UNIONPAY -> CardBrandDto.UnionPay
-            CardBrand.VISA -> CardBrandDto.Visa
-            CardBrand.UNKNOWN -> CardBrandDto.Unknown
+            CardBrandEntity.AMERICAN_EXPRESS -> CardBrand.AMERICAN_EXPRESS
+            CardBrandEntity.DINERS_CLUB -> CardBrand.DINERS_CLUB
+            CardBrandEntity.DISCOVER -> CardBrand.DISCOVER
+            CardBrandEntity.EFTPOS_AUSTRALIA -> CardBrand.EFTPOS_AUSTRALIA
+            CardBrandEntity.GIROCARD -> CardBrand.GIROCARD
+            CardBrandEntity.JCB -> CardBrand.JCB
+            CardBrandEntity.MASTERCARD -> CardBrand.MASTERCARD
+            CardBrandEntity.UNIONPAY -> CardBrand.UNIONPAY
+            CardBrandEntity.VISA -> CardBrand.VISA
+            CardBrandEntity.UNKNOWN -> CardBrand.UNKNOWN
         }
     }
 }

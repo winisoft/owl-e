@@ -1,18 +1,18 @@
 package com.wini.owle.validators.user
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.user.PaymentMethodDto
+import com.wini.owle.dto.user.PaymentMethod
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class PaymentMethodValidator(
     private val userValidator: UserValidator
-) : BaseValidator<PaymentMethodDto>() {
+) : BaseValidator<PaymentMethod>() {
     companion object {
         const val LAST_FOUR_LENGTH = 4
     }
 
-    override fun validate(dto: PaymentMethodDto): ValidationResult {
+    override fun validate(dto: PaymentMethod): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // user is required (non-nullable reference)

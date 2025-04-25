@@ -1,19 +1,18 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.dto.workflows.PhaseDto
-import com.wini.owle.entity.workflows.PhaseDao
+import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.entity.workflows.PhaseEntity
 import com.wini.owle.mapper.workflows.PhasesMapper
 import com.wini.owle.repo.PhaseIdFactory
 import com.wini.owle.repo.workflows.PhaseRepository
 import com.wini.owle.services.BaseServiceImpl
-import com.wini.owle.repo.EntityIdFactory
 
 
 class PhaseService(
     private val repository: PhaseRepository,
     private val mapper: PhasesMapper,
     entityIdFactory: PhaseIdFactory
-): BaseServiceImpl<Long, PhaseDto, PhaseDao>(
+): BaseServiceImpl<Long, Phase, PhaseEntity>(
     repository = repository,
     mapper = mapper,
     entityIdFactory = entityIdFactory

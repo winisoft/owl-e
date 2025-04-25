@@ -1,6 +1,6 @@
 package com.wini.owle.models.workflows
 
-import com.wini.owle.dto.workflows.StoreMethodDto
+import com.wini.owle.dto.workflows.enums.StoreMethod
 import kotlinx.serialization.Serializable
 
 
@@ -10,7 +10,7 @@ data class DataPointModel(
     val workflowId: Long,
     val name: String,
     val presetValue: String?,
-    val storeMethod: StoreMethodDto
+    val storeMethod: StoreMethod
 ) {
 
     val isReadOnly: Boolean

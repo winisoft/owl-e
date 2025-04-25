@@ -1,7 +1,7 @@
 package com.wini.owle.validators.workflows
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.typing.TypeDeclarationValidator
@@ -9,12 +9,12 @@ import com.wini.owle.validators.typing.TypeDeclarationValidator
 class DataPointValidator(
     private val workflowValidator: WorkflowValidator,
     private val typeDeclarationValidator: TypeDeclarationValidator
-) : BaseValidator<DataPointDto>() {
+) : BaseValidator<DataPoint>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: DataPointDto): ValidationResult {
+    override fun validate(dto: DataPoint): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested workflow

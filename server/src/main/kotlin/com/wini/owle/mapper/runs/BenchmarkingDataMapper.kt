@@ -1,18 +1,18 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.BenchmarkingDataDto
-import com.wini.owle.entity.runs.BenchmarkingDataDao
+import com.wini.owle.dto.runs.test.BenchmarkReport
+import com.wini.owle.entity.runs.test.BenchmarkReportEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 
 
 class BenchmarkingDataMapper(
-    private val daoFactory: DaoFactory<BenchmarkingDataDao, Long>,
+    private val daoFactory: DaoFactory<BenchmarkReportEntity, Long>,
     private val workflowExecutionsMapper: WorkflowExecutionsMapper
-) : DbMapper<BenchmarkingDataDto, BenchmarkingDataDao>() {
+) : DbMapper<BenchmarkReport, BenchmarkReportEntity>() {
 
-    override fun toEntity(dto: BenchmarkingDataDto): BenchmarkingDataDao {
-        val applyProps: BenchmarkingDataDao.() -> Unit = {
+    override fun toEntity(dto: BenchmarkReport): BenchmarkReportEntity {
+        val applyProps: BenchmarkReportEntity.() -> Unit = {
             workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
             totalExecutionTime = dto.totalExecutionTime.toBigDecimal()
             totalSteps = dto.totalSteps
@@ -22,13 +22,13 @@ class BenchmarkingDataMapper(
         return if (dto.id == 0L)
             daoFactory.create().apply(applyProps)
         else
-            BenchmarkingDataDao.findById(dto.id)
+            BenchmarkReportEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("BenchmarkingData with id=${dto.id} not found")
     }
 
-    override fun toDto(entity: BenchmarkingDataDao): BenchmarkingDataDto {
-        return BenchmarkingDataDto(
+    override fun toDto(entity: BenchmarkReportEntity): BenchmarkReport {
+        return BenchmarkReport(
             id = entity.id.value,
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             totalExecutionTime = entity.totalExecutionTime.toDouble(),

@@ -1,11 +1,17 @@
 package com.wini.owle.validators
 
 import com.wini.owle.dto.environs.*
-import com.wini.owle.dto.runs.*
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRunLogLine
+import com.wini.owle.dto.runs.test.*
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
+import com.wini.owle.dto.runs.workflow.WorkflowTestResult
 import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.transforms.*
 import com.wini.owle.dto.typing.*
 import com.wini.owle.dto.user.*
+import com.wini.owle.dto.user.tags.Tag
+import com.wini.owle.dto.user.tags.TagRelation
 import com.wini.owle.dto.workflows.*
 
 import com.wini.owle.validators.environs.*
@@ -21,55 +27,55 @@ import org.koin.dsl.module
 
 val validatorsModule = module {
 
-    single<DtoValidator<PackageDto>> { PackageValidator(get(), ) }
-    single<DtoValidator<PackageRepoDto>> { PackageRepoValidator() }
-    single<DtoValidator<ToolPackageDependencyDto>> { ToolPackageDependencyValidator() }
-    single<DtoValidator<VersionSpecDto>> { VersionSpecValidator() }
+    single<DtoValidator<PyPackage>> { PackageValidator(get(), ) }
+    single<DtoValidator<PyPackageRepo>> { PackageRepoValidator() }
+    single<DtoValidator<ToolPyPackDep>> { ToolPackageDependencyValidator() }
+    single<DtoValidator<VersionSpec>> { VersionSpecValidator() }
 
-    single<DtoValidator<BenchmarkingDataDto>> { BenchmarkingDataValidator(get()) }
-    single<DtoValidator<ExecutionLogDto>> { ExecutionLogValidator(get(),) }
-    single<DtoValidator<StepExecutionDto>> { StepExecutionValidator(get(), get(), get()) }
-    single<DtoValidator<TestCaseDto>> { TestCaseValidator(get(), get(), get()) }
-    single<DtoValidator<TestExpectedOutcomeDto>> { TestExpectedOutcomeValidator(get(),) }
-    single<DtoValidator<TestInputDto>> { TestInputValidator(get(),) }
-    single<DtoValidator<TestResultDto>> { TestResultValidator(get(), get()) }
-    single<DtoValidator<WorkflowExecutionDto>> { WorkflowExecutionValidator(get(), get(), get()) }
+    single<DtoValidator<BenchmarkReport>> { BenchmarkingDataValidator(get()) }
+    single<DtoValidator<StepRunLogLine>> { ExecutionLogValidator(get(),) }
+    single<DtoValidator<StepExecution>> { StepExecutionValidator(get(), get(), get()) }
+    single<DtoValidator<TestCase>> { TestCaseValidator(get(), get(), get()) }
+    single<DtoValidator<TestExpectation>> { TestExpectedOutcomeValidator(get(),) }
+    single<DtoValidator<TestInput>> { TestInputValidator(get(),) }
+    single<DtoValidator<WorkflowTestResult>> { TestResultValidator(get(), get()) }
+    single<DtoValidator<WorkflowExecution>> { WorkflowExecutionValidator(get(), get(), get()) }
 
-    single<DtoValidator<ErrorWatchDto>> { ErrorWatchValidator(get()) }
-    single<DtoValidator<ErrorWatchFnDto>> { ErrorWatchFnValidator(get()) }
-    single<DtoValidator<InquisitionDto>> { InquisitionValidator(get(), get()) }
+    single<DtoValidator<ErrorWatch>> { ErrorWatchValidator(get()) }
+    single<DtoValidator<ErrorWatchFn>> { ErrorWatchFnValidator(get()) }
+    single<DtoValidator<Inquisition>> { InquisitionValidator(get(), get()) }
 
-    single<DtoValidator<PreReqInjectionDto>> { PreReqInjectionValidator(get(), get()) }
-    single<DtoValidator<ProvisionDto>> { ProvisionValidator(get(), get(), get()) }
-    single<DtoValidator<ProvisionDataPointDto>> { ProvisionDataPointValidator() }
-    single<DtoValidator<RevisionDto>> { RevisionValidator(get(), get()) }
-    single<DtoValidator<StepDto>> { StepValidator(get(), get(), get()) }
-    single<DtoValidator<ToolDto>> { ToolValidator(get()) }
-    single<DtoValidator<ToolParamDto>> { ToolParamValidator(get(), get()) }
-    single<DtoValidator<WorkflowJunctionDto>> { WorkflowJunctionValidator(get(), get(), get()) }
+    single<DtoValidator<InitialDataPointInjector>> { PreReqInjectionValidator(get(), get()) }
+    single<DtoValidator<Provision>> { ProvisionValidator(get(), get(), get()) }
+    single<DtoValidator<ProvisionDataPoint>> { ProvisionDataPointValidator() }
+    single<DtoValidator<DataPointSave>> { RevisionValidator(get(), get()) }
+    single<DtoValidator<Step>> { StepValidator(get(), get(), get()) }
+    single<DtoValidator<Tool>> { ToolValidator(get()) }
+    single<DtoValidator<ToolParam>> { ToolParamValidator(get(), get()) }
+    single<DtoValidator<WorkflowJunction>> { WorkflowJunctionValidator(get(), get(), get()) }
 
-    single<DtoValidator<AppliedTransformDto>> { AppliedTransformValidator(get(), get(), get()) }
-    single<DtoValidator<AppliedTransformArgDto>> { AppliedTransformArgValidator(get(), get()) }
-    single<DtoValidator<TransformationDto>> { TransformationValidator(get()) }
-    single<DtoValidator<TransformationArgDto>> { TransformationArgValidator(get(), get()) }
-    single<DtoValidator<TransformationTargetTypeDto>> { TransformationTargetTypeValidator() }
+    single<DtoValidator<AppliedTransform>> { AppliedTransformValidator(get(), get(), get()) }
+    single<DtoValidator<AppliedTransformArg>> { AppliedTransformArgValidator(get(), get()) }
+    single<DtoValidator<Transform>> { TransformationValidator(get()) }
+    single<DtoValidator<TransformArg>> { TransformationArgValidator(get(), get()) }
+    single<DtoValidator<TransformTargetType>> { TransformationTargetTypeValidator() }
 
-    single<DtoValidator<TypeBoundsDto>> { TypeBoundsValidator(get()) }
-    single<DtoValidator<TypeDeclarationDto>> { TypeDeclarationValidator(get()) }
-    single<DtoValidator<TypeDefinitionDto>> { TypeDefinitionValidator(get()) }
-    single<DtoValidator<TypeParameterDto>> { TypeParameterValidator(get()) }
-    single<DtoValidator<TypeSchemaRefDto>> { TypeSchemaRefValidator(get()) }
-    single<DtoValidator<TypeUnionMemberDto>> { TypeUnionMemberValidator() }
-    single<DtoValidator<TypeVarianceDto>> { TypeVarianceValidator(get()) }
+    single<DtoValidator<TypeBound>> { TypeBoundsValidator(get()) }
+    single<DtoValidator<TypeDeclaration>> { TypeDeclarationValidator(get()) }
+    single<DtoValidator<TypeDefinition>> { TypeDefinitionValidator(get()) }
+    single<DtoValidator<TypeParameter>> { TypeParameterValidator(get()) }
+    single<DtoValidator<TypeSchemaRef>> { TypeSchemaRefValidator(get()) }
+    single<DtoValidator<TypeUnionMember>> { TypeUnionMemberValidator() }
+    single<DtoValidator<TypeVariance>> { TypeVarianceValidator(get()) }
 
-    single<DtoValidator<PaymentMethodDto>> { PaymentMethodValidator(get()) }
-    single<DtoValidator<TagDto>> { TagValidator(get()) }
-    single<DtoValidator<TagRelationDto>> { TagRelationValidator() }
-    single<DtoValidator<UserDto>> { UserValidator() }
-    single<DtoValidator<DataPointDto>> { DataPointValidator(get(), get()) }
-    single<DtoValidator<PhaseDto>> { PhaseValidator(get()) }
-    single<DtoValidator<WorkflowFolderDto>> { WorkflowFolderValidator() }
-    single<DtoValidator<WorkflowDto>> { WorkflowValidator() }
+    single<DtoValidator<PaymentMethod>> { PaymentMethodValidator(get()) }
+    single<DtoValidator<Tag>> { TagValidator(get()) }
+    single<DtoValidator<TagRelation>> { TagRelationValidator() }
+    single<DtoValidator<User>> { UserValidator() }
+    single<DtoValidator<DataPoint>> { DataPointValidator(get(), get()) }
+    single<DtoValidator<Phase>> { PhaseValidator(get()) }
+    single<DtoValidator<WorkflowFolder>> { WorkflowFolderValidator() }
+    single<DtoValidator<Workflow>> { WorkflowValidator() }
 
 
     single<PackageValidator> { PackageValidator(get(), ) }

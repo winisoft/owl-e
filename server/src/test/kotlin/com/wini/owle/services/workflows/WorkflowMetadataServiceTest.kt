@@ -2,9 +2,12 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.*
-import com.wini.owle.entity.workflows.WorkflowMetadataDao
+import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto
+import com.wini.owle.dto.workflows.enums.CommercialUse
+import com.wini.owle.dto.workflows.enums.ModificationTermsDto
+import com.wini.owle.entity.workflows.WorkflowMetadataEntity
 import com.wini.owle.mapper.workflows.WorkflowMetadataMapper
 import com.wini.owle.repo.WorkflowMetadataIdFactory
 import com.wini.owle.repo.workflows.WorkflowMetadataRepository
@@ -28,7 +31,7 @@ open class WorkflowMetadataServiceTest {
         id: Long = 1L,
         name: String = "John Arbuckle",
         version: String = "1.0.0",
-        contributors: List<UserDto> = mockk(),
+        contributors: List<User> = mockk(),
         copyrightInformation:String = "2025",
         contactInformation: String = "lasagnalonely@email.com",
         thirdPartyLicenses: String = "Ok",
@@ -36,13 +39,13 @@ open class WorkflowMetadataServiceTest {
         distributionAcceptedAt: String = "",
         distributionUpdatedAt: String = "",
         discretionAdvisedContent: Boolean = true,
-        commercialUsage: CommercialUseDto = mockk(),
+        commercialUsage: CommercialUse = mockk(),
         authorshipCredit: AuthorshipCreditDto = mockk(),
         allowRedistribution: Boolean = false,
         modification: ModificationTermsDto = mockk(),
-        excludedSteps: List<StepDto> = mockk()
-    ): WorkflowMetadataDto {
-        return WorkflowMetadataDto(
+        excludedSteps: List<Step> = mockk()
+    ): WorkflowMetadata {
+        return WorkflowMetadata(
             id = id,
             name = name,
             version = version,
@@ -62,7 +65,7 @@ open class WorkflowMetadataServiceTest {
         )
     }
 
-    fun createSampleEntity(): WorkflowMetadataDao = mockk<WorkflowMetadataDao>() {
+    fun createSampleEntity(): WorkflowMetadataEntity = mockk<WorkflowMetadataEntity>() {
         every { id } returns mockk()
         every { name } returns "John Arbuckle"
         every { version } returns "1.0.0"
@@ -89,8 +92,8 @@ open class WorkflowMetadataServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: WorkflowMetadataDto = createSampleDto()
-        val entity: WorkflowMetadataDao = mockk()
+        val dto: WorkflowMetadata = createSampleDto()
+        val entity: WorkflowMetadataEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -112,8 +115,8 @@ open class WorkflowMetadataServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: WorkflowMetadataDto = mockk()
-        val entity: WorkflowMetadataDao = mockk()
+        val dto: WorkflowMetadata = mockk()
+        val entity: WorkflowMetadataEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -136,9 +139,9 @@ open class WorkflowMetadataServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: WorkflowMetadataDto = createSampleDto()
+        val dto: WorkflowMetadata = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: WorkflowMetadataDao = mockk<WorkflowMetadataDao>() {
+        val entity: WorkflowMetadataEntity = mockk<WorkflowMetadataEntity>() {
             every { id } returns mockk()
         }
 
@@ -187,7 +190,7 @@ open class WorkflowMetadataServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<WorkflowMetadataDao> = mockk()
+        val entities: List<WorkflowMetadataEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -208,8 +211,8 @@ open class WorkflowMetadataServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<WorkflowMetadataDao>()
-        val emptyDtoList = emptyList<WorkflowMetadataDto>()
+        val emptyList = emptyList<WorkflowMetadataEntity>()
+        val emptyDtoList = emptyList<WorkflowMetadata>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -254,7 +257,7 @@ open class WorkflowMetadataServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, WorkflowMetadataDao> = mockk()
+        val entityClass: EntityClass<Long, WorkflowMetadataEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -304,8 +307,8 @@ open class WorkflowMetadataServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<WorkflowMetadataDto>()
-        val emptyEntityList = emptyList<WorkflowMetadataDao>()
+        val emptyDtoList = emptyList<WorkflowMetadata>()
+        val emptyEntityList = emptyList<WorkflowMetadataEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

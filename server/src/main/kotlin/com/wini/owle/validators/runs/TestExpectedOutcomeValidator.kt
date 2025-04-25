@@ -1,18 +1,18 @@
 package com.wini.owle.validators.runs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.runs.TestExpectedOutcomeDto
+import com.wini.owle.dto.runs.test.TestExpectation
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TestExpectedOutcomeValidator(
     private val testCaseValidator: TestCaseValidator
-) : BaseValidator<TestExpectedOutcomeDto>() {
+) : BaseValidator<TestExpectation>() {
     companion object {
         const val MAX_DATAPOINT_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: TestExpectedOutcomeDto): ValidationResult {
+    override fun validate(dto: TestExpectation): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested testCase

@@ -5,7 +5,6 @@ import com.wini.owle.repo.runs.StepExecutionDbIntegrationTest
 import com.wini.owle.repo.runs.WorkflowExecutionDbIntegrationTest
 import com.wini.owle.repo.steps.*
 import com.wini.owle.repo.typing.*
-import com.wini.owle.repo.user.PaymentMethodDbIntegrationTest
 import com.wini.owle.repo.workflows.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -31,15 +30,15 @@ class DatabaseIntegrationTests {
 
         @Nested
         @DisplayName("ErrorWatchFn")
-        inner class ErrorWatchFnDbIntegrationTests: ErrorWatchFnDbIntegrationTest()
+        inner class ErrorWatchEntityFnDbIntegrationTests: ErrorWatchEntityFnDbIntegrationTest()
 
         @Nested
         @DisplayName("ErrorWatch")
-        inner class ErrorWatchDbIntegrationTests: ErrorWatchDbIntegrationTest()
+        inner class ErrorWatchEntityDbIntegrationTests: ErrorWatchEntityDbIntegrationTest()
 
         @Nested
         @DisplayName("Inquisition")
-        inner class InquisitionDbIntegrationTests: InquisitionDbIntegrationTest()
+        inner class InquisitionEntityDbIntegrationTests: InquisitionEntityDbIntegrationTest()
 
         @Nested
         @DisplayName("PreReqInjection")
@@ -59,15 +58,15 @@ class DatabaseIntegrationTests {
 
         @Nested
         @DisplayName("TypeBound")
-        inner class TypeBoundDbIntegrationTests: TypeBoundDbIntegrationTest()
+        inner class TypeBoundEntityDbIntegrationTests: TypeBoundEntityDbIntegrationTest()
 
         @Nested
         @DisplayName("TypeDeclaration")
-        inner class TypeDeclarationDbIntegrationTests: TypeDeclarationDbIntegrationTest()
+        inner class TypeDeclarationEntityDbIntegrationTests: TypeDeclarationEntityDbIntegrationTest()
 
         @Nested
         @DisplayName("TypeDefinition")
-        inner class TypeDefinitionDbIntegrationTests: TypeDefinitionDbIntegrationTest()
+        inner class TypeDefinitionEntityDbIntegrationTests: TypeDefinitionEntityDbIntegrationTest()
 
         @Nested
         @DisplayName("TypeParameter")
@@ -79,7 +78,7 @@ class DatabaseIntegrationTests {
 
         @Nested
         @DisplayName("DataPoint")
-        inner class DataPointDbIntegrationTests: DataPointDbIntegrationTest()
+        inner class DataPointEntityDbIntegrationTests: DataPointEntityDbIntegrationTest()
 
         @Nested
         @DisplayName("Phase")

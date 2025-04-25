@@ -1,21 +1,21 @@
 package com.wini.owle.mapper.runs.enums
 
-import com.wini.owle.dto.runs.GenerationMethodDto
-import com.wini.owle.entity.runs.enums.GenerationMethod
+import com.wini.owle.dto.runs.enums.GenerationMethod
+import com.wini.owle.entity.runs.enums.GenerationMethodEntity
 
 class GenerationMethodMapper {
 
-    fun toEntity(dto: GenerationMethodDto): GenerationMethod {
+    fun toEntity(dto: GenerationMethod): GenerationMethodEntity {
         return when (dto) {
-            GenerationMethodDto.Manual -> GenerationMethod.MANUAL
-            GenerationMethodDto.AiGenerated -> GenerationMethod.AI_GENERATED
+            GenerationMethod.MANUAL -> GenerationMethodEntity.MANUAL
+            GenerationMethod.AI_GENERATED -> GenerationMethodEntity.AI_GENERATED
         }
     }
 
-    fun toDto(entity: GenerationMethod): GenerationMethodDto {
+    fun toDto(entity: GenerationMethodEntity): GenerationMethod {
         return when (entity) {
-            GenerationMethod.MANUAL -> GenerationMethodDto.Manual
-            GenerationMethod.AI_GENERATED -> GenerationMethodDto.AiGenerated
+            GenerationMethodEntity.MANUAL -> GenerationMethod.MANUAL
+            GenerationMethodEntity.AI_GENERATED -> GenerationMethod.AI_GENERATED
         }
     }
 

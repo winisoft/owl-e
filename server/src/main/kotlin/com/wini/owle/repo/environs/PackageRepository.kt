@@ -1,7 +1,7 @@
 package com.wini.owle.repo.environs
 
-import com.wini.owle.entity.environs.PackageDao
-import com.wini.owle.entity.environs.VersionSpecDao
+import com.wini.owle.entity.environs.PyPackageEntity
+import com.wini.owle.entity.environs.VersionSpecEntity
 import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -9,15 +9,15 @@ import org.jetbrains.exposed.sql.transactions.transaction
 /**
  * Provides data access operations for `PackageEntity` objects.
  */
-class PackageRepository: OwleRepoImpl<Long, PackageDao>(PackageDao) {
+class PackageRepository: OwleRepoImpl<Long, PyPackageEntity>(PyPackageEntity) {
 
     fun createPackageWithVersionSpec(
         packageName: String,
         disambiguation: String?,
-        versionSpec: VersionSpecDao
-    ): PackageDao {
+        versionSpec: VersionSpecEntity
+    ): PyPackageEntity {
         return transaction {
-            val newPackage = PackageDao.new {
+            val newPackage = PyPackageEntity.new {
                 name = packageName
                 this.disambiguation = disambiguation
                 this.versionSpec = versionSpec
@@ -31,10 +31,10 @@ class PackageRepository: OwleRepoImpl<Long, PackageDao>(PackageDao) {
     fun updatePackageWithVersionSpec(
         packageId: Long,
         packageName: String,
-        versionSpec: VersionSpecDao?
-    ): PackageDao? {
+        versionSpec: VersionSpecEntity?
+    ): PyPackageEntity? {
         return transaction {
-            val packageEntity = PackageDao.findById(packageId) ?: return@transaction null
+            val packageEntity = PyPackageEntity.findById(packageId) ?: return@transaction null
             packageEntity.apply {
                 name = packageName
                 if (versionSpec != null) {

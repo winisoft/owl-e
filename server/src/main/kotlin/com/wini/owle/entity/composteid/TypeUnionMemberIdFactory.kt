@@ -1,14 +1,14 @@
 package com.wini.owle.entity.composteid
 
-import com.wini.owle.dto.typing.TypeUnionMemberDto
+import com.wini.owle.dto.typing.TypeUnionMember
 import com.wini.owle.entity.TypeUnionMembers
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 
-object TypeUnionMemberIdFactory : CompositeIdFactoryImpl<TypeUnionMemberDto>() {
+object TypeUnionMemberIdFactory : CompositeIdFactoryImpl<TypeUnionMember>() {
 
-    override fun fromDtoInstance(dto: TypeUnionMemberDto): CompositeID {
+    override fun fromDtoInstance(dto: TypeUnionMember): CompositeID {
         return CompositeID {
             it[TypeUnionMembers.unionTypeDeclaration] = dto.unionTypeDeclarationId
             it[TypeUnionMembers.memberTypeDeclaration] = dto.memberTypeDeclarationId

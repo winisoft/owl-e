@@ -3,27 +3,27 @@ package com.wini.owle.api.environs
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.environs.VersionSpecDto
+import com.wini.owle.dto.environs.VersionSpec
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import com.wini.owle.validators.BaseValidator
 
 
-open class VersionSpecApiTest : BaseLongPkApiTest<VersionSpecDto, VersionSpecApi>() {
+open class VersionSpecApiTest : BaseLongPkApiTest<VersionSpec, VersionSpecApi>() {
 
     override val route: String = "/api/version-spec"
 
-    override fun getDto(id: Long): VersionSpecDto = DtoTestInstanceFactory.versionSpecDto(
+    override fun getDto(id: Long): VersionSpec = DtoTestInstanceFactory.versionSpecDto(
         id = id
     )
 
-    override val serializer: KSerializer<VersionSpecDto> = VersionSpecDto.serializer()
+    override val serializer: KSerializer<VersionSpec> = VersionSpec.serializer()
     
-    override val listSerializer: KSerializer<List<VersionSpecDto>> = ListSerializer(VersionSpecDto.serializer())
+    override val listSerializer: KSerializer<List<VersionSpec>> = ListSerializer(VersionSpec.serializer())
 
     override fun getApiInstance(
-        dll: DLL<Long, VersionSpecDto>,
-        validator: BaseValidator<VersionSpecDto>
+        dll: DLL<Long, VersionSpec>,
+        validator: BaseValidator<VersionSpec>
     ): VersionSpecApi = VersionSpecApi(dll, validator)
 
 }

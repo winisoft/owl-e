@@ -4,7 +4,7 @@ import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.async.AsyncError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.typing.TypeUnionMemberDto
+import com.wini.owle.dto.typing.TypeUnionMember
 import com.wini.owle.entity.TypeUnionMembers
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
@@ -13,18 +13,18 @@ import org.jetbrains.exposed.dao.id.CompositeID
 import com.wini.owle.validators.BaseValidator
 
 
-open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMemberDto, TypeUnionMemberApi>() {
+open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMember, TypeUnionMemberApi>() {
 
 
-    override fun getDto(id1: Long, id2: Long): TypeUnionMemberDto = DtoTestInstanceFactory.typeUnionMemberDto(
+    override fun getDto(id1: Long, id2: Long): TypeUnionMember = DtoTestInstanceFactory.typeUnionMemberDto(
         unionTypeDeclarationId = id1,
         memberTypeDeclarationId = id2
     )
 
     override fun getApiInstance(
-        dll: DLL<CompositeID, TypeUnionMemberDto>,
-        validator: BaseValidator<TypeUnionMemberDto>,
-        compositeIdFactory: CompositeIdFactory<TypeUnionMemberDto>
+        dll: DLL<CompositeID, TypeUnionMember>,
+        validator: BaseValidator<TypeUnionMember>,
+        compositeIdFactory: CompositeIdFactory<TypeUnionMember>
     ): TypeUnionMemberApi {
         return TypeUnionMemberApi(
             dll = dll,
@@ -47,9 +47,9 @@ open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMemberDto, 
         }
     }
 
-    override val serializer: KSerializer<TypeUnionMemberDto> = TypeUnionMemberDto.serializer()
+    override val serializer: KSerializer<TypeUnionMember> = TypeUnionMember.serializer()
     
-    override val listSerializer: KSerializer<List<TypeUnionMemberDto>> = ListSerializer(TypeUnionMemberDto.serializer())
+    override val listSerializer: KSerializer<List<TypeUnionMember>> = ListSerializer(TypeUnionMember.serializer())
 
     override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
         return listOf(

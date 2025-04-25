@@ -1,29 +1,29 @@
 package com.wini.owle.mapper
 
-import com.wini.owle.mapper.environs.PackageMapperTest
-import com.wini.owle.mapper.environs.PackageRepoMapperTest
+import com.wini.owle.mapper.environs.PyPackageMapperTest
+import com.wini.owle.mapper.environs.PyPackageRepoMapperTest
 import com.wini.owle.mapper.environs.VersionSpecsMapperTest
-import com.wini.owle.mapper.environs.enums.PackageRepoTypeMapperTest
+import com.wini.owle.mapper.environs.enums.PyPackageRepoTypeEntityMapperTest
 import com.wini.owle.mapper.runs.*
-import com.wini.owle.mapper.runs.enums.ComparisonOperatorMapperTest
-import com.wini.owle.mapper.runs.enums.ExecutionStatusMapperTest
-import com.wini.owle.mapper.runs.enums.GenerationMethodMapperTest
-import com.wini.owle.mapper.runs.enums.LogLevelMapperTest
+import com.wini.owle.mapper.runs.enums.ComparisonOperatorEntityMapperTest
+import com.wini.owle.mapper.runs.enums.ExecutionStatusEntityMapperTest
+import com.wini.owle.mapper.runs.enums.GenerationMethodEntityMapperTest
+import com.wini.owle.mapper.runs.enums.LogLevelEntityMapperTest
 import com.wini.owle.mapper.steps.*
 import com.wini.owle.mapper.transforms.*
-import com.wini.owle.mapper.transforms.enums.TransformOccurrenceMapperTest
+import com.wini.owle.mapper.transforms.enums.TransformEntityOccurrenceMapperTest
 import com.wini.owle.mapper.typing.*
-import com.wini.owle.mapper.typing.enums.VarianceCardinalityMapperTest
-import com.wini.owle.mapper.user.PaymentMethodMapperTest
+import com.wini.owle.mapper.typing.enums.VarianceCardinalityEntityMapperTest
+import com.wini.owle.mapper.user.PaymentMethodEntityMapperTest
 import com.wini.owle.mapper.user.TagsMapperTest
-import com.wini.owle.mapper.user.UserMapperTest
-import com.wini.owle.mapper.user.enums.CardBrandMapperTest
-import com.wini.owle.mapper.user.enums.SubscriptionStatusMapperTest
+import com.wini.owle.mapper.user.UserEntityMapperTest
+import com.wini.owle.mapper.user.enums.CardBrandEntityMapperTest
+import com.wini.owle.mapper.user.enums.SubscriptionStatusEntityMapperTest
 import com.wini.owle.mapper.workflows.*
-import com.wini.owle.mapper.workflows.enums.AuthorshipCreditMapperTest
-import com.wini.owle.mapper.workflows.enums.CommercialUseMapperTest
-import com.wini.owle.mapper.workflows.enums.ModificationTermsMapperTest
-import com.wini.owle.mapper.workflows.enums.StoreMethodMapperTest
+import com.wini.owle.mapper.workflows.enums.AuthorshipCreditEntityMapperTest
+import com.wini.owle.mapper.workflows.enums.CommercialUseEntityMapperTest
+import com.wini.owle.mapper.workflows.enums.ModificationTermsEntityMapperTest
+import com.wini.owle.mapper.workflows.enums.StoreMethodEntityMapperTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
@@ -39,31 +39,31 @@ open class MapperTests {
     @DisplayName("Enum Mapper Tests")
     inner class EnumMapperTests {
 
-        @Nested inner class PackageRepoTypeMapperTests: PackageRepoTypeMapperTest()
+        @Nested inner class PyPackageRepoTypeEntityMapperTests: PyPackageRepoTypeEntityMapperTest()
 
-        @Nested inner class ComparisonOperatorMapperTests: ComparisonOperatorMapperTest()
+        @Nested inner class ComparisonOperatorEntityMapperTests: ComparisonOperatorEntityMapperTest()
 
-        @Nested inner class ExecutionStatusMapperTests: ExecutionStatusMapperTest()
+        @Nested inner class ExecutionStatusEntityMapperTests: ExecutionStatusEntityMapperTest()
 
-        @Nested inner class GenerationMethodMapperTests: GenerationMethodMapperTest()
+        @Nested inner class GenerationMethodEntityMapperTests: GenerationMethodEntityMapperTest()
 
-        @Nested inner class LogLevelMapperTests: LogLevelMapperTest()
+        @Nested inner class LogLevelEntityMapperTests: LogLevelEntityMapperTest()
 
-        @Nested inner class TransformOccurrenceMapperTests: TransformOccurrenceMapperTest()
+        @Nested inner class TransformEntityOccurrenceMapperTests: TransformEntityOccurrenceMapperTest()
 
-        @Nested inner class VarianceCardinalityMapperTests: VarianceCardinalityMapperTest()
+        @Nested inner class VarianceCardinalityEntityMapperTests: VarianceCardinalityEntityMapperTest()
 
-        @Nested inner class CardBrandMapperTests: CardBrandMapperTest()
+        @Nested inner class CardBrandEntityMapperTests: CardBrandEntityMapperTest()
 
-        @Nested inner class SubscriptionStatusMapperTests: SubscriptionStatusMapperTest()
+        @Nested inner class SubscriptionStatusEntityMapperTests: SubscriptionStatusEntityMapperTest()
 
-        @Nested inner class AuthorshipCreditMapperTests: AuthorshipCreditMapperTest()
+        @Nested inner class AuthorshipCreditEntityMapperTests: AuthorshipCreditEntityMapperTest()
 
-        @Nested inner class CommercialUseMapperTests: CommercialUseMapperTest()
+        @Nested inner class CommercialUseEntityMapperTests: CommercialUseEntityMapperTest()
 
-        @Nested inner class ModificationTermsMapperTests: ModificationTermsMapperTest()
+        @Nested inner class ModificationTermsEntityMapperTests: ModificationTermsEntityMapperTest()
 
-        @Nested inner class StoreMethodMapperTests: StoreMethodMapperTest()
+        @Nested inner class StoreMethodEntityMapperTests: StoreMethodEntityMapperTest()
     }
 
     @Nested
@@ -71,10 +71,10 @@ open class MapperTests {
     inner class MapperEnvironsModuleTest {
 
         @Nested @DisplayName("PackageRepoMapper")
-        inner class PackageRepoTest: PackageRepoMapperTest()
+        inner class PyPackageRepoTest: PyPackageRepoMapperTest()
 
         @Nested @DisplayName("PackageMapper")
-        inner class PackageTest: PackageMapperTest()
+        inner class PyPackageTest: PyPackageMapperTest()
 
         @Nested @DisplayName("VersionSpecMapper")
         inner class VersionSpecTest: VersionSpecsMapperTest()
@@ -98,16 +98,16 @@ open class MapperTests {
         inner class StepExecutionTest: StepExecutionMapperTest()
 
         @Nested @DisplayName("TestCaseMapper")
-        inner class TestCaseTest: TestCaseMapperTest()
+        inner class TestCaseTestEntity: TestCaseMapperTestEntity()
 
         @Nested @DisplayName("TestExpectedOutcomeMapper")
         inner class TestExpectedOutcomeTest: TestExpectedOutcomeMapperTest()
 
         @Nested @DisplayName("TestInputMapper")
-        inner class TestInputTest: TestInputMapperTest()
+        inner class TestInputTestEntity: TestInputMapperTestEntity()
 
         @Nested @DisplayName("TestResultMapper")
-        inner class TestResultTest: TestResultMapperTest()
+        inner class TestResultWorkflowTest: TestResultMapperWorkflowTest()
 
         @Nested @DisplayName("WorkflowExecutionMapper")
         inner class WorkflowExecutionTest: WorkflowExecutionMapperTest()
@@ -119,13 +119,13 @@ open class MapperTests {
     inner class MapperStepsModuleTest {
 
         @Nested @DisplayName("ErrorWatchMapper")
-        inner class ErrorWatchTest: ErrorWatchMapperTest()
+        inner class ErrorWatchEntityTest: ErrorWatchEntityMapperTest()
 
         @Nested @DisplayName("ErrorWatchFnMapper")
-        inner class ErrorWatchFnTest: ErrorWatchFnMapperTest()
+        inner class ErrorWatchEntityFnTest: ErrorWatchEntityFnMapperTest()
 
         @Nested @DisplayName("InquisitionMapper")
-        inner class InquisitionTest: InquisitionMapperTest()
+        inner class InquisitionEntityTest: InquisitionEntityMapperTest()
 
         @Nested @DisplayName("PreReqInjectionMapper")
         inner class PreReqInjectionTest: PreReqInjectionMapperTest()
@@ -146,10 +146,10 @@ open class MapperTests {
     inner class MapperTransformsModuleTest {
 
         @Nested @DisplayName("AppliedTransformArgMapper")
-        inner class AppliedTransformArgTest: AppliedTransformArgMapperTest()
+        inner class AppliedTransformEntityEntityArgTest: AppliedTransformEntityEntityArgMapperTest()
 
         @Nested @DisplayName("AppliedTransformMapper")
-        inner class AppliedTransformTest: AppliedTransformMapperTest()
+        inner class AppliedTransformEntityEntityTest: AppliedTransformEntityEntityMapperTest()
 
         @Nested @DisplayName("TransformationArgMapper")
         inner class TransformationArgTest: TransformationArgMapperTest()
@@ -164,13 +164,13 @@ open class MapperTests {
     inner class MapperTypingModuleTests {
 
         @Nested @DisplayName("TypeBoundMapper")
-        inner class TypeBoundTest: TypeBoundMapperTest()
+        inner class TypeBoundEntityTest: TypeBoundEntityMapperTest()
 
         @Nested @DisplayName("TypeDeclaratonMapper")
-        inner class TypeDeclarationTest: TypeDeclarationMapperTest()
+        inner class TypeDeclarationEntityTest: TypeDeclarationEntityMapperTest()
 
         @Nested @DisplayName("TypeDefinitionMapper")
-        inner class TypeDefinitionTest: TypeDefinitionMapperTest()
+        inner class TypeDefinitionEntityTest: TypeDefinitionEntityMapperTest()
 
         @Nested @DisplayName("TypeParameterMapper")
         inner class TypeParameterTest: TypeParameterMapperTest()
@@ -185,16 +185,16 @@ open class MapperTests {
 
     @Nested
     @DisplayName("User Module")
-    inner class MapperUserModuleTest {
+    inner class MapperUserEntityModuleTest {
 
         @Nested @DisplayName("PaymentMethodMapper")
-        inner class PaymentMethodTest: PaymentMethodMapperTest()
+        inner class PaymentMethodEntityTest: PaymentMethodEntityMapperTest()
 
         @Nested @DisplayName("TagMapper")
-        inner class TagTest: TagsMapperTest()
+        inner class TagEntityTest: TagsMapperTest()
 
         @Nested @DisplayName("UserMapper")
-        inner class UserTest: UserMapperTest()
+        inner class UserEntityTest: UserEntityMapperTest()
 
     }
 
@@ -203,7 +203,7 @@ open class MapperTests {
     inner class MapperWorkflowsModuleTest {
 
         @Nested @DisplayName("DataPointMapper")
-        inner class DataPointTest: DataPointMapperTest()
+        inner class DataPointEntityTest: DataPointEntityMapperTest()
 
         @Nested @DisplayName("PhaseMapper")
         inner class PhaseTest: PhaseMapperTest()

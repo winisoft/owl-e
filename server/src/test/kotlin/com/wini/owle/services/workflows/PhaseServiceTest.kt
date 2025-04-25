@@ -2,9 +2,9 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.workflows.PhaseDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import com.wini.owle.entity.workflows.PhaseDao
+import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.entity.workflows.PhaseEntity
 import com.wini.owle.mapper.workflows.PhasesMapper
 import com.wini.owle.repo.PhaseIdFactory
 import com.wini.owle.repo.workflows.PhaseRepository
@@ -26,13 +26,13 @@ open class PhaseServiceTest {
 
     fun createSampleDto(
         id: Long = 1L,
-        workflow: WorkflowDto = mockk(),
-        parentPhase: PhaseDto? = null,
+        workflow: Workflow = mockk(),
+        parentPhase: Phase? = null,
         name: String = "Phase Name",
         description: String? = "Phase Description",
         displayOrder: Int = 1
-    ) : PhaseDto {
-        return PhaseDto(
+    ) : Phase {
+        return Phase(
             id = id,
             workflow = workflow,
             parentPhase = parentPhase,
@@ -43,7 +43,7 @@ open class PhaseServiceTest {
     }
 
 
-    fun createSampleEntity(): PhaseDao = mockk<PhaseDao>() {
+    fun createSampleEntity(): PhaseEntity = mockk<PhaseEntity>() {
         every { id } returns mockk()
         every { workflow } returns mockk()
         every { parentPhase } returns null
@@ -63,8 +63,8 @@ open class PhaseServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: PhaseDto = mockk()
-        val entity: PhaseDao = mockk()
+        val dto: Phase = mockk()
+        val entity: PhaseEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -86,8 +86,8 @@ open class PhaseServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: PhaseDto = mockk()
-        val entity: PhaseDao = mockk()
+        val dto: Phase = mockk()
+        val entity: PhaseEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -110,9 +110,9 @@ open class PhaseServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: PhaseDto = createSampleDto()
+        val dto: Phase = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: PhaseDao = mockk<PhaseDao>() {
+        val entity: PhaseEntity = mockk<PhaseEntity>() {
             every { id } returns mockk()
         }
 
@@ -161,7 +161,7 @@ open class PhaseServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<PhaseDao> = mockk()
+        val entities: List<PhaseEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -182,8 +182,8 @@ open class PhaseServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<PhaseDao>()
-        val emptyDtoList = emptyList<PhaseDto>()
+        val emptyList = emptyList<PhaseEntity>()
+        val emptyDtoList = emptyList<Phase>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -228,7 +228,7 @@ open class PhaseServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, PhaseDao> = mockk()
+        val entityClass: EntityClass<Long, PhaseEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -278,8 +278,8 @@ open class PhaseServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<PhaseDto>()
-        val emptyEntityList = emptyList<PhaseDao>()
+        val emptyDtoList = emptyList<Phase>()
+        val emptyEntityList = emptyList<PhaseEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

@@ -1,7 +1,7 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.steps.WorkflowJunctionDto
+import com.wini.owle.dto.steps.WorkflowJunction
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.workflows.WorkflowValidator
@@ -10,8 +10,8 @@ class WorkflowJunctionValidator(
     private val sourceStepValidator: StepValidator,
     private val targetWorkflowValidator: WorkflowValidator,
     private val triggerInquisitionValidator: InquisitionValidator
-) : BaseValidator<WorkflowJunctionDto>() {
-    override fun validate(dto: WorkflowJunctionDto): ValidationResult {
+) : BaseValidator<WorkflowJunction>() {
+    override fun validate(dto: WorkflowJunction): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested sourceStep

@@ -1,27 +1,27 @@
 package com.wini.owle.mapper.runs.enums
 
-import com.wini.owle.dto.runs.LogLevelDto
-import com.wini.owle.entity.runs.enums.LogLevel
+import com.wini.owle.dto.runs.enums.LogLevel
+import com.wini.owle.entity.runs.enums.LogLevelEntity
 
 class LogLevelMapper {
 
-    fun toEntity(dto: LogLevelDto): LogLevel {
+    fun toEntity(dto: LogLevel): LogLevelEntity {
         return when (dto) {
-            LogLevelDto.Debug -> LogLevel.DEBUG
-            LogLevelDto.Info -> LogLevel.INFO
-            LogLevelDto.Warning -> LogLevel.WARNING
-            LogLevelDto.Error -> LogLevel.ERROR
-            LogLevelDto.Critical -> LogLevel.CRITICAL
+            LogLevel.DEBUG -> LogLevelEntity.DEBUG
+            LogLevel.INFO -> LogLevelEntity.INFO
+            LogLevel.WARNING -> LogLevelEntity.WARNING
+            LogLevel.ERROR -> LogLevelEntity.ERROR
+            LogLevel.CRITICAL -> LogLevelEntity.CRITICAL
         }
     }
 
-    fun toDto(entity: LogLevel): LogLevelDto {
+    fun toDto(entity: LogLevelEntity): LogLevel {
         return when (entity) {
-            LogLevel.DEBUG -> LogLevelDto.Debug
-            LogLevel.INFO -> LogLevelDto.Info
-            LogLevel.WARNING -> LogLevelDto.Warning
-            LogLevel.ERROR -> LogLevelDto.Error
-            LogLevel.CRITICAL -> LogLevelDto.Critical
+            LogLevelEntity.DEBUG -> LogLevel.DEBUG
+            LogLevelEntity.INFO -> LogLevel.INFO
+            LogLevelEntity.WARNING -> LogLevel.WARNING
+            LogLevelEntity.ERROR -> LogLevel.ERROR
+            LogLevelEntity.CRITICAL -> LogLevel.CRITICAL
         }
     }
 }

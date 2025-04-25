@@ -1,7 +1,7 @@
 package com.wini.owle.validators.runs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.runs.TestCaseDto
+import com.wini.owle.dto.runs.test.TestCase
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.steps.StepValidator
@@ -12,12 +12,12 @@ class TestCaseValidator(
     private val userValidator: UserValidator,
     private val workflowValidator: WorkflowValidator,
     private val stepValidator: StepValidator
-) : BaseValidator<TestCaseDto>() {
+) : BaseValidator<TestCase>() {
     companion object {
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: TestCaseDto): ValidationResult {
+    override fun validate(dto: TestCase): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested user

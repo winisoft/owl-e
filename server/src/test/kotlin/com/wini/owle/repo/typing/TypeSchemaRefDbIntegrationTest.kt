@@ -5,7 +5,6 @@ import com.wini.owle.entity.*
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDeclarationDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeDefinitionDao
 import com.wini.owle.entity.EntityTestInstanceFactory.typeSchemaRefDao
-import com.wini.owle.repo.OwleRepoImplTest
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach
@@ -27,8 +26,8 @@ open class TypeSchemaRefDbIntegrationTest {
     fun `test 'on delete' of dependent TypeDefinition entity cascades to TypeSchemaRef`() {
         transaction {
             val typeDefinition = typeDefinitionDao()
-            val typeDeclaration = typeDeclarationDao(typeDefinition = typeDefinition)
-            val typeSchemaRef = typeSchemaRefDao(typeDeclaration = typeDeclaration)
+            val typeDeclaration = typeDeclarationDao(typeDefinitionEntity = typeDefinition)
+            val typeSchemaRef = typeSchemaRefDao(typeDeclarationEntity = typeDeclaration)
             val typeSchemaRefId = typeSchemaRef.id.value
 
             TypeDefinitionRepository().delete(typeDefinition.id)
@@ -46,7 +45,7 @@ open class TypeSchemaRefDbIntegrationTest {
     fun `test 'on delete' of dependent TypeDeclaration entity cascades to TypeSchemaRef`() {
         transaction {
             val typeDeclaration = typeDeclarationDao()
-            val typeSchemaRef = typeSchemaRefDao(typeDeclaration = typeDeclaration)
+            val typeSchemaRef = typeSchemaRefDao(typeDeclarationEntity = typeDeclaration)
             val typeSchemaRefId = typeSchemaRef.id.value
 
             val repo = TypeSchemaRefRepository()

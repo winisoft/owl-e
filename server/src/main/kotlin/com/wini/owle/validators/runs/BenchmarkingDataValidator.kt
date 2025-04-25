@@ -1,15 +1,15 @@
 package com.wini.owle.validators.runs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.runs.BenchmarkingDataDto
+import com.wini.owle.dto.runs.test.BenchmarkReport
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class BenchmarkingDataValidator(
     private val workflowExecutionValidator: WorkflowExecutionValidator
-) : BaseValidator<BenchmarkingDataDto>() {
+) : BaseValidator<BenchmarkReport>() {
 
-    override fun validate(dto: BenchmarkingDataDto): ValidationResult {
+    override fun validate(dto: BenchmarkReport): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested workflowExecution

@@ -2,11 +2,11 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.workflows.PhaseDto
-import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.dto.workflows.ToolDto
-import com.wini.owle.dto.workflows.WorkflowDto
-import com.wini.owle.entity.workflows.StepDao
+import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Step
+import com.wini.owle.dto.workflows.Tool
+import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.mapper.workflows.StepsMapper
 import com.wini.owle.repo.StepIdFactory
 import com.wini.owle.repo.workflows.StepRepository
@@ -30,14 +30,14 @@ open class StepServiceTest {
         id: Long = 3L,
         name: String = "Example Step",
         description: String? = "A step in a workflow",
-        workflow: WorkflowDto = mockk(),
+        workflow: Workflow = mockk(),
         isWorkflowHead: Boolean = true,
-        tool: ToolDto = mockk(),
-        parentPhase: PhaseDto? = mockk(),
+        tool: Tool = mockk(),
+        parentPhase: Phase? = mockk(),
         displayOrder: Int = 0,
-        nextStep: StepDto? = mockk()
-    ): StepDto {
-        return StepDto(
+        nextStep: Step? = mockk()
+    ): Step {
+        return Step(
             id = id,
             name = name,
             description = description,
@@ -50,7 +50,7 @@ open class StepServiceTest {
         )
     }
 
-    fun createSampleEntity(): StepDao = mockk<StepDao>() {
+    fun createSampleEntity(): StepEntity = mockk<StepEntity>() {
         every { id } returns mockk()
         every { name } returns "Example Step"
         every { description } returns "A step in a workflow"
@@ -72,8 +72,8 @@ open class StepServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: StepDto = mockk()
-        val entity: StepDao = mockk()
+        val dto: Step = mockk()
+        val entity: StepEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -95,8 +95,8 @@ open class StepServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: StepDto = mockk()
-        val entity: StepDao = mockk()
+        val dto: Step = mockk()
+        val entity: StepEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -119,9 +119,9 @@ open class StepServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: StepDto = createSampleDto()
+        val dto: Step = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: StepDao = mockk<StepDao>() {
+        val entity: StepEntity = mockk<StepEntity>() {
             every { id } returns mockk()
         }
 
@@ -170,7 +170,7 @@ open class StepServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<StepDao> = mockk()
+        val entities: List<StepEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -191,8 +191,8 @@ open class StepServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<StepDao>()
-        val emptyDtoList = emptyList<StepDto>()
+        val emptyList = emptyList<StepEntity>()
+        val emptyDtoList = emptyList<Step>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -237,7 +237,7 @@ open class StepServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, StepDao> = mockk()
+        val entityClass: EntityClass<Long, StepEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -287,8 +287,8 @@ open class StepServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<StepDto>()
-        val emptyEntityList = emptyList<StepDao>()
+        val emptyDtoList = emptyList<Step>()
+        val emptyEntityList = emptyList<StepEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

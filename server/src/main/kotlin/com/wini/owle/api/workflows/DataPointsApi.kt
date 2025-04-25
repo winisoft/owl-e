@@ -2,7 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.workflows.DataPointDto
+import com.wini.owle.dto.workflows.DataPoint
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
@@ -10,11 +10,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class DataPointsApi(
-    dll: DLL<Long, DataPointDto>,
-    validator: DtoValidator<DataPointDto>
-): LongIdEndpointImpl<DataPointDto>(
+    dll: DLL<Long, DataPoint>,
+    validator: DtoValidator<DataPoint>
+): LongIdEndpointImpl<DataPoint>(
     dll = dll,
-    serializer = DataPointDto.serializer(),
+    serializer = DataPoint.serializer(),
     validator = validator
 ) {
 

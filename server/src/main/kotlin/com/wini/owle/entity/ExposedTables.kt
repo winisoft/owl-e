@@ -1,24 +1,22 @@
 package com.wini.owle.entity
 
-import com.wini.owle.entity.environs.enums.PackageRepoType
-import com.wini.owle.entity.runs.enums.ComparisonOperator
-import com.wini.owle.entity.runs.enums.ExecutionStatus
-import com.wini.owle.entity.runs.enums.GenerationMethod
-import com.wini.owle.entity.runs.enums.LogLevel
-import com.wini.owle.entity.transforms.enums.TransformOccurrence
-import com.wini.owle.entity.typing.enums.VarianceCardinality
-import com.wini.owle.entity.user.enums.CardBrand
-import com.wini.owle.entity.user.enums.SubscriptionStatus
-import com.wini.owle.entity.workflows.enums.AuthorshipCredit
-import com.wini.owle.entity.workflows.enums.CommercialUse
-import com.wini.owle.entity.workflows.enums.ModificationTerms
-import com.wini.owle.entity.workflows.enums.StoreMethod
+import com.wini.owle.entity.environs.enums.PackageRepoTypeEntity
+import com.wini.owle.entity.runs.enums.ComparisonOperatorEntity
+import com.wini.owle.entity.runs.enums.ExecutionStatusEntity
+import com.wini.owle.entity.runs.enums.GenerationMethodEntity
+import com.wini.owle.entity.runs.enums.LogLevelEntity
+import com.wini.owle.entity.transforms.enums.TransformOccurrenceEntity
+import com.wini.owle.entity.typing.enums.VarianceCardinalityEntity
+import com.wini.owle.entity.user.enums.CardBrandEntity
+import com.wini.owle.entity.user.enums.SubscriptionStatusEntity
+import com.wini.owle.entity.workflows.enums.AuthorshipCreditEntity
+import com.wini.owle.entity.workflows.enums.CommercialUseEntity
+import com.wini.owle.entity.workflows.enums.ModificationTermsEntity
+import com.wini.owle.entity.workflows.enums.StoreMethodEntity
 import com.wini.owle.models.metadata.UserDesignedMetadata
-import kotlinx.datetime.Instant
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.CompositeIdTable
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.json.json
 import org.jetbrains.exposed.sql.json.jsonb
@@ -73,8 +71,8 @@ object TypeBounds : LongIdTable("type_bounds") {
 
 object TypeVariances : LongIdTable("type_variance") {
     val typeVariableDeclaration = reference("typeVariableDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val variance = enumerationByName("variance", 13, VarianceCardinality::class)
-        .default(VarianceCardinality.INVARIANT)
+    val variance = enumerationByName("variance", 13, VarianceCardinalityEntity::class)
+        .default(VarianceCardinalityEntity.INVARIANT)
 }
 
 object TypeSchemaRefs : LongIdTable("type_schema_refs") {
@@ -114,10 +112,10 @@ object WorkflowMetadata : LongIdTable("workflow_metadata") {
     val contactInformation = text("contact_information").nullable()
     val thirdPartyLicenses = text("third_party_licenses").nullable()
     val discretionAdvisedContent = bool("discretion_advised_content").default(false)
-    val commercialUsage = enumerationByName("commercial_usage", 32, CommercialUse::class)
-    val creditNotation = enumerationByName("credit_notation", 32, AuthorshipCredit::class)
+    val commercialUsage = enumerationByName("commercial_usage", 32, CommercialUseEntity::class)
+    val creditNotation = enumerationByName("credit_notation", 32, AuthorshipCreditEntity::class)
     val allowRedistribution = bool("allow_redistribution").default(false)
-    val modification = enumerationByName("modification", 64, ModificationTerms::class)
+    val modification = enumerationByName("modification", 64, ModificationTermsEntity::class)
     val distributionVersion = varchar("distribution_version", 20).default("1.0.0")
     val distributionAcceptedAt = timestamp("distribution_accepted_at")
     val distributionUpdatedAt = timestamp("distribution_updated_at")
@@ -182,7 +180,7 @@ object DataPoints : LongIdTable("data_points") {
     val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE)
     val name = varchar("name", 255)
     val presetValue = text("presetValue").nullable()
-    val storeMethod = enumerationByName("storeMethod", 10, StoreMethod::class).default(StoreMethod.TEXT)
+    val storeMethod = enumerationByName("storeMethod", 10, StoreMethodEntity::class).default(StoreMethodEntity.TEXT)
     val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
     val description = text("description").nullable()
     val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
@@ -190,7 +188,7 @@ object DataPoints : LongIdTable("data_points") {
 }
 
 object PackageRepositories : LongIdTable("packagerepositories") {
-    val sourceType = enumerationByName("sourcetype", 50, PackageRepoType::class)
+    val sourceType = enumerationByName("sourcetype", 50, PackageRepoTypeEntity::class)
     val sourceUrl = text("sourceurl").nullable()
 }
 
@@ -210,7 +208,7 @@ object TransformationArgs : LongIdTable("transformation_args") {
 
 object AppliedTransforms : LongIdTable("applied_transforms") {
     val transformation = reference("transformationId", Transformations, onDelete = ReferenceOption.CASCADE)
-    val occurrence = enumerationByName("occurrence", 20, TransformOccurrence::class)
+    val occurrence = enumerationByName("occurrence", 20, TransformOccurrenceEntity::class)
     val previousTransform = reference("previousTransformId", AppliedTransforms, onDelete = ReferenceOption.CASCADE).nullable()
     val resultTypeDeclaration = reference("resultTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
     val dataPoint = reference("dataPointId", DataPoints, onDelete = ReferenceOption.CASCADE).nullable()
@@ -273,8 +271,8 @@ object Users : LongIdTable("users") {
     val resetToken = varchar("resetToken", 255).nullable()
     val oauthProvider = varchar("oauthProvider", 50).nullable()
     val oauthId = varchar("oauthId", 255).nullable()
-    val subscriptionStatus = enumerationByName("subscriptionStatus", 20, SubscriptionStatus::class)
-        .default(SubscriptionStatus.REGISTERED)
+    val subscriptionStatus = enumerationByName("subscriptionStatus", 20, SubscriptionStatusEntity::class)
+        .default(SubscriptionStatusEntity.REGISTERED)
     val apiKey = varchar("apiKey", 255).nullable()
     val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
     val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
@@ -286,7 +284,7 @@ object PaymentMethods : LongIdTable("payment_methods") {
     // Payment method definitely doesn't make sense if user is removed => cascade
     val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
 
-    val cardBrand = enumerationByName("cardBrand", 50, CardBrand::class).nullable()
+    val cardBrand = enumerationByName("cardBrand", 50, CardBrandEntity::class).nullable()
     val lastFour = varchar("lastFour", 4).nullable()
     val isDefault = bool("isDefault").default(false)
     val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
@@ -314,7 +312,7 @@ object WorkflowExecutions : LongIdTable("workflow_executions") {
     val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
     val startedAt = timestamp("startedAt").defaultExpression(CurrentTimestamp)
     val completedAt = timestamp("completedAt").nullable()
-    val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
+    val status = enumerationByName("status", 20, ExecutionStatusEntity::class).default(ExecutionStatusEntity.RUNNING)
 }
 
 object StepExecutions : LongIdTable("step_executions") {
@@ -322,13 +320,13 @@ object StepExecutions : LongIdTable("step_executions") {
     val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE)
     val startedAt = timestamp("startedAt").defaultExpression(CurrentTimestamp)
     val completedAt = timestamp("completedAt").nullable()
-    val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
+    val status = enumerationByName("status", 20, ExecutionStatusEntity::class).default(ExecutionStatusEntity.RUNNING)
 }
 
 object ExecutionLogs : LongIdTable("execution_logs") {
     val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
     val timestamp = timestamp("timestamp").defaultExpression(CurrentTimestamp)
-    val logLevel = enumerationByName("logLevel", 10, LogLevel::class)
+    val logLevel = enumerationByName("logLevel", 10, LogLevelEntity::class)
     val message = text("message")
 }
 
@@ -357,14 +355,14 @@ object TestInputs : LongIdTable("test_inputs") {
     val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
     val dataPointName = varchar("dataPointName", 255)
     val value = text("value").nullable()
-    val generationMethod = enumerationByName("generationMethod", 20, GenerationMethod::class)
+    val generationMethod = enumerationByName("generationMethod", 20, GenerationMethodEntity::class)
 }
 
 object TestExpectedOutcomes : LongIdTable("test_expected_outcomes") {
     val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
     val dataPointName = varchar("dataPointName", 255)
     val expectedValue = text("expectedValue").nullable()
-    val comparisonOperator = enumerationByName("comparisonOperator", 20, ComparisonOperator::class)
+    val comparisonOperator = enumerationByName("comparisonOperator", 20, ComparisonOperatorEntity::class)
 }
 
 object TestResults : LongIdTable("test_results") {

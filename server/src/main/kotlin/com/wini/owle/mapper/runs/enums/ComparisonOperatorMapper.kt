@@ -1,28 +1,27 @@
 package com.wini.owle.mapper.runs.enums
 
-import com.wini.owle.dto.runs.ComparisonOperatorDto
-import com.wini.owle.entity.runs.enums.ComparisonOperator
+import com.wini.owle.dto.runs.enums.ComparisonOperator
+import com.wini.owle.entity.runs.enums.ComparisonOperatorEntity
 
 class ComparisonOperatorMapper {
 
-    fun toEntity(dto: ComparisonOperatorDto) : ComparisonOperator {
+    fun toEntity(dto: ComparisonOperator) : ComparisonOperatorEntity {
         return when (dto) {
-            ComparisonOperatorDto.Contains -> ComparisonOperator.CONTAINS
-            ComparisonOperatorDto.Equals -> ComparisonOperator.EQUALS
-            ComparisonOperatorDto.GreaterThan -> ComparisonOperator.GREATER_THAN
-            ComparisonOperatorDto.LessThan -> ComparisonOperator.LESS_THAN
-            ComparisonOperatorDto.NotEquals -> ComparisonOperator.NOT_EQUALS
-            else -> throw IllegalArgumentException("Unsupported member for ComparisonOperatorDto: ${dto.id}")
+            ComparisonOperator.CONTAINS -> ComparisonOperatorEntity.CONTAINS
+            ComparisonOperator.EQUALS -> ComparisonOperatorEntity.EQUALS
+            ComparisonOperator.GREATER_THAN -> ComparisonOperatorEntity.GREATER_THAN
+            ComparisonOperator.LESS_THAN -> ComparisonOperatorEntity.LESS_THAN
+            ComparisonOperator.NOT_EQUALS -> ComparisonOperatorEntity.NOT_EQUALS
         }
     }
 
-    fun toDto(entity: ComparisonOperator): ComparisonOperatorDto {
+    fun toDto(entity: ComparisonOperatorEntity): ComparisonOperator {
         return when (entity) {
-            ComparisonOperator.EQUALS -> ComparisonOperatorDto.Equals
-            ComparisonOperator.NOT_EQUALS -> ComparisonOperatorDto.NotEquals
-            ComparisonOperator.CONTAINS -> ComparisonOperatorDto.Contains
-            ComparisonOperator.GREATER_THAN -> ComparisonOperatorDto.GreaterThan
-            ComparisonOperator.LESS_THAN -> ComparisonOperatorDto.LessThan
+            ComparisonOperatorEntity.EQUALS -> ComparisonOperator.EQUALS
+            ComparisonOperatorEntity.NOT_EQUALS -> ComparisonOperator.NOT_EQUALS
+            ComparisonOperatorEntity.CONTAINS -> ComparisonOperator.CONTAINS
+            ComparisonOperatorEntity.GREATER_THAN -> ComparisonOperator.GREATER_THAN
+            ComparisonOperatorEntity.LESS_THAN -> ComparisonOperator.LESS_THAN
         }
     }
 

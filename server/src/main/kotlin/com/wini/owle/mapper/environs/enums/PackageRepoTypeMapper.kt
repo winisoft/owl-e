@@ -1,29 +1,28 @@
 package com.wini.owle.mapper.environs.enums
 
-import com.wini.owle.dto.environs.PackageRepoTypeDto
-import com.wini.owle.entity.environs.enums.PackageRepoType
-import com.wini.owle.entity.environs.enums.PackageRepoType.*
+import com.wini.owle.dto.environs.enums.PyPackageRepoType
+import com.wini.owle.entity.environs.enums.PackageRepoTypeEntity
+import com.wini.owle.entity.environs.enums.PackageRepoTypeEntity.*
 
 class PackageRepoTypeMapper {
 
-    fun toEntity(dto: PackageRepoTypeDto): PackageRepoType {
+    fun toEntity(dto: PyPackageRepoType): PackageRepoTypeEntity {
         return when (dto) {
-            PackageRepoTypeDto.Pypi -> PYPI
-            PackageRepoTypeDto.Conda -> CONDA
-            PackageRepoTypeDto.Custom -> CUSTOM
-            PackageRepoTypeDto.Github -> GITHUB
-            PackageRepoTypeDto.Local -> LOCAL
-            else -> throw IllegalArgumentException("Unsupported member for PackageRepoTypeDto: ${dto.id}")
+            PyPackageRepoType.PYPI -> PYPI
+            PyPackageRepoType.CONDA -> CONDA
+            PyPackageRepoType.CUSTOM -> CUSTOM
+            PyPackageRepoType.GITHUB -> GITHUB
+            PyPackageRepoType.LOCAL -> LOCAL
         }
     }
 
-    fun toDto(entity: PackageRepoType): PackageRepoTypeDto {
+    fun toDto(entity: PackageRepoTypeEntity): PyPackageRepoType {
         return when (entity) {
-            PYPI -> PackageRepoTypeDto.Pypi
-            CONDA -> PackageRepoTypeDto.Conda
-            CUSTOM -> PackageRepoTypeDto.Custom
-            GITHUB -> PackageRepoTypeDto.Github
-            LOCAL -> PackageRepoTypeDto.Local
+            PYPI -> PyPackageRepoType.PYPI
+            CONDA -> PyPackageRepoType.CONDA
+            CUSTOM -> PyPackageRepoType.CUSTOM
+            GITHUB -> PyPackageRepoType.GITHUB
+            LOCAL -> PyPackageRepoType.LOCAL
         }
     }
 }

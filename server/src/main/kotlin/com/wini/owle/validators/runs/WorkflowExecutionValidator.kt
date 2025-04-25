@@ -1,7 +1,7 @@
 package com.wini.owle.validators.runs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.runs.WorkflowExecutionDto
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
@@ -13,8 +13,8 @@ class WorkflowExecutionValidator(
     private val workflowValidator: WorkflowValidator,
     private val userValidator: UserValidator,
     private val dateTimeConverter: DateTimeConverter
-): BaseValidator<WorkflowExecutionDto>() {
-    override fun validate(dto: WorkflowExecutionDto): ValidationResult {
+): BaseValidator<WorkflowExecution>() {
+    override fun validate(dto: WorkflowExecution): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested workflow

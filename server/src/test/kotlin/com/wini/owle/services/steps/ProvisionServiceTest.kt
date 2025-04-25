@@ -2,11 +2,11 @@ package com.wini.owle.services.steps
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.steps.ProvisionDto
-import com.wini.owle.dto.workflows.DataPointDto
-import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.dto.workflows.ToolParamDto
-import com.wini.owle.entity.steps.ProvisionDao
+import com.wini.owle.dto.steps.Provision
+import com.wini.owle.dto.workflows.DataPoint
+import com.wini.owle.dto.workflows.Step
+import com.wini.owle.dto.workflows.ToolParam
+import com.wini.owle.entity.steps.ToolParamDataPointEntity
 import com.wini.owle.mapper.steps.ProvisionsMapper
 import com.wini.owle.repo.ProvisionIdFactory
 import com.wini.owle.repo.steps.ProvisionRepository
@@ -28,11 +28,11 @@ open class ProvisionServiceTest {
 
     fun createSampleDto(
         id: Long = 1L,
-        step: StepDto = mockk(),
-        toolParam: ToolParamDto = mockk(),
-        dataPoints: List<DataPointDto> = mockk()
-    ) : ProvisionDto {
-        return ProvisionDto(
+        step: Step = mockk(),
+        toolParam: ToolParam = mockk(),
+        dataPoints: List<DataPoint> = mockk()
+    ) : Provision {
+        return Provision(
             id = id,
             step = step,
             toolParam = toolParam,
@@ -40,11 +40,11 @@ open class ProvisionServiceTest {
         )
     }
 
-    fun createSampleEntity(): ProvisionDao = mockk<ProvisionDao>() {
+    fun createSampleEntity(): ToolParamDataPointEntity = mockk<ToolParamDataPointEntity>() {
         every { id } returns mockk()
         every { step } returns mockk()
         every { toolParam } returns mockk()
-        every { dataPoint } returns mockk()
+        every { dataPointEntity } returns mockk()
     }
 
     @BeforeEach
@@ -58,8 +58,8 @@ open class ProvisionServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: ProvisionDto = mockk()
-        val entity: ProvisionDao = mockk()
+        val dto: Provision = mockk()
+        val entity: ToolParamDataPointEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -81,8 +81,8 @@ open class ProvisionServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: ProvisionDto = mockk()
-        val entity: ProvisionDao = mockk()
+        val dto: Provision = mockk()
+        val entity: ToolParamDataPointEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -105,11 +105,11 @@ open class ProvisionServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: ProvisionDto = createSampleDto()
+        val dto: Provision = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: ProvisionDao = mockk<ProvisionDao>() {
+        val entity: ToolParamDataPointEntity = mockk<ToolParamDataPointEntity>() {
             every { id } returns mockk()
-            every { dataPoint } returns mockk()
+            every { dataPointEntity } returns mockk()
             every { step } returns mockk()
         }
 
@@ -158,7 +158,7 @@ open class ProvisionServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<ProvisionDao> = mockk()
+        val entities: List<ToolParamDataPointEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -179,8 +179,8 @@ open class ProvisionServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<ProvisionDao>()
-        val emptyDtoList = emptyList<ProvisionDto>()
+        val emptyList = emptyList<ToolParamDataPointEntity>()
+        val emptyDtoList = emptyList<Provision>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -225,7 +225,7 @@ open class ProvisionServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, ProvisionDao> = mockk()
+        val entityClass: EntityClass<Long, ToolParamDataPointEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -275,8 +275,8 @@ open class ProvisionServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<ProvisionDto>()
-        val emptyEntityList = emptyList<ProvisionDao>()
+        val emptyDtoList = emptyList<Provision>()
+        val emptyEntityList = emptyList<ToolParamDataPointEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

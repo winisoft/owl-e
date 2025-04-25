@@ -1,12 +1,12 @@
 package com.wini.owle.validators.environs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
+import com.wini.owle.dto.environs.ToolPyPackDep
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
-class ToolPackageDependencyValidator : BaseValidator<ToolPackageDependencyDto>() {
-    override fun validate(dto: ToolPackageDependencyDto): ValidationResult {
+class ToolPackageDependencyValidator : BaseValidator<ToolPyPackDep>() {
+    override fun validate(dto: ToolPyPackDep): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // All fields are required as they form the composite primary key

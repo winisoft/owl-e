@@ -2,9 +2,9 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.runs.BenchmarkingDataDto
-import com.wini.owle.dto.runs.WorkflowExecutionDto
-import com.wini.owle.entity.runs.BenchmarkingDataDao
+import com.wini.owle.dto.runs.test.BenchmarkReport
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
+import com.wini.owle.entity.runs.test.BenchmarkReportEntity
 import com.wini.owle.mapper.runs.BenchmarkingDataMapper
 import com.wini.owle.repo.BenchmarkingDataIdFactory
 import com.wini.owle.repo.runs.BenchmarkingDataRepository
@@ -27,12 +27,12 @@ open class BenchmarkingDataServiceTest {
 
     fun createSampleDto(
         mockId: Long = 1L,
-        workflowExecution: WorkflowExecutionDto = mockk(),
+        workflowExecution: WorkflowExecution = mockk(),
         totalExecutionTime: Double = 123.456,
         totalSteps: Int = 99,
         aiDeterminedSteps: Int = 88,
         predeterminedSteps: Int = 77
-    ): BenchmarkingDataDto = BenchmarkingDataDto(
+    ): BenchmarkReport = BenchmarkReport(
         id = mockId,
         workflowExecution = workflowExecution,
         totalExecutionTime = totalExecutionTime,
@@ -41,7 +41,7 @@ open class BenchmarkingDataServiceTest {
         predeterminedSteps = predeterminedSteps
     )
 
-    fun createSampleEntity(): BenchmarkingDataDao = mockk<BenchmarkingDataDao>() {
+    fun createSampleEntity(): BenchmarkReportEntity = mockk<BenchmarkReportEntity>() {
         every { id } returns mockk()
         every { workflowExecution } returns mockk()
         every { totalExecutionTime } returns BigDecimal(123.456)
@@ -61,8 +61,8 @@ open class BenchmarkingDataServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: BenchmarkingDataDto = mockk()
-        val entity: BenchmarkingDataDao = mockk()
+        val dto: BenchmarkReport = mockk()
+        val entity: BenchmarkReportEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -84,8 +84,8 @@ open class BenchmarkingDataServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: BenchmarkingDataDto = mockk()
-        val entity: BenchmarkingDataDao = mockk()
+        val dto: BenchmarkReport = mockk()
+        val entity: BenchmarkReportEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -108,9 +108,9 @@ open class BenchmarkingDataServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: BenchmarkingDataDto = createSampleDto()
+        val dto: BenchmarkReport = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: BenchmarkingDataDao = mockk<BenchmarkingDataDao>() {
+        val entity: BenchmarkReportEntity = mockk<BenchmarkReportEntity>() {
             every { id } returns mockk()
         }
 
@@ -159,7 +159,7 @@ open class BenchmarkingDataServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<BenchmarkingDataDao> = mockk()
+        val entities: List<BenchmarkReportEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -180,8 +180,8 @@ open class BenchmarkingDataServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<BenchmarkingDataDao>()
-        val emptyDtoList = emptyList<BenchmarkingDataDto>()
+        val emptyList = emptyList<BenchmarkReportEntity>()
+        val emptyDtoList = emptyList<BenchmarkReport>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -226,7 +226,7 @@ open class BenchmarkingDataServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, BenchmarkingDataDao> = mockk()
+        val entityClass: EntityClass<Long, BenchmarkReportEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -276,8 +276,8 @@ open class BenchmarkingDataServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<BenchmarkingDataDto>()
-        val emptyEntityList = emptyList<BenchmarkingDataDao>()
+        val emptyDtoList = emptyList<BenchmarkReport>()
+        val emptyEntityList = emptyList<BenchmarkReportEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

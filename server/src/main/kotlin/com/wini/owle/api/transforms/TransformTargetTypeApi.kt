@@ -3,10 +3,8 @@ package com.wini.owle.api.transforms
 import com.wini.owle.api.CompositeIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.transforms.TransformationTargetTypeDto
+import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.entity.composteid.CompositeIdFactory
-import com.wini.owle.entity.composteid.TransformTargetTypeIdFactory
 import com.wini.owle.validators.DtoValidator
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -14,12 +12,12 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class TransformTargetTypeApi(
-    dll: DLL<CompositeID, TransformationTargetTypeDto>,
-    validator: DtoValidator<TransformationTargetTypeDto>,
-    compositeIdFactory: CompositeIdFactory<TransformationTargetTypeDto>
-): CompositeIdEndpointImpl<TransformationTargetTypeDto>(
+    dll: DLL<CompositeID, TransformTargetType>,
+    validator: DtoValidator<TransformTargetType>,
+    compositeIdFactory: CompositeIdFactory<TransformTargetType>
+): CompositeIdEndpointImpl<TransformTargetType>(
     dll = dll,
-    serializer = TransformationTargetTypeDto.serializer(),
+    serializer = TransformTargetType.serializer(),
     compositeIdFactory = compositeIdFactory,
     validator = validator
 ) {

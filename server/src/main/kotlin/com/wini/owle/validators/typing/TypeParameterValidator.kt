@@ -1,14 +1,14 @@
 package com.wini.owle.validators.typing
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.typing.TypeParameterDto
+import com.wini.owle.dto.typing.TypeParameter
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TypeParameterValidator(
     private val typeDeclarationValidator: TypeDeclarationValidator
-) : BaseValidator<TypeParameterDto>() {
-    override fun validate(dto: TypeParameterDto): ValidationResult {
+) : BaseValidator<TypeParameter>() {
+    override fun validate(dto: TypeParameter): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested typeDeclaration

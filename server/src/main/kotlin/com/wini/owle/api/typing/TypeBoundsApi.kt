@@ -2,7 +2,7 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.typing.TypeBoundsDto
+import com.wini.owle.dto.typing.TypeBound
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
@@ -11,11 +11,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class TypeBoundsApi(
-    dll: DLL<Long, TypeBoundsDto>,
-    validator: DtoValidator<TypeBoundsDto>
-): LongIdEndpointImpl<TypeBoundsDto>(
+    dll: DLL<Long, TypeBound>,
+    validator: DtoValidator<TypeBound>
+): LongIdEndpointImpl<TypeBound>(
     dll = dll,
-    serializer = TypeBoundsDto.serializer(),
+    serializer = TypeBound.serializer(),
     validator = validator
 ) {
 

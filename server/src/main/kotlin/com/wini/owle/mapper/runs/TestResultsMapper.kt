@@ -1,23 +1,22 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.TestResultDto
-import com.wini.owle.entity.runs.TestResultDao
+import com.wini.owle.dto.runs.workflow.WorkflowTestResult
+import com.wini.owle.entity.runs.workflow.WorkflowTestResultEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
-import kotlinx.datetime.LocalDateTime // Ensure correct import
 
 
 class TestResultsMapper(
-    private val daoFactory: DaoFactory<TestResultDao, Long>,
+    private val daoFactory: DaoFactory<WorkflowTestResultEntity, Long>,
     private val testCasesMapper: TestCasesMapper,
     private val workflowExecutionsMapper: WorkflowExecutionsMapper,
     private val dateTimeConverter: DateTimeConverter
-): DbMapper<TestResultDto, TestResultDao>() {
+): DbMapper<WorkflowTestResult, WorkflowTestResultEntity>() {
 
-    override fun toEntity(dto: TestResultDto): TestResultDao {
-        val applyProps: TestResultDao.() -> Unit = {
-            testCase = testCasesMapper.toEntity(dto.testCase)
+    override fun toEntity(dto: WorkflowTestResult): WorkflowTestResultEntity {
+        val applyProps: WorkflowTestResultEntity.() -> Unit = {
+            testCaseEntity = testCasesMapper.toEntity(dto.testCase)
             workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
             passed = dto.passed
             executedAt = dateTimeConverter.fromString(dto.executedAt)
@@ -25,16 +24,16 @@ class TestResultsMapper(
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            TestResultDao.findById(dto.id)
+            WorkflowTestResultEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("TestResult with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: TestResultDao): TestResultDto {
-        return TestResultDto(
+    override fun toDto(entity: WorkflowTestResultEntity): WorkflowTestResult {
+        return WorkflowTestResult(
             id = entity.id.value,
-            testCase = testCasesMapper.toDto(entity.testCase),
+            testCase = testCasesMapper.toDto(entity.testCaseEntity),
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             passed = entity.passed,
             executedAt = dateTimeConverter.toString(entity.executedAt)

@@ -1,27 +1,25 @@
 package com.wini.owle.mapper.user
 
-import com.wini.owle.dto.user.PaymentMethodDto
-import com.wini.owle.entity.user.enums.CardBrand
-import com.wini.owle.entity.user.PaymentMethodDao
+import com.wini.owle.dto.user.PaymentMethod
+import com.wini.owle.entity.user.PaymentMethodEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.user.enums.CardBrandMapper
-import kotlinx.datetime.LocalDateTime
 
 
 class PaymentMethodsMapper(
-    private val daoFactory: DaoFactory<PaymentMethodDao, Long>,
+    private val daoFactory: DaoFactory<PaymentMethodEntity, Long>,
     private val userMapper: UsersMapper,
     private val cardBrandMapper: CardBrandMapper,
     private val dateTimeConverter: DateTimeConverter
-): DbMapper<PaymentMethodDto, PaymentMethodDao>() {
+): DbMapper<PaymentMethod, PaymentMethodEntity>() {
 
 
-    override fun toEntity(dto: PaymentMethodDto): PaymentMethodDao {
-        val applyProps: PaymentMethodDao.() -> Unit = {
+    override fun toEntity(dto: PaymentMethod): PaymentMethodEntity {
+        val applyProps: PaymentMethodEntity.() -> Unit = {
             stripePaymentMethodId = dto.stripePaymentMethodId
-            user = userMapper.toEntity(dto.user)
+            userEntity = userMapper.toEntity(dto.user)
             cardBrand = dto.cardBrand?.let { cardBrandMapper.toEntity(it) }
             lastFour = dto.lastFour
             isDefault = dto.isDefault
@@ -31,17 +29,17 @@ class PaymentMethodsMapper(
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            PaymentMethodDao.findById(dto.id)
+            PaymentMethodEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("PaymentMethod with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: PaymentMethodDao): PaymentMethodDto {
-        return PaymentMethodDto(
+    override fun toDto(entity: PaymentMethodEntity): PaymentMethod {
+        return PaymentMethod(
             id = entity.id.value,
             stripePaymentMethodId = entity.stripePaymentMethodId,
-            user = userMapper.toDto(entity.user),
+            user = userMapper.toDto(entity.userEntity),
             cardBrand = entity.cardBrand?.let { cardBrandMapper.toDto(it) },
             lastFour = entity.lastFour,
             isDefault = entity.isDefault,

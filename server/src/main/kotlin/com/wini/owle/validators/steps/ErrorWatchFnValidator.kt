@@ -1,18 +1,18 @@
 package com.wini.owle.validators.steps
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.steps.ErrorWatchFnDto
+import com.wini.owle.dto.steps.ErrorWatchFn
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class ErrorWatchFnValidator(
     private val errorWatchValidator: ErrorWatchValidator
-) : BaseValidator<ErrorWatchFnDto>() {
+) : BaseValidator<ErrorWatchFn>() {
     companion object {
         const val MAX_FUNCTION_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: ErrorWatchFnDto): ValidationResult {
+    override fun validate(dto: ErrorWatchFn): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested errorWatch

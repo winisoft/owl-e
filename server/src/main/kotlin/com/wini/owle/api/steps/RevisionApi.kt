@@ -3,18 +3,18 @@ package com.wini.owle.api.steps
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.steps.RevisionDto
+import com.wini.owle.dto.steps.DataPointSave
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.validators.DtoValidator
 
 
 class RevisionApi(
-    dll: DLL<Long, RevisionDto>,
-    validator: DtoValidator<RevisionDto>
-): LongIdEndpointImpl<RevisionDto>(
+    dll: DLL<Long, DataPointSave>,
+    validator: DtoValidator<DataPointSave>
+): LongIdEndpointImpl<DataPointSave>(
     dll = dll,
-    serializer = RevisionDto.serializer(),
+    serializer = DataPointSave.serializer(),
     validator = validator
 ) {
 

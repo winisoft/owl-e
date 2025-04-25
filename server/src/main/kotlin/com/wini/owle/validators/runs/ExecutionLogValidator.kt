@@ -1,14 +1,14 @@
 package com.wini.owle.validators.runs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.runs.ExecutionLogDto
+import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class ExecutionLogValidator(
     private val stepExecutionValidator: StepExecutionValidator
-) : BaseValidator<ExecutionLogDto>() {
-    override fun validate(dto: ExecutionLogDto): ValidationResult {
+) : BaseValidator<StepRunLogLine>() {
+    override fun validate(dto: StepRunLogLine): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested stepExecution

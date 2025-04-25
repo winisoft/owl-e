@@ -1,15 +1,15 @@
 package com.wini.owle.validators.runs
 
 import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.runs.TestResultDto
+import com.wini.owle.dto.runs.workflow.WorkflowTestResult
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.ValidationResult
 
 class TestResultValidator(
     private val testCaseValidator: TestCaseValidator,
     private val workflowExecutionValidator: WorkflowExecutionValidator
-) : BaseValidator<TestResultDto>() {
-    override fun validate(dto: TestResultDto): ValidationResult {
+) : BaseValidator<WorkflowTestResult>() {
+    override fun validate(dto: WorkflowTestResult): ValidationResult {
         val violations = mutableListOf<TypeValidation>()
 
         // Validate nested testCase

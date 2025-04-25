@@ -3,10 +3,8 @@ package com.wini.owle.api.steps
 import com.wini.owle.api.CompositeIdEndpointImpl
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.steps.ProvisionDataPointDto
+import com.wini.owle.dto.steps.ProvisionDataPoint
 import com.wini.owle.entity.composteid.CompositeIdFactory
-import com.wini.owle.entity.composteid.ProvisionDataPointIdFactory
 import com.wini.owle.validators.DtoValidator
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -14,12 +12,12 @@ import org.jetbrains.exposed.dao.id.CompositeID
 
 
 class ProvisionDataPointApi(
-    dll: DLL<CompositeID, ProvisionDataPointDto>,
-    validator: DtoValidator<ProvisionDataPointDto>,
-    compositeIdFactory: CompositeIdFactory<ProvisionDataPointDto>
-): CompositeIdEndpointImpl<ProvisionDataPointDto>(
+    dll: DLL<CompositeID, ProvisionDataPoint>,
+    validator: DtoValidator<ProvisionDataPoint>,
+    compositeIdFactory: CompositeIdFactory<ProvisionDataPoint>
+): CompositeIdEndpointImpl<ProvisionDataPoint>(
     dll = dll,
-    serializer = ProvisionDataPointDto.serializer(),
+    serializer = ProvisionDataPoint.serializer(),
     compositeIdFactory = compositeIdFactory,
     validator = validator
 ) {

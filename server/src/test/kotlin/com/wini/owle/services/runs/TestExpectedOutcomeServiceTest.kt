@@ -2,10 +2,10 @@ package com.wini.owle.services.runs
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.runs.ComparisonOperatorDto
-import com.wini.owle.dto.runs.TestCaseDto
-import com.wini.owle.dto.runs.TestExpectedOutcomeDto
-import com.wini.owle.entity.runs.TestExpectedOutcomeDao
+import com.wini.owle.dto.runs.enums.ComparisonOperator
+import com.wini.owle.dto.runs.test.TestCase
+import com.wini.owle.dto.runs.test.TestExpectation
+import com.wini.owle.entity.runs.test.TestExpectationEntity
 import com.wini.owle.mapper.runs.TestExpectedOutcomesMapper
 import com.wini.owle.repo.TestExpectedOutcomeIdFactory
 import com.wini.owle.repo.runs.TestExpectedOutcomeRepository
@@ -29,10 +29,10 @@ open class TestExpectedOutcomeServiceTest {
         id: Long = 1L,
         dataPointName: String = "output1",
         expectedValue: String = "expectedValue1",
-        comparisonOperator: ComparisonOperatorDto = mockk(),
-        testCase: TestCaseDto = mockk()
-    ): TestExpectedOutcomeDto {
-        return TestExpectedOutcomeDto(
+        comparisonOperator: ComparisonOperator = mockk(),
+        testCase: TestCase = mockk()
+    ): TestExpectation {
+        return TestExpectation(
             id = id,
             dataPointName = dataPointName,
             expectedValue = expectedValue,
@@ -41,12 +41,12 @@ open class TestExpectedOutcomeServiceTest {
         )
     }
 
-    fun createSampleEntity(): TestExpectedOutcomeDao = mockk<TestExpectedOutcomeDao>() {
+    fun createSampleEntity(): TestExpectationEntity = mockk<TestExpectationEntity>() {
         every { id } returns mockk()
         every { dataPointName } returns "output1"
         every { expectedValue } returns "expectedValue1"
         every { comparisonOperator } returns mockk()
-        every { testCase } returns mockk()
+        every { testCaseEntity } returns mockk()
     }
 
     @BeforeEach
@@ -60,8 +60,8 @@ open class TestExpectedOutcomeServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: TestExpectedOutcomeDto = mockk()
-        val entity: TestExpectedOutcomeDao = mockk()
+        val dto: TestExpectation = mockk()
+        val entity: TestExpectationEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -83,8 +83,8 @@ open class TestExpectedOutcomeServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: TestExpectedOutcomeDto = mockk()
-        val entity: TestExpectedOutcomeDao = mockk()
+        val dto: TestExpectation = mockk()
+        val entity: TestExpectationEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -107,9 +107,9 @@ open class TestExpectedOutcomeServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: TestExpectedOutcomeDto = createSampleDto()
+        val dto: TestExpectation = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: TestExpectedOutcomeDao = mockk<TestExpectedOutcomeDao>() {
+        val entity: TestExpectationEntity = mockk<TestExpectationEntity>() {
             every { id } returns mockk()
         }
 
@@ -158,7 +158,7 @@ open class TestExpectedOutcomeServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<TestExpectedOutcomeDao> = mockk()
+        val entities: List<TestExpectationEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -179,8 +179,8 @@ open class TestExpectedOutcomeServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<TestExpectedOutcomeDao>()
-        val emptyDtoList = emptyList<TestExpectedOutcomeDto>()
+        val emptyList = emptyList<TestExpectationEntity>()
+        val emptyDtoList = emptyList<TestExpectation>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -225,7 +225,7 @@ open class TestExpectedOutcomeServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, TestExpectedOutcomeDao> = mockk()
+        val entityClass: EntityClass<Long, TestExpectationEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -275,8 +275,8 @@ open class TestExpectedOutcomeServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<TestExpectedOutcomeDto>()
-        val emptyEntityList = emptyList<TestExpectedOutcomeDao>()
+        val emptyDtoList = emptyList<TestExpectation>()
+        val emptyEntityList = emptyList<TestExpectationEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

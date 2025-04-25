@@ -1,23 +1,23 @@
 package com.wini.owle.mapper.workflows.enums
 
-import com.wini.owle.dto.workflows.StoreMethodDto
-import com.wini.owle.entity.workflows.enums.StoreMethod
+import com.wini.owle.dto.workflows.enums.StoreMethod
+import com.wini.owle.entity.workflows.enums.StoreMethodEntity
 
 class StoreMethodMapper {
 
-    fun toEntity(dto: StoreMethodDto): StoreMethod {
+    fun toEntity(dto: StoreMethod): StoreMethodEntity {
         return when (dto) {
-            StoreMethodDto.Text -> StoreMethod.TEXT
-            StoreMethodDto.Blob -> StoreMethod.BLOB
-            StoreMethodDto.File -> StoreMethod.FILE
+            StoreMethod.TEXT -> StoreMethodEntity.TEXT
+            StoreMethod.BLOB -> StoreMethodEntity.BLOB
+            StoreMethod.FILE -> StoreMethodEntity.FILE
         }
     }
 
-    fun toDto(entity: StoreMethod): StoreMethodDto {
+    fun toDto(entity: StoreMethodEntity): StoreMethod {
         return when (entity) {
-            StoreMethod.TEXT -> StoreMethodDto.Text
-            StoreMethod.BLOB -> StoreMethodDto.Blob
-            StoreMethod.FILE -> StoreMethodDto.File
+            StoreMethodEntity.TEXT -> StoreMethod.TEXT
+            StoreMethodEntity.BLOB -> StoreMethod.BLOB
+            StoreMethodEntity.FILE -> StoreMethod.FILE
         }
     }
 }

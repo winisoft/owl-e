@@ -1,31 +1,31 @@
 package com.wini.owle.mapper.steps
 
-import com.wini.owle.dto.steps.ProvisionDataPointDto
+import com.wini.owle.dto.steps.ProvisionDataPoint
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import com.wini.owle.entity.composteid.ProvisionDataPointIdFactory
-import com.wini.owle.entity.steps.ProvisionDataPointDao
+import com.wini.owle.entity.steps.ProvisionDataPointEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import org.jetbrains.exposed.dao.id.CompositeID
 
 class ProvisionDataPointMapper(
-    private val daoFactory: DaoFactory<ProvisionDataPointDao, CompositeID>,
-    private val compositeIdFactory: CompositeIdFactory<ProvisionDataPointDto> = ProvisionDataPointIdFactory
-): DbMapper<ProvisionDataPointDto, ProvisionDataPointDao>() {
+    private val daoFactory: DaoFactory<ProvisionDataPointEntity, CompositeID>,
+    private val compositeIdFactory: CompositeIdFactory<ProvisionDataPoint> = ProvisionDataPointIdFactory
+): DbMapper<ProvisionDataPoint, ProvisionDataPointEntity>() {
 
-    override fun toEntity(dto: ProvisionDataPointDto): ProvisionDataPointDao {
+    override fun toEntity(dto: ProvisionDataPoint): ProvisionDataPointEntity {
         return compositeIdFactory.fromDtoInstance(dto).let { id ->
-            ProvisionDataPointDao.findById(id)
-        } ?: ProvisionDataPointDao.create(
+            ProvisionDataPointEntity.findById(id)
+        } ?: ProvisionDataPointEntity.create(
             provisionId = dto.provisionId,
             dataPointId = dto.dataPointId
         )
     }
 
-    override fun toDto(entity: ProvisionDataPointDao): ProvisionDataPointDto {
-        return ProvisionDataPointDto(
+    override fun toDto(entity: ProvisionDataPointEntity): ProvisionDataPoint {
+        return ProvisionDataPoint(
             provisionId = entity.provision.id.value,
-            dataPointId = entity.dataPoint.id.value
+            dataPointId = entity.dataPointEntity.id.value
         )
     }
 

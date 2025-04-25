@@ -3,18 +3,18 @@ package com.wini.owle.api.user
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.user.UserDto
+import com.wini.owle.dto.user.User
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.validators.DtoValidator
 
 
 class UserApi(
-    dll: DLL<Long, UserDto>,
-    validator: DtoValidator<UserDto>
-): LongIdEndpointImpl<UserDto>(
+    dll: DLL<Long, User>,
+    validator: DtoValidator<User>
+): LongIdEndpointImpl<User>(
     dll = dll,
-    serializer = UserDto.serializer(),
+    serializer = User.serializer(),
     validator = validator
 ) {
 

@@ -2,7 +2,7 @@ package com.wini.owle.api.workflows
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.workflows.WorkflowDto
+import com.wini.owle.dto.workflows.Workflow
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
@@ -10,11 +10,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class WorkflowApi(
-    dll: DLL<Long, WorkflowDto>,
-    validator: DtoValidator<WorkflowDto>
-): LongIdEndpointImpl<WorkflowDto>(
+    dll: DLL<Long, Workflow>,
+    validator: DtoValidator<Workflow>
+): LongIdEndpointImpl<Workflow>(
     dll = dll,
-    serializer = WorkflowDto.serializer(),
+    serializer = Workflow.serializer(),
     validator = validator
 ) {
     override fun register(routing: Routing) {

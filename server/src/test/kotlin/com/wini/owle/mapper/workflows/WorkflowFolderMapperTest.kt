@@ -1,7 +1,7 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.WorkflowFolderDto
-import com.wini.owle.entity.workflows.WorkflowFolderDao
+import com.wini.owle.dto.workflows.WorkflowFolder
+import com.wini.owle.entity.workflows.WorkflowFolderEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import io.mockk.*
@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 open class WorkflowFolderMapperTest {
 
     private lateinit var mapper: WorkflowFoldersMapper
-    private val factory: DaoFactory<WorkflowFolderDao, Long> = mockk()
+    private val factory: DaoFactory<WorkflowFolderEntity, Long> = mockk()
     private val dateTimeConverter: DateTimeConverter = mockk()
 
     @BeforeEach
@@ -26,7 +26,7 @@ open class WorkflowFolderMapperTest {
     @Test
     fun `toEntity should throw exception when id is non-zero but entity not found`() {
         // Create test DTO
-        val dto = WorkflowFolderDto(
+        val dto = WorkflowFolder(
             id = 99L,
             name = "folderName",
             description = "description",
@@ -35,8 +35,8 @@ open class WorkflowFolderMapperTest {
         )
 
         // Mock behavior for findById to return null (not found)
-        mockkObject(WorkflowFolderDao)
-        every { WorkflowFolderDao.findById(99L) } returns null
+        mockkObject(WorkflowFolderEntity)
+        every { WorkflowFolderEntity.findById(99L) } returns null
 
         // Verify exception is thrown with correct message
         val exception = assertThrows<IllegalStateException> {
@@ -44,13 +44,13 @@ open class WorkflowFolderMapperTest {
         }
 
         assertEquals("WorkflowFolder with id=99 not found", exception.message)
-        unmockkObject(WorkflowFolderDao)
+        unmockkObject(WorkflowFolderEntity)
     }
 
     @Test
     fun `toDto should correctly delegate to collaborators`() {
         // Setup mocks
-        val entity = mockk<WorkflowFolderDao> {
+        val entity = mockk<WorkflowFolderEntity> {
             every { id.value } returns 1L
             every { name } returns "folderName"
             every { description } returns "description"
@@ -85,7 +85,7 @@ open class WorkflowFolderMapperTest {
     @Test
     fun `toEntity should update existing entity when id is non-zero`() {
         // Create test DTO
-        val dto = WorkflowFolderDto(
+        val dto = WorkflowFolder(
             id = 42L,
             name = "folderName",
             description = "description",
@@ -94,7 +94,7 @@ open class WorkflowFolderMapperTest {
         )
 
         // Create mock existing entity to update
-        val existingEntity = mockk<WorkflowFolderDao>(relaxed = true)
+        val existingEntity = mockk<WorkflowFolderEntity>(relaxed = true)
 
         // Setup mock responses from collaborators
         val createdAt = mockk<Instant>()
@@ -104,8 +104,8 @@ open class WorkflowFolderMapperTest {
         every { dateTimeConverter.fromString(dto.updatedAt) } returns updatedAt
 
         // Mock finding existing entity
-        mockkObject(WorkflowFolderDao)
-        every { WorkflowFolderDao.findById(42L) } returns existingEntity
+        mockkObject(WorkflowFolderEntity)
+        every { WorkflowFolderEntity.findById(42L) } returns existingEntity
 
         // Execute method under test
         val result = mapper.toEntity(dto)
@@ -125,13 +125,13 @@ open class WorkflowFolderMapperTest {
         // Verify the result is the updated entity
         assertEquals(existingEntity, result)
 
-        unmockkObject(WorkflowFolderDao)
+        unmockkObject(WorkflowFolderEntity)
     }
 
     @Test
     fun `toEntity should create a new entity when id is zero`() {
         // Create test DTO
-        val dto = WorkflowFolderDto(
+        val dto = WorkflowFolder(
             id = 0L,
             name = "folderName",
             description = "description",
@@ -140,7 +140,7 @@ open class WorkflowFolderMapperTest {
         )
 
         // Create mock new entity
-        val newEntity = mockk<WorkflowFolderDao>(relaxed = true)
+        val newEntity = mockk<WorkflowFolderEntity>(relaxed = true)
 
         // Setup mock responses from collaborators
         val createdAt = mockk<Instant>()

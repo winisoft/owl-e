@@ -1,20 +1,19 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.WorkflowFolderDto
-import com.wini.owle.entity.workflows.WorkflowFolderDao
+import com.wini.owle.dto.workflows.WorkflowFolder
+import com.wini.owle.entity.workflows.WorkflowFolderEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
-import kotlinx.datetime.LocalDateTime
 
 
 class WorkflowFoldersMapper(
-    private val daoFactory: DaoFactory<WorkflowFolderDao, Long>,
+    private val daoFactory: DaoFactory<WorkflowFolderEntity, Long>,
     private val dateTimeConverter: DateTimeConverter
-) : DbMapper<WorkflowFolderDto, WorkflowFolderDao>() {
+) : DbMapper<WorkflowFolder, WorkflowFolderEntity>() {
 
-    override fun toEntity(dto: WorkflowFolderDto): WorkflowFolderDao {
-        val applyProps: WorkflowFolderDao.() -> Unit = {
+    override fun toEntity(dto: WorkflowFolder): WorkflowFolderEntity {
+        val applyProps: WorkflowFolderEntity.() -> Unit = {
             name = dto.name
             description = dto.description
             img = null
@@ -25,14 +24,14 @@ class WorkflowFoldersMapper(
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            WorkflowFolderDao.findById(dto.id)
+            WorkflowFolderEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("WorkflowFolder with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: WorkflowFolderDao): WorkflowFolderDto {
-        return WorkflowFolderDto(
+    override fun toDto(entity: WorkflowFolderEntity): WorkflowFolder {
+        return WorkflowFolder(
             id = entity.id.value,
             parentFolder = null, //TODO
             name = entity.name,

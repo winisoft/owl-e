@@ -1,11 +1,10 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.dto.steps.RevisionDto
-import com.wini.owle.entity.steps.RevisionDao
+import com.wini.owle.dto.steps.DataPointSave
+import com.wini.owle.entity.steps.DataPointSaveEntity
 import com.wini.owle.mapper.steps.RevisionsMapper
 import com.wini.owle.repo.steps.RevisionRepository
 import com.wini.owle.services.BaseServiceImpl
-import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.RevisionIdFactory
 
 
@@ -13,7 +12,7 @@ class RevisionService(
     repository: RevisionRepository,
     mapper: RevisionsMapper,
     entityIdFactory: RevisionIdFactory
-): BaseServiceImpl<Long, RevisionDto, RevisionDao>(
+): BaseServiceImpl<Long, DataPointSave, DataPointSaveEntity>(
     repository = repository,
     mapper = mapper,
     entityIdFactory = entityIdFactory

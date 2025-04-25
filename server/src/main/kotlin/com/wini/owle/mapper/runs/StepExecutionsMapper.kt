@@ -1,7 +1,7 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.StepExecutionDto
-import com.wini.owle.entity.runs.StepExecutionDao
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.entity.runs.step.StepRunEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
@@ -10,15 +10,15 @@ import com.wini.owle.mapper.workflows.StepsMapper
 
 
 class StepExecutionsMapper(
-    private val daoFactory: DaoFactory<StepExecutionDao, Long>,
+    private val daoFactory: DaoFactory<StepRunEntity, Long>,
     private val workflowExecutionsMapper: WorkflowExecutionsMapper,
     private val stepMapper: StepsMapper,
     private val executionStatusMapper: ExecutionStatusMapper,
     private val dateTimeConverter: DateTimeConverter
-): DbMapper<StepExecutionDto, StepExecutionDao>() {
+): DbMapper<StepExecution, StepRunEntity>() {
 
-    override fun toEntity(dto: StepExecutionDto): StepExecutionDao {
-        val applyProps: StepExecutionDao.() -> Unit = {
+    override fun toEntity(dto: StepExecution): StepRunEntity {
+        val applyProps: StepRunEntity.() -> Unit = {
             workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
             step = stepMapper.toEntity(dto.step)
             startedAt = dateTimeConverter.fromString(dto.startedAt)
@@ -28,13 +28,13 @@ class StepExecutionsMapper(
         return if (dto.id == 0L)
             daoFactory.create().apply(applyProps)
         else
-            StepExecutionDao.findById(dto.id)
+            StepRunEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("StepExecution with id=${dto.id} not found")
     }
 
-    override fun toDto(entity: StepExecutionDao): StepExecutionDto {
-        return StepExecutionDto(
+    override fun toDto(entity: StepRunEntity): StepExecution {
+        return StepExecution(
             id = entity.id.value,
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             step = stepMapper.toDto(entity.step),

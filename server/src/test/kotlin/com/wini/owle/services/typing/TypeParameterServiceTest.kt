@@ -2,9 +2,9 @@ package com.wini.owle.services.typing
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.dto.typing.TypeParameterDto
-import com.wini.owle.entity.typing.TypeParameterDao
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.dto.typing.TypeParameter
+import com.wini.owle.entity.typing.TypeParameterEntity
 import com.wini.owle.mapper.typing.TypeParametersMapper
 import com.wini.owle.repo.TypeParameterIdFactory
 import com.wini.owle.repo.typing.TypeParameterRepository
@@ -26,11 +26,11 @@ open class TypeParameterServiceTest {
 
     fun createSampleDto(
         id: Long = 1L,
-        typeDeclaration: TypeDeclarationDto = mockk(),
+        typeDeclaration: TypeDeclaration = mockk(),
         position: Int = 1,
-        parameterTypeDeclaration: TypeDeclarationDto = mockk()
-    ) : TypeParameterDto {
-        return TypeParameterDto(
+        parameterTypeDeclaration: TypeDeclaration = mockk()
+    ) : TypeParameter {
+        return TypeParameter(
             id = id,
             typeDeclaration = typeDeclaration,
             position = position,
@@ -38,11 +38,11 @@ open class TypeParameterServiceTest {
         )
     }
 
-    fun createSampleEntity(): TypeParameterDao = mockk<TypeParameterDao>() {
+    fun createSampleEntity(): TypeParameterEntity = mockk<TypeParameterEntity>() {
         every { id } returns mockk()
-        every { typeDeclaration } returns mockk()
+        every { typeDeclarationEntity } returns mockk()
         every { position } returns 1
-        every { parameterTypeDeclaration } returns mockk()
+        every { parameterTypeDeclarationEntity } returns mockk()
     }
 
     @BeforeEach
@@ -56,8 +56,8 @@ open class TypeParameterServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: TypeParameterDto = mockk()
-        val entity: TypeParameterDao = mockk()
+        val dto: TypeParameter = mockk()
+        val entity: TypeParameterEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -79,8 +79,8 @@ open class TypeParameterServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: TypeParameterDto = mockk()
-        val entity: TypeParameterDao = mockk()
+        val dto: TypeParameter = mockk()
+        val entity: TypeParameterEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -103,9 +103,9 @@ open class TypeParameterServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: TypeParameterDto = createSampleDto()
+        val dto: TypeParameter = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: TypeParameterDao = mockk<TypeParameterDao>() {
+        val entity: TypeParameterEntity = mockk<TypeParameterEntity>() {
             every { id } returns mockk()
         }
 
@@ -154,7 +154,7 @@ open class TypeParameterServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<TypeParameterDao> = mockk()
+        val entities: List<TypeParameterEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -175,8 +175,8 @@ open class TypeParameterServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<TypeParameterDao>()
-        val emptyDtoList = emptyList<TypeParameterDto>()
+        val emptyList = emptyList<TypeParameterEntity>()
+        val emptyDtoList = emptyList<TypeParameter>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -221,7 +221,7 @@ open class TypeParameterServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, TypeParameterDao> = mockk()
+        val entityClass: EntityClass<Long, TypeParameterEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -271,8 +271,8 @@ open class TypeParameterServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<TypeParameterDto>()
-        val emptyEntityList = emptyList<TypeParameterDao>()
+        val emptyDtoList = emptyList<TypeParameter>()
+        val emptyEntityList = emptyList<TypeParameterEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

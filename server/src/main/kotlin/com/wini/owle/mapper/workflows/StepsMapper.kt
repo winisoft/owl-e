@@ -1,21 +1,21 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.entity.workflows.StepDao
+import com.wini.owle.dto.workflows.Step
+import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 
 
 class StepsMapper(
-    private val daoFactory: DaoFactory<StepDao, Long>,
+    private val daoFactory: DaoFactory<StepEntity, Long>,
     private val workflowMapper: WorkflowsMapper,
     private val toolMapper: ToolsMapper,
     private val phasesMapper: PhasesMapper
-) : DbMapper<StepDto, StepDao>() {
+) : DbMapper<Step, StepEntity>() {
 
-    override fun toEntity(dto: StepDto): StepDao {
+    override fun toEntity(dto: Step): StepEntity {
 
-        val applyProps: StepDao.() -> Unit = {
+        val applyProps: StepEntity.() -> Unit = {
             workflow = workflowMapper.toEntity(dto.workflow)
             name = dto.name
             description = dto.description
@@ -28,14 +28,14 @@ class StepsMapper(
         return if (dto.id == 0L) {
             daoFactory.create().apply(applyProps)
         } else {
-            StepDao.findById(dto.id)
+            StepEntity.findById(dto.id)
                 ?.apply(applyProps)
                 ?: throw IllegalStateException("Step with id=${dto.id} not found")
         }
     }
 
-    override fun toDto(entity: StepDao): StepDto {
-        return StepDto(
+    override fun toDto(entity: StepEntity): Step {
+        return Step(
             id = entity.id.value,
             name = entity.name,
             description = entity.description,

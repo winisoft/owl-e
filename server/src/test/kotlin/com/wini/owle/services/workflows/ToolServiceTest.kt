@@ -2,11 +2,11 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.environs.ToolPackageDependencyDto
-import com.wini.owle.dto.typing.TypeDeclarationDto
-import com.wini.owle.dto.workflows.StepDto
-import com.wini.owle.dto.workflows.ToolDto
-import com.wini.owle.entity.workflows.ToolDao
+import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.dto.workflows.Step
+import com.wini.owle.dto.workflows.Tool
+import com.wini.owle.entity.workflows.ToolEntity
 import com.wini.owle.mapper.workflows.ToolsMapper
 import com.wini.owle.repo.ToolIdFactory
 import com.wini.owle.repo.workflows.ToolRepository
@@ -31,11 +31,11 @@ open class ToolServiceTest {
         name: String = "Tool Name",
         description: String? = "Tool Description",
         body: String = "a sample of code",
-        returnTypeDeclaration: TypeDeclarationDto? = mockk(),
-        steps: List<StepDto> = mockk(),
-        packageDependencies: List<ToolPackageDependencyDto> = mockk()
-    ): ToolDto {
-        return ToolDto(
+        returnTypeDeclaration: TypeDeclaration? = mockk(),
+        steps: List<Step> = mockk(),
+        packageDependencies: List<ToolPyPackDep> = mockk()
+    ): Tool {
+        return Tool(
             id = id,
             name = name,
             description = description,
@@ -44,12 +44,12 @@ open class ToolServiceTest {
         )
     }
 
-    fun createSampleEntity(): ToolDao = mockk<ToolDao>() {
+    fun createSampleEntity(): ToolEntity = mockk<ToolEntity>() {
         every { id } returns mockk()
         every { name } returns "Tool Name"
         every { description } returns "Tool Description"
         every { body } returns "a sample of code"
-        every { returnTypeDeclaration } returns mockk()
+        every { returnTypeDeclarationEntity } returns mockk()
         every { packageDependencies} returns mockk()
     }
 
@@ -64,8 +64,8 @@ open class ToolServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: ToolDto = mockk()
-        val entity: ToolDao = mockk()
+        val dto: Tool = mockk()
+        val entity: ToolEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
@@ -87,8 +87,8 @@ open class ToolServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: ToolDto = mockk()
-        val entity: ToolDao = mockk()
+        val dto: Tool = mockk()
+        val entity: ToolEntity = mockk()
         val exception = RuntimeException("Database error")
 
         every { mapper.toEntity(dto) } returns entity
@@ -111,9 +111,9 @@ open class ToolServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: ToolDto = createSampleDto()
+        val dto: Tool = createSampleDto()
         val entityId: EntityID<Long> = mockk()
-        val entity: ToolDao = mockk<ToolDao>() {
+        val entity: ToolEntity = mockk<ToolEntity>() {
             every { id } returns mockk()
         }
 
@@ -162,7 +162,7 @@ open class ToolServiceTest {
     fun `test getAll success`() {
         // Arrange
         val dtos = listOf(createSampleDto(1L), createSampleDto(2L))
-        val entities: List<ToolDao> = mockk()
+        val entities: List<ToolEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -183,8 +183,8 @@ open class ToolServiceTest {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<ToolDao>()
-        val emptyDtoList = emptyList<ToolDto>()
+        val emptyList = emptyList<ToolEntity>()
+        val emptyDtoList = emptyList<Tool>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -229,7 +229,7 @@ open class ToolServiceTest {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityClass: EntityClass<Long, ToolDao> = mockk()
+        val entityClass: EntityClass<Long, ToolEntity> = mockk()
         val id = 1L
         val entityId: EntityID<Long> = mockk()
 
@@ -279,8 +279,8 @@ open class ToolServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<ToolDto>()
-        val emptyEntityList = emptyList<ToolDao>()
+        val emptyDtoList = emptyList<Tool>()
+        val emptyEntityList = emptyList<ToolEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList

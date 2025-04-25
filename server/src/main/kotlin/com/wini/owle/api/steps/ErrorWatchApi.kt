@@ -2,7 +2,7 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.LongIdEndpointImpl
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.steps.ErrorWatchDto
+import com.wini.owle.dto.steps.ErrorWatch
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
@@ -11,11 +11,11 @@ import com.wini.owle.validators.DtoValidator
 
 
 class ErrorWatchApi(
-    dll: DLL<Long, ErrorWatchDto>,
-    validator: DtoValidator<ErrorWatchDto>
-): LongIdEndpointImpl<ErrorWatchDto>(
+    dll: DLL<Long, ErrorWatch>,
+    validator: DtoValidator<ErrorWatch>
+): LongIdEndpointImpl<ErrorWatch>(
     dll = dll,
-    serializer = ErrorWatchDto.serializer(),
+    serializer = ErrorWatch.serializer(),
     validator = validator
 )  {
 
