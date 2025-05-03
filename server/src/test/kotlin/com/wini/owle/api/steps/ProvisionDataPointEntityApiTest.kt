@@ -1,7 +1,7 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.Base2IdCompositeApiTest
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.ProvisionDataPoint
@@ -48,16 +48,16 @@ open class ProvisionDataPointEntityApiTest : Base2IdCompositeApiTest<ProvisionDa
         }
     }
 
-    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
+    override fun allParamsMalformedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("provisionId"),
-            AsyncError.ApiRequestError.MissingParameter("dataPointId")
+            OwleError.ApiRequestError.MissingParameter("provisionId"),
+            OwleError.ApiRequestError.MissingParameter("dataPointId")
         )
     }
 
-    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
+    override fun onlyFirstParamProvidedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("dataPointId")
+            OwleError.ApiRequestError.MissingParameter("dataPointId")
         )
     }
 

@@ -17,9 +17,9 @@ class TypeVariancesMapper(
         val applyProps: TypeVarianceEntity.() -> Unit = {
             typeVariableDeclaration = typeDeclarationsMapper.toEntity(dto.typeVariableDeclaration)
             varianceCardinality = when (dto.varianceCardinality) {
-                VarianceCardinalityDto.Covariant -> VarianceCardinalityEntity.COVARIANT
-                VarianceCardinalityDto.Contravariant -> VarianceCardinalityEntity.CONTRAVARIANT
-                VarianceCardinalityDto.Invariant -> VarianceCardinalityEntity.INVARIANT
+                VarianceCardinalityDto.COVARIANT -> VarianceCardinalityEntity.COVARIANT
+                VarianceCardinalityDto.CONTRAVARIANT -> VarianceCardinalityEntity.CONTRAVARIANT
+                VarianceCardinalityDto.INVARIANT -> VarianceCardinalityEntity.INVARIANT
             }
         }
         return if (dto.id == 0L) {
@@ -36,9 +36,9 @@ class TypeVariancesMapper(
             id = entity.id.value,
             typeVariableDeclaration = typeDeclarationsMapper.toDto(entity.typeVariableDeclaration),
             varianceCardinality = when (entity.varianceCardinality) {
-                VarianceCardinalityEntity.COVARIANT -> VarianceCardinalityDto.Covariant
-                VarianceCardinalityEntity.CONTRAVARIANT -> VarianceCardinalityDto.Contravariant
-                VarianceCardinalityEntity.INVARIANT -> VarianceCardinalityDto.Invariant
+                VarianceCardinalityEntity.COVARIANT -> VarianceCardinalityDto.COVARIANT
+                VarianceCardinalityEntity.CONTRAVARIANT -> VarianceCardinalityDto.CONTRAVARIANT
+                VarianceCardinalityEntity.INVARIANT -> VarianceCardinalityDto.INVARIANT
             }
         )
     }

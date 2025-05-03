@@ -1,10 +1,11 @@
 package com.wini.owle.api
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.entity.composteid.CompositeIdFactory
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.validators.BaseValidator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -52,8 +53,8 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
     ): R
     abstract fun compositeId1(): CompositeID
     abstract fun compositeId2(): CompositeID
-    abstract fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError>
-    abstract fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError>
+    abstract fun allParamsMalformedErrors(): List<OwleError.ApiRequestError>
+    abstract fun onlyFirstParamProvidedErrors(): List<OwleError.ApiRequestError>
 
     protected fun setupTestApp(
         dll: DLL<CompositeID, T>,
@@ -530,7 +531,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
         fun `DELETE batch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
             val dll = mockk<DLL<CompositeID, T>>()
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.RequestBodyMalformed))
+            val expectedErrors = listOf(ApiError.fromAsyncError(OwleError.ApiRequestError.RequestBodyMalformed))
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
                 val response = client.delete("$route/batch") {
@@ -551,7 +552,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
         fun `POST create - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
             val dll = mockk<DLL<CompositeID, T>>()
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+            val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
                 val response = client.post(route) {
@@ -572,8 +573,8 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
         fun `POST createBatch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
             val dll = mockk<DLL<CompositeID, T>>()
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val reqError = AsyncError.ApiRequestError.RequestBodyMalformed
-            val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+            val reqError = OwleError.ApiRequestError.RequestBodyMalformed
+            val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
                 val response = client.post("$route/batch") {
@@ -594,8 +595,8 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
         fun `PUT update - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
             val dll = mockk<DLL<CompositeID, T>>()
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
-            val apiError = AsyncError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
-            val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+            val apiError = OwleError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
+            val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
                 val response = client.put(route) {
@@ -617,8 +618,8 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
             val dll = mockk<DLL<CompositeID, T>>()
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
             coEvery { dll.updateAll(any()) } returns AsyncResult.Success(emptyList())
-            val apiError = AsyncError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
-            val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+            val apiError = OwleError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
+            val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
                 val response = client.put("$route/batch") {
@@ -651,11 +652,11 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 val compositeIdFactory: CompositeIdFactory<T> = mockk() {
                     coEvery { fromRequestParams(any()) } returns AsyncResult.Success(id)
                 }
-                val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.NoSuchIdError))
+                val expectedErrors = listOf(ApiError.fromAsyncError(NoSuchIdError))
                 val dll = mockk<DLL<CompositeID, T>> {
                     coEvery {
                         getById(id)
-                    } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
+                    } returns AsyncResult.Failure(NoSuchIdError)
                 }
 
                 setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
@@ -676,7 +677,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 val dll = mockk<DLL<CompositeID, T>>()
                 val asyncErrors = onlyFirstParamProvidedErrors()
                 val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(AsyncError.ApiRequestError.MultipleParamFailure(asyncErrors))
+                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(OwleError.ApiRequestError.MultipleParamFailure(asyncErrors))
                 }
 
                 val apiErrors = asyncErrors.map { ApiError.fromAsyncError(it) }
@@ -701,7 +702,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 val asyncErrors = onlyFirstParamProvidedErrors()
                 val apiErrors = asyncErrors.map { ApiError.fromAsyncError(it) }
                 val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(AsyncError.ApiRequestError.MultipleParamFailure(asyncErrors))
+                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(OwleError.ApiRequestError.MultipleParamFailure(asyncErrors))
                 }
 
                 setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
@@ -726,12 +727,12 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
             @Test
             fun `DELETE by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
                 val id: CompositeID = compositeId1()
-                val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.NoSuchIdError))
+                val expectedErrors = listOf(ApiError.fromAsyncError(NoSuchIdError))
                 val compositeIdFactory: CompositeIdFactory<T> = mockk() {
                     coEvery { fromRequestParams(any()) } returns AsyncResult.Success(id)
                 }
                 val dll = mockk<DLL<CompositeID, T>> {
-                    coEvery { getById(id) } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
+                    coEvery { getById(id) } returns AsyncResult.Failure(NoSuchIdError)
                 }
 
                 setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
@@ -753,7 +754,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 val asyncErrors = onlyFirstParamProvidedErrors()
                 val apiErrors = asyncErrors.map { ApiError.fromAsyncError(it) }
                 val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(AsyncError.ApiRequestError.MultipleParamFailure(asyncErrors))
+                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(OwleError.ApiRequestError.MultipleParamFailure(asyncErrors))
                 }
 
                 setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
@@ -775,7 +776,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 val dll = mockk<DLL<CompositeID, T>>()
                 val expectedAsyncErrors = allParamsMalformedErrors()
                 val compositeIdFactory: CompositeIdFactory<T> = mockk() {
-                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(AsyncError.ApiRequestError.MultipleParamFailure(failed = expectedAsyncErrors))
+                    coEvery { fromRequestParams(any()) } returns AsyncResult.Failure(OwleError.ApiRequestError.MultipleParamFailure(failed = expectedAsyncErrors))
                 }
                 val apiErrors = expectedAsyncErrors.map { ApiError.fromAsyncError(it) }
 
@@ -805,7 +806,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
             val emptyList = emptyList<T>()
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
             val dll = mockk<DLL<CompositeID, T>>()
-            val expectedErrors = listOf(AsyncError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) })
+            val expectedErrors = listOf(OwleError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) })
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
                 val response = client.post("$route/batch") {
@@ -817,7 +818,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
                 assertEquals(HttpStatusCode.BadRequest, response.status)
                 assertFalse(apiResponse.success)
                 assertNull(apiResponse.data)
-                assertEquals(AsyncError.ApiRequestError.EmptyListNotAllowed.message, apiResponse.message)
+                assertEquals(OwleError.ApiRequestError.EmptyListNotAllowed.message, apiResponse.message)
                 assertEquals(expectedErrors, apiResponse.errors)
             }
         }
@@ -828,7 +829,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
             val dll = mockk<DLL<CompositeID, T>>()
             coEvery { dll.updateAll(emptyList()) } returns AsyncResult.Success(emptyList())
-            val apiError = AsyncError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
+            val apiError = OwleError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
             val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {
@@ -852,7 +853,7 @@ abstract class Base2IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
             val compositeIdFactory: CompositeIdFactory<T> = mockk()
             val dll = mockk<DLL<CompositeID, T>>()
             coEvery { dll.deleteAll(emptyList()) } returns AsyncResult.Success(Unit)
-            val apiError = AsyncError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
+            val apiError = OwleError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
             val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
 
             setupTestApp(dll = dll, compositeIdFactory = compositeIdFactory) {

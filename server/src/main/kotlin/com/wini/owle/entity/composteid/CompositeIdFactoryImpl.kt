@@ -1,8 +1,11 @@
 package com.wini.owle.entity.composteid
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.MissingParameter
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.error.MultipleParamFailure
+import com.wini.owle.error.OwleError
+import com.wini.owle.error.ParamValueMalformedLong
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
@@ -23,7 +26,7 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
      * are either not found or malformed.
      */
     override fun fromRequestParams(params: Map<String, List<String>>): AsyncResult<CompositeID> {
-        val failed = mutableListOf<AsyncError.ApiRequestError>()
+        val failed = mutableListOf<OwleError>()
 
         // map the names of the relevant db table columns to values found under that key in the request query params
         return fkReferences.values.associateWith {
@@ -32,11 +35,11 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
         }.mapNotNull { (key: String, values: List<String>?) ->
             when {
                 values == null || values.firstOrNull() == null -> {
-                    failed.add(AsyncError.ApiRequestError.MissingParameter(key))
+                    failed.add(MissingParameter(key))
                     null
                 }
                 values.first().toLongOrNull() == null -> {
-                    failed.add(AsyncError.ApiRequestError.ParamValueMalformedLong(key))
+                    failed.add(ParamValueMalformedLong(key))
                     null
                 }
                 else -> key to values[0].toLong()
@@ -44,7 +47,7 @@ abstract class CompositeIdFactoryImpl<T: BaseDto>: CompositeIdFactory<T> {
         }.also {
             // logically 'short-circuits' further consideration of the already-determined invalid data provided
             if (failed.isNotEmpty())
-                return AsyncError.ApiRequestError.MultipleParamFailure(failed = failed.toList()).asFailure()
+                return MultipleParamFailure(failed = failed.toList()).asFailure()
         }.associate {
             // map the key under which the parameter was provided (its db column name) to the valid Long value it offered
             it.first to it.second

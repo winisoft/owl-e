@@ -34,15 +34,15 @@ val validatorsModule = module {
 
     single<DtoValidator<BenchmarkReport>> { BenchmarkingDataValidator(get()) }
     single<DtoValidator<StepRunLogLine>> { ExecutionLogValidator(get(),) }
-    single<DtoValidator<StepExecution>> { StepExecutionValidator(get(), get(), get()) }
-    single<DtoValidator<TestCase>> { TestCaseValidator(get(), get(), get()) }
+    single<DtoValidator<StepExecution>> { StepExecutionValidator(get(), get()) }
+    single<DtoValidator<TestCase>> { TestCaseValidator(get(), get(), get(), get(), get(), get())  }
     single<DtoValidator<TestExpectation>> { TestExpectedOutcomeValidator(get(),) }
     single<DtoValidator<TestInput>> { TestInputValidator(get(),) }
     single<DtoValidator<WorkflowTestResult>> { TestResultValidator(get(), get()) }
     single<DtoValidator<WorkflowExecution>> { WorkflowExecutionValidator(get(), get(), get()) }
 
     single<DtoValidator<ErrorWatch>> { ErrorWatchValidator(get()) }
-    single<DtoValidator<ErrorWatchFn>> { ErrorWatchFnValidator(get()) }
+    single<DtoValidator<ErrorWatchFn>> { ErrorWatchFnValidator() }
     single<DtoValidator<Inquisition>> { InquisitionValidator(get(), get()) }
 
     single<DtoValidator<InitialDataPointInjector>> { PreReqInjectionValidator(get(), get()) }
@@ -85,15 +85,15 @@ val validatorsModule = module {
 
     single<BenchmarkingDataValidator> { BenchmarkingDataValidator(get()) }
     single<ExecutionLogValidator> { ExecutionLogValidator(get(),) }
-    single<StepExecutionValidator> { StepExecutionValidator(get(), get(), get()) }
-    single<TestCaseValidator> { TestCaseValidator(get(), get(), get()) }
+    single<StepExecutionValidator> { StepExecutionValidator(get(), get()) }
+    single<TestCaseValidator> { TestCaseValidator(get(), get(), get(), get(), get(), get()) }
     single<TestExpectedOutcomeValidator> { TestExpectedOutcomeValidator(get()) }
     single<TestInputValidator> { TestInputValidator(get(),) }
     single<TestResultValidator> { TestResultValidator(get(), get()) }
     single<WorkflowExecutionValidator> { WorkflowExecutionValidator(get(), get(), get()) }
 
     single<ErrorWatchValidator> { ErrorWatchValidator(get()) }
-    single<ErrorWatchFnValidator> { ErrorWatchFnValidator(get(),) }
+    single<ErrorWatchFnValidator> { ErrorWatchFnValidator() }
     single<InquisitionValidator> { InquisitionValidator(get(), get()) }
 
     single<PreReqInjectionValidator> { PreReqInjectionValidator(get(), get()) }

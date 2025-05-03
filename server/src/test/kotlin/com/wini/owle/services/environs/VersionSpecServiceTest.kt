@@ -1,9 +1,10 @@
 package com.wini.owle.services.environs
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.environs.VersionSpec
 import com.wini.owle.entity.environs.VersionSpecEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.environs.VersionSpecsMapper
 import com.wini.owle.repo.VersionSpecIdFactory
 import com.wini.owle.repo.environs.VersionSpecRepository
@@ -93,7 +94,7 @@ open class VersionSpecServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -143,7 +144,7 @@ open class VersionSpecServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

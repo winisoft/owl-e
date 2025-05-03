@@ -1,29 +1,19 @@
 package com.wini.owle.validators.environs
 
-import com.wini.owle.async.TypeValidation
+
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.environs.ToolPyPackDep
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+@OwleValidator(model = ToolPyPackDep::class)
 class ToolPackageDependencyValidator : BaseValidator<ToolPyPackDep>() {
-    override fun validate(dto: ToolPyPackDep): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
 
-        // All fields are required as they form the composite primary key
-        // and are non-nullable references in ToolPackageDependencies table
-        if (dto.toolId <= 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "toolId", 1, Long.MAX_VALUE))
-        }
+    override fun fieldValidations(dto: ToolPyPackDep): List<FieldValidation> {
+        return listOf(
 
-        if (dto.packageId <= 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "packageId", 1, Long.MAX_VALUE))
-        }
-
-        if (dto.versionSpecId <= 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "versionSpecId", 1, Long.MAX_VALUE))
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+        )
     }
 }
 

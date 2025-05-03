@@ -1,44 +1,24 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.steps.Inquisition
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.workflows.DataPointValidator
 
+
+@OwleValidator(model = Inquisition::class)
 class InquisitionValidator(
     private val stepValidator: StepValidator,
     private val dataPointValidator: DataPointValidator
 ) : BaseValidator<Inquisition>() {
-    companion object {
-        const val MAX_CLASS_LENGTH = 255
-    }
 
-    override fun validate(dto: Inquisition): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
 
-        // Validate nested step
-        violations.addAll(stepValidator.validate(dto.step).violations)
-
-        // className is required and has max length
-        if (dto.className.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "className"))
-        }
-        if (dto.className.length > MAX_CLASS_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "className", MAX_CLASS_LENGTH))
-        }
-
-        // Validate nested dataPoint
-        violations.addAll(dataPointValidator.validate(dto.dataPoint).violations)
-
-        // Validate nested onMetWorkflowStep
-        violations.addAll(stepValidator.validate(dto.onMetWorkflowStep).violations)
-
-        // executionOrder must be non-negative
-        if (dto.executionOrder < 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "executionOrder", 0, Int.MAX_VALUE.toLong()))
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+    override fun fieldValidations(dto: Inquisition): List<FieldValidation> {
+        return listOf()
     }
 }
+
+
+

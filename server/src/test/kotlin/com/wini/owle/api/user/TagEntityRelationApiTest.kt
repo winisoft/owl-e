@@ -1,7 +1,7 @@
 package com.wini.owle.api.user
 
 import com.wini.owle.api.Base2IdCompositeApiTest
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.tags.TagRelation
@@ -50,16 +50,16 @@ open class TagEntityRelationApiTest: Base2IdCompositeApiTest<TagRelation, TagRel
     
     override val listSerializer: KSerializer<List<TagRelation>> = ListSerializer(TagRelation.serializer())
 
-    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
+    override fun allParamsMalformedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.ParamValueMalformedLong("parentTagId"),
-            AsyncError.ApiRequestError.ParamValueMalformedLong("childTagId")
+            OwleError.ApiRequestError.ParamValueMalformedLong("parentTagId"),
+            OwleError.ApiRequestError.ParamValueMalformedLong("childTagId")
         )
     }
 
-    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
+    override fun onlyFirstParamProvidedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("childTagId")
+            OwleError.ApiRequestError.MissingParameter("childTagId")
         )
     }
 

@@ -1,9 +1,10 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.typing.TypeParameter
 import com.wini.owle.entity.typing.TypeParameterEntity
+import com.wini.owle.error.DatabaseError
 import com.wini.owle.mapper.typing.TypeParametersMapper
 import com.wini.owle.repo.typing.TypeParameterRepository
 import com.wini.owle.services.BaseServiceImpl
@@ -31,7 +32,7 @@ class TypeParameterService(
                 return AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                AsyncError.DatabaseError.Generic(exception.message ?: "Unable to get TypeParameter entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to get TypeParameter entities").asFailure()
             }
         )
     }

@@ -19,7 +19,6 @@ import com.wini.owle.api.user.PaymentMethodApi
 import com.wini.owle.api.user.TagApi
 import com.wini.owle.api.user.TagRelationApi
 import com.wini.owle.api.user.UserApi
-import com.wini.owle.validators.validatorsModule
 import com.wini.owle.api.workflows.PhaseApi
 import com.wini.owle.api.workflows.WorkflowApi
 import com.wini.owle.api.workflows.WorkflowFolderApi
@@ -42,6 +41,7 @@ import com.wini.owle.dto.user.tags.TagRelation
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.*
 import com.wini.owle.entity.composteid.compositeIdFactoryModule
+import com.wini.owle.validators.validatorsModule
 import org.koin.dsl.module
 
 

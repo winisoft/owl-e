@@ -1,38 +1,25 @@
 package com.wini.owle.validators.workflows
 
-import com.wini.owle.async.TypeValidation
+
+import com.wini.owle.error.FieldValidation
+
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.workflows.WorkflowFolder
-import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
 
+@OwleValidator(model = WorkflowFolder::class)
 class WorkflowFolderValidator: BaseValidator<WorkflowFolder>() {
+
     companion object {
         const val MAX_NAME_LENGTH = 255
+        const val MAX_DESC_LENGTH = 16_000
     }
 
-    override fun validate(dto: WorkflowFolder): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
+    override fun fieldValidations(dto: WorkflowFolder): List<FieldValidation> {
 
-        // name is required and has max length
-        if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
-        }
-        if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
-        }
-
-        // parentFolder is optional (nullable reference)
-        dto.parentFolder?.apply {
-            violations.addAll(validate(this).violations)
-        }
-
-        // timestamps (createdAt, updatedAt)
-        DateTimeConverter.fromString(dto.createdAt) <= DateTimeConverter.fromString(dto.updatedAt)
-
-
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+        return listOf()
     }
+
 }

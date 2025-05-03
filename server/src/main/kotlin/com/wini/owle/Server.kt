@@ -33,6 +33,7 @@ object Server {
 
     fun startServer() {
 
+
         try {
             embeddedServer(
                 factory = Netty,
@@ -52,7 +53,26 @@ object Server {
     }
 
     private fun Application.ktorModule() {
-
+//        val api = OpenAPIGen(
+//            config = OpenAPIGen.Configuration(
+//                api = OpenAPIModel(
+//                    info = InfoModel().apply {
+//                        title = "My API"
+//                        version = "1.0.0"
+//                        description = "API Docs"
+//                    }
+//                )
+//            ),
+//            pipeline = this
+//        )
+//        install(OpenAPIGen) {
+//            swaggerUiPath = "./swaggerUI"
+//            info {
+//                title = "My API"
+//                version = "1.0.0"
+//                description = "API Docs"
+//            }
+//        }
         routing {
 
             install(ContentNegotiation) {

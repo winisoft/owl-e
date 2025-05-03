@@ -1,12 +1,15 @@
 package com.wini.owle.validators.steps
 
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.steps.ProvisionDataPoint
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+
+@OwleValidator(model = ProvisionDataPoint::class)
 class ProvisionDataPointValidator : BaseValidator<ProvisionDataPoint>() {
-    override fun validate(dto: ProvisionDataPoint): ValidationResult {
 
-        return ValidationResult.valid()
-    }
-}
+    override fun fieldValidations(dto: ProvisionDataPoint):List<FieldValidation> {
+        return listOf()
+    }}

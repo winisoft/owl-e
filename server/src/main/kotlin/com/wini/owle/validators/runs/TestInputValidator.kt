@@ -1,31 +1,21 @@
 package com.wini.owle.validators.runs
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.runs.test.TestInput
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+
+@OwleValidator(model = TestInput::class)
 class TestInputValidator(
     private val testCaseValidator: TestCaseValidator
 ) : BaseValidator<TestInput>() {
+
     companion object {
         const val MAX_DATAPOINT_NAME_LENGTH = 255
     }
 
-    override fun validate(dto: TestInput): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
-
-        // Validate nested testCase
-        violations.addAll(testCaseValidator.validate(dto.testCase).violations)
-
-        // dataPointName is required and has max length
-        if (dto.dataPointName.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "dataPointName"))
-        }
-        if (dto.dataPointName.length > MAX_DATAPOINT_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "dataPointName", MAX_DATAPOINT_NAME_LENGTH))
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
-    }
-}
+    override fun fieldValidations(dto: TestInput):List<FieldValidation> {
+        return listOf()
+    }}

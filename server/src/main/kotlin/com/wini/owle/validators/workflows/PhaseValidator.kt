@@ -1,41 +1,24 @@
 package com.wini.owle.validators.workflows
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+
+import com.wini.owle.ksp.OwleValidator
 import com.wini.owle.dto.workflows.Phase
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+
+@OwleValidator(model = Phase::class)
 class PhaseValidator(
     private val workflowValidator: WorkflowValidator
 ) : BaseValidator<Phase>() {
+
     companion object {
         const val MAX_NAME_LENGTH = 512
+        const val MAX_DESC_LENGTH = 16_000
     }
 
-    override fun validate(dto: Phase): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
+    override fun fieldValidations(dto: Phase): List<FieldValidation> {
 
-        // name is required and has max length
-        if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
-        }
-        if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
-        }
-
-        // displayOrder must be non-negative
-        if (dto.displayOrder < 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
-        }
-
-        // Validate optional parentPhase if present
-        dto.parentPhase?.let { phase ->
-            violations.addAll(validate(phase).violations)
-        }
-
-        // Validate nested workflow
-        violations.addAll(workflowValidator.validate(dto.workflow).violations)
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+        return listOf()
     }
 }

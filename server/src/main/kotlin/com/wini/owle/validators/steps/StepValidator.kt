@@ -1,48 +1,51 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.validators.workflows.PhaseValidator
 import com.wini.owle.validators.workflows.WorkflowValidator
 
+
+@OwleValidator(model = Step::class)
 class StepValidator(
     private val workflowValidator: WorkflowValidator,
     private val toolValidator: ToolValidator,
     private val parentPhaseValidator: PhaseValidator
-) : BaseValidator<Step>() {
-    companion object {
-        const val MAX_NAME_LENGTH = 512
+): DtoValidator<Step> {
+
+    override fun fieldValidations(dto: Step):List<FieldValidation> {
+        return listOf(
+//            FieldValidation.LongValueMustNotBeNegative(
+//                Step::id,
+//                dto
+//            ),
+//            TextInputValidation(
+//                Step::name,
+//                dto,
+//                MAX_NAME_LENGTH
+//            ),
+//            TextInputValidation(
+//                Step::description,
+//                dto,
+//                MAX_DESC_LENGTH
+//            ),
+//            FieldValidation.IntValueMustNotBeNegative(
+//                Step::displayOrder,
+//                dto
+//            )
+//        ).plus(
+//            workflowValidator.fieldValidations(dto.workflow)
+//        ).plus(
+//            toolValidator.fieldValidations(dto.tool)
+//        ).plus(
+//            dto.parentPhase?.let { parentPhaseValidator.fieldValidations(it) } ?: emptyList()
+//        ).plus(
+//            dto.nextStep?.let { fieldValidations(it) } ?: emptyList()
+        )
     }
 
-    override fun validate(dto: Step): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
-
-        // name is required and has max length
-        if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
-        }
-        if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
-        }
-
-        // Validate optional parentPhase if present
-        dto.parentPhase?.let { phase ->
-            violations.addAll(parentPhaseValidator.validate(phase).violations)
-        }
-
-        // Validate nested workflow
-        violations.addAll(workflowValidator.validate(dto.workflow).violations)
-
-        // Validate nested tool
-        violations.addAll(toolValidator.validate(dto.tool).violations)
-
-        // displayOrder must be non-negative
-        if (dto.displayOrder < 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "displayOrder", 0, Int.MAX_VALUE.toLong()))
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
-    }
 }

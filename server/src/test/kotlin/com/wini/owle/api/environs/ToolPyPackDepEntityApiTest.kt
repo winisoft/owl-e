@@ -2,7 +2,7 @@ package com.wini.owle.api.environs
 
 import com.wini.owle.api.Base3IdCompositeApiTest
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.ToolPyPackDep
@@ -53,18 +53,18 @@ open class ToolPyPackDepEntityApiTest : Base3IdCompositeApiTest<ToolPyPackDep, T
         }
     }
 
-    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
+    override fun allParamsMalformedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("toolId"),
-            AsyncError.ApiRequestError.MissingParameter("packageId"),
-            AsyncError.ApiRequestError.MissingParameter("versionSpecId"),
+            OwleError.ApiRequestError.MissingParameter("toolId"),
+            OwleError.ApiRequestError.MissingParameter("packageId"),
+            OwleError.ApiRequestError.MissingParameter("versionSpecId"),
         )
     }
 
-    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
+    override fun onlyFirstParamProvidedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("dataPointId"),
-            AsyncError.ApiRequestError.MissingParameter("versionSpecId")
+            OwleError.ApiRequestError.MissingParameter("dataPointId"),
+            OwleError.ApiRequestError.MissingParameter("versionSpecId")
         )
     }
 

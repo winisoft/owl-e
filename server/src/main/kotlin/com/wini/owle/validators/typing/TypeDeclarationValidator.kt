@@ -1,30 +1,24 @@
 package com.wini.owle.validators.typing
 
-import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.typing.TypeDeclaration
-import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+import com.wini.owle.error.FieldValidation
+
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.typing.TypeDeclaration
+import com.wini.owle.dto.typing.TypeDefinition
+import com.wini.owle.validators.BaseValidator
+
+
+@OwleValidator(model = TypeDeclaration::class)
 class TypeDeclarationValidator(
     private val typeDefinitionValidator: TypeDefinitionValidator
 ) : BaseValidator<TypeDeclaration>() {
-    companion object {
-        const val MAX_ALIAS_LENGTH = 255
-    }
 
-    override fun validate(dto: TypeDeclaration): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
 
-        // Validate nested typeDefinition
-        violations.addAll(typeDefinitionValidator.validate(dto.typeDefinition).violations)
 
-        // alias is optional but has max length if present
-        dto.alias?.let { alias ->
-            if (alias.length > MAX_ALIAS_LENGTH) {
-                violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "alias", MAX_ALIAS_LENGTH))
-            }
-        }
+    override fun fieldValidations(dto: TypeDeclaration):List<FieldValidation> {
 
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
-    }
-}
+        return listOf()
+    }}

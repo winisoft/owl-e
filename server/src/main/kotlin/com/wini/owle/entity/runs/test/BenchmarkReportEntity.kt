@@ -24,11 +24,6 @@ class BenchmarkReportEntity(id: EntityID<Long>) : LongEntity(id) {
     var totalExecutionTime by BenchmarkingData.totalExecutionTime
 
     /**
-     * Total number of steps executed within the workflow.
-     */
-    var totalSteps by BenchmarkingData.totalSteps
-
-    /**
      * Number of steps dynamically determined by AI during execution.
      */
     var aiDeterminedSteps by BenchmarkingData.aiDeterminedSteps

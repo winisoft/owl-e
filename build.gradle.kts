@@ -6,4 +6,12 @@ plugins {
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.ktor) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.openApiGenerator) apply false
+    alias(libs.plugins.ksp) apply false
+}
+
+buildscript {
+    dependencies {
+        classpath(kotlin("gradle-plugin", version = "2.1.0"))
+    }
 }

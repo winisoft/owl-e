@@ -1,7 +1,7 @@
 package com.wini.owle.api.transforms
 
 import com.wini.owle.api.Base2IdCompositeApiTest
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.transforms.TransformTargetType
@@ -70,16 +70,16 @@ open class TransformEntityTargetTypeApiTest : Base2IdCompositeApiTest<TransformT
     
     override val listSerializer: KSerializer<List<TransformTargetType>> = ListSerializer(TransformTargetType.serializer())
 
-    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
+    override fun onlyFirstParamProvidedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("typeDeclarationId")
+            OwleError.ApiRequestError.MissingParameter("typeDeclarationId")
         )
     }
 
-    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
+    override fun allParamsMalformedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.ParamValueMalformedLong("transformationId"),
-            AsyncError.ApiRequestError.ParamValueMalformedLong("typeDeclarationId")
+            OwleError.ApiRequestError.ParamValueMalformedLong("transformationId"),
+            OwleError.ApiRequestError.ParamValueMalformedLong("typeDeclarationId")
         )
     }
 }

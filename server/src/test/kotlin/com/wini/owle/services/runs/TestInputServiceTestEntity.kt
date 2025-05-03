@@ -1,11 +1,12 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.test.TestCase
 import com.wini.owle.dto.runs.test.TestInput
 import com.wini.owle.entity.runs.test.TestInputEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.runs.TestInputsMapper
 import com.wini.owle.repo.TestInputIdFactory
 import com.wini.owle.repo.runs.TestInputRepository
@@ -100,7 +101,7 @@ open class TestInputServiceTestEntity {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -148,7 +149,7 @@ open class TestInputServiceTestEntity {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

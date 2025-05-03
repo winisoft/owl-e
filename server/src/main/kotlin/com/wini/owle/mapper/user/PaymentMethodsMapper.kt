@@ -1,6 +1,7 @@
 package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.PaymentMethod
+import com.wini.owle.dto.user.enums.CardBrand
 import com.wini.owle.entity.user.PaymentMethodEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
@@ -20,7 +21,7 @@ class PaymentMethodsMapper(
         val applyProps: PaymentMethodEntity.() -> Unit = {
             stripePaymentMethodId = dto.stripePaymentMethodId
             userEntity = userMapper.toEntity(dto.user)
-            cardBrand = dto.cardBrand?.let { cardBrandMapper.toEntity(it) }
+            //cardBrand = dto.cardBrand?.let { cardBrandMapper. }
             lastFour = dto.lastFour
             isDefault = dto.isDefault
             createdAt = dateTimeConverter.fromString(dto.createdAt)
@@ -40,7 +41,7 @@ class PaymentMethodsMapper(
             id = entity.id.value,
             stripePaymentMethodId = entity.stripePaymentMethodId,
             user = userMapper.toDto(entity.userEntity),
-            cardBrand = entity.cardBrand?.let { cardBrandMapper.toDto(it) },
+            cardBrand = null, //entity.cardBrand?.let { return PaymentMethod. },
             lastFour = entity.lastFour,
             isDefault = entity.isDefault,
             createdAt = dateTimeConverter.toString(entity.createdAt),

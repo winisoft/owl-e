@@ -1,6 +1,7 @@
 package com.wini.owle.mapper.user
 
 import com.wini.owle.dto.user.User
+import com.wini.owle.dto.user.enums.SubscriptionStatus
 import com.wini.owle.entity.user.UserEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
@@ -21,7 +22,7 @@ class UsersMapper(
             resetToken = dto.resetToken
             oauthProvider = dto.oauthProvider
             oauthId = dto.oauthId
-            subscriptionStatus = subscriptionStatusMapper.toEntity(dto.subscriptionStatus)
+            //subscriptionStatus = subscriptionStatusMapper.toEntity(dto.subscriptionStatus)
             apiKey = dto.apiKey
             createdAt = dateTimeConverter.fromString(dto.createdAt)
             updatedAt = dateTimeConverter.fromString(dto.updatedAt)
@@ -43,7 +44,7 @@ class UsersMapper(
             resetToken = entity.resetToken,
             oauthProvider = entity.oauthProvider,
             oauthId = entity.oauthId,
-            subscriptionStatus = subscriptionStatusMapper.toDto(entity.subscriptionStatus),
+            subscriptionStatus = SubscriptionStatus.ACTIVE,
             apiKey = entity.apiKey,
             createdAt = dateTimeConverter.toString(entity.createdAt),
             updatedAt = dateTimeConverter.toString(entity.updatedAt),

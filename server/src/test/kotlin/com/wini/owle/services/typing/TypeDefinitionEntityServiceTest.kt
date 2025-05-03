@@ -1,10 +1,11 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.environs.VersionSpec
 import com.wini.owle.dto.typing.TypeDefinition
 import com.wini.owle.entity.typing.TypeDefinitionEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.typing.TypeDefinitionsMapper
 import com.wini.owle.repo.TypeDefinitionIdFactory
 import com.wini.owle.repo.typing.TypeDefinitionRepository
@@ -96,7 +97,7 @@ open class TypeDefinitionEntityServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -144,7 +145,7 @@ open class TypeDefinitionEntityServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

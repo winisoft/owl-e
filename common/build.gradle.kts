@@ -1,5 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 group = "com.wini.owle"
@@ -10,6 +11,8 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
     testImplementation(kotlin("test"))
 }
 
@@ -17,5 +20,5 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(22)
+    jvmToolchain(17)
 }

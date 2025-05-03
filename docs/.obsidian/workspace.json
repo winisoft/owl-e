@@ -8,35 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "0d7e26cab03c8602",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Application Architecture.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Application Architecture"
-            }
-          },
-          {
             "id": "25921759b7f3efc3",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Owl-E.md",
-                "mode": "preview",
+                "file": "server.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Owl-E"
+              "title": "server"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 275.5
+    "width": 419.5
   },
   "right": {
     "id": "7c670df6d58492ac",
@@ -109,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Owl-E.md",
+                "file": "server.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Owl-E"
+              "title": "Backlinks for server"
             }
           },
           {
@@ -184,8 +169,15 @@
   },
   "active": "25921759b7f3efc3",
   "lastOpenFiles": [
-    "Application Architecture.md",
     "Owl-E.md",
+    "Overview.md",
+    "composeApp.md",
+    "server.md",
+    "Submodules.md",
+    "common.md",
+    "Untitled.md",
+    "type-schema.md",
+    "Application Architecture.md",
     "Data Model.md",
     "System Documentation.md",
     "Owl-E Data Model.md"

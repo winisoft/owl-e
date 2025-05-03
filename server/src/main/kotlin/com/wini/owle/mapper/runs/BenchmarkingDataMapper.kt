@@ -15,7 +15,6 @@ class BenchmarkingDataMapper(
         val applyProps: BenchmarkReportEntity.() -> Unit = {
             workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
             totalExecutionTime = dto.totalExecutionTime.toBigDecimal()
-            totalSteps = dto.totalSteps
             aiDeterminedSteps = dto.aiDeterminedSteps
             predeterminedSteps = dto.predeterminedSteps
         }
@@ -32,7 +31,6 @@ class BenchmarkingDataMapper(
             id = entity.id.value,
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             totalExecutionTime = entity.totalExecutionTime.toDouble(),
-            totalSteps = entity.totalSteps,
             aiDeterminedSteps = entity.aiDeterminedSteps,
             predeterminedSteps = entity.predeterminedSteps
         )

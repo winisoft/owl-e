@@ -54,7 +54,6 @@ val daoFactoryModule = module {
     single<DaoFactory<ToolPyPackDepEntity, CompositeID>> { ExposedDaoFactory(ToolPyPackDepEntity) }
     single<DaoFactory<BenchmarkReportEntity, Long>> { ExposedDaoFactory(BenchmarkReportEntity) }
     single<DaoFactory<StepRunLogLineEntity, Long>> { ExposedDaoFactory(StepRunLogLineEntity) }
-    single<DaoFactory<StepBenchmarkingDataDao, Long>> { ExposedDaoFactory(StepBenchmarkingDataDao) }
     single<DaoFactory<StepRunEntity, Long>> { ExposedDaoFactory(StepRunEntity) }
     single<DaoFactory<TestCaseEntity, Long>> { ExposedDaoFactory(TestCaseEntity) }
     single<DaoFactory<TestExpectationEntity, Long>> { ExposedDaoFactory(TestExpectationEntity) }
@@ -142,7 +141,7 @@ val mapperModule = module {
     single<PackagesMapper> { PackagesMapper(get(), get()) }
     single<TypeParametersMapper> { TypeParametersMapper(get(), get()) }
     single<TypeSchemaRefsMapper> { TypeSchemaRefsMapper(get(), get()) }
-    single<StepBenchmarkingDataMapper> { StepBenchmarkingDataMapper(get(), get()) }
+    //single<StepBenchmarkingDataMapper> { StepBenchmarkingDataMapper(get(), get()) }
     single<DataPointsMapper> { DataPointsMapper(get(), get(), get(), get()) }
     single<ToolsMapper> { ToolsMapper(get(), get()) }
     single<ToolPackageDependencyMapper> { ToolPackageDependencyMapper(get()) }

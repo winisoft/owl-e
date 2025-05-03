@@ -24,4 +24,6 @@ object DateTimeConverter {
         }
     }
 
+    fun isChronologicallyCoherent(timestamp: String): Boolean = runCatching { fromString(timestamp) }.getOrNull() != null
+
 }

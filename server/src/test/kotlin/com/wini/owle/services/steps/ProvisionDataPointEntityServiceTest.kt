@@ -1,9 +1,10 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.ProvisionDataPoint
 import com.wini.owle.entity.steps.ProvisionDataPointEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.steps.ProvisionDataPointMapper
 import com.wini.owle.repo.ProvisionDataPointIdFactory
 import com.wini.owle.repo.steps.ProvisionDataPointRepository
@@ -87,7 +88,7 @@ open class ProvisionDataPointEntityServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -137,7 +138,7 @@ open class ProvisionDataPointEntityServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

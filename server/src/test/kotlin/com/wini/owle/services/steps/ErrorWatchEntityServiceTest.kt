@@ -1,10 +1,11 @@
 package com.wini.owle.services.steps
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.ErrorWatch
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.entity.steps.ErrorWatchEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.steps.ErrorWatchesMapper
 import com.wini.owle.repo.ErrorWatchIdFactory
 import com.wini.owle.repo.steps.ErrorWatchRepository
@@ -96,7 +97,7 @@ open class ErrorWatchEntityServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -144,7 +145,7 @@ open class ErrorWatchEntityServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

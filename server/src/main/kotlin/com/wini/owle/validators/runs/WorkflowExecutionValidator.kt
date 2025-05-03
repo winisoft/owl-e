@@ -1,38 +1,22 @@
 package com.wini.owle.validators.runs
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
-import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 import com.wini.owle.validators.user.UserValidator
 import com.wini.owle.validators.workflows.WorkflowValidator
 
 
+@OwleValidator(model = WorkflowExecution::class)
 class WorkflowExecutionValidator(
     private val workflowValidator: WorkflowValidator,
     private val userValidator: UserValidator,
-    private val dateTimeConverter: DateTimeConverter
+    private val stepExecutionValidator: StepExecutionValidator,
 ): BaseValidator<WorkflowExecution>() {
-    override fun validate(dto: WorkflowExecution): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
 
-        // Validate nested workflow
-        violations.addAll(workflowValidator.validate(dto.workflow).violations)
-
-        // Validate nested user
-        violations.addAll(userValidator.validate(dto.user).violations)
-
-        // completedAt if present, must be after startedAt
-        dto.completedAt?.apply {
-            if (dateTimeConverter.fromString(this) <= dateTimeConverter.fromString(dto.startedAt)) {
-                violations.add(TypeValidation.StartedAndCompletedTimestamp(
-                    dto.typeName,
-                    dto.idToString()
-                ))
-            }
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+    override fun fieldValidations(dto: WorkflowExecution):List<FieldValidation> {
+        return listOf()
     }
 }

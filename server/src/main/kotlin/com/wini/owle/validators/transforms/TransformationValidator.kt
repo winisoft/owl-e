@@ -1,39 +1,28 @@
 package com.wini.owle.validators.transforms
 
-import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.transforms.Transform
-import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
-import com.wini.owle.validators.typing.TypeDeclarationValidator
 
+import com.wini.owle.error.FieldValidation
+
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.ksp.StringLengthMax
+import com.wini.owle.ksp.StringLengthMin
+import com.wini.owle.ksp.StringMustNotBeBlank
+import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.transforms.Transform
+import com.wini.owle.dto.transforms.TransformArg
+import com.wini.owle.dto.workflows.WorkflowFolder
+import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.typing.TypeDeclarationValidator
+import com.wini.owle.validators.workflows.WorkflowFolderValidator.Companion.MAX_DESC_LENGTH
+import com.wini.owle.validators.workflows.WorkflowValidator
+
+@OwleValidator(model = Transform::class)
 class TransformationValidator(
     private val returnsTypeValidator: TypeDeclarationValidator
 ) : BaseValidator<Transform>() {
-    companion object {
-        const val MAX_NAME_LENGTH = 255
-    }
 
-    override fun validate(dto: Transform): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
+    override fun fieldValidations(dto: Transform):List<FieldValidation> {
 
-        // name is required and has max length
-        if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
-        }
-        if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
-        }
-
-        // description is required (non-nullable text)
-        if (dto.description.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "description"))
-        }
-
-        // Validate optional returnsType if present
-        dto.returnsType?.let { returnsType ->
-            violations.addAll(returnsTypeValidator.validate(returnsType).violations)
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
-    }
-}
+        return listOf()
+    }}

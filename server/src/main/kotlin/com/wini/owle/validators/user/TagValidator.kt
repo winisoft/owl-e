@@ -1,33 +1,22 @@
 package com.wini.owle.validators.user
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
 import com.wini.owle.dto.user.tags.Tag
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+
+@OwleValidator(model = Tag::class)
 class TagValidator(
     private val userValidator: UserValidator
 ) : BaseValidator<Tag>() {
+
     companion object {
         const val MAX_NAME_LENGTH = 255
+        const val MAX_DESC_LENGTH = 16_000
     }
 
-    override fun validate(dto: Tag): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
+    override fun fieldValidations(dto: Tag):List<FieldValidation> {
 
-        // name is required and has max length
-        if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
-        }
-        if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
-        }
-
-        // description is optional (nullable text)
-
-        // user is required (non-nullable reference)
-        violations.addAll(userValidator.validate(dto.user).violations)
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
-    }
-}
+        return listOf()
+    }}

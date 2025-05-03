@@ -12,11 +12,12 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            setUrl("https://jitpack.io")
+        }
     }
 }
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-}
+
 
 dependencyResolutionManagement {
     repositories {
@@ -28,10 +29,12 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
 include(":composeApp")
 include(":server")
-include(":shared")
-include("common")
+//include(":shared")
+include(":common")
+include("type-schema")

@@ -1,27 +1,17 @@
 package com.wini.owle.validators.typing
 
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
+import com.wini.owle.ksp.OwleValidator
 import com.wini.owle.dto.typing.TypeParameter
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+
+@OwleValidator(model = TypeParameter::class)
 class TypeParameterValidator(
     private val typeDeclarationValidator: TypeDeclarationValidator
 ) : BaseValidator<TypeParameter>() {
-    override fun validate(dto: TypeParameter): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
 
-        // Validate nested typeDeclaration
-        violations.addAll(typeDeclarationValidator.validate(dto.typeDeclaration).violations)
+    override fun fieldValidations(dto: TypeParameter):List<FieldValidation> {
 
-        // position must be non-negative
-        if (dto.position < 0) {
-            violations.add(TypeValidation.LongRange(dto.typeName, dto.idToString(), "position", 0, Int.MAX_VALUE.toLong()))
-        }
-
-        // Validate nested parameterTypeDeclaration
-        violations.addAll(typeDeclarationValidator.validate(dto.parameterTypeDeclaration).violations)
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
-    }
-}
+        return listOf()
+    }}

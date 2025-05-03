@@ -1,7 +1,7 @@
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.Base2IdCompositeApiTest
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeUnionMember
@@ -51,16 +51,16 @@ open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMember, Typ
     
     override val listSerializer: KSerializer<List<TypeUnionMember>> = ListSerializer(TypeUnionMember.serializer())
 
-    override fun onlyFirstParamProvidedErrors(): List<AsyncError.ApiRequestError> {
+    override fun onlyFirstParamProvidedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.MissingParameter("memberTypeDeclarationId")
+            OwleError.ApiRequestError.MissingParameter("memberTypeDeclarationId")
         )
     }
 
-    override fun allParamsMalformedErrors(): List<AsyncError.ApiRequestError> {
+    override fun allParamsMalformedErrors(): List<OwleError.ApiRequestError> {
         return listOf(
-            AsyncError.ApiRequestError.ParamValueMalformedLong("unionTypeDeclarationId"),
-            AsyncError.ApiRequestError.ParamValueMalformedLong("memberTypeDeclarationId")
+            OwleError.ApiRequestError.ParamValueMalformedLong("unionTypeDeclarationId"),
+            OwleError.ApiRequestError.ParamValueMalformedLong("memberTypeDeclarationId")
         )
     }
 

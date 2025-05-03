@@ -1,9 +1,10 @@
 package com.wini.owle.services.transforms
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.entity.transforms.TransformTargetTypeEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.transforms.TransformTargetTypesMapper
 import com.wini.owle.repo.TransformTargetTypeIdFactory
 import com.wini.owle.repo.transforms.TransformTargetTypeRepository
@@ -87,7 +88,7 @@ open class TransformEntityArgTargetTypeServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -137,7 +138,7 @@ open class TransformEntityArgTargetTypeServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

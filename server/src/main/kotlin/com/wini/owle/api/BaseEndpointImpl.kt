@@ -2,11 +2,16 @@ package com.wini.owle.api
 
 import com.wini.owle.api.OwleApiCall.Companion.successStatus
 import com.wini.owle.validators.DtoValidator
-import com.wini.owle.async.AsyncError
-import com.wini.owle.async.AsyncError.ApiRequestError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.error.EmptyListNotAllowed
+import com.wini.owle.error.MissingParameter
+import com.wini.owle.error.MultipleParamFailure
+import com.wini.owle.error.MultipleTypeValidations
+import com.wini.owle.error.NoSuchIdError
+import com.wini.owle.error.ParamValueMalformedLong
+import com.wini.owle.error.RequestBodyMalformed
 import com.wini.owle.ifNullExit
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -66,10 +71,10 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
             success = false,
             message = failure.error.message,
             errors = when (failure.error) {
-                is ApiRequestError.MultipleTypeValidations ->
-                    (failure.error as ApiRequestError.MultipleTypeValidations).violations
-                is ApiRequestError.MultipleParamFailure ->
-                    (failure.error as ApiRequestError.MultipleParamFailure).failed
+                is MultipleTypeValidations ->
+                    (failure.error as MultipleTypeValidations).violations
+                is MultipleParamFailure ->
+                    (failure.error as MultipleParamFailure).failed
                 else ->
                     listOf(failure.error)
             }.map {
@@ -81,14 +86,14 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
     }
 
     private fun AsyncResult.Failure.toStatusCode(): HttpStatusCode = when (error) {
-        is ApiRequestError.MissingParameter,
-        is ApiRequestError.ParamValueMalformedLong,
-        is ApiRequestError.RequestBodyMalformed,
-        is ApiRequestError.EmptyListNotAllowed,
-        is ApiRequestError.MultipleParamFailure,
-        is ApiRequestError.MultipleTypeValidations ->
+        is MissingParameter,
+        is ParamValueMalformedLong,
+        is RequestBodyMalformed,
+        is EmptyListNotAllowed,
+        is MultipleParamFailure,
+        is MultipleTypeValidations ->
             HttpStatusCode.BadRequest
-        is AsyncError.NoSuchIdError ->
+        is NoSuchIdError ->
             HttpStatusCode.NotFound
         else ->
             HttpStatusCode.InternalServerError
@@ -101,11 +106,11 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         return runCatching {
             Json.decodeFromString(dtoSerializer, receiveText())
         }.getOrElse {
-            return ApiRequestError.RequestBodyMalformed.asFailure()
+            return RequestBodyMalformed.asFailure()
         }.run {
             this to validator.validate(this)
         }.let { (items, validationResult) ->
-            if (validationResult.violations.isNotEmpty())
+            if (validationResult.violations.isEmpty().not())
                 validationResult.asFailure()
             else
                 AsyncResult.Success(items)
@@ -119,13 +124,13 @@ abstract class BaseEndpointImpl<ID: Any, T: BaseDto>(
         return runCatching {
             Json.decodeFromString(dtoListSerializer, receiveText())
         }.getOrElse {
-            return ApiRequestError.RequestBodyMalformed.asFailure()
+            return RequestBodyMalformed.asFailure()
         }.takeIf { it.isNotEmpty() }.ifNullExit {
-            return ApiRequestError.EmptyListNotAllowed.asFailure()
+            return EmptyListNotAllowed.asFailure()
         }.run {
             this to validator.validateAll(this)
         }.let { (items, validationResult) ->
-            if (validationResult.violations.isNotEmpty())
+            if (validationResult.violations.isEmpty().not())
                 validationResult.asFailure()
             else
                 AsyncResult.Success(items)

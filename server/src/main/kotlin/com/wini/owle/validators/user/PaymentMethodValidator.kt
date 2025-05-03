@@ -1,33 +1,29 @@
 package com.wini.owle.validators.user
 
-import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.user.PaymentMethod
-import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
 
+
+import com.wini.owle.error.FieldValidation
+
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.user.PaymentMethod
+import com.wini.owle.dto.workflows.WorkflowFolder
+import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.workflows.WorkflowFolderValidator.Companion.MAX_DESC_LENGTH
+import com.wini.owle.validators.workflows.WorkflowValidator
+
+@OwleValidator(model = PaymentMethod::class)
 class PaymentMethodValidator(
     private val userValidator: UserValidator
 ) : BaseValidator<PaymentMethod>() {
+
     companion object {
         const val LAST_FOUR_LENGTH = 4
     }
 
-    override fun validate(dto: PaymentMethod): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
+    override fun fieldValidations(dto: PaymentMethod):List<FieldValidation> {
 
-        // user is required (non-nullable reference)
-        violations.addAll(userValidator.validate(dto.user).violations)
-
-        // lastFour is optional but must be exactly 4 characters if present
-        if (dto.lastFour != null && dto.lastFour!!.length != LAST_FOUR_LENGTH) {
-            violations.add(TypeValidation.StringLengthExact(
-                dto.typeName,
-                dto.idToString(),
-                "lastFour",
-                LAST_FOUR_LENGTH
-            ))
-        }
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+        return listOf()
     }
 }

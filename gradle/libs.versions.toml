@@ -17,6 +17,7 @@ batikAll = "1.13"
 bonsaiCore = "1.2.0"
 compose-multiplatform = "1.7.3"
 coroutinesExtensionsJvm = "1.5.3"
+dokka = "1.9.10"
 exposedCore = "0.56.0"
 flexmarkAll = "0.64.0"
 hamcrestVersion = "2.2"
@@ -34,6 +35,7 @@ kotlinTypescript = "5.4.5-pre.844"
 kotlinx-coroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.7.3"
+ksp = "2.1.0-1.0.29"
 ktor = "2.3.13"
 ktorServerCore = "2.3.3"
 ktorServerTests = "2.3.13"
@@ -42,6 +44,7 @@ mockk = "1.13.5"
 mysql = "1.19.0"
 mysqlConnectorJava = "8.0.26"
 node = "3.5.1"
+openApiGenerator = "7.12.0"
 richtextCommonmark = "1.0.0-alpha01"
 richtextCommonmarkJvm = "1.0.0-alpha01"
 snakeyaml = "2.2"
@@ -143,3 +146,6 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 node = { id = "com.github.node-gradle.node", version.ref = "node" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+openApiGenerator = { id = "org.openapi.generator", version.ref = "openApiGenerator" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

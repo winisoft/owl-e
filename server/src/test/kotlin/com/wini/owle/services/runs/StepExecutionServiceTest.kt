@@ -1,12 +1,13 @@
 package com.wini.owle.services.runs
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.step.StepExecution
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.entity.runs.step.StepRunEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.runs.StepExecutionsMapper
 import com.wini.owle.repo.StepExecutionIdFactory
 import com.wini.owle.repo.runs.StepExecutionRepository
@@ -104,7 +105,7 @@ open class StepExecutionServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -152,7 +153,7 @@ open class StepExecutionServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

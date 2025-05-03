@@ -102,7 +102,6 @@ val repositoryModule = module {
     single<StepExecutionRepository> { StepExecutionRepository() }
     single<ExecutionLogRepository> { ExecutionLogRepository() }
     single<BenchmarkingDataRepository> { BenchmarkingDataRepository() }
-    single<StepBenchmarkingDataRepository> { StepBenchmarkingDataRepository() }
     single<TestCaseRepository> { TestCaseRepository() }
     single<TestInputRepository> { TestInputRepository() }
     single<TestExpectedOutcomeRepository> { TestExpectedOutcomeRepository() }

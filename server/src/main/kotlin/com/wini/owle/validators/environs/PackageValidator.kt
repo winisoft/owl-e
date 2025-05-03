@@ -1,40 +1,36 @@
 package com.wini.owle.validators.environs
 
-import com.wini.owle.async.TypeValidation
-import com.wini.owle.dto.environs.PyPackage
-import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.ValidationResult
+import com.wini.owle.error.FieldValidation
 
+import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.dto.environs.PyPackage
+import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.validators.BaseValidator
+
+
+@OwleValidator(model = PyPackage::class)
 class PackageValidator(
     private val versionSpecValidator: VersionSpecValidator
 ) : BaseValidator<PyPackage>() {
-    companion object {
-        const val MAX_NAME_LENGTH = 255
-        const val MAX_DISAMBIGUATION_LENGTH = 255
-    }
 
-    override fun validate(dto: PyPackage): ValidationResult {
-        val violations = mutableListOf<TypeValidation>()
 
-        // Name is required and must not be blank
-        if (dto.name.isBlank()) {
-            violations.add(TypeValidation.StringBlank(dto.typeName, dto.idToString(), "name"))
-        }
 
-        // Check name length
-        if (dto.name.length > MAX_NAME_LENGTH) {
-            violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "name", MAX_NAME_LENGTH))
-        }
-
-        // Check disambiguation length if present
-        dto.disambiguation?.let { disambiguation ->
-            if (disambiguation.length > MAX_DISAMBIGUATION_LENGTH) {
-                violations.add(TypeValidation.MaxLength(dto.typeName, dto.idToString(), "disambiguation", MAX_DISAMBIGUATION_LENGTH))
-            }
-        }
-
-        violations.addAll(versionSpecValidator.validate(dto.versionSpec).violations)
-
-        return if (violations.isEmpty()) ValidationResult.valid() else ValidationResult.invalid(violations)
+    override fun fieldValidations(dto: PyPackage):List<FieldValidation> {
+        return listOf(
+//            FieldValidation.LongValueMustNotBeNegative(PyPackage::id, dto),
+//            TextInputValidation(
+//                PyPackage::name,
+//                dto,
+//                MAX_NAME_LENGTH
+//            ),
+//            TextInputValidation(
+//                PyPackage::disambiguation,
+//                dto,
+//                MAX_DISAMBIGUATION_LENGTH
+//            ),
+//        ).plus(
+//            versionSpecValidator.fieldValidations(dto.versionSpec)
+//        )
+    )
     }
 }

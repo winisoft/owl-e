@@ -1,9 +1,10 @@
 package com.wini.owle.api
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.validators.BaseValidator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -365,7 +366,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `POST create - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
                 val dll = mockk<DLL<Long, T>>()
-                val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+                val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
                 setupTestApp(dll) {
                     val response = client.post(route) {
@@ -385,8 +386,8 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `POST createBatch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
                 val dll = mockk<DLL<Long, T>>()
-                val reqError = AsyncError.ApiRequestError.RequestBodyMalformed
-                val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+                val reqError = OwleError.ApiRequestError.RequestBodyMalformed
+                val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
                 setupTestApp(dll) {
                     val response = client.post("$route/batch") {
@@ -412,8 +413,8 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `PUT update - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
                 val dll = mockk<DLL<Long, T>>()
-                val apiError = AsyncError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
-                val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+                val apiError = OwleError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
+                val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
                 setupTestApp(dll) {
                     val response = client.put(route) {
@@ -434,8 +435,8 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             fun `PUT updateBatch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
                 val dll = mockk<DLL<Long, T>>()
                 coEvery { dll.updateAll(any()) } returns AsyncResult.Success(emptyList())
-                val apiError = AsyncError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
-                val expectedErrors = AsyncError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
+                val apiError = OwleError.ApiRequestError.RequestBodyMalformed.run { ApiError(errorCode, message) }
+                val expectedErrors = OwleError.ApiRequestError.RequestBodyMalformed.run { listOf(ApiError(errorCode, message)) }
 
                 setupTestApp(dll) {
                     val response = client.put("$route/batch") {
@@ -458,7 +459,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
         @Test
         fun `DELETE batch - on serialization error - returns HTTP Code 400, RequestBodyMalformed`() = runBlocking {
             val dll = mockk<DLL<Long, T>>()
-            val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.RequestBodyMalformed))
+            val expectedErrors = listOf(ApiError.fromAsyncError(OwleError.ApiRequestError.RequestBodyMalformed))
 
             setupTestApp(dll) {
                 val response = client.delete("$route/batch") {
@@ -471,7 +472,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
                 Assertions.assertNull(apiResponse.data)
                 Assertions.assertFalse(apiResponse.success)
                 Assertions.assertEquals(expectedErrors, apiResponse.errors)
-                Assertions.assertEquals(AsyncError.ApiRequestError.RequestBodyMalformed.message, apiResponse.message)
+                Assertions.assertEquals(OwleError.ApiRequestError.RequestBodyMalformed.message, apiResponse.message)
             }
         }
 
@@ -488,11 +489,11 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `GET by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
                 val id = 1L
-                val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.NoSuchIdError))
+                val expectedErrors = listOf(ApiError.fromAsyncError(NoSuchIdError))
                 val dll = mockk<DLL<Long, T>> {
                     coEvery {
                         getById(any<Long>())
-                    } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
+                    } returns AsyncResult.Failure(NoSuchIdError)
                 }
 
                 setupTestApp(dll) {
@@ -512,7 +513,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `GET by id - with malformed parameter - returns HTTP Code 400, ParamValueMalformed`() = runBlocking {
                 val dll = mockk<DLL<Long, T>>()
-                val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("id")))
+                val expectedErrors = listOf(ApiError.fromAsyncError(OwleError.ApiRequestError.ParamValueMalformedLong("id")))
 
                 setupTestApp(dll) {
                     val response = client.get("$route/not-a-number") {
@@ -536,11 +537,11 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `DELETE by id - on not found - returns HTTP Code 404, NoSuchIdError`() = runBlocking {
                 val id = 1L
-                val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.NoSuchIdError))
+                val expectedErrors = listOf(ApiError.fromAsyncError(NoSuchIdError))
                 val dll = mockk<DLL<Long, T>> {
                     coEvery {
                         delete(id)
-                    } returns AsyncResult.Failure(AsyncError.NoSuchIdError)
+                    } returns AsyncResult.Failure(NoSuchIdError)
                 }
 
                 setupTestApp(dll) {
@@ -560,7 +561,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             @Test
             fun `DELETE by id - with malformed parameter - returns HTTP Code 400, ParamValueMalformed`() = runBlocking {
                 val dll = mockk<DLL<Long, T>>()
-                val expectedErrors = listOf(ApiError.fromAsyncError(AsyncError.ApiRequestError.ParamValueMalformedLong("id")))
+                val expectedErrors = listOf(ApiError.fromAsyncError(OwleError.ApiRequestError.ParamValueMalformedLong("id")))
 
                 setupTestApp(dll) {
                     val response = client.delete("$route/not-a-number") {
@@ -587,7 +588,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
         fun `POST create batch - on empty list - returns HTTP Code 400, EmptyList`() = runBlocking {
             val emptyList = emptyList<T>()
             val dll = mockk<DLL<Long, T>>()
-            val expectedErrors = listOf(AsyncError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) })
+            val expectedErrors = listOf(OwleError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) })
 
             setupTestApp(dll) {
                 val response = client.post("$route/batch") {
@@ -600,7 +601,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
                 Assertions.assertEquals(HttpStatusCode.BadRequest, response.status)
                 Assertions.assertFalse(apiResponse.success)
                 Assertions.assertNull(apiResponse.data)
-                Assertions.assertEquals(AsyncError.ApiRequestError.EmptyListNotAllowed.message, apiResponse.message)
+                Assertions.assertEquals(OwleError.ApiRequestError.EmptyListNotAllowed.message, apiResponse.message)
                 Assertions.assertEquals(expectedErrors, apiResponse.errors)
             }
         }
@@ -610,7 +611,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             val emptyList = emptyList<T>()
             val dll = mockk<DLL<Long, T>>()
             coEvery { dll.updateAll(emptyList()) } returns AsyncResult.Success(emptyList())
-            val apiError = AsyncError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
+            val apiError = OwleError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
             val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
 
             setupTestApp(dll) {
@@ -633,7 +634,7 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
             val emptyList = emptyList<T>()
             val dll = mockk<DLL<Long, T>>()
             coEvery { dll.deleteAll(emptyList()) } returns AsyncResult.Success(Unit)
-            val apiError = AsyncError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
+            val apiError = OwleError.ApiRequestError.EmptyListNotAllowed.run { ApiError(errorCode, message) }
             val expectedResponse = ApiResponse<T>(success = false, message = apiError.message, errors = listOf(apiError))
 
             setupTestApp(dll) {

@@ -1,9 +1,10 @@
 package com.wini.owle.services.typing
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.typing.TypeUnionMember
 import com.wini.owle.entity.typing.TypeUnionMemberEntity
+import com.wini.owle.error.DatabaseError
 import com.wini.owle.mapper.typing.TypeUnionMembersMapper
 import com.wini.owle.repo.typing.TypeUnionMemberRepository
 import com.wini.owle.services.BaseServiceImpl
@@ -30,7 +31,7 @@ class TypeUnionMemberService(
                 return AsyncResult.Success(data)
             },
             onFailure = { exception ->
-                AsyncError.DatabaseError.Generic(exception.message ?: "Unable to delete entities").asFailure()
+                DatabaseError.Generic(exception.message ?: "Unable to delete entities").asFailure()
             }
         )
     }

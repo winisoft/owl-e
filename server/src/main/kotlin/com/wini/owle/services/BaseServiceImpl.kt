@@ -1,9 +1,9 @@
 package com.wini.owle.services
 
-import com.wini.owle.async.AsyncError.DatabaseError
-import com.wini.owle.async.AsyncError.NoSuchIdError
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.error.DatabaseError
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.repo.EntityIdFactory
 import com.wini.owle.repo.OwleRepo

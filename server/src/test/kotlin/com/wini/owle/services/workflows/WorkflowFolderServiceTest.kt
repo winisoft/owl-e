@@ -1,9 +1,10 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.entity.workflows.WorkflowFolderEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.workflows.WorkflowFoldersMapper
 import com.wini.owle.repo.WorkflowFolderIdFactory
 import com.wini.owle.repo.workflows.WorkflowFolderRepository
@@ -104,7 +105,7 @@ open class WorkflowFolderServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -152,7 +153,7 @@ open class WorkflowFolderServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

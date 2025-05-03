@@ -1,15 +1,15 @@
 package com.wini.owle.validators
 
-import com.wini.owle.async.AsyncError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.async.TypeValidation
+import com.wini.owle.error.FieldValidation
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.error.MultipleTypeValidations
 
 /**
  * Container for validation results that can hold multiple validation errors.
  */
 class ValidationResult(
-    val violations: List<TypeValidation>
+    val violations: List<FieldValidation>
 ) {
     /**
      * Whether the validation passed with no errors.
@@ -17,23 +17,10 @@ class ValidationResult(
     val isValid: Boolean get() = violations.isEmpty()
     
     /**
-     * Converts this validation result to an AsyncResult.
-     * If validation passed, returns Success with the provided item.
-     * If validation failed, returns Failure with MultipleTypeValidations.
-     */
-    fun <T> asResult(item: T): AsyncResult<T> {
-        return if (isValid) {
-            AsyncResult.Success(item)
-        } else {
-            AsyncError.ApiRequestError.MultipleTypeValidations(violations).asFailure()
-        }
-    }
-    
-    /**
      * Converts this validation result to an AsyncResult.Failure.
      */
     fun asFailure(): AsyncResult.Failure {
-        return AsyncError.ApiRequestError.MultipleTypeValidations(violations).asFailure()
+        return MultipleTypeValidations(violations).asFailure()
     }
     
     companion object {
@@ -45,13 +32,13 @@ class ValidationResult(
         /**
          * Creates a validation result with the provided violations.
          */
-        fun invalid(vararg violations: TypeValidation): ValidationResult = 
+        fun invalid(vararg violations: FieldValidation): ValidationResult =
             ValidationResult(violations.toList())
         
         /**
          * Creates a validation result with the provided violations.
          */
-        fun invalid(violations: List<TypeValidation>): ValidationResult = 
+        fun invalid(violations: List<FieldValidation>): ValidationResult =
             ValidationResult(violations)
     }
 }
@@ -61,12 +48,30 @@ class ValidationResult(
  * This replaces the previous (T) -> Boolean function approach with a more structured interface.
  */
 interface DtoValidator<T : BaseDto> {
+
+    /**
+     * Returns a list of FieldValidations, representing a constraint of the data model enforced on the generic argument T
+     * of this DtoValidator.
+     *
+     * NOTE: The steps defined in the lists have a meaningful relative position that is logically
+     * necessary for the successful validation of the type.
+     */
+    fun fieldValidations(dto: T): List<FieldValidation>
+
     /**
      * Validates a DTO against business rules and constraints.
      * @param dto The DTO to validate
      * @return ValidationResult containing any validation errors
      */
-    fun validate(dto: T): ValidationResult
+    fun validate(dto: T): ValidationResult {
+        val validations = fieldValidations(dto)
+        return if (validations.none { it.isInvalid })
+            ValidationResult.valid()
+        else
+            validations.filter { it.isInvalid }.run {
+                ValidationResult.invalid(this)
+            }
+    }
     
     /**
      * Validates a list of DTOs, ensuring all are valid.
@@ -87,8 +92,10 @@ interface DtoValidator<T : BaseDto> {
          * Creates a simple validator that always validates successfully.
          * Useful for cases where no validation is needed.
          */
-        fun <T : BaseDto> alwaysValid(): DtoValidator<T> = object : DtoValidator<T> {
-            override fun validate(dto: T): ValidationResult = ValidationResult.valid()
-        }
+        fun <T : BaseDto> alwaysValid(): DtoValidator<T> =
+            object : DtoValidator<T> {
+                override fun fieldValidations(dto: T): List<FieldValidation> = emptyList()
+                override fun validate(dto: T): ValidationResult = ValidationResult.valid()
+            }
     }
 } 

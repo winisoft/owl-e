@@ -1,10 +1,11 @@
 package com.wini.owle.services.workflows
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.Phase
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.entity.workflows.PhaseEntity
+import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.workflows.PhasesMapper
 import com.wini.owle.repo.PhaseIdFactory
 import com.wini.owle.repo.workflows.PhaseRepository
@@ -103,7 +104,7 @@ open class PhaseServiceTest {
         assertTrue(result is AsyncResult.Failure)
 
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.DatabaseError.Generic)
+        assertTrue(error is OwleError.DatabaseError.Generic)
         assertEquals("The operation could not be completed.", error.message)
     }
 
@@ -151,7 +152,7 @@ open class PhaseServiceTest {
         // Assert
         assertTrue(result is AsyncResult.Failure)
         val error = (result as AsyncResult.Failure).error
-        assertTrue(error is AsyncError.NoSuchIdError)
+        assertTrue(error is NoSuchIdError)
 
         // Verify
         verify { repository.getById(entityId) }

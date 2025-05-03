@@ -1,6 +1,6 @@
 package com.wini.owle.api
 
-import com.wini.owle.async.AsyncError
+import com.wini.owle.error.OwleError
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,22 +10,22 @@ data class ApiError(
     val detail: String? = null
 ) {
 
-    constructor(asyncError: AsyncError): this(
-        code = asyncError.errorCode,
-        message = asyncError.message,
-        detail = asyncError.detail
+    constructor(owleError: OwleError): this(
+        code = owleError.errorCode,
+        message = owleError.message,
+        detail = owleError.detail
     )
 
-    fun fromAsyncError(asyncError: AsyncError): ApiError {
+    fun fromAsyncError(owleError: OwleError): ApiError {
         return ApiError(
-            code = asyncError.errorCode,
-            message = asyncError.message,
-            detail = asyncError.detail
+            code = owleError.errorCode,
+            message = owleError.message,
+            detail = owleError.detail
         )
     }
 
     companion object {
-        fun fromAsyncError(error: AsyncError): ApiError {
+        fun fromAsyncError(error: OwleError): ApiError {
             return ApiError(
                 code = error.errorCode,
                 message = error.message,

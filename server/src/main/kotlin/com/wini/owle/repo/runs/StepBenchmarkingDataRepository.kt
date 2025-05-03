@@ -4,4 +4,4 @@ import com.wini.owle.repo.OwleRepoImpl
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class StepBenchmarkingDataRepository: OwleRepoImpl<Long, StepBenchmarkingDataDao>(StepBenchmarkingDataDao)
+//class StepBenchmarkingDataRepository: OwleRepoImpl<Long, StepBenchmarkingDataDao>(StepBenchmarkingDataDao)
