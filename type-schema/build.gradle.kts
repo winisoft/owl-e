@@ -2,7 +2,8 @@ group = "com.wini.owle"
 version = "unspecified"
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 repositories {
@@ -12,6 +13,7 @@ repositories {
 dependencies {
     implementation(project(":common"))
     implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
+    implementation(libs.kotlinx.serialization.json)
 }
 
 sourceSets.main {

@@ -33,7 +33,7 @@ dependencyResolutionManagement {
     }
 }
 
-include(":composeApp")
+include(":composeApp.md")
 include(":server")
 //include(":shared")
 include(":common")
