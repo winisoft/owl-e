@@ -1,9 +1,7 @@
 package com.wini.owle.validators.runs
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackage
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.runs.test.BenchmarkReport
 import com.wini.owle.validators.BaseValidator
 
@@ -12,7 +10,7 @@ class BenchmarkingDataValidator(
     private val workflowExecutionValidator: WorkflowExecutionValidator
 ) : BaseValidator<BenchmarkReport>() {
 
-    override fun fieldValidations(dto: BenchmarkReport):List<FieldValidation> {
+    override fun fieldValidations(dto: BenchmarkReport):List<FieldConstraintError> {
 
         return listOf()
     }

@@ -1,7 +1,7 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
@@ -25,4 +25,5 @@ data class TypeBound(
      * Relationship to the type variable declaration.
      */
     val typeVariableDeclaration: TypeDeclaration
+
 ) : StandardDto

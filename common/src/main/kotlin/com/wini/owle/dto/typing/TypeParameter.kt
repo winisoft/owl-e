@@ -1,14 +1,14 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.ksp.IntValueMin
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.IntValueMin
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
 /**
  * Represents parameters used within complex types, allowing for parameterized type declarations.
- * Supports types such as 'List[int]' or 'Dict[str, int]', where 'int' or 'str' would be parameters of 'List' or 'Dict'.
+ * Supports types such as 'List[kotlin.Int]' or 'Dict[str, int]', where 'int' or 'str' would be parameters of 'List' or 'Dict'.
  */
 @OwleModel
 @Serializable

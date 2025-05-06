@@ -1,9 +1,8 @@
 package com.wini.owle.validators.runs
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.runs.test.TestCase
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.steps.StepValidator
@@ -20,7 +19,7 @@ class TestCaseValidator(
     private val testExpectationValidator: TestExpectedOutcomeValidator,
     private val resultsValidator: TestResultValidator
 ) : BaseValidator<TestCase>() {
-    override fun fieldValidations(dto: TestCase):List<FieldValidation> {
+    override fun fieldValidations(dto: TestCase):List<FieldConstraintError> {
 
         return listOf()
     }

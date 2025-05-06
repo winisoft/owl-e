@@ -1,7 +1,7 @@
 package com.wini.owle.validators.user
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.user.tags.Tag
 import com.wini.owle.validators.BaseValidator
 
@@ -16,7 +16,7 @@ class TagValidator(
         const val MAX_DESC_LENGTH = 16_000
     }
 
-    override fun fieldValidations(dto: Tag):List<FieldValidation> {
+    override fun fieldValidations(dto: Tag):List<FieldConstraintError> {
 
         return listOf()
     }}

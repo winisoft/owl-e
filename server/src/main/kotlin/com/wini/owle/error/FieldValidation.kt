@@ -23,10 +23,10 @@ import kotlinx.serialization.Serializable
 import java.net.URL
 import kotlin.reflect.KProperty1
 
-abstract class CompositeValidation : OwleError, FieldValidation() {
+abstract class CompositeValidation : OwleError, FieldConstraintError() {
 
-    protected abstract val delegateValidations: List<FieldValidation>
-    protected val firstFailure: FieldValidation? by lazy {
+    protected abstract val delegateValidations: List<FieldConstraintError>
+    protected val firstFailure: FieldConstraintError? by lazy {
         delegateValidations.firstOrNull { it.isInvalid }
     }
 
@@ -52,7 +52,7 @@ sealed class FieldValidation: OwleError {
     abstract override val detail: String?
     abstract val isInvalid: Boolean
 
-    sealed class SingleFieldValidation: FieldValidation()
+    sealed class SingleFieldValidation: FieldConstraintError()
 
     /**
      * Validates that all characters in the input string are from safe character ranges.
@@ -62,7 +62,7 @@ sealed class FieldValidation: OwleError {
     data class StringContainsRestrictedChars<T : BaseDto>(
         private val constrainedField: KProperty1<T, String?>,
         private val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
 
         private val value: String? get() = constrainedField.get(receiver)
 
@@ -93,7 +93,7 @@ sealed class FieldValidation: OwleError {
     data class NotNumeric<T: BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : OwleError, FieldValidation() {
+    ) : OwleError, FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val isInvalid: Boolean get() = value?.let { it.all { ch -> ch.isDigit() } } ?: false
         override val errorCode: String = NumericOnly.ERROR_CODE
@@ -105,7 +105,7 @@ sealed class FieldValidation: OwleError {
     data class InvalidResetToken<T : BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = InvalidResetTokenFormat.ERROR_CODE
         override val isInvalid: Boolean get() = value
@@ -123,7 +123,7 @@ sealed class FieldValidation: OwleError {
     data class InvalidOAuthProvider<T : BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = InvalidOAuthProviderEnum.ERROR_CODE
         override val message: String get() = InvalidOAuthProviderEnum.MESSAGE
@@ -138,7 +138,7 @@ sealed class FieldValidation: OwleError {
     data class PythonVersionSegmentFormat<T: BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ): FieldValidation() {
+    ): FieldConstraintError() {
         override val isInvalid: Boolean get() = if (value == null) false else !Regex(PY_VERSION_SEG_REGEX).matches(value!!)
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = PythonVersionSegFormat.ERROR_CODE
@@ -155,7 +155,7 @@ sealed class FieldValidation: OwleError {
     data class StringMustNotBeBlank<T : BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = StringMustNotBeWhitespace.ERROR_CODE
         override val isInvalid: Boolean get() = value?.isBlank() ?: false
@@ -169,7 +169,7 @@ sealed class FieldValidation: OwleError {
         val constrainedField: KProperty1<T, String?>,
         val receiver: T,
         val minLength: Int
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = StringLengthMustBeGrTh.ERROR_CODE
         override val isInvalid: Boolean get() = value?.length?.let { it < minLength } ?: false
@@ -183,7 +183,7 @@ sealed class FieldValidation: OwleError {
         val constrainedField: KProperty1<T, String?>,
         val receiver: T,
         val maxLength: Int
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = StringLengthMustBeLsTh.ERROR_CODE
         override val isInvalid: Boolean get() = value?.length?.let { it > maxLength } ?: false
@@ -197,7 +197,7 @@ sealed class FieldValidation: OwleError {
         val constrainedField: KProperty1<T, Int>,
         val receiver: T,
         val minValue: Int
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: Int get() = constrainedField.get(receiver)
         override val errorCode: String = IntValueMustMeetMin.ERROR_CODE
         override val isInvalid: Boolean get() = value < minValue
@@ -211,7 +211,7 @@ sealed class FieldValidation: OwleError {
         val constrainedField: KProperty1<T, String?>,
         val receiver: T,
         val requirement: Int
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = StringMustHaveRequiredLenExact.ERROR_CODE
         override val isInvalid: Boolean get() = value?.length?.let { it != requirement } ?: true
@@ -225,7 +225,7 @@ sealed class FieldValidation: OwleError {
         val constrainedField: KProperty1<T, Long>,
         val receiver: T,
         val minValue: Long
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: Long get() = constrainedField.get(receiver)
         override val errorCode: String = LongValueMustMeetMin.ERROR_CODE
         override val isInvalid: Boolean get() = value < minValue
@@ -238,7 +238,7 @@ sealed class FieldValidation: OwleError {
     data class LongValueMustNotBeNegative<T : BaseDto>(
         val constrainedField: KProperty1<T, Long>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: Long get() = constrainedField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_LONG_NEGATIVE"
         override val isInvalid: Boolean get() = value < 0
@@ -253,7 +253,7 @@ sealed class FieldValidation: OwleError {
         val receiver: T,
         val minValue: Long,
         val maxValue: Long
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: Long get() = constrainedField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_LONG_OUTSIDE_RANGE"
         override val isInvalid: Boolean get() = value < minValue || value >= maxValue
@@ -269,7 +269,7 @@ sealed class FieldValidation: OwleError {
         val receiver: T,
         val minValue: Double,
         val maxValue: Double
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: Double get() = constrainedField.get(receiver)
         override val errorCode: String = DoubleValueOutsideValidRange.ERROR_CODE
         override val isInvalid: Boolean get() = value < minValue || value >= maxValue
@@ -282,7 +282,7 @@ sealed class FieldValidation: OwleError {
     data class ListNotEmpty<T : BaseDto>(
         val constrainedField: KProperty1<T, List<*>>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         override val errorCode: String = ListCannotBeEmpty.ERROR_CODE
         override val isInvalid: Boolean get() = constrainedField.get(receiver).isEmpty()
         override val message: String get() = ListCannotBeEmpty.MESSAGE// "Must not be an empty list."
@@ -294,7 +294,7 @@ sealed class FieldValidation: OwleError {
     data class InvalidEmail<T : BaseDto>(
         val constrainedField: KProperty1<T, String>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String get() = constrainedField.get(receiver)
         override val errorCode: String = InvalidEmailFormat.ERROR_CODE
         override val isInvalid: Boolean get() =
@@ -312,7 +312,7 @@ sealed class FieldValidation: OwleError {
     data class InvalidUrl<T : BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_STR_URL"
         override val isInvalid: Boolean get() = runCatching { URL(value).toURI() }.isFailure
@@ -324,7 +324,7 @@ sealed class FieldValidation: OwleError {
     data class TimestampFormatMustMatchIso8601<T : BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_TIMESTAMP_FORMAT"
         override val isInvalid: Boolean
@@ -341,7 +341,7 @@ sealed class FieldValidation: OwleError {
     data class TimestampMustBeChronologicallyCoherent<T : BaseDto>(
         val constrainedField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val value: String? get() = constrainedField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_TIMESTAMP_VALUE"
         override val isInvalid: Boolean
@@ -350,7 +350,7 @@ sealed class FieldValidation: OwleError {
         override val detail: String get() = "${receiver.idText}::${constrainedField.name}: value='$value'"
     }
 
-    sealed class MultipleFieldValidation: FieldValidation()
+    sealed class MultipleFieldValidation: FieldConstraintError()
 
     /** Fails if both workflow and step are null. */
     @Serializable
@@ -358,7 +358,7 @@ sealed class FieldValidation: OwleError {
         val workflow: KProperty1<T, Workflow?>,
         val step: KProperty1<T, Step?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val workflowValue: Workflow? = workflow.get(receiver)
         private val stepValue: Step? = step.get(receiver)
         override val errorCode: String = "TYPE_INVALID_TEST_CASE_FOCUS"
@@ -374,7 +374,7 @@ sealed class FieldValidation: OwleError {
         val versionMaxField: KProperty1<T, String?>,
         val versionExactField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val versionMinValue: String? get() = versionMinField.get(receiver)
         private val versionMaxValue: String? get() = versionMinField.get(receiver)
         private val versionExactValue: String? get() = versionMinField.get(receiver)
@@ -390,7 +390,7 @@ sealed class FieldValidation: OwleError {
         val startTimestampField: KProperty1<T, String>,
         val completedTimestampField: KProperty1<T, String?>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val startedValue: String get() = startTimestampField.get(receiver)
         private val completedValue: String? get() = completedTimestampField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_TIME_COMPLETED_BEFORE_START"
@@ -410,7 +410,7 @@ sealed class FieldValidation: OwleError {
         val createdAt: KProperty1<T, String>,
         val updatedAt: KProperty1<T, String>,
         val receiver: T
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val createdValue: String get() = createdAt.get(receiver)
         private val updatedValue: String get() = updatedAt.get(receiver)
         override val errorCode: String = "TYPE_INVALID_TIME_UPDATE_BEFORE_CREATE"
@@ -425,7 +425,7 @@ sealed class FieldValidation: OwleError {
         val providerField: KProperty1<T, String?>,
         val idField: KProperty1<T, String?>,
         val receiver: T,
-    ) : FieldValidation() {
+    ) : FieldConstraintError() {
         private val provider = providerField.get(receiver)
         private val id = idField.get(receiver)
         override val errorCode: String = "TYPE_INVALID_OAUTH_ID_COMBINATION"

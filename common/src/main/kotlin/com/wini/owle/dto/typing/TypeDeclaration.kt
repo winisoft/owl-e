@@ -1,9 +1,9 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.StringLengthMax
-import com.wini.owle.ksp.StringMustNotBeBlank
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.StringMustNotBeBlank
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
@@ -14,6 +14,7 @@ import kotlinx.serialization.Serializable
 @OwleModel
 @Serializable
 data class TypeDeclaration(
+
     @LongValueMin(0)
     override val id: Long,
 

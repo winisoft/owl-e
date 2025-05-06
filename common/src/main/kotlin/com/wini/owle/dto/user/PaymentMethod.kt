@@ -1,12 +1,12 @@
 package com.wini.owle.dto.user
 
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.NumeralsOnly
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.StringLengthExact
-import com.wini.owle.ksp.StringMustNotBeBlank
-import com.wini.owle.ksp.TimestampCoherent
-import com.wini.owle.ksp.TimestampIso8601Format
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.NumeralsOnly
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthExact
+import com.wini.owle.schema.StringMustNotBeBlank
+import com.wini.owle.schema.TimestampCoherent
+import com.wini.owle.schema.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.enums.CardBrand
 import kotlinx.serialization.Serializable

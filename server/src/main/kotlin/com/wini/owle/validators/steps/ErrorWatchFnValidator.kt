@@ -1,9 +1,8 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.steps.ErrorWatchFn
 import com.wini.owle.validators.BaseValidator
 
@@ -12,7 +11,7 @@ import com.wini.owle.validators.BaseValidator
 class ErrorWatchFnValidator: BaseValidator<ErrorWatchFn>() {
 
 
-    override fun fieldValidations(dto: ErrorWatchFn):List<FieldValidation> {
+    override fun fieldValidations(dto: ErrorWatchFn):List<FieldConstraintError> {
 
         return listOf()
     }}

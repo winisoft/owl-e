@@ -1,8 +1,8 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.workflows.ToolParam
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.typing.TypeDeclarationValidator
@@ -18,7 +18,7 @@ class ToolParamValidator(
         const val MAX_NAME_LENGTH = 255
     }
 
-    override fun fieldValidations(dto: ToolParam):List<FieldValidation> {
+    override fun fieldValidations(dto: ToolParam):List<FieldConstraintError> {
 
         return listOf()
     }

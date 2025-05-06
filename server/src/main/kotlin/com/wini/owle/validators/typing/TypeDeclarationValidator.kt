@@ -1,13 +1,10 @@
 package com.wini.owle.validators.typing
 
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.typing.TypeDeclaration
-import com.wini.owle.dto.typing.TypeDefinition
 import com.wini.owle.validators.BaseValidator
 
 
@@ -18,7 +15,7 @@ class TypeDeclarationValidator(
 
 
 
-    override fun fieldValidations(dto: TypeDeclaration):List<FieldValidation> {
+    override fun fieldValidations(dto: TypeDeclaration):List<FieldConstraintError> {
 
         return listOf()
     }}

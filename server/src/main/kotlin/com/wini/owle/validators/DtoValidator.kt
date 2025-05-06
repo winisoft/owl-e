@@ -1,7 +1,7 @@
 package com.wini.owle.validators
 
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.error.MultipleTypeValidations
 
@@ -9,7 +9,7 @@ import com.wini.owle.error.MultipleTypeValidations
  * Container for validation results that can hold multiple validation errors.
  */
 class ValidationResult(
-    val violations: List<FieldValidation>
+    val violations: List<FieldConstraintError>
 ) {
     /**
      * Whether the validation passed with no errors.
@@ -32,13 +32,13 @@ class ValidationResult(
         /**
          * Creates a validation result with the provided violations.
          */
-        fun invalid(vararg violations: FieldValidation): ValidationResult =
+        fun invalid(vararg violations: FieldConstraintError): ValidationResult =
             ValidationResult(violations.toList())
         
         /**
          * Creates a validation result with the provided violations.
          */
-        fun invalid(violations: List<FieldValidation>): ValidationResult =
+        fun invalid(violations: List<FieldConstraintError>): ValidationResult =
             ValidationResult(violations)
     }
 }
@@ -56,7 +56,7 @@ interface DtoValidator<T : BaseDto> {
      * NOTE: The steps defined in the lists have a meaningful relative position that is logically
      * necessary for the successful validation of the type.
      */
-    fun fieldValidations(dto: T): List<FieldValidation>
+    fun fieldValidations(dto: T): List<FieldConstraintError>
 
     /**
      * Validates a DTO against business rules and constraints.
@@ -94,7 +94,7 @@ interface DtoValidator<T : BaseDto> {
          */
         fun <T : BaseDto> alwaysValid(): DtoValidator<T> =
             object : DtoValidator<T> {
-                override fun fieldValidations(dto: T): List<FieldValidation> = emptyList()
+                override fun fieldValidations(dto: T): List<FieldConstraintError> = emptyList()
                 override fun validate(dto: T): ValidationResult = ValidationResult.valid()
             }
     }

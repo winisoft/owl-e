@@ -48,7 +48,6 @@ kotlin {
             //implementation(projects.common)
         }
         desktopMain.dependencies {
-            implementation(projects.common)
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(projects.server)

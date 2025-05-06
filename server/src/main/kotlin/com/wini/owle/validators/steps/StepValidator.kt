@@ -1,9 +1,8 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.validators.DtoValidator
 import com.wini.owle.validators.workflows.PhaseValidator
@@ -17,7 +16,7 @@ class StepValidator(
     private val parentPhaseValidator: PhaseValidator
 ): DtoValidator<Step> {
 
-    override fun fieldValidations(dto: Step):List<FieldValidation> {
+    override fun fieldValidations(dto: Step):List<FieldConstraintError> {
         return listOf(
 //            FieldValidation.LongValueMustNotBeNegative(
 //                Step::id,

@@ -1,7 +1,12 @@
 package com.wini.owle.dto.environs
 
-import com.wini.owle.ksp.*
 import com.wini.owle.dto.StandardDto
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.StringLengthMin
+import com.wini.owle.schema.StringMustNotBeBlank
+import com.wini.owle.schema.StringMustNotContainRestricted
 import kotlinx.serialization.Serializable
 
 
@@ -20,7 +25,7 @@ data class PyPackage(
      * The name of the Python library package (e.g., 'numpy', 'pandas').
      * Required.
      */
-    @StringLengthMin(0)
+    @StringLengthMin(1)
     @StringMustNotContainRestricted
     @StringMustNotBeBlank
     @StringLengthMax(MAX_NAME_LENGTH)
@@ -30,7 +35,7 @@ data class PyPackage(
      * Optional field to distinguish between packages with similar names.
      * Useful if the package is a fork or variant.
      */
-    @StringLengthMin(0)
+    @StringLengthMin(1)
     @StringMustNotContainRestricted
     @StringMustNotBeBlank
     @StringLengthMax(MAX_DISAMBIGUATION_LENGTH)
@@ -46,19 +51,5 @@ data class PyPackage(
     companion object {
         const val MAX_NAME_LENGTH = 255
         const val MAX_DISAMBIGUATION_LENGTH = 255
-        const val JSON_ONE_EXAMPLE = """{
-            "id": 1,
-            "name": "pandas",
-            "disambiguation": "not the bear"
-        }"""
-        const val JSON_LIST_EXAMPLE = """
-            [
-                {
-                    "id": 1,
-                    "name": "spacy",
-                    "disambiguation": "not the kevin"
-                }
-            ]
-        """
     }
 }

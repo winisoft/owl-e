@@ -1,7 +1,7 @@
 package com.wini.owle.validators.runs
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.validators.BaseValidator
 
@@ -11,7 +11,7 @@ class ExecutionLogValidator(
     private val stepExecutionValidator: StepExecutionValidator
 ) : BaseValidator<StepRunLogLine>() {
 
-    override fun fieldValidations(dto: StepRunLogLine):List<FieldValidation> {
+    override fun fieldValidations(dto: StepRunLogLine):List<FieldConstraintError> {
         return listOf()
     }
 

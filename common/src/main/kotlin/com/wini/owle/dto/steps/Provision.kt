@@ -1,8 +1,8 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.ksp.ListHasMembers
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.ListHasMembers
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.dto.workflows.Step

@@ -3,7 +3,7 @@ package com.wini.owle.api
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.validators.ValidationResult
-import com.wini.owle.error.FieldValidation.StringMustNotBeEmpty
+import com.wini.owle.error.FieldConstraintError.StringMustNotBeEmpty
 
 
 /**

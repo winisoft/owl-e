@@ -1,9 +1,8 @@
 package com.wini.owle.validators.typing
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.typing.TypeDefinition
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.environs.VersionSpecValidator
 
@@ -13,7 +12,7 @@ class TypeDefinitionValidator(
     private val versionSpecValidator: VersionSpecValidator
 ) : BaseValidator<TypeDefinition>() {
 
-    override fun fieldValidations(dto: TypeDefinition):List<FieldValidation> {
+    override fun fieldValidations(dto: TypeDefinition):List<FieldConstraintError> {
 
         return listOf()
     }

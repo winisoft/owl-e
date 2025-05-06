@@ -1,10 +1,9 @@
 package com.wini.owle.validators.environs
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.environs.PyPackage
-import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.validators.BaseValidator
 
 
@@ -15,7 +14,7 @@ class PackageValidator(
 
 
 
-    override fun fieldValidations(dto: PyPackage):List<FieldValidation> {
+    override fun fieldValidations(dto: PyPackage):List<FieldConstraintError> {
         return listOf(
 //            FieldValidation.LongValueMustNotBeNegative(PyPackage::id, dto),
 //            TextInputValidation(

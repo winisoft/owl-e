@@ -1,8 +1,12 @@
 package com.wini.owle.dto.environs
 
-import com.wini.owle.ksp.*
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.environs.enums.PyPackageRepoType
+import com.wini.owle.schema.InvalidUrl
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.StringMustNotContainRestricted
 import kotlinx.serialization.Serializable
 
 

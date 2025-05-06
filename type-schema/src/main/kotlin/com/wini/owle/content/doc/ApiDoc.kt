@@ -1,7 +1,7 @@
 package com.wini.owle.content.doc
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Represents documentation for an API endpoint class.
@@ -114,8 +114,8 @@ data class ApiMediaTypeDoc(
 data class OpenApiSpec(
     val openapi: String = "3.0.0",
     val info: Info,
-    val paths: Map<String, Map<String, @Contextual Any>>,
-    val components: Map<String, @Contextual Any> = emptyMap(),
+    val paths: Map<String, JsonObject>,
+    val components: Map<String, JsonObject> = emptyMap(),
     val tags: List<Tag> = emptyList()
 ) {
     @Serializable

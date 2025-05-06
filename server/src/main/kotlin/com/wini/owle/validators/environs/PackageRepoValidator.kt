@@ -1,7 +1,7 @@
 package com.wini.owle.validators.environs
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.environs.PyPackageRepo
 import com.wini.owle.validators.BaseValidator
 
@@ -13,7 +13,7 @@ class PackageRepoValidator: BaseValidator<PyPackageRepo>() {
         const val MAX_SOURCE_URL_LEN = 1024
     }
 
-    override fun fieldValidations(dto: PyPackageRepo): List<FieldValidation> {
+    override fun fieldValidations(dto: PyPackageRepo): List<FieldConstraintError> {
         return emptyList()
     }
 

@@ -1,10 +1,11 @@
 package com.wini.owle.dto.runs.test
 
-import com.wini.owle.ksp.DoubleMinAndMax
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.DoubleMinAndMax
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
+import com.wini.owle.schema.IntValueMin
 import kotlinx.serialization.Serializable
 
 /**
@@ -32,11 +33,13 @@ data class BenchmarkReport(
     /**
      * Number of steps dynamically determined by AI during execution.
      */
+    @IntValueMin(0)
     val aiDeterminedSteps: Int,
 
     /**
      * Number of steps predetermined and set in the workflow configuration.
      */
+    @IntValueMin(0)
     val predeterminedSteps: Int
 
 ) : StandardDto {

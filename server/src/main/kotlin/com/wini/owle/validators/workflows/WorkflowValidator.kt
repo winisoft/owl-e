@@ -1,9 +1,9 @@
 package com.wini.owle.validators.workflows
 
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.validators.DtoValidator
 
@@ -17,7 +17,7 @@ class WorkflowValidator : DtoValidator<Workflow> {
         const val MIN_PYTHON_VERSION_LENGTH = 3
     }
 
-    override fun fieldValidations(dto: Workflow):List<FieldValidation> {
+    override fun fieldValidations(dto: Workflow):List<FieldConstraintError> {
 
         return listOf()
     }

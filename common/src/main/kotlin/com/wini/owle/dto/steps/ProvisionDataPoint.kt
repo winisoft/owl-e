@@ -1,7 +1,7 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable
 

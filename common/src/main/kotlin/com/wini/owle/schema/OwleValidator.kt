@@ -1,4 +1,4 @@
-package com.wini.owle.ksp
+package com.wini.owle.schema
 
 import kotlin.reflect.KClass
 

@@ -1,7 +1,5 @@
 package com.wini.owle.content.doc
 
-import com.wini.owle.error.OwleError
-
 
 /**
  * Represents the body of documentation related to a single OwleError type.
@@ -12,16 +10,7 @@ import com.wini.owle.error.OwleError
  *     some constraint that has been violated, the error code of some internal HTTP request made, or the id of some entity that was not found.
  */
 data class OwleErrorDoc(
-    override val errorCode: String,
-    override val message: String,
+    val errorCode: String,
+    val message: String,
     val attributes: Map<String, Any?> = emptyMap()
-): OwleError {
-
-    /**
-     * Always null in the context of documentation.
-     * 
-     * `detail` is useful only in expresssing the contributing factors of errors during their runtime occurrence 
-     */
-    override val detail: String? = null
-}
-
+)

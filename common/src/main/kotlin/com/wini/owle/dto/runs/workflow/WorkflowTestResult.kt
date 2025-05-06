@@ -1,9 +1,9 @@
 package com.wini.owle.dto.runs.workflow
 
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.TimestampCoherent
-import com.wini.owle.ksp.TimestampIso8601Format
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.TimestampCoherent
+import com.wini.owle.schema.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.test.TestCase
 import kotlinx.serialization.Serializable

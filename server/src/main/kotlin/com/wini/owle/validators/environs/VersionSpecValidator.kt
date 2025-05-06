@@ -1,8 +1,7 @@
 package com.wini.owle.validators.environs
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.environs.VersionSpec
 import com.wini.owle.validators.BaseValidator
 
@@ -14,7 +13,7 @@ import com.wini.owle.validators.BaseValidator
 class VersionSpecValidator : BaseValidator<VersionSpec>() {
 
 
-    override fun fieldValidations(dto: VersionSpec):List<FieldValidation> {
+    override fun fieldValidations(dto: VersionSpec):List<FieldConstraintError> {
 
         return listOf()
     }

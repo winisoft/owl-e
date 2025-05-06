@@ -1,19 +1,20 @@
 package com.wini.owle.dto.user
 
-import com.wini.owle.ksp.StringMustNotContainRestricted
-import com.wini.owle.ksp.EmailTerms
-import com.wini.owle.ksp.OAuthProviderEnum
-import com.wini.owle.ksp.ResetTokenCharsOnly
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OneDigitMinimum
-import com.wini.owle.ksp.OneLowercaseMinimum
-import com.wini.owle.ksp.OneSpecialCharMinimum
-import com.wini.owle.ksp.OneUppercaseMinimum
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.TimestampCoherent
-import com.wini.owle.ksp.TimestampIso8601Format
+import com.wini.owle.schema.StringMustNotContainRestricted
+import com.wini.owle.schema.EmailTerms
+import com.wini.owle.schema.OAuthProviderEnum
+import com.wini.owle.schema.ResetTokenCharsOnly
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OneDigitMinimum
+import com.wini.owle.schema.OneLowercaseMinimum
+import com.wini.owle.schema.OneSpecialCharMinimum
+import com.wini.owle.schema.OneUppercaseMinimum
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.TimestampCoherent
+import com.wini.owle.schema.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.enums.SubscriptionStatus
+import com.wini.owle.schema.PasswordSecurityPolicy
 import kotlinx.serialization.Serializable
 
 /**
@@ -21,7 +22,7 @@ import kotlinx.serialization.Serializable
  * subscription status, and related payment methods.
  */
 @OwleModel
-//@OAuthProviderEnum
+@OAuthProviderEnum
 @Serializable
 data class User(
 
@@ -37,11 +38,7 @@ data class User(
     /**
      * User's password, stored as a hashed value.
      */
-    @StringMustNotContainRestricted
-    @OneUppercaseMinimum
-    @OneLowercaseMinimum
-    @OneSpecialCharMinimum
-    @OneDigitMinimum
+    @PasswordSecurityPolicy
     val password: String,
 
     /**
@@ -69,6 +66,7 @@ data class User(
     /**
      * API key for accessing restricted resources.
      */
+    @ResetTokenCharsOnly
     val apiKey: String? = null,
 
     /**

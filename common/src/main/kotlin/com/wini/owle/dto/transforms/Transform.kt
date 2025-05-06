@@ -1,11 +1,11 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.ksp.StringMustNotContainRestricted
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.StringLengthMax
-import com.wini.owle.ksp.StringLengthMin
-import com.wini.owle.ksp.StringMustNotBeBlank
+import com.wini.owle.schema.StringMustNotContainRestricted
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.StringLengthMin
+import com.wini.owle.schema.StringMustNotBeBlank
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.typing.TypeDeclaration
 import kotlinx.serialization.Serializable
@@ -24,7 +24,7 @@ data class Transform(
     /**
      * Name of the transformation.
      */
-    @StringLengthMin(0)
+    @StringLengthMin(1)
     @StringMustNotContainRestricted
     @StringMustNotBeBlank
     @StringLengthMax(MAX_NAME_LENGTH)
@@ -32,7 +32,7 @@ data class Transform(
     /**
      * Detailed description of what the transformation does.
      */
-    @StringLengthMin(0)
+    @StringLengthMin(1)
     @StringMustNotContainRestricted
     @StringMustNotBeBlank
     @StringLengthMax(MAX_DESC_LENGTH)

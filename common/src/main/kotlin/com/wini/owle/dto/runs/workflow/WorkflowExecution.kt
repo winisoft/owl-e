@@ -1,10 +1,11 @@
 package com.wini.owle.dto.runs.workflow
 
-import com.wini.owle.ksp.CompletedTimeBeforeStart
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.TimestampCoherent
-import com.wini.owle.ksp.TimestampIso8601Format
+import com.wini.owle.content.decorator.PreventsTimeParadoxes
+import com.wini.owle.schema.CompletedTimeBeforeStart
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.TimestampCoherent
+import com.wini.owle.schema.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.step.StepExecution
@@ -18,8 +19,10 @@ import kotlinx.serialization.Serializable
  * user executing the workflow, and current status of the workflow execution.
  */
 @OwleModel
-@CompletedTimeBeforeStart("startedAt", "completedAt")
 @Serializable
+@PreventsTimeParadoxes(
+    "startedAt",
+    "completedAt")
 data class WorkflowExecution(
 
     @LongValueMin(0)

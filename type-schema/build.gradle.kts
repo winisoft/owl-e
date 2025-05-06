@@ -14,6 +14,10 @@ dependencies {
     implementation(project(":common"))
     implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
     implementation(libs.kotlinx.serialization.json)
+    
+    // OpenAPI spec generation
+    implementation("io.swagger.core.v3:swagger-core:2.2.20")
+    implementation("io.swagger.core.v3:swagger-models:2.2.20")
 }
 
 sourceSets.main {

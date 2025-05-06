@@ -1,6 +1,6 @@
 package com.wini.owle.api
 
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.OwleModel
 import kotlinx.serialization.Serializable
 
 @OwleModel

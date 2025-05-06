@@ -1,12 +1,11 @@
 package com.wini.owle.schema
 
 import com.google.devtools.ksp.processing.*
-import com.google.devtools.ksp.symbol.*
-import com.google.devtools.ksp.validate
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.wini.owle.content.doc.*
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import java.io.BufferedWriter
+import kotlinx.serialization.json.*
 
 /**
  * A symbol processor that extracts API documentation from the codebase structure.
@@ -36,23 +35,39 @@ class ApiDocProcessor(
     private val routeExtractor = RouteExtractor(logger)
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        logger.info("Starting API documentation extraction")
-        
-        // Process DTO models first
-        processModels(resolver)
-        
-        // Process errors
-        processErrors(resolver)
-        
-        // Find all endpoint implementations and extract their routes
-        processEndpoints(resolver)
-        
-        // Generate OpenAPI spec
-        generateOpenApiSpec()
-        
-        // Generate individual endpoint docs
-        endpoints.forEach { endpoint ->
-            generateEndpointDoc(endpoint)
+        try {
+            logger.info("Starting API documentation extraction")
+            
+            // Process DTO models first
+            processModels(resolver)
+            
+            // Process errors
+            processErrors(resolver)
+            
+            // Find all endpoint implementations and extract their routes
+            processEndpoints(resolver)
+            
+            // Don't generate for abstract base classes
+            endpoints.removeIf { it.name == "BaseEndpointImpl" || it.name == "CompositeIdEndpointImpl" || it.name == "LongIdEndpointImpl" }
+            
+            // Generate OpenAPI spec only if we found actual endpoints
+            if (endpoints.isNotEmpty()) {
+                generateOpenApiSpec()
+            } else {
+                logger.warn("No concrete API endpoints found. Skipping OpenAPI generation.")
+            }
+            
+            // Generate individual endpoint docs
+            endpoints.forEach { endpoint ->
+                try {
+                    generateEndpointDoc(endpoint)
+                } catch (e: Exception) {
+                    logger.error("Error generating doc for endpoint ${endpoint.name}: ${e.message}")
+                }
+            }
+        } catch (e: Exception) {
+            logger.error("Error in API doc processing: ${e.message}")
+            e.printStackTrace()
         }
         
         logger.info("Completed API documentation extraction")
@@ -207,13 +222,16 @@ class ApiDocProcessor(
         logger.info("  DTO type: $dtoType")
         
         // Look for any API documentation annotations
-        val description = endpointClass.annotations
+        val annotation = endpointClass.annotations
             .firstOrNull { it.annotationType.resolve().declaration.qualifiedName?.asString() == "com.wini.owle.content.OwleApiEndpoint" }
-            ?.arguments
+        
+        val descriptionFromAnnotation = annotation?.arguments
             ?.firstOrNull { it.name?.asString() == "description" }
-            ?.value as? String 
-            ?: endpointClass.docString 
-            ?: "No description available"
+            ?.value as? String
+            
+        val description = descriptionFromAnnotation
+            ?: endpointClass.docString
+            ?: "API for ${dtoType} management"
         
         // Extract tags from annotation if present
         val tags = (endpointClass.annotations
@@ -393,107 +411,141 @@ class ApiDocProcessor(
     }
     
     private fun generateOpenApiSpec() {
-        val file = codeGenerator.createNewFile(
-            Dependencies(false),
-            "com.wini.owle.openapi",
-            "openapi",
-            "json"
-        )
+        // Use try-catch to handle the case where the file already exists
+        try {
+            val file = codeGenerator.createNewFile(
+                Dependencies(false),
+                "com.wini.owle.openapi",
+                "openapi",
+                "json"
+            )
         
         // Convert endpoints to OpenAPI path structure
-        val paths = mutableMapOf<String, MutableMap<String, Any>>()
+        val pathsMap = mutableMapOf<String, JsonObject>()
         
         endpoints.forEach { endpoint ->
             endpoint.routes.forEach { route ->
                 val fullPath = endpoint.basePath + route.path
                 
-                val pathItem = paths.getOrPut(fullPath) { mutableMapOf() }
-                
-                route.operations.forEach { operation ->
-                    val method = operation.method.lowercase()
-                    
-                    // Convert operation to OpenAPI format
-                    // This is a simplified version
-                    val openApiOperation = mapOf(
-                        "summary" to operation.summary,
-                        "description" to operation.description,
-                        "tags" to endpoint.tags,
-                        "responses" to operation.responses.mapValues { (_, response) ->
-                            mapOf(
-                                "description" to response.description,
-                                "content" to response.content.mapValues { (_, mediaType) ->
-                                    mapOf(
-                                        "schema" to buildSchemaMap(mediaType.schema)
-                                    )
+                // Build a path item object for each path
+                val pathItemBuilder = buildJsonObject {
+                    route.operations.forEach { operation ->
+                        val method = operation.method.lowercase()
+                        
+                        // Add each operation to the path item
+                        putJsonObject(method) {
+                            put("summary", JsonPrimitive(operation.summary))
+                            put("description", JsonPrimitive(operation.description))
+                            
+                            putJsonArray("tags") {
+                                endpoint.tags.forEach { tag -> add(JsonPrimitive(tag)) }
+                            }
+                            
+                            putJsonObject("responses") {
+                                operation.responses.forEach { (code, response) ->
+                                    putJsonObject(code.toString()) {
+                                        put("description", JsonPrimitive(response.description))
+                                        
+                                        putJsonObject("content") {
+                                            response.content.forEach { (contentType, mediaType) ->
+                                                putJsonObject(contentType) {
+                                                    put("schema", buildJsonSchema(mediaType.schema))
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                            )
+                            }
                         }
-                    )
-                    
-                    pathItem[method] = openApiOperation
+                    }
                 }
+                
+                pathsMap[fullPath] = pathItemBuilder
             }
         }
         
         // Build components section with schemas
-        val schemas = models.mapValues { (_, model) ->
-            mapOf(
-                "type" to "object",
-                "properties" to model.properties.associate { prop ->
-                    prop.name to mapOf(
-                        "type" to getOpenApiType(prop.type),
-                        "description" to prop.description
-                    )
+        val schemasObject = buildJsonObject {
+            models.forEach { (_, model) ->
+                putJsonObject(model.name) {
+                    put("type", JsonPrimitive("object"))
+                    
+                    putJsonObject("properties") {
+                        model.properties.forEach { prop ->
+                            putJsonObject(prop.name) {
+                                put("type", JsonPrimitive(getOpenApiType(prop.type)))
+                                put("description", JsonPrimitive(prop.description))
+                            }
+                        }
+                    }
                 }
+            }
+        }
+        
+        // Create the map of components
+        val componentsMap = mapOf("schemas" to schemasObject)
+        
+        // Extract real API tags from endpoints for grouping
+        val apiTags = endpoints.flatMap { it.tags }.distinct().map { tagName ->
+            OpenApiSpec.Tag(
+                name = tagName,
+                description = "Operations related to $tagName"
             )
         }
         
-        val components = mapOf(
-            "schemas" to schemas
-        )
-        
         // Generate final OpenAPI spec
-        val openApiSpec = mapOf(
-            "openapi" to "3.0.0",
-            "info" to mapOf(
-                "title" to "Owle API",
-                "version" to "1.0.0",
-                "description" to "API documentation automatically generated from codebase structure"
+        val openApiSpec = OpenApiSpec(
+            openapi = "3.0.0",
+            info = OpenApiSpec.Info(
+                title = "Owle API",
+                version = "1.0.0",
+                description = "API documentation automatically generated from codebase structure"
             ),
-            "paths" to paths,
-            "components" to components
+            paths = pathsMap,
+            components = componentsMap,
+            tags = apiTags
         )
         
         // Write out the JSON
         file.bufferedWriter().use { writer ->
-            // In a real implementation, we'd use proper JSON serialization
-            // For this example, we're writing a simplified version
-            val json = Json { prettyPrint = true }
+            val json = Json { 
+                prettyPrint = true 
+                encodeDefaults = true
+            }
             writer.write(json.encodeToString(openApiSpec))
+        }
+        
+        logger.info("Successfully generated OpenAPI spec with ${pathsMap.size} paths and ${models.size} schemas")
+        } catch (e: Exception) {
+            logger.error("Error generating OpenAPI spec: ${e.message}")
         }
     }
     
-    private fun buildSchemaMap(schema: ApiSchemaDoc): Map<String, Any?> {
-        val result = mutableMapOf<String, Any?>()
-        
-        if (schema.type != null) result["type"] = schema.type
-        if (schema.format != null) result["format"] = schema.format
-        if (schema.description != null) result["description"] = schema.description
-        if (schema.ref != null) result["\$ref"] = schema.ref
-        
-        if (schema.properties.isNotEmpty()) {
-            result["properties"] = schema.properties.mapValues { buildSchemaMap(it.value) }
+    private fun buildJsonSchema(schema: ApiSchemaDoc): JsonObject {
+        return buildJsonObject {
+            if (schema.type != null) put("type", JsonPrimitive(schema.type))
+            if (schema.format != null) put("format", JsonPrimitive(schema.format))
+            if (schema.description != null) put("description", JsonPrimitive(schema.description))
+            if (schema.ref != null) put("\$ref", JsonPrimitive(schema.ref))
+            
+            if (schema.properties.isNotEmpty()) {
+                putJsonObject("properties") {
+                    schema.properties.forEach { (propName, propSchema) ->
+                        put(propName, buildJsonSchema(propSchema))
+                    }
+                }
+            }
+            
+            if (schema.items != null) {
+                put("items", buildJsonSchema(schema.items))
+            }
+            
+            if (schema.required.isNotEmpty()) {
+                putJsonArray("required") {
+                    schema.required.forEach { add(JsonPrimitive(it)) }
+                }
+            }
         }
-        
-        if (schema.items != null) {
-            result["items"] = buildSchemaMap(schema.items)
-        }
-        
-        if (schema.required.isNotEmpty()) {
-            result["required"] = schema.required
-        }
-        
-        return result
     }
     
     private fun getOpenApiType(kotlinType: String): String {

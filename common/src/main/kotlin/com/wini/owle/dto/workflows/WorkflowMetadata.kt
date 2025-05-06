@@ -1,7 +1,7 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto

@@ -1,11 +1,12 @@
 package com.wini.owle.dto.runs.test
 
-import com.wini.owle.ksp.StringMustNotContainRestricted
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.StringLengthMax
-import com.wini.owle.ksp.StringLengthMin
-import com.wini.owle.ksp.StringMustNotBeBlank
+import com.wini.owle.content.decorator.ListHasMembers
+import com.wini.owle.schema.StringMustNotContainRestricted
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.StringLengthMin
+import com.wini.owle.schema.StringMustNotBeBlank
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.workflow.WorkflowTestResult
 import com.wini.owle.dto.workflows.Step
@@ -16,18 +17,19 @@ import kotlinx.serialization.Serializable
 @OwleModel
 @Serializable
 data class TestCase(
+
     @LongValueMin(0)
     override val id: Long,
 
     val user: User,
 
-    @StringLengthMin(0)
+    @StringLengthMin(1)
     @StringMustNotContainRestricted
     @StringMustNotBeBlank
     @StringLengthMax(MAX_NAME_LENGTH)
     val name: String,
 
-    @StringLengthMin(0)
+    @StringLengthMin(1)
     @StringMustNotContainRestricted
     @StringMustNotBeBlank
     @StringLengthMax(MAX_DESC_LENGTH)
@@ -39,6 +41,7 @@ data class TestCase(
 
     val inputs: List<TestInput>,
 
+    @ListHasMembers
     val expectedOutcomes: List<TestExpectation>,
 
     val results: List<WorkflowTestResult>

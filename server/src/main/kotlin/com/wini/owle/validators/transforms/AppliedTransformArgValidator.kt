@@ -1,11 +1,9 @@
 package com.wini.owle.validators.transforms
 
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.transforms.AppliedTransformArg
 import com.wini.owle.validators.BaseValidator
 
@@ -16,7 +14,7 @@ class AppliedTransformArgValidator(
 ) : BaseValidator<AppliedTransformArg>() {
 
 
-    override fun fieldValidations(dto: AppliedTransformArg):List<FieldValidation> {
+    override fun fieldValidations(dto: AppliedTransformArg):List<FieldConstraintError> {
 
         return listOf()
     }}

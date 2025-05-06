@@ -7,7 +7,6 @@ import com.wini.owle.content.doc.ModelPropertyDoc
 import com.wini.owle.content.doc.OwleErrorDoc
 import com.wini.owle.ksp.OwleModel
 
-
 /**
  * A symbol processor designed to facilitate the generation of code and documentation relevant to the Owl-e application. 
  * Its primary focus is upon the classes of the common module's 'dto' model types, which are the types the API trades in and
@@ -22,6 +21,12 @@ class ModelSchemaProcessor(
 ) : SymbolProcessor {
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
+        logger.warn("begin ModelSchemaProcessor")
+        val m = resolver
+            .getSymbolsWithAnnotation(OwleModel::class.qualifiedName!!)
+        logger.warn("got m")
+        logger.warn("m as list size? ${m.toList().count()}")
+
         val models = resolver
             .getSymbolsWithAnnotation(OwleModel::class.qualifiedName!!)
             .filterIsInstance<KSClassDeclaration>()

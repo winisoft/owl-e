@@ -1,8 +1,7 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.steps.Provision
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.workflows.DataPointValidator
@@ -15,7 +14,7 @@ class ProvisionValidator(
     private val dataPointsValidator: DataPointValidator
 ) : BaseValidator<Provision>() {
 
-    override fun fieldValidations(dto: Provision):List<FieldValidation> {
+    override fun fieldValidations(dto: Provision):List<FieldConstraintError> {
         return listOf()
     }
 

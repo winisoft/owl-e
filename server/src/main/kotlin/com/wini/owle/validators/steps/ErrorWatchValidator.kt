@@ -1,7 +1,7 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.steps.ErrorWatch
 import com.wini.owle.validators.BaseValidator
 
@@ -15,7 +15,7 @@ class ErrorWatchValidator(
         const val MAX_ERROR_TYPE_LENGTH = 255
     }
 
-    override fun fieldValidations(dto: ErrorWatch):List<FieldValidation> {
+    override fun fieldValidations(dto: ErrorWatch):List<FieldConstraintError> {
         return listOf()
     }
 }

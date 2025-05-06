@@ -1,17 +1,11 @@
 package com.wini.owle.validators.typing
 
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.typing.TypeSchemaRef
-import com.wini.owle.dto.typing.TypeVariance
-import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.workflows.WorkflowFolderValidator.Companion.MAX_DESC_LENGTH
-import com.wini.owle.validators.workflows.WorkflowValidator
 
 @OwleValidator(model = TypeSchemaRef::class)
 class TypeSchemaRefValidator(
@@ -23,7 +17,7 @@ class TypeSchemaRefValidator(
     }
 
     //TODO: val parentRef: TypeSchemaRef?, val childRefs: List<TypeSchemaRef>
-    override fun fieldValidations(dto: TypeSchemaRef): List<FieldValidation> {
+    override fun fieldValidations(dto: TypeSchemaRef): List<FieldConstraintError> {
         return listOf()
     }
 }

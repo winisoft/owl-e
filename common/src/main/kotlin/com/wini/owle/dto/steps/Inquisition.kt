@@ -1,8 +1,8 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.ksp.IntValueMin
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.IntValueMin
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.DataPoint

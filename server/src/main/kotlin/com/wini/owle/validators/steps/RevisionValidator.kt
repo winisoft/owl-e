@@ -1,7 +1,7 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.steps.DataPointSave
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.workflows.DataPointValidator
@@ -13,6 +13,6 @@ class RevisionValidator(
     private val stepValidator: StepValidator
 ) : BaseValidator<DataPointSave>() {
 
-    override fun fieldValidations(dto: DataPointSave):List<FieldValidation> {
+    override fun fieldValidations(dto: DataPointSave):List<FieldConstraintError> {
         return listOf()
     }}

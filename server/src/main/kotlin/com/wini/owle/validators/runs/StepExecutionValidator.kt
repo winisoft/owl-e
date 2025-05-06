@@ -1,11 +1,9 @@
 package com.wini.owle.validators.runs
 
 
-import com.wini.owle.error.FieldValidation
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.runs.step.StepExecution
-import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.steps.StepValidator
 
@@ -16,7 +14,7 @@ class StepExecutionValidator(
     private val stepValidator: StepValidator
 ): BaseValidator<StepExecution>() {
 
-    override fun fieldValidations(dto: StepExecution):List<FieldValidation> {
+    override fun fieldValidations(dto: StepExecution):List<FieldConstraintError> {
         return listOf()
     }
 }

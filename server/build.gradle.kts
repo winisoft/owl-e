@@ -1,11 +1,11 @@
+import com.google.devtools.ksp.gradle.KspTask
+import com.google.devtools.ksp.gradle.model.Ksp
 
 plugins {
     application
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.dokka)
     alias(libs.plugins.ktor)
-    alias(libs.plugins.openApiGenerator)
     alias(libs.plugins.ksp)
 }
 
@@ -24,9 +24,9 @@ sourceSets.test {
 sourceSets {
     main {
         dependencies {
-            implementation(projects.common)//project(":common"))
-            implementation(projects.typeSchema)//project(":type-schema"))
-            ksp(projects.typeSchema) //(":type-schema"))
+            implementation(projects.common)
+            implementation(projects.typeSchema)
+            ksp(projects.typeSchema)
             implementation(libs.logback)
             implementation(libs.ktor.server.core)
             implementation(libs.ktor.server.netty)
@@ -44,7 +44,6 @@ sourceSets {
             implementation(libs.stripe.java)
             implementation("io.ktor:ktor-server-swagger:3.1.2")
             implementation("io.ktor:ktor-server-openapi:2.3.13")
-
         }
     }
     test {
@@ -62,11 +61,10 @@ sourceSets {
             testImplementation(libs.kotlin.test.junit)
             implementation(libs.ktor.server.tests)
             implementation(libs.kotlin.test.junit)
-
             implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
             implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-            testImplementation("org.mockito:mockito-core:5.6.0") // Adjust to latest version
-            testImplementation("org.mockito:mockito-inline:5.2.0") // For mocking final classes
+            testImplementation("org.mockito:mockito-core:5.6.0")
+            testImplementation("org.mockito:mockito-inline:5.2.0")
             testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
         }
     }
@@ -79,35 +77,6 @@ tasks.test {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
-//
-//tasks.dokkaHtml {
-//    outputDirectory.set(buildDir.resolve("dokka"))
-//}
-//
-//openApiGenerate {
-//    validateSpec.set(true)
-//    configFile.set("$rootDir/oai/configuraton.yaml")
-//    apiPackage.set("com.wini.owle.api")
-//    modelPackage.set("com.wini.owle.dto")
-//    generateApiTests.set(true)
-//    generateModelDocumentation.set(true)
-//    generateApiDocumentation.set(true)
-//    apiFilesConstrainedTo.add("$rootDir/main/kotlin/com/wini/owle/api")
-//    modelFilesConstrainedTo.add("$rootDir/main/kotlin/com/wini/owle/dto")
-//    globalProperties.putAll(
-//        mutableMapOf(
-//
-//            "" to ""
-//        )
-//    )
-//    generatorName.set("kotlin")
-//    inputSpec.set("$rootDir/specs/petstore-v3.0.yaml")
-//    outputDir.set("$buildDir/generated")
-//    apiPackage.set("org.openapi.example.api")
-//    invokerPackage.set("org.openapi.example.invoker")
-//    modelPackage.set("org.openapi.example.model")
-//    configOptions.put("dateLibrary", "java8")
-//}
 
 application {
     mainClass.set("com.wini.owle.MainKt")

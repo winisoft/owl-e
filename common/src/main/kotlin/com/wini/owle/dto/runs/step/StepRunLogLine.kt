@@ -1,13 +1,13 @@
 package com.wini.owle.dto.runs.step
 
-import com.wini.owle.ksp.StringMustNotContainRestricted
-import com.wini.owle.ksp.LongValueMin
-import com.wini.owle.ksp.OwleModel
-import com.wini.owle.ksp.StringLengthMax
-import com.wini.owle.ksp.StringLengthMin
-import com.wini.owle.ksp.StringMustNotBeBlank
-import com.wini.owle.ksp.TimestampCoherent
-import com.wini.owle.ksp.TimestampIso8601Format
+import com.wini.owle.schema.StringMustNotContainRestricted
+import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.StringLengthMin
+import com.wini.owle.schema.StringMustNotBeBlank
+import com.wini.owle.schema.TimestampCoherent
+import com.wini.owle.schema.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.enums.LogLevel
 import kotlinx.serialization.Serializable
@@ -19,6 +19,7 @@ import kotlinx.serialization.Serializable
 @OwleModel
 @Serializable
 data class StepRunLogLine(
+
     @LongValueMin(0)
     override val id: Long,
 

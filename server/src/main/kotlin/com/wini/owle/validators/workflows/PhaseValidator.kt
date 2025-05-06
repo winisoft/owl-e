@@ -1,8 +1,8 @@
 package com.wini.owle.validators.workflows
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.workflows.Phase
 import com.wini.owle.validators.BaseValidator
 
@@ -17,7 +17,7 @@ class PhaseValidator(
         const val MAX_DESC_LENGTH = 16_000
     }
 
-    override fun fieldValidations(dto: Phase): List<FieldValidation> {
+    override fun fieldValidations(dto: Phase): List<FieldConstraintError> {
 
         return listOf()
     }

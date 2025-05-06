@@ -5,7 +5,7 @@ import com.wini.owle.error.AuthenticationError
 import com.wini.owle.error.AuthorizationError
 import com.wini.owle.error.DatabaseError
 import com.wini.owle.error.EmptyListNotAllowed
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 import com.wini.owle.error.MissingParameter
 import com.wini.owle.error.MultipleParamFailure
 import com.wini.owle.error.MultipleTypeValidations
@@ -19,7 +19,7 @@ object ErrorMapper {
     fun asyncToApi(error: OwleError) {
         error.run {
             when (this) {
-                is FieldValidation -> ApiError(errorCode, message, detail)
+                is FieldConstraintError -> ApiError(errorCode, message, detail)
                 EmptyListNotAllowed -> TODO()
                 is MissingParameter -> TODO()
                 is MultipleParamFailure -> TODO()

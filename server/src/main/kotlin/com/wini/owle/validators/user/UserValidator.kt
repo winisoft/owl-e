@@ -1,13 +1,12 @@
 package com.wini.owle.validators.user
 
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.InconsistentOAuthId
-import com.wini.owle.ksp.OwleValidator
+import com.wini.owle.schema.InconsistentOAuthId
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.user.User
 import com.wini.owle.validators.BaseValidator
-import com.wini.owle.validators.workflows.WorkflowValidator
 
 
 @OwleValidator(User::class)
@@ -23,7 +22,7 @@ class UserValidator : BaseValidator<User>() {
         const val MAX_API_KEY_LENGTH = 255
     }
 
-    override fun fieldValidations(dto: User):List<FieldValidation> {
+    override fun fieldValidations(dto: User):List<FieldConstraintError> {
 
         return listOf()
     }

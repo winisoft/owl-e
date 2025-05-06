@@ -1,9 +1,8 @@
 package com.wini.owle.validators.steps
 
-import com.wini.owle.error.FieldValidation
+import com.wini.owle.error.FieldConstraintError
 
-import com.wini.owle.ksp.OwleValidator
-import com.wini.owle.dto.environs.PyPackageRepo
+import com.wini.owle.schema.OwleValidator
 import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.validators.BaseValidator
 import com.wini.owle.validators.typing.TypeDeclarationValidator
@@ -20,7 +19,7 @@ class ToolValidator(
         const val MAX_BODY_LENGTH = 15_000
     }
 
-    override fun fieldValidations(dto: Tool):List<FieldValidation> {
+    override fun fieldValidations(dto: Tool):List<FieldConstraintError> {
 
         return listOf()
     }
