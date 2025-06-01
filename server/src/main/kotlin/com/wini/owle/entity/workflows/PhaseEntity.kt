@@ -1,26 +1,22 @@
 package com.wini.owle.entity.workflows
 
-import com.wini.owle.entity.Phases
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents a phase within a workflow, grouping steps or other phases.
  * Phases support hierarchical organization, enabling subphases.
  */
-class PhaseEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<PhaseEntity>(Phases)
+class PhaseEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<PhaseEntity>(Phases)
 
     /**
      * Workflow containing this phase.
      */
     var workflow by WorkflowEntity referencedOn Phases.workflow
-
-    /**
-     * Reference to the parent phase, if this phase is part of a hierarchical structure.
-     */
-    var parentPhase by PhaseEntity optionalReferencedOn Phases.parentPhase
 
     /**
      * Name of the phase, used for identification within the workflow.
@@ -36,4 +32,8 @@ class PhaseEntity(id: EntityID<Long>) : LongEntity(id) {
      * Specifies the order in which the phase appears within the workflow.
      */
     var displayOrder by Phases.displayOrder
+
+    val parentPhases get() = PhaseRelationEntity.find { PhaseRelations.child eq id }.map { it.parent }
+
+    val childPhases get() = PhaseRelationEntity.find { PhaseRelations.parent eq id }.map { it.child }
 }

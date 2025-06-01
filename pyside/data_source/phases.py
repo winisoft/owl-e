@@ -1,0 +1,27916 @@
+phases = {
+    "items": [
+  {
+    "name": "Data Preparation",
+    "description": "Ensure input image and depth map are available and properly formatted.",
+    "child_phases": [
+      {
+        "name": "Image Load",
+        "description": "Load the input image.",
+        "id": 2,
+        "workflow_id": 1,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Depth Map Load",
+        "description": "Load the corresponding depth map.",
+        "id": 3,
+        "workflow_id": 1,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1,
+    "workflow_id": 1,
+    "display_order": 0
+  },
+  {
+    "name": "Image Load",
+    "description": "Load the input image.",
+    "id": 2,
+    "workflow_id": 1,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Depth Map Load",
+    "description": "Load the corresponding depth map.",
+    "id": 3,
+    "workflow_id": 1,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "3D Model Creation",
+    "description": "Create a 3D model using the loaded image and depth map.",
+    "child_phases": [
+      {
+        "name": "Image to Mesh",
+        "description": "Convert the input image into a mesh using the depth information.",
+        "id": 5,
+        "workflow_id": 1,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Mesh Cleanup",
+        "description": "Clean up the generated mesh (e.g., remove unwanted vertices, close gaps)",
+        "id": 6,
+        "workflow_id": 1,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 4,
+    "workflow_id": 1,
+    "display_order": 1
+  },
+  {
+    "name": "Image to Mesh",
+    "description": "Convert the input image into a mesh using the depth information.",
+    "id": 5,
+    "workflow_id": 1,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Mesh Cleanup",
+    "description": "Clean up the generated mesh (e.g., remove unwanted vertices, close gaps)",
+    "id": 6,
+    "workflow_id": 1,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Refinement",
+    "description": "Refine and enhance the created model.",
+    "child_phases": [
+      {
+        "name": "Mesh Optimization",
+        "description": "Optimize the mesh for performance.",
+        "id": 8,
+        "workflow_id": 1,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Texture Mapping",
+        "description": "Map the input image onto the 3D model as a texture.",
+        "id": 9,
+        "workflow_id": 1,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 7,
+    "workflow_id": 1,
+    "display_order": 2
+  },
+  {
+    "name": "Mesh Optimization",
+    "description": "Optimize the mesh for performance.",
+    "id": 8,
+    "workflow_id": 1,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Texture Mapping",
+    "description": "Map the input image onto the 3D model as a texture.",
+    "id": 9,
+    "workflow_id": 1,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output and Export",
+    "description": "Prepare and export the final 3D model.",
+    "child_phases": [
+      {
+        "name": "Model Output",
+        "description": "Display the final 3D model in Blender.",
+        "id": 11,
+        "workflow_id": 1,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Export Model",
+        "description": "Export the final 3D model to a desired file format (e.g., .obj, .stl).",
+        "id": 12,
+        "workflow_id": 1,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 10,
+    "workflow_id": 1,
+    "display_order": 3
+  },
+  {
+    "name": "Model Output",
+    "description": "Display the final 3D model in Blender.",
+    "id": 11,
+    "workflow_id": 1,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Export Model",
+    "description": "Export the final 3D model to a desired file format (e.g., .obj, .stl).",
+    "id": 12,
+    "workflow_id": 1,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Image Input",
+    "description": "Read and load images from the specified input source.",
+    "child_phases": [
+      {
+        "name": "Load Images",
+        "description": "Use libraries like OpenCV or PIL to load images.",
+        "id": 14,
+        "workflow_id": 2,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Preprocess Images",
+        "description": "Apply necessary preprocessing techniques like resizing, normalization, etc.",
+        "id": 15,
+        "workflow_id": 2,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 13,
+    "workflow_id": 2,
+    "display_order": 0
+  },
+  {
+    "name": "Load Images",
+    "description": "Use libraries like OpenCV or PIL to load images.",
+    "id": 14,
+    "workflow_id": 2,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Preprocess Images",
+    "description": "Apply necessary preprocessing techniques like resizing, normalization, etc.",
+    "id": 15,
+    "workflow_id": 2,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Extraction",
+    "description": "Extract meaningful features from the input images.",
+    "child_phases": [
+      {
+        "name": "Edge Detection",
+        "description": "Use algorithms like Canny or Sobel to extract edges.",
+        "id": 17,
+        "workflow_id": 2,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Color Analysis",
+        "description": "Extract color histograms or analyze colors using RGB/HSV models.",
+        "id": 18,
+        "workflow_id": 2,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Texture Analysis",
+        "description": "Use techniques like Local Binary Patterns (LBP) for texture extraction.",
+        "id": 19,
+        "workflow_id": 2,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 16,
+    "workflow_id": 2,
+    "display_order": 1
+  },
+  {
+    "name": "Edge Detection",
+    "description": "Use algorithms like Canny or Sobel to extract edges.",
+    "id": 17,
+    "workflow_id": 2,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Color Analysis",
+    "description": "Extract color histograms or analyze colors using RGB/HSV models.",
+    "id": 18,
+    "workflow_id": 2,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Texture Analysis",
+    "description": "Use techniques like Local Binary Patterns (LBP) for texture extraction.",
+    "id": 19,
+    "workflow_id": 2,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Image Analysis",
+    "description": "Analyze the extracted features to gain insights or make decisions.",
+    "child_phases": [
+      {
+        "name": "Feature Vector Creation",
+        "description": "Combine extracted features into a vector for each image.",
+        "id": 21,
+        "workflow_id": 2,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dimensionality Reduction",
+        "description": "Apply techniques like PCA to reduce feature dimensions.",
+        "id": 22,
+        "workflow_id": 2,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Classification/Clustering",
+        "description": "Use machine learning algorithms to classify or cluster images based on extracted features.",
+        "id": 23,
+        "workflow_id": 2,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 20,
+    "workflow_id": 2,
+    "display_order": 2
+  },
+  {
+    "name": "Feature Vector Creation",
+    "description": "Combine extracted features into a vector for each image.",
+    "id": 21,
+    "workflow_id": 2,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dimensionality Reduction",
+    "description": "Apply techniques like PCA to reduce feature dimensions.",
+    "id": 22,
+    "workflow_id": 2,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Classification/Clustering",
+    "description": "Use machine learning algorithms to classify or cluster images based on extracted features.",
+    "id": 23,
+    "workflow_id": 2,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output based on the analysis performed.",
+    "child_phases": [
+      {
+        "name": "Result Visualization",
+        "description": "Visualize the results using plots, charts, or heatmaps.",
+        "id": 25,
+        "workflow_id": 2,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate reports in a suitable format (e.g., PDF, HTML) containing analysis results.",
+        "id": 26,
+        "workflow_id": 2,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 24,
+    "workflow_id": 2,
+    "display_order": 3
+  },
+  {
+    "name": "Result Visualization",
+    "description": "Visualize the results using plots, charts, or heatmaps.",
+    "id": 25,
+    "workflow_id": 2,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate reports in a suitable format (e.g., PDF, HTML) containing analysis results.",
+    "id": 26,
+    "workflow_id": 2,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Handling raw data, cleaning, transforming and loading.",
+    "child_phases": [
+      {
+        "name": "Data Loading",
+        "description": "Reading datasets from various sources.",
+        "id": 28,
+        "workflow_id": 3,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handling missing values, outliers, and inconsistencies.",
+        "id": 29,
+        "workflow_id": 3,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Data Transformation",
+        "description": "Aggregating, merging, and reshaping data as needed.",
+        "id": 30,
+        "workflow_id": 3,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 27,
+    "workflow_id": 3,
+    "display_order": 0
+  },
+  {
+    "name": "Data Loading",
+    "description": "Reading datasets from various sources.",
+    "id": 28,
+    "workflow_id": 3,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handling missing values, outliers, and inconsistencies.",
+    "id": 29,
+    "workflow_id": 3,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Aggregating, merging, and reshaping data as needed.",
+    "id": 30,
+    "workflow_id": 3,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis (EDA)",
+    "description": "Understanding the main characteristics of the data.",
+    "child_phases": [
+      {
+        "name": "Descriptive Statistics",
+        "description": "Calculating summary statistics like mean, median, mode.",
+        "id": 32,
+        "workflow_id": 3,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Visualization",
+        "description": "Creating plots and charts to visualize data patterns.",
+        "id": 33,
+        "workflow_id": 3,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 31,
+    "workflow_id": 3,
+    "display_order": 1
+  },
+  {
+    "name": "Descriptive Statistics",
+    "description": "Calculating summary statistics like mean, median, mode.",
+    "id": 32,
+    "workflow_id": 3,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Creating plots and charts to visualize data patterns.",
+    "id": 33,
+    "workflow_id": 3,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Statistical Analysis",
+    "description": "Performing statistical tests and modeling.",
+    "child_phases": [
+      {
+        "name": "Hypothesis Testing",
+        "description": "Testing claims or assumptions about the population using sample data.",
+        "id": 35,
+        "workflow_id": 3,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Regression Modeling",
+        "description": "Building predictive models to understand relationships between variables.",
+        "id": 36,
+        "workflow_id": 3,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 34,
+    "workflow_id": 3,
+    "display_order": 2
+  },
+  {
+    "name": "Hypothesis Testing",
+    "description": "Testing claims or assumptions about the population using sample data.",
+    "id": 35,
+    "workflow_id": 3,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Regression Modeling",
+    "description": "Building predictive models to understand relationships between variables.",
+    "id": 36,
+    "workflow_id": 3,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Results Interpretation",
+    "description": "Interpreting and communicating statistical findings.",
+    "id": 37,
+    "workflow_id": 3,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Video Production Pipeline",
+    "description": "End-to-end process for creating, editing, and rendering video content.",
+    "child_phases": [
+      {
+        "name": "Pre-production",
+        "description": "Planning and preparation phase before actual video production begins.",
+        "child_phases": [
+          {
+            "name": "Concept Development",
+            "description": "Idea generation and scriptwriting.",
+            "id": 40,
+            "workflow_id": 4,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Storyboarding",
+            "description": "Visual representation of the video script.",
+            "id": 41,
+            "workflow_id": 4,
+            "display_order": 1,
+            "child_phases": []
+          },
+          {
+            "name": "Location Scouting",
+            "description": "Finding suitable locations for shooting.",
+            "id": 42,
+            "workflow_id": 4,
+            "display_order": 2,
+            "child_phases": []
+          }
+        ],
+        "id": 39,
+        "workflow_id": 4,
+        "display_order": 0
+      },
+      {
+        "name": "Production",
+        "description": "Actual filming and recording of the video content.",
+        "child_phases": [
+          {
+            "name": "Video Recording",
+            "description": "Capturing raw footage using cameras or other devices.",
+            "id": 44,
+            "workflow_id": 4,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Audio Recording",
+            "description": "Recording clear audio for synchronization with video.",
+            "id": 45,
+            "workflow_id": 4,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 43,
+        "workflow_id": 4,
+        "display_order": 1
+      },
+      {
+        "name": "Post-production",
+        "description": "Editing and rendering of the recorded video content.",
+        "child_phases": [
+          {
+            "name": "Video Editing",
+            "description": "Assembly of footage, adding transitions and effects.",
+            "id": 47,
+            "workflow_id": 4,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Color Grading",
+            "description": "Adjusting color balance for a consistent look throughout the video.",
+            "id": 48,
+            "workflow_id": 4,
+            "display_order": 1,
+            "child_phases": []
+          },
+          {
+            "name": "Sound Design",
+            "description": "Adding background music, sound effects, and mixing audio tracks.",
+            "id": 49,
+            "workflow_id": 4,
+            "display_order": 2,
+            "child_phases": []
+          },
+          {
+            "name": "Rendering",
+            "description": "Exporting the final edited video in the desired format and resolution.",
+            "id": 50,
+            "workflow_id": 4,
+            "display_order": 3,
+            "child_phases": []
+          }
+        ],
+        "id": 46,
+        "workflow_id": 4,
+        "display_order": 2
+      }
+    ],
+    "id": 38,
+    "workflow_id": 4,
+    "display_order": 0
+  },
+  {
+    "name": "Pre-production",
+    "description": "Planning and preparation phase before actual video production begins.",
+    "child_phases": [
+      {
+        "name": "Concept Development",
+        "description": "Idea generation and scriptwriting.",
+        "id": 40,
+        "workflow_id": 4,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Storyboarding",
+        "description": "Visual representation of the video script.",
+        "id": 41,
+        "workflow_id": 4,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Location Scouting",
+        "description": "Finding suitable locations for shooting.",
+        "id": 42,
+        "workflow_id": 4,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 39,
+    "workflow_id": 4,
+    "display_order": 0
+  },
+  {
+    "name": "Concept Development",
+    "description": "Idea generation and scriptwriting.",
+    "id": 40,
+    "workflow_id": 4,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Storyboarding",
+    "description": "Visual representation of the video script.",
+    "id": 41,
+    "workflow_id": 4,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Location Scouting",
+    "description": "Finding suitable locations for shooting.",
+    "id": 42,
+    "workflow_id": 4,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Production",
+    "description": "Actual filming and recording of the video content.",
+    "child_phases": [
+      {
+        "name": "Video Recording",
+        "description": "Capturing raw footage using cameras or other devices.",
+        "id": 44,
+        "workflow_id": 4,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Audio Recording",
+        "description": "Recording clear audio for synchronization with video.",
+        "id": 45,
+        "workflow_id": 4,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 43,
+    "workflow_id": 4,
+    "display_order": 1
+  },
+  {
+    "name": "Video Recording",
+    "description": "Capturing raw footage using cameras or other devices.",
+    "id": 44,
+    "workflow_id": 4,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Audio Recording",
+    "description": "Recording clear audio for synchronization with video.",
+    "id": 45,
+    "workflow_id": 4,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Post-production",
+    "description": "Editing and rendering of the recorded video content.",
+    "child_phases": [
+      {
+        "name": "Video Editing",
+        "description": "Assembly of footage, adding transitions and effects.",
+        "id": 47,
+        "workflow_id": 4,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Color Grading",
+        "description": "Adjusting color balance for a consistent look throughout the video.",
+        "id": 48,
+        "workflow_id": 4,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Sound Design",
+        "description": "Adding background music, sound effects, and mixing audio tracks.",
+        "id": 49,
+        "workflow_id": 4,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Rendering",
+        "description": "Exporting the final edited video in the desired format and resolution.",
+        "id": 50,
+        "workflow_id": 4,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 46,
+    "workflow_id": 4,
+    "display_order": 2
+  },
+  {
+    "name": "Video Editing",
+    "description": "Assembly of footage, adding transitions and effects.",
+    "id": 47,
+    "workflow_id": 4,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Color Grading",
+    "description": "Adjusting color balance for a consistent look throughout the video.",
+    "id": 48,
+    "workflow_id": 4,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Sound Design",
+    "description": "Adding background music, sound effects, and mixing audio tracks.",
+    "id": 49,
+    "workflow_id": 4,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Rendering",
+    "description": "Exporting the final edited video in the desired format and resolution.",
+    "id": 50,
+    "workflow_id": 4,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and clean input data",
+    "child_phases": [
+      {
+        "name": "Data Collection",
+        "description": "Gather all necessary data",
+        "id": 52,
+        "workflow_id": 5,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, and inconsistencies",
+        "id": 53,
+        "workflow_id": 5,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 51,
+    "workflow_id": 5,
+    "display_order": 0
+  },
+  {
+    "name": "Data Collection",
+    "description": "Gather all necessary data",
+    "id": 52,
+    "workflow_id": 5,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, and inconsistencies",
+    "id": 53,
+    "workflow_id": 5,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features from existing ones to improve model performance",
+    "id": 54,
+    "workflow_id": 5,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis",
+    "description": "Analyze and visualize data to gain insights",
+    "id": 55,
+    "workflow_id": 5,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose appropriate machine learning models for the task",
+    "child_phases": [
+      {
+        "name": "Understand Task Type",
+        "description": "Classify task as regression, classification, clustering, etc.",
+        "id": 57,
+        "workflow_id": 5,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Consider Model Types",
+        "description": "Evaluate different model types based on task type",
+        "id": 58,
+        "workflow_id": 5,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 56,
+    "workflow_id": 5,
+    "display_order": 3
+  },
+  {
+    "name": "Understand Task Type",
+    "description": "Classify task as regression, classification, clustering, etc.",
+    "id": 57,
+    "workflow_id": 5,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Consider Model Types",
+    "description": "Evaluate different model types based on task type",
+    "id": 58,
+    "workflow_id": 5,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Training",
+    "description": "Train selected models using prepared data",
+    "child_phases": [
+      {
+        "name": "Split Data",
+        "description": "Divide data into training, validation, and test sets",
+        "id": 60,
+        "workflow_id": 5,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Hyperparameter Tuning",
+        "description": "Optimize model hyperparameters for better performance",
+        "id": 61,
+        "workflow_id": 5,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 59,
+    "workflow_id": 5,
+    "display_order": 4
+  },
+  {
+    "name": "Split Data",
+    "description": "Divide data into training, validation, and test sets",
+    "id": 60,
+    "workflow_id": 5,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Hyperparameter Tuning",
+    "description": "Optimize model hyperparameters for better performance",
+    "id": 61,
+    "workflow_id": 5,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Evaluation",
+    "description": "Evaluate trained models' performance using appropriate metrics",
+    "child_phases": [
+      {
+        "name": "Select Evaluation Metrics",
+        "description": "Choose relevant evaluation metrics based on task type",
+        "id": 63,
+        "workflow_id": 5,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Compare Models",
+        "description": "Compare the performance of different models",
+        "id": 64,
+        "workflow_id": 5,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 62,
+    "workflow_id": 5,
+    "display_order": 5
+  },
+  {
+    "name": "Select Evaluation Metrics",
+    "description": "Choose relevant evaluation metrics based on task type",
+    "id": 63,
+    "workflow_id": 5,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Compare Models",
+    "description": "Compare the performance of different models",
+    "id": 64,
+    "workflow_id": 5,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection & Optimization",
+    "description": "Select best performing model and fine-tune if necessary",
+    "child_phases": [
+      {
+        "name": "Best Model Selection",
+        "description": "Choose the model with the best performance",
+        "id": 66,
+        "workflow_id": 5,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Fine-Tuning",
+        "description": "Further optimize selected model if required",
+        "id": 67,
+        "workflow_id": 5,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 65,
+    "workflow_id": 5,
+    "display_order": 6
+  },
+  {
+    "name": "Best Model Selection",
+    "description": "Choose the model with the best performance",
+    "id": 66,
+    "workflow_id": 5,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Fine-Tuning",
+    "description": "Further optimize selected model if required",
+    "id": 67,
+    "workflow_id": 5,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Deployment",
+    "description": "Deploy trained model for prediction or inference",
+    "id": 68,
+    "workflow_id": 5,
+    "display_order": 7,
+    "child_phases": []
+  },
+  {
+    "name": "Monitoring & Updating",
+    "description": "Monitor model performance, collect feedback, and update as needed",
+    "id": 69,
+    "workflow_id": 5,
+    "display_order": 8,
+    "child_phases": []
+  },
+  {
+    "name": "Game Level Design Workflow",
+    "description": "Design and test levels for an upcoming video game",
+    "child_phases": [
+      {
+        "name": "Level Planning",
+        "description": "Define level goals, layout, and gameplay elements",
+        "id": 71,
+        "workflow_id": 6,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Level Creation",
+        "description": "Create and populate levels using design tools",
+        "child_phases": [
+          {
+            "name": "Environment Setup",
+            "description": "Set up terrain, lighting, and environment props",
+            "id": 73,
+            "workflow_id": 6,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Enemy Placement",
+            "description": "Place enemies according to level goals",
+            "id": 74,
+            "workflow_id": 6,
+            "display_order": 1,
+            "child_phases": []
+          },
+          {
+            "name": "Puzzle Design",
+            "description": "Design puzzles and obstacles for players to overcome",
+            "id": 75,
+            "workflow_id": 6,
+            "display_order": 2,
+            "child_phases": []
+          }
+        ],
+        "id": 72,
+        "workflow_id": 6,
+        "display_order": 1
+      },
+      {
+        "name": "Level Testing",
+        "description": "Test levels for gameplay balance, fun factor, and bugs",
+        "child_phases": [
+          {
+            "name": "Playtesting",
+            "description": "Test levels manually or with AI agents to gather feedback",
+            "id": 77,
+            "workflow_id": 6,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Balance Adjustment",
+            "description": "Adjust difficulty, enemy strength, and other gameplay elements based on testing results",
+            "id": 78,
+            "workflow_id": 6,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 76,
+        "workflow_id": 6,
+        "display_order": 2
+      },
+      {
+        "name": "Level Iteration",
+        "description": "Refine levels based on playtesting feedback and design goals",
+        "id": 79,
+        "workflow_id": 6,
+        "display_order": 3,
+        "child_phases": []
+      },
+      {
+        "name": "Finalization",
+        "description": "Prepare levels for handoff to programming team by ensuring all assets are properly placed and documented",
+        "id": 80,
+        "workflow_id": 6,
+        "display_order": 4,
+        "child_phases": []
+      }
+    ],
+    "id": 70,
+    "workflow_id": 6,
+    "display_order": 0
+  },
+  {
+    "name": "Level Planning",
+    "description": "Define level goals, layout, and gameplay elements",
+    "id": 71,
+    "workflow_id": 6,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Level Creation",
+    "description": "Create and populate levels using design tools",
+    "child_phases": [
+      {
+        "name": "Environment Setup",
+        "description": "Set up terrain, lighting, and environment props",
+        "id": 73,
+        "workflow_id": 6,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Enemy Placement",
+        "description": "Place enemies according to level goals",
+        "id": 74,
+        "workflow_id": 6,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Puzzle Design",
+        "description": "Design puzzles and obstacles for players to overcome",
+        "id": 75,
+        "workflow_id": 6,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 72,
+    "workflow_id": 6,
+    "display_order": 1
+  },
+  {
+    "name": "Environment Setup",
+    "description": "Set up terrain, lighting, and environment props",
+    "id": 73,
+    "workflow_id": 6,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Enemy Placement",
+    "description": "Place enemies according to level goals",
+    "id": 74,
+    "workflow_id": 6,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Puzzle Design",
+    "description": "Design puzzles and obstacles for players to overcome",
+    "id": 75,
+    "workflow_id": 6,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Level Testing",
+    "description": "Test levels for gameplay balance, fun factor, and bugs",
+    "child_phases": [
+      {
+        "name": "Playtesting",
+        "description": "Test levels manually or with AI agents to gather feedback",
+        "id": 77,
+        "workflow_id": 6,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Balance Adjustment",
+        "description": "Adjust difficulty, enemy strength, and other gameplay elements based on testing results",
+        "id": 78,
+        "workflow_id": 6,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 76,
+    "workflow_id": 6,
+    "display_order": 2
+  },
+  {
+    "name": "Playtesting",
+    "description": "Test levels manually or with AI agents to gather feedback",
+    "id": 77,
+    "workflow_id": 6,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Balance Adjustment",
+    "description": "Adjust difficulty, enemy strength, and other gameplay elements based on testing results",
+    "id": 78,
+    "workflow_id": 6,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Level Iteration",
+    "description": "Refine levels based on playtesting feedback and design goals",
+    "id": 79,
+    "workflow_id": 6,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Finalization",
+    "description": "Prepare levels for handoff to programming team by ensuring all assets are properly placed and documented",
+    "id": 80,
+    "workflow_id": 6,
+    "display_order": 4,
+    "child_phases": []
+  },
+  {
+    "name": "Transcription",
+    "description": "Generate transcriptions from video using Whisper.",
+    "child_phases": [
+      {
+        "name": "Whisper Transcription",
+        "description": "Run Whisper to transcribe audio tracks.",
+        "id": 82,
+        "workflow_id": 7,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 81,
+    "workflow_id": 7,
+    "display_order": 0
+  },
+  {
+    "name": "Whisper Transcription",
+    "description": "Run Whisper to transcribe audio tracks.",
+    "id": 82,
+    "workflow_id": 7,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Text-to-Speech Synthesis",
+    "description": "Synthesize speech from transcriptions using TTS.",
+    "child_phases": [
+      {
+        "name": "TTS Audio Generation",
+        "description": "Generate audio files using text-to-speech.",
+        "id": 84,
+        "workflow_id": 7,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 83,
+    "workflow_id": 7,
+    "display_order": 1
+  },
+  {
+    "name": "TTS Audio Generation",
+    "description": "Generate audio files using text-to-speech.",
+    "id": 84,
+    "workflow_id": 7,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Video Processing",
+    "description": "Process videos using FFmpeg to incorporate dubbed audio tracks.",
+    "child_phases": [
+      {
+        "name": "FFmpeg Audio Replacement",
+        "description": "Replace original audio with dubbed audio in video files.",
+        "id": 86,
+        "workflow_id": 7,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 85,
+    "workflow_id": 7,
+    "display_order": 2
+  },
+  {
+    "name": "FFmpeg Audio Replacement",
+    "description": "Replace original audio with dubbed audio in video files.",
+    "id": 86,
+    "workflow_id": 7,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Preparation",
+    "description": "Prepare and organize the output dubbing videos.",
+    "child_phases": [
+      {
+        "name": "File Organization",
+        "description": "Organize output files according to naming conventions or directories.",
+        "id": 88,
+        "workflow_id": 7,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 87,
+    "workflow_id": 7,
+    "display_order": 3
+  },
+  {
+    "name": "File Organization",
+    "description": "Organize output files according to naming conventions or directories.",
+    "id": 88,
+    "workflow_id": 7,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Project Setup",
+    "description": "Initialize the project, set up environment and import required libraries.",
+    "child_phases": [],
+    "id": 89,
+    "workflow_id": 8,
+    "display_order": 0
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data required for AI model.",
+    "child_phases": [
+      {
+        "name": "Input Data Collection",
+        "description": "Gather necessary data from available sources.",
+        "id": 91,
+        "workflow_id": 8,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Clean and preprocess the collected data.",
+        "id": 92,
+        "workflow_id": 8,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 90,
+    "workflow_id": 8,
+    "display_order": 1
+  },
+  {
+    "name": "Input Data Collection",
+    "description": "Gather necessary data from available sources.",
+    "id": 91,
+    "workflow_id": 8,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Clean and preprocess the collected data.",
+    "id": 92,
+    "workflow_id": 8,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "AI Model Interaction",
+    "description": "Engage with AI model to generate sample configuration data.",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Choose appropriate AI model for the task.",
+        "id": 94,
+        "workflow_id": 8,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prompt Generation",
+        "description": "Craft prompts to guide the AI model's response.",
+        "id": 95,
+        "workflow_id": 8,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Data Generation",
+        "description": "Interact with the AI model to generate configuration data.",
+        "id": 96,
+        "workflow_id": 8,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 93,
+    "workflow_id": 8,
+    "display_order": 2
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose appropriate AI model for the task.",
+    "id": 94,
+    "workflow_id": 8,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prompt Generation",
+    "description": "Craft prompts to guide the AI model's response.",
+    "id": 95,
+    "workflow_id": 8,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Generation",
+    "description": "Interact with the AI model to generate configuration data.",
+    "id": 96,
+    "workflow_id": 8,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Output Processing",
+    "description": "Process and format generated output.",
+    "child_phases": [
+      {
+        "name": "Output Cleaning",
+        "description": "Clean and format the generated output.",
+        "id": 98,
+        "workflow_id": 8,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Validation",
+        "description": "Validate the generated data for completeness and accuracy.",
+        "id": 99,
+        "workflow_id": 8,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 97,
+    "workflow_id": 8,
+    "display_order": 3
+  },
+  {
+    "name": "Output Cleaning",
+    "description": "Clean and format the generated output.",
+    "id": 98,
+    "workflow_id": 8,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Validation",
+    "description": "Validate the generated data for completeness and accuracy.",
+    "id": 99,
+    "workflow_id": 8,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Platform Demonstration",
+    "description": "Prepare demonstration of platform's flexibility and power.",
+    "child_phases": [
+      {
+        "name": "Data Analysis",
+        "description": "Analyze the generated data to showcase platform capabilities.",
+        "id": 101,
+        "workflow_id": 8,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate reports or visualizations to demonstrate findings.",
+        "id": 102,
+        "workflow_id": 8,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 100,
+    "workflow_id": 8,
+    "display_order": 4
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Analyze the generated data to showcase platform capabilities.",
+    "id": 101,
+    "workflow_id": 8,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate reports or visualizations to demonstrate findings.",
+    "id": 102,
+    "workflow_id": 8,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialization of the Python environment and required dependencies.",
+    "child_phases": [],
+    "id": 103,
+    "workflow_id": 29,
+    "display_order": 0
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Gathering and preparing input data for code review.",
+    "child_phases": [],
+    "id": 104,
+    "workflow_id": 29,
+    "display_order": 1
+  },
+  {
+    "name": "Code Review",
+    "description": "Reviewing code submissions and identifying errors.",
+    "child_phases": [
+      {
+        "name": "Error Identification",
+        "description": "Locating syntax, logical, and other types of errors in the code.",
+        "child_phases": [],
+        "id": 106,
+        "workflow_id": 29,
+        "display_order": 0
+      },
+      {
+        "name": "Code Analysis",
+        "description": "Analyzing code structure, style, and efficiency.",
+        "child_phases": [],
+        "id": 107,
+        "workflow_id": 29,
+        "display_order": 1
+      }
+    ],
+    "id": 105,
+    "workflow_id": 29,
+    "display_order": 2
+  },
+  {
+    "name": "Error Identification",
+    "description": "Locating syntax, logical, and other types of errors in the code.",
+    "child_phases": [],
+    "id": 106,
+    "workflow_id": 29,
+    "display_order": 0
+  },
+  {
+    "name": "Code Analysis",
+    "description": "Analyzing code structure, style, and efficiency.",
+    "child_phases": [],
+    "id": 107,
+    "workflow_id": 29,
+    "display_order": 1
+  },
+  {
+    "name": "Suggestions Generation",
+    "description": "Generating natural language explanations for identified errors and improvements.",
+    "child_phases": [
+      {
+        "name": "Error Explanation",
+        "description": "Explaining the identified errors in a clear, natural language manner.",
+        "child_phases": [],
+        "id": 109,
+        "workflow_id": 29,
+        "display_order": 0
+      },
+      {
+        "name": "Improvement Suggestions",
+        "description": "Providing suggestions for improving the code based on analysis.",
+        "child_phases": [],
+        "id": 110,
+        "workflow_id": 29,
+        "display_order": 1
+      }
+    ],
+    "id": 108,
+    "workflow_id": 29,
+    "display_order": 3
+  },
+  {
+    "name": "Error Explanation",
+    "description": "Explaining the identified errors in a clear, natural language manner.",
+    "child_phases": [],
+    "id": 109,
+    "workflow_id": 29,
+    "display_order": 0
+  },
+  {
+    "name": "Improvement Suggestions",
+    "description": "Providing suggestions for improving the code based on analysis.",
+    "child_phases": [],
+    "id": 110,
+    "workflow_id": 29,
+    "display_order": 1
+  },
+  {
+    "name": "Report Generation",
+    "description": "Compiling all findings into a comprehensive review report.",
+    "child_phases": [],
+    "id": 111,
+    "workflow_id": 29,
+    "display_order": 4
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data such as topics and keywords.",
+    "child_phases": [],
+    "id": 112,
+    "workflow_id": 30,
+    "display_order": 0
+  },
+  {
+    "name": "AI Model Selection",
+    "description": "Choose the appropriate AI model for content generation.",
+    "child_phases": [
+      {
+        "name": "Model Training",
+        "description": "Train the selected AI model if necessary.",
+        "child_phases": [],
+        "id": 114,
+        "workflow_id": 30,
+        "display_order": 0
+      }
+    ],
+    "id": 113,
+    "workflow_id": 30,
+    "display_order": 1
+  },
+  {
+    "name": "Model Training",
+    "description": "Train the selected AI model if necessary.",
+    "child_phases": [],
+    "id": 114,
+    "workflow_id": 30,
+    "display_order": 0
+  },
+  {
+    "name": "Content Generation",
+    "description": "Generate blog posts, articles, or social media content based on given topics and keywords using the chosen AI model.",
+    "child_phases": [
+      {
+        "name": "Input Preprocessing",
+        "description": "Preprocess input data such as topics and keywords to make them suitable for the AI model.",
+        "child_phases": [],
+        "id": 116,
+        "workflow_id": 30,
+        "display_order": 0
+      },
+      {
+        "name": "Model Inference",
+        "description": "Use the trained AI model to generate content based on the preprocessed inputs.",
+        "child_phases": [
+          {
+            "name": "Output Postprocessing",
+            "description": "Clean up and format the generated content to make it suitable for its intended purpose (e.g., blog posts, articles, social media).",
+            "child_phases": [],
+            "id": 118,
+            "workflow_id": 30,
+            "display_order": 0
+          }
+        ],
+        "id": 117,
+        "workflow_id": 30,
+        "display_order": 1
+      }
+    ],
+    "id": 115,
+    "workflow_id": 30,
+    "display_order": 2
+  },
+  {
+    "name": "Input Preprocessing",
+    "description": "Preprocess input data such as topics and keywords to make them suitable for the AI model.",
+    "child_phases": [],
+    "id": 116,
+    "workflow_id": 30,
+    "display_order": 0
+  },
+  {
+    "name": "Model Inference",
+    "description": "Use the trained AI model to generate content based on the preprocessed inputs.",
+    "child_phases": [
+      {
+        "name": "Output Postprocessing",
+        "description": "Clean up and format the generated content to make it suitable for its intended purpose (e.g., blog posts, articles, social media).",
+        "child_phases": [],
+        "id": 118,
+        "workflow_id": 30,
+        "display_order": 0
+      }
+    ],
+    "id": 117,
+    "workflow_id": 30,
+    "display_order": 1
+  },
+  {
+    "name": "Output Postprocessing",
+    "description": "Clean up and format the generated content to make it suitable for its intended purpose (e.g., blog posts, articles, social media).",
+    "child_phases": [],
+    "id": 118,
+    "workflow_id": 30,
+    "display_order": 0
+  },
+  {
+    "name": "Evaluation and Feedback",
+    "description": "Evaluate the generated content and incorporate feedback to improve future generations.",
+    "child_phases": [
+      {
+        "name": "Human Evaluation",
+        "description": "Have human evaluators review and provide feedback on the generated content.",
+        "child_phases": [],
+        "id": 120,
+        "workflow_id": 30,
+        "display_order": 0
+      },
+      {
+        "name": "Model Fine-tuning",
+        "description": "Use the human feedback to fine-tune or retrain the AI model for better future generations.",
+        "child_phases": [],
+        "id": 121,
+        "workflow_id": 30,
+        "display_order": 1
+      }
+    ],
+    "id": 119,
+    "workflow_id": 30,
+    "display_order": 3
+  },
+  {
+    "name": "Human Evaluation",
+    "description": "Have human evaluators review and provide feedback on the generated content.",
+    "child_phases": [],
+    "id": 120,
+    "workflow_id": 30,
+    "display_order": 0
+  },
+  {
+    "name": "Model Fine-tuning",
+    "description": "Use the human feedback to fine-tune or retrain the AI model for better future generations.",
+    "child_phases": [],
+    "id": 121,
+    "workflow_id": 30,
+    "display_order": 1
+  },
+  {
+    "name": "Planning and Design",
+    "description": "Define the chatbot's purpose, functionality, and user interface.",
+    "child_phases": [
+      {
+        "name": "Defining User Personas",
+        "description": "Identify target users and their needs.",
+        "id": 123,
+        "workflow_id": 31,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Designing Conversation Flow",
+        "description": "Plan the chatbot's responses based on user inputs.",
+        "id": 124,
+        "workflow_id": 31,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 122,
+    "workflow_id": 31,
+    "display_order": 0
+  },
+  {
+    "name": "Defining User Personas",
+    "description": "Identify target users and their needs.",
+    "id": 123,
+    "workflow_id": 31,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Designing Conversation Flow",
+    "description": "Plan the chatbot's responses based on user inputs.",
+    "id": 124,
+    "workflow_id": 31,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and organize data required for training and testing.",
+    "child_phases": [
+      {
+        "name": "Data Collection",
+        "description": "Gather data relevant to the chatbot's purpose.",
+        "id": 126,
+        "workflow_id": 31,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning and Preprocessing",
+        "description": "Clean and prepare data for training models.",
+        "id": 127,
+        "workflow_id": 31,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 125,
+    "workflow_id": 31,
+    "display_order": 1
+  },
+  {
+    "name": "Data Collection",
+    "description": "Gather data relevant to the chatbot's purpose.",
+    "id": 126,
+    "workflow_id": 31,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning and Preprocessing",
+    "description": "Clean and prepare data for training models.",
+    "id": 127,
+    "workflow_id": 31,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choose appropriate machine learning models and train them.",
+    "child_phases": [
+      {
+        "name": "Choosing ML Algorithm(s)",
+        "description": "Select algorithms suitable for intent recognition and context maintenance.",
+        "id": 129,
+        "workflow_id": 31,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Training Models",
+        "description": "Train selected models using prepared data.",
+        "id": 130,
+        "workflow_id": 31,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 128,
+    "workflow_id": 31,
+    "display_order": 2
+  },
+  {
+    "name": "Choosing ML Algorithm(s)",
+    "description": "Select algorithms suitable for intent recognition and context maintenance.",
+    "id": 129,
+    "workflow_id": 31,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Training Models",
+    "description": "Train selected models using prepared data.",
+    "id": 130,
+    "workflow_id": 31,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Integration and Testing",
+    "description": "Integrate trained models into the chatbot app and test its functionality.",
+    "child_phases": [
+      {
+        "name": "Model Integration",
+        "description": "Combine trained models with other components of the chatbot app.",
+        "id": 132,
+        "workflow_id": 31,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Testing and Evaluation",
+        "description": "Test the chatbot's performance and make necessary improvements.",
+        "id": 133,
+        "workflow_id": 31,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 131,
+    "workflow_id": 31,
+    "display_order": 3
+  },
+  {
+    "name": "Model Integration",
+    "description": "Combine trained models with other components of the chatbot app.",
+    "id": 132,
+    "workflow_id": 31,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Evaluation",
+    "description": "Test the chatbot's performance and make necessary improvements.",
+    "id": 133,
+    "workflow_id": 31,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Deployment and Maintenance",
+    "description": "Deploy the chatbot app, monitor its performance, and update it as needed.",
+    "child_phases": [
+      {
+        "name": "Chatbot Deployment",
+        "description": "Launch the chatbot on intended platforms (e.g., website, messaging apps).",
+        "id": 135,
+        "workflow_id": 31,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Monitoring and Maintenance",
+        "description": "Keep track of user feedback and update the chatbot's responses regularly.",
+        "id": 136,
+        "workflow_id": 31,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 134,
+    "workflow_id": 31,
+    "display_order": 4
+  },
+  {
+    "name": "Chatbot Deployment",
+    "description": "Launch the chatbot on intended platforms (e.g., website, messaging apps).",
+    "id": 135,
+    "workflow_id": 31,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Monitoring and Maintenance",
+    "description": "Keep track of user feedback and update the chatbot's responses regularly.",
+    "id": 136,
+    "workflow_id": 31,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialize the environment, data, and necessary libraries.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Ensure Python and required dependencies are installed.",
+        "id": 138,
+        "workflow_id": 32,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Make learning resources and user data available.",
+        "id": 139,
+        "workflow_id": 32,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 137,
+    "workflow_id": 32,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Ensure Python and required dependencies are installed.",
+    "id": 138,
+    "workflow_id": 32,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Make learning resources and user data available.",
+    "id": 139,
+    "workflow_id": 32,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Learning Resource Curator",
+    "description": "Collect, organize, and recommend suitable learning resources.",
+    "child_phases": [
+      {
+        "name": "Resource Collection",
+        "description": "Gather learning materials from various sources.",
+        "id": 141,
+        "workflow_id": 32,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Resource Organization",
+        "description": "Categorize resources based on topics or difficulty levels.",
+        "id": 142,
+        "workflow_id": 32,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Personalized Recommendation",
+        "description": "Recommend resources tailored to each user's interests and abilities.",
+        "id": 143,
+        "workflow_id": 32,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 140,
+    "workflow_id": 32,
+    "display_order": 1
+  },
+  {
+    "name": "Resource Collection",
+    "description": "Gather learning materials from various sources.",
+    "id": 141,
+    "workflow_id": 32,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Resource Organization",
+    "description": "Categorize resources based on topics or difficulty levels.",
+    "id": 142,
+    "workflow_id": 32,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Personalized Recommendation",
+    "description": "Recommend resources tailored to each user's interests and abilities.",
+    "id": 143,
+    "workflow_id": 32,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Progress Tracker",
+    "description": "Monitor users' learning progress.",
+    "child_phases": [
+      {
+        "name": "Activity Logging",
+        "description": "Record users' interactions with learning resources.",
+        "id": 145,
+        "workflow_id": 32,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Progress Analysis",
+        "description": "Analyze logged activities to track users' progress and identify areas of improvement.",
+        "id": 146,
+        "workflow_id": 32,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 144,
+    "workflow_id": 32,
+    "display_order": 2
+  },
+  {
+    "name": "Activity Logging",
+    "description": "Record users' interactions with learning resources.",
+    "id": 145,
+    "workflow_id": 32,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Progress Analysis",
+    "description": "Analyze logged activities to track users' progress and identify areas of improvement.",
+    "id": 146,
+    "workflow_id": 32,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Adaptive Feedback Provider",
+    "description": "Offer personalized feedback based on users' performance.",
+    "child_phases": [
+      {
+        "name": "Performance Evaluation",
+        "description": "Assess users' understanding and skills through quizzes or assignments.",
+        "id": 148,
+        "workflow_id": 32,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Feedback Generation",
+        "description": "Generate adaptive, personalized feedback based on evaluation results.",
+        "id": 149,
+        "workflow_id": 32,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 147,
+    "workflow_id": 32,
+    "display_order": 3
+  },
+  {
+    "name": "Performance Evaluation",
+    "description": "Assess users' understanding and skills through quizzes or assignments.",
+    "id": 148,
+    "workflow_id": 32,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Feedback Generation",
+    "description": "Generate adaptive, personalized feedback based on evaluation results.",
+    "id": 149,
+    "workflow_id": 32,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialize environment and load required data.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Ensure necessary Python packages are installed.",
+        "id": 151,
+        "workflow_id": 33,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Loading",
+        "description": "Load customer inquiries and response data.",
+        "id": 152,
+        "workflow_id": 33,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 150,
+    "workflow_id": 33,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Ensure necessary Python packages are installed.",
+    "id": 151,
+    "workflow_id": 33,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load customer inquiries and response data.",
+    "id": 152,
+    "workflow_id": 33,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Inquiry Processing",
+    "description": "Handle incoming customer inquiries.",
+    "child_phases": [
+      {
+        "name": "Inquiry Retrieval",
+        "description": "Fetch customer inquiry from chat or email.",
+        "id": 154,
+        "workflow_id": 33,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Query Understanding",
+        "description": "Analyze and interpret the customer's query.",
+        "id": 155,
+        "workflow_id": 33,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 153,
+    "workflow_id": 33,
+    "display_order": 1
+  },
+  {
+    "name": "Inquiry Retrieval",
+    "description": "Fetch customer inquiry from chat or email.",
+    "id": 154,
+    "workflow_id": 33,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Query Understanding",
+    "description": "Analyze and interpret the customer's query.",
+    "id": 155,
+    "workflow_id": 33,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Information Retrieval",
+    "description": "Find relevant information to address the customer's query.",
+    "child_phases": [
+      {
+        "name": "Database Query",
+        "description": "Search for information in the customer support database.",
+        "id": 157,
+        "workflow_id": 33,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "External Data Fetch",
+        "description": "Retrieve data from external APIs if necessary.",
+        "id": 158,
+        "workflow_id": 33,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 156,
+    "workflow_id": 33,
+    "display_order": 2
+  },
+  {
+    "name": "Database Query",
+    "description": "Search for information in the customer support database.",
+    "id": 157,
+    "workflow_id": 33,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "External Data Fetch",
+    "description": "Retrieve data from external APIs if necessary.",
+    "id": 158,
+    "workflow_id": 33,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Response Generation",
+    "description": "Compose a helpful response to the customer's inquiry.",
+    "child_phases": [
+      {
+        "name": "Response Formulation",
+        "description": "Create an appropriate response using retrieved information.",
+        "id": 160,
+        "workflow_id": 33,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Response Evaluation",
+        "description": "Review and refine the generated response for clarity.",
+        "id": 161,
+        "workflow_id": 33,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 159,
+    "workflow_id": 33,
+    "display_order": 3
+  },
+  {
+    "name": "Response Formulation",
+    "description": "Create an appropriate response using retrieved information.",
+    "id": 160,
+    "workflow_id": 33,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Response Evaluation",
+    "description": "Review and refine the generated response for clarity.",
+    "id": 161,
+    "workflow_id": 33,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Communication",
+    "description": "Send the response back to the customer.",
+    "child_phases": [
+      {
+        "name": "Chat Response",
+        "description": "Send the response via chat platform.",
+        "id": 163,
+        "workflow_id": 33,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Email Response",
+        "description": "Send the response via email.",
+        "id": 164,
+        "workflow_id": 33,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 162,
+    "workflow_id": 33,
+    "display_order": 4
+  },
+  {
+    "name": "Chat Response",
+    "description": "Send the response via chat platform.",
+    "id": 163,
+    "workflow_id": 33,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Email Response",
+    "description": "Send the response via email.",
+    "id": 164,
+    "workflow_id": 33,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Monitoring and Logging",
+    "description": "Track and log customer interactions for analysis.",
+    "child_phases": [
+      {
+        "name": "Interaction Tracking",
+        "description": "Record customer inquiries and responses.",
+        "id": 166,
+        "workflow_id": 33,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Logging",
+        "description": "Log system errors and issues encountered during processing.",
+        "id": 167,
+        "workflow_id": 33,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 165,
+    "workflow_id": 33,
+    "display_order": 5
+  },
+  {
+    "name": "Interaction Tracking",
+    "description": "Record customer inquiries and responses.",
+    "id": 166,
+    "workflow_id": 33,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Logging",
+    "description": "Log system errors and issues encountered during processing.",
+    "id": 167,
+    "workflow_id": 33,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Clean, preprocess and organize sensor data.",
+    "child_phases": [
+      {
+        "name": "Data Collection",
+        "description": "Gather data from equipment sensors.",
+        "id": 169,
+        "workflow_id": 34,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers and errors in data.",
+        "id": 170,
+        "workflow_id": 34,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Engineering",
+        "description": "Extract relevant features from raw sensor data.",
+        "id": 171,
+        "workflow_id": 34,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 168,
+    "workflow_id": 34,
+    "display_order": 0
+  },
+  {
+    "name": "Data Collection",
+    "description": "Gather data from equipment sensors.",
+    "id": 169,
+    "workflow_id": 34,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers and errors in data.",
+    "id": 170,
+    "workflow_id": 34,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Extract relevant features from raw sensor data.",
+    "id": 171,
+    "workflow_id": 34,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis (EDA)",
+    "description": "Analyze patterns, trends and correlations in the data.",
+    "child_phases": [
+      {
+        "name": "Descriptive Statistics",
+        "description": "Calculate summary statistics of sensor data.",
+        "id": 173,
+        "workflow_id": 34,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Visualization",
+        "description": "Create visualizations to explore relationships in data.",
+        "id": 174,
+        "workflow_id": 34,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 172,
+    "workflow_id": 34,
+    "display_order": 1
+  },
+  {
+    "name": "Descriptive Statistics",
+    "description": "Calculate summary statistics of sensor data.",
+    "id": 173,
+    "workflow_id": 34,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Create visualizations to explore relationships in data.",
+    "id": 174,
+    "workflow_id": 34,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Building",
+    "description": "Train predictive models using historical failure data.",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Choose appropriate machine learning algorithms for prediction.",
+        "id": 176,
+        "workflow_id": 34,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Training",
+        "description": "Train selected models on prepared sensor data.",
+        "id": 177,
+        "workflow_id": 34,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Validation",
+        "description": "Evaluate model performance using techniques like cross-validation.",
+        "id": 178,
+        "workflow_id": 34,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 175,
+    "workflow_id": 34,
+    "display_order": 2
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose appropriate machine learning algorithms for prediction.",
+    "id": 176,
+    "workflow_id": 34,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Training",
+    "description": "Train selected models on prepared sensor data.",
+    "id": 177,
+    "workflow_id": 34,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Validation",
+    "description": "Evaluate model performance using techniques like cross-validation.",
+    "id": 178,
+    "workflow_id": 34,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Model Deployment & Monitoring",
+    "description": "Deploy trained models in production environment and monitor equipment.",
+    "child_phases": [
+      {
+        "name": "Deployment",
+        "description": "Integrate predictive maintenance model with real-time sensor data.",
+        "id": 180,
+        "workflow_id": 34,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Monitoring",
+        "description": "Continuously monitor equipment health and predict failures.",
+        "id": 181,
+        "workflow_id": 34,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 179,
+    "workflow_id": 34,
+    "display_order": 3
+  },
+  {
+    "name": "Deployment",
+    "description": "Integrate predictive maintenance model with real-time sensor data.",
+    "id": 180,
+    "workflow_id": 34,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Monitoring",
+    "description": "Continuously monitor equipment health and predict failures.",
+    "id": 181,
+    "workflow_id": 34,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Monitor market trends, competitor pricing and other factors.",
+    "child_phases": [
+      {
+        "name": "Market Trend Monitoring",
+        "description": "Collect and analyze market trend data.",
+        "id": 183,
+        "workflow_id": 35,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Competitor Pricing Tracking",
+        "description": "Gather competitor pricing information.",
+        "id": 184,
+        "workflow_id": 35,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 182,
+    "workflow_id": 35,
+    "display_order": 0
+  },
+  {
+    "name": "Market Trend Monitoring",
+    "description": "Collect and analyze market trend data.",
+    "id": 183,
+    "workflow_id": 35,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Competitor Pricing Tracking",
+    "description": "Gather competitor pricing information.",
+    "id": 184,
+    "workflow_id": 35,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Prepare collected data for analysis.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values and outliers in the dataset.",
+        "id": 186,
+        "workflow_id": 35,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Engineering",
+        "description": "Create new features from existing ones to improve predictive modeling.",
+        "id": 187,
+        "workflow_id": 35,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 185,
+    "workflow_id": 35,
+    "display_order": 1
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values and outliers in the dataset.",
+    "id": 186,
+    "workflow_id": 35,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features from existing ones to improve predictive modeling.",
+    "id": 187,
+    "workflow_id": 35,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Pricing Optimization",
+    "description": "Analyze data to suggest optimal prices.",
+    "child_phases": [
+      {
+        "name": "Price Prediction Modeling",
+        "description": "Build and train machine learning models for price prediction.",
+        "id": 189,
+        "workflow_id": 35,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Optimal Price Suggestions",
+        "description": "Generate suggestions based on predicted prices and other factors.",
+        "id": 190,
+        "workflow_id": 35,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 188,
+    "workflow_id": 35,
+    "display_order": 2
+  },
+  {
+    "name": "Price Prediction Modeling",
+    "description": "Build and train machine learning models for price prediction.",
+    "id": 189,
+    "workflow_id": 35,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Optimal Price Suggestions",
+    "description": "Generate suggestions based on predicted prices and other factors.",
+    "id": 190,
+    "workflow_id": 35,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Pricing Strategy Evaluation",
+    "description": "Evaluate the impact of suggested pricing strategy.",
+    "child_phases": [
+      {
+        "name": "Sensitivity Analysis",
+        "description": "Analyze how changes in inputs affect output.",
+        "id": 192,
+        "workflow_id": 35,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Scenario Simulation",
+        "description": "Simulate different pricing scenarios to assess their impact.",
+        "id": 193,
+        "workflow_id": 35,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 191,
+    "workflow_id": 35,
+    "display_order": 3
+  },
+  {
+    "name": "Sensitivity Analysis",
+    "description": "Analyze how changes in inputs affect output.",
+    "id": 192,
+    "workflow_id": 35,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Scenario Simulation",
+    "description": "Simulate different pricing scenarios to assess their impact.",
+    "id": 193,
+    "workflow_id": 35,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Handle and organize input data for analysis.",
+    "child_phases": [
+      {
+        "name": "Data Collection",
+        "description": "Fetch text data from social media, reviews, or surveys.",
+        "id": 195,
+        "workflow_id": 36,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Preprocess text data (remove noise, handle missing values, etc.).",
+        "id": 196,
+        "workflow_id": 36,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 194,
+    "workflow_id": 36,
+    "display_order": 0
+  },
+  {
+    "name": "Data Collection",
+    "description": "Fetch text data from social media, reviews, or surveys.",
+    "id": 195,
+    "workflow_id": 36,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Preprocess text data (remove noise, handle missing values, etc.).",
+    "id": 196,
+    "workflow_id": 36,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Sentiment Analysis Model Development",
+    "description": "Create and train a model for sentiment analysis.",
+    "child_phases": [
+      {
+        "name": "Text Preprocessing",
+        "description": "Tokenize, stem, or lemmatize text data.",
+        "id": 198,
+        "workflow_id": 36,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Extraction",
+        "description": "Convert text data into numerical features (e.g., TF-IDF, Word Embeddings).",
+        "id": 199,
+        "workflow_id": 36,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Model Selection and Training",
+        "description": "Choose appropriate algorithms and train models on the dataset.",
+        "id": 200,
+        "workflow_id": 36,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 197,
+    "workflow_id": 36,
+    "display_order": 1
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Tokenize, stem, or lemmatize text data.",
+    "id": 198,
+    "workflow_id": 36,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Extraction",
+    "description": "Convert text data into numerical features (e.g., TF-IDF, Word Embeddings).",
+    "id": 199,
+    "workflow_id": 36,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choose appropriate algorithms and train models on the dataset.",
+    "id": 200,
+    "workflow_id": 36,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Analysis and Interpretation",
+    "description": "Analyze results and draw insights.",
+    "child_phases": [
+      {
+        "name": "Sentiment Scoring",
+        "description": "Use trained model to predict sentiments of input texts.",
+        "id": 202,
+        "workflow_id": 36,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Results Visualization",
+        "description": "Visualize sentiment distribution, trends, etc. for better insights.",
+        "id": 203,
+        "workflow_id": 36,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 201,
+    "workflow_id": 36,
+    "display_order": 2
+  },
+  {
+    "name": "Sentiment Scoring",
+    "description": "Use trained model to predict sentiments of input texts.",
+    "id": 202,
+    "workflow_id": 36,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Results Visualization",
+    "description": "Visualize sentiment distribution, trends, etc. for better insights.",
+    "id": 203,
+    "workflow_id": 36,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Prepare a report summarizing the findings.",
+    "child_phases": [
+      {
+        "name": "Data Export",
+        "description": "Export analysis results into desired formats (e.g., CSV, JSON).",
+        "id": 205,
+        "workflow_id": 36,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Writing",
+        "description": "Write a comprehensive report on the findings.",
+        "id": 206,
+        "workflow_id": 36,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 204,
+    "workflow_id": 36,
+    "display_order": 3
+  },
+  {
+    "name": "Data Export",
+    "description": "Export analysis results into desired formats (e.g., CSV, JSON).",
+    "id": 205,
+    "workflow_id": 36,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Writing",
+    "description": "Write a comprehensive report on the findings.",
+    "id": 206,
+    "workflow_id": 36,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection and Preprocessing",
+    "description": "Collect financial market data, clean and preprocess it for analysis.",
+    "child_phases": [
+      {
+        "name": "Data Acquisition",
+        "description": "Fetch historical stock prices, volumes, news sentiment, etc.",
+        "id": 208,
+        "workflow_id": 37,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, and inconsistencies in data",
+        "id": 209,
+        "workflow_id": 37,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 207,
+    "workflow_id": 37,
+    "display_order": 0
+  },
+  {
+    "name": "Data Acquisition",
+    "description": "Fetch historical stock prices, volumes, news sentiment, etc.",
+    "id": 208,
+    "workflow_id": 37,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, and inconsistencies in data",
+    "id": 209,
+    "workflow_id": 37,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis (EDA)",
+    "description": "Analyze historical market trends to understand patterns.",
+    "id": 210,
+    "workflow_id": 37,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Building",
+    "description": "Develop predictive models using machine learning algorithms.",
+    "child_phases": [
+      {
+        "name": "Feature Engineering",
+        "description": "Create new features that improve model accuracy",
+        "id": 212,
+        "workflow_id": 37,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Selection and Training",
+        "description": "Choose appropriate ML algorithm(s), train, and validate models",
+        "id": 213,
+        "workflow_id": 37,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 211,
+    "workflow_id": 37,
+    "display_order": 2
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features that improve model accuracy",
+    "id": 212,
+    "workflow_id": 37,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choose appropriate ML algorithm(s), train, and validate models",
+    "id": 213,
+    "workflow_id": 37,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Trading Strategy Customization",
+    "description": "Allow users to customize trading strategies based on model outputs.",
+    "child_phases": [
+      {
+        "name": "Strategy Parameters",
+        "description": "Define parameters like risk tolerance, profit targets, etc.",
+        "id": 215,
+        "workflow_id": 37,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Backtesting",
+        "description": "Test customized strategies using historical data",
+        "id": 216,
+        "workflow_id": 37,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 214,
+    "workflow_id": 37,
+    "display_order": 3
+  },
+  {
+    "name": "Strategy Parameters",
+    "description": "Define parameters like risk tolerance, profit targets, etc.",
+    "id": 215,
+    "workflow_id": 37,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Backtesting",
+    "description": "Test customized strategies using historical data",
+    "id": 216,
+    "workflow_id": 37,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Trading Bot Implementation",
+    "description": "Integrate predictive models with trading strategies and execute trades.",
+    "child_phases": [
+      {
+        "name": "Trade Execution",
+        "description": "Automate buying and selling stocks based on strategy",
+        "id": 218,
+        "workflow_id": 37,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Monitoring and Evaluation",
+        "description": "Continuously monitor bot performance, re-evaluate strategies if needed",
+        "id": 219,
+        "workflow_id": 37,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 217,
+    "workflow_id": 37,
+    "display_order": 4
+  },
+  {
+    "name": "Trade Execution",
+    "description": "Automate buying and selling stocks based on strategy",
+    "id": 218,
+    "workflow_id": 37,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Monitoring and Evaluation",
+    "description": "Continuously monitor bot performance, re-evaluate strategies if needed",
+    "id": 219,
+    "workflow_id": 37,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure environment and prepare input data.",
+    "child_phases": [],
+    "id": 220,
+    "workflow_id": 38,
+    "display_order": 0
+  },
+  {
+    "name": "Text Processing",
+    "description": "Handle text inputs, including translation and processing.",
+    "child_phases": [
+      {
+        "name": "Text Input",
+        "description": "Receive and process text inputs.",
+        "id": 222,
+        "workflow_id": 38,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Translation",
+        "description": "Translate input text to desired language using NLP techniques.",
+        "id": 223,
+        "workflow_id": 38,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 221,
+    "workflow_id": 38,
+    "display_order": 1
+  },
+  {
+    "name": "Text Input",
+    "description": "Receive and process text inputs.",
+    "id": 222,
+    "workflow_id": 38,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Translation",
+    "description": "Translate input text to desired language using NLP techniques.",
+    "id": 223,
+    "workflow_id": 38,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Speech Processing",
+    "description": "Handle speech inputs, including translation and processing.",
+    "child_phases": [
+      {
+        "name": "Speech Input",
+        "description": "Receive and process speech inputs.",
+        "id": 225,
+        "workflow_id": 38,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Speech to Text Conversion",
+        "description": "Convert speech input to text using a speech recognition engine.",
+        "id": 226,
+        "workflow_id": 38,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Translation",
+        "description": "Translate converted text to desired language using NLP techniques.",
+        "id": 227,
+        "workflow_id": 38,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 224,
+    "workflow_id": 38,
+    "display_order": 2
+  },
+  {
+    "name": "Speech Input",
+    "description": "Receive and process speech inputs.",
+    "id": 225,
+    "workflow_id": 38,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Speech to Text Conversion",
+    "description": "Convert speech input to text using a speech recognition engine.",
+    "id": 226,
+    "workflow_id": 38,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Translation",
+    "description": "Translate converted text to desired language using NLP techniques.",
+    "id": 227,
+    "workflow_id": 38,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Real-Time Processing",
+    "description": "Ensure the application provides instant translations.",
+    "child_phases": [
+      {
+        "name": "Buffering",
+        "description": "Buffer incoming inputs to minimize lag.",
+        "id": 229,
+        "workflow_id": 38,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Async Translation",
+        "description": "Implement asynchronous translation processes for efficiency.",
+        "id": 230,
+        "workflow_id": 38,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 228,
+    "workflow_id": 38,
+    "display_order": 3
+  },
+  {
+    "name": "Buffering",
+    "description": "Buffer incoming inputs to minimize lag.",
+    "id": 229,
+    "workflow_id": 38,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Async Translation",
+    "description": "Implement asynchronous translation processes for efficiency.",
+    "id": 230,
+    "workflow_id": 38,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output",
+    "description": "Display or deliver the translated output.",
+    "child_phases": [
+      {
+        "name": "Text Output",
+        "description": "Display translated text outputs.",
+        "id": 232,
+        "workflow_id": 38,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Speech Output",
+        "description": "Convert translated text to speech and deliver audio outputs.",
+        "id": 233,
+        "workflow_id": 38,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 231,
+    "workflow_id": 38,
+    "display_order": 4
+  },
+  {
+    "name": "Text Output",
+    "description": "Display translated text outputs.",
+    "id": 232,
+    "workflow_id": 38,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Speech Output",
+    "description": "Convert translated text to speech and deliver audio outputs.",
+    "id": 233,
+    "workflow_id": 38,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Understand the task, gather requirements, and define code refactoring strategies.",
+    "child_phases": [],
+    "id": 234,
+    "workflow_id": 39,
+    "display_order": 0
+  },
+  {
+    "name": "Setup",
+    "description": "Prepare the development environment, tools, and input data.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Ensure Python environment is configured with required dependencies.",
+        "id": 236,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 235,
+    "workflow_id": 39,
+    "display_order": 1
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Ensure Python environment is configured with required dependencies.",
+    "id": 236,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Code Analysis",
+    "description": "Analyze source code to identify refactoring opportunities.",
+    "child_phases": [
+      {
+        "name": "Code Parsing",
+        "description": "Parse source code into an Intermediate Representation (IR).",
+        "id": 238,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Refactoring Opportunity Identification",
+        "description": "Identify potential refactorings based on code analysis.",
+        "id": 239,
+        "workflow_id": 39,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 237,
+    "workflow_id": 39,
+    "display_order": 2
+  },
+  {
+    "name": "Code Parsing",
+    "description": "Parse source code into an Intermediate Representation (IR).",
+    "id": 238,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring Opportunity Identification",
+    "description": "Identify potential refactorings based on code analysis.",
+    "id": 239,
+    "workflow_id": 39,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring Suggestion",
+    "description": "Generate and prioritize refactoring suggestions.",
+    "child_phases": [
+      {
+        "name": "Suggestion Generation",
+        "description": "Create a list of suggested refactorings based on identified opportunities.",
+        "id": 241,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Priority Ranking",
+        "description": "Rank suggestions based on expected improvement in readability, maintainability, and performance.",
+        "id": 242,
+        "workflow_id": 39,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 240,
+    "workflow_id": 39,
+    "display_order": 3
+  },
+  {
+    "name": "Suggestion Generation",
+    "description": "Create a list of suggested refactorings based on identified opportunities.",
+    "id": 241,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Priority Ranking",
+    "description": "Rank suggestions based on expected improvement in readability, maintainability, and performance.",
+    "id": 242,
+    "workflow_id": 39,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring Application",
+    "description": "Apply the selected refactorings to the source code.",
+    "child_phases": [
+      {
+        "name": "User Feedback",
+        "description": "Present suggestions to the user and obtain approval for each.",
+        "id": 244,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Code Transformation",
+        "description": "Transform source code according to approved refactorings.",
+        "id": 245,
+        "workflow_id": 39,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 243,
+    "workflow_id": 39,
+    "display_order": 4
+  },
+  {
+    "name": "User Feedback",
+    "description": "Present suggestions to the user and obtain approval for each.",
+    "id": 244,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Code Transformation",
+    "description": "Transform source code according to approved refactorings.",
+    "id": 245,
+    "workflow_id": 39,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Ensure refactored code maintains functionality while improving readability, maintainability, and performance.",
+    "child_phases": [
+      {
+        "name": "Unit Tests",
+        "description": "Run unit tests to ensure code functionality is preserved.",
+        "id": 247,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Performance Testing",
+        "description": "Measure and compare performance before and after refactoring.",
+        "id": 248,
+        "workflow_id": 39,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 246,
+    "workflow_id": 39,
+    "display_order": 5
+  },
+  {
+    "name": "Unit Tests",
+    "description": "Run unit tests to ensure code functionality is preserved.",
+    "id": 247,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Testing",
+    "description": "Measure and compare performance before and after refactoring.",
+    "id": 248,
+    "workflow_id": 39,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Evaluation",
+    "description": "Evaluate the effectiveness of applied refactorings and gather user feedback.",
+    "child_phases": [
+      {
+        "name": "User Feedback Collection",
+        "description": "Gather user opinions on the refactored code.",
+        "id": 250,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Refactoring Effectiveness Assessment",
+        "description": "Assess the impact of refactorings on readability, maintainability, and performance.",
+        "id": 251,
+        "workflow_id": 39,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 249,
+    "workflow_id": 39,
+    "display_order": 6
+  },
+  {
+    "name": "User Feedback Collection",
+    "description": "Gather user opinions on the refactored code.",
+    "id": 250,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring Effectiveness Assessment",
+    "description": "Assess the impact of refactorings on readability, maintainability, and performance.",
+    "id": 251,
+    "workflow_id": 39,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Iteration",
+    "description": "Repeat refactoring cycle to continuously improve code quality.",
+    "child_phases": [
+      {
+        "name": "Refine Refactoring Strategies",
+        "description": "Update strategies based on evaluation results and user feedback.",
+        "id": 253,
+        "workflow_id": 39,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Re-analyze Code",
+        "description": "Re-analyze source code for new refactoring opportunities.",
+        "id": 254,
+        "workflow_id": 39,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 252,
+    "workflow_id": 39,
+    "display_order": 7
+  },
+  {
+    "name": "Refine Refactoring Strategies",
+    "description": "Update strategies based on evaluation results and user feedback.",
+    "id": 253,
+    "workflow_id": 39,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Re-analyze Code",
+    "description": "Re-analyze source code for new refactoring opportunities.",
+    "id": 254,
+    "workflow_id": 39,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Preprocessing",
+    "description": "Clean and prepare input data",
+    "child_phases": [
+      {
+        "name": "Text Extraction",
+        "description": "Extract text from documents or videos",
+        "id": 256,
+        "workflow_id": 40,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Text Cleaning",
+        "description": "Remove unnecessary characters, spaces, etc.",
+        "id": 257,
+        "workflow_id": 40,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 255,
+    "workflow_id": 40,
+    "display_order": 0
+  },
+  {
+    "name": "Text Extraction",
+    "description": "Extract text from documents or videos",
+    "id": 256,
+    "workflow_id": 40,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Text Cleaning",
+    "description": "Remove unnecessary characters, spaces, etc.",
+    "id": 257,
+    "workflow_id": 40,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Generate concise summaries",
+    "child_phases": [
+      {
+        "name": "Feature Extraction",
+        "description": "Convert text into numerical features",
+        "id": 259,
+        "workflow_id": 40,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Selection and Training",
+        "description": "Choose, train, and evaluate AI models",
+        "id": 260,
+        "workflow_id": 40,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Summary Generation",
+        "description": "Use trained model to generate summaries",
+        "id": 261,
+        "workflow_id": 40,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 258,
+    "workflow_id": 40,
+    "display_order": 1
+  },
+  {
+    "name": "Feature Extraction",
+    "description": "Convert text into numerical features",
+    "id": 259,
+    "workflow_id": 40,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choose, train, and evaluate AI models",
+    "id": 260,
+    "workflow_id": 40,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Summary Generation",
+    "description": "Use trained model to generate summaries",
+    "id": 261,
+    "workflow_id": 40,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Postprocessing",
+    "description": "Refine and evaluate summaries",
+    "child_phases": [
+      {
+        "name": "Summary Refinement",
+        "description": "Human-in-the-loop refinement of summaries",
+        "id": 263,
+        "workflow_id": 40,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Evaluation",
+        "description": "Evaluate summary quality using appropriate metrics",
+        "id": 264,
+        "workflow_id": 40,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 262,
+    "workflow_id": 40,
+    "display_order": 2
+  },
+  {
+    "name": "Summary Refinement",
+    "description": "Human-in-the-loop refinement of summaries",
+    "id": 263,
+    "workflow_id": 40,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Evaluation",
+    "description": "Evaluate summary quality using appropriate metrics",
+    "id": 264,
+    "workflow_id": 40,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Fetch real-time traffic data and other relevant factors.",
+    "child_phases": [
+      {
+        "name": "Traffic Data Fetching",
+        "description": "Get real-time traffic data from APIs or databases.",
+        "id": 266,
+        "workflow_id": 41,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Other Factors Data Fetching",
+        "description": "Collect data on weather, road closures, events, etc.",
+        "id": 267,
+        "workflow_id": 41,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 265,
+    "workflow_id": 41,
+    "display_order": 0
+  },
+  {
+    "name": "Traffic Data Fetching",
+    "description": "Get real-time traffic data from APIs or databases.",
+    "id": 266,
+    "workflow_id": 41,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Other Factors Data Fetching",
+    "description": "Collect data on weather, road closures, events, etc.",
+    "id": 267,
+    "workflow_id": 41,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Clean and transform the collected data.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, and inconsistencies.",
+        "id": 269,
+        "workflow_id": 41,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Transformation",
+        "description": "Prepare data for route optimization algorithms.",
+        "id": 270,
+        "workflow_id": 41,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 268,
+    "workflow_id": 41,
+    "display_order": 1
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, and inconsistencies.",
+    "id": 269,
+    "workflow_id": 41,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Prepare data for route optimization algorithms.",
+    "id": 270,
+    "workflow_id": 41,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Route Optimization",
+    "description": "Calculate the most efficient routes based on processed data.",
+    "child_phases": [
+      {
+        "name": "Route Calculation",
+        "description": "Use algorithms like Dijkstra's or A* to find optimal paths.",
+        "id": 272,
+        "workflow_id": 41,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dynamic Route Adjustment",
+        "description": "Continuously update routes based on real-time traffic changes.",
+        "id": 273,
+        "workflow_id": 41,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 271,
+    "workflow_id": 41,
+    "display_order": 2
+  },
+  {
+    "name": "Route Calculation",
+    "description": "Use algorithms like Dijkstra's or A* to find optimal paths.",
+    "id": 272,
+    "workflow_id": 41,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dynamic Route Adjustment",
+    "description": "Continuously update routes based on real-time traffic changes.",
+    "id": 273,
+    "workflow_id": 41,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Result Presentation",
+    "description": "Display the optimized route to users.",
+    "child_phases": [
+      {
+        "name": "Route Visualization",
+        "description": "Show the calculated route on a map or other visual representations.",
+        "id": 275,
+        "workflow_id": 41,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "User Notification",
+        "description": "Notify users about the optimal route and any real-time updates.",
+        "id": 276,
+        "workflow_id": 41,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 274,
+    "workflow_id": 41,
+    "display_order": 3
+  },
+  {
+    "name": "Route Visualization",
+    "description": "Show the calculated route on a map or other visual representations.",
+    "id": 275,
+    "workflow_id": 41,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "User Notification",
+    "description": "Notify users about the optimal route and any real-time updates.",
+    "id": 276,
+    "workflow_id": 41,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare recipient data, topics, and tone preferences.",
+    "child_phases": [],
+    "id": 277,
+    "workflow_id": 42,
+    "display_order": 0
+  },
+  {
+    "name": "Email Drafting",
+    "description": "Write personalized emails based on given inputs.",
+    "child_phases": [
+      {
+        "name": "Recipient Loop",
+        "description": "Loop through each recipient and draft an email for them.",
+        "id": 279,
+        "workflow_id": 42,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Topic Incorporation",
+        "description": "Incorporate the specified topic into the email content.",
+        "id": 280,
+        "workflow_id": 42,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Tone Application",
+        "description": "Apply the preferred tone to make the email personalized.",
+        "id": 281,
+        "workflow_id": 42,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 278,
+    "workflow_id": 42,
+    "display_order": 1
+  },
+  {
+    "name": "Recipient Loop",
+    "description": "Loop through each recipient and draft an email for them.",
+    "id": 279,
+    "workflow_id": 42,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Topic Incorporation",
+    "description": "Incorporate the specified topic into the email content.",
+    "id": 280,
+    "workflow_id": 42,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tone Application",
+    "description": "Apply the preferred tone to make the email personalized.",
+    "id": 281,
+    "workflow_id": 42,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Email Review and Validation",
+    "description": "Review drafted emails for any errors or inconsistencies.",
+    "child_phases": [
+      {
+        "name": "Content Check",
+        "description": "Check if all recipients, topics, and tones have been correctly incorporated.",
+        "id": 283,
+        "workflow_id": 42,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Grammar and Syntax Check",
+        "description": "Review emails for any grammatical errors or syntax issues.",
+        "id": 284,
+        "workflow_id": 42,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 282,
+    "workflow_id": 42,
+    "display_order": 2
+  },
+  {
+    "name": "Content Check",
+    "description": "Check if all recipients, topics, and tones have been correctly incorporated.",
+    "id": 283,
+    "workflow_id": 42,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Grammar and Syntax Check",
+    "description": "Review emails for any grammatical errors or syntax issues.",
+    "id": 284,
+    "workflow_id": 42,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Email Delivery",
+    "description": "Send the drafted emails to their respective recipients.",
+    "child_phases": [
+      {
+        "name": "Email Sending",
+        "description": "Use email sending libraries to send the prepared emails.",
+        "id": 286,
+        "workflow_id": 42,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Delivery Confirmation",
+        "description": "Confirm if emails have been delivered successfully or not.",
+        "id": 287,
+        "workflow_id": 42,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 285,
+    "workflow_id": 42,
+    "display_order": 3
+  },
+  {
+    "name": "Email Sending",
+    "description": "Use email sending libraries to send the prepared emails.",
+    "id": 286,
+    "workflow_id": 42,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Delivery Confirmation",
+    "description": "Confirm if emails have been delivered successfully or not.",
+    "id": 287,
+    "workflow_id": 42,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Cleaning, transforming and loading historical sales data.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Handling missing values, outliers and inconsistencies.",
+        "id": 289,
+        "workflow_id": 43,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Transformation",
+        "description": "Aggregating, merging and reshaping data.",
+        "id": 290,
+        "workflow_id": 43,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Data Loading",
+        "description": "Loading prepared data into the analysis environment.",
+        "id": 291,
+        "workflow_id": 43,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 288,
+    "workflow_id": 43,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handling missing values, outliers and inconsistencies.",
+    "id": 289,
+    "workflow_id": 43,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Aggregating, merging and reshaping data.",
+    "id": 290,
+    "workflow_id": 43,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Loading",
+    "description": "Loading prepared data into the analysis environment.",
+    "id": 291,
+    "workflow_id": 43,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Creating new features that might improve model performance.",
+    "child_phases": [
+      {
+        "name": "Trend Analysis",
+        "description": "Identifying trends in historical sales data.",
+        "id": 293,
+        "workflow_id": 43,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Seasonality Analysis",
+        "description": "Detecting seasonal patterns in sales.",
+        "id": 294,
+        "workflow_id": 43,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 292,
+    "workflow_id": 43,
+    "display_order": 1
+  },
+  {
+    "name": "Trend Analysis",
+    "description": "Identifying trends in historical sales data.",
+    "id": 293,
+    "workflow_id": 43,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Seasonality Analysis",
+    "description": "Detecting seasonal patterns in sales.",
+    "id": 294,
+    "workflow_id": 43,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choosing, training and evaluating predictive models.",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Selecting appropriate models for forecasting.",
+        "id": 296,
+        "workflow_id": 43,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Training",
+        "description": "Training selected models on historical data.",
+        "id": 297,
+        "workflow_id": 43,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Model Evaluation",
+        "description": "Evaluating model performance using suitable metrics.",
+        "id": 298,
+        "workflow_id": 43,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 295,
+    "workflow_id": 43,
+    "display_order": 2
+  },
+  {
+    "name": "Model Selection",
+    "description": "Selecting appropriate models for forecasting.",
+    "id": 296,
+    "workflow_id": 43,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Training",
+    "description": "Training selected models on historical data.",
+    "id": 297,
+    "workflow_id": 43,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Evaluation",
+    "description": "Evaluating model performance using suitable metrics.",
+    "id": 298,
+    "workflow_id": 43,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Sales Prediction and Reporting",
+    "description": "Generating sales forecasts and creating reports.",
+    "child_phases": [
+      {
+        "name": "Sales Forecasting",
+        "description": "Using trained models to predict future sales.",
+        "id": 300,
+        "workflow_id": 43,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Creating visualizations and reports for stakeholders.",
+        "id": 301,
+        "workflow_id": 43,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 299,
+    "workflow_id": 43,
+    "display_order": 3
+  },
+  {
+    "name": "Sales Forecasting",
+    "description": "Using trained models to predict future sales.",
+    "id": 300,
+    "workflow_id": 43,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Creating visualizations and reports for stakeholders.",
+    "id": 301,
+    "workflow_id": 43,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Monitoring and Updating",
+    "description": "Monitoring model performance, updating as needed.",
+    "child_phases": [
+      {
+        "name": "Performance Monitoring",
+        "description": "Tracking forecast accuracy over time.",
+        "id": 303,
+        "workflow_id": 43,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Retraining",
+        "description": "Retraining models with new data periodically.",
+        "id": 304,
+        "workflow_id": 43,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 302,
+    "workflow_id": 43,
+    "display_order": 4
+  },
+  {
+    "name": "Performance Monitoring",
+    "description": "Tracking forecast accuracy over time.",
+    "id": 303,
+    "workflow_id": 43,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Retraining",
+    "description": "Retraining models with new data periodically.",
+    "id": 304,
+    "workflow_id": 43,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Game Setup",
+    "description": "Initialize the game environment, create necessary data structures and load any required assets.",
+    "child_phases": [],
+    "id": 305,
+    "workflow_id": 44,
+    "display_order": 0
+  },
+  {
+    "name": "NPC Behavior Control",
+    "description": "Implement AI-driven behaviors for NPCs. This includes pathfinding, decision-making, and interactions with players and other NPCs.",
+    "child_phases": [
+      {
+        "name": "Pathfinding",
+        "description": "Develop algorithms for NPCs to navigate the game world efficiently.",
+        "id": 307,
+        "workflow_id": 44,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Decision Making",
+        "description": "Create rules or use machine learning models to determine NPC actions based on their state and surroundings.",
+        "id": 308,
+        "workflow_id": 44,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 306,
+    "workflow_id": 44,
+    "display_order": 1
+  },
+  {
+    "name": "Pathfinding",
+    "description": "Develop algorithms for NPCs to navigate the game world efficiently.",
+    "id": 307,
+    "workflow_id": 44,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Decision Making",
+    "description": "Create rules or use machine learning models to determine NPC actions based on their state and surroundings.",
+    "id": 308,
+    "workflow_id": 44,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quest Creation and Management",
+    "description": "Design, generate, and manage quests for players. This includes creating quest objectives, rewards, and associated NPCs.",
+    "child_phases": [
+      {
+        "name": "Quests Design",
+        "description": "Define the structure of quests, including objectives, dialogues, and rewards.",
+        "id": 310,
+        "workflow_id": 44,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Quest Generation",
+        "description": "Implement algorithms to create new quests dynamically based on game state.",
+        "id": 311,
+        "workflow_id": 44,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 309,
+    "workflow_id": 44,
+    "display_order": 2
+  },
+  {
+    "name": "Quests Design",
+    "description": "Define the structure of quests, including objectives, dialogues, and rewards.",
+    "id": 310,
+    "workflow_id": 44,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Quest Generation",
+    "description": "Implement algorithms to create new quests dynamically based on game state.",
+    "id": 311,
+    "workflow_id": 44,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Game Events Management",
+    "description": "Handle in-game events such as combat, dialogues, and special occurrences. Update game state accordingly.",
+    "child_phases": [
+      {
+        "name": "Combat System",
+        "description": "Manage turn-based or real-time combat mechanics, tracking character stats, abilities, and damage calculations.",
+        "id": 313,
+        "workflow_id": 44,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dialogue System",
+        "description": "Handle conversations between NPCs and players, updating game state based on player choices.",
+        "id": 314,
+        "workflow_id": 44,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 312,
+    "workflow_id": 44,
+    "display_order": 3
+  },
+  {
+    "name": "Combat System",
+    "description": "Manage turn-based or real-time combat mechanics, tracking character stats, abilities, and damage calculations.",
+    "id": 313,
+    "workflow_id": 44,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dialogue System",
+    "description": "Handle conversations between NPCs and players, updating game state based on player choices.",
+    "id": 314,
+    "workflow_id": 44,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Game Loop and Testing",
+    "description": "Implement the main game loop for running the simulation, and test various aspects of the game to ensure functionality and balance.",
+    "child_phases": [
+      {
+        "name": "Game Loop",
+        "description": "Create a function that runs continuously, updating game state based on player actions and AI decisions.",
+        "id": 316,
+        "workflow_id": 44,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Testing",
+        "description": "Develop tests to validate NPC behaviors, quest progression, and overall gameplay balance.",
+        "id": 317,
+        "workflow_id": 44,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 315,
+    "workflow_id": 44,
+    "display_order": 4
+  },
+  {
+    "name": "Game Loop",
+    "description": "Create a function that runs continuously, updating game state based on player actions and AI decisions.",
+    "id": 316,
+    "workflow_id": 44,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Develop tests to validate NPC behaviors, quest progression, and overall gameplay balance.",
+    "id": 317,
+    "workflow_id": 44,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure environment, load dependencies and data.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Ensure Python environment is correctly configured.",
+        "id": 319,
+        "workflow_id": 45,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dependency Installation",
+        "description": "Install required libraries such as OpenCV, NumPy, etc.",
+        "id": 320,
+        "workflow_id": 45,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Prepare input data like video streams or image sequences.",
+        "id": 321,
+        "workflow_id": 45,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 318,
+    "workflow_id": 45,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Ensure Python environment is correctly configured.",
+    "id": 319,
+    "workflow_id": 45,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dependency Installation",
+    "description": "Install required libraries such as OpenCV, NumPy, etc.",
+    "id": 320,
+    "workflow_id": 45,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data like video streams or image sequences.",
+    "id": 321,
+    "workflow_id": 45,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Object Detection",
+    "description": "Identify objects in each frame of the video stream.",
+    "child_phases": [
+      {
+        "name": "Frame Processing",
+        "description": "Process each frame individually for object detection.",
+        "id": 323,
+        "workflow_id": 45,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Object Identification",
+        "description": "Use algorithms like YOLO, SSD, or Faster R-CNN to identify objects.",
+        "id": 324,
+        "workflow_id": 45,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 322,
+    "workflow_id": 45,
+    "display_order": 1
+  },
+  {
+    "name": "Frame Processing",
+    "description": "Process each frame individually for object detection.",
+    "id": 323,
+    "workflow_id": 45,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Object Identification",
+    "description": "Use algorithms like YOLO, SSD, or Faster R-CNN to identify objects.",
+    "id": 324,
+    "workflow_id": 45,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Object Tracking",
+    "description": "Continuously track the identified objects as they move.",
+    "child_phases": [
+      {
+        "name": "Track Initialization",
+        "description": "Initialize tracking for newly detected objects in the first frame.",
+        "id": 326,
+        "workflow_id": 45,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Movement Analysis",
+        "description": "Analyze object movement between consecutive frames.",
+        "id": 327,
+        "workflow_id": 45,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Tracking Update",
+        "description": "Update object tracks based on their movements and positions.",
+        "id": 328,
+        "workflow_id": 45,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 325,
+    "workflow_id": 45,
+    "display_order": 2
+  },
+  {
+    "name": "Track Initialization",
+    "description": "Initialize tracking for newly detected objects in the first frame.",
+    "id": 326,
+    "workflow_id": 45,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Movement Analysis",
+    "description": "Analyze object movement between consecutive frames.",
+    "id": 327,
+    "workflow_id": 45,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tracking Update",
+    "description": "Update object tracks based on their movements and positions.",
+    "id": 328,
+    "workflow_id": 45,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Real-Time Processing",
+    "description": "Ensure the application can process video streams in real-time.",
+    "child_phases": [
+      {
+        "name": "Frame Rate Control",
+        "description": "Limit processing to maintain a suitable frame rate.",
+        "id": 330,
+        "workflow_id": 45,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Async Processing",
+        "description": "Implement asynchronous processing for efficient tracking.",
+        "id": 331,
+        "workflow_id": 45,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 329,
+    "workflow_id": 45,
+    "display_order": 3
+  },
+  {
+    "name": "Frame Rate Control",
+    "description": "Limit processing to maintain a suitable frame rate.",
+    "id": 330,
+    "workflow_id": 45,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Async Processing",
+    "description": "Implement asynchronous processing for efficient tracking.",
+    "id": 331,
+    "workflow_id": 45,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Result Visualization",
+    "description": "Display the tracked objects' positions and movements.",
+    "child_phases": [
+      {
+        "name": "Object Highlighting",
+        "description": "Highlight detected objects in each frame with bounding boxes.",
+        "id": 333,
+        "workflow_id": 45,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Movement Display",
+        "description": "Display object movement paths or trajectories.",
+        "id": 334,
+        "workflow_id": 45,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 332,
+    "workflow_id": 45,
+    "display_order": 4
+  },
+  {
+    "name": "Object Highlighting",
+    "description": "Highlight detected objects in each frame with bounding boxes.",
+    "id": 333,
+    "workflow_id": 45,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Movement Display",
+    "description": "Display object movement paths or trajectories.",
+    "id": 334,
+    "workflow_id": 45,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling and Optimization",
+    "description": "Ensure the application can handle errors gracefully and optimize performance.",
+    "child_phases": [
+      {
+        "name": "Error Detection",
+        "description": "Implement error detection mechanisms to handle exceptions.",
+        "id": 336,
+        "workflow_id": 45,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Performance Optimization",
+        "description": "Optimize tracking algorithms for better performance.",
+        "id": 337,
+        "workflow_id": 45,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 335,
+    "workflow_id": 45,
+    "display_order": 5
+  },
+  {
+    "name": "Error Detection",
+    "description": "Implement error detection mechanisms to handle exceptions.",
+    "id": 336,
+    "workflow_id": 45,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Optimization",
+    "description": "Optimize tracking algorithms for better performance.",
+    "id": 337,
+    "workflow_id": 45,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Clean and transform raw data into a suitable format for segmentation.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, and inconsistencies in the dataset.",
+        "id": 339,
+        "workflow_id": 46,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Engineering",
+        "description": "Create new features or transform existing ones to improve segmentation.",
+        "id": 340,
+        "workflow_id": 46,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 338,
+    "workflow_id": 46,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, and inconsistencies in the dataset.",
+    "id": 339,
+    "workflow_id": 46,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features or transform existing ones to improve segmentation.",
+    "id": 340,
+    "workflow_id": 46,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis",
+    "description": "Understand customer behaviors, preferences, and characteristics through visualizations and statistical analysis.",
+    "child_phases": [
+      {
+        "name": "Descriptive Statistics",
+        "description": "Calculate summary statistics to understand central tendencies and dispersions.",
+        "id": 342,
+        "workflow_id": 46,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Visualization",
+        "description": "Create visualizations to explore patterns, trends, and outliers in the data.",
+        "id": 343,
+        "workflow_id": 46,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 341,
+    "workflow_id": 46,
+    "display_order": 1
+  },
+  {
+    "name": "Descriptive Statistics",
+    "description": "Calculate summary statistics to understand central tendencies and dispersions.",
+    "id": 342,
+    "workflow_id": 46,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Create visualizations to explore patterns, trends, and outliers in the data.",
+    "id": 343,
+    "workflow_id": 46,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Segmentation Model Selection",
+    "description": "Choose appropriate segmentation algorithms based on the nature of the dataset.",
+    "child_phases": [
+      {
+        "name": "Algorithm Research",
+        "description": "Study and compare different clustering algorithms suitable for customer segmentation.",
+        "id": 345,
+        "workflow_id": 46,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Evaluation",
+        "description": "Evaluate selected algorithms using appropriate metrics to choose the best fit model.",
+        "id": 346,
+        "workflow_id": 46,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 344,
+    "workflow_id": 46,
+    "display_order": 2
+  },
+  {
+    "name": "Algorithm Research",
+    "description": "Study and compare different clustering algorithms suitable for customer segmentation.",
+    "id": 345,
+    "workflow_id": 46,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Evaluation",
+    "description": "Evaluate selected algorithms using appropriate metrics to choose the best fit model.",
+    "id": 346,
+    "workflow_id": 46,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Segmentation Model Training",
+    "description": "Train the chosen segmentation model on the prepared dataset.",
+    "child_phases": [
+      {
+        "name": "Hyperparameter Tuning",
+        "description": "Optimize model hyperparameters to improve segmentation performance.",
+        "id": 348,
+        "workflow_id": 46,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Validation",
+        "description": "Validate the trained model using techniques such as cross-validation.",
+        "id": 349,
+        "workflow_id": 46,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 347,
+    "workflow_id": 46,
+    "display_order": 3
+  },
+  {
+    "name": "Hyperparameter Tuning",
+    "description": "Optimize model hyperparameters to improve segmentation performance.",
+    "id": 348,
+    "workflow_id": 46,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Validation",
+    "description": "Validate the trained model using techniques such as cross-validation.",
+    "id": 349,
+    "workflow_id": 46,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Segmentation Interpretation and Analysis",
+    "description": "Interpret the results of segmentation, analyze customer groups, and derive insights for targeted marketing campaigns.",
+    "child_phases": [
+      {
+        "name": "Cluster Profiling",
+        "description": "Analyze the characteristics and behaviors of customers in each segment.",
+        "id": 351,
+        "workflow_id": 46,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Segmentation Visualization",
+        "description": "Visualize segmentation results to communicate insights effectively.",
+        "id": 352,
+        "workflow_id": 46,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 350,
+    "workflow_id": 46,
+    "display_order": 4
+  },
+  {
+    "name": "Cluster Profiling",
+    "description": "Analyze the characteristics and behaviors of customers in each segment.",
+    "id": 351,
+    "workflow_id": 46,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Segmentation Visualization",
+    "description": "Visualize segmentation results to communicate insights effectively.",
+    "id": 352,
+    "workflow_id": 46,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Deployment and Monitoring",
+    "description": "Deploy the trained model for real-world use and monitor its performance.",
+    "child_phases": [
+      {
+        "name": "API Development",
+        "description": "Develop an API or integration points to serve segmentation predictions.",
+        "id": 354,
+        "workflow_id": 46,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Monitoring",
+        "description": "Continuously monitor model performance, retrain as necessary, and update segments over time.",
+        "id": 355,
+        "workflow_id": 46,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 353,
+    "workflow_id": 46,
+    "display_order": 5
+  },
+  {
+    "name": "API Development",
+    "description": "Develop an API or integration points to serve segmentation predictions.",
+    "id": 354,
+    "workflow_id": 46,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Monitoring",
+    "description": "Continuously monitor model performance, retrain as necessary, and update segments over time.",
+    "id": 355,
+    "workflow_id": 46,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "System Initialization",
+    "description": "Set up the Python environment, import necessary libraries, and initialize variables.",
+    "child_phases": [],
+    "id": 356,
+    "workflow_id": 47,
+    "display_order": 0
+  },
+  {
+    "name": "Device Management",
+    "description": "Control and manage smart home devices via APIs or protocols.",
+    "child_phases": [
+      {
+        "name": "Device Discovery",
+        "description": "Identify available IoT devices and their capabilities.",
+        "id": 358,
+        "workflow_id": 47,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Device Interaction",
+        "description": "Send commands to control connected devices.",
+        "id": 359,
+        "workflow_id": 47,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 357,
+    "workflow_id": 47,
+    "display_order": 1
+  },
+  {
+    "name": "Device Discovery",
+    "description": "Identify available IoT devices and their capabilities.",
+    "id": 358,
+    "workflow_id": 47,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Device Interaction",
+    "description": "Send commands to control connected devices.",
+    "id": 359,
+    "workflow_id": 47,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Voice Command Processing",
+    "description": "Handle voice inputs, process natural language commands, and trigger actions.",
+    "child_phases": [
+      {
+        "name": "Speech-to-Text",
+        "description": "Convert audio input to text.",
+        "id": 361,
+        "workflow_id": 47,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Intent Recognition",
+        "description": "Identify user intent from the transcribed text.",
+        "id": 362,
+        "workflow_id": 47,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Action Triggering",
+        "description": "Execute actions based on recognized intents.",
+        "id": 363,
+        "workflow_id": 47,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 360,
+    "workflow_id": 47,
+    "display_order": 2
+  },
+  {
+    "name": "Speech-to-Text",
+    "description": "Convert audio input to text.",
+    "id": 361,
+    "workflow_id": 47,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Intent Recognition",
+    "description": "Identify user intent from the transcribed text.",
+    "id": 362,
+    "workflow_id": 47,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Action Triggering",
+    "description": "Execute actions based on recognized intents.",
+    "id": 363,
+    "workflow_id": 47,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Automated Triggers",
+    "description": "Set up routines and schedules for automated device control.",
+    "child_phases": [
+      {
+        "name": "Routine Creation",
+        "description": "Define sequences of actions to be performed automatically.",
+        "id": 365,
+        "workflow_id": 47,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Schedule Management",
+        "description": "Set up timers and reminders for routines.",
+        "id": 366,
+        "workflow_id": 47,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 364,
+    "workflow_id": 47,
+    "display_order": 3
+  },
+  {
+    "name": "Routine Creation",
+    "description": "Define sequences of actions to be performed automatically.",
+    "id": 365,
+    "workflow_id": 47,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Schedule Management",
+    "description": "Set up timers and reminders for routines.",
+    "id": 366,
+    "workflow_id": 47,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Contextual Information Provision",
+    "description": "Provide relevant information based on user queries or contextual triggers.",
+    "child_phases": [
+      {
+        "name": "Information Retrieval",
+        "description": "Fetch data from appropriate sources (e.g., web scraping, databases).",
+        "id": 368,
+        "workflow_id": 47,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Context Analysis",
+        "description": "Analyze user context to provide relevant information.",
+        "id": 369,
+        "workflow_id": 47,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 367,
+    "workflow_id": 47,
+    "display_order": 4
+  },
+  {
+    "name": "Information Retrieval",
+    "description": "Fetch data from appropriate sources (e.g., web scraping, databases).",
+    "id": 368,
+    "workflow_id": 47,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Context Analysis",
+    "description": "Analyze user context to provide relevant information.",
+    "id": 369,
+    "workflow_id": 47,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "System Monitoring and Error Handling",
+    "description": "Monitor system performance, handle errors gracefully, and log relevant events.",
+    "child_phases": [
+      {
+        "name": "Error Detection",
+        "description": "Identify and classify errors encountered during execution.",
+        "id": 371,
+        "workflow_id": 47,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling",
+        "description": "Implement strategies to recover from errors and maintain system functionality.",
+        "id": 372,
+        "workflow_id": 47,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 370,
+    "workflow_id": 47,
+    "display_order": 5
+  },
+  {
+    "name": "Error Detection",
+    "description": "Identify and classify errors encountered during execution.",
+    "id": 371,
+    "workflow_id": 47,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Implement strategies to recover from errors and maintain system functionality.",
+    "id": 372,
+    "workflow_id": 47,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Collect and prepare input data for analysis.",
+    "child_phases": [
+      {
+        "name": "Fetch Data",
+        "description": "Retrieve demand, supply, and market factor data.",
+        "id": 374,
+        "workflow_id": 48,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, and inconsistencies in the dataset.",
+        "id": 375,
+        "workflow_id": 48,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Engineering",
+        "description": "Create new relevant features for analysis, such as price trends or seasonality indicators.",
+        "id": 376,
+        "workflow_id": 48,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 373,
+    "workflow_id": 48,
+    "display_order": 0
+  },
+  {
+    "name": "Fetch Data",
+    "description": "Retrieve demand, supply, and market factor data.",
+    "id": 374,
+    "workflow_id": 48,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, and inconsistencies in the dataset.",
+    "id": 375,
+    "workflow_id": 48,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new relevant features for analysis, such as price trends or seasonality indicators.",
+    "id": 376,
+    "workflow_id": 48,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis (EDA)",
+    "description": "Understand and analyze the data to identify patterns and trends.",
+    "child_phases": [
+      {
+        "name": "Descriptive Statistics",
+        "description": "Calculate summary statistics to understand central tendency, dispersion, shape, etc.",
+        "id": 378,
+        "workflow_id": 48,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Visualization",
+        "description": "Create visualizations to explore relationships between variables and identify potential correlations or trends.",
+        "id": 379,
+        "workflow_id": 48,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 377,
+    "workflow_id": 48,
+    "display_order": 1
+  },
+  {
+    "name": "Descriptive Statistics",
+    "description": "Calculate summary statistics to understand central tendency, dispersion, shape, etc.",
+    "id": 378,
+    "workflow_id": 48,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Create visualizations to explore relationships between variables and identify potential correlations or trends.",
+    "id": 379,
+    "workflow_id": 48,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choose appropriate pricing optimization models and train them on the prepared data.",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Select suitable machine learning or statistical models for dynamic pricing optimization.",
+        "id": 381,
+        "workflow_id": 48,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Train Models",
+        "description": "Split data into training, validation, and test sets, then train the selected models on the training set.",
+        "id": 382,
+        "workflow_id": 48,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 380,
+    "workflow_id": 48,
+    "display_order": 2
+  },
+  {
+    "name": "Model Selection",
+    "description": "Select suitable machine learning or statistical models for dynamic pricing optimization.",
+    "id": 381,
+    "workflow_id": 48,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Train Models",
+    "description": "Split data into training, validation, and test sets, then train the selected models on the training set.",
+    "id": 382,
+    "workflow_id": 48,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Evaluation and Selection",
+    "description": "Evaluate model performance using appropriate metrics and select the best performing model.",
+    "child_phases": [
+      {
+        "name": "Evaluation Metrics",
+        "description": "Define evaluation metrics such as RMSE, MAE, or R-squared to measure model performance.",
+        "id": 384,
+        "workflow_id": 48,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Comparison",
+        "description": "Compare the performance of different models using the defined evaluation metrics.",
+        "id": 385,
+        "workflow_id": 48,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 383,
+    "workflow_id": 48,
+    "display_order": 3
+  },
+  {
+    "name": "Evaluation Metrics",
+    "description": "Define evaluation metrics such as RMSE, MAE, or R-squared to measure model performance.",
+    "id": 384,
+    "workflow_id": 48,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Comparison",
+    "description": "Compare the performance of different models using the defined evaluation metrics.",
+    "id": 385,
+    "workflow_id": 48,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Price Optimization",
+    "description": "Use the selected model to suggest optimal prices for individual listings.",
+    "child_phases": [
+      {
+        "name": "Make Predictions",
+        "description": "Feed market factors data into the trained model to predict optimal prices.",
+        "id": 387,
+        "workflow_id": 48,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Suggest Prices",
+        "description": "Output predicted optimal prices as suggestions for individual listings.",
+        "id": 388,
+        "workflow_id": 48,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 386,
+    "workflow_id": 48,
+    "display_order": 4
+  },
+  {
+    "name": "Make Predictions",
+    "description": "Feed market factors data into the trained model to predict optimal prices.",
+    "id": 387,
+    "workflow_id": 48,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Suggest Prices",
+    "description": "Output predicted optimal prices as suggestions for individual listings.",
+    "id": 388,
+    "workflow_id": 48,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Monitoring and Updating",
+    "description": "Monitor model performance, retrain if necessary, and update prices regularly.",
+    "child_phases": [
+      {
+        "name": "Performance Monitoring",
+        "description": "Track the performance of suggested prices over time to ensure they remain optimal.",
+        "id": 390,
+        "workflow_id": 48,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Retraining",
+        "description": "If performance degrades significantly, retrain the model using fresh data.",
+        "id": 391,
+        "workflow_id": 48,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 389,
+    "workflow_id": 48,
+    "display_order": 5
+  },
+  {
+    "name": "Performance Monitoring",
+    "description": "Track the performance of suggested prices over time to ensure they remain optimal.",
+    "id": 390,
+    "workflow_id": 48,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Retraining",
+    "description": "If performance degrades significantly, retrain the model using fresh data.",
+    "id": 391,
+    "workflow_id": 48,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Retrieval",
+    "description": "Fetch data about the specific thing.",
+    "child_phases": [],
+    "id": 392,
+    "workflow_id": 49,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Clean up and prepare the raw data.",
+    "child_phases": [
+      {
+        "name": "Handling Missing Values",
+        "description": "Fill or remove missing values in the dataset.",
+        "id": 394,
+        "workflow_id": 49,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Detection",
+        "description": "Identify and handle outliers in the dataset.",
+        "id": 395,
+        "workflow_id": 49,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 393,
+    "workflow_id": 49,
+    "display_order": 1
+  },
+  {
+    "name": "Handling Missing Values",
+    "description": "Fill or remove missing values in the dataset.",
+    "id": 394,
+    "workflow_id": 49,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Detection",
+    "description": "Identify and handle outliers in the dataset.",
+    "id": 395,
+    "workflow_id": 49,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Enrichment",
+    "description": "Add additional relevant data to enhance the dataset.",
+    "child_phases": [],
+    "id": 396,
+    "workflow_id": 49,
+    "display_order": 2
+  },
+  {
+    "name": "Data Processing",
+    "description": "Transform and analyze the dataset based on requirements.",
+    "child_phases": [
+      {
+        "name": "Aggregation",
+        "description": "Combine data based on specific criteria.",
+        "id": 398,
+        "workflow_id": 49,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Filtering",
+        "description": "Select specific rows or columns from the dataset.",
+        "id": 399,
+        "workflow_id": 49,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 397,
+    "workflow_id": 49,
+    "display_order": 3
+  },
+  {
+    "name": "Aggregation",
+    "description": "Combine data based on specific criteria.",
+    "id": 398,
+    "workflow_id": 49,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Filtering",
+    "description": "Select specific rows or columns from the dataset.",
+    "id": 399,
+    "workflow_id": 49,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Rendering",
+    "description": "Display or export the processed data.",
+    "child_phases": [
+      {
+        "name": "Visualization",
+        "description": "Create charts, graphs, or other visual representations of the data.",
+        "id": 401,
+        "workflow_id": 49,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Export",
+        "description": "Save the processed data in a specific format (e.g., CSV, JSON).",
+        "id": 402,
+        "workflow_id": 49,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 400,
+    "workflow_id": 49,
+    "display_order": 4
+  },
+  {
+    "name": "Visualization",
+    "description": "Create charts, graphs, or other visual representations of the data.",
+    "id": 401,
+    "workflow_id": 49,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Export",
+    "description": "Save the processed data in a specific format (e.g., CSV, JSON).",
+    "id": 402,
+    "workflow_id": 49,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Processing",
+    "description": "Validate and parse input matrix and power.",
+    "child_phases": [
+      {
+        "name": "Matrix Validation",
+        "description": "Check if the input is a square matrix.",
+        "id": 404,
+        "workflow_id": 73,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Power Validation",
+        "description": "Ensure the power is a non-negative integer.",
+        "id": 405,
+        "workflow_id": 73,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 403,
+    "workflow_id": 73,
+    "display_order": 0
+  },
+  {
+    "name": "Matrix Validation",
+    "description": "Check if the input is a square matrix.",
+    "id": 404,
+    "workflow_id": 73,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Power Validation",
+    "description": "Ensure the power is a non-negative integer.",
+    "id": 405,
+    "workflow_id": 73,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Matrix Power Calculation",
+    "description": "Calculate the power of the given matrix.",
+    "child_phases": [
+      {
+        "name": "Base Case Check",
+        "description": "Check if the power is zero, return identity matrix.",
+        "id": 407,
+        "workflow_id": 73,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Power Iteration",
+        "description": "Calculate the power using matrix multiplication.",
+        "id": 408,
+        "workflow_id": 73,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 406,
+    "workflow_id": 73,
+    "display_order": 1
+  },
+  {
+    "name": "Base Case Check",
+    "description": "Check if the power is zero, return identity matrix.",
+    "id": 407,
+    "workflow_id": 73,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Power Iteration",
+    "description": "Calculate the power using matrix multiplication.",
+    "id": 408,
+    "workflow_id": 73,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format and return the resulting matrix.",
+    "child_phases": [
+      {
+        "name": "Matrix Rounding",
+        "description": "Round off the decimal values in the resulting matrix.",
+        "id": 410,
+        "workflow_id": 73,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Matrix Stringification",
+        "description": "Convert the resulting matrix to a string representation.",
+        "id": 411,
+        "workflow_id": 73,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 409,
+    "workflow_id": 73,
+    "display_order": 2
+  },
+  {
+    "name": "Matrix Rounding",
+    "description": "Round off the decimal values in the resulting matrix.",
+    "id": 410,
+    "workflow_id": 73,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Matrix Stringification",
+    "description": "Convert the resulting matrix to a string representation.",
+    "id": 411,
+    "workflow_id": 73,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Handling",
+    "description": "Obtain and validate user input as an integer.",
+    "child_phases": [
+      {
+        "name": "Get Input",
+        "description": "Prompt the user for an integer input.",
+        "id": 413,
+        "workflow_id": 74,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Validate Input",
+        "description": "Check if the input is a valid positive integer.",
+        "id": 414,
+        "workflow_id": 74,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 412,
+    "workflow_id": 74,
+    "display_order": 0
+  },
+  {
+    "name": "Get Input",
+    "description": "Prompt the user for an integer input.",
+    "id": 413,
+    "workflow_id": 74,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Validate Input",
+    "description": "Check if the input is a valid positive integer.",
+    "id": 414,
+    "workflow_id": 74,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Prime Number Check",
+    "description": "Determine if the given number is prime.",
+    "child_phases": [
+      {
+        "name": "Number Handling",
+        "description": "Initialize variables for the number and its factors.",
+        "child_phases": [
+          {
+            "name": "Initialize Number",
+            "description": "Store the input as a number variable.",
+            "id": 417,
+            "workflow_id": 74,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Initialize Factors Counter",
+            "description": "Set a counter variable to keep track of factor count.",
+            "id": 418,
+            "workflow_id": 74,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 416,
+        "workflow_id": 74,
+        "display_order": 0
+      },
+      {
+        "name": "Factor Checking",
+        "description": "Iterate through possible factors and increment counter for each.",
+        "child_phases": [
+          {
+            "name": "Initialize Potential Factor",
+            "description": "Start checking potential factors from 2.",
+            "id": 420,
+            "workflow_id": 74,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Check Each Potential Factor",
+            "description": "Divide the number by the potential factor and increment counter if it divides evenly.",
+            "id": 421,
+            "workflow_id": 74,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 419,
+        "workflow_id": 74,
+        "display_order": 1
+      },
+      {
+        "name": "Prime Decision",
+        "description": "Determine if the number is prime based on factor count.",
+        "child_phases": [
+          {
+            "name": "Check Factor Count",
+            "description": "If counter > 1, the number is not prime.",
+            "id": 423,
+            "workflow_id": 74,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Set Result",
+            "description": "Return True if the number is prime (counter == 2), False otherwise.",
+            "id": 424,
+            "workflow_id": 74,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 422,
+        "workflow_id": 74,
+        "display_order": 2
+      }
+    ],
+    "id": 415,
+    "workflow_id": 74,
+    "display_order": 1
+  },
+  {
+    "name": "Number Handling",
+    "description": "Initialize variables for the number and its factors.",
+    "child_phases": [
+      {
+        "name": "Initialize Number",
+        "description": "Store the input as a number variable.",
+        "id": 417,
+        "workflow_id": 74,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Initialize Factors Counter",
+        "description": "Set a counter variable to keep track of factor count.",
+        "id": 418,
+        "workflow_id": 74,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 416,
+    "workflow_id": 74,
+    "display_order": 0
+  },
+  {
+    "name": "Initialize Number",
+    "description": "Store the input as a number variable.",
+    "id": 417,
+    "workflow_id": 74,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Initialize Factors Counter",
+    "description": "Set a counter variable to keep track of factor count.",
+    "id": 418,
+    "workflow_id": 74,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Factor Checking",
+    "description": "Iterate through possible factors and increment counter for each.",
+    "child_phases": [
+      {
+        "name": "Initialize Potential Factor",
+        "description": "Start checking potential factors from 2.",
+        "id": 420,
+        "workflow_id": 74,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Check Each Potential Factor",
+        "description": "Divide the number by the potential factor and increment counter if it divides evenly.",
+        "id": 421,
+        "workflow_id": 74,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 419,
+    "workflow_id": 74,
+    "display_order": 1
+  },
+  {
+    "name": "Initialize Potential Factor",
+    "description": "Start checking potential factors from 2.",
+    "id": 420,
+    "workflow_id": 74,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Check Each Potential Factor",
+    "description": "Divide the number by the potential factor and increment counter if it divides evenly.",
+    "id": 421,
+    "workflow_id": 74,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Prime Decision",
+    "description": "Determine if the number is prime based on factor count.",
+    "child_phases": [
+      {
+        "name": "Check Factor Count",
+        "description": "If counter > 1, the number is not prime.",
+        "id": 423,
+        "workflow_id": 74,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Set Result",
+        "description": "Return True if the number is prime (counter == 2), False otherwise.",
+        "id": 424,
+        "workflow_id": 74,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 422,
+    "workflow_id": 74,
+    "display_order": 2
+  },
+  {
+    "name": "Check Factor Count",
+    "description": "If counter > 1, the number is not prime.",
+    "id": 423,
+    "workflow_id": 74,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Set Result",
+    "description": "Return True if the number is prime (counter == 2), False otherwise.",
+    "id": 424,
+    "workflow_id": 74,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Handling",
+    "description": "Display the result of the prime number check.",
+    "child_phases": [
+      {
+        "name": "Prepare Output Message",
+        "description": "Format the output message based on the prime checking result.",
+        "id": 426,
+        "workflow_id": 74,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Display Output",
+        "description": "Print or return the output message to the user.",
+        "id": 427,
+        "workflow_id": 74,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 425,
+    "workflow_id": 74,
+    "display_order": 2
+  },
+  {
+    "name": "Prepare Output Message",
+    "description": "Format the output message based on the prime checking result.",
+    "id": 426,
+    "workflow_id": 74,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Display Output",
+    "description": "Print or return the output message to the user.",
+    "id": 427,
+    "workflow_id": 74,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and load required data such as commit history.",
+    "child_phases": [
+      {
+        "name": "Load Git Repository Data",
+        "description": "Fetch and load git repository data.",
+        "id": 429,
+        "workflow_id": 75,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Preprocess Data",
+        "description": "Clean and structure commit history data.",
+        "id": 430,
+        "workflow_id": 75,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 428,
+    "workflow_id": 75,
+    "display_order": 0
+  },
+  {
+    "name": "Load Git Repository Data",
+    "description": "Fetch and load git repository data.",
+    "id": 429,
+    "workflow_id": 75,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Preprocess Data",
+    "description": "Clean and structure commit history data.",
+    "id": 430,
+    "workflow_id": 75,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Analyze commit history data.",
+    "child_phases": [
+      {
+        "name": "Calculate Activity Trends",
+        "description": "Compute trends in lines changed over time.",
+        "id": 432,
+        "workflow_id": 75,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Contributors",
+        "description": "Analyze contributors and their commits.",
+        "id": 433,
+        "workflow_id": 75,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 431,
+    "workflow_id": 75,
+    "display_order": 1
+  },
+  {
+    "name": "Calculate Activity Trends",
+    "description": "Compute trends in lines changed over time.",
+    "id": 432,
+    "workflow_id": 75,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Contributors",
+    "description": "Analyze contributors and their commits.",
+    "id": 433,
+    "workflow_id": 75,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Create visualizations for the analyzed data.",
+    "child_phases": [
+      {
+        "name": "Generate Activity Line Graph",
+        "description": "Plot trends in lines changed over time.",
+        "id": 435,
+        "workflow_id": 75,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate Contributor Chart",
+        "description": "Visualize contributions by different users.",
+        "id": 436,
+        "workflow_id": 75,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 434,
+    "workflow_id": 75,
+    "display_order": 2
+  },
+  {
+    "name": "Generate Activity Line Graph",
+    "description": "Plot trends in lines changed over time.",
+    "id": 435,
+    "workflow_id": 75,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate Contributor Chart",
+    "description": "Visualize contributions by different users.",
+    "id": 436,
+    "workflow_id": 75,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Fetch data from API.",
+    "child_phases": [
+      {
+        "name": "API Request",
+        "description": "Send request to the API endpoint.",
+        "id": 438,
+        "workflow_id": 76,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Response Handling",
+        "description": "Handle and parse API response.",
+        "id": 439,
+        "workflow_id": 76,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 437,
+    "workflow_id": 76,
+    "display_order": 0
+  },
+  {
+    "name": "API Request",
+    "description": "Send request to the API endpoint.",
+    "id": 438,
+    "workflow_id": 76,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Response Handling",
+    "description": "Handle and parse API response.",
+    "id": 439,
+    "workflow_id": 76,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Normalize data into a consistent format.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Remove any invalid or irrelevant data.",
+        "id": 441,
+        "workflow_id": 76,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Normalization",
+        "description": "Transform data into a uniform format.",
+        "id": 442,
+        "workflow_id": 76,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 440,
+    "workflow_id": 76,
+    "display_order": 1
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Remove any invalid or irrelevant data.",
+    "id": 441,
+    "workflow_id": 76,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Normalization",
+    "description": "Transform data into a uniform format.",
+    "id": 442,
+    "workflow_id": 76,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Validation",
+    "description": "Ensure the integrity of the data.",
+    "child_phases": [
+      {
+        "name": "Type Checking",
+        "description": "Check if all fields have correct data types.",
+        "id": 444,
+        "workflow_id": 76,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Value Checking",
+        "description": "Check if values fall within expected ranges or constraints.",
+        "id": 445,
+        "workflow_id": 76,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 443,
+    "workflow_id": 76,
+    "display_order": 2
+  },
+  {
+    "name": "Type Checking",
+    "description": "Check if all fields have correct data types.",
+    "id": 444,
+    "workflow_id": 76,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Value Checking",
+    "description": "Check if values fall within expected ranges or constraints.",
+    "id": 445,
+    "workflow_id": 76,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Storage",
+    "description": "Store data in CSV file.",
+    "child_phases": [
+      {
+        "name": "CSV Formatting",
+        "description": "Format data into CSV rows.",
+        "id": 447,
+        "workflow_id": 76,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "File Writing",
+        "description": "Write formatted data to CSV file.",
+        "id": 448,
+        "workflow_id": 76,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 446,
+    "workflow_id": 76,
+    "display_order": 3
+  },
+  {
+    "name": "CSV Formatting",
+    "description": "Format data into CSV rows.",
+    "id": 447,
+    "workflow_id": 76,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "File Writing",
+    "description": "Write formatted data to CSV file.",
+    "id": 448,
+    "workflow_id": 76,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling and Logging",
+    "description": "Handle errors gracefully and log appropriately.",
+    "child_phases": [
+      {
+        "name": "Exception Handling",
+        "description": "Catch and handle exceptions during processing.",
+        "id": 450,
+        "workflow_id": 76,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Logging",
+        "description": "Log events for troubleshooting.",
+        "id": 451,
+        "workflow_id": 76,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 449,
+    "workflow_id": 76,
+    "display_order": 4
+  },
+  {
+    "name": "Exception Handling",
+    "description": "Catch and handle exceptions during processing.",
+    "id": 450,
+    "workflow_id": 76,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Logging",
+    "description": "Log events for troubleshooting.",
+    "id": 451,
+    "workflow_id": 76,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Preparation",
+    "description": "Prepare and validate the input data - a list of news articles as dictionaries with 'title' and 'text' keys.",
+    "child_phases": [],
+    "id": 452,
+    "workflow_id": 77,
+    "display_order": 0
+  },
+  {
+    "name": "Article Processing",
+    "description": "Process each article in the input list to generate a summary.",
+    "child_phases": [
+      {
+        "name": "Sentence Extraction",
+        "description": "Extract the first two sentences from the article text. If there are fewer than two sentences, use the whole text.",
+        "id": 454,
+        "workflow_id": 77,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 453,
+    "workflow_id": 77,
+    "display_order": 1
+  },
+  {
+    "name": "Sentence Extraction",
+    "description": "Extract the first two sentences from the article text. If there are fewer than two sentences, use the whole text.",
+    "id": 454,
+    "workflow_id": 77,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summary Combination",
+    "description": "Combine all generated summaries into one paragraph, separated by newlines.",
+    "child_phases": [],
+    "id": 455,
+    "workflow_id": 77,
+    "display_order": 2
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate the final combined summary as a string.",
+    "child_phases": [],
+    "id": 456,
+    "workflow_id": 77,
+    "display_order": 3
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data and ensure its compatibility with the K-Means algorithm.",
+    "child_phases": [
+      {
+        "name": "Image Loading",
+        "description": "Load images from their source locations.",
+        "id": 458,
+        "workflow_id": 78,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preprocessing",
+        "description": "Convert images to appropriate formats, normalize pixel values if necessary.",
+        "id": 459,
+        "workflow_id": 78,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 457,
+    "workflow_id": 78,
+    "display_order": 0
+  },
+  {
+    "name": "Image Loading",
+    "description": "Load images from their source locations.",
+    "id": 458,
+    "workflow_id": 78,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Convert images to appropriate formats, normalize pixel values if necessary.",
+    "id": 459,
+    "workflow_id": 78,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "K-Means Clustering Setup",
+    "description": "Configure the K-Means clustering algorithm for image segmentation.",
+    "child_phases": [
+      {
+        "name": "Determine Number of Clusters",
+        "description": "Decide on the optimal number of clusters based on domain knowledge or experimentation.",
+        "id": 461,
+        "workflow_id": 78,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Initialize Cluster Centers",
+        "description": "Randomly select initial cluster centers.",
+        "id": 462,
+        "workflow_id": 78,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 460,
+    "workflow_id": 78,
+    "display_order": 1
+  },
+  {
+    "name": "Determine Number of Clusters",
+    "description": "Decide on the optimal number of clusters based on domain knowledge or experimentation.",
+    "id": 461,
+    "workflow_id": 78,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Initialize Cluster Centers",
+    "description": "Randomly select initial cluster centers.",
+    "id": 462,
+    "workflow_id": 78,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Image Segmentation via K-Means",
+    "description": "Perform the image segmentation using the configured K-Means algorithm.",
+    "child_phases": [
+      {
+        "name": "Assign Pixels to Clusters",
+        "description": "Assign each pixel of the input images to its nearest cluster center.",
+        "id": 464,
+        "workflow_id": 78,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Update Cluster Centers",
+        "description": "Recalculate the center of mass for each cluster.",
+        "id": 465,
+        "workflow_id": 78,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Iterative Refinement",
+        "description": "Repeat the assignment and update steps until convergence or a maximum number of iterations is reached.",
+        "id": 466,
+        "workflow_id": 78,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 463,
+    "workflow_id": 78,
+    "display_order": 2
+  },
+  {
+    "name": "Assign Pixels to Clusters",
+    "description": "Assign each pixel of the input images to its nearest cluster center.",
+    "id": 464,
+    "workflow_id": 78,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Update Cluster Centers",
+    "description": "Recalculate the center of mass for each cluster.",
+    "id": 465,
+    "workflow_id": 78,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Iterative Refinement",
+    "description": "Repeat the assignment and update steps until convergence or a maximum number of iterations is reached.",
+    "id": 466,
+    "workflow_id": 78,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Post-Processing",
+    "description": "Refine and analyze the segmented images.",
+    "child_phases": [
+      {
+        "name": "Visualize Segmented Images",
+        "description": "Display or save the segmented images for evaluation.",
+        "id": 468,
+        "workflow_id": 78,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Evaluation Metrics",
+        "description": "Calculate evaluation metrics to assess the quality of segmentation.",
+        "id": 469,
+        "workflow_id": 78,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 467,
+    "workflow_id": 78,
+    "display_order": 3
+  },
+  {
+    "name": "Visualize Segmented Images",
+    "description": "Display or save the segmented images for evaluation.",
+    "id": 468,
+    "workflow_id": 78,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Evaluation Metrics",
+    "description": "Calculate evaluation metrics to assess the quality of segmentation.",
+    "id": 469,
+    "workflow_id": 78,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure the environment and prepare input data.",
+    "child_phases": [],
+    "id": 470,
+    "workflow_id": 79,
+    "display_order": 0
+  },
+  {
+    "name": "Parsing",
+    "description": "Extract information from OpenAPI/Swagger specification files.",
+    "child_phases": [
+      {
+        "name": "Load Specification",
+        "description": "Read and load the API specifications.",
+        "id": 472,
+        "workflow_id": 79,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parse Endpoints",
+        "description": "Extract endpoints, methods, parameters, and responses from the specification.",
+        "id": 473,
+        "workflow_id": 79,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 471,
+    "workflow_id": 79,
+    "display_order": 1
+  },
+  {
+    "name": "Load Specification",
+    "description": "Read and load the API specifications.",
+    "id": 472,
+    "workflow_id": 79,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parse Endpoints",
+    "description": "Extract endpoints, methods, parameters, and responses from the specification.",
+    "id": 473,
+    "workflow_id": 79,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Generation",
+    "description": "Generate markdown or HTML formatted API documentation.",
+    "child_phases": [
+      {
+        "name": "Document Structure",
+        "description": "Create the basic structure of the documentation (e.g., table of contents, headers).",
+        "id": 475,
+        "workflow_id": 79,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Populate Documentation",
+        "description": "Fill in the documentation with the parsed information.",
+        "id": 476,
+        "workflow_id": 79,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Format Documentation",
+        "description": "Apply markdown or HTML formatting to the generated documentation.",
+        "id": 477,
+        "workflow_id": 79,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 474,
+    "workflow_id": 79,
+    "display_order": 2
+  },
+  {
+    "name": "Document Structure",
+    "description": "Create the basic structure of the documentation (e.g., table of contents, headers).",
+    "id": 475,
+    "workflow_id": 79,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Populate Documentation",
+    "description": "Fill in the documentation with the parsed information.",
+    "id": 476,
+    "workflow_id": 79,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Format Documentation",
+    "description": "Apply markdown or HTML formatting to the generated documentation.",
+    "id": 477,
+    "workflow_id": 79,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Preprocessing the dataset of customer reviews.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Handling missing values, removing duplicates, and irrelevant data.",
+        "id": 479,
+        "workflow_id": 80,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Text Preprocessing",
+        "description": "Tokenization, stemming, lemmatization, stopword removal.",
+        "id": 480,
+        "workflow_id": 80,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 478,
+    "workflow_id": 80,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handling missing values, removing duplicates, and irrelevant data.",
+    "id": 479,
+    "workflow_id": 80,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Tokenization, stemming, lemmatization, stopword removal.",
+    "id": 480,
+    "workflow_id": 80,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Bias Identification",
+    "description": "Detecting over-represented sentiments in the dataset.",
+    "child_phases": [
+      {
+        "name": "Sentiment Analysis",
+        "description": "Analyzing sentiment of reviews using a baseline model.",
+        "id": 482,
+        "workflow_id": 80,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Bias Detection",
+        "description": "Identifying biases using statistical methods or bias metrics.",
+        "id": 483,
+        "workflow_id": 80,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 481,
+    "workflow_id": 80,
+    "display_order": 1
+  },
+  {
+    "name": "Sentiment Analysis",
+    "description": "Analyzing sentiment of reviews using a baseline model.",
+    "id": 482,
+    "workflow_id": 80,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Bias Detection",
+    "description": "Identifying biases using statistical methods or bias metrics.",
+    "id": 483,
+    "workflow_id": 80,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Debiasing Techniques",
+    "description": "Applying techniques to mitigate the identified biases.",
+    "child_phases": [
+      {
+        "name": "Reweighting Samples",
+        "description": "Adjusting the weights of biased samples in the dataset.",
+        "id": 485,
+        "workflow_id": 80,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Parameter Adjustment",
+        "description": "Modifying model parameters to reduce bias.",
+        "id": 486,
+        "workflow_id": 80,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Adversarial Learning",
+        "description": "Using techniques like adversarial learning to learn a fair representation.",
+        "id": 487,
+        "workflow_id": 80,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 484,
+    "workflow_id": 80,
+    "display_order": 2
+  },
+  {
+    "name": "Reweighting Samples",
+    "description": "Adjusting the weights of biased samples in the dataset.",
+    "id": 485,
+    "workflow_id": 80,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Parameter Adjustment",
+    "description": "Modifying model parameters to reduce bias.",
+    "id": 486,
+    "workflow_id": 80,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Adversarial Learning",
+    "description": "Using techniques like adversarial learning to learn a fair representation.",
+    "id": 487,
+    "workflow_id": 80,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Evaluation",
+    "description": "Evaluating the fairness and accuracy of the debiased sentiment analysis model.",
+    "child_phases": [
+      {
+        "name": "Fairness Metrics",
+        "description": "Calculating metrics like demographic parity, equal opportunity.",
+        "id": 489,
+        "workflow_id": 80,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Accuracy Evaluation",
+        "description": "Measuring the accuracy of the debiased sentiment analysis model.",
+        "id": 490,
+        "workflow_id": 80,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 488,
+    "workflow_id": 80,
+    "display_order": 3
+  },
+  {
+    "name": "Fairness Metrics",
+    "description": "Calculating metrics like demographic parity, equal opportunity.",
+    "id": 489,
+    "workflow_id": 80,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Accuracy Evaluation",
+    "description": "Measuring the accuracy of the debiased sentiment analysis model.",
+    "id": 490,
+    "workflow_id": 80,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load the CSV dataset into a pandas DataFrame.",
+    "child_phases": [],
+    "id": 491,
+    "workflow_id": 81,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, remove duplicates, and convert data types.",
+    "child_phases": [
+      {
+        "name": "Handling Missing Values",
+        "description": "Fill or drop missing values based on the dataset's nature.",
+        "id": 493,
+        "workflow_id": 81,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Removing Duplicates",
+        "description": "Remove duplicate rows from the dataset.",
+        "id": 494,
+        "workflow_id": 81,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Data Type Conversion",
+        "description": "Convert data types of columns to appropriate ones (e.g., converting a column of numeric strings to integers).",
+        "id": 495,
+        "workflow_id": 81,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 492,
+    "workflow_id": 81,
+    "display_order": 1
+  },
+  {
+    "name": "Handling Missing Values",
+    "description": "Fill or drop missing values based on the dataset's nature.",
+    "id": 493,
+    "workflow_id": 81,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Removing Duplicates",
+    "description": "Remove duplicate rows from the dataset.",
+    "id": 494,
+    "workflow_id": 81,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Type Conversion",
+    "description": "Convert data types of columns to appropriate ones (e.g., converting a column of numeric strings to integers).",
+    "id": 495,
+    "workflow_id": 81,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Encoding Categorical Variables",
+    "description": "Encode categorical variables using techniques like one-hot encoding or label encoding.",
+    "child_phases": [],
+    "id": 496,
+    "workflow_id": 81,
+    "display_order": 2
+  },
+  {
+    "name": "Data Reporting",
+    "description": "Generate a report summarizing the preprocessing steps taken and the final dataset's characteristics.",
+    "child_phases": [],
+    "id": 497,
+    "workflow_id": 81,
+    "display_order": 3
+  },
+  {
+    "name": "Problem Setup",
+    "description": "Set up the environment, prepare input data and define the problem.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Configure Python environment with required dependencies.",
+        "id": 499,
+        "workflow_id": 82,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Prepare input data for coin tosses.",
+        "id": 500,
+        "workflow_id": 82,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 498,
+    "workflow_id": 82,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Configure Python environment with required dependencies.",
+    "id": 499,
+    "workflow_id": 82,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data for coin tosses.",
+    "id": 500,
+    "workflow_id": 82,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Bayesian Inference Implementation",
+    "description": "Implement functions for priors, likelihoods, and Bayes theorem update.",
+    "child_phases": [
+      {
+        "name": "Define Priors",
+        "description": "Write Python function to set up priors using beta distribution.",
+        "id": 502,
+        "workflow_id": 82,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Define Likelihoods",
+        "description": "Write Python function to define likelihoods based on observed data.",
+        "id": 503,
+        "workflow_id": 82,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Bayes Theorem Update",
+        "description": "Write Python function to update models using Bayes theorem.",
+        "id": 504,
+        "workflow_id": 82,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 501,
+    "workflow_id": 82,
+    "display_order": 1
+  },
+  {
+    "name": "Define Priors",
+    "description": "Write Python function to set up priors using beta distribution.",
+    "id": 502,
+    "workflow_id": 82,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Define Likelihoods",
+    "description": "Write Python function to define likelihoods based on observed data.",
+    "id": 503,
+    "workflow_id": 82,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Bayes Theorem Update",
+    "description": "Write Python function to update models using Bayes theorem.",
+    "id": 504,
+    "workflow_id": 82,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Model Estimation",
+    "description": "Estimate the probability that a coin is biased towards heads.",
+    "child_phases": [
+      {
+        "name": "Run Inference",
+        "description": "Execute the Bayesian inference functions with input data.",
+        "id": 506,
+        "workflow_id": 82,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Result Analysis",
+        "description": "Analyze and interpret the estimated probabilities.",
+        "id": 507,
+        "workflow_id": 82,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 505,
+    "workflow_id": 82,
+    "display_order": 2
+  },
+  {
+    "name": "Run Inference",
+    "description": "Execute the Bayesian inference functions with input data.",
+    "id": 506,
+    "workflow_id": 82,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Result Analysis",
+    "description": "Analyze and interpret the estimated probabilities.",
+    "id": 507,
+    "workflow_id": 82,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and organize the supplier data and ethical considerations metrics.",
+    "child_phases": [
+      {
+        "name": "Load Data",
+        "description": "Load the supplier data and ethical metrics from available sources.",
+        "id": 509,
+        "workflow_id": 83,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Cleanse Data",
+        "description": "Handle missing values, duplicates, and inconsistencies in the data.",
+        "id": 510,
+        "workflow_id": 83,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 508,
+    "workflow_id": 83,
+    "display_order": 0
+  },
+  {
+    "name": "Load Data",
+    "description": "Load the supplier data and ethical metrics from available sources.",
+    "id": 509,
+    "workflow_id": 83,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Cleanse Data",
+    "description": "Handle missing values, duplicates, and inconsistencies in the data.",
+    "id": 510,
+    "workflow_id": 83,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Analyze the prepared data to calculate ethical scores for each supplier.",
+    "child_phases": [
+      {
+        "name": "Feature Engineering",
+        "description": "Create new features that reflect suppliers' ethical practices.",
+        "id": 512,
+        "workflow_id": 83,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Calculate Ethical Scores",
+        "description": "Compute an overall ethical score for each supplier based on given weights for sustainability, labor standards, and supply chain transparency.",
+        "id": 513,
+        "workflow_id": 83,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 511,
+    "workflow_id": 83,
+    "display_order": 1
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features that reflect suppliers' ethical practices.",
+    "id": 512,
+    "workflow_id": 83,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Calculate Ethical Scores",
+    "description": "Compute an overall ethical score for each supplier based on given weights for sustainability, labor standards, and supply chain transparency.",
+    "id": 513,
+    "workflow_id": 83,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Ranking",
+    "description": "Rank suppliers based on their ethical scores.",
+    "child_phases": [
+      {
+        "name": "Sort Suppliers",
+        "description": "Arrange suppliers in descending order of their ethical scores.",
+        "id": 515,
+        "workflow_id": 83,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Paginate Results",
+        "description": "Break down the ranked list into manageable pages or groups for better visualization.",
+        "id": 516,
+        "workflow_id": 83,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 514,
+    "workflow_id": 83,
+    "display_order": 2
+  },
+  {
+    "name": "Sort Suppliers",
+    "description": "Arrange suppliers in descending order of their ethical scores.",
+    "id": 515,
+    "workflow_id": 83,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Paginate Results",
+    "description": "Break down the ranked list into manageable pages or groups for better visualization.",
+    "id": 516,
+    "workflow_id": 83,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization and Reporting",
+    "description": "Generate visualizations and reports to communicate the ranking results.",
+    "child_phases": [
+      {
+        "name": "Create Visualizations",
+        "description": "Generate charts, graphs, or other visual aids to illustrate supplier rankings.",
+        "id": 518,
+        "workflow_id": 83,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Report",
+        "description": "Compose a report summarizing the ranking process and results.",
+        "id": 519,
+        "workflow_id": 83,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 517,
+    "workflow_id": 83,
+    "display_order": 3
+  },
+  {
+    "name": "Create Visualizations",
+    "description": "Generate charts, graphs, or other visual aids to illustrate supplier rankings.",
+    "id": 518,
+    "workflow_id": 83,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Report",
+    "description": "Compose a report summarizing the ranking process and results.",
+    "id": 519,
+    "workflow_id": 83,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialize the environment, import necessary libraries and prepare input data.",
+    "child_phases": [
+      {
+        "name": "Environment Setup",
+        "description": "Configure Python environment",
+        "id": 521,
+        "workflow_id": 84,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Import Libraries",
+        "description": "Import required Python libraries",
+        "id": 522,
+        "workflow_id": 84,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Input Data",
+        "description": "Load and prepare input data",
+        "id": 523,
+        "workflow_id": 84,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 520,
+    "workflow_id": 84,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Setup",
+    "description": "Configure Python environment",
+    "id": 521,
+    "workflow_id": 84,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Import Libraries",
+    "description": "Import required Python libraries",
+    "id": 522,
+    "workflow_id": 84,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Input Data",
+    "description": "Load and prepare input data",
+    "id": 523,
+    "workflow_id": 84,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Landscape Generation Functionality",
+    "description": "Develop functions to generate landscape based on pipe inputs.",
+    "child_phases": [
+      {
+        "name": "Define Base Landscape",
+        "description": "Create a basic landscape structure",
+        "id": 525,
+        "workflow_id": 84,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Pipe Input Processing",
+        "description": "Implement functions to process pipe inputs and modify the landscape",
+        "id": 526,
+        "workflow_id": 84,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Validate Inputs",
+        "description": "Ensure input pipes are valid for landscape generation",
+        "id": 527,
+        "workflow_id": 84,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 524,
+    "workflow_id": 84,
+    "display_order": 1
+  },
+  {
+    "name": "Define Base Landscape",
+    "description": "Create a basic landscape structure",
+    "id": 525,
+    "workflow_id": 84,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Pipe Input Processing",
+    "description": "Implement functions to process pipe inputs and modify the landscape",
+    "id": 526,
+    "workflow_id": 84,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Validate Inputs",
+    "description": "Ensure input pipes are valid for landscape generation",
+    "id": 527,
+    "workflow_id": 84,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the landscape generator with various input scenarios.",
+    "child_phases": [
+      {
+        "name": "Unit Tests",
+        "description": "Test individual functions and their inputs/outputs",
+        "id": 529,
+        "workflow_id": 84,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Tests",
+        "description": "Test how functions work together",
+        "id": 530,
+        "workflow_id": 84,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "User Scenario Tests",
+        "description": "Test the tool with user-provided input pipes",
+        "id": 531,
+        "workflow_id": 84,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 528,
+    "workflow_id": 84,
+    "display_order": 2
+  },
+  {
+    "name": "Unit Tests",
+    "description": "Test individual functions and their inputs/outputs",
+    "id": 529,
+    "workflow_id": 84,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Tests",
+    "description": "Test how functions work together",
+    "id": 530,
+    "workflow_id": 84,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "User Scenario Tests",
+    "description": "Test the tool with user-provided input pipes",
+    "id": 531,
+    "workflow_id": 84,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation and Finalization",
+    "description": "Create documentation, optimize code, and prepare for delivery.",
+    "child_phases": [
+      {
+        "name": "Code Commenting",
+        "description": "Add comments to explain the functionality of each section",
+        "id": 533,
+        "workflow_id": 84,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Documentation Creation",
+        "description": "Prepare user guide and API documentation",
+        "id": 534,
+        "workflow_id": 84,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Optimization",
+        "description": "Refine code for performance and efficiency",
+        "id": 535,
+        "workflow_id": 84,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 532,
+    "workflow_id": 84,
+    "display_order": 3
+  },
+  {
+    "name": "Code Commenting",
+    "description": "Add comments to explain the functionality of each section",
+    "id": 533,
+    "workflow_id": 84,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation Creation",
+    "description": "Prepare user guide and API documentation",
+    "id": 534,
+    "workflow_id": 84,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Optimization",
+    "description": "Refine code for performance and efficiency",
+    "id": 535,
+    "workflow_id": 84,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Initialize",
+    "description": "Set up the environment and tools.",
+    "child_phases": [
+      {
+        "name": "Check Dependencies",
+        "description": "Ensure required dependencies are installed.",
+        "id": 537,
+        "workflow_id": 85,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Configure Tools",
+        "description": "Set up flake8, black, pylint for use.",
+        "id": 538,
+        "workflow_id": 85,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 536,
+    "workflow_id": 85,
+    "display_order": 0
+  },
+  {
+    "name": "Check Dependencies",
+    "description": "Ensure required dependencies are installed.",
+    "id": 537,
+    "workflow_id": 85,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Configure Tools",
+    "description": "Set up flake8, black, pylint for use.",
+    "id": 538,
+    "workflow_id": 85,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Linting and Verification",
+    "description": "Run linting tools on given commit or branch.",
+    "child_phases": [
+      {
+        "name": "flake8",
+        "description": "Check Python code for style guide adherence.",
+        "id": 540,
+        "workflow_id": 85,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "black",
+        "description": "Format Python code consistently.",
+        "id": 541,
+        "workflow_id": 85,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "pylint",
+        "description": "Verify Python code adheres to best practices.",
+        "id": 542,
+        "workflow_id": 85,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 539,
+    "workflow_id": 85,
+    "display_order": 1
+  },
+  {
+    "name": "flake8",
+    "description": "Check Python code for style guide adherence.",
+    "id": 540,
+    "workflow_id": 85,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "black",
+    "description": "Format Python code consistently.",
+    "id": 541,
+    "workflow_id": 85,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "pylint",
+    "description": "Verify Python code adheres to best practices.",
+    "id": 542,
+    "workflow_id": 85,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Reporting and Improvement",
+    "description": "Generate reports and improve consistency.",
+    "child_phases": [
+      {
+        "name": "Generate Reports",
+        "description": "Create summaries of linting results.",
+        "id": 544,
+        "workflow_id": 85,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Improve Consistency",
+        "description": "Apply linting tool suggestions to improve branch history.",
+        "id": 545,
+        "workflow_id": 85,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 543,
+    "workflow_id": 85,
+    "display_order": 2
+  },
+  {
+    "name": "Generate Reports",
+    "description": "Create summaries of linting results.",
+    "id": 544,
+    "workflow_id": 85,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Improve Consistency",
+    "description": "Apply linting tool suggestions to improve branch history.",
+    "id": 545,
+    "workflow_id": 85,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Load and prepare the ontological data.",
+    "child_phases": [
+      {
+        "name": "Load Data",
+        "description": "Load the dictionary representing the ontological data.",
+        "id": 547,
+        "workflow_id": 86,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Preprocess Data",
+        "description": "Ensure data is in a suitable format for processing.",
+        "id": 548,
+        "workflow_id": 86,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 546,
+    "workflow_id": 86,
+    "display_order": 0
+  },
+  {
+    "name": "Load Data",
+    "description": "Load the dictionary representing the ontological data.",
+    "id": 547,
+    "workflow_id": 86,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Preprocess Data",
+    "description": "Ensure data is in a suitable format for processing.",
+    "id": 548,
+    "workflow_id": 86,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Calculate depth and breadth of the ontology.",
+    "child_phases": [
+      {
+        "name": "Calculate Depth",
+        "description": "Determine the maximum distance from root to any leaf node.",
+        "id": 550,
+        "workflow_id": 86,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Calculate Breadth",
+        "description": "Determine the number of nodes at the deepest level(s).",
+        "id": 551,
+        "workflow_id": 86,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 549,
+    "workflow_id": 86,
+    "display_order": 1
+  },
+  {
+    "name": "Calculate Depth",
+    "description": "Determine the maximum distance from root to any leaf node.",
+    "id": 550,
+    "workflow_id": 86,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Calculate Breadth",
+    "description": "Determine the number of nodes at the deepest level(s).",
+    "id": 551,
+    "workflow_id": 86,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Generate ASCII art representation of the taxonomy.",
+    "child_phases": [
+      {
+        "name": "Create Visualization Logic",
+        "description": "Write functions to generate ASCII art based on ontology structure.",
+        "id": 553,
+        "workflow_id": 86,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate Visualization",
+        "description": "Apply visualization logic to ontology data and generate output.",
+        "id": 554,
+        "workflow_id": 86,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 552,
+    "workflow_id": 86,
+    "display_order": 2
+  },
+  {
+    "name": "Create Visualization Logic",
+    "description": "Write functions to generate ASCII art based on ontology structure.",
+    "id": 553,
+    "workflow_id": 86,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate Visualization",
+    "description": "Apply visualization logic to ontology data and generate output.",
+    "id": 554,
+    "workflow_id": 86,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Fetching",
+    "description": "Retrieve news articles from URLs.",
+    "child_phases": [
+      {
+        "name": "URL Input",
+        "description": "Accept a list of URLs as input.",
+        "id": 556,
+        "workflow_id": 87,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Article Retrieval",
+        "description": "Fetch articles using libraries like requests and BeautifulSoup.",
+        "id": 557,
+        "workflow_id": 87,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 555,
+    "workflow_id": 87,
+    "display_order": 0
+  },
+  {
+    "name": "URL Input",
+    "description": "Accept a list of URLs as input.",
+    "id": 556,
+    "workflow_id": 87,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Article Retrieval",
+    "description": "Fetch articles using libraries like requests and BeautifulSoup.",
+    "id": 557,
+    "workflow_id": 87,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Text Summarization",
+    "description": "Summarize each fetched article.",
+    "child_phases": [
+      {
+        "name": "Article Parsing",
+        "description": "Extract text from the retrieved articles.",
+        "id": 559,
+        "workflow_id": 87,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summary Generation",
+        "description": "Generate summaries using libraries like Gensim and SumBasic.",
+        "id": 560,
+        "workflow_id": 87,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 558,
+    "workflow_id": 87,
+    "display_order": 1
+  },
+  {
+    "name": "Article Parsing",
+    "description": "Extract text from the retrieved articles.",
+    "id": 559,
+    "workflow_id": 87,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summary Generation",
+    "description": "Generate summaries using libraries like Gensim and SumBasic.",
+    "id": 560,
+    "workflow_id": 87,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Aggregate summaries into a report.",
+    "child_phases": [
+      {
+        "name": "Aggregation",
+        "description": "Combine the generated summaries into an aggregated summary.",
+        "id": 562,
+        "workflow_id": 87,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Highlighting Main Points",
+        "description": "Identify and highlight main points across all fetched articles.",
+        "id": 563,
+        "workflow_id": 87,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 561,
+    "workflow_id": 87,
+    "display_order": 2
+  },
+  {
+    "name": "Aggregation",
+    "description": "Combine the generated summaries into an aggregated summary.",
+    "id": 562,
+    "workflow_id": 87,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Highlighting Main Points",
+    "description": "Identify and highlight main points across all fetched articles.",
+    "id": 563,
+    "workflow_id": 87,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Problem Setup",
+    "description": "Define the task and prepare the environment.",
+    "child_phases": [],
+    "id": 564,
+    "workflow_id": 88,
+    "display_order": 0
+  },
+  {
+    "name": "Monte Carlo Method Implementation",
+    "description": "Implement the Monte Carlo method for estimating Pi.",
+    "child_phases": [
+      {
+        "name": "Random Sampling",
+        "description": "Generate random points within a square.",
+        "id": 566,
+        "workflow_id": 88,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Counting Inside Circle",
+        "description": "Count how many points fall inside a quarter circle.",
+        "id": 567,
+        "workflow_id": 88,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Estimating Pi",
+        "description": "Calculate the estimate of Pi using the ratio of points.",
+        "id": 568,
+        "workflow_id": 88,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 565,
+    "workflow_id": 88,
+    "display_order": 1
+  },
+  {
+    "name": "Random Sampling",
+    "description": "Generate random points within a square.",
+    "id": 566,
+    "workflow_id": 88,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Counting Inside Circle",
+    "description": "Count how many points fall inside a quarter circle.",
+    "id": 567,
+    "workflow_id": 88,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Estimating Pi",
+    "description": "Calculate the estimate of Pi using the ratio of points.",
+    "id": 568,
+    "workflow_id": 88,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Test the implementation with different numbers of samples.",
+    "child_phases": [],
+    "id": 569,
+    "workflow_id": 88,
+    "display_order": 2
+  },
+  {
+    "name": "Documentation and Reporting",
+    "description": "Document the code and report the estimated value of Pi.",
+    "child_phases": [],
+    "id": 570,
+    "workflow_id": 88,
+    "display_order": 3
+  },
+  {
+    "name": "Setup and Planning",
+    "description": "Define the task, prepare input data, set up environment.",
+    "child_phases": [],
+    "id": 571,
+    "workflow_id": 89,
+    "display_order": 0
+  },
+  {
+    "name": "Function Development",
+    "description": "Develop the core transformation function.",
+    "child_phases": [
+      {
+        "name": "Input Data Analysis",
+        "description": "Understand input data format and structure.",
+        "id": 573,
+        "workflow_id": 89,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Transformation Function Implementation",
+        "description": "Write the function to perform the transformation.",
+        "id": 574,
+        "workflow_id": 89,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 572,
+    "workflow_id": 89,
+    "display_order": 1
+  },
+  {
+    "name": "Input Data Analysis",
+    "description": "Understand input data format and structure.",
+    "id": 573,
+    "workflow_id": 89,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Transformation Function Implementation",
+    "description": "Write the function to perform the transformation.",
+    "id": 574,
+    "workflow_id": 89,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Audit Trail Logger Development",
+    "description": "Create the logger function to track transformations.",
+    "child_phases": [
+      {
+        "name": "Logger Function Design",
+        "description": "Define how the logger will record transformation details.",
+        "id": 576,
+        "workflow_id": 89,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Logger Function Implementation",
+        "description": "Write the code for the logger function.",
+        "id": 577,
+        "workflow_id": 89,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 575,
+    "workflow_id": 89,
+    "display_order": 2
+  },
+  {
+    "name": "Logger Function Design",
+    "description": "Define how the logger will record transformation details.",
+    "id": 576,
+    "workflow_id": 89,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Logger Function Implementation",
+    "description": "Write the code for the logger function.",
+    "id": 577,
+    "workflow_id": 89,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Integration and Testing",
+    "description": "Combine functions, test with various inputs.",
+    "child_phases": [
+      {
+        "name": "Function Integration",
+        "description": "Merge transformation function and logger function.",
+        "id": 579,
+        "workflow_id": 89,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Test Case Development",
+        "description": "Create tests to ensure the function works as expected.",
+        "id": 580,
+        "workflow_id": 89,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Testing and Debugging",
+        "description": "Run tests, fix any issues that arise.",
+        "id": 581,
+        "workflow_id": 89,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 578,
+    "workflow_id": 89,
+    "display_order": 3
+  },
+  {
+    "name": "Function Integration",
+    "description": "Merge transformation function and logger function.",
+    "id": 579,
+    "workflow_id": 89,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Test Case Development",
+    "description": "Create tests to ensure the function works as expected.",
+    "id": 580,
+    "workflow_id": 89,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Debugging",
+    "description": "Run tests, fix any issues that arise.",
+    "id": 581,
+    "workflow_id": 89,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation and Delivery",
+    "description": "Prepare final output and documentation.",
+    "child_phases": [
+      {
+        "name": "Function Documentation",
+        "description": "Write clear comments and docstrings for the functions.",
+        "id": 583,
+        "workflow_id": 89,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Final Testing and Preparation",
+        "description": "Ensure everything works, prepare final deliverables.",
+        "id": 584,
+        "workflow_id": 89,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 582,
+    "workflow_id": 89,
+    "display_order": 4
+  },
+  {
+    "name": "Function Documentation",
+    "description": "Write clear comments and docstrings for the functions.",
+    "id": 583,
+    "workflow_id": 89,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Final Testing and Preparation",
+    "description": "Ensure everything works, prepare final deliverables.",
+    "id": 584,
+    "workflow_id": 89,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "News Article Aggregation",
+    "description": "Fetch news articles from multiple sources using APIs.",
+    "child_phases": [
+      {
+        "name": "BBC News API",
+        "description": "Retrieve articles from BBC News",
+        "id": 586,
+        "workflow_id": 90,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "CNN News API",
+        "description": "Retrieve articles from CNN News",
+        "id": 587,
+        "workflow_id": 90,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "The Guardian News API",
+        "description": "Retrieve articles from The Guardian",
+        "id": 588,
+        "workflow_id": 90,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 585,
+    "workflow_id": 90,
+    "display_order": 0
+  },
+  {
+    "name": "BBC News API",
+    "description": "Retrieve articles from BBC News",
+    "id": 586,
+    "workflow_id": 90,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "CNN News API",
+    "description": "Retrieve articles from CNN News",
+    "id": 587,
+    "workflow_id": 90,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "The Guardian News API",
+    "description": "Retrieve articles from The Guardian",
+    "id": 588,
+    "workflow_id": 90,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "News Article Summarization",
+    "description": "Generate concise summaries for each article.",
+    "child_phases": [
+      {
+        "name": "Text Preprocessing",
+        "description": "Clean and preprocess text data",
+        "id": 590,
+        "workflow_id": 90,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summary Generation",
+        "description": "Apply summarization techniques to generate summaries",
+        "id": 591,
+        "workflow_id": 90,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 589,
+    "workflow_id": 90,
+    "display_order": 1
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Clean and preprocess text data",
+    "id": 590,
+    "workflow_id": 90,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summary Generation",
+    "description": "Apply summarization techniques to generate summaries",
+    "id": 591,
+    "workflow_id": 90,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Create a report containing source title, summary, and overall theme.",
+    "child_phases": [
+      {
+        "name": "Source Title Extraction",
+        "description": "Extract the source title from each article",
+        "id": 593,
+        "workflow_id": 90,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Theme Analysis",
+        "description": "Analyze summaries to determine an overall theme or recommendation",
+        "id": 594,
+        "workflow_id": 90,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 592,
+    "workflow_id": 90,
+    "display_order": 2
+  },
+  {
+    "name": "Source Title Extraction",
+    "description": "Extract the source title from each article",
+    "id": 593,
+    "workflow_id": 90,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Theme Analysis",
+    "description": "Analyze summaries to determine an overall theme or recommendation",
+    "id": 594,
+    "workflow_id": 90,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Hashmap Analysis",
+    "description": "Detect common issues in the hashmap.",
+    "child_phases": [
+      {
+        "name": "Key-Value Corruption Detection",
+        "description": "Identify corrupted key-value pairs.",
+        "id": 596,
+        "workflow_id": 91,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Duplicate Key Detection",
+        "description": "Find duplicate keys in the hashmap.",
+        "id": 597,
+        "workflow_id": 91,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Missing Value Detection",
+        "description": "Detect missing values associated with keys.",
+        "id": 598,
+        "workflow_id": 91,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 595,
+    "workflow_id": 91,
+    "display_order": 0
+  },
+  {
+    "name": "Key-Value Corruption Detection",
+    "description": "Identify corrupted key-value pairs.",
+    "id": 596,
+    "workflow_id": 91,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Duplicate Key Detection",
+    "description": "Find duplicate keys in the hashmap.",
+    "id": 597,
+    "workflow_id": 91,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Missing Value Detection",
+    "description": "Detect missing values associated with keys.",
+    "id": 598,
+    "workflow_id": 91,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Hashmap Repair",
+    "description": "Perform repairs on detected issues.",
+    "child_phases": [
+      {
+        "name": "Corruption Repair",
+        "description": "Repair corrupted key-value pairs if possible.",
+        "id": 600,
+        "workflow_id": 91,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Duplicate Key Resolution",
+        "description": "Resolve duplicate keys by merging values or using a predefined strategy.",
+        "id": 601,
+        "workflow_id": 91,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Missing Value Imputation",
+        "description": "Impute missing values with appropriate strategies, such as mean/mode imputation or using default values.",
+        "id": 602,
+        "workflow_id": 91,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 599,
+    "workflow_id": 91,
+    "display_order": 1
+  },
+  {
+    "name": "Corruption Repair",
+    "description": "Repair corrupted key-value pairs if possible.",
+    "id": 600,
+    "workflow_id": 91,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Duplicate Key Resolution",
+    "description": "Resolve duplicate keys by merging values or using a predefined strategy.",
+    "id": 601,
+    "workflow_id": 91,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Missing Value Imputation",
+    "description": "Impute missing values with appropriate strategies, such as mean/mode imputation or using default values.",
+    "id": 602,
+    "workflow_id": 91,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Diagnostic Message Generation",
+    "description": "Generate detailed diagnostic messages for each detected issue and the corresponding repairs.",
+    "id": 603,
+    "workflow_id": 91,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Input Preparation",
+    "description": "Prepare input image file and ensure it's available.",
+    "child_phases": [],
+    "id": 604,
+    "workflow_id": 92,
+    "display_order": 0
+  },
+  {
+    "name": "Image Processing",
+    "description": "Process the input image to convert it into grayscale.",
+    "child_phases": [
+      {
+        "name": "Grayscale Conversion",
+        "description": "Convert the RGB image to grayscale.",
+        "child_phases": [],
+        "id": 606,
+        "workflow_id": 92,
+        "display_order": 0
+      }
+    ],
+    "id": 605,
+    "workflow_id": 92,
+    "display_order": 1
+  },
+  {
+    "name": "Grayscale Conversion",
+    "description": "Convert the RGB image to grayscale.",
+    "child_phases": [],
+    "id": 606,
+    "workflow_id": 92,
+    "display_order": 0
+  },
+  {
+    "name": "ASCII Art Generation",
+    "description": "Generate ASCII art from the grayscale image.",
+    "child_phases": [
+      {
+        "name": "Pixel Mapping",
+        "description": "Map pixel intensities to ASCII characters.",
+        "child_phases": [],
+        "id": 608,
+        "workflow_id": 92,
+        "display_order": 0
+      },
+      {
+        "name": "ASCII Art Composition",
+        "description": "Compose the ASCII art string from mapped characters.",
+        "child_phases": [],
+        "id": 609,
+        "workflow_id": 92,
+        "display_order": 1
+      }
+    ],
+    "id": 607,
+    "workflow_id": 92,
+    "display_order": 2
+  },
+  {
+    "name": "Pixel Mapping",
+    "description": "Map pixel intensities to ASCII characters.",
+    "child_phases": [],
+    "id": 608,
+    "workflow_id": 92,
+    "display_order": 0
+  },
+  {
+    "name": "ASCII Art Composition",
+    "description": "Compose the ASCII art string from mapped characters.",
+    "child_phases": [],
+    "id": 609,
+    "workflow_id": 92,
+    "display_order": 1
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output ASCII art file or display the result.",
+    "child_phases": [
+      {
+        "name": "File Output",
+        "description": "Write the ASCII art string to an output file.",
+        "child_phases": [],
+        "id": 611,
+        "workflow_id": 92,
+        "display_order": 0
+      },
+      {
+        "name": "Display",
+        "description": "Display the generated ASCII art in console or other interface.",
+        "child_phases": [],
+        "id": 612,
+        "workflow_id": 92,
+        "display_order": 1
+      }
+    ],
+    "id": 610,
+    "workflow_id": 92,
+    "display_order": 3
+  },
+  {
+    "name": "File Output",
+    "description": "Write the ASCII art string to an output file.",
+    "child_phases": [],
+    "id": 611,
+    "workflow_id": 92,
+    "display_order": 0
+  },
+  {
+    "name": "Display",
+    "description": "Display the generated ASCII art in console or other interface.",
+    "child_phases": [],
+    "id": 612,
+    "workflow_id": 92,
+    "display_order": 1
+  },
+  {
+    "name": "Input Preparation",
+    "description": "Accept and validate input string containing Python code.",
+    "child_phases": [],
+    "id": 613,
+    "workflow_id": 93,
+    "display_order": 0
+  },
+  {
+    "name": "Code Parsing",
+    "description": "Use ast module to parse the provided code.",
+    "child_phases": [
+      {
+        "name": "ast Parse",
+        "description": "Execute ast.parse() on the input string.",
+        "child_phases": [],
+        "id": 615,
+        "workflow_id": 93,
+        "display_order": 0
+      }
+    ],
+    "id": 614,
+    "workflow_id": 93,
+    "display_order": 1
+  },
+  {
+    "name": "ast Parse",
+    "description": "Execute ast.parse() on the input string.",
+    "child_phases": [],
+    "id": 615,
+    "workflow_id": 93,
+    "display_order": 0
+  },
+  {
+    "name": "Linting with Pylint",
+    "description": "Use pylint to check for style violations in the provided code.",
+    "child_phases": [
+      {
+        "name": "Pylint Execution",
+        "description": "Run pylint on the input string and collect detected issues.",
+        "child_phases": [],
+        "id": 617,
+        "workflow_id": 93,
+        "display_order": 0
+      }
+    ],
+    "id": 616,
+    "workflow_id": 93,
+    "display_order": 2
+  },
+  {
+    "name": "Pylint Execution",
+    "description": "Run pylint on the input string and collect detected issues.",
+    "child_phases": [],
+    "id": 617,
+    "workflow_id": 93,
+    "display_order": 0
+  },
+  {
+    "name": "Issue Reporting",
+    "description": "Format and return any detected issues from the linting process.",
+    "child_phases": [],
+    "id": 618,
+    "workflow_id": 93,
+    "display_order": 3
+  },
+  {
+    "name": "API Documentation Generator",
+    "description": "Generate API documentation from open-source repositories in a user-defined format.",
+    "child_phases": [
+      {
+        "name": "Fetching Documentation",
+        "description": "Retrieve API documentation from GitHub or similar platforms.",
+        "id": 620,
+        "workflow_id": 94,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parsing Documentation",
+        "description": "Parse fetched documentation into structured formats like JSON or Markdown.",
+        "child_phases": [
+          {
+            "name": "Identifying Document Structure",
+            "description": "Recognize the format and structure of the fetched documentation.",
+            "id": 622,
+            "workflow_id": 94,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Conversion to Structured Format",
+            "description": "Transform fetched documentation into JSON or Markdown format.",
+            "id": 623,
+            "workflow_id": 94,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 621,
+        "workflow_id": 94,
+        "display_order": 1
+      },
+      {
+        "name": "Generating Documentation",
+        "description": "Create API documentation in user-defined formats like HTML or PDF.",
+        "child_phases": [
+          {
+            "name": "Formatting Documentation",
+            "description": "Style and structure the generated documentation according to user preferences.",
+            "id": 625,
+            "workflow_id": 94,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Output Generation",
+            "description": "Convert structured format into the desired output format.",
+            "id": 626,
+            "workflow_id": 94,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 624,
+        "workflow_id": 94,
+        "display_order": 2
+      }
+    ],
+    "id": 619,
+    "workflow_id": 94,
+    "display_order": 0
+  },
+  {
+    "name": "Fetching Documentation",
+    "description": "Retrieve API documentation from GitHub or similar platforms.",
+    "id": 620,
+    "workflow_id": 94,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parsing Documentation",
+    "description": "Parse fetched documentation into structured formats like JSON or Markdown.",
+    "child_phases": [
+      {
+        "name": "Identifying Document Structure",
+        "description": "Recognize the format and structure of the fetched documentation.",
+        "id": 622,
+        "workflow_id": 94,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Conversion to Structured Format",
+        "description": "Transform fetched documentation into JSON or Markdown format.",
+        "id": 623,
+        "workflow_id": 94,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 621,
+    "workflow_id": 94,
+    "display_order": 1
+  },
+  {
+    "name": "Identifying Document Structure",
+    "description": "Recognize the format and structure of the fetched documentation.",
+    "id": 622,
+    "workflow_id": 94,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Conversion to Structured Format",
+    "description": "Transform fetched documentation into JSON or Markdown format.",
+    "id": 623,
+    "workflow_id": 94,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Generating Documentation",
+    "description": "Create API documentation in user-defined formats like HTML or PDF.",
+    "child_phases": [
+      {
+        "name": "Formatting Documentation",
+        "description": "Style and structure the generated documentation according to user preferences.",
+        "id": 625,
+        "workflow_id": 94,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Generation",
+        "description": "Convert structured format into the desired output format.",
+        "id": 626,
+        "workflow_id": 94,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 624,
+    "workflow_id": 94,
+    "display_order": 2
+  },
+  {
+    "name": "Formatting Documentation",
+    "description": "Style and structure the generated documentation according to user preferences.",
+    "id": 625,
+    "workflow_id": 94,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Convert structured format into the desired output format.",
+    "id": 626,
+    "workflow_id": 94,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "News Aggregation",
+    "description": "Fetch news articles from multiple RSS feeds and summarize them.",
+    "child_phases": [
+      {
+        "name": "Feed Fetching",
+        "description": "Collect data from multiple RSS feeds.",
+        "id": 628,
+        "workflow_id": 95,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Article Summarization",
+        "description": "Summarize fetched articles using text processing techniques.",
+        "id": 629,
+        "workflow_id": 95,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 627,
+    "workflow_id": 95,
+    "display_order": 0
+  },
+  {
+    "name": "Feed Fetching",
+    "description": "Collect data from multiple RSS feeds.",
+    "id": 628,
+    "workflow_id": 95,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Article Summarization",
+    "description": "Summarize fetched articles using text processing techniques.",
+    "id": 629,
+    "workflow_id": 95,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Newsletter Generation",
+    "description": "Combine summarized articles to generate an aggregated newsletter.",
+    "child_phases": [
+      {
+        "name": "Aggregation",
+        "description": "Combine the summarized articles into a single document.",
+        "id": 631,
+        "workflow_id": 95,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 630,
+    "workflow_id": 95,
+    "display_order": 1
+  },
+  {
+    "name": "Aggregation",
+    "description": "Combine the summarized articles into a single document.",
+    "id": 631,
+    "workflow_id": 95,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Email Delivery",
+    "description": "Send the generated newsletter via email to subscribers.",
+    "child_phases": [
+      {
+        "name": "Mail Configuration",
+        "description": "Set up SMTP server and credentials.",
+        "id": 633,
+        "workflow_id": 95,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Mail Sending",
+        "description": "Send the aggregated newsletter to subscribers' emails.",
+        "id": 634,
+        "workflow_id": 95,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 632,
+    "workflow_id": 95,
+    "display_order": 2
+  },
+  {
+    "name": "Mail Configuration",
+    "description": "Set up SMTP server and credentials.",
+    "id": 633,
+    "workflow_id": 95,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Mail Sending",
+    "description": "Send the aggregated newsletter to subscribers' emails.",
+    "id": 634,
+    "workflow_id": 95,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Understand the task, gather requirements and define inputs/outputs.",
+    "child_phases": [
+      {
+        "name": "Define Input Data",
+        "description": "Identify and prepare required input data (topics, desired outcomes).",
+        "id": 636,
+        "workflow_id": 96,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Set Function Requirements",
+        "description": "Determine the functionality needed for the curriculum builder.",
+        "id": 637,
+        "workflow_id": 96,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 635,
+    "workflow_id": 96,
+    "display_order": 0
+  },
+  {
+    "name": "Define Input Data",
+    "description": "Identify and prepare required input data (topics, desired outcomes).",
+    "id": 636,
+    "workflow_id": 96,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Set Function Requirements",
+    "description": "Determine the functionality needed for the curriculum builder.",
+    "id": 637,
+    "workflow_id": 96,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Design",
+    "description": "Architect the solution and plan the implementation.",
+    "child_phases": [
+      {
+        "name": "Plan Lesson Structure",
+        "description": "Decide how to allocate lessons based on total topics.",
+        "id": 639,
+        "workflow_id": 96,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Design Outcome Coverage",
+        "description": "Plan how to ensure each outcome is covered in at least one lesson.",
+        "id": 640,
+        "workflow_id": 96,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 638,
+    "workflow_id": 96,
+    "display_order": 1
+  },
+  {
+    "name": "Plan Lesson Structure",
+    "description": "Decide how to allocate lessons based on total topics.",
+    "id": 639,
+    "workflow_id": 96,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Design Outcome Coverage",
+    "description": "Plan how to ensure each outcome is covered in at least one lesson.",
+    "id": 640,
+    "workflow_id": 96,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Implementation",
+    "description": "Write the Python code for the curriculum builder.",
+    "child_phases": [
+      {
+        "name": "Write Lesson Allocation Function",
+        "description": "Implement logic to allocate lessons based on total topics.",
+        "id": 642,
+        "workflow_id": 96,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Write Outcome Coverage Function",
+        "description": "Implement logic to ensure each outcome is covered in at least one lesson.",
+        "id": 643,
+        "workflow_id": 96,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 641,
+    "workflow_id": 96,
+    "display_order": 2
+  },
+  {
+    "name": "Write Lesson Allocation Function",
+    "description": "Implement logic to allocate lessons based on total topics.",
+    "id": 642,
+    "workflow_id": 96,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Write Outcome Coverage Function",
+    "description": "Implement logic to ensure each outcome is covered in at least one lesson.",
+    "id": 643,
+    "workflow_id": 96,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Verify the functionality of the curriculum builder.",
+    "child_phases": [
+      {
+        "name": "Unit Tests",
+        "description": "Test individual functions and their inputs/outputs.",
+        "id": 645,
+        "workflow_id": 96,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Tests",
+        "description": "Test the combined functionality of the curriculum builder.",
+        "id": 646,
+        "workflow_id": 96,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 644,
+    "workflow_id": 96,
+    "display_order": 3
+  },
+  {
+    "name": "Unit Tests",
+    "description": "Test individual functions and their inputs/outputs.",
+    "id": 645,
+    "workflow_id": 96,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Tests",
+    "description": "Test the combined functionality of the curriculum builder.",
+    "id": 646,
+    "workflow_id": 96,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Refinement",
+    "description": "Improve and optimize the solution.",
+    "child_phases": [
+      {
+        "name": "Code Review",
+        "description": "Review and improve the code based on best practices.",
+        "id": 648,
+        "workflow_id": 96,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Performance Optimization",
+        "description": "Optimize the performance of the curriculum builder if needed.",
+        "id": 649,
+        "workflow_id": 96,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 647,
+    "workflow_id": 96,
+    "display_order": 4
+  },
+  {
+    "name": "Code Review",
+    "description": "Review and improve the code based on best practices.",
+    "id": 648,
+    "workflow_id": 96,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Optimization",
+    "description": "Optimize the performance of the curriculum builder if needed.",
+    "id": 649,
+    "workflow_id": 96,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialize the environment and fetch input parameters.",
+    "child_phases": [
+      {
+        "name": "Parameter Collection",
+        "description": "Retrieve dataset path, language models, analysis tasks.",
+        "id": 651,
+        "workflow_id": 97,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Environment Initialization",
+        "description": "Check Python environment configuration and required dependencies.",
+        "id": 652,
+        "workflow_id": 97,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 650,
+    "workflow_id": 97,
+    "display_order": 0
+  },
+  {
+    "name": "Parameter Collection",
+    "description": "Retrieve dataset path, language models, analysis tasks.",
+    "id": 651,
+    "workflow_id": 97,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Environment Initialization",
+    "description": "Check Python environment configuration and required dependencies.",
+    "id": 652,
+    "workflow_id": 97,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Load data and perform preprocessing.",
+    "child_phases": [
+      {
+        "name": "Data Loading",
+        "description": "Load dataset from the provided path.",
+        "id": 654,
+        "workflow_id": 97,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Text Preprocessing",
+        "description": "Clean, tokenize, vectorize text data using specified language models.",
+        "id": 655,
+        "workflow_id": 97,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 653,
+    "workflow_id": 97,
+    "display_order": 1
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load dataset from the provided path.",
+    "id": 654,
+    "workflow_id": 97,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Clean, tokenize, vectorize text data using specified language models.",
+    "id": 655,
+    "workflow_id": 97,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Training",
+    "description": "Train models based on selected analysis tasks.",
+    "child_phases": [
+      {
+        "name": "Task Selection",
+        "description": "Identify and select appropriate analysis tasks.",
+        "id": 657,
+        "workflow_id": 97,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Training",
+        "description": "Train models using preprocessed data.",
+        "id": 658,
+        "workflow_id": 97,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 656,
+    "workflow_id": 97,
+    "display_order": 2
+  },
+  {
+    "name": "Task Selection",
+    "description": "Identify and select appropriate analysis tasks.",
+    "id": 657,
+    "workflow_id": 97,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Training",
+    "description": "Train models using preprocessed data.",
+    "id": 658,
+    "workflow_id": 97,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Evaluation",
+    "description": "Evaluate trained models.",
+    "child_phases": [
+      {
+        "name": "Evaluation Metrics Selection",
+        "description": "Choose appropriate evaluation metrics for each task.",
+        "id": 660,
+        "workflow_id": 97,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Performance Assessment",
+        "description": "Assess model performance using selected metrics.",
+        "id": 661,
+        "workflow_id": 97,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 659,
+    "workflow_id": 97,
+    "display_order": 3
+  },
+  {
+    "name": "Evaluation Metrics Selection",
+    "description": "Choose appropriate evaluation metrics for each task.",
+    "id": 660,
+    "workflow_id": 97,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Performance Assessment",
+    "description": "Assess model performance using selected metrics.",
+    "id": 661,
+    "workflow_id": 97,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report containing analysis results.",
+    "child_phases": [
+      {
+        "name": "Results Interpretation",
+        "description": "Interpret the evaluation results.",
+        "id": 663,
+        "workflow_id": 97,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Creation",
+        "description": "Create a report containing data loading, preprocessing steps, model training details, evaluation results, and interpretation.",
+        "id": 664,
+        "workflow_id": 97,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 662,
+    "workflow_id": 97,
+    "display_order": 4
+  },
+  {
+    "name": "Results Interpretation",
+    "description": "Interpret the evaluation results.",
+    "id": 663,
+    "workflow_id": 97,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Creation",
+    "description": "Create a report containing data loading, preprocessing steps, model training details, evaluation results, and interpretation.",
+    "id": 664,
+    "workflow_id": 97,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Version Control",
+    "description": "Ensure version control using tools like Git.",
+    "child_phases": [
+      {
+        "name": "Git Setup",
+        "description": "Initialize a new Git repository or use an existing one.",
+        "id": 666,
+        "workflow_id": 97,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Code Commitment",
+        "description": "Commit the generated Jupyter notebook and other necessary files to Git.",
+        "id": 667,
+        "workflow_id": 97,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 665,
+    "workflow_id": 97,
+    "display_order": 5
+  },
+  {
+    "name": "Git Setup",
+    "description": "Initialize a new Git repository or use an existing one.",
+    "id": 666,
+    "workflow_id": 97,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Code Commitment",
+    "description": "Commit the generated Jupyter notebook and other necessary files to Git.",
+    "id": 667,
+    "workflow_id": 97,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Loading and Inspection",
+    "description": "Load data from CSV file and inspect its structure, types, missing values, and summary statistics.",
+    "child_phases": [
+      {
+        "name": "Data Loading",
+        "description": "Load the CSV file into a DataFrame.",
+        "id": 669,
+        "workflow_id": 98,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Inspection",
+        "description": "Display basic information about the DataFrame.",
+        "id": 670,
+        "workflow_id": 98,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 668,
+    "workflow_id": 98,
+    "display_order": 0
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load the CSV file into a DataFrame.",
+    "id": 669,
+    "workflow_id": 98,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Inspection",
+    "description": "Display basic information about the DataFrame.",
+    "id": 670,
+    "workflow_id": 98,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, convert data types, and remove duplicates.",
+    "child_phases": [
+      {
+        "name": "Missing Values Handling",
+        "description": "Drop or impute missing values based on the given strategy.",
+        "id": 672,
+        "workflow_id": 98,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Type Conversion",
+        "description": "Convert categorical variables to appropriate data types.",
+        "id": 673,
+        "workflow_id": 98,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Duplicate Removal",
+        "description": "Remove duplicate rows if any.",
+        "id": 674,
+        "workflow_id": 98,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 671,
+    "workflow_id": 98,
+    "display_order": 1
+  },
+  {
+    "name": "Missing Values Handling",
+    "description": "Drop or impute missing values based on the given strategy.",
+    "id": 672,
+    "workflow_id": 98,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Type Conversion",
+    "description": "Convert categorical variables to appropriate data types.",
+    "id": 673,
+    "workflow_id": 98,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Duplicate Removal",
+    "description": "Remove duplicate rows if any.",
+    "id": 674,
+    "workflow_id": 98,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Detection and Handling",
+    "description": "Identify and handle outliers using a statistical method.",
+    "child_phases": [
+      {
+        "name": "Outlier Identification",
+        "description": "Detect outliers using IQR or Z-score.",
+        "id": 676,
+        "workflow_id": 98,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Handling",
+        "description": "Handle detected outliers.",
+        "id": 677,
+        "workflow_id": 98,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 675,
+    "workflow_id": 98,
+    "display_order": 2
+  },
+  {
+    "name": "Outlier Identification",
+    "description": "Detect outliers using IQR or Z-score.",
+    "id": 676,
+    "workflow_id": 98,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Handling",
+    "description": "Handle detected outliers.",
+    "id": 677,
+    "workflow_id": 98,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Perform feature engineering and scale/normalize features if required.",
+    "child_phases": [
+      {
+        "name": "Feature Engineering",
+        "description": "Create new features or encode categorical variables.",
+        "id": 679,
+        "workflow_id": 98,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Scaling/Normalization",
+        "description": "Scale or normalize features as needed.",
+        "id": 680,
+        "workflow_id": 98,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 678,
+    "workflow_id": 98,
+    "display_order": 3
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features or encode categorical variables.",
+    "id": 679,
+    "workflow_id": 98,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Scaling/Normalization",
+    "description": "Scale or normalize features as needed.",
+    "id": 680,
+    "workflow_id": 98,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report summarizing the data cleaning and transformation process.",
+    "child_phases": [
+      {
+        "name": "Before-and-After Comparison",
+        "description": "Compare the dataset before and after cleaning.",
+        "id": 682,
+        "workflow_id": 98,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Visualizations",
+        "description": "Create relevant visualizations for better understanding.",
+        "id": 683,
+        "workflow_id": 98,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 681,
+    "workflow_id": 98,
+    "display_order": 4
+  },
+  {
+    "name": "Before-and-After Comparison",
+    "description": "Compare the dataset before and after cleaning.",
+    "id": 682,
+    "workflow_id": 98,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualizations",
+    "description": "Create relevant visualizations for better understanding.",
+    "id": 683,
+    "workflow_id": 98,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Ensure input data (RDF ontology) is available and valid.",
+    "child_phases": [],
+    "id": 684,
+    "workflow_id": 99,
+    "display_order": 0
+  },
+  {
+    "name": "Parsing and Processing",
+    "description": "Parse the RDF input, process taxonomies, vocabularies, and logical constraints.",
+    "child_phases": [
+      {
+        "name": "RDF Parsing",
+        "description": "Convert RDF format into a Python-friendly structure.",
+        "child_phases": [],
+        "id": 686,
+        "workflow_id": 99,
+        "display_order": 0
+      },
+      {
+        "name": "Taxonomy Processing",
+        "description": "Handle hierarchical structures and vocabularies.",
+        "child_phases": [],
+        "id": 687,
+        "workflow_id": 99,
+        "display_order": 1
+      },
+      {
+        "name": "Logical Constraints",
+        "description": "Identify and handle logical constraints in the ontology.",
+        "child_phases": [],
+        "id": 688,
+        "workflow_id": 99,
+        "display_order": 2
+      }
+    ],
+    "id": 685,
+    "workflow_id": 99,
+    "display_order": 1
+  },
+  {
+    "name": "RDF Parsing",
+    "description": "Convert RDF format into a Python-friendly structure.",
+    "child_phases": [],
+    "id": 686,
+    "workflow_id": 99,
+    "display_order": 0
+  },
+  {
+    "name": "Taxonomy Processing",
+    "description": "Handle hierarchical structures and vocabularies.",
+    "child_phases": [],
+    "id": 687,
+    "workflow_id": 99,
+    "display_order": 1
+  },
+  {
+    "name": "Logical Constraints",
+    "description": "Identify and handle logical constraints in the ontology.",
+    "child_phases": [],
+    "id": 688,
+    "workflow_id": 99,
+    "display_order": 2
+  },
+  {
+    "name": "Graph Generation",
+    "description": "Generate a visual representation of the processed ontology.",
+    "child_phases": [
+      {
+        "name": "Node Creation",
+        "description": "Create nodes based on concepts and instances in the ontology.",
+        "child_phases": [],
+        "id": 690,
+        "workflow_id": 99,
+        "display_order": 0
+      },
+      {
+        "name": "Edge Creation",
+        "description": "Create edges based on relationships between concepts and instances.",
+        "child_phases": [],
+        "id": 691,
+        "workflow_id": 99,
+        "display_order": 1
+      },
+      {
+        "name": "Layout Generation",
+        "description": "Arrange nodes and edges to create a clear visual representation.",
+        "child_phases": [
+          {
+            "name": "Graphviz Layout",
+            "description": "Use Graphviz's layout algorithms for arrangement.",
+            "child_phases": [],
+            "id": 693,
+            "workflow_id": 99,
+            "display_order": 0
+          },
+          {
+            "name": "Matplotlib Visualization",
+            "description": "Create the final visual representation using Matplotlib.",
+            "child_phases": [],
+            "id": 694,
+            "workflow_id": 99,
+            "display_order": 1
+          }
+        ],
+        "id": 692,
+        "workflow_id": 99,
+        "display_order": 2
+      }
+    ],
+    "id": 689,
+    "workflow_id": 99,
+    "display_order": 2
+  },
+  {
+    "name": "Node Creation",
+    "description": "Create nodes based on concepts and instances in the ontology.",
+    "child_phases": [],
+    "id": 690,
+    "workflow_id": 99,
+    "display_order": 0
+  },
+  {
+    "name": "Edge Creation",
+    "description": "Create edges based on relationships between concepts and instances.",
+    "child_phases": [],
+    "id": 691,
+    "workflow_id": 99,
+    "display_order": 1
+  },
+  {
+    "name": "Layout Generation",
+    "description": "Arrange nodes and edges to create a clear visual representation.",
+    "child_phases": [
+      {
+        "name": "Graphviz Layout",
+        "description": "Use Graphviz's layout algorithms for arrangement.",
+        "child_phases": [],
+        "id": 693,
+        "workflow_id": 99,
+        "display_order": 0
+      },
+      {
+        "name": "Matplotlib Visualization",
+        "description": "Create the final visual representation using Matplotlib.",
+        "child_phases": [],
+        "id": 694,
+        "workflow_id": 99,
+        "display_order": 1
+      }
+    ],
+    "id": 692,
+    "workflow_id": 99,
+    "display_order": 2
+  },
+  {
+    "name": "Graphviz Layout",
+    "description": "Use Graphviz's layout algorithms for arrangement.",
+    "child_phases": [],
+    "id": 693,
+    "workflow_id": 99,
+    "display_order": 0
+  },
+  {
+    "name": "Matplotlib Visualization",
+    "description": "Create the final visual representation using Matplotlib.",
+    "child_phases": [],
+    "id": 694,
+    "workflow_id": 99,
+    "display_order": 1
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate and save the visual output in a usable format.",
+    "child_phases": [
+      {
+        "name": "Graph Output",
+        "description": "Save the generated graph to a file (e.g., PNG, PDF).",
+        "child_phases": [],
+        "id": 696,
+        "workflow_id": 99,
+        "display_order": 0
+      },
+      {
+        "name": "Metadata Output",
+        "description": "Generate and save metadata associated with the ontology visualization.",
+        "child_phases": [],
+        "id": 697,
+        "workflow_id": 99,
+        "display_order": 1
+      }
+    ],
+    "id": 695,
+    "workflow_id": 99,
+    "display_order": 3
+  },
+  {
+    "name": "Graph Output",
+    "description": "Save the generated graph to a file (e.g., PNG, PDF).",
+    "child_phases": [],
+    "id": 696,
+    "workflow_id": 99,
+    "display_order": 0
+  },
+  {
+    "name": "Metadata Output",
+    "description": "Generate and save metadata associated with the ontology visualization.",
+    "child_phases": [],
+    "id": 697,
+    "workflow_id": 99,
+    "display_order": 1
+  },
+  {
+    "name": "Planning",
+    "description": "Define the structure of the lesson plan and determine the number of topics per week.",
+    "child_phases": [
+      {
+        "name": "Calculate Topics Per Week",
+        "description": "Divide the total number of topics by the desired number of weeks to determine the number of topics per week.",
+        "id": 699,
+        "workflow_id": 100,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Adjust for Equal Distribution",
+        "description": "Adjust the number of topics per week if necessary to ensure an equal distribution of topics.",
+        "id": 700,
+        "workflow_id": 100,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 698,
+    "workflow_id": 100,
+    "display_order": 0
+  },
+  {
+    "name": "Calculate Topics Per Week",
+    "description": "Divide the total number of topics by the desired number of weeks to determine the number of topics per week.",
+    "id": 699,
+    "workflow_id": 100,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Adjust for Equal Distribution",
+    "description": "Adjust the number of topics per week if necessary to ensure an equal distribution of topics.",
+    "id": 700,
+    "workflow_id": 100,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Topic Processing",
+    "description": "Create a dictionary for each topic with the required keys.",
+    "child_phases": [
+      {
+        "name": "Initialize Topic Dictionary",
+        "description": "Create an empty dictionary for each topic with keys 'topic', 'learning_outcomes', 'activities', and 'resources'.",
+        "id": 702,
+        "workflow_id": 100,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Populate Topic Dictionary",
+        "description": "Fill in the details for each key in the topic dictionary based on the available data.",
+        "id": 703,
+        "workflow_id": 100,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 701,
+    "workflow_id": 100,
+    "display_order": 1
+  },
+  {
+    "name": "Initialize Topic Dictionary",
+    "description": "Create an empty dictionary for each topic with keys 'topic', 'learning_outcomes', 'activities', and 'resources'.",
+    "id": 702,
+    "workflow_id": 100,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Populate Topic Dictionary",
+    "description": "Fill in the details for each key in the topic dictionary based on the available data.",
+    "id": 703,
+    "workflow_id": 100,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Lesson Plan Generation",
+    "description": "Organize the topics into weekly modules.",
+    "child_phases": [
+      {
+        "name": "Initialize Lesson Plan",
+        "description": "Create an empty lesson plan with sections for each week.",
+        "id": 705,
+        "workflow_id": 100,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Assign Topics to Weeks",
+        "description": "Assign the topics to their respective weeks in the lesson plan, ensuring an equal distribution of topics per week.",
+        "id": 706,
+        "workflow_id": 100,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 704,
+    "workflow_id": 100,
+    "display_order": 2
+  },
+  {
+    "name": "Initialize Lesson Plan",
+    "description": "Create an empty lesson plan with sections for each week.",
+    "id": 705,
+    "workflow_id": 100,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Assign Topics to Weeks",
+    "description": "Assign the topics to their respective weeks in the lesson plan, ensuring an equal distribution of topics per week.",
+    "id": 706,
+    "workflow_id": 100,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Review and Adjustment",
+    "description": "Review the generated lesson plan and make any necessary adjustments.",
+    "child_phases": [
+      {
+        "name": "Check Topic Distribution",
+        "description": "Ensure that each week has an equal number of topics or as close to equal as possible.",
+        "id": 708,
+        "workflow_id": 100,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Verify Topic Details",
+        "description": "Confirm that the learning outcomes, activities, and resources are accurate for each topic.",
+        "id": 709,
+        "workflow_id": 100,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 707,
+    "workflow_id": 100,
+    "display_order": 3
+  },
+  {
+    "name": "Check Topic Distribution",
+    "description": "Ensure that each week has an equal number of topics or as close to equal as possible.",
+    "id": 708,
+    "workflow_id": 100,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Verify Topic Details",
+    "description": "Confirm that the learning outcomes, activities, and resources are accurate for each topic.",
+    "id": 709,
+    "workflow_id": 100,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and load the required Git commit history data.",
+    "child_phases": [],
+    "id": 710,
+    "workflow_id": 101,
+    "display_order": 0
+  },
+  {
+    "name": "Commit Analysis",
+    "description": "Analyze the commit history to identify fever periods.",
+    "child_phases": [
+      {
+        "name": "Load Commit Data",
+        "description": "Load and parse the Git commit history data.",
+        "id": 712,
+        "workflow_id": 101,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Fever Periods",
+        "description": "Calculate the number of commits per interval and identify fever periods.",
+        "id": 713,
+        "workflow_id": 101,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 711,
+    "workflow_id": 101,
+    "display_order": 1
+  },
+  {
+    "name": "Load Commit Data",
+    "description": "Load and parse the Git commit history data.",
+    "id": 712,
+    "workflow_id": 101,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Fever Periods",
+    "description": "Calculate the number of commits per interval and identify fever periods.",
+    "id": 713,
+    "workflow_id": 101,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Create visualizations to display the identified fever intervals.",
+    "child_phases": [
+      {
+        "name": "Data Transformation",
+        "description": "Transform the identified fever periods data into a suitable format for visualization.",
+        "id": 715,
+        "workflow_id": 101,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Visualization Creation",
+        "description": "Generate plots or charts to display the fever periods.",
+        "id": 716,
+        "workflow_id": 101,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 714,
+    "workflow_id": 101,
+    "display_order": 2
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Transform the identified fever periods data into a suitable format for visualization.",
+    "id": 715,
+    "workflow_id": 101,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization Creation",
+    "description": "Generate plots or charts to display the fever periods.",
+    "id": 716,
+    "workflow_id": 101,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "App Integration",
+    "description": "Integrate the analysis and visualization components into the Python app.",
+    "child_phases": [],
+    "id": 717,
+    "workflow_id": 101,
+    "display_order": 3
+  },
+  {
+    "name": "Setup",
+    "description": "Create necessary variables and import required libraries.",
+    "child_phases": [
+      {
+        "name": "Import Libraries",
+        "description": "Import the random library for generating random numbers.",
+        "id": 719,
+        "workflow_id": 102,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Initialize Variables",
+        "description": "Set up the counter for points inside quarter circle, total points variable.",
+        "id": 720,
+        "workflow_id": 102,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 718,
+    "workflow_id": 102,
+    "display_order": 0
+  },
+  {
+    "name": "Import Libraries",
+    "description": "Import the random library for generating random numbers.",
+    "id": 719,
+    "workflow_id": 102,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Initialize Variables",
+    "description": "Set up the counter for points inside quarter circle, total points variable.",
+    "id": 720,
+    "workflow_id": 102,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Generation of Random Points",
+    "description": "Generate a specified number of random points within a square.",
+    "child_phases": [
+      {
+        "name": "Define Function",
+        "description": "Create a function to generate random points.",
+        "id": 722,
+        "workflow_id": 102,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate Points",
+        "description": "Use the function to generate the required number of points.",
+        "id": 723,
+        "workflow_id": 102,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 721,
+    "workflow_id": 102,
+    "display_order": 1
+  },
+  {
+    "name": "Define Function",
+    "description": "Create a function to generate random points.",
+    "id": 722,
+    "workflow_id": 102,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate Points",
+    "description": "Use the function to generate the required number of points.",
+    "id": 723,
+    "workflow_id": 102,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Checking Points Within Quarter Circle",
+    "description": "Check how many of the generated points fall within a quarter circle.",
+    "child_phases": [
+      {
+        "name": "Define Function",
+        "description": "Create a function to check if a point is inside the quarter circle.",
+        "id": 725,
+        "workflow_id": 102,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Count Points Inside Quarter Circle",
+        "description": "Use the function to count points within the quarter circle.",
+        "id": 726,
+        "workflow_id": 102,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 724,
+    "workflow_id": 102,
+    "display_order": 2
+  },
+  {
+    "name": "Define Function",
+    "description": "Create a function to check if a point is inside the quarter circle.",
+    "id": 725,
+    "workflow_id": 102,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Count Points Inside Quarter Circle",
+    "description": "Use the function to count points within the quarter circle.",
+    "id": 726,
+    "workflow_id": 102,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Estimation of Pi",
+    "description": "Calculate the estimated value of Pi using the ratio of points inside the quarter circle to total points.",
+    "child_phases": [
+      {
+        "name": "Define Function",
+        "description": "Create a function to estimate Pi.",
+        "id": 728,
+        "workflow_id": 102,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Calculate Estimation",
+        "description": "Use the function to calculate the estimation of Pi.",
+        "id": 729,
+        "workflow_id": 102,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 727,
+    "workflow_id": 102,
+    "display_order": 3
+  },
+  {
+    "name": "Define Function",
+    "description": "Create a function to estimate Pi.",
+    "id": 728,
+    "workflow_id": 102,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Calculate Estimation",
+    "description": "Use the function to calculate the estimation of Pi.",
+    "id": 729,
+    "workflow_id": 102,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Validation and Iteration",
+    "description": "Check if the estimated value of Pi is close enough to the actual value, then iterate if needed.",
+    "child_phases": [
+      {
+        "name": "Actual Value of Pi",
+        "description": "Assign a constant for the actual value of Pi.",
+        "id": 731,
+        "workflow_id": 102,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Comparison and Iteration",
+        "description": "Compare the estimated Pi with the actual Pi, and iterate if necessary.",
+        "id": 732,
+        "workflow_id": 102,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 730,
+    "workflow_id": 102,
+    "display_order": 4
+  },
+  {
+    "name": "Actual Value of Pi",
+    "description": "Assign a constant for the actual value of Pi.",
+    "id": 731,
+    "workflow_id": 102,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Comparison and Iteration",
+    "description": "Compare the estimated Pi with the actual Pi, and iterate if necessary.",
+    "id": 732,
+    "workflow_id": 102,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Understand the task, define the wrapper's behavior and error handling.",
+    "child_phases": [],
+    "id": 733,
+    "workflow_id": 103,
+    "display_order": 0
+  },
+  {
+    "name": "Implementation",
+    "description": "Write the Python code for the wrapper function with input/output logging and error handling.",
+    "child_phases": [
+      {
+        "name": "Function Definition",
+        "description": "Define the wrapper function that takes another function as an argument.",
+        "id": 735,
+        "workflow_id": 103,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Input Logging",
+        "description": "Add code to log input arguments of the wrapped function.",
+        "id": 736,
+        "workflow_id": 103,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Output Logging",
+        "description": "Add code to log output results of the wrapped function.",
+        "id": 737,
+        "workflow_id": 103,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling",
+        "description": "Implement try-except blocks to catch and handle errors gracefully.",
+        "id": 738,
+        "workflow_id": 103,
+        "display_order": 3,
+        "child_phases": []
+      },
+      {
+        "name": "Reset Mechanism",
+        "description": "Create a mechanism to reset the wrapper's internal state upon error or manual intervention.",
+        "id": 739,
+        "workflow_id": 103,
+        "display_order": 4,
+        "child_phases": []
+      }
+    ],
+    "id": 734,
+    "workflow_id": 103,
+    "display_order": 1
+  },
+  {
+    "name": "Function Definition",
+    "description": "Define the wrapper function that takes another function as an argument.",
+    "id": 735,
+    "workflow_id": 103,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Input Logging",
+    "description": "Add code to log input arguments of the wrapped function.",
+    "id": 736,
+    "workflow_id": 103,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Logging",
+    "description": "Add code to log output results of the wrapped function.",
+    "id": 737,
+    "workflow_id": 103,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Implement try-except blocks to catch and handle errors gracefully.",
+    "id": 738,
+    "workflow_id": 103,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Reset Mechanism",
+    "description": "Create a mechanism to reset the wrapper's internal state upon error or manual intervention.",
+    "id": 739,
+    "workflow_id": 103,
+    "display_order": 4,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the wrapper with various scenarios, including error cases.",
+    "child_phases": [],
+    "id": 740,
+    "workflow_id": 103,
+    "display_order": 2
+  },
+  {
+    "name": "Documentation",
+    "description": "Document the wrapper's usage, behavior, and any known issues or limitations.",
+    "child_phases": [],
+    "id": 741,
+    "workflow_id": 103,
+    "display_order": 3
+  },
+  {
+    "name": "Planning",
+    "description": "Define quiz parameters and prepare question banks.",
+    "child_phases": [
+      {
+        "name": "Set Quiz Parameters",
+        "description": "Define topic, number of questions, difficulty level.",
+        "id": 743,
+        "workflow_id": 104,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Question Banks",
+        "description": "Organize questions into topic-specific lists.",
+        "id": 744,
+        "workflow_id": 104,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 742,
+    "workflow_id": 104,
+    "display_order": 0
+  },
+  {
+    "name": "Set Quiz Parameters",
+    "description": "Define topic, number of questions, difficulty level.",
+    "id": 743,
+    "workflow_id": 104,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Question Banks",
+    "description": "Organize questions into topic-specific lists.",
+    "id": 744,
+    "workflow_id": 104,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Generation",
+    "description": "Select and format questions for the quiz.",
+    "child_phases": [
+      {
+        "name": "Random Question Selection",
+        "description": "Choose questions from banks based on parameters.",
+        "id": 746,
+        "workflow_id": 104,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Create Answer Key",
+        "description": "Generate correct answers for each question.",
+        "id": 747,
+        "workflow_id": 104,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 745,
+    "workflow_id": 104,
+    "display_order": 1
+  },
+  {
+    "name": "Random Question Selection",
+    "description": "Choose questions from banks based on parameters.",
+    "id": 746,
+    "workflow_id": 104,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Create Answer Key",
+    "description": "Generate correct answers for each question.",
+    "id": 747,
+    "workflow_id": 104,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Formatting",
+    "description": "Prepare the quiz structure and shuffle answer choices.",
+    "child_phases": [
+      {
+        "name": "Format Questions",
+        "description": "Create multiple-choice options for each question.",
+        "id": 749,
+        "workflow_id": 104,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Shuffle Answers",
+        "description": "Randomize answer choices to avoid predictable patterns.",
+        "id": 750,
+        "workflow_id": 104,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 748,
+    "workflow_id": 104,
+    "display_order": 2
+  },
+  {
+    "name": "Format Questions",
+    "description": "Create multiple-choice options for each question.",
+    "id": 749,
+    "workflow_id": 104,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Shuffle Answers",
+    "description": "Randomize answer choices to avoid predictable patterns.",
+    "id": 750,
+    "workflow_id": 104,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Review and Finalize",
+    "description": "Check the quiz, make adjustments if necessary.",
+    "child_phases": [
+      {
+        "name": "Quiz Review",
+        "description": "Ensure questions and answers align with parameters.",
+        "id": 752,
+        "workflow_id": 104,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Finalize Quiz",
+        "description": "Prepare final quiz structure for output or usage.",
+        "id": 753,
+        "workflow_id": 104,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 751,
+    "workflow_id": 104,
+    "display_order": 3
+  },
+  {
+    "name": "Quiz Review",
+    "description": "Ensure questions and answers align with parameters.",
+    "id": 752,
+    "workflow_id": 104,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Finalize Quiz",
+    "description": "Prepare final quiz structure for output or usage.",
+    "id": 753,
+    "workflow_id": 104,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Project Setup",
+    "description": "Configure the Python environment, import required libraries, and prepare input data.",
+    "child_phases": [],
+    "id": 754,
+    "workflow_id": 105,
+    "display_order": 0
+  },
+  {
+    "name": "Fractal Generation",
+    "description": "Implement functions to generate fractals such as Brownian motion or Perlin noise.",
+    "child_phases": [
+      {
+        "name": "Brownian Motion Implementation",
+        "description": "Create a function to generate landscapes using Brownian motion.",
+        "child_phases": [],
+        "id": 756,
+        "workflow_id": 105,
+        "display_order": 0
+      },
+      {
+        "name": "Perlin Noise Implementation",
+        "description": "Create a function to generate landscapes using Perlin noise.",
+        "child_phases": [],
+        "id": 757,
+        "workflow_id": 105,
+        "display_order": 1
+      }
+    ],
+    "id": 755,
+    "workflow_id": 105,
+    "display_order": 1
+  },
+  {
+    "name": "Brownian Motion Implementation",
+    "description": "Create a function to generate landscapes using Brownian motion.",
+    "child_phases": [],
+    "id": 756,
+    "workflow_id": 105,
+    "display_order": 0
+  },
+  {
+    "name": "Perlin Noise Implementation",
+    "description": "Create a function to generate landscapes using Perlin noise.",
+    "child_phases": [],
+    "id": 757,
+    "workflow_id": 105,
+    "display_order": 1
+  },
+  {
+    "name": "Parameterization",
+    "description": "Add parameters such as zoom level, detail scale, and seed for random number generation to the fractal generation functions.",
+    "child_phases": [],
+    "id": 758,
+    "workflow_id": 105,
+    "display_order": 2
+  },
+  {
+    "name": "App Integration",
+    "description": "Combine the fractal generation functions into a single Python application that accepts user inputs for parameters.",
+    "child_phases": [],
+    "id": 759,
+    "workflow_id": 105,
+    "display_order": 3
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Test the application with various input parameters to ensure it generates expected output.",
+    "child_phases": [],
+    "id": 760,
+    "workflow_id": 105,
+    "display_order": 4
+  },
+  {
+    "name": "Planning",
+    "description": "Define the structure and logic of the curriculum generator.",
+    "child_phases": [
+      {
+        "name": "Input Analysis",
+        "description": "Understand the format and requirements of input data.",
+        "id": 762,
+        "workflow_id": 106,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prerequisite Mapping",
+        "description": "Identify and map prerequisites between topics.",
+        "id": 763,
+        "workflow_id": 106,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 761,
+    "workflow_id": 106,
+    "display_order": 0
+  },
+  {
+    "name": "Input Analysis",
+    "description": "Understand the format and requirements of input data.",
+    "id": 762,
+    "workflow_id": 106,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prerequisite Mapping",
+    "description": "Identify and map prerequisites between topics.",
+    "id": 763,
+    "workflow_id": 106,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Development",
+    "description": "Implement the functionality of the curriculum generator.",
+    "child_phases": [
+      {
+        "name": "Topic Processing",
+        "description": "Create structured lesson plans for each topic.",
+        "id": 765,
+        "workflow_id": 106,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prerequisite-Based Ordering",
+        "description": "Order lessons based on prerequisites.",
+        "id": 766,
+        "workflow_id": 106,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 764,
+    "workflow_id": 106,
+    "display_order": 1
+  },
+  {
+    "name": "Topic Processing",
+    "description": "Create structured lesson plans for each topic.",
+    "id": 765,
+    "workflow_id": 106,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prerequisite-Based Ordering",
+    "description": "Order lessons based on prerequisites.",
+    "id": 766,
+    "workflow_id": 106,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Validate the functionality and output of the curriculum generator.",
+    "child_phases": [
+      {
+        "name": "Unit Tests",
+        "description": "Test individual components of the application.",
+        "id": 768,
+        "workflow_id": 106,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Tests",
+        "description": "Test the overall functionality of the application.",
+        "id": 769,
+        "workflow_id": 106,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 767,
+    "workflow_id": 106,
+    "display_order": 2
+  },
+  {
+    "name": "Unit Tests",
+    "description": "Test individual components of the application.",
+    "id": 768,
+    "workflow_id": 106,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Tests",
+    "description": "Test the overall functionality of the application.",
+    "id": 769,
+    "workflow_id": 106,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation and Delivery",
+    "description": "Prepare and deliver the final product.",
+    "child_phases": [
+      {
+        "name": "Documentation",
+        "description": "Create user guides and API documentation.",
+        "id": 771,
+        "workflow_id": 106,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Delivery",
+        "description": "Package and deliver the application to stakeholders.",
+        "id": 772,
+        "workflow_id": 106,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 770,
+    "workflow_id": 106,
+    "display_order": 3
+  },
+  {
+    "name": "Documentation",
+    "description": "Create user guides and API documentation.",
+    "id": 771,
+    "workflow_id": 106,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Delivery",
+    "description": "Package and deliver the application to stakeholders.",
+    "id": 772,
+    "workflow_id": 106,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Project Analysis",
+    "description": "Understand the project's requirements and break down tasks.",
+    "child_phases": [
+      {
+        "name": "Task Extraction",
+        "description": "Extract tasks from the project management tool.",
+        "id": 774,
+        "workflow_id": 107,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Task Categorization",
+        "description": "Categorize tasks based on nature and context.",
+        "id": 775,
+        "workflow_id": 107,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 773,
+    "workflow_id": 107,
+    "display_order": 0
+  },
+  {
+    "name": "Task Extraction",
+    "description": "Extract tasks from the project management tool.",
+    "id": 774,
+    "workflow_id": 107,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Task Categorization",
+    "description": "Categorize tasks based on nature and context.",
+    "id": 775,
+    "workflow_id": 107,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Recommendation",
+    "description": "Suggest optimal tools for each task.",
+    "child_phases": [
+      {
+        "name": "Library Search",
+        "description": "Search for relevant software libraries/APIs.",
+        "id": 777,
+        "workflow_id": 107,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parameter Suggestion",
+        "description": "Recommend parameters based on task context.",
+        "id": 778,
+        "workflow_id": 107,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 776,
+    "workflow_id": 107,
+    "display_order": 1
+  },
+  {
+    "name": "Library Search",
+    "description": "Search for relevant software libraries/APIs.",
+    "id": 777,
+    "workflow_id": 107,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Suggestion",
+    "description": "Recommend parameters based on task context.",
+    "id": 778,
+    "workflow_id": 107,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Validation and Reporting",
+    "description": "Validate recommendations and generate reports.",
+    "child_phases": [
+      {
+        "name": "Recommendation Validation",
+        "description": "Check if recommended tools fit the task requirements.",
+        "id": 780,
+        "workflow_id": 107,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate a report of recommended tools for each task.",
+        "id": 781,
+        "workflow_id": 107,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 779,
+    "workflow_id": 107,
+    "display_order": 2
+  },
+  {
+    "name": "Recommendation Validation",
+    "description": "Check if recommended tools fit the task requirements.",
+    "id": 780,
+    "workflow_id": 107,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report of recommended tools for each task.",
+    "id": 781,
+    "workflow_id": 107,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Understand the task, define inputs and outputs.",
+    "child_phases": [],
+    "id": 782,
+    "workflow_id": 108,
+    "display_order": 0
+  },
+  {
+    "name": "Function Creation",
+    "description": "Write a Python function to check if a number is prime.",
+    "child_phases": [
+      {
+        "name": "Initialize Variables",
+        "description": "Set up initial variables like the number to be checked and a flag for primality.",
+        "id": 784,
+        "workflow_id": 108,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Check Divisibility",
+        "description": "Loop through numbers from 2 to the square root of the input number to check if it's divisible by any.",
+        "id": 785,
+        "workflow_id": 108,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Return Result",
+        "description": "Based on the flag set during checks, return True if prime, False otherwise.",
+        "id": 786,
+        "workflow_id": 108,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 783,
+    "workflow_id": 108,
+    "display_order": 1
+  },
+  {
+    "name": "Initialize Variables",
+    "description": "Set up initial variables like the number to be checked and a flag for primality.",
+    "id": 784,
+    "workflow_id": 108,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Check Divisibility",
+    "description": "Loop through numbers from 2 to the square root of the input number to check if it's divisible by any.",
+    "id": 785,
+    "workflow_id": 108,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Return Result",
+    "description": "Based on the flag set during checks, return True if prime, False otherwise.",
+    "id": 786,
+    "workflow_id": 108,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the function with various inputs.",
+    "child_phases": [
+      {
+        "name": "Edge Cases",
+        "description": "Test with edge cases like 0, 1, 2, prime numbers.",
+        "id": 788,
+        "workflow_id": 108,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Random Numbers",
+        "description": "Test with random numbers to ensure correct functioning.",
+        "id": 789,
+        "workflow_id": 108,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 787,
+    "workflow_id": 108,
+    "display_order": 2
+  },
+  {
+    "name": "Edge Cases",
+    "description": "Test with edge cases like 0, 1, 2, prime numbers.",
+    "id": 788,
+    "workflow_id": 108,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Random Numbers",
+    "description": "Test with random numbers to ensure correct functioning.",
+    "id": 789,
+    "workflow_id": 108,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "File Reading",
+    "description": "Read and process the large text file containing Python code snippets.",
+    "child_phases": [
+      {
+        "name": "Open File",
+        "description": "Open the given text file for reading.",
+        "id": 791,
+        "workflow_id": 109,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parse Lines",
+        "description": "Split the file content into lines using the newline delimiter.",
+        "id": 792,
+        "workflow_id": 109,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 790,
+    "workflow_id": 109,
+    "display_order": 0
+  },
+  {
+    "name": "Open File",
+    "description": "Open the given text file for reading.",
+    "id": 791,
+    "workflow_id": 109,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parse Lines",
+    "description": "Split the file content into lines using the newline delimiter.",
+    "id": 792,
+    "workflow_id": 109,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Code Snippet Cleaning",
+    "description": "Clean each code snippet by removing comments, empty lines, and whitespace.",
+    "child_phases": [
+      {
+        "name": "Remove Comments",
+        "description": "Remove single-line (starting with '#') and multi-line (between '/*' and '*/') comments.",
+        "child_phases": [
+          {
+            "name": "Single-Line Comment Removal",
+            "description": "Remove lines starting with '#'.",
+            "id": 795,
+            "workflow_id": 109,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Multi-Line Comment Removal",
+            "description": "Remove lines between '/*' and '*/'.",
+            "id": 796,
+            "workflow_id": 109,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 794,
+        "workflow_id": 109,
+        "display_order": 0
+      },
+      {
+        "name": "Remove Empty Lines and Whitespace",
+        "description": "Remove empty lines and leading/trailing whitespaces from each line.",
+        "id": 797,
+        "workflow_id": 109,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 793,
+    "workflow_id": 109,
+    "display_order": 1
+  },
+  {
+    "name": "Remove Comments",
+    "description": "Remove single-line (starting with '#') and multi-line (between '/*' and '*/') comments.",
+    "child_phases": [
+      {
+        "name": "Single-Line Comment Removal",
+        "description": "Remove lines starting with '#'.",
+        "id": 795,
+        "workflow_id": 109,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Multi-Line Comment Removal",
+        "description": "Remove lines between '/*' and '*/'.",
+        "id": 796,
+        "workflow_id": 109,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 794,
+    "workflow_id": 109,
+    "display_order": 0
+  },
+  {
+    "name": "Single-Line Comment Removal",
+    "description": "Remove lines starting with '#'.",
+    "id": 795,
+    "workflow_id": 109,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Multi-Line Comment Removal",
+    "description": "Remove lines between '/*' and '*/'.",
+    "id": 796,
+    "workflow_id": 109,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Remove Empty Lines and Whitespace",
+    "description": "Remove empty lines and leading/trailing whitespaces from each line.",
+    "id": 797,
+    "workflow_id": 109,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Result Preparation",
+    "description": "Prepare the final list of cleaned code snippets.",
+    "child_phases": [
+      {
+        "name": "Join Lines",
+        "description": "Join the cleaned lines back into a single string for each code snippet.",
+        "id": 799,
+        "workflow_id": 109,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 798,
+    "workflow_id": 109,
+    "display_order": 2
+  },
+  {
+    "name": "Join Lines",
+    "description": "Join the cleaned lines back into a single string for each code snippet.",
+    "id": 799,
+    "workflow_id": 109,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Project Setup",
+    "description": "Configure Python environment, install dependencies, prepare input data.",
+    "child_phases": [],
+    "id": 800,
+    "workflow_id": 110,
+    "display_order": 0
+  },
+  {
+    "name": "Challenge Generation Logic",
+    "description": "Develop the core logic for generating unique programming challenges based on a given category.",
+    "child_phases": [
+      {
+        "name": "Input Processing",
+        "description": "Parse and validate the input category name.",
+        "child_phases": [],
+        "id": 802,
+        "workflow_id": 110,
+        "display_order": 0
+      },
+      {
+        "name": "Challenge Generation",
+        "description": "Generate five unique challenge names and descriptions within the given category.",
+        "child_phases": [
+          {
+            "name": "Duplicate Checking",
+            "description": "Ensure generated challenges are not duplicates or repeats from previous runs.",
+            "child_phases": [],
+            "id": 804,
+            "workflow_id": 110,
+            "display_order": 0
+          }
+        ],
+        "id": 803,
+        "workflow_id": 110,
+        "display_order": 1
+      },
+      {
+        "name": "Output Formatting",
+        "description": "Format the generated challenges as a list of tuples.",
+        "child_phases": [],
+        "id": 805,
+        "workflow_id": 110,
+        "display_order": 2
+      }
+    ],
+    "id": 801,
+    "workflow_id": 110,
+    "display_order": 1
+  },
+  {
+    "name": "Input Processing",
+    "description": "Parse and validate the input category name.",
+    "child_phases": [],
+    "id": 802,
+    "workflow_id": 110,
+    "display_order": 0
+  },
+  {
+    "name": "Challenge Generation",
+    "description": "Generate five unique challenge names and descriptions within the given category.",
+    "child_phases": [
+      {
+        "name": "Duplicate Checking",
+        "description": "Ensure generated challenges are not duplicates or repeats from previous runs.",
+        "child_phases": [],
+        "id": 804,
+        "workflow_id": 110,
+        "display_order": 0
+      }
+    ],
+    "id": 803,
+    "workflow_id": 110,
+    "display_order": 1
+  },
+  {
+    "name": "Duplicate Checking",
+    "description": "Ensure generated challenges are not duplicates or repeats from previous runs.",
+    "child_phases": [],
+    "id": 804,
+    "workflow_id": 110,
+    "display_order": 0
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format the generated challenges as a list of tuples.",
+    "child_phases": [],
+    "id": 805,
+    "workflow_id": 110,
+    "display_order": 2
+  },
+  {
+    "name": "Testing",
+    "description": "Test the application with various category inputs to ensure it functions correctly.",
+    "child_phases": [],
+    "id": 806,
+    "workflow_id": 110,
+    "display_order": 2
+  },
+  {
+    "name": "Setup",
+    "description": "Prepare the environment and required data",
+    "child_phases": [],
+    "id": 807,
+    "workflow_id": 111,
+    "display_order": 0
+  },
+  {
+    "name": "Graph Creation",
+    "description": "Create an undirected graph using the given dataset",
+    "child_phases": [
+      {
+        "name": "Load Dataset",
+        "description": "Load the predefined dataset containing facts about books, authors, genres etc.",
+        "child_phases": [],
+        "id": 809,
+        "workflow_id": 111,
+        "display_order": 0
+      },
+      {
+        "name": "Initialize Graph",
+        "description": "Create an empty graph structure and initialize it with the loaded data",
+        "child_phases": [],
+        "id": 810,
+        "workflow_id": 111,
+        "display_order": 1
+      }
+    ],
+    "id": 808,
+    "workflow_id": 111,
+    "display_order": 1
+  },
+  {
+    "name": "Load Dataset",
+    "description": "Load the predefined dataset containing facts about books, authors, genres etc.",
+    "child_phases": [],
+    "id": 809,
+    "workflow_id": 111,
+    "display_order": 0
+  },
+  {
+    "name": "Initialize Graph",
+    "description": "Create an empty graph structure and initialize it with the loaded data",
+    "child_phases": [],
+    "id": 810,
+    "workflow_id": 111,
+    "display_order": 1
+  },
+  {
+    "name": "Graph Manipulation",
+    "description": "Add, update, or remove nodes and edges in the graph",
+    "child_phases": [
+      {
+        "name": "Node Addition",
+        "description": "Add new entities (nodes) to the graph",
+        "child_phases": [],
+        "id": 812,
+        "workflow_id": 111,
+        "display_order": 0
+      },
+      {
+        "name": "Edge Addition",
+        "description": "Establish new relationships (edges) between entities in the graph",
+        "child_phases": [],
+        "id": 813,
+        "workflow_id": 111,
+        "display_order": 1
+      },
+      {
+        "name": "Update Nodes/Edes",
+        "description": "Modify existing nodes or edges with new information",
+        "child_phases": [],
+        "id": 814,
+        "workflow_id": 111,
+        "display_order": 2
+      }
+    ],
+    "id": 811,
+    "workflow_id": 111,
+    "display_order": 2
+  },
+  {
+    "name": "Node Addition",
+    "description": "Add new entities (nodes) to the graph",
+    "child_phases": [],
+    "id": 812,
+    "workflow_id": 111,
+    "display_order": 0
+  },
+  {
+    "name": "Edge Addition",
+    "description": "Establish new relationships (edges) between entities in the graph",
+    "child_phases": [],
+    "id": 813,
+    "workflow_id": 111,
+    "display_order": 1
+  },
+  {
+    "name": "Update Nodes/Edes",
+    "description": "Modify existing nodes or edges with new information",
+    "child_phases": [],
+    "id": 814,
+    "workflow_id": 111,
+    "display_order": 2
+  },
+  {
+    "name": "Graph Querying",
+    "description": "Implement functions to query the graph and retrieve connected entities based on certain conditions",
+    "child_phases": [
+      {
+        "name": "Query Books by Author",
+        "description": "Find all books by a specific author",
+        "child_phases": [],
+        "id": 816,
+        "workflow_id": 111,
+        "display_order": 0
+      },
+      {
+        "name": "Query Authors by Genre",
+        "description": "Find all authors of a particular genre",
+        "child_phases": [],
+        "id": 817,
+        "workflow_id": 111,
+        "display_order": 1
+      }
+    ],
+    "id": 815,
+    "workflow_id": 111,
+    "display_order": 3
+  },
+  {
+    "name": "Query Books by Author",
+    "description": "Find all books by a specific author",
+    "child_phases": [],
+    "id": 816,
+    "workflow_id": 111,
+    "display_order": 0
+  },
+  {
+    "name": "Query Authors by Genre",
+    "description": "Find all authors of a particular genre",
+    "child_phases": [],
+    "id": 817,
+    "workflow_id": 111,
+    "display_order": 1
+  },
+  {
+    "name": "Graph Serialization/Deserialization",
+    "description": "Save the graph as a file in an easy-to-parse format and load it back into memory when required",
+    "child_phases": [
+      {
+        "name": "Serialization",
+        "description": "Save the graph to a file in JSON or CSV format",
+        "child_phases": [],
+        "id": 819,
+        "workflow_id": 111,
+        "display_order": 0
+      },
+      {
+        "name": "Deserialization",
+        "description": "Load the graph from a saved file back into memory",
+        "child_phases": [],
+        "id": 820,
+        "workflow_id": 111,
+        "display_order": 1
+      }
+    ],
+    "id": 818,
+    "workflow_id": 111,
+    "display_order": 4
+  },
+  {
+    "name": "Serialization",
+    "description": "Save the graph to a file in JSON or CSV format",
+    "child_phases": [],
+    "id": 819,
+    "workflow_id": 111,
+    "display_order": 0
+  },
+  {
+    "name": "Deserialization",
+    "description": "Load the graph from a saved file back into memory",
+    "child_phases": [],
+    "id": 820,
+    "workflow_id": 111,
+    "display_order": 1
+  },
+  {
+    "name": "Graph Analytics",
+    "description": "Implement functions for basic graph analytics tasks",
+    "child_phases": [
+      {
+        "name": "Calculate Node Degree",
+        "description": "Determine the number of connections each node has in the graph",
+        "child_phases": [],
+        "id": 822,
+        "workflow_id": 111,
+        "display_order": 0
+      },
+      {
+        "name": "Find Connected Components",
+        "description": "Identify groups of nodes that are connected to each other but not to any other nodes",
+        "child_phases": [],
+        "id": 823,
+        "workflow_id": 111,
+        "display_order": 1
+      }
+    ],
+    "id": 821,
+    "workflow_id": 111,
+    "display_order": 5
+  },
+  {
+    "name": "Calculate Node Degree",
+    "description": "Determine the number of connections each node has in the graph",
+    "child_phases": [],
+    "id": 822,
+    "workflow_id": 111,
+    "display_order": 0
+  },
+  {
+    "name": "Find Connected Components",
+    "description": "Identify groups of nodes that are connected to each other but not to any other nodes",
+    "child_phases": [],
+    "id": 823,
+    "workflow_id": 111,
+    "display_order": 1
+  },
+  {
+    "name": "Task Analysis",
+    "description": "Understand and categorize tasks based on their descriptions.",
+    "child_phases": [
+      {
+        "name": "Task Classification",
+        "description": "Assign categories or tags to each task for easier processing.",
+        "id": 825,
+        "workflow_id": 112,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Task Parameter Extraction",
+        "description": "Extract relevant parameters from task descriptions.",
+        "id": 826,
+        "workflow_id": 112,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 824,
+    "workflow_id": 112,
+    "display_order": 0
+  },
+  {
+    "name": "Task Classification",
+    "description": "Assign categories or tags to each task for easier processing.",
+    "id": 825,
+    "workflow_id": 112,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Task Parameter Extraction",
+    "description": "Extract relevant parameters from task descriptions.",
+    "id": 826,
+    "workflow_id": 112,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Matching",
+    "description": "Match tasks with suitable tools based on predefined rules or patterns.",
+    "child_phases": [
+      {
+        "name": "Rule-Based Matching",
+        "description": "Match tasks to tools using if-elif-else statements.",
+        "id": 828,
+        "workflow_id": 112,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Pattern-Based Matching",
+        "description": "Use regular expressions or other pattern matching techniques to find suitable tools.",
+        "id": 829,
+        "workflow_id": 112,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 827,
+    "workflow_id": 112,
+    "display_order": 1
+  },
+  {
+    "name": "Rule-Based Matching",
+    "description": "Match tasks to tools using if-elif-else statements.",
+    "id": 828,
+    "workflow_id": 112,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Pattern-Based Matching",
+    "description": "Use regular expressions or other pattern matching techniques to find suitable tools.",
+    "id": 829,
+    "workflow_id": 112,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Optimization",
+    "description": "Determine optimal parameters or settings for each suggested tool.",
+    "child_phases": [
+      {
+        "name": "Default Parameter Assignment",
+        "description": "Assign default parameters for tools that don't require optimization.",
+        "id": 831,
+        "workflow_id": 112,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parameter Optimization Algorithms",
+        "description": "Use algorithms like grid search or random search to find optimal parameters.",
+        "id": 832,
+        "workflow_id": 112,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 830,
+    "workflow_id": 112,
+    "display_order": 2
+  },
+  {
+    "name": "Default Parameter Assignment",
+    "description": "Assign default parameters for tools that don't require optimization.",
+    "id": 831,
+    "workflow_id": 112,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Optimization Algorithms",
+    "description": "Use algorithms like grid search or random search to find optimal parameters.",
+    "id": 832,
+    "workflow_id": 112,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate a user-friendly output suggesting the most suitable tools along with their optimal parameters.",
+    "child_phases": [
+      {
+        "name": "Output Formatting",
+        "description": "Format the output in a visually appealing and easy-to-understand manner.",
+        "id": 834,
+        "workflow_id": 112,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Result Presentation",
+        "description": "Present the results to the user, either via command line, GUI, or API.",
+        "id": 835,
+        "workflow_id": 112,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 833,
+    "workflow_id": 112,
+    "display_order": 3
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format the output in a visually appealing and easy-to-understand manner.",
+    "id": 834,
+    "workflow_id": 112,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Result Presentation",
+    "description": "Present the results to the user, either via command line, GUI, or API.",
+    "id": 835,
+    "workflow_id": 112,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Load and inspect the dataset, ensure it's a pandas DataFrame with DatetimeIndex.",
+    "child_phases": [
+      {
+        "name": "Load Dataset",
+        "description": "Load the time-series dataset into a pandas DataFrame.",
+        "id": 837,
+        "workflow_id": 113,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Inspect Dataset",
+        "description": "Verify that the DataFrame has a DatetimeIndex and understand its structure.",
+        "id": 838,
+        "workflow_id": 113,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 836,
+    "workflow_id": 113,
+    "display_order": 0
+  },
+  {
+    "name": "Load Dataset",
+    "description": "Load the time-series dataset into a pandas DataFrame.",
+    "id": 837,
+    "workflow_id": 113,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Inspect Dataset",
+    "description": "Verify that the DataFrame has a DatetimeIndex and understand its structure.",
+    "id": 838,
+    "workflow_id": 113,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Handle missing values and prepare the data for interpolation.",
+    "child_phases": [
+      {
+        "name": "Identify Missing Values",
+        "description": "Find out where the NaN or null values are in the dataset.",
+        "id": 840,
+        "workflow_id": 113,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Handle Single Missing Values",
+        "description": "Interpolate single missing values using linear interpolation.",
+        "id": 841,
+        "workflow_id": 113,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Handle Consecutive Missing Values",
+        "description": "Interpolate consecutive missing values using linear interpolation.",
+        "id": 842,
+        "workflow_id": 113,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 839,
+    "workflow_id": 113,
+    "display_order": 1
+  },
+  {
+    "name": "Identify Missing Values",
+    "description": "Find out where the NaN or null values are in the dataset.",
+    "id": 840,
+    "workflow_id": 113,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Handle Single Missing Values",
+    "description": "Interpolate single missing values using linear interpolation.",
+    "id": 841,
+    "workflow_id": 113,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Handle Consecutive Missing Values",
+    "description": "Interpolate consecutive missing values using linear interpolation.",
+    "id": 842,
+    "workflow_id": 113,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Interpolation",
+    "description": "Perform linear interpolation on the DataFrame.",
+    "child_phases": [
+      {
+        "name": "Select Interpolation Method",
+        "description": "Choose linear interpolation method for this task.",
+        "id": 844,
+        "workflow_id": 113,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Apply Interpolation",
+        "description": "Use pandas' interpolation function to fill missing values.",
+        "id": 845,
+        "workflow_id": 113,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 843,
+    "workflow_id": 113,
+    "display_order": 2
+  },
+  {
+    "name": "Select Interpolation Method",
+    "description": "Choose linear interpolation method for this task.",
+    "id": 844,
+    "workflow_id": 113,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Apply Interpolation",
+    "description": "Use pandas' interpolation function to fill missing values.",
+    "id": 845,
+    "workflow_id": 113,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Verification",
+    "description": "Check the interpolated data and ensure it meets the required standards.",
+    "child_phases": [
+      {
+        "name": "Check for Remaining Missing Values",
+        "description": "Ensure there are no more missing values in the dataset.",
+        "id": 847,
+        "workflow_id": 113,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Inspect Interpolated Data",
+        "description": "Verify that the interpolated data looks reasonable and makes sense.",
+        "id": 848,
+        "workflow_id": 113,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 846,
+    "workflow_id": 113,
+    "display_order": 3
+  },
+  {
+    "name": "Check for Remaining Missing Values",
+    "description": "Ensure there are no more missing values in the dataset.",
+    "id": 847,
+    "workflow_id": 113,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Inspect Interpolated Data",
+    "description": "Verify that the interpolated data looks reasonable and makes sense.",
+    "id": 848,
+    "workflow_id": 113,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Understand the task and gather requirements.",
+    "child_phases": [],
+    "id": 849,
+    "workflow_id": 114,
+    "display_order": 0
+  },
+  {
+    "name": "Development",
+    "description": "Write Python code to accomplish the task.",
+    "child_phases": [
+      {
+        "name": "Input Processing",
+        "description": "Take in topics, options, and answer as arguments.",
+        "id": 851,
+        "workflow_id": 114,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Random Selection",
+        "description": "Randomly select one correct and two incorrect options.",
+        "id": 852,
+        "workflow_id": 114,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Question Generation",
+        "description": "Create a multiple-choice question based on selected options.",
+        "id": 853,
+        "workflow_id": 114,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 850,
+    "workflow_id": 114,
+    "display_order": 1
+  },
+  {
+    "name": "Input Processing",
+    "description": "Take in topics, options, and answer as arguments.",
+    "id": 851,
+    "workflow_id": 114,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Random Selection",
+    "description": "Randomly select one correct and two incorrect options.",
+    "id": 852,
+    "workflow_id": 114,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Question Generation",
+    "description": "Create a multiple-choice question based on selected options.",
+    "id": 853,
+    "workflow_id": 114,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Ensure the function works correctly with different inputs.",
+    "child_phases": [],
+    "id": 854,
+    "workflow_id": 114,
+    "display_order": 2
+  },
+  {
+    "name": "Documentation",
+    "description": "Write documentation for the function and tests.",
+    "child_phases": [],
+    "id": 855,
+    "workflow_id": 114,
+    "display_order": 3
+  },
+  {
+    "name": "Setup",
+    "description": "Prepare environment, import necessary libraries and initialize variables.",
+    "child_phases": [
+      {
+        "name": "Import Libraries",
+        "description": "Import required Python libraries such as numpy, scipy.stats.",
+        "id": 857,
+        "workflow_id": 115,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Initialize Variables",
+        "description": "Set up prior beliefs, observed data list, etc.",
+        "id": 858,
+        "workflow_id": 115,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 856,
+    "workflow_id": 115,
+    "display_order": 0
+  },
+  {
+    "name": "Import Libraries",
+    "description": "Import required Python libraries such as numpy, scipy.stats.",
+    "id": 857,
+    "workflow_id": 115,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Initialize Variables",
+    "description": "Set up prior beliefs, observed data list, etc.",
+    "id": 858,
+    "workflow_id": 115,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Bayesian Inference Process",
+    "description": "Implement the Bayesian inference steps.",
+    "child_phases": [
+      {
+        "name": "Define Prior Beliefs",
+        "description": "Set up initial probability distribution for the unknown parameter (probability of getting heads).",
+        "id": 860,
+        "workflow_id": 115,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Flip Coin and Observe Data",
+        "description": "Simulate coin flips, record outcomes, and update beliefs.",
+        "id": 861,
+        "workflow_id": 115,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Calculate Likelihoods",
+        "description": "Compute likelihood function for each flip outcome based on the current belief.",
+        "id": 862,
+        "workflow_id": 115,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Update Beliefs",
+        "description": "Use Bayes' theorem to update the probability distribution after observing new data.",
+        "id": 863,
+        "workflow_id": 115,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 859,
+    "workflow_id": 115,
+    "display_order": 1
+  },
+  {
+    "name": "Define Prior Beliefs",
+    "description": "Set up initial probability distribution for the unknown parameter (probability of getting heads).",
+    "id": 860,
+    "workflow_id": 115,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Flip Coin and Observe Data",
+    "description": "Simulate coin flips, record outcomes, and update beliefs.",
+    "id": 861,
+    "workflow_id": 115,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Calculate Likelihoods",
+    "description": "Compute likelihood function for each flip outcome based on the current belief.",
+    "id": 862,
+    "workflow_id": 115,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Update Beliefs",
+    "description": "Use Bayes' theorem to update the probability distribution after observing new data.",
+    "id": 863,
+    "workflow_id": 115,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Test and Validate",
+    "description": "Ensure the function works as expected and validate results.",
+    "child_phases": [
+      {
+        "name": "Run Test Cases",
+        "description": "Execute test cases to verify functionality.",
+        "id": 865,
+        "workflow_id": 115,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Validate Results",
+        "description": "Check if the estimated probabilities match expected outcomes or fall within acceptable ranges.",
+        "id": 866,
+        "workflow_id": 115,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 864,
+    "workflow_id": 115,
+    "display_order": 2
+  },
+  {
+    "name": "Run Test Cases",
+    "description": "Execute test cases to verify functionality.",
+    "id": 865,
+    "workflow_id": 115,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Validate Results",
+    "description": "Check if the estimated probabilities match expected outcomes or fall within acceptable ranges.",
+    "id": 866,
+    "workflow_id": 115,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Prepare the environment and obtain input data.",
+    "child_phases": [],
+    "id": 867,
+    "workflow_id": 116,
+    "display_order": 0
+  },
+  {
+    "name": "Parsing",
+    "description": "Parse OpenAPI yaml or json specification files.",
+    "child_phases": [
+      {
+        "name": "YAML Parsing",
+        "description": "Parse YAML format.",
+        "id": 869,
+        "workflow_id": 116,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "JSON Parsing",
+        "description": "Parse JSON format.",
+        "id": 870,
+        "workflow_id": 116,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 868,
+    "workflow_id": 116,
+    "display_order": 1
+  },
+  {
+    "name": "YAML Parsing",
+    "description": "Parse YAML format.",
+    "id": 869,
+    "workflow_id": 116,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "JSON Parsing",
+    "description": "Parse JSON format.",
+    "id": 870,
+    "workflow_id": 116,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Extraction",
+    "description": "Extract relevant information from the parsed data.",
+    "child_phases": [
+      {
+        "name": "Endpoint Extraction",
+        "description": "Extract endpoints.",
+        "id": 872,
+        "workflow_id": 116,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Method Extraction",
+        "description": "Extract methods.",
+        "id": 873,
+        "workflow_id": 116,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Parameter Extraction",
+        "description": "Extract parameters.",
+        "id": 874,
+        "workflow_id": 116,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 871,
+    "workflow_id": 116,
+    "display_order": 2
+  },
+  {
+    "name": "Endpoint Extraction",
+    "description": "Extract endpoints.",
+    "id": 872,
+    "workflow_id": 116,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Method Extraction",
+    "description": "Extract methods.",
+    "id": 873,
+    "workflow_id": 116,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Extraction",
+    "description": "Extract parameters.",
+    "id": 874,
+    "workflow_id": 116,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation Generation",
+    "description": "Generate markdown API documentation.",
+    "child_phases": [
+      {
+        "name": "Formatting",
+        "description": "Follow a consistent format for generated docs.",
+        "id": 876,
+        "workflow_id": 116,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Example Addition",
+        "description": "Add examples for each endpoint.",
+        "id": 877,
+        "workflow_id": 116,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 875,
+    "workflow_id": 116,
+    "display_order": 3
+  },
+  {
+    "name": "Formatting",
+    "description": "Follow a consistent format for generated docs.",
+    "id": 876,
+    "workflow_id": 116,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Example Addition",
+    "description": "Add examples for each endpoint.",
+    "id": 877,
+    "workflow_id": 116,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Handling",
+    "description": "Collect user input for start value, common difference/ratio, and number of terms.",
+    "child_phases": [
+      {
+        "name": "Start Value Input",
+        "description": "Handle user input for the start value of the series.",
+        "id": 879,
+        "workflow_id": 117,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Common Difference/Ratio Input",
+        "description": "Handle user input for the common difference (arithmetic) or ratio (geometric).",
+        "id": 880,
+        "workflow_id": 117,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Number of Terms Input",
+        "description": "Handle user input for the number of terms to generate.",
+        "id": 881,
+        "workflow_id": 117,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 878,
+    "workflow_id": 117,
+    "display_order": 0
+  },
+  {
+    "name": "Start Value Input",
+    "description": "Handle user input for the start value of the series.",
+    "id": 879,
+    "workflow_id": 117,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Common Difference/Ratio Input",
+    "description": "Handle user input for the common difference (arithmetic) or ratio (geometric).",
+    "id": 880,
+    "workflow_id": 117,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Number of Terms Input",
+    "description": "Handle user input for the number of terms to generate.",
+    "id": 881,
+    "workflow_id": 117,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Series Generation",
+    "description": "Generate the series based on user inputs.",
+    "child_phases": [
+      {
+        "name": "Arithmetic Series Generation",
+        "description": "Calculate and return the first n terms of an arithmetic series if common difference is provided.",
+        "id": 883,
+        "workflow_id": 117,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Geometric Series Generation",
+        "description": "Calculate and return the first n terms of a geometric series if ratio is provided.",
+        "id": 884,
+        "workflow_id": 117,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 882,
+    "workflow_id": 117,
+    "display_order": 1
+  },
+  {
+    "name": "Arithmetic Series Generation",
+    "description": "Calculate and return the first n terms of an arithmetic series if common difference is provided.",
+    "id": 883,
+    "workflow_id": 117,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Geometric Series Generation",
+    "description": "Calculate and return the first n terms of a geometric series if ratio is provided.",
+    "id": 884,
+    "workflow_id": 117,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Handling",
+    "description": "Display or return the generated series to the user.",
+    "child_phases": [
+      {
+        "name": "Series Display",
+        "description": "Print or display the generated series for the user to see.",
+        "id": 886,
+        "workflow_id": 117,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Series Return",
+        "description": "Return the generated series if the function is called programmatically.",
+        "id": 887,
+        "workflow_id": 117,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 885,
+    "workflow_id": 117,
+    "display_order": 2
+  },
+  {
+    "name": "Series Display",
+    "description": "Print or display the generated series for the user to see.",
+    "id": 886,
+    "workflow_id": 117,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Series Return",
+    "description": "Return the generated series if the function is called programmatically.",
+    "id": 887,
+    "workflow_id": 117,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Handle invalid inputs and unexpected errors.",
+    "child_phases": [
+      {
+        "name": "Input Validation",
+        "description": "Check user inputs for validity (e.g., non-zero division, valid data types).",
+        "id": 889,
+        "workflow_id": 117,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Message Display",
+        "description": "Display appropriate error messages to guide the user.",
+        "id": 890,
+        "workflow_id": 117,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 888,
+    "workflow_id": 117,
+    "display_order": 3
+  },
+  {
+    "name": "Input Validation",
+    "description": "Check user inputs for validity (e.g., non-zero division, valid data types).",
+    "id": 889,
+    "workflow_id": 117,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Message Display",
+    "description": "Display appropriate error messages to guide the user.",
+    "id": 890,
+    "workflow_id": 117,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Prepare the environment and data.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Ensure all dependencies are installed.",
+        "id": 892,
+        "workflow_id": 118,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Prepare any required input data.",
+        "id": 893,
+        "workflow_id": 118,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 891,
+    "workflow_id": 118,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Ensure all dependencies are installed.",
+    "id": 892,
+    "workflow_id": 118,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare any required input data.",
+    "id": 893,
+    "workflow_id": 118,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Particle Initialization",
+    "description": "Create initial particle positions.",
+    "child_phases": [
+      {
+        "name": "Particle Position Generation",
+        "description": "Generate random initial positions for particles.",
+        "id": 895,
+        "workflow_id": 118,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 894,
+    "workflow_id": 118,
+    "display_order": 1
+  },
+  {
+    "name": "Particle Position Generation",
+    "description": "Generate random initial positions for particles.",
+    "id": 895,
+    "workflow_id": 118,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Movement Simulation",
+    "description": "Simulate particle movement using random walk.",
+    "child_phases": [
+      {
+        "name": "Random Walk Implementation",
+        "description": "Implement functions for particle movement based on random walk.",
+        "id": 897,
+        "workflow_id": 118,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Simulation Loop",
+        "description": "Simulate N particles moving M steps with step size D meters.",
+        "id": 898,
+        "workflow_id": 118,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 896,
+    "workflow_id": 118,
+    "display_order": 2
+  },
+  {
+    "name": "Random Walk Implementation",
+    "description": "Implement functions for particle movement based on random walk.",
+    "id": 897,
+    "workflow_id": 118,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Simulation Loop",
+    "description": "Simulate N particles moving M steps with step size D meters.",
+    "id": 898,
+    "workflow_id": 118,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Create visual representation of the simulation.",
+    "child_phases": [
+      {
+        "name": "Data Collection",
+        "description": "Collect data on particle positions at each time step.",
+        "id": 900,
+        "workflow_id": 118,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Graphical Representation",
+        "description": "Visualize particle movement using graphs or animations.",
+        "id": 901,
+        "workflow_id": 118,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 899,
+    "workflow_id": 118,
+    "display_order": 3
+  },
+  {
+    "name": "Data Collection",
+    "description": "Collect data on particle positions at each time step.",
+    "id": 900,
+    "workflow_id": 118,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Graphical Representation",
+    "description": "Visualize particle movement using graphs or animations.",
+    "id": 901,
+    "workflow_id": 118,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Results Analysis",
+    "description": "Analyze and interpret the simulation results.",
+    "child_phases": [
+      {
+        "name": "Data Analysis",
+        "description": "Calculate statistics and measures from the particle movements.",
+        "id": 903,
+        "workflow_id": 118,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate a report summarizing the simulation and its findings.",
+        "id": 904,
+        "workflow_id": 118,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 902,
+    "workflow_id": 118,
+    "display_order": 4
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Calculate statistics and measures from the particle movements.",
+    "id": 903,
+    "workflow_id": 118,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report summarizing the simulation and its findings.",
+    "id": 904,
+    "workflow_id": 118,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Generation",
+    "description": "Create a random quiz on math operations (addition, subtraction, multiplication) within a specified range.",
+    "child_phases": [
+      {
+        "name": "Question Generation",
+        "description": "Generate questions with one correct answer and three distractors for each operation type.",
+        "id": 906,
+        "workflow_id": 119,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Quiz Compilation",
+        "description": "Compile generated questions into a single quiz with 10 questions.",
+        "id": 907,
+        "workflow_id": 119,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 905,
+    "workflow_id": 119,
+    "display_order": 0
+  },
+  {
+    "name": "Question Generation",
+    "description": "Generate questions with one correct answer and three distractors for each operation type.",
+    "id": 906,
+    "workflow_id": 119,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Compilation",
+    "description": "Compile generated questions into a single quiz with 10 questions.",
+    "id": 907,
+    "workflow_id": 119,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Define quiz structure, questions difficulty levels and scoring system.",
+    "child_phases": [
+      {
+        "name": "Quiz Structure Definition",
+        "description": "Determine the number of questions per quiz and topics.",
+        "id": 909,
+        "workflow_id": 120,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Difficulty Levels Definition",
+        "description": "Set up different difficulty levels for each question type.",
+        "id": 910,
+        "workflow_id": 120,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Scoring System Design",
+        "description": "Define scoring system based on correct/incorrect answers.",
+        "id": 911,
+        "workflow_id": 120,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 908,
+    "workflow_id": 120,
+    "display_order": 0
+  },
+  {
+    "name": "Quiz Structure Definition",
+    "description": "Determine the number of questions per quiz and topics.",
+    "id": 909,
+    "workflow_id": 120,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Difficulty Levels Definition",
+    "description": "Set up different difficulty levels for each question type.",
+    "id": 910,
+    "workflow_id": 120,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Scoring System Design",
+    "description": "Define scoring system based on correct/incorrect answers.",
+    "id": 911,
+    "workflow_id": 120,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and organize questions, answers and associated metadata.",
+    "child_phases": [
+      {
+        "name": "Questions Metadata Collection",
+        "description": "Gather question text, difficulty level, topic.",
+        "id": 913,
+        "workflow_id": 120,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Answers Metadata Collection",
+        "description": "Collect correct answer(s) for each question.",
+        "id": 914,
+        "workflow_id": 120,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 912,
+    "workflow_id": 120,
+    "display_order": 1
+  },
+  {
+    "name": "Questions Metadata Collection",
+    "description": "Gather question text, difficulty level, topic.",
+    "id": 913,
+    "workflow_id": 120,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Answers Metadata Collection",
+    "description": "Collect correct answer(s) for each question.",
+    "id": 914,
+    "workflow_id": 120,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Engine Implementation",
+    "description": "Develop the core functionality of the adaptive quizzing engine.",
+    "child_phases": [
+      {
+        "name": "User Authentication",
+        "description": "Implement user registration and login.",
+        "id": 916,
+        "workflow_id": 120,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Quiz Generation",
+        "description": "Create quiz questions based on user's current difficulty level.",
+        "id": 917,
+        "workflow_id": 120,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Adaptive Difficulty Adjustment",
+        "description": "Implement logic to adjust question difficulty based on user performance.",
+        "id": 918,
+        "workflow_id": 120,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 915,
+    "workflow_id": 120,
+    "display_order": 2
+  },
+  {
+    "name": "User Authentication",
+    "description": "Implement user registration and login.",
+    "id": 916,
+    "workflow_id": 120,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Generation",
+    "description": "Create quiz questions based on user's current difficulty level.",
+    "id": 917,
+    "workflow_id": 120,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Adaptive Difficulty Adjustment",
+    "description": "Implement logic to adjust question difficulty based on user performance.",
+    "id": 918,
+    "workflow_id": 120,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "User Interface",
+    "description": "Create a simple, intuitive interface for users.",
+    "child_phases": [
+      {
+        "name": "Quiz Taking Interface",
+        "description": "Design the screen where users take quizzes.",
+        "id": 920,
+        "workflow_id": 120,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Results Display",
+        "description": "Show user's score and provide options to retake quiz or learn more about incorrect topics.",
+        "id": 921,
+        "workflow_id": 120,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 919,
+    "workflow_id": 120,
+    "display_order": 3
+  },
+  {
+    "name": "Quiz Taking Interface",
+    "description": "Design the screen where users take quizzes.",
+    "id": 920,
+    "workflow_id": 120,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Results Display",
+    "description": "Show user's score and provide options to retake quiz or learn more about incorrect topics.",
+    "id": 921,
+    "workflow_id": 120,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the application thoroughly for any bugs or inconsistencies.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual components of the application.",
+        "id": 923,
+        "workflow_id": 120,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Ensure all components work together correctly.",
+        "id": 924,
+        "workflow_id": 120,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 922,
+    "workflow_id": 120,
+    "display_order": 4
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual components of the application.",
+    "id": 923,
+    "workflow_id": 120,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Ensure all components work together correctly.",
+    "id": 924,
+    "workflow_id": 120,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "File Processing",
+    "description": "Read and process input Python files.",
+    "child_phases": [
+      {
+        "name": "File Reading",
+        "description": "Load Python files from the provided list.",
+        "id": 926,
+        "workflow_id": 121,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "File Parsing",
+        "description": "Parse loaded files into Abstract Syntax Trees (AST) for analysis.",
+        "id": 927,
+        "workflow_id": 121,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 925,
+    "workflow_id": 121,
+    "display_order": 0
+  },
+  {
+    "name": "File Reading",
+    "description": "Load Python files from the provided list.",
+    "id": 926,
+    "workflow_id": 121,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "File Parsing",
+    "description": "Parse loaded files into Abstract Syntax Trees (AST) for analysis.",
+    "id": 927,
+    "workflow_id": 121,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Code Review",
+    "description": "Check each file against PEP 8 style guidelines, empty functions, and TODO comments.",
+    "child_phases": [
+      {
+        "name": "PEP 8 Style Guidelines Check",
+        "description": "Verify adherence to PEP 8 naming conventions, line length, indentation, etc.",
+        "id": 929,
+        "workflow_id": 121,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Empty Functions Check",
+        "description": "Identify functions with no implementation or only a pass statement.",
+        "id": 930,
+        "workflow_id": 121,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "TODO Comments Check",
+        "description": "Find TODO comments and list them in the report.",
+        "id": 931,
+        "workflow_id": 121,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 928,
+    "workflow_id": 121,
+    "display_order": 1
+  },
+  {
+    "name": "PEP 8 Style Guidelines Check",
+    "description": "Verify adherence to PEP 8 naming conventions, line length, indentation, etc.",
+    "id": 929,
+    "workflow_id": 121,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Empty Functions Check",
+    "description": "Identify functions with no implementation or only a pass statement.",
+    "id": 930,
+    "workflow_id": 121,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "TODO Comments Check",
+    "description": "Find TODO comments and list them in the report.",
+    "id": 931,
+    "workflow_id": 121,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a detailed report of all violations found in each file.",
+    "child_phases": [
+      {
+        "name": "Violations Collection",
+        "description": "Compile a list of PEP 8 style guideline violations, empty functions, and TODO comments for each file.",
+        "id": 933,
+        "workflow_id": 121,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Formatting",
+        "description": "Format the compiled violations into a readable report format.",
+        "id": 934,
+        "workflow_id": 121,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 932,
+    "workflow_id": 121,
+    "display_order": 2
+  },
+  {
+    "name": "Violations Collection",
+    "description": "Compile a list of PEP 8 style guideline violations, empty functions, and TODO comments for each file.",
+    "id": 933,
+    "workflow_id": 121,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Formatting",
+    "description": "Format the compiled violations into a readable report format.",
+    "id": 934,
+    "workflow_id": 121,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data such as topics, desired outcomes, and any other relevant information.",
+    "child_phases": [],
+    "id": 935,
+    "workflow_id": 122,
+    "display_order": 0
+  },
+  {
+    "name": "Function Definition",
+    "description": "Define Python functions to accomplish the task of generating structured lesson plans.",
+    "child_phases": [
+      {
+        "name": "Topic Combination Function",
+        "description": "Create a function to combine topics into lessons.",
+        "child_phases": [],
+        "id": 937,
+        "workflow_id": 122,
+        "display_order": 0
+      },
+      {
+        "name": "Outcome Mapping Function",
+        "description": "Create a function to map desired outcomes to lessons.",
+        "child_phases": [],
+        "id": 938,
+        "workflow_id": 122,
+        "display_order": 1
+      }
+    ],
+    "id": 936,
+    "workflow_id": 122,
+    "display_order": 1
+  },
+  {
+    "name": "Topic Combination Function",
+    "description": "Create a function to combine topics into lessons.",
+    "child_phases": [],
+    "id": 937,
+    "workflow_id": 122,
+    "display_order": 0
+  },
+  {
+    "name": "Outcome Mapping Function",
+    "description": "Create a function to map desired outcomes to lessons.",
+    "child_phases": [],
+    "id": 938,
+    "workflow_id": 122,
+    "display_order": 1
+  },
+  {
+    "name": "Lesson Generation",
+    "description": "Use defined functions to generate structured lesson plans from the prepared data.",
+    "child_phases": [
+      {
+        "name": "Lesson Plan Creation",
+        "description": "Create lessons based on combined topics and desired outcomes.",
+        "child_phases": [],
+        "id": 940,
+        "workflow_id": 122,
+        "display_order": 0
+      },
+      {
+        "name": "Output Formatting",
+        "description": "Format the generated lesson plans into a desired output format.",
+        "child_phases": [],
+        "id": 941,
+        "workflow_id": 122,
+        "display_order": 1
+      }
+    ],
+    "id": 939,
+    "workflow_id": 122,
+    "display_order": 2
+  },
+  {
+    "name": "Lesson Plan Creation",
+    "description": "Create lessons based on combined topics and desired outcomes.",
+    "child_phases": [],
+    "id": 940,
+    "workflow_id": 122,
+    "display_order": 0
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format the generated lesson plans into a desired output format.",
+    "child_phases": [],
+    "id": 941,
+    "workflow_id": 122,
+    "display_order": 1
+  },
+  {
+    "name": "Testing",
+    "description": "Test the generated Python app with sample data to ensure it's working as expected.",
+    "child_phases": [],
+    "id": 942,
+    "workflow_id": 122,
+    "display_order": 3
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Handling and cleaning raw data",
+    "child_phases": [
+      {
+        "name": "Import Data",
+        "description": "Load the clinical trial data",
+        "id": 944,
+        "workflow_id": 123,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, etc.",
+        "id": 945,
+        "workflow_id": 123,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 943,
+    "workflow_id": 123,
+    "display_order": 0
+  },
+  {
+    "name": "Import Data",
+    "description": "Load the clinical trial data",
+    "id": 944,
+    "workflow_id": 123,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, etc.",
+    "id": 945,
+    "workflow_id": 123,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Statistical Analysis",
+    "description": "Performing statistical tests on the data",
+    "child_phases": [
+      {
+        "name": "Exploratory Data Analysis",
+        "description": "Understanding the distribution of data",
+        "id": 947,
+        "workflow_id": 123,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Hypothesis Testing",
+        "description": "Performing t-tests, ANOVA, etc.",
+        "id": 948,
+        "workflow_id": 123,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 946,
+    "workflow_id": 123,
+    "display_order": 1
+  },
+  {
+    "name": "Exploratory Data Analysis",
+    "description": "Understanding the distribution of data",
+    "id": 947,
+    "workflow_id": 123,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Hypothesis Testing",
+    "description": "Performing t-tests, ANOVA, etc.",
+    "id": 948,
+    "workflow_id": 123,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Creating visualizations for better understanding",
+    "child_phases": [
+      {
+        "name": "Plotting Data",
+        "description": "Using matplotlib or seaborn to plot data",
+        "id": 950,
+        "workflow_id": 123,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Interpreting Visualizations",
+        "description": "Drawing insights from the plots",
+        "id": 951,
+        "workflow_id": 123,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 949,
+    "workflow_id": 123,
+    "display_order": 2
+  },
+  {
+    "name": "Plotting Data",
+    "description": "Using matplotlib or seaborn to plot data",
+    "id": 950,
+    "workflow_id": 123,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Interpreting Visualizations",
+    "description": "Drawing insights from the plots",
+    "id": 951,
+    "workflow_id": 123,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generating a markdown report summarizing results",
+    "child_phases": [
+      {
+        "name": "Summarize Findings",
+        "description": "Concisely state key findings from analysis",
+        "id": 953,
+        "workflow_id": 123,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Include Visualizations",
+        "description": "Add relevant plots to the report",
+        "id": 954,
+        "workflow_id": 123,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 952,
+    "workflow_id": 123,
+    "display_order": 3
+  },
+  {
+    "name": "Summarize Findings",
+    "description": "Concisely state key findings from analysis",
+    "id": 953,
+    "workflow_id": 123,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Include Visualizations",
+    "description": "Add relevant plots to the report",
+    "id": 954,
+    "workflow_id": 123,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Loading and preprocessing input data.",
+    "child_phases": [
+      {
+        "name": "Load Data",
+        "description": "Reading the input time-series dataset.",
+        "id": 956,
+        "workflow_id": 124,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Preprocess Data",
+        "description": "Handling any missing values or outliers in the data.",
+        "id": 957,
+        "workflow_id": 124,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 955,
+    "workflow_id": 124,
+    "display_order": 0
+  },
+  {
+    "name": "Load Data",
+    "description": "Reading the input time-series dataset.",
+    "id": 956,
+    "workflow_id": 124,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Preprocess Data",
+    "description": "Handling any missing values or outliers in the data.",
+    "id": 957,
+    "workflow_id": 124,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Exploring and understanding the structure of the data.",
+    "child_phases": [
+      {
+        "name": "Check Stationarity",
+        "description": "Checking if the time-series is stationary or not.",
+        "id": 959,
+        "workflow_id": 124,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Trends and Seasonality",
+        "description": "Analyzing the presence of trends and seasonality in the data.",
+        "id": 960,
+        "workflow_id": 124,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 958,
+    "workflow_id": 124,
+    "display_order": 1
+  },
+  {
+    "name": "Check Stationarity",
+    "description": "Checking if the time-series is stationary or not.",
+    "id": 959,
+    "workflow_id": 124,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Trends and Seasonality",
+    "description": "Analyzing the presence of trends and seasonality in the data.",
+    "id": 960,
+    "workflow_id": 124,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Normalization",
+    "description": "Removing linear trends and seasonality.",
+    "child_phases": [
+      {
+        "name": "Remove Linear Trends",
+        "description": "Applying techniques such as differencing to remove trends.",
+        "id": 962,
+        "workflow_id": 124,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Remove Seasonality",
+        "description": "Using decomposition or other techniques to remove seasonality.",
+        "id": 963,
+        "workflow_id": 124,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 961,
+    "workflow_id": 124,
+    "display_order": 2
+  },
+  {
+    "name": "Remove Linear Trends",
+    "description": "Applying techniques such as differencing to remove trends.",
+    "id": 962,
+    "workflow_id": 124,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Remove Seasonality",
+    "description": "Using decomposition or other techniques to remove seasonality.",
+    "id": 963,
+    "workflow_id": 124,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Result Verification",
+    "description": "Ensuring the output data is free from trends and seasonality.",
+    "child_phases": [
+      {
+        "name": "Check Normalization",
+        "description": "Confirming that trends and seasonality have been removed.",
+        "id": 965,
+        "workflow_id": 124,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Data Validation",
+        "description": "Ensuring the output data is in the correct format.",
+        "id": 966,
+        "workflow_id": 124,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 964,
+    "workflow_id": 124,
+    "display_order": 3
+  },
+  {
+    "name": "Check Normalization",
+    "description": "Confirming that trends and seasonality have been removed.",
+    "id": 965,
+    "workflow_id": 124,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Data Validation",
+    "description": "Ensuring the output data is in the correct format.",
+    "id": 966,
+    "workflow_id": 124,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Definition",
+    "description": "Define the classes for nodes and edges.",
+    "child_phases": [
+      {
+        "name": "Node Class Definition",
+        "description": "Define the node class with attributes like entity type, name, etc.",
+        "id": 968,
+        "workflow_id": 125,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Class Definition",
+        "description": "Define the edge class with attributes like relation type, nodes it connects, etc.",
+        "id": 969,
+        "workflow_id": 125,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 967,
+    "workflow_id": 125,
+    "display_order": 0
+  },
+  {
+    "name": "Node Class Definition",
+    "description": "Define the node class with attributes like entity type, name, etc.",
+    "id": 968,
+    "workflow_id": 125,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Class Definition",
+    "description": "Define the edge class with attributes like relation type, nodes it connects, etc.",
+    "id": 969,
+    "workflow_id": 125,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Initialization",
+    "description": "Initialize an empty graph or load existing data.",
+    "child_phases": [
+      {
+        "name": "Empty Graph Creation",
+        "description": "Create an empty graph if no input data is available.",
+        "id": 971,
+        "workflow_id": 125,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Loading",
+        "description": "Load the prepared input data into the graph.",
+        "id": 972,
+        "workflow_id": 125,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 970,
+    "workflow_id": 125,
+    "display_order": 1
+  },
+  {
+    "name": "Empty Graph Creation",
+    "description": "Create an empty graph if no input data is available.",
+    "id": 971,
+    "workflow_id": 125,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load the prepared input data into the graph.",
+    "id": 972,
+    "workflow_id": 125,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Manipulation Functions",
+    "description": "Define functions to add/remove nodes and edges.",
+    "child_phases": [
+      {
+        "name": "Node Addition Function",
+        "description": "Define a function to add new nodes to the graph.",
+        "id": 974,
+        "workflow_id": 125,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Addition Function",
+        "description": "Define a function to connect two nodes with an edge.",
+        "id": 975,
+        "workflow_id": 125,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Node Removal Function",
+        "description": "Define a function to remove a node from the graph.",
+        "id": 976,
+        "workflow_id": 125,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Removal Function",
+        "description": "Define a function to disconnect two nodes or remove an edge.",
+        "id": 977,
+        "workflow_id": 125,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 973,
+    "workflow_id": 125,
+    "display_order": 2
+  },
+  {
+    "name": "Node Addition Function",
+    "description": "Define a function to add new nodes to the graph.",
+    "id": 974,
+    "workflow_id": 125,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Addition Function",
+    "description": "Define a function to connect two nodes with an edge.",
+    "id": 975,
+    "workflow_id": 125,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Node Removal Function",
+    "description": "Define a function to remove a node from the graph.",
+    "id": 976,
+    "workflow_id": 125,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Removal Function",
+    "description": "Define a function to disconnect two nodes or remove an edge.",
+    "id": 977,
+    "workflow_id": 125,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Query Functions",
+    "description": "Define functions to query the graph.",
+    "child_phases": [
+      {
+        "name": "Neighborhood Query Function",
+        "description": "Define a function to find neighboring nodes of a given node.",
+        "id": 979,
+        "workflow_id": 125,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Relation Query Function",
+        "description": "Define a function to find relations between two nodes or all relations of a node.",
+        "id": 980,
+        "workflow_id": 125,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Pathfinding Function",
+        "description": "Define a function to find the shortest path or any path between two nodes.",
+        "id": 981,
+        "workflow_id": 125,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 978,
+    "workflow_id": 125,
+    "display_order": 3
+  },
+  {
+    "name": "Neighborhood Query Function",
+    "description": "Define a function to find neighboring nodes of a given node.",
+    "id": 979,
+    "workflow_id": 125,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Relation Query Function",
+    "description": "Define a function to find relations between two nodes or all relations of a node.",
+    "id": 980,
+    "workflow_id": 125,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Pathfinding Function",
+    "description": "Define a function to find the shortest path or any path between two nodes.",
+    "id": 981,
+    "workflow_id": 125,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Visualization",
+    "description": "Visualize the graph for better understanding and debugging.",
+    "child_phases": [
+      {
+        "name": "Node Display Function",
+        "description": "Define a function to display node attributes.",
+        "id": 983,
+        "workflow_id": 125,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Display Function",
+        "description": "Define a function to display edge relations.",
+        "id": 984,
+        "workflow_id": 125,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Graph Layout Function",
+        "description": "Define a function to layout nodes and edges in an aesthetically pleasing manner.",
+        "id": 985,
+        "workflow_id": 125,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 982,
+    "workflow_id": 125,
+    "display_order": 4
+  },
+  {
+    "name": "Node Display Function",
+    "description": "Define a function to display node attributes.",
+    "id": 983,
+    "workflow_id": 125,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Display Function",
+    "description": "Define a function to display edge relations.",
+    "id": 984,
+    "workflow_id": 125,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Layout Function",
+    "description": "Define a function to layout nodes and edges in an aesthetically pleasing manner.",
+    "id": 985,
+    "workflow_id": 125,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure the environment and prepare input data.",
+    "child_phases": [],
+    "id": 986,
+    "workflow_id": 126,
+    "display_order": 0
+  },
+  {
+    "name": "Monte Carlo Simulation",
+    "description": "Implement the Monte Carlo simulation to estimate Pi.",
+    "child_phases": [
+      {
+        "name": "Generate Random Samples",
+        "description": "Create random points in a unit square based on the number of samples.",
+        "child_phases": [],
+        "id": 988,
+        "workflow_id": 126,
+        "display_order": 0
+      },
+      {
+        "name": "Calculate Hits",
+        "description": "Count the number of points that fall within a quarter circle.",
+        "child_phases": [],
+        "id": 989,
+        "workflow_id": 126,
+        "display_order": 1
+      },
+      {
+        "name": "Estimate Pi",
+        "description": "Use the ratio of hits to total samples to estimate Pi.",
+        "child_phases": [],
+        "id": 990,
+        "workflow_id": 126,
+        "display_order": 2
+      }
+    ],
+    "id": 987,
+    "workflow_id": 126,
+    "display_order": 1
+  },
+  {
+    "name": "Generate Random Samples",
+    "description": "Create random points in a unit square based on the number of samples.",
+    "child_phases": [],
+    "id": 988,
+    "workflow_id": 126,
+    "display_order": 0
+  },
+  {
+    "name": "Calculate Hits",
+    "description": "Count the number of points that fall within a quarter circle.",
+    "child_phases": [],
+    "id": 989,
+    "workflow_id": 126,
+    "display_order": 1
+  },
+  {
+    "name": "Estimate Pi",
+    "description": "Use the ratio of hits to total samples to estimate Pi.",
+    "child_phases": [],
+    "id": 990,
+    "workflow_id": 126,
+    "display_order": 2
+  },
+  {
+    "name": "Testing",
+    "description": "Test the function with various sample sizes and validate the results.",
+    "child_phases": [],
+    "id": 991,
+    "workflow_id": 126,
+    "display_order": 2
+  },
+  {
+    "name": "Data Collection",
+    "description": "Functions to collect data from multiple CSV files.",
+    "child_phases": [
+      {
+        "name": "File Loading",
+        "description": "Load US census information CSV files.",
+        "id": 993,
+        "workflow_id": 127,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Extraction",
+        "description": "Extract relevant columns (population, age, race) from loaded files.",
+        "id": 994,
+        "workflow_id": 127,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 992,
+    "workflow_id": 127,
+    "display_order": 0
+  },
+  {
+    "name": "File Loading",
+    "description": "Load US census information CSV files.",
+    "id": 993,
+    "workflow_id": 127,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Extraction",
+    "description": "Extract relevant columns (population, age, race) from loaded files.",
+    "id": 994,
+    "workflow_id": 127,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Normalization",
+    "description": "Functions to normalize collected data.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values and outliers in the extracted data.",
+        "id": 996,
+        "workflow_id": 127,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Transformation",
+        "description": "Transform data into a suitable format for further processing.",
+        "id": 997,
+        "workflow_id": 127,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 995,
+    "workflow_id": 127,
+    "display_order": 1
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values and outliers in the extracted data.",
+    "id": 996,
+    "workflow_id": 127,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Transform data into a suitable format for further processing.",
+    "id": 997,
+    "workflow_id": 127,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Validation",
+    "description": "Pipeline to validate data.",
+    "child_phases": [
+      {
+        "name": "Null Value Checking",
+        "description": "Check for and handle null values in the dataset.",
+        "id": 999,
+        "workflow_id": 127,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Type Verification",
+        "description": "Verify that data types match expectations.",
+        "id": 1000,
+        "workflow_id": 127,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Range Check",
+        "description": "Check if data falls within expected ranges.",
+        "id": 1001,
+        "workflow_id": 127,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 998,
+    "workflow_id": 127,
+    "display_order": 2
+  },
+  {
+    "name": "Null Value Checking",
+    "description": "Check for and handle null values in the dataset.",
+    "id": 999,
+    "workflow_id": 127,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Type Verification",
+    "description": "Verify that data types match expectations.",
+    "id": 1000,
+    "workflow_id": 127,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Range Check",
+    "description": "Check if data falls within expected ranges.",
+    "id": 1001,
+    "workflow_id": 127,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "System Design",
+    "description": "Define the structure of the adaptive learning progress tracker, including user profiles, performance data, and difficulty levels.",
+    "child_phases": [
+      {
+        "name": "Data Structures",
+        "description": "Choose appropriate data structures for efficient storage and retrieval of user data.",
+        "id": 1003,
+        "workflow_id": 128,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "System Architecture",
+        "description": "Design the system architecture, including modules or classes for user management, performance tracking, difficulty adjustment, etc.",
+        "id": 1004,
+        "workflow_id": 128,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1002,
+    "workflow_id": 128,
+    "display_order": 0
+  },
+  {
+    "name": "Data Structures",
+    "description": "Choose appropriate data structures for efficient storage and retrieval of user data.",
+    "id": 1003,
+    "workflow_id": 128,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "System Architecture",
+    "description": "Design the system architecture, including modules or classes for user management, performance tracking, difficulty adjustment, etc.",
+    "id": 1004,
+    "workflow_id": 128,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "User Management",
+    "description": "Implement features to create and manage user profiles.",
+    "child_phases": [
+      {
+        "name": "User Registration",
+        "description": "Create functionality for users to register with unique IDs or usernames.",
+        "id": 1006,
+        "workflow_id": 128,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "User Profile Management",
+        "description": "Implement features to update and retrieve user profiles, including learning preferences and progress.",
+        "id": 1007,
+        "workflow_id": 128,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1005,
+    "workflow_id": 128,
+    "display_order": 1
+  },
+  {
+    "name": "User Registration",
+    "description": "Create functionality for users to register with unique IDs or usernames.",
+    "id": 1006,
+    "workflow_id": 128,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "User Profile Management",
+    "description": "Implement features to update and retrieve user profiles, including learning preferences and progress.",
+    "id": 1007,
+    "workflow_id": 128,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Tracking",
+    "description": "Develop functionality to track user performance over time.",
+    "child_phases": [
+      {
+        "name": "Quiz/Assessment Creation",
+        "description": "Create tools for educators or admins to create quizzes or assessments.",
+        "id": 1009,
+        "workflow_id": 128,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "User Response Recording",
+        "description": "Record user responses during assessments and store them in the performance data.",
+        "id": 1010,
+        "workflow_id": 128,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Performance Analysis",
+        "description": "Analyze user performance data to identify learning trends and areas of improvement.",
+        "id": 1011,
+        "workflow_id": 128,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1008,
+    "workflow_id": 128,
+    "display_order": 2
+  },
+  {
+    "name": "Quiz/Assessment Creation",
+    "description": "Create tools for educators or admins to create quizzes or assessments.",
+    "id": 1009,
+    "workflow_id": 128,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "User Response Recording",
+    "description": "Record user responses during assessments and store them in the performance data.",
+    "id": 1010,
+    "workflow_id": 128,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Analysis",
+    "description": "Analyze user performance data to identify learning trends and areas of improvement.",
+    "id": 1011,
+    "workflow_id": 128,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Adaptive Learning",
+    "description": "Implement adaptive learning features based on user proficiency.",
+    "child_phases": [
+      {
+        "name": "Difficulty Adjustment",
+        "description": "Adjust difficulty levels based on user performance, using algorithms like item response theory.",
+        "id": 1013,
+        "workflow_id": 128,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Personalized Learning Flow",
+        "description": "Tailor learning flows for each user based on their proficiency and learning pace.",
+        "id": 1014,
+        "workflow_id": 128,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1012,
+    "workflow_id": 128,
+    "display_order": 3
+  },
+  {
+    "name": "Difficulty Adjustment",
+    "description": "Adjust difficulty levels based on user performance, using algorithms like item response theory.",
+    "id": 1013,
+    "workflow_id": 128,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Personalized Learning Flow",
+    "description": "Tailor learning flows for each user based on their proficiency and learning pace.",
+    "id": 1014,
+    "workflow_id": 128,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "User Insights",
+    "description": "Provide users with insights into their learning trends and areas of improvement.",
+    "child_phases": [
+      {
+        "name": "Progress Visualization",
+        "description": "Create visualizations (e.g., graphs, charts) to display user progress over time.",
+        "id": 1016,
+        "workflow_id": 128,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Areas of Improvement Identification",
+        "description": "Identify areas where users are struggling and provide targeted recommendations.",
+        "id": 1017,
+        "workflow_id": 128,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1015,
+    "workflow_id": 128,
+    "display_order": 4
+  },
+  {
+    "name": "Progress Visualization",
+    "description": "Create visualizations (e.g., graphs, charts) to display user progress over time.",
+    "id": 1016,
+    "workflow_id": 128,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Areas of Improvement Identification",
+    "description": "Identify areas where users are struggling and provide targeted recommendations.",
+    "id": 1017,
+    "workflow_id": 128,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure environment, install dependencies and prepare data.",
+    "child_phases": [],
+    "id": 1018,
+    "workflow_id": 129,
+    "display_order": 0
+  },
+  {
+    "name": "User Preferences",
+    "description": "Accept user inputs for topics, sources and language preferences.",
+    "child_phases": [
+      {
+        "name": "Get Topics",
+        "description": "Fetch user's preferred topics.",
+        "id": 1020,
+        "workflow_id": 129,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Get Sources",
+        "description": "Fetch user's preferred news sources.",
+        "id": 1021,
+        "workflow_id": 129,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Get Language",
+        "description": "Fetch user's preferred language.",
+        "id": 1022,
+        "workflow_id": 129,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1019,
+    "workflow_id": 129,
+    "display_order": 1
+  },
+  {
+    "name": "Get Topics",
+    "description": "Fetch user's preferred topics.",
+    "id": 1020,
+    "workflow_id": 129,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Get Sources",
+    "description": "Fetch user's preferred news sources.",
+    "id": 1021,
+    "workflow_id": 129,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Get Language",
+    "description": "Fetch user's preferred language.",
+    "id": 1022,
+    "workflow_id": 129,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Fetching",
+    "description": "Retrieve headlines and summaries from multiple news sources using APIs.",
+    "child_phases": [
+      {
+        "name": "BBC API Fetch",
+        "description": "Fetch data from BBC News API.",
+        "id": 1024,
+        "workflow_id": 129,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "CNN API Fetch",
+        "description": "Fetch data from CNN News API.",
+        "id": 1025,
+        "workflow_id": 129,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "The Guardian API Fetch",
+        "description": "Fetch data from The Guardian News API.",
+        "id": 1026,
+        "workflow_id": 129,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1023,
+    "workflow_id": 129,
+    "display_order": 2
+  },
+  {
+    "name": "BBC API Fetch",
+    "description": "Fetch data from BBC News API.",
+    "id": 1024,
+    "workflow_id": 129,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "CNN API Fetch",
+    "description": "Fetch data from CNN News API.",
+    "id": 1025,
+    "workflow_id": 129,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "The Guardian API Fetch",
+    "description": "Fetch data from The Guardian News API.",
+    "id": 1026,
+    "workflow_id": 129,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Consolidate fetched data into a single formatted summary report.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Clean and standardize the fetched data.",
+        "id": 1028,
+        "workflow_id": 129,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summarization",
+        "description": "Generate summaries based on user preferences.",
+        "id": 1029,
+        "workflow_id": 129,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1027,
+    "workflow_id": 129,
+    "display_order": 3
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Clean and standardize the fetched data.",
+    "id": 1028,
+    "workflow_id": 129,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Generate summaries based on user preferences.",
+    "id": 1029,
+    "workflow_id": 129,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Format and generate the final summary report.",
+    "child_phases": [
+      {
+        "name": "Formatting",
+        "description": "Format the consolidated data into a report template.",
+        "id": 1031,
+        "workflow_id": 129,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generation",
+        "description": "Generate the final summary report in user's preferred language.",
+        "id": 1032,
+        "workflow_id": 129,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1030,
+    "workflow_id": 129,
+    "display_order": 4
+  },
+  {
+    "name": "Formatting",
+    "description": "Format the consolidated data into a report template.",
+    "id": 1031,
+    "workflow_id": 129,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generation",
+    "description": "Generate the final summary report in user's preferred language.",
+    "id": 1032,
+    "workflow_id": 129,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Retrieve research papers from URLs or PDF files.",
+    "child_phases": [
+      {
+        "name": "URL Retrieval",
+        "description": "Extract paper links from provided sources.",
+        "id": 1034,
+        "workflow_id": 130,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "PDF Extraction",
+        "description": "Extract text from PDF files.",
+        "id": 1035,
+        "workflow_id": 130,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1033,
+    "workflow_id": 130,
+    "display_order": 0
+  },
+  {
+    "name": "URL Retrieval",
+    "description": "Extract paper links from provided sources.",
+    "id": 1034,
+    "workflow_id": 130,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "PDF Extraction",
+    "description": "Extract text from PDF files.",
+    "id": 1035,
+    "workflow_id": 130,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Clean and extract relevant text for summarization.",
+    "child_phases": [
+      {
+        "name": "Text Extraction",
+        "description": "Convert PDF files to plain text.",
+        "id": 1037,
+        "workflow_id": 130,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Text Cleaning",
+        "description": "Remove unnecessary elements (e.g., headers, footers).",
+        "id": 1038,
+        "workflow_id": 130,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1036,
+    "workflow_id": 130,
+    "display_order": 1
+  },
+  {
+    "name": "Text Extraction",
+    "description": "Convert PDF files to plain text.",
+    "id": 1037,
+    "workflow_id": 130,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Text Cleaning",
+    "description": "Remove unnecessary elements (e.g., headers, footers).",
+    "id": 1038,
+    "workflow_id": 130,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "AI-Driven Summarization",
+    "description": "Summarize extracted texts using AI tools.",
+    "child_phases": [
+      {
+        "name": "Text Splitting",
+        "description": "Split long texts into manageable chunks.",
+        "id": 1040,
+        "workflow_id": 130,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summarization",
+        "description": "Use AI models to generate summaries for each chunk.",
+        "id": 1041,
+        "workflow_id": 130,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1039,
+    "workflow_id": 130,
+    "display_order": 2
+  },
+  {
+    "name": "Text Splitting",
+    "description": "Split long texts into manageable chunks.",
+    "id": 1040,
+    "workflow_id": 130,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Use AI models to generate summaries for each chunk.",
+    "id": 1041,
+    "workflow_id": 130,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Topic Identification",
+    "description": "Identify key topics in the research papers.",
+    "child_phases": [
+      {
+        "name": "Text Processing",
+        "description": "Prepare texts for topic modeling (e.g., tokenization, lemmatization).",
+        "id": 1043,
+        "workflow_id": 130,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Topic Modeling",
+        "description": "Use AI models to identify topics in the research papers.",
+        "id": 1044,
+        "workflow_id": 130,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1042,
+    "workflow_id": 130,
+    "display_order": 3
+  },
+  {
+    "name": "Text Processing",
+    "description": "Prepare texts for topic modeling (e.g., tokenization, lemmatization).",
+    "id": 1043,
+    "workflow_id": 130,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Topic Modeling",
+    "description": "Use AI models to identify topics in the research papers.",
+    "id": 1044,
+    "workflow_id": 130,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Review Synthesis",
+    "description": "Combine and summarize findings from multiple sources.",
+    "child_phases": [
+      {
+        "name": "Summary Aggregation",
+        "description": "Combine summaries from different sources.",
+        "id": 1046,
+        "workflow_id": 130,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Final Summarization",
+        "description": "Generate a final summary of the literature review.",
+        "id": 1047,
+        "workflow_id": 130,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1045,
+    "workflow_id": 130,
+    "display_order": 4
+  },
+  {
+    "name": "Summary Aggregation",
+    "description": "Combine summaries from different sources.",
+    "id": 1046,
+    "workflow_id": 130,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Final Summarization",
+    "description": "Generate a final summary of the literature review.",
+    "id": 1047,
+    "workflow_id": 130,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Ingestion",
+    "description": "Read CSV files and load data into pandas DataFrames.",
+    "child_phases": [],
+    "id": 1048,
+    "workflow_id": 131,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values and validate data types.",
+    "child_phases": [
+      {
+        "name": "Missing Value Handling",
+        "description": "Fill or drop missing values appropriately.",
+        "id": 1050,
+        "workflow_id": 131,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Type Validation",
+        "description": "Validate column data types and enforce consistency.",
+        "id": 1051,
+        "workflow_id": 131,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1049,
+    "workflow_id": 131,
+    "display_order": 1
+  },
+  {
+    "name": "Missing Value Handling",
+    "description": "Fill or drop missing values appropriately.",
+    "id": 1050,
+    "workflow_id": 131,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Type Validation",
+    "description": "Validate column data types and enforce consistency.",
+    "id": 1051,
+    "workflow_id": 131,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Harmonization",
+    "description": "Rename columns to a standard naming convention.",
+    "child_phases": [],
+    "id": 1052,
+    "workflow_id": 131,
+    "display_order": 2
+  },
+  {
+    "name": "Dataset Merging",
+    "description": "Append all three datasets into one, ensuring no duplicate rows.",
+    "child_phases": [
+      {
+        "name": "Duplicate Row Removal",
+        "description": "Ensure there are no duplicated rows in the merged dataset.",
+        "id": 1054,
+        "workflow_id": 131,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1053,
+    "workflow_id": 131,
+    "display_order": 3
+  },
+  {
+    "name": "Duplicate Row Removal",
+    "description": "Ensure there are no duplicated rows in the merged dataset.",
+    "id": 1054,
+    "workflow_id": 131,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Write the harmonized dataset back to a CSV file.",
+    "child_phases": [],
+    "id": 1055,
+    "workflow_id": 131,
+    "display_order": 4
+  },
+  {
+    "name": "Error Handling and Logging",
+    "description": "Implement error handling and logging for better pipeline monitoring and debugging capabilities.",
+    "child_phases": [
+      {
+        "name": "Error Handling",
+        "description": "Implement error handling mechanisms to manage potential issues.",
+        "id": 1057,
+        "workflow_id": 131,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Logging",
+        "description": "Implement logging functionality for pipeline monitoring.",
+        "id": 1058,
+        "workflow_id": 131,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1056,
+    "workflow_id": 131,
+    "display_order": 5
+  },
+  {
+    "name": "Error Handling",
+    "description": "Implement error handling mechanisms to manage potential issues.",
+    "id": 1057,
+    "workflow_id": 131,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Logging",
+    "description": "Implement logging functionality for pipeline monitoring.",
+    "id": 1058,
+    "workflow_id": 131,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Fetching",
+    "description": "Retrieve data from RSS feeds.",
+    "child_phases": [
+      {
+        "name": "Feed Selection",
+        "description": "Choose relevant RSS feeds based on the search query.",
+        "id": 1060,
+        "workflow_id": 132,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Fetch Headlines",
+        "description": "Use feedparser to fetch latest headlines from selected feeds.",
+        "id": 1061,
+        "workflow_id": 132,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1059,
+    "workflow_id": 132,
+    "display_order": 0
+  },
+  {
+    "name": "Feed Selection",
+    "description": "Choose relevant RSS feeds based on the search query.",
+    "id": 1060,
+    "workflow_id": 132,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Fetch Headlines",
+    "description": "Use feedparser to fetch latest headlines from selected feeds.",
+    "id": 1061,
+    "workflow_id": 132,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Process fetched data for summarization.",
+    "child_phases": [
+      {
+        "name": "Headline Selection",
+        "description": "Select relevant headlines based on the search query.",
+        "id": 1063,
+        "workflow_id": 132,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summarize Headlines",
+        "description": "Use Gensim's SumBasic to summarize selected headlines.",
+        "id": 1064,
+        "workflow_id": 132,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1062,
+    "workflow_id": 132,
+    "display_order": 1
+  },
+  {
+    "name": "Headline Selection",
+    "description": "Select relevant headlines based on the search query.",
+    "id": 1063,
+    "workflow_id": 132,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summarize Headlines",
+    "description": "Use Gensim's SumBasic to summarize selected headlines.",
+    "id": 1064,
+    "workflow_id": 132,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate and return final output.",
+    "child_phases": [
+      {
+        "name": "Headline Generation",
+        "description": "Create a concise headline for each summarized article.",
+        "id": 1066,
+        "workflow_id": 132,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Result Compilation",
+        "description": "Compile the generated headlines into a list for output.",
+        "id": 1067,
+        "workflow_id": 132,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1065,
+    "workflow_id": 132,
+    "display_order": 2
+  },
+  {
+    "name": "Headline Generation",
+    "description": "Create a concise headline for each summarized article.",
+    "id": 1066,
+    "workflow_id": 132,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Result Compilation",
+    "description": "Compile the generated headlines into a list for output.",
+    "id": 1067,
+    "workflow_id": 132,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Project Setup",
+    "description": "Initialization and configuration of the development environment.",
+    "child_phases": [],
+    "id": 1068,
+    "workflow_id": 133,
+    "display_order": 0
+  },
+  {
+    "name": "Agent Definition",
+    "description": "Defining the rule-based strategy for the agent's behavior.",
+    "child_phases": [
+      {
+        "name": "Obstacle Avoidance",
+        "description": "Implementing rules to avoid obstacles in the environment.",
+        "id": 1070,
+        "workflow_id": 133,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Goal-Seeking Behavior",
+        "description": "Implementing rules to move towards the goal.",
+        "id": 1071,
+        "workflow_id": 133,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1069,
+    "workflow_id": 133,
+    "display_order": 1
+  },
+  {
+    "name": "Obstacle Avoidance",
+    "description": "Implementing rules to avoid obstacles in the environment.",
+    "id": 1070,
+    "workflow_id": 133,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Goal-Seeking Behavior",
+    "description": "Implementing rules to move towards the goal.",
+    "id": 1071,
+    "workflow_id": 133,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Agent Movement Simulation",
+    "description": "Creating functions to simulate the agent's movement in the environment.",
+    "child_phases": [],
+    "id": 1072,
+    "workflow_id": 133,
+    "display_order": 2
+  },
+  {
+    "name": "Visualization",
+    "description": "Generating visualizations of the agent's path and decisions.",
+    "child_phases": [
+      {
+        "name": "Path Visualization",
+        "description": "Creating visual representations of the agent's movement path.",
+        "id": 1074,
+        "workflow_id": 133,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Decision Visualization",
+        "description": "Visualizing the decisions made by the agent during its movement.",
+        "id": 1075,
+        "workflow_id": 133,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1073,
+    "workflow_id": 133,
+    "display_order": 3
+  },
+  {
+    "name": "Path Visualization",
+    "description": "Creating visual representations of the agent's movement path.",
+    "id": 1074,
+    "workflow_id": 133,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Decision Visualization",
+    "description": "Visualizing the decisions made by the agent during its movement.",
+    "id": 1075,
+    "workflow_id": 133,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Evaluation",
+    "description": "Testing the agent's behavior in different scenarios and evaluating its performance.",
+    "child_phases": [],
+    "id": 1076,
+    "workflow_id": 133,
+    "display_order": 4
+  },
+  {
+    "name": "Data Collection",
+    "description": "Aggregates news articles from multiple RSS feeds on a specified topic.",
+    "child_phases": [
+      {
+        "name": "RSS Feed Retrieval",
+        "description": "Collects RSS feed URLs for the specified topic.",
+        "id": 1078,
+        "workflow_id": 134,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Article Fetching",
+        "description": "Fetches news articles from the retrieved feeds.",
+        "id": 1079,
+        "workflow_id": 134,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1077,
+    "workflow_id": 134,
+    "display_order": 0
+  },
+  {
+    "name": "RSS Feed Retrieval",
+    "description": "Collects RSS feed URLs for the specified topic.",
+    "id": 1078,
+    "workflow_id": 134,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Article Fetching",
+    "description": "Fetches news articles from the retrieved feeds.",
+    "id": 1079,
+    "workflow_id": 134,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Preprocesses fetched articles to make them suitable for summarization.",
+    "child_phases": [
+      {
+        "name": "HTML Parsing",
+        "description": "Extracts text content from the HTML structure of fetched articles.",
+        "id": 1081,
+        "workflow_id": 134,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Text Cleaning",
+        "description": "Cleans and tokenizes extracted text, removing unwanted characters and stop words.",
+        "id": 1082,
+        "workflow_id": 134,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1080,
+    "workflow_id": 134,
+    "display_order": 1
+  },
+  {
+    "name": "HTML Parsing",
+    "description": "Extracts text content from the HTML structure of fetched articles.",
+    "id": 1081,
+    "workflow_id": 134,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Text Cleaning",
+    "description": "Cleans and tokenizes extracted text, removing unwanted characters and stop words.",
+    "id": 1082,
+    "workflow_id": 134,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Generates a coherent consolidated summary report using a text summarization library.",
+    "child_phases": [
+      {
+        "name": "Text Summarization",
+        "description": "Applies Gensim or Transformers to summarize the content of fetched articles.",
+        "id": 1084,
+        "workflow_id": 134,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summary Aggregation",
+        "description": "Combines multiple summaries into a single coherent report.",
+        "id": 1085,
+        "workflow_id": 134,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1083,
+    "workflow_id": 134,
+    "display_order": 2
+  },
+  {
+    "name": "Text Summarization",
+    "description": "Applies Gensim or Transformers to summarize the content of fetched articles.",
+    "id": 1084,
+    "workflow_id": 134,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summary Aggregation",
+    "description": "Combines multiple summaries into a single coherent report.",
+    "id": 1085,
+    "workflow_id": 134,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Version Control",
+    "description": "Handle git operations and versioning.",
+    "child_phases": [
+      {
+        "name": "Clone Repository",
+        "description": "Clone the repository using GitPython.",
+        "id": 1087,
+        "workflow_id": 135,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Checkout Branch",
+        "description": "Checkout a specific branch for processing.",
+        "id": 1088,
+        "workflow_id": 135,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Pull Changes",
+        "description": "Pull latest changes from remote repository.",
+        "id": 1089,
+        "workflow_id": 135,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1086,
+    "workflow_id": 135,
+    "display_order": 0
+  },
+  {
+    "name": "Clone Repository",
+    "description": "Clone the repository using GitPython.",
+    "id": 1087,
+    "workflow_id": 135,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Checkout Branch",
+    "description": "Checkout a specific branch for processing.",
+    "id": 1088,
+    "workflow_id": 135,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Pull Changes",
+    "description": "Pull latest changes from remote repository.",
+    "id": 1089,
+    "workflow_id": 135,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Build Automation",
+    "description": "Compile and package the application.",
+    "child_phases": [
+      {
+        "name": "Install Dependencies",
+        "description": "Install required dependencies using pip.",
+        "id": 1091,
+        "workflow_id": 135,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Package Application",
+        "description": "Create a standalone executable using Pyinstaller.",
+        "id": 1092,
+        "workflow_id": 135,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1090,
+    "workflow_id": 135,
+    "display_order": 1
+  },
+  {
+    "name": "Install Dependencies",
+    "description": "Install required dependencies using pip.",
+    "id": 1091,
+    "workflow_id": 135,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Package Application",
+    "description": "Create a standalone executable using Pyinstaller.",
+    "id": 1092,
+    "workflow_id": 135,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Perform unit testing on the application.",
+    "child_phases": [
+      {
+        "name": "Run Unit Tests",
+        "description": "Execute unit tests using pytest.",
+        "id": 1094,
+        "workflow_id": 135,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Test Report Generation",
+        "description": "Generate test reports for analysis.",
+        "id": 1095,
+        "workflow_id": 135,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1093,
+    "workflow_id": 135,
+    "display_order": 2
+  },
+  {
+    "name": "Run Unit Tests",
+    "description": "Execute unit tests using pytest.",
+    "id": 1094,
+    "workflow_id": 135,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Test Report Generation",
+    "description": "Generate test reports for analysis.",
+    "id": 1095,
+    "workflow_id": 135,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Code Quality Checks",
+    "description": "Perform code quality checks on the application.",
+    "child_phases": [
+      {
+        "name": "Linting",
+        "description": "Check coding standards using a linter like flake8.",
+        "id": 1097,
+        "workflow_id": 135,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Static Code Analysis",
+        "description": "Perform static code analysis using tools like pylint or pytype.",
+        "id": 1098,
+        "workflow_id": 135,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1096,
+    "workflow_id": 135,
+    "display_order": 3
+  },
+  {
+    "name": "Linting",
+    "description": "Check coding standards using a linter like flake8.",
+    "id": 1097,
+    "workflow_id": 135,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Static Code Analysis",
+    "description": "Perform static code analysis using tools like pylint or pytype.",
+    "id": 1098,
+    "workflow_id": 135,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Deployment",
+    "description": "Deploy the application to target environments.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Configure environment variables for deployment.",
+        "id": 1100,
+        "workflow_id": 135,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Upload Artifacts",
+        "description": "Upload built artifacts to artifact repositories like Nexus or Artifactory.",
+        "id": 1101,
+        "workflow_id": 135,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Deploy to Target Environments",
+        "description": "Deploy the application to target environments using tools like Ansible or Terraform.",
+        "id": 1102,
+        "workflow_id": 135,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1099,
+    "workflow_id": 135,
+    "display_order": 4
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Configure environment variables for deployment.",
+    "id": 1100,
+    "workflow_id": 135,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Upload Artifacts",
+    "description": "Upload built artifacts to artifact repositories like Nexus or Artifactory.",
+    "id": 1101,
+    "workflow_id": 135,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Deploy to Target Environments",
+    "description": "Deploy the application to target environments using tools like Ansible or Terraform.",
+    "id": 1102,
+    "workflow_id": 135,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Environment Setup",
+    "description": "Ensure OpenCV library is installed and the Python environment is configured.",
+    "child_phases": [],
+    "id": 1103,
+    "workflow_id": 136,
+    "display_order": 0
+  },
+  {
+    "name": "Image Import",
+    "description": "Load input images for processing.",
+    "child_phases": [],
+    "id": 1104,
+    "workflow_id": 136,
+    "display_order": 1
+  },
+  {
+    "name": "Filter Selection",
+    "description": "Define which filters (grayscale, blur, edge detection) will be applied to the images.",
+    "child_phases": [
+      {
+        "name": "Grayscale Conversion",
+        "description": "Convert color images to grayscale using OpenCV's cvtColor function.",
+        "child_phases": [],
+        "id": 1106,
+        "workflow_id": 136,
+        "display_order": 0
+      },
+      {
+        "name": "Blurring",
+        "description": "Apply blurring effect on the images using OpenCV's GaussianBlur or other blur functions.",
+        "child_phases": [],
+        "id": 1107,
+        "workflow_id": 136,
+        "display_order": 1
+      },
+      {
+        "name": "Edge Detection",
+        "description": "Detect edges in the images using OpenCV's Canny or other edge detection functions.",
+        "child_phases": [],
+        "id": 1108,
+        "workflow_id": 136,
+        "display_order": 2
+      }
+    ],
+    "id": 1105,
+    "workflow_id": 136,
+    "display_order": 2
+  },
+  {
+    "name": "Grayscale Conversion",
+    "description": "Convert color images to grayscale using OpenCV's cvtColor function.",
+    "child_phases": [],
+    "id": 1106,
+    "workflow_id": 136,
+    "display_order": 0
+  },
+  {
+    "name": "Blurring",
+    "description": "Apply blurring effect on the images using OpenCV's GaussianBlur or other blur functions.",
+    "child_phases": [],
+    "id": 1107,
+    "workflow_id": 136,
+    "display_order": 1
+  },
+  {
+    "name": "Edge Detection",
+    "description": "Detect edges in the images using OpenCV's Canny or other edge detection functions.",
+    "child_phases": [],
+    "id": 1108,
+    "workflow_id": 136,
+    "display_order": 2
+  },
+  {
+    "name": "Filter Application",
+    "description": "Apply selected filters to the input images sequentially.",
+    "child_phases": [],
+    "id": 1109,
+    "workflow_id": 136,
+    "display_order": 3
+  },
+  {
+    "name": "Image Output",
+    "description": "Save or display the filtered images as output.",
+    "child_phases": [],
+    "id": 1110,
+    "workflow_id": 136,
+    "display_order": 4
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Load and preprocess the input image",
+    "child_phases": [
+      {
+        "name": "Image Loading",
+        "description": "Read the input image file",
+        "id": 1112,
+        "workflow_id": 137,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Image Preprocessing",
+        "description": "Resize, normalize, and transform the image",
+        "id": 1113,
+        "workflow_id": 137,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1111,
+    "workflow_id": 137,
+    "display_order": 0
+  },
+  {
+    "name": "Image Loading",
+    "description": "Read the input image file",
+    "id": 1112,
+    "workflow_id": 137,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Image Preprocessing",
+    "description": "Resize, normalize, and transform the image",
+    "id": 1113,
+    "workflow_id": 137,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Loading",
+    "description": "Load the pre-trained CLIP or DALL-E model",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Choose between CLIP and DALL-E",
+        "id": 1115,
+        "workflow_id": 137,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Loading",
+        "description": "Load the selected model",
+        "id": 1116,
+        "workflow_id": 137,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1114,
+    "workflow_id": 137,
+    "display_order": 1
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose between CLIP and DALL-E",
+    "id": 1115,
+    "workflow_id": 137,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Loading",
+    "description": "Load the selected model",
+    "id": 1116,
+    "workflow_id": 137,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Image Captioning",
+    "description": "Generate a textual description from the image using the loaded model",
+    "child_phases": [
+      {
+        "name": "Feature Extraction",
+        "description": "Extract features from the input image",
+        "id": 1118,
+        "workflow_id": 137,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Caption Generation",
+        "description": "Generate caption based on extracted features",
+        "id": 1119,
+        "workflow_id": 137,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1117,
+    "workflow_id": 137,
+    "display_order": 2
+  },
+  {
+    "name": "Feature Extraction",
+    "description": "Extract features from the input image",
+    "id": 1118,
+    "workflow_id": 137,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Caption Generation",
+    "description": "Generate caption based on extracted features",
+    "id": 1119,
+    "workflow_id": 137,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Postprocessing",
+    "description": "Clean up and format the generated caption",
+    "child_phases": [
+      {
+        "name": "Text Cleaning",
+        "description": "Remove any unwanted characters or words",
+        "id": 1121,
+        "workflow_id": 137,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Truncation",
+        "description": "Ensure the caption has at most 20 words",
+        "id": 1122,
+        "workflow_id": 137,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1120,
+    "workflow_id": 137,
+    "display_order": 3
+  },
+  {
+    "name": "Text Cleaning",
+    "description": "Remove any unwanted characters or words",
+    "id": 1121,
+    "workflow_id": 137,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Truncation",
+    "description": "Ensure the caption has at most 20 words",
+    "id": 1122,
+    "workflow_id": 137,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Create and save the output file with the generated caption",
+    "id": 1123,
+    "workflow_id": 137,
+    "display_order": 4,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Clean and prepare the Iris dataset for logistic regression.",
+    "child_phases": [
+      {
+        "name": "Load Dataset",
+        "description": "Import the Iris dataset.",
+        "id": 1125,
+        "workflow_id": 138,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Handle Missing Values",
+        "description": "Check and handle any missing values in the dataset.",
+        "id": 1126,
+        "workflow_id": 138,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Encode Categorical Data",
+        "description": "Convert categorical data to numerical data if necessary.",
+        "id": 1127,
+        "workflow_id": 138,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Normalize Data",
+        "description": "Scale features to have a common range for better performance of logistic regression.",
+        "id": 1128,
+        "workflow_id": 138,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 1124,
+    "workflow_id": 138,
+    "display_order": 0
+  },
+  {
+    "name": "Load Dataset",
+    "description": "Import the Iris dataset.",
+    "id": 1125,
+    "workflow_id": 138,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Handle Missing Values",
+    "description": "Check and handle any missing values in the dataset.",
+    "id": 1126,
+    "workflow_id": 138,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Encode Categorical Data",
+    "description": "Convert categorical data to numerical data if necessary.",
+    "id": 1127,
+    "workflow_id": 138,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Normalize Data",
+    "description": "Scale features to have a common range for better performance of logistic regression.",
+    "id": 1128,
+    "workflow_id": 138,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Model Training",
+    "description": "Implement and train the logistic regression model on the Iris dataset.",
+    "child_phases": [
+      {
+        "name": "Split Dataset",
+        "description": "Divide the dataset into training and testing sets.",
+        "id": 1130,
+        "workflow_id": 138,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Initialize Model Parameters",
+        "description": "Set initial values for model parameters (weights and bias).",
+        "id": 1131,
+        "workflow_id": 138,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Logistic Regression Algorithm",
+        "description": "Write functions to perform forward propagation, cost calculation, and backpropagation for updating model parameters.",
+        "id": 1132,
+        "workflow_id": 138,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Train Model",
+        "description": "Use gradient descent to iteratively update the model's parameters until convergence.",
+        "id": 1133,
+        "workflow_id": 138,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 1129,
+    "workflow_id": 138,
+    "display_order": 1
+  },
+  {
+    "name": "Split Dataset",
+    "description": "Divide the dataset into training and testing sets.",
+    "id": 1130,
+    "workflow_id": 138,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Initialize Model Parameters",
+    "description": "Set initial values for model parameters (weights and bias).",
+    "id": 1131,
+    "workflow_id": 138,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Logistic Regression Algorithm",
+    "description": "Write functions to perform forward propagation, cost calculation, and backpropagation for updating model parameters.",
+    "id": 1132,
+    "workflow_id": 138,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Train Model",
+    "description": "Use gradient descent to iteratively update the model's parameters until convergence.",
+    "id": 1133,
+    "workflow_id": 138,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Prediction and Evaluation",
+    "description": "Make predictions using the trained model and evaluate its performance.",
+    "child_phases": [
+      {
+        "name": "Predict on Test Set",
+        "description": "Use the trained model to predict labels for the test set.",
+        "id": 1135,
+        "workflow_id": 138,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Calculate Accuracy Score",
+        "description": "Compare predicted labels with actual labels in the test set and calculate accuracy score.",
+        "id": 1136,
+        "workflow_id": 138,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1134,
+    "workflow_id": 138,
+    "display_order": 2
+  },
+  {
+    "name": "Predict on Test Set",
+    "description": "Use the trained model to predict labels for the test set.",
+    "id": 1135,
+    "workflow_id": 138,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Calculate Accuracy Score",
+    "description": "Compare predicted labels with actual labels in the test set and calculate accuracy score.",
+    "id": 1136,
+    "workflow_id": 138,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Define the criteria for strong passwords and common patterns.",
+    "child_phases": [
+      {
+        "name": "Define Password Criteria",
+        "description": "Determine length, character types, and complexity.",
+        "id": 1138,
+        "workflow_id": 139,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Common Patterns",
+        "description": "Compile a list of common password patterns to avoid.",
+        "id": 1139,
+        "workflow_id": 139,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1137,
+    "workflow_id": 139,
+    "display_order": 0
+  },
+  {
+    "name": "Define Password Criteria",
+    "description": "Determine length, character types, and complexity.",
+    "id": 1138,
+    "workflow_id": 139,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Common Patterns",
+    "description": "Compile a list of common password patterns to avoid.",
+    "id": 1139,
+    "workflow_id": 139,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Development",
+    "description": "Write the Python application.",
+    "child_phases": [
+      {
+        "name": "Password Generation Function",
+        "description": "Create a function that generates strong passwords based on defined criteria.",
+        "id": 1141,
+        "workflow_id": 139,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Pattern Checking Function",
+        "description": "Implement a function to check for common patterns in generated passwords.",
+        "id": 1142,
+        "workflow_id": 139,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1140,
+    "workflow_id": 139,
+    "display_order": 1
+  },
+  {
+    "name": "Password Generation Function",
+    "description": "Create a function that generates strong passwords based on defined criteria.",
+    "id": 1141,
+    "workflow_id": 139,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Pattern Checking Function",
+    "description": "Implement a function to check for common patterns in generated passwords.",
+    "id": 1142,
+    "workflow_id": 139,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Ensure the application works correctly.",
+    "child_phases": [
+      {
+        "name": "Unit Tests",
+        "description": "Test individual functions and their inputs/outputs.",
+        "id": 1144,
+        "workflow_id": 139,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Tests",
+        "description": "Test the entire application's flow.",
+        "id": 1145,
+        "workflow_id": 139,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1143,
+    "workflow_id": 139,
+    "display_order": 2
+  },
+  {
+    "name": "Unit Tests",
+    "description": "Test individual functions and their inputs/outputs.",
+    "id": 1144,
+    "workflow_id": 139,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Tests",
+    "description": "Test the entire application's flow.",
+    "id": 1145,
+    "workflow_id": 139,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Security & Privacy",
+    "description": "Ensure generated passwords are not logged or stored.",
+    "child_phases": [
+      {
+        "name": "Password Disposal",
+        "description": "Implement measures to securely dispose of passwords after use.",
+        "id": 1147,
+        "workflow_id": 139,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling",
+        "description": "Handle exceptions and errors in a secure manner.",
+        "id": 1148,
+        "workflow_id": 139,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1146,
+    "workflow_id": 139,
+    "display_order": 3
+  },
+  {
+    "name": "Password Disposal",
+    "description": "Implement measures to securely dispose of passwords after use.",
+    "id": 1147,
+    "workflow_id": 139,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Handle exceptions and errors in a secure manner.",
+    "id": 1148,
+    "workflow_id": 139,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Fetch article URLs and titles.",
+    "child_phases": [
+      {
+        "name": "URL Retrieval",
+        "description": "Collect the list of URLs.",
+        "id": 1150,
+        "workflow_id": 140,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Title Extraction",
+        "description": "Extract article titles from URLs.",
+        "id": 1151,
+        "workflow_id": 140,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1149,
+    "workflow_id": 140,
+    "display_order": 0
+  },
+  {
+    "name": "URL Retrieval",
+    "description": "Collect the list of URLs.",
+    "id": 1150,
+    "workflow_id": 140,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Title Extraction",
+    "description": "Extract article titles from URLs.",
+    "id": 1151,
+    "workflow_id": 140,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Web Scraping",
+    "description": "Fetch article content from provided URLs.",
+    "child_phases": [
+      {
+        "name": "URL Validation",
+        "description": "Check if URLs are accessible and valid.",
+        "id": 1153,
+        "workflow_id": 140,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Content Extraction",
+        "description": "Fetch and parse HTML content of articles.",
+        "id": 1154,
+        "workflow_id": 140,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1152,
+    "workflow_id": 140,
+    "display_order": 1
+  },
+  {
+    "name": "URL Validation",
+    "description": "Check if URLs are accessible and valid.",
+    "id": 1153,
+    "workflow_id": 140,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Content Extraction",
+    "description": "Fetch and parse HTML content of articles.",
+    "id": 1154,
+    "workflow_id": 140,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Summarize fetched article content.",
+    "child_phases": [
+      {
+        "name": "Text Cleaning",
+        "description": "Clean extracted text for summarization.",
+        "id": 1156,
+        "workflow_id": 140,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summarization Algorithm",
+        "description": "Apply chosen algorithm to generate summaries.",
+        "id": 1157,
+        "workflow_id": 140,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1155,
+    "workflow_id": 140,
+    "display_order": 2
+  },
+  {
+    "name": "Text Cleaning",
+    "description": "Clean extracted text for summarization.",
+    "id": 1156,
+    "workflow_id": 140,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization Algorithm",
+    "description": "Apply chosen algorithm to generate summaries.",
+    "id": 1157,
+    "workflow_id": 140,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Handle potential errors gracefully.",
+    "child_phases": [
+      {
+        "name": "Broken Link Handling",
+        "description": "Handle invalid URLs or inaccessible pages.",
+        "id": 1159,
+        "workflow_id": 140,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Exception Logging",
+        "description": "Log and manage exceptions for better troubleshooting.",
+        "id": 1160,
+        "workflow_id": 140,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1158,
+    "workflow_id": 140,
+    "display_order": 3
+  },
+  {
+    "name": "Broken Link Handling",
+    "description": "Handle invalid URLs or inaccessible pages.",
+    "id": 1159,
+    "workflow_id": 140,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Exception Logging",
+    "description": "Log and manage exceptions for better troubleshooting.",
+    "id": 1160,
+    "workflow_id": 140,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Prepare and output the final dictionary.",
+    "child_phases": [
+      {
+        "name": "Summary Compilation",
+        "description": "Compile summaries into a dictionary with article titles as keys.",
+        "id": 1162,
+        "workflow_id": 140,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dictionary Output",
+        "description": "Output or save the compiled summary dictionary.",
+        "id": 1163,
+        "workflow_id": 140,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1161,
+    "workflow_id": 140,
+    "display_order": 4
+  },
+  {
+    "name": "Summary Compilation",
+    "description": "Compile summaries into a dictionary with article titles as keys.",
+    "id": 1162,
+    "workflow_id": 140,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dictionary Output",
+    "description": "Output or save the compiled summary dictionary.",
+    "id": 1163,
+    "workflow_id": 140,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Problem Definition",
+    "description": "Understand the task of creating a recursive function to generate Fibonacci numbers up to a given limit.",
+    "child_phases": [],
+    "id": 1164,
+    "workflow_id": 141,
+    "display_order": 0
+  },
+  {
+    "name": "Function Design",
+    "description": "Plan and design the recursive function that appends its result to a global list.",
+    "child_phases": [
+      {
+        "name": "Global List Handling",
+        "description": "Ensure safe modification of the global list without unexpected side effects.",
+        "id": 1166,
+        "workflow_id": 141,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Recursion Setup",
+        "description": "Set up the base case and recursive step for generating Fibonacci numbers.",
+        "id": 1167,
+        "workflow_id": 141,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1165,
+    "workflow_id": 141,
+    "display_order": 1
+  },
+  {
+    "name": "Global List Handling",
+    "description": "Ensure safe modification of the global list without unexpected side effects.",
+    "id": 1166,
+    "workflow_id": 141,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Recursion Setup",
+    "description": "Set up the base case and recursive step for generating Fibonacci numbers.",
+    "id": 1167,
+    "workflow_id": 141,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Implementation",
+    "description": "Write Python code implementing the designed function.",
+    "child_phases": [
+      {
+        "name": "Function Definition",
+        "description": "Define the recursive function with appropriate parameters and return type.",
+        "id": 1169,
+        "workflow_id": 141,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Code Execution",
+        "description": "Test the function with various inputs to ensure it behaves as expected.",
+        "id": 1170,
+        "workflow_id": 141,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1168,
+    "workflow_id": 141,
+    "display_order": 2
+  },
+  {
+    "name": "Function Definition",
+    "description": "Define the recursive function with appropriate parameters and return type.",
+    "id": 1169,
+    "workflow_id": 141,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Code Execution",
+    "description": "Test the function with various inputs to ensure it behaves as expected.",
+    "id": 1170,
+    "workflow_id": 141,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Thoroughly test the function and validate its results.",
+    "child_phases": [
+      {
+        "name": "Edge Cases",
+        "description": "Test the function with edge cases, such as very large limits.",
+        "id": 1172,
+        "workflow_id": 141,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling",
+        "description": "Ensure the function handles errors appropriately and provides meaningful error messages.",
+        "id": 1173,
+        "workflow_id": 141,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1171,
+    "workflow_id": 141,
+    "display_order": 3
+  },
+  {
+    "name": "Edge Cases",
+    "description": "Test the function with edge cases, such as very large limits.",
+    "id": 1172,
+    "workflow_id": 141,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Ensure the function handles errors appropriately and provides meaningful error messages.",
+    "id": 1173,
+    "workflow_id": 141,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Initialization",
+    "description": "Setup environment, import required libraries and modules.",
+    "child_phases": [],
+    "id": 1174,
+    "workflow_id": 142,
+    "display_order": 0
+  },
+  {
+    "name": "API Configuration",
+    "description": "Read and validate base URLs and API keys for both APIs.",
+    "child_phases": [],
+    "id": 1175,
+    "workflow_id": 142,
+    "display_order": 1
+  },
+  {
+    "name": "Schema Fetching",
+    "description": "Make requests to fetch schemas from both APIs.",
+    "child_phases": [
+      {
+        "name": "Fetch Schema from API 1",
+        "child_phases": [],
+        "description": "",
+        "id": 1177,
+        "workflow_id": 142,
+        "display_order": 0
+      },
+      {
+        "name": "Fetch Schema from API 2",
+        "child_phases": [],
+        "description": "",
+        "id": 1178,
+        "workflow_id": 142,
+        "display_order": 1
+      }
+    ],
+    "id": 1176,
+    "workflow_id": 142,
+    "display_order": 2
+  },
+  {
+    "name": "Fetch Schema from API 1",
+    "child_phases": [],
+    "description": "",
+    "id": 1177,
+    "workflow_id": 142,
+    "display_order": 0
+  },
+  {
+    "name": "Fetch Schema from API 2",
+    "child_phases": [],
+    "description": "",
+    "id": 1178,
+    "workflow_id": 142,
+    "display_order": 1
+  },
+  {
+    "name": "Schema Parsing",
+    "description": "Parse fetched JSON schemas into a usable format.",
+    "child_phases": [
+      {
+        "name": "Parse Schema from API 1",
+        "child_phases": [],
+        "description": "",
+        "id": 1180,
+        "workflow_id": 142,
+        "display_order": 0
+      },
+      {
+        "name": "Parse Schema from API 2",
+        "child_phases": [],
+        "description": "",
+        "id": 1181,
+        "workflow_id": 142,
+        "display_order": 1
+      }
+    ],
+    "id": 1179,
+    "workflow_id": 142,
+    "display_order": 3
+  },
+  {
+    "name": "Parse Schema from API 1",
+    "child_phases": [],
+    "description": "",
+    "id": 1180,
+    "workflow_id": 142,
+    "display_order": 0
+  },
+  {
+    "name": "Parse Schema from API 2",
+    "child_phases": [],
+    "description": "",
+    "id": 1181,
+    "workflow_id": 142,
+    "display_order": 1
+  },
+  {
+    "name": "Schema Comparison",
+    "description": "Compare the parsed schemas for differences.",
+    "child_phases": [],
+    "id": 1182,
+    "workflow_id": 142,
+    "display_order": 4
+  },
+  {
+    "name": "Mapping Generation",
+    "description": "Generate a mapping document highlighting differences and recommended transformations.",
+    "child_phases": [
+      {
+        "name": "Identify Differences",
+        "child_phases": [],
+        "description": "",
+        "id": 1184,
+        "workflow_id": 142,
+        "display_order": 0
+      },
+      {
+        "name": "Recommend Transformations",
+        "child_phases": [],
+        "description": "",
+        "id": 1185,
+        "workflow_id": 142,
+        "display_order": 1
+      }
+    ],
+    "id": 1183,
+    "workflow_id": 142,
+    "display_order": 5
+  },
+  {
+    "name": "Identify Differences",
+    "child_phases": [],
+    "description": "",
+    "id": 1184,
+    "workflow_id": 142,
+    "display_order": 0
+  },
+  {
+    "name": "Recommend Transformations",
+    "child_phases": [],
+    "description": "",
+    "id": 1185,
+    "workflow_id": 142,
+    "display_order": 1
+  },
+  {
+    "name": "Output",
+    "description": "Output the mapping document in a user-friendly format.",
+    "child_phases": [],
+    "id": 1186,
+    "workflow_id": 142,
+    "display_order": 6
+  },
+  {
+    "name": "Planning",
+    "description": "Understand the task, define requirements and create a high-level design.",
+    "child_phases": [
+      {
+        "name": "Define Story Nodes Structure",
+        "description": "Determine how story nodes will be structured in the dictionary.",
+        "id": 1188,
+        "workflow_id": 143,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Inputs and Outputs",
+        "description": "Identify what inputs are required from users and what outputs the generator should produce.",
+        "id": 1189,
+        "workflow_id": 143,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1187,
+    "workflow_id": 143,
+    "display_order": 0
+  },
+  {
+    "name": "Define Story Nodes Structure",
+    "description": "Determine how story nodes will be structured in the dictionary.",
+    "id": 1188,
+    "workflow_id": 143,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Inputs and Outputs",
+    "description": "Identify what inputs are required from users and what outputs the generator should produce.",
+    "id": 1189,
+    "workflow_id": 143,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Development",
+    "description": "Write code to implement the interactive story generator.",
+    "child_phases": [
+      {
+        "name": "Create Story Nodes Dictionary",
+        "description": "Write function(s) to create and manage the dictionary containing story nodes.",
+        "id": 1191,
+        "workflow_id": 143,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Choice Selection Logic",
+        "description": "Write logic to handle user input for choosing branches at each node.",
+        "id": 1192,
+        "workflow_id": 143,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Handle Looping Back to Previous Nodes",
+        "description": "Write logic to allow users to go back to previous nodes based on their choices.",
+        "id": 1193,
+        "workflow_id": 143,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1190,
+    "workflow_id": 143,
+    "display_order": 1
+  },
+  {
+    "name": "Create Story Nodes Dictionary",
+    "description": "Write function(s) to create and manage the dictionary containing story nodes.",
+    "id": 1191,
+    "workflow_id": 143,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Choice Selection Logic",
+    "description": "Write logic to handle user input for choosing branches at each node.",
+    "id": 1192,
+    "workflow_id": 143,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Handle Looping Back to Previous Nodes",
+    "description": "Write logic to allow users to go back to previous nodes based on their choices.",
+    "id": 1193,
+    "workflow_id": 143,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the interactive story generator with various inputs and edge cases.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual functions and logic within the generator.",
+        "id": 1195,
+        "workflow_id": 143,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Test how different parts of the generator interact with each other.",
+        "id": 1196,
+        "workflow_id": 143,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1194,
+    "workflow_id": 143,
+    "display_order": 2
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual functions and logic within the generator.",
+    "id": 1195,
+    "workflow_id": 143,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Test how different parts of the generator interact with each other.",
+    "id": 1196,
+    "workflow_id": 143,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation and Review",
+    "description": "Document the code, ensure it meets requirements and review for improvements.",
+    "child_phases": [
+      {
+        "name": "Write Documentation",
+        "description": "Document how to use the generator, its inputs, outputs, and any error messages.",
+        "id": 1198,
+        "workflow_id": 143,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Code Review",
+        "description": "Review code for efficiency, readability, and compliance with best practices.",
+        "id": 1199,
+        "workflow_id": 143,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1197,
+    "workflow_id": 143,
+    "display_order": 3
+  },
+  {
+    "name": "Write Documentation",
+    "description": "Document how to use the generator, its inputs, outputs, and any error messages.",
+    "id": 1198,
+    "workflow_id": 143,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Code Review",
+    "description": "Review code for efficiency, readability, and compliance with best practices.",
+    "id": 1199,
+    "workflow_id": 143,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure environment and dependencies.",
+    "child_phases": [],
+    "id": 1200,
+    "workflow_id": 144,
+    "display_order": 0
+  },
+  {
+    "name": "Input Processing",
+    "description": "Accept directory path input.",
+    "child_phases": [
+      {
+        "name": "Path Validation",
+        "description": "Ensure provided path exists and is accessible.",
+        "id": 1202,
+        "workflow_id": 144,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1201,
+    "workflow_id": 144,
+    "display_order": 1
+  },
+  {
+    "name": "Path Validation",
+    "description": "Ensure provided path exists and is accessible.",
+    "id": 1202,
+    "workflow_id": 144,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "File Identification",
+    "description": "Find all Python files in the given directory.",
+    "child_phases": [
+      {
+        "name": "Directory Traversal",
+        "description": "Scan directories recursively.",
+        "id": 1204,
+        "workflow_id": 144,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "File Filtering",
+        "description": "Filter files based on extension (.py).",
+        "id": 1205,
+        "workflow_id": 144,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1203,
+    "workflow_id": 144,
+    "display_order": 2
+  },
+  {
+    "name": "Directory Traversal",
+    "description": "Scan directories recursively.",
+    "id": 1204,
+    "workflow_id": 144,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "File Filtering",
+    "description": "Filter files based on extension (.py).",
+    "id": 1205,
+    "workflow_id": 144,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Linting",
+    "description": "Check Python code for errors and warnings.",
+    "child_phases": [
+      {
+        "name": "Error Tracking",
+        "description": "Keep track of linting error counts.",
+        "id": 1207,
+        "workflow_id": 144,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Warning Tracking",
+        "description": "Keep track of linting warning counts.",
+        "id": 1208,
+        "workflow_id": 144,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1206,
+    "workflow_id": 144,
+    "display_order": 3
+  },
+  {
+    "name": "Error Tracking",
+    "description": "Keep track of linting error counts.",
+    "id": 1207,
+    "workflow_id": 144,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Warning Tracking",
+    "description": "Keep track of linting warning counts.",
+    "id": 1208,
+    "workflow_id": 144,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Formatting",
+    "description": "Format Python code according to Black standards.",
+    "child_phases": [],
+    "id": 1209,
+    "workflow_id": 144,
+    "display_order": 4
+  },
+  {
+    "name": "Saving Changes",
+    "description": "Overwrite files with formatted content.",
+    "child_phases": [
+      {
+        "name": "Backup Creation",
+        "description": "Create backups of original files (optional).",
+        "id": 1211,
+        "workflow_id": 144,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1210,
+    "workflow_id": 144,
+    "display_order": 5
+  },
+  {
+    "name": "Backup Creation",
+    "description": "Create backups of original files (optional).",
+    "id": 1211,
+    "workflow_id": 144,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report on linting/formatting issues.",
+    "child_phases": [
+      {
+        "name": "Issue Reporting",
+        "description": "Report files with error/warning counts exceeding thresholds.",
+        "id": 1213,
+        "workflow_id": 144,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1212,
+    "workflow_id": 144,
+    "display_order": 6
+  },
+  {
+    "name": "Issue Reporting",
+    "description": "Report files with error/warning counts exceeding thresholds.",
+    "id": 1213,
+    "workflow_id": 144,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Image Loading",
+    "description": "Load images from the provided paths.",
+    "child_phases": [
+      {
+        "name": "Error Handling",
+        "description": "Handle any errors during image loading.",
+        "id": 1215,
+        "workflow_id": 145,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1214,
+    "workflow_id": 145,
+    "display_order": 0
+  },
+  {
+    "name": "Error Handling",
+    "description": "Handle any errors during image loading.",
+    "id": 1215,
+    "workflow_id": 145,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Image Resizing",
+    "description": "Resize images while maintaining aspect ratio.",
+    "child_phases": [
+      {
+        "name": "Aspect Ratio Calculation",
+        "description": "Calculate the aspect ratio of each image.",
+        "id": 1217,
+        "workflow_id": 145,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Resizing",
+        "description": "Resize images based on maximum width/height.",
+        "id": 1218,
+        "workflow_id": 145,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1216,
+    "workflow_id": 145,
+    "display_order": 1
+  },
+  {
+    "name": "Aspect Ratio Calculation",
+    "description": "Calculate the aspect ratio of each image.",
+    "id": 1217,
+    "workflow_id": 145,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Resizing",
+    "description": "Resize images based on maximum width/height.",
+    "id": 1218,
+    "workflow_id": 145,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Image Saving",
+    "description": "Save resized images to specified directory.",
+    "child_phases": [
+      {
+        "name": "File Naming",
+        "description": "Generate unique filenames for saved images.",
+        "id": 1220,
+        "workflow_id": 145,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling",
+        "description": "Handle any errors during image saving.",
+        "id": 1221,
+        "workflow_id": 145,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1219,
+    "workflow_id": 145,
+    "display_order": 2
+  },
+  {
+    "name": "File Naming",
+    "description": "Generate unique filenames for saved images.",
+    "id": 1220,
+    "workflow_id": 145,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Handle any errors during image saving.",
+    "id": 1221,
+    "workflow_id": 145,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Batch Processing",
+    "description": "Process all images in the input list sequentially.",
+    "child_phases": [
+      {
+        "name": "Iteration",
+        "description": "Loop through each image in the input list.",
+        "id": 1223,
+        "workflow_id": 145,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1222,
+    "workflow_id": 145,
+    "display_order": 3
+  },
+  {
+    "name": "Iteration",
+    "description": "Loop through each image in the input list.",
+    "id": 1223,
+    "workflow_id": 145,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Planning and Setup",
+    "description": "Define the scope, gather requirements, set up the Python environment.",
+    "child_phases": [],
+    "id": 1224,
+    "workflow_id": 146,
+    "display_order": 0
+  },
+  {
+    "name": "Data Type Mapping",
+    "description": "Identify and map basic data types between JavaScript and Python.",
+    "child_phases": [
+      {
+        "name": "JavaScript Data Types",
+        "description": "List and understand all possible data types in JavaScript.",
+        "id": 1226,
+        "workflow_id": 146,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Python Equivalents",
+        "description": "Find equivalent data types in Python for each JavaScript data type.",
+        "id": 1227,
+        "workflow_id": 146,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1225,
+    "workflow_id": 146,
+    "display_order": 1
+  },
+  {
+    "name": "JavaScript Data Types",
+    "description": "List and understand all possible data types in JavaScript.",
+    "id": 1226,
+    "workflow_id": 146,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Python Equivalents",
+    "description": "Find equivalent data types in Python for each JavaScript data type.",
+    "id": 1227,
+    "workflow_id": 146,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Control Structure Mapping",
+    "description": "Identify and map control structures between JavaScript and Python.",
+    "child_phases": [
+      {
+        "name": "JavaScript Control Structures",
+        "description": "List and understand all possible control structures in JavaScript.",
+        "id": 1229,
+        "workflow_id": 146,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Python Equivalents",
+        "description": "Find equivalent control structures in Python for each JavaScript control structure.",
+        "id": 1230,
+        "workflow_id": 146,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1228,
+    "workflow_id": 146,
+    "display_order": 2
+  },
+  {
+    "name": "JavaScript Control Structures",
+    "description": "List and understand all possible control structures in JavaScript.",
+    "id": 1229,
+    "workflow_id": 146,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Python Equivalents",
+    "description": "Find equivalent control structures in Python for each JavaScript control structure.",
+    "id": 1230,
+    "workflow_id": 146,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Function Mapping",
+    "description": "Identify and map functions between JavaScript and Python.",
+    "child_phases": [
+      {
+        "name": "JavaScript Functions",
+        "description": "List and understand all possible functions in JavaScript.",
+        "id": 1232,
+        "workflow_id": 146,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Python Equivalents",
+        "description": "Find equivalent functions in Python for each JavaScript function.",
+        "id": 1233,
+        "workflow_id": 146,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1231,
+    "workflow_id": 146,
+    "display_order": 3
+  },
+  {
+    "name": "JavaScript Functions",
+    "description": "List and understand all possible functions in JavaScript.",
+    "id": 1232,
+    "workflow_id": 146,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Python Equivalents",
+    "description": "Find equivalent functions in Python for each JavaScript function.",
+    "id": 1233,
+    "workflow_id": 146,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Translation Algorithm Development",
+    "description": "Develop an algorithm to translate JavaScript code into Python.",
+    "child_phases": [
+      {
+        "name": "Parsing",
+        "description": "Parse the input JavaScript code and extract relevant information.",
+        "id": 1235,
+        "workflow_id": 146,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Mapping",
+        "description": "Map parsed elements onto equivalent Python structures.",
+        "id": 1236,
+        "workflow_id": 146,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Translation",
+        "description": "Translate mapped elements into Python syntax.",
+        "id": 1237,
+        "workflow_id": 146,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1234,
+    "workflow_id": 146,
+    "display_order": 4
+  },
+  {
+    "name": "Parsing",
+    "description": "Parse the input JavaScript code and extract relevant information.",
+    "id": 1235,
+    "workflow_id": 146,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Mapping",
+    "description": "Map parsed elements onto equivalent Python structures.",
+    "id": 1236,
+    "workflow_id": 146,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Translation",
+    "description": "Translate mapped elements into Python syntax.",
+    "id": 1237,
+    "workflow_id": 146,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Test the translator with various inputs, validate outputs.",
+    "child_phases": [
+      {
+        "name": "Test Cases Generation",
+        "description": "Generate test cases covering all possible scenarios.",
+        "id": 1239,
+        "workflow_id": 146,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Translation Accuracy",
+        "description": "Check if translated Python code produces expected output.",
+        "id": 1240,
+        "workflow_id": 146,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1238,
+    "workflow_id": 146,
+    "display_order": 5
+  },
+  {
+    "name": "Test Cases Generation",
+    "description": "Generate test cases covering all possible scenarios.",
+    "id": 1239,
+    "workflow_id": 146,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Translation Accuracy",
+    "description": "Check if translated Python code produces expected output.",
+    "id": 1240,
+    "workflow_id": 146,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation and Reporting",
+    "description": "Document the process, create user manual, prepare final report.",
+    "child_phases": [],
+    "id": 1241,
+    "workflow_id": 146,
+    "display_order": 6
+  },
+  {
+    "name": "Data Acquisition",
+    "description": "Functions for loading and accessing data.",
+    "child_phases": [
+      {
+        "name": "Load Data",
+        "description": "Read CSV file and load into pandas dataframe.",
+        "id": 1243,
+        "workflow_id": 147,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Handle Missing Values",
+        "description": "Impute or drop missing values in the dataset.",
+        "id": 1244,
+        "workflow_id": 147,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1242,
+    "workflow_id": 147,
+    "display_order": 0
+  },
+  {
+    "name": "Load Data",
+    "description": "Read CSV file and load into pandas dataframe.",
+    "id": 1243,
+    "workflow_id": 147,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Handle Missing Values",
+    "description": "Impute or drop missing values in the dataset.",
+    "id": 1244,
+    "workflow_id": 147,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Functions for data cleaning and preprocessing.",
+    "child_phases": [
+      {
+        "name": "Data Type Conversion",
+        "description": "Convert data types as necessary (e.g., convert strings to integers).",
+        "id": 1246,
+        "workflow_id": 147,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Detection",
+        "description": "Identify and handle outliers in the dataset.",
+        "id": 1247,
+        "workflow_id": 147,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1245,
+    "workflow_id": 147,
+    "display_order": 1
+  },
+  {
+    "name": "Data Type Conversion",
+    "description": "Convert data types as necessary (e.g., convert strings to integers).",
+    "id": 1246,
+    "workflow_id": 147,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Detection",
+    "description": "Identify and handle outliers in the dataset.",
+    "id": 1247,
+    "workflow_id": 147,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis",
+    "description": "Functions for exploring and understanding the data.",
+    "child_phases": [
+      {
+        "name": "Descriptive Statistics",
+        "description": "Generate summary statistics to understand central tendency, dispersion, etc.",
+        "id": 1249,
+        "workflow_id": 147,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Visualization",
+        "description": "Create plots and charts to visualize data distributions, relationships, etc.",
+        "id": 1250,
+        "workflow_id": 147,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1248,
+    "workflow_id": 147,
+    "display_order": 2
+  },
+  {
+    "name": "Descriptive Statistics",
+    "description": "Generate summary statistics to understand central tendency, dispersion, etc.",
+    "id": 1249,
+    "workflow_id": 147,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Create plots and charts to visualize data distributions, relationships, etc.",
+    "id": 1250,
+    "workflow_id": 147,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Statistical Analysis",
+    "description": "Functions for performing statistical analysis on the data.",
+    "child_phases": [
+      {
+        "name": "Hypothesis Testing",
+        "description": "Perform t-tests, ANOVA, chi-square tests, etc. to test hypotheses.",
+        "id": 1252,
+        "workflow_id": 147,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Regression Analysis",
+        "description": "Fit regression models and assess their performance.",
+        "id": 1253,
+        "workflow_id": 147,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1251,
+    "workflow_id": 147,
+    "display_order": 3
+  },
+  {
+    "name": "Hypothesis Testing",
+    "description": "Perform t-tests, ANOVA, chi-square tests, etc. to test hypotheses.",
+    "id": 1252,
+    "workflow_id": 147,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Regression Analysis",
+    "description": "Fit regression models and assess their performance.",
+    "id": 1253,
+    "workflow_id": 147,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Reporting",
+    "description": "Functions for generating reports on the data analysis.",
+    "child_phases": [
+      {
+        "name": "Generate Report",
+        "description": "Create a report summarizing the data cleaning, exploration, statistical analysis, and findings.",
+        "id": 1255,
+        "workflow_id": 147,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1254,
+    "workflow_id": 147,
+    "display_order": 4
+  },
+  {
+    "name": "Generate Report",
+    "description": "Create a report summarizing the data cleaning, exploration, statistical analysis, and findings.",
+    "id": 1255,
+    "workflow_id": 147,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Automation",
+    "description": "Functions for automating the entire pipeline.",
+    "child_phases": [
+      {
+        "name": "Parameterization",
+        "description": "Make functions parameterizable to adapt for other datasets with minimal human intervention.",
+        "id": 1257,
+        "workflow_id": 147,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Scheduling",
+        "description": "Schedule the pipeline to run at regular intervals or based on triggers.",
+        "id": 1258,
+        "workflow_id": 147,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1256,
+    "workflow_id": 147,
+    "display_order": 5
+  },
+  {
+    "name": "Parameterization",
+    "description": "Make functions parameterizable to adapt for other datasets with minimal human intervention.",
+    "id": 1257,
+    "workflow_id": 147,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Scheduling",
+    "description": "Schedule the pipeline to run at regular intervals or based on triggers.",
+    "id": 1258,
+    "workflow_id": 147,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Handling",
+    "description": "Process and validate the input PDF file.",
+    "child_phases": [
+      {
+        "name": "PDF Validation",
+        "description": "Check if the provided file is a valid PDF.",
+        "id": 1260,
+        "workflow_id": 148,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "PDF Extraction",
+        "description": "Extract text from the PDF using libraries like PyMuPDF or pdfplumber.",
+        "id": 1261,
+        "workflow_id": 148,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1259,
+    "workflow_id": 148,
+    "display_order": 0
+  },
+  {
+    "name": "PDF Validation",
+    "description": "Check if the provided file is a valid PDF.",
+    "id": 1260,
+    "workflow_id": 148,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "PDF Extraction",
+    "description": "Extract text from the PDF using libraries like PyMuPDF or pdfplumber.",
+    "id": 1261,
+    "workflow_id": 148,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Clean and prepare the extracted text for summarization.",
+    "child_phases": [
+      {
+        "name": "Text Cleaning",
+        "description": "Remove unnecessary spaces, punctuation, and convert to lowercase.",
+        "id": 1263,
+        "workflow_id": 148,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Section/Chapter Segmentation",
+        "description": "Split the text into sections or chapters based on headers or other indicators.",
+        "id": 1264,
+        "workflow_id": 148,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1262,
+    "workflow_id": 148,
+    "display_order": 1
+  },
+  {
+    "name": "Text Cleaning",
+    "description": "Remove unnecessary spaces, punctuation, and convert to lowercase.",
+    "id": 1263,
+    "workflow_id": 148,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Section/Chapter Segmentation",
+    "description": "Split the text into sections or chapters based on headers or other indicators.",
+    "id": 1264,
+    "workflow_id": 148,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "AI Summarization",
+    "description": "Use AI tools like transformers-based models to summarize each section/chapter.",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Choose an appropriate model (e.g., BERT, DistilBERT) for summarization.",
+        "id": 1266,
+        "workflow_id": 148,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Summarization",
+        "description": "Feed the text of each section/chapter to the chosen model and generate summaries.",
+        "id": 1267,
+        "workflow_id": 148,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1265,
+    "workflow_id": 148,
+    "display_order": 2
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose an appropriate model (e.g., BERT, DistilBERT) for summarization.",
+    "id": 1266,
+    "workflow_id": 148,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Feed the text of each section/chapter to the chosen model and generate summaries.",
+    "id": 1267,
+    "workflow_id": 148,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Structure and format the summaries for output.",
+    "child_phases": [
+      {
+        "name": "JSON/Markdown Structuring",
+        "description": "Arrange the summaries in a structured JSON or Markdown format.",
+        "id": 1269,
+        "workflow_id": 148,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Generation",
+        "description": "Generate the final output file (e.g., JSON, Markdown) containing the structured summaries.",
+        "id": 1270,
+        "workflow_id": 148,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1268,
+    "workflow_id": 148,
+    "display_order": 3
+  },
+  {
+    "name": "JSON/Markdown Structuring",
+    "description": "Arrange the summaries in a structured JSON or Markdown format.",
+    "id": 1269,
+    "workflow_id": 148,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate the final output file (e.g., JSON, Markdown) containing the structured summaries.",
+    "id": 1270,
+    "workflow_id": 148,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Import",
+    "description": "Load raw data from CSV files.",
+    "child_phases": [],
+    "id": 1271,
+    "workflow_id": 149,
+    "display_order": 0
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Perform necessary cleaning tasks on the data.",
+    "child_phases": [
+      {
+        "name": "Handling Missing Values",
+        "description": "Deal with missing or null values in the dataset.",
+        "id": 1273,
+        "workflow_id": 149,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Removing Duplicates",
+        "description": "Remove duplicate rows from the dataset.",
+        "id": 1274,
+        "workflow_id": 149,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Detection and Removal",
+        "description": "Identify and remove outliers from the dataset.",
+        "id": 1275,
+        "workflow_id": 149,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Irrelevant Columns Removal",
+        "description": "Remove columns that are not necessary for analysis.",
+        "id": 1276,
+        "workflow_id": 149,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 1272,
+    "workflow_id": 149,
+    "display_order": 1
+  },
+  {
+    "name": "Handling Missing Values",
+    "description": "Deal with missing or null values in the dataset.",
+    "id": 1273,
+    "workflow_id": 149,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Removing Duplicates",
+    "description": "Remove duplicate rows from the dataset.",
+    "id": 1274,
+    "workflow_id": 149,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Detection and Removal",
+    "description": "Identify and remove outliers from the dataset.",
+    "id": 1275,
+    "workflow_id": 149,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Irrelevant Columns Removal",
+    "description": "Remove columns that are not necessary for analysis.",
+    "id": 1276,
+    "workflow_id": 149,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Data Export",
+    "description": "Export the cleaned dataset.",
+    "child_phases": [],
+    "id": 1277,
+    "workflow_id": 149,
+    "display_order": 2
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report summarizing preprocessing steps.",
+    "child_phases": [],
+    "id": 1278,
+    "workflow_id": 149,
+    "display_order": 3
+  },
+  {
+    "name": "Task Definition",
+    "description": "Define the problem and gather requirements.",
+    "child_phases": [
+      {
+        "name": "Understand Disease Spread Model",
+        "description": "Familiarize with SIR model and modify it if needed.",
+        "id": 1280,
+        "workflow_id": 150,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Input Parameters",
+        "description": "Determine required parameters for the simulation.",
+        "id": 1281,
+        "workflow_id": 150,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1279,
+    "workflow_id": 150,
+    "display_order": 0
+  },
+  {
+    "name": "Understand Disease Spread Model",
+    "description": "Familiarize with SIR model and modify it if needed.",
+    "id": 1280,
+    "workflow_id": 150,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Input Parameters",
+    "description": "Determine required parameters for the simulation.",
+    "id": 1281,
+    "workflow_id": 150,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Environment Setup",
+    "description": "Ensure Python environment is configured with necessary dependencies.",
+    "child_phases": [
+      {
+        "name": "Check Dependencies",
+        "description": "Verify that all required libraries are installed.",
+        "id": 1283,
+        "workflow_id": 150,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Input Data",
+        "description": "Ensure input data for simulation is available and correct.",
+        "id": 1284,
+        "workflow_id": 150,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1282,
+    "workflow_id": 150,
+    "display_order": 1
+  },
+  {
+    "name": "Check Dependencies",
+    "description": "Verify that all required libraries are installed.",
+    "id": 1283,
+    "workflow_id": 150,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Input Data",
+    "description": "Ensure input data for simulation is available and correct.",
+    "id": 1284,
+    "workflow_id": 150,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Coding",
+    "description": "Write Python code to simulate disease spread.",
+    "child_phases": [
+      {
+        "name": "Define Simulation Function",
+        "description": "Create a function that takes input parameters and simulates disease spread.",
+        "id": 1286,
+        "workflow_id": 150,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Implement SIR Model",
+        "description": "Code the mathematical representation of the SIR model.",
+        "id": 1287,
+        "workflow_id": 150,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Daily Simulation",
+        "description": "Simulate daily change in susceptible, infected, and recovered populations.",
+        "id": 1288,
+        "workflow_id": 150,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1285,
+    "workflow_id": 150,
+    "display_order": 2
+  },
+  {
+    "name": "Define Simulation Function",
+    "description": "Create a function that takes input parameters and simulates disease spread.",
+    "id": 1286,
+    "workflow_id": 150,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Implement SIR Model",
+    "description": "Code the mathematical representation of the SIR model.",
+    "id": 1287,
+    "workflow_id": 150,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Daily Simulation",
+    "description": "Simulate daily change in susceptible, infected, and recovered populations.",
+    "id": 1288,
+    "workflow_id": 150,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the simulation function with various inputs.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual components of the code to ensure they work as expected.",
+        "id": 1290,
+        "workflow_id": 150,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Test the entire application to ensure it works correctly with various inputs.",
+        "id": 1291,
+        "workflow_id": 150,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1289,
+    "workflow_id": 150,
+    "display_order": 3
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual components of the code to ensure they work as expected.",
+    "id": 1290,
+    "workflow_id": 150,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Test the entire application to ensure it works correctly with various inputs.",
+    "id": 1291,
+    "workflow_id": 150,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation and Code Review",
+    "description": "Ensure the code is well-documented and reviewed by others.",
+    "child_phases": [
+      {
+        "name": "Code Documentation",
+        "description": "Add comments to explain what each part of the code does.",
+        "id": 1293,
+        "workflow_id": 150,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Peer Review",
+        "description": "Have other developers review the code for potential issues and improvements.",
+        "id": 1294,
+        "workflow_id": 150,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1292,
+    "workflow_id": 150,
+    "display_order": 4
+  },
+  {
+    "name": "Code Documentation",
+    "description": "Add comments to explain what each part of the code does.",
+    "id": 1293,
+    "workflow_id": 150,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Peer Review",
+    "description": "Have other developers review the code for potential issues and improvements.",
+    "id": 1294,
+    "workflow_id": 150,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Input",
+    "description": "Reading and preparing the CSV file containing questions, choices, and answers.",
+    "child_phases": [
+      {
+        "name": "File Reading",
+        "description": "Opening and reading the CSV file.",
+        "id": 1296,
+        "workflow_id": 151,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Parsing and structuring the data from the CSV.",
+        "id": 1297,
+        "workflow_id": 151,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1295,
+    "workflow_id": 151,
+    "display_order": 0
+  },
+  {
+    "name": "File Reading",
+    "description": "Opening and reading the CSV file.",
+    "id": 1296,
+    "workflow_id": 151,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Parsing and structuring the data from the CSV.",
+    "id": 1297,
+    "workflow_id": 151,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Generation",
+    "description": "Creating the quiz structure using the prepared data.",
+    "child_phases": [
+      {
+        "name": "Question Creation",
+        "description": "Formatting questions with their choices and answers.",
+        "id": 1299,
+        "workflow_id": 151,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Quiz Assembly",
+        "description": "Combining questions to create the quiz.",
+        "id": 1300,
+        "workflow_id": 151,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1298,
+    "workflow_id": 151,
+    "display_order": 1
+  },
+  {
+    "name": "Question Creation",
+    "description": "Formatting questions with their choices and answers.",
+    "id": 1299,
+    "workflow_id": 151,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Assembly",
+    "description": "Combining questions to create the quiz.",
+    "id": 1300,
+    "workflow_id": 151,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Manipulation",
+    "description": "Shuffling options for randomness.",
+    "child_phases": [
+      {
+        "name": "Options Shuffling",
+        "description": "Randomizing the order of choices.",
+        "id": 1302,
+        "workflow_id": 151,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1301,
+    "workflow_id": 151,
+    "display_order": 2
+  },
+  {
+    "name": "Options Shuffling",
+    "description": "Randomizing the order of choices.",
+    "id": 1302,
+    "workflow_id": 151,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Grading",
+    "description": "Evaluating user's answers against the correct answers.",
+    "child_phases": [
+      {
+        "name": "Answer Collection",
+        "description": "Gathering user's responses.",
+        "id": 1304,
+        "workflow_id": 151,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Score Calculation",
+        "description": "Comparing user's answers with the correct ones and determining the score.",
+        "id": 1305,
+        "workflow_id": 151,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1303,
+    "workflow_id": 151,
+    "display_order": 3
+  },
+  {
+    "name": "Answer Collection",
+    "description": "Gathering user's responses.",
+    "id": 1304,
+    "workflow_id": 151,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Score Calculation",
+    "description": "Comparing user's answers with the correct ones and determining the score.",
+    "id": 1305,
+    "workflow_id": 151,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output",
+    "description": "Displaying results to the user.",
+    "child_phases": [
+      {
+        "name": "Result Formatting",
+        "description": "Preparing the results in a readable format.",
+        "id": 1307,
+        "workflow_id": 151,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Result Display",
+        "description": "Showing the results to the user.",
+        "id": 1308,
+        "workflow_id": 151,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1306,
+    "workflow_id": 151,
+    "display_order": 4
+  },
+  {
+    "name": "Result Formatting",
+    "description": "Preparing the results in a readable format.",
+    "id": 1307,
+    "workflow_id": 151,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Result Display",
+    "description": "Showing the results to the user.",
+    "id": 1308,
+    "workflow_id": 151,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Retrieve data from scientific instruments represented as dictionaries.",
+    "child_phases": [],
+    "id": 1309,
+    "workflow_id": 152,
+    "display_order": 0
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Clean and prepare the data for normalization.",
+    "child_phases": [
+      {
+        "name": "Handle Missing Data",
+        "description": "Manage any missing measurements in the input.",
+        "id": 1311,
+        "workflow_id": 152,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Check Data Types",
+        "description": "Ensure all measurements are numeric (int or float).",
+        "id": 1312,
+        "workflow_id": 152,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1310,
+    "workflow_id": 152,
+    "display_order": 1
+  },
+  {
+    "name": "Handle Missing Data",
+    "description": "Manage any missing measurements in the input.",
+    "id": 1311,
+    "workflow_id": 152,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Check Data Types",
+    "description": "Ensure all measurements are numeric (int or float).",
+    "id": 1312,
+    "workflow_id": 152,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Calculate Statistics",
+    "description": "Compute mean and standard deviation for each instrument's measurements.",
+    "child_phases": [
+      {
+        "name": "Compute Mean",
+        "description": "Calculate the average measurement per instrument.",
+        "id": 1314,
+        "workflow_id": 152,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Compute Standard Deviation",
+        "description": "Calculate the spread of measurements around the mean.",
+        "id": 1315,
+        "workflow_id": 152,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1313,
+    "workflow_id": 152,
+    "display_order": 2
+  },
+  {
+    "name": "Compute Mean",
+    "description": "Calculate the average measurement per instrument.",
+    "id": 1314,
+    "workflow_id": 152,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Compute Standard Deviation",
+    "description": "Calculate the spread of measurements around the mean.",
+    "id": 1315,
+    "workflow_id": 152,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Normalize Data",
+    "description": "Standardize measurements using z-scores.",
+    "child_phases": [
+      {
+        "name": "Convert to Z-Scores",
+        "description": "Calculate z-score for each measurement using the mean and standard deviation.",
+        "id": 1317,
+        "workflow_id": 152,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1316,
+    "workflow_id": 152,
+    "display_order": 3
+  },
+  {
+    "name": "Convert to Z-Scores",
+    "description": "Calculate z-score for each measurement using the mean and standard deviation.",
+    "id": 1317,
+    "workflow_id": 152,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Format Output",
+    "description": "Prepare the final dictionary with instrument names as keys and tuples of mean and z-scores as values.",
+    "child_phases": [],
+    "id": 1318,
+    "workflow_id": 152,
+    "display_order": 4
+  },
+  {
+    "name": "Data Loading and Preprocessing",
+    "description": "Functions to load, clean, and handle missing values in the climate change dataset.",
+    "child_phases": [
+      {
+        "name": "Load Dataset",
+        "description": "Function to load the climate change dataset.",
+        "id": 1320,
+        "workflow_id": 153,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Functions to handle missing values, outliers, and inconsistencies in the data.",
+        "id": 1321,
+        "workflow_id": 153,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1319,
+    "workflow_id": 153,
+    "display_order": 0
+  },
+  {
+    "name": "Load Dataset",
+    "description": "Function to load the climate change dataset.",
+    "id": 1320,
+    "workflow_id": 153,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Functions to handle missing values, outliers, and inconsistencies in the data.",
+    "id": 1321,
+    "workflow_id": 153,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis",
+    "description": "Functions to calculate statistical measures and generate plots for data exploration.",
+    "child_phases": [
+      {
+        "name": "Calculate Statistical Measures",
+        "description": "Functions to calculate mean, median, mode, standard deviation, etc.",
+        "id": 1323,
+        "workflow_id": 153,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Visualization",
+        "description": "Functions to create various plots like line graphs, bar charts, heatmaps, etc.",
+        "id": 1324,
+        "workflow_id": 153,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1322,
+    "workflow_id": 153,
+    "display_order": 1
+  },
+  {
+    "name": "Calculate Statistical Measures",
+    "description": "Functions to calculate mean, median, mode, standard deviation, etc.",
+    "id": 1323,
+    "workflow_id": 153,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Functions to create various plots like line graphs, bar charts, heatmaps, etc.",
+    "id": 1324,
+    "workflow_id": 153,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization and Reporting",
+    "description": "Function to generate a summary report of the climate change data analysis.",
+    "child_phases": [
+      {
+        "name": "Generate Summary Report",
+        "description": "Function to create a comprehensive summary report including all calculations, plots, and interpretations.",
+        "id": 1326,
+        "workflow_id": 153,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1325,
+    "workflow_id": 153,
+    "display_order": 2
+  },
+  {
+    "name": "Generate Summary Report",
+    "description": "Function to create a comprehensive summary report including all calculations, plots, and interpretations.",
+    "id": 1326,
+    "workflow_id": 153,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Load and preprocess data.",
+    "child_phases": [
+      {
+        "name": "Data Loading",
+        "description": "Load the DataFrame from input data.",
+        "id": 1328,
+        "workflow_id": 154,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers, etc.",
+        "id": 1329,
+        "workflow_id": 154,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1327,
+    "workflow_id": 154,
+    "display_order": 0
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load the DataFrame from input data.",
+    "id": 1328,
+    "workflow_id": 154,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers, etc.",
+    "id": 1329,
+    "workflow_id": 154,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis (EDA)",
+    "description": "Analyze and understand the data.",
+    "child_phases": [
+      {
+        "name": "Data Visualization",
+        "description": "Plot historical data for insights.",
+        "id": 1331,
+        "workflow_id": 154,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Stationarity Check",
+        "description": "Check if time series is stationary.",
+        "id": 1332,
+        "workflow_id": 154,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1330,
+    "workflow_id": 154,
+    "display_order": 1
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Plot historical data for insights.",
+    "id": 1331,
+    "workflow_id": 154,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Stationarity Check",
+    "description": "Check if time series is stationary.",
+    "id": 1332,
+    "workflow_id": 154,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose appropriate forecasting model.",
+    "child_phases": [
+      {
+        "name": "Model Research",
+        "description": "Research ARIMA, SARIMA, Prophet models.",
+        "id": 1334,
+        "workflow_id": 154,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Fit",
+        "description": "Fit the chosen model to historical data.",
+        "id": 1335,
+        "workflow_id": 154,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1333,
+    "workflow_id": 154,
+    "display_order": 2
+  },
+  {
+    "name": "Model Research",
+    "description": "Research ARIMA, SARIMA, Prophet models.",
+    "id": 1334,
+    "workflow_id": 154,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Fit",
+    "description": "Fit the chosen model to historical data.",
+    "id": 1335,
+    "workflow_id": 154,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Forecast Generation",
+    "description": "Generate predictions using the fitted model.",
+    "child_phases": [
+      {
+        "name": "Hyperparameter Tuning",
+        "description": "Fine-tune model parameters for optimal performance.",
+        "id": 1337,
+        "workflow_id": 154,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prediction",
+        "description": "Make forecasts using the tuned model.",
+        "id": 1338,
+        "workflow_id": 154,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1336,
+    "workflow_id": 154,
+    "display_order": 3
+  },
+  {
+    "name": "Hyperparameter Tuning",
+    "description": "Fine-tune model parameters for optimal performance.",
+    "id": 1337,
+    "workflow_id": 154,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prediction",
+    "description": "Make forecasts using the tuned model.",
+    "id": 1338,
+    "workflow_id": 154,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Evaluation and Validation",
+    "description": "Evaluate forecast accuracy.",
+    "child_phases": [
+      {
+        "name": "Error Metrics Calculation",
+        "description": "Calculate error metrics like MAE, RMSE, etc.",
+        "id": 1340,
+        "workflow_id": 154,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Forecast Visualization",
+        "description": "Plot historical and predicted values for comparison.",
+        "id": 1341,
+        "workflow_id": 154,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1339,
+    "workflow_id": 154,
+    "display_order": 4
+  },
+  {
+    "name": "Error Metrics Calculation",
+    "description": "Calculate error metrics like MAE, RMSE, etc.",
+    "id": 1340,
+    "workflow_id": 154,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Forecast Visualization",
+    "description": "Plot historical and predicted values for comparison.",
+    "id": 1341,
+    "workflow_id": 154,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Prepare output DataFrame with predictions.",
+    "child_phases": [
+      {
+        "name": "Prediction Formatting",
+        "description": "Format predictions to match input data structure.",
+        "id": 1343,
+        "workflow_id": 154,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Creation",
+        "description": "Create the output DataFrame with predicted values.",
+        "id": 1344,
+        "workflow_id": 154,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1342,
+    "workflow_id": 154,
+    "display_order": 5
+  },
+  {
+    "name": "Prediction Formatting",
+    "description": "Format predictions to match input data structure.",
+    "id": 1343,
+    "workflow_id": 154,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Creation",
+    "description": "Create the output DataFrame with predicted values.",
+    "id": 1344,
+    "workflow_id": 154,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Framework Setup",
+    "description": "Set up the Python environment and install required dependencies.",
+    "child_phases": [],
+    "id": 1345,
+    "workflow_id": 155,
+    "display_order": 0
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data for test cases.",
+    "child_phases": [],
+    "id": 1346,
+    "workflow_id": 155,
+    "display_order": 1
+  },
+  {
+    "name": "Framework Creation",
+    "description": "Create the automated testing framework using unittest or pytest.",
+    "child_phases": [
+      {
+        "name": "Test Case Generation",
+        "description": "Implement functionality to generate test cases dynamically based on input data.",
+        "child_phases": [],
+        "id": 1348,
+        "workflow_id": 155,
+        "display_order": 0
+      },
+      {
+        "name": "Setup and Teardown",
+        "description": "Handle setup and teardown operations for each test case.",
+        "child_phases": [],
+        "id": 1349,
+        "workflow_id": 155,
+        "display_order": 1
+      }
+    ],
+    "id": 1347,
+    "workflow_id": 155,
+    "display_order": 2
+  },
+  {
+    "name": "Test Case Generation",
+    "description": "Implement functionality to generate test cases dynamically based on input data.",
+    "child_phases": [],
+    "id": 1348,
+    "workflow_id": 155,
+    "display_order": 0
+  },
+  {
+    "name": "Setup and Teardown",
+    "description": "Handle setup and teardown operations for each test case.",
+    "child_phases": [],
+    "id": 1349,
+    "workflow_id": 155,
+    "display_order": 1
+  },
+  {
+    "name": "Parallel Test Execution",
+    "description": "Implement functionality to run tests in parallel.",
+    "child_phases": [],
+    "id": 1350,
+    "workflow_id": 155,
+    "display_order": 3
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a comprehensive HTML report at the end of test execution.",
+    "child_phases": [],
+    "id": 1351,
+    "workflow_id": 155,
+    "display_order": 4
+  },
+  {
+    "name": "News Data Fetching",
+    "description": "Fetches the latest headlines from multiple news APIs like BBC, The Guardian, CNN.",
+    "child_phases": [
+      {
+        "name": "BBC Headlines Fetching",
+        "description": "Fetches the latest headlines from BBC News API.",
+        "id": 1353,
+        "workflow_id": 156,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "The Guardian Headlines Fetching",
+        "description": "Fetches the latest headlines from The Guardian News API.",
+        "id": 1354,
+        "workflow_id": 156,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "CNN Headlines Fetching",
+        "description": "Fetches the latest headlines from CNN News API.",
+        "id": 1355,
+        "workflow_id": 156,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1352,
+    "workflow_id": 156,
+    "display_order": 0
+  },
+  {
+    "name": "BBC Headlines Fetching",
+    "description": "Fetches the latest headlines from BBC News API.",
+    "id": 1353,
+    "workflow_id": 156,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "The Guardian Headlines Fetching",
+    "description": "Fetches the latest headlines from The Guardian News API.",
+    "id": 1354,
+    "workflow_id": 156,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "CNN Headlines Fetching",
+    "description": "Fetches the latest headlines from CNN News API.",
+    "id": 1355,
+    "workflow_id": 156,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "News Article Summarization",
+    "description": "Summarizes each fetched article using a text summarization library like genius or bert-extractive-summarizer.",
+    "child_phases": [
+      {
+        "name": "BBC Articles Summarization",
+        "description": "Summarizes each BBC article fetched.",
+        "id": 1357,
+        "workflow_id": 156,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "The Guardian Articles Summarization",
+        "description": "Summarizes each The Guardian article fetched.",
+        "id": 1358,
+        "workflow_id": 156,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "CNN Articles Summarization",
+        "description": "Summarizes each CNN article fetched.",
+        "id": 1359,
+        "workflow_id": 156,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1356,
+    "workflow_id": 156,
+    "display_order": 1
+  },
+  {
+    "name": "BBC Articles Summarization",
+    "description": "Summarizes each BBC article fetched.",
+    "id": 1357,
+    "workflow_id": 156,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "The Guardian Articles Summarization",
+    "description": "Summarizes each The Guardian article fetched.",
+    "id": 1358,
+    "workflow_id": 156,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "CNN Articles Summarization",
+    "description": "Summarizes each CNN article fetched.",
+    "id": 1359,
+    "workflow_id": 156,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Aggregate Summary Generation",
+    "description": "Generates an aggregate summary report from the summaries of individual articles.",
+    "id": 1360,
+    "workflow_id": 156,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Problem Definition",
+    "description": "Understand the task of generating all prime numbers up to a given limit using an efficient algorithm.",
+    "child_phases": [],
+    "id": 1361,
+    "workflow_id": 157,
+    "display_order": 0
+  },
+  {
+    "name": "Algorithm Selection",
+    "description": "Choose an efficient algorithm for prime number generation, such as the Sieve of Eratosthenes.",
+    "child_phases": [
+      {
+        "name": "Understand Sieve of Eratosthenes",
+        "description": "Learn about and comprehend the workings of the Sieve of Eratosthenes algorithm.",
+        "id": 1363,
+        "workflow_id": 157,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1362,
+    "workflow_id": 157,
+    "display_order": 1
+  },
+  {
+    "name": "Understand Sieve of Eratosthenes",
+    "description": "Learn about and comprehend the workings of the Sieve of Eratosthenes algorithm.",
+    "id": 1363,
+    "workflow_id": 157,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Function Design",
+    "description": "Design a function in Python that takes an input limit and returns a list of prime numbers up to that limit.",
+    "child_phases": [
+      {
+        "name": "Define Function Signature",
+        "description": "Decide the name, parameters, and return type of the function.",
+        "id": 1365,
+        "workflow_id": 157,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Sieve Logic",
+        "description": "Write the Python code implementing the Sieve of Eratosthenes algorithm.",
+        "id": 1366,
+        "workflow_id": 157,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1364,
+    "workflow_id": 157,
+    "display_order": 2
+  },
+  {
+    "name": "Define Function Signature",
+    "description": "Decide the name, parameters, and return type of the function.",
+    "id": 1365,
+    "workflow_id": 157,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Sieve Logic",
+    "description": "Write the Python code implementing the Sieve of Eratosthenes algorithm.",
+    "id": 1366,
+    "workflow_id": 157,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the function with various inputs to ensure it works correctly.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual components of the function to ensure they work as expected.",
+        "id": 1368,
+        "workflow_id": 157,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Test the entire function with various inputs to ensure it produces correct outputs.",
+        "id": 1369,
+        "workflow_id": 157,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1367,
+    "workflow_id": 157,
+    "display_order": 3
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual components of the function to ensure they work as expected.",
+    "id": 1368,
+    "workflow_id": 157,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Test the entire function with various inputs to ensure it produces correct outputs.",
+    "id": 1369,
+    "workflow_id": 157,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation",
+    "description": "Write documentation explaining how to use the function and its expected behavior.",
+    "child_phases": [],
+    "id": 1370,
+    "workflow_id": 157,
+    "display_order": 4
+  },
+  {
+    "name": "Planning",
+    "description": "Define the scope and structure of the curriculum.",
+    "child_phases": [
+      {
+        "name": "Topic Selection",
+        "description": "Finalize the list of topics to be covered.",
+        "id": 1372,
+        "workflow_id": 158,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Progression Planning",
+        "description": "Determine the logical progression of topics.",
+        "id": 1373,
+        "workflow_id": 158,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1371,
+    "workflow_id": 158,
+    "display_order": 0
+  },
+  {
+    "name": "Topic Selection",
+    "description": "Finalize the list of topics to be covered.",
+    "id": 1372,
+    "workflow_id": 158,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Progression Planning",
+    "description": "Determine the logical progression of topics.",
+    "id": 1373,
+    "workflow_id": 158,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare the input data for processing.",
+    "child_phases": [
+      {
+        "name": "Input Data Cleaning",
+        "description": "Ensure the topic list is clean and formatted correctly.",
+        "id": 1375,
+        "workflow_id": 158,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Removing Duplicates",
+        "description": "Eliminate any repeated topics from the list.",
+        "id": 1376,
+        "workflow_id": 158,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1374,
+    "workflow_id": 158,
+    "display_order": 1
+  },
+  {
+    "name": "Input Data Cleaning",
+    "description": "Ensure the topic list is clean and formatted correctly.",
+    "id": 1375,
+    "workflow_id": 158,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Removing Duplicates",
+    "description": "Eliminate any repeated topics from the list.",
+    "id": 1376,
+    "workflow_id": 158,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Curriculum Generation",
+    "description": "Generate the structured lessons based on the input topics.",
+    "child_phases": [
+      {
+        "name": "Topic Breakdown",
+        "description": "Break down each topic into subtopics.",
+        "id": 1378,
+        "workflow_id": 158,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Objective Setting",
+        "description": "Set clear objectives for each subtopic.",
+        "id": 1379,
+        "workflow_id": 158,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Key Concept Identification",
+        "description": "Identify key concepts related to each subtopic.",
+        "id": 1380,
+        "workflow_id": 158,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Activity Suggestion",
+        "description": "Suggest related activities for each subtopic.",
+        "id": 1381,
+        "workflow_id": 158,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 1377,
+    "workflow_id": 158,
+    "display_order": 2
+  },
+  {
+    "name": "Topic Breakdown",
+    "description": "Break down each topic into subtopics.",
+    "id": 1378,
+    "workflow_id": 158,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Objective Setting",
+    "description": "Set clear objectives for each subtopic.",
+    "id": 1379,
+    "workflow_id": 158,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Key Concept Identification",
+    "description": "Identify key concepts related to each subtopic.",
+    "id": 1380,
+    "workflow_id": 158,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Activity Suggestion",
+    "description": "Suggest related activities for each subtopic.",
+    "id": 1381,
+    "workflow_id": 158,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate the output curriculum plan.",
+    "child_phases": [
+      {
+        "name": "Plan Formatting",
+        "description": "Format the curriculum plan in a structured way.",
+        "id": 1383,
+        "workflow_id": 158,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Progression Validation",
+        "description": "Ensure topics are arranged in the planned progression.",
+        "id": 1384,
+        "workflow_id": 158,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1382,
+    "workflow_id": 158,
+    "display_order": 3
+  },
+  {
+    "name": "Plan Formatting",
+    "description": "Format the curriculum plan in a structured way.",
+    "id": 1383,
+    "workflow_id": 158,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Progression Validation",
+    "description": "Ensure topics are arranged in the planned progression.",
+    "id": 1384,
+    "workflow_id": 158,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Review and Revision",
+    "description": "Review and revise the generated curriculum plan.",
+    "child_phases": [
+      {
+        "name": "Content Review",
+        "description": "Review the content of each subtopic for accuracy.",
+        "id": 1386,
+        "workflow_id": 158,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Plan Refinement",
+        "description": "Refine the curriculum plan based on review feedback.",
+        "id": 1387,
+        "workflow_id": 158,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1385,
+    "workflow_id": 158,
+    "display_order": 4
+  },
+  {
+    "name": "Content Review",
+    "description": "Review the content of each subtopic for accuracy.",
+    "id": 1386,
+    "workflow_id": 158,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Plan Refinement",
+    "description": "Refine the curriculum plan based on review feedback.",
+    "id": 1387,
+    "workflow_id": 158,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Query and Fetch Phase",
+    "description": "Retrieve relevant papers from academic databases using the given research topic.",
+    "child_phases": [
+      {
+        "name": "Database Selection",
+        "description": "Choose appropriate academic databases (e.g., Semantic Scholar, arXiv).",
+        "id": 1389,
+        "workflow_id": 159,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Paper Retrieval",
+        "description": "Fetch relevant papers based on the chosen topic and selected databases.",
+        "id": 1390,
+        "workflow_id": 159,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1388,
+    "workflow_id": 159,
+    "display_order": 0
+  },
+  {
+    "name": "Database Selection",
+    "description": "Choose appropriate academic databases (e.g., Semantic Scholar, arXiv).",
+    "id": 1389,
+    "workflow_id": 159,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Paper Retrieval",
+    "description": "Fetch relevant papers based on the chosen topic and selected databases.",
+    "id": 1390,
+    "workflow_id": 159,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Information Extraction Phase",
+    "description": "Extract key information from fetched papers using NLP techniques.",
+    "child_phases": [
+      {
+        "name": "Text Preprocessing",
+        "description": "Clean and tokenize text data from retrieved papers.",
+        "id": 1392,
+        "workflow_id": 159,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Keyword Extraction",
+        "description": "Identify and extract important keywords using TF-IDF or other algorithms.",
+        "id": 1393,
+        "workflow_id": 159,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Summarization",
+        "description": "Generate summaries of the fetched papers focusing on key information.",
+        "id": 1394,
+        "workflow_id": 159,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1391,
+    "workflow_id": 159,
+    "display_order": 1
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Clean and tokenize text data from retrieved papers.",
+    "id": 1392,
+    "workflow_id": 159,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Keyword Extraction",
+    "description": "Identify and extract important keywords using TF-IDF or other algorithms.",
+    "id": 1393,
+    "workflow_id": 159,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Summarization",
+    "description": "Generate summaries of the fetched papers focusing on key information.",
+    "id": 1394,
+    "workflow_id": 159,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Organization Phase",
+    "description": "Organize and present extracted information in a structured format.",
+    "child_phases": [
+      {
+        "name": "Structured Data Generation",
+        "description": "Format extracted information into JSON or CSV.",
+        "id": 1396,
+        "workflow_id": 159,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1395,
+    "workflow_id": 159,
+    "display_order": 2
+  },
+  {
+    "name": "Structured Data Generation",
+    "description": "Format extracted information into JSON or CSV.",
+    "id": 1396,
+    "workflow_id": 159,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Analysis and Reporting Phase",
+    "description": "Provide basic statistics about retrieved literature.",
+    "child_phases": [
+      {
+        "name": "Statistics Calculation",
+        "description": "Calculate relevant metrics (e.g., number of papers, top keywords).",
+        "id": 1398,
+        "workflow_id": 159,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Present calculated statistics and summaries in a user-friendly format.",
+        "id": 1399,
+        "workflow_id": 159,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1397,
+    "workflow_id": 159,
+    "display_order": 3
+  },
+  {
+    "name": "Statistics Calculation",
+    "description": "Calculate relevant metrics (e.g., number of papers, top keywords).",
+    "id": 1398,
+    "workflow_id": 159,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Present calculated statistics and summaries in a user-friendly format.",
+    "id": 1399,
+    "workflow_id": 159,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Optional Phase: Research Suggestions",
+    "description": "Suggest related topics or further research questions based on analysis.",
+    "child_phases": [
+      {
+        "name": "Topic Analysis",
+        "description": "Identify dominant themes and trends in the retrieved literature.",
+        "id": 1401,
+        "workflow_id": 159,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Related Topics Generation",
+        "description": "Generate suggestions for related topics or further research questions.",
+        "id": 1402,
+        "workflow_id": 159,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1400,
+    "workflow_id": 159,
+    "display_order": 4
+  },
+  {
+    "name": "Topic Analysis",
+    "description": "Identify dominant themes and trends in the retrieved literature.",
+    "id": 1401,
+    "workflow_id": 159,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Related Topics Generation",
+    "description": "Generate suggestions for related topics or further research questions.",
+    "id": 1402,
+    "workflow_id": 159,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "User Interface Phase",
+    "description": "Create a user-friendly interface for configuring query and processing options.",
+    "child_phases": [
+      {
+        "name": "Configuration Options",
+        "description": "Allow users to select databases, specify research topics, and customize processing settings.",
+        "id": 1404,
+        "workflow_id": 159,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "User Interaction Design",
+        "description": "Create an intuitive interface for minimal manual intervention during setup.",
+        "id": 1405,
+        "workflow_id": 159,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1403,
+    "workflow_id": 159,
+    "display_order": 5
+  },
+  {
+    "name": "Configuration Options",
+    "description": "Allow users to select databases, specify research topics, and customize processing settings.",
+    "id": 1404,
+    "workflow_id": 159,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "User Interaction Design",
+    "description": "Create an intuitive interface for minimal manual intervention during setup.",
+    "id": 1405,
+    "workflow_id": 159,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Handling",
+    "description": "Handle input image and directory containing multiple images.",
+    "child_phases": [
+      {
+        "name": "Image Loading",
+        "description": "Load the input image.",
+        "id": 1407,
+        "workflow_id": 160,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Directory Scanning",
+        "description": "Scan the provided directory to retrieve all images.",
+        "id": 1408,
+        "workflow_id": 160,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1406,
+    "workflow_id": 160,
+    "display_order": 0
+  },
+  {
+    "name": "Image Loading",
+    "description": "Load the input image.",
+    "id": 1407,
+    "workflow_id": 160,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Directory Scanning",
+    "description": "Scan the provided directory to retrieve all images.",
+    "id": 1408,
+    "workflow_id": 160,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Patch Selection",
+    "description": "Select random patches from the images in the directory.",
+    "child_phases": [
+      {
+        "name": "Random Image Selection",
+        "description": "Select a random image from the scanned directory.",
+        "id": 1410,
+        "workflow_id": 160,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Random Patch Extraction",
+        "description": "Extract random patches from the selected image.",
+        "id": 1411,
+        "workflow_id": 160,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1409,
+    "workflow_id": 160,
+    "display_order": 1
+  },
+  {
+    "name": "Random Image Selection",
+    "description": "Select a random image from the scanned directory.",
+    "id": 1410,
+    "workflow_id": 160,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Random Patch Extraction",
+    "description": "Extract random patches from the selected image.",
+    "id": 1411,
+    "workflow_id": 160,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Mosaic Generation",
+    "description": "Arrange the selected patches to create a mosaic.",
+    "child_phases": [
+      {
+        "name": "Patch Arrangement",
+        "description": "Arrange the extracted patches into a mosaic pattern.",
+        "id": 1413,
+        "workflow_id": 160,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Mosaic Image Creation",
+        "description": "Create an output image from the arranged patches.",
+        "id": 1414,
+        "workflow_id": 160,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1412,
+    "workflow_id": 160,
+    "display_order": 2
+  },
+  {
+    "name": "Patch Arrangement",
+    "description": "Arrange the extracted patches into a mosaic pattern.",
+    "id": 1413,
+    "workflow_id": 160,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Mosaic Image Creation",
+    "description": "Create an output image from the arranged patches.",
+    "id": 1414,
+    "workflow_id": 160,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Handling",
+    "description": "Save the generated mosaic as an output image.",
+    "child_phases": [
+      {
+        "name": "File Name Generation",
+        "description": "Generate a filename for the output image.",
+        "id": 1416,
+        "workflow_id": 160,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Image Saving",
+        "description": "Save the generated mosaic image with the specified filename.",
+        "id": 1417,
+        "workflow_id": 160,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1415,
+    "workflow_id": 160,
+    "display_order": 3
+  },
+  {
+    "name": "File Name Generation",
+    "description": "Generate a filename for the output image.",
+    "id": 1416,
+    "workflow_id": 160,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Image Saving",
+    "description": "Save the generated mosaic image with the specified filename.",
+    "id": 1417,
+    "workflow_id": 160,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure the environment and gather input data.",
+    "child_phases": [
+      {
+        "name": "Environment Setup",
+        "description": "Ensure necessary libraries and dependencies are installed.",
+        "id": 1419,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Gather, cleanse, and organize time-series data.",
+        "id": 1420,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1418,
+    "workflow_id": 161,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Setup",
+    "description": "Ensure necessary libraries and dependencies are installed.",
+    "id": 1419,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Gather, cleanse, and organize time-series data.",
+    "id": 1420,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Explore and analyze the prepared time-series data.",
+    "child_phases": [
+      {
+        "name": "Data Exploration",
+        "description": "Understand data distribution, patterns, and trends.",
+        "id": 1422,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Engineering",
+        "description": "Create new features to enhance data analysis.",
+        "id": 1423,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1421,
+    "workflow_id": 161,
+    "display_order": 1
+  },
+  {
+    "name": "Data Exploration",
+    "description": "Understand data distribution, patterns, and trends.",
+    "id": 1422,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Create new features to enhance data analysis.",
+    "id": 1423,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Time-Traveling Functionality",
+    "description": "Develop functions to 'travel back in time' and observe past states.",
+    "child_phases": [
+      {
+        "name": "Define Time Intervals",
+        "description": "Determine how users can select specific time intervals.",
+        "id": 1425,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Time-Travel Logic",
+        "description": "Write functions to retrieve data based on selected time intervals.",
+        "id": 1426,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1424,
+    "workflow_id": 161,
+    "display_order": 2
+  },
+  {
+    "name": "Define Time Intervals",
+    "description": "Determine how users can select specific time intervals.",
+    "id": 1425,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Time-Travel Logic",
+    "description": "Write functions to retrieve data based on selected time intervals.",
+    "id": 1426,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Manipulation and Visualization",
+    "description": "Manipulate data and create visualizations for better understanding.",
+    "child_phases": [
+      {
+        "name": "Data Aggregation",
+        "description": "Aggregate or summarize data based on user-defined intervals.",
+        "id": 1428,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Visualization Creation",
+        "description": "Create interactive plots, charts, and graphs to represent time-series data.",
+        "id": 1429,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1427,
+    "workflow_id": 161,
+    "display_order": 3
+  },
+  {
+    "name": "Data Aggregation",
+    "description": "Aggregate or summarize data based on user-defined intervals.",
+    "id": 1428,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization Creation",
+    "description": "Create interactive plots, charts, and graphs to represent time-series data.",
+    "id": 1429,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "User Interface",
+    "description": "Design an intuitive interface for users to interact with the app.",
+    "child_phases": [
+      {
+        "name": "Interface Design",
+        "description": "Create a user-friendly layout for better usability.",
+        "id": 1431,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Interaction Logic",
+        "description": "Connect front-end elements with back-end functionality.",
+        "id": 1432,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1430,
+    "workflow_id": 161,
+    "display_order": 4
+  },
+  {
+    "name": "Interface Design",
+    "description": "Create a user-friendly layout for better usability.",
+    "id": 1431,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Interaction Logic",
+    "description": "Connect front-end elements with back-end functionality.",
+    "id": 1432,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Test the app thoroughly to ensure it works as expected.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual functions and components.",
+        "id": 1434,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Ensure all components work together correctly.",
+        "id": 1435,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1433,
+    "workflow_id": 161,
+    "display_order": 5
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual functions and components.",
+    "id": 1434,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Ensure all components work together correctly.",
+    "id": 1435,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation",
+    "description": "Prepare documentation to explain how the app works.",
+    "child_phases": [
+      {
+        "name": "App Description",
+        "description": "Explain the purpose and functionality of the Time-Traveling Data Miner.",
+        "id": 1437,
+        "workflow_id": 161,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "User Manual",
+        "description": "Provide step-by-step instructions for using the app.",
+        "id": 1438,
+        "workflow_id": 161,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1436,
+    "workflow_id": 161,
+    "display_order": 6
+  },
+  {
+    "name": "App Description",
+    "description": "Explain the purpose and functionality of the Time-Traveling Data Miner.",
+    "id": 1437,
+    "workflow_id": 161,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "User Manual",
+    "description": "Provide step-by-step instructions for using the app.",
+    "id": 1438,
+    "workflow_id": 161,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Define the scope, identify required parameters and interventions.",
+    "child_phases": [
+      {
+        "name": "Identify Parameters",
+        "description": "Determine infection rate, recovery rate, initial infected population.",
+        "id": 1440,
+        "workflow_id": 162,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Select Interventions",
+        "description": "Choose intervention strategies to model (quarantine, vaccination, social distancing).",
+        "id": 1441,
+        "workflow_id": 162,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1439,
+    "workflow_id": 162,
+    "display_order": 0
+  },
+  {
+    "name": "Identify Parameters",
+    "description": "Determine infection rate, recovery rate, initial infected population.",
+    "id": 1440,
+    "workflow_id": 162,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Select Interventions",
+    "description": "Choose intervention strategies to model (quarantine, vaccination, social distancing).",
+    "id": 1441,
+    "workflow_id": 162,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup Environment",
+    "description": "Configure Python environment and prepare input data.",
+    "child_phases": [
+      {
+        "name": "Check Dependencies",
+        "description": "Ensure required libraries are installed (e.g., numpy, matplotlib, scipy).",
+        "id": 1443,
+        "workflow_id": 162,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Data",
+        "description": "Organize input data for population structure and other relevant factors.",
+        "id": 1444,
+        "workflow_id": 162,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1442,
+    "workflow_id": 162,
+    "display_order": 1
+  },
+  {
+    "name": "Check Dependencies",
+    "description": "Ensure required libraries are installed (e.g., numpy, matplotlib, scipy).",
+    "id": 1443,
+    "workflow_id": 162,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Data",
+    "description": "Organize input data for population structure and other relevant factors.",
+    "id": 1444,
+    "workflow_id": 162,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Development",
+    "description": "Create the agent-based simulation model.",
+    "child_phases": [
+      {
+        "name": "Agent Definition",
+        "description": "Define agents' properties, behaviors, and interactions.",
+        "id": 1446,
+        "workflow_id": 162,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Structure",
+        "description": "Set up the model's structure, parameters, and interventions.",
+        "id": 1447,
+        "workflow_id": 162,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1445,
+    "workflow_id": 162,
+    "display_order": 2
+  },
+  {
+    "name": "Agent Definition",
+    "description": "Define agents' properties, behaviors, and interactions.",
+    "id": 1446,
+    "workflow_id": 162,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Structure",
+    "description": "Set up the model's structure, parameters, and interventions.",
+    "id": 1447,
+    "workflow_id": 162,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Implementation",
+    "description": "Write the Python code for the simulation.",
+    "child_phases": [
+      {
+        "name": "Agent-Based Simulation Code",
+        "description": "Implement agent behaviors, model structure, and interventions.",
+        "id": 1449,
+        "workflow_id": 162,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Visualization",
+        "description": "Set up visualization tools to track infection spread over time.",
+        "id": 1450,
+        "workflow_id": 162,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1448,
+    "workflow_id": 162,
+    "display_order": 3
+  },
+  {
+    "name": "Agent-Based Simulation Code",
+    "description": "Implement agent behaviors, model structure, and interventions.",
+    "id": 1449,
+    "workflow_id": 162,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Visualization",
+    "description": "Set up visualization tools to track infection spread over time.",
+    "id": 1450,
+    "workflow_id": 162,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing & Validation",
+    "description": "Ensure the simulation behaves as expected.",
+    "child_phases": [
+      {
+        "name": "Simulation Runs",
+        "description": "Run simulations with different parameters and interventions.",
+        "id": 1452,
+        "workflow_id": 162,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Result Analysis",
+        "description": "Analyze outputs, validate against known outcomes or real-world data if available.",
+        "id": 1453,
+        "workflow_id": 162,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1451,
+    "workflow_id": 162,
+    "display_order": 4
+  },
+  {
+    "name": "Simulation Runs",
+    "description": "Run simulations with different parameters and interventions.",
+    "id": 1452,
+    "workflow_id": 162,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Result Analysis",
+    "description": "Analyze outputs, validate against known outcomes or real-world data if available.",
+    "id": 1453,
+    "workflow_id": 162,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation & Reporting",
+    "description": "Prepare the final deliverable.",
+    "child_phases": [
+      {
+        "name": "Document Code",
+        "description": "Comment and document Python code for clarity.",
+        "id": 1455,
+        "workflow_id": 162,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Report",
+        "description": "Create a report summarizing the simulation, results, and insights.",
+        "id": 1456,
+        "workflow_id": 162,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1454,
+    "workflow_id": 162,
+    "display_order": 5
+  },
+  {
+    "name": "Document Code",
+    "description": "Comment and document Python code for clarity.",
+    "id": 1455,
+    "workflow_id": 162,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Report",
+    "description": "Create a report summarizing the simulation, results, and insights.",
+    "id": 1456,
+    "workflow_id": 162,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Input Phase",
+    "description": "Retrieve and validate input topic.",
+    "child_phases": [
+      {
+        "name": "Topic Retrieval",
+        "description": "Fetch the topic from user input or predefined data.",
+        "id": 1458,
+        "workflow_id": 163,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Topic Validation",
+        "description": "Check if the retrieved topic is valid for processing.",
+        "id": 1459,
+        "workflow_id": 163,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1457,
+    "workflow_id": 163,
+    "display_order": 0
+  },
+  {
+    "name": "Topic Retrieval",
+    "description": "Fetch the topic from user input or predefined data.",
+    "id": 1458,
+    "workflow_id": 163,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Topic Validation",
+    "description": "Check if the retrieved topic is valid for processing.",
+    "id": 1459,
+    "workflow_id": 163,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Preparation Phase",
+    "description": "Set up and initialize AI model.",
+    "child_phases": [
+      {
+        "name": "Model Selection",
+        "description": "Choose appropriate AI model for outline generation.",
+        "id": 1461,
+        "workflow_id": 163,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Initialization",
+        "description": "Load and prepare the selected model for use.",
+        "id": 1462,
+        "workflow_id": 163,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1460,
+    "workflow_id": 163,
+    "display_order": 1
+  },
+  {
+    "name": "Model Selection",
+    "description": "Choose appropriate AI model for outline generation.",
+    "id": 1461,
+    "workflow_id": 163,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Initialization",
+    "description": "Load and prepare the selected model for use.",
+    "id": 1462,
+    "workflow_id": 163,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Outline Generation Phase",
+    "description": "Generate a list of subtopics using the prepared AI model.",
+    "child_phases": [
+      {
+        "name": "Prompt Preparation",
+        "description": "Create input prompt based on the retrieved topic.",
+        "id": 1464,
+        "workflow_id": 163,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Inference",
+        "description": "Use the AI model to generate outlines for the given topic.",
+        "id": 1465,
+        "workflow_id": 163,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1463,
+    "workflow_id": 163,
+    "display_order": 2
+  },
+  {
+    "name": "Prompt Preparation",
+    "description": "Create input prompt based on the retrieved topic.",
+    "id": 1464,
+    "workflow_id": 163,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Inference",
+    "description": "Use the AI model to generate outlines for the given topic.",
+    "id": 1465,
+    "workflow_id": 163,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting Phase",
+    "description": "Prepare and output the generated outline.",
+    "child_phases": [
+      {
+        "name": "Outline Postprocessing",
+        "description": "Clean up and refine the generated outlines if necessary.",
+        "id": 1467,
+        "workflow_id": 163,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Generation",
+        "description": "Format and prepare the final list of subtopics for output.",
+        "id": 1468,
+        "workflow_id": 163,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1466,
+    "workflow_id": 163,
+    "display_order": 3
+  },
+  {
+    "name": "Outline Postprocessing",
+    "description": "Clean up and refine the generated outlines if necessary.",
+    "id": 1467,
+    "workflow_id": 163,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Format and prepare the final list of subtopics for output.",
+    "id": 1468,
+    "workflow_id": 163,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Retrieve user performance data and topics.",
+    "child_phases": [],
+    "id": 1469,
+    "workflow_id": 164,
+    "display_order": 0
+  },
+  {
+    "name": "Data Processing",
+    "description": "Clean, normalize, and structure the data for analysis.",
+    "child_phases": [
+      {
+        "name": "Topic Extraction",
+        "description": "Extract unique topics from user performance data.",
+        "id": 1471,
+        "workflow_id": 164,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Score Normalization",
+        "description": "Normalize user scores to a standard range.",
+        "id": 1472,
+        "workflow_id": 164,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1470,
+    "workflow_id": 164,
+    "display_order": 1
+  },
+  {
+    "name": "Topic Extraction",
+    "description": "Extract unique topics from user performance data.",
+    "id": 1471,
+    "workflow_id": 164,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Score Normalization",
+    "description": "Normalize user scores to a standard range.",
+    "id": 1472,
+    "workflow_id": 164,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Analysis",
+    "description": "Analyze user performance and identify areas of struggle.",
+    "child_phases": [
+      {
+        "name": "Calculate Average Scores",
+        "description": "Compute average scores for each topic.",
+        "id": 1474,
+        "workflow_id": 164,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Struggle Topics",
+        "description": "Flag topics where the user scored below a certain threshold.",
+        "id": 1475,
+        "workflow_id": 164,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1473,
+    "workflow_id": 164,
+    "display_order": 2
+  },
+  {
+    "name": "Calculate Average Scores",
+    "description": "Compute average scores for each topic.",
+    "id": 1474,
+    "workflow_id": 164,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Struggle Topics",
+    "description": "Flag topics where the user scored below a certain threshold.",
+    "id": 1475,
+    "workflow_id": 164,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Study Guide Generation",
+    "description": "Create an adaptive study guide prioritizing difficult topics.",
+    "child_phases": [
+      {
+        "name": "Prioritize Topics",
+        "description": "Order topics based on user performance.",
+        "id": 1477,
+        "workflow_id": 164,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Adjust Problem Difficulty",
+        "description": "Adaptively adjust problem difficulty based on past performance.",
+        "id": 1478,
+        "workflow_id": 164,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1476,
+    "workflow_id": 164,
+    "display_order": 3
+  },
+  {
+    "name": "Prioritize Topics",
+    "description": "Order topics based on user performance.",
+    "id": 1477,
+    "workflow_id": 164,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Adjust Problem Difficulty",
+    "description": "Adaptively adjust problem difficulty based on past performance.",
+    "id": 1478,
+    "workflow_id": 164,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Create the final adaptive study guide.",
+    "child_phases": [],
+    "id": 1479,
+    "workflow_id": 164,
+    "display_order": 4
+  },
+  {
+    "name": "Setup",
+    "description": "Configure Python environment and install dependencies.",
+    "child_phases": [],
+    "id": 1480,
+    "workflow_id": 165,
+    "display_order": 0
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Ensure required input data is prepared and available.",
+    "child_phases": [],
+    "id": 1481,
+    "workflow_id": 165,
+    "display_order": 1
+  },
+  {
+    "name": "Test Case Generation",
+    "description": "Automatically generate test cases based on docstrings in Python libraries.",
+    "child_phases": [
+      {
+        "name": "Docstring Parsing",
+        "description": "Extract and parse docstrings from Python library functions.",
+        "id": 1483,
+        "workflow_id": 165,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Test Case Creation",
+        "description": "Generate test cases based on parsed docstrings.",
+        "id": 1484,
+        "workflow_id": 165,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1482,
+    "workflow_id": 165,
+    "display_order": 2
+  },
+  {
+    "name": "Docstring Parsing",
+    "description": "Extract and parse docstrings from Python library functions.",
+    "id": 1483,
+    "workflow_id": 165,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Test Case Creation",
+    "description": "Generate test cases based on parsed docstrings.",
+    "id": 1484,
+    "workflow_id": 165,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Run generated test cases using a popular testing framework like pytest.",
+    "child_phases": [
+      {
+        "name": "Test Case Execution",
+        "description": "Run the generated test cases and record results.",
+        "id": 1486,
+        "workflow_id": 165,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1485,
+    "workflow_id": 165,
+    "display_order": 3
+  },
+  {
+    "name": "Test Case Execution",
+    "description": "Run the generated test cases and record results.",
+    "id": 1486,
+    "workflow_id": 165,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report summarizing the results of the testing.",
+    "child_phases": [
+      {
+        "name": "Result Analysis",
+        "description": "Analyze the results from the executed test cases.",
+        "id": 1488,
+        "workflow_id": 165,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Creation",
+        "description": "Create a summary report based on the analyzed results.",
+        "id": 1489,
+        "workflow_id": 165,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1487,
+    "workflow_id": 165,
+    "display_order": 4
+  },
+  {
+    "name": "Result Analysis",
+    "description": "Analyze the results from the executed test cases.",
+    "id": 1488,
+    "workflow_id": 165,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Creation",
+    "description": "Create a summary report based on the analyzed results.",
+    "id": 1489,
+    "workflow_id": 165,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Input Handling",
+    "description": "Fetch and validate the input OpenAPI YAML file.",
+    "child_phases": [
+      {
+        "name": "File Fetching",
+        "description": "Retrieve the specified OpenAPI YAML file.",
+        "id": 1491,
+        "workflow_id": 166,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "File Validation",
+        "description": "Check if the fetched file is valid and follows OpenAPI format.",
+        "id": 1492,
+        "workflow_id": 166,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1490,
+    "workflow_id": 166,
+    "display_order": 0
+  },
+  {
+    "name": "File Fetching",
+    "description": "Retrieve the specified OpenAPI YAML file.",
+    "id": 1491,
+    "workflow_id": 166,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "File Validation",
+    "description": "Check if the fetched file is valid and follows OpenAPI format.",
+    "id": 1492,
+    "workflow_id": 166,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Extraction",
+    "description": "Extract API specifications from the validated OpenAPI YAML file.",
+    "child_phases": [
+      {
+        "name": "OpenAPI Version Detection",
+        "description": "Determine the version of the OpenAPI specification.",
+        "id": 1494,
+        "workflow_id": 166,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Specification Extraction",
+        "description": "Extract endpoints, methods, parameters based on the detected OpenAPI version.",
+        "id": 1495,
+        "workflow_id": 166,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1493,
+    "workflow_id": 166,
+    "display_order": 1
+  },
+  {
+    "name": "OpenAPI Version Detection",
+    "description": "Determine the version of the OpenAPI specification.",
+    "id": 1494,
+    "workflow_id": 166,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Specification Extraction",
+    "description": "Extract endpoints, methods, parameters based on the detected OpenAPI version.",
+    "id": 1495,
+    "workflow_id": 166,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Markdown Generation",
+    "description": "Generate markdown documentation using a predefined template.",
+    "child_phases": [
+      {
+        "name": "Template Fetching",
+        "description": "Fetch the predefined markdown template.",
+        "id": 1497,
+        "workflow_id": 166,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Documentation Generation",
+        "description": "Populate the fetched template with extracted specifications to generate API documentation in markdown format.",
+        "id": 1498,
+        "workflow_id": 166,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1496,
+    "workflow_id": 166,
+    "display_order": 2
+  },
+  {
+    "name": "Template Fetching",
+    "description": "Fetch the predefined markdown template.",
+    "id": 1497,
+    "workflow_id": 166,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation Generation",
+    "description": "Populate the fetched template with extracted specifications to generate API documentation in markdown format.",
+    "id": 1498,
+    "workflow_id": 166,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Handling",
+    "description": "Handle the generated markdown file.",
+    "child_phases": [
+      {
+        "name": "File Generation",
+        "description": "Create a new markdown (.md) file with the generated API documentation.",
+        "id": 1500,
+        "workflow_id": 166,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling",
+        "description": "Throw appropriate errors for invalid files or any other exceptions encountered during processing.",
+        "id": 1501,
+        "workflow_id": 166,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1499,
+    "workflow_id": 166,
+    "display_order": 3
+  },
+  {
+    "name": "File Generation",
+    "description": "Create a new markdown (.md) file with the generated API documentation.",
+    "id": 1500,
+    "workflow_id": 166,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Throw appropriate errors for invalid files or any other exceptions encountered during processing.",
+    "id": 1501,
+    "workflow_id": 166,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Define the structure and format of lessons, determine data sources.",
+    "child_phases": [
+      {
+        "name": "Lesson Structure Definition",
+        "description": "Determine lesson components like topics, outcomes, activities.",
+        "id": 1503,
+        "workflow_id": 167,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Source Identification",
+        "description": "Identify where topics and other relevant data reside.",
+        "id": 1504,
+        "workflow_id": 167,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1502,
+    "workflow_id": 167,
+    "display_order": 0
+  },
+  {
+    "name": "Lesson Structure Definition",
+    "description": "Determine lesson components like topics, outcomes, activities.",
+    "id": 1503,
+    "workflow_id": 167,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Source Identification",
+    "description": "Identify where topics and other relevant data reside.",
+    "id": 1504,
+    "workflow_id": 167,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Cleanse, transform, and organize input data.",
+    "child_phases": [
+      {
+        "name": "Data Cleaning",
+        "description": "Remove duplicates, handle missing values in topics data.",
+        "id": 1506,
+        "workflow_id": 167,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Transformation",
+        "description": "Transform data into a suitable format for lesson generation.",
+        "id": 1507,
+        "workflow_id": 167,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1505,
+    "workflow_id": 167,
+    "display_order": 1
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Remove duplicates, handle missing values in topics data.",
+    "id": 1506,
+    "workflow_id": 167,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation",
+    "description": "Transform data into a suitable format for lesson generation.",
+    "id": 1507,
+    "workflow_id": 167,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Lesson Generation",
+    "description": "Create structured lessons based on defined format and available topics.",
+    "child_phases": [
+      {
+        "name": "Topic Selection",
+        "description": "Choose relevant topics based on desired outcomes.",
+        "id": 1509,
+        "workflow_id": 167,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outcome Mapping",
+        "description": "Map selected topics to desired learning outcomes.",
+        "id": 1510,
+        "workflow_id": 167,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Lesson Assembly",
+        "description": "Combine topics, outcomes, and activities into structured lessons.",
+        "id": 1511,
+        "workflow_id": 167,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1508,
+    "workflow_id": 167,
+    "display_order": 2
+  },
+  {
+    "name": "Topic Selection",
+    "description": "Choose relevant topics based on desired outcomes.",
+    "id": 1509,
+    "workflow_id": 167,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outcome Mapping",
+    "description": "Map selected topics to desired learning outcomes.",
+    "id": 1510,
+    "workflow_id": 167,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Lesson Assembly",
+    "description": "Combine topics, outcomes, and activities into structured lessons.",
+    "id": 1511,
+    "workflow_id": 167,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Validation and Testing",
+    "description": "Ensure generated lessons meet quality standards and perform as expected.",
+    "child_phases": [
+      {
+        "name": "Lesson Quality Check",
+        "description": "Verify lesson structure, content, and coherence.",
+        "id": 1513,
+        "workflow_id": 167,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Lesson Functionality Test",
+        "description": "Test the app with various inputs to ensure it generates lessons correctly.",
+        "id": 1514,
+        "workflow_id": 167,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1512,
+    "workflow_id": 167,
+    "display_order": 3
+  },
+  {
+    "name": "Lesson Quality Check",
+    "description": "Verify lesson structure, content, and coherence.",
+    "id": 1513,
+    "workflow_id": 167,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Lesson Functionality Test",
+    "description": "Test the app with various inputs to ensure it generates lessons correctly.",
+    "id": 1514,
+    "workflow_id": 167,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Iteration and Improvement",
+    "description": "Collect feedback, refine, and enhance the curriculum generation process.",
+    "child_phases": [
+      {
+        "name": "Feedback Collection",
+        "description": "Gather user feedback on generated lessons.",
+        "id": 1516,
+        "workflow_id": 167,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Lesson Refinement",
+        "description": "Update lesson content or structure based on collected feedback.",
+        "id": 1517,
+        "workflow_id": 167,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1515,
+    "workflow_id": 167,
+    "display_order": 4
+  },
+  {
+    "name": "Feedback Collection",
+    "description": "Gather user feedback on generated lessons.",
+    "id": 1516,
+    "workflow_id": 167,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Lesson Refinement",
+    "description": "Update lesson content or structure based on collected feedback.",
+    "id": 1517,
+    "workflow_id": 167,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Collection",
+    "description": "Functions to collect data from sensor APIs at regular intervals.",
+    "child_phases": [
+      {
+        "name": "Initialize Sensors",
+        "description": "Set up API credentials and endpoints for each sensor.",
+        "id": 1519,
+        "workflow_id": 168,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Collect Data Intervals",
+        "description": "Read sensor data at specified intervals using APIs.",
+        "id": 1520,
+        "workflow_id": 168,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Store Data",
+        "description": "Save collected data in a suitable format (e.g., CSV, JSON).",
+        "id": 1521,
+        "workflow_id": 168,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1518,
+    "workflow_id": 168,
+    "display_order": 0
+  },
+  {
+    "name": "Initialize Sensors",
+    "description": "Set up API credentials and endpoints for each sensor.",
+    "id": 1519,
+    "workflow_id": 168,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Collect Data Intervals",
+    "description": "Read sensor data at specified intervals using APIs.",
+    "id": 1520,
+    "workflow_id": 168,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Store Data",
+    "description": "Save collected data in a suitable format (e.g., CSV, JSON).",
+    "id": 1521,
+    "workflow_id": 168,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values and outliers to make data analysis-ready.",
+    "child_phases": [
+      {
+        "name": "Handle Missing Values",
+        "description": "Implement methods for handling missing sensor readings (e.g., fill with mean, median, or mode; drop rows/columns).",
+        "id": 1523,
+        "workflow_id": 168,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Detection",
+        "description": "Identify and handle outliers using statistical methods or domain-specific thresholds.",
+        "id": 1524,
+        "workflow_id": 168,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1522,
+    "workflow_id": 168,
+    "display_order": 1
+  },
+  {
+    "name": "Handle Missing Values",
+    "description": "Implement methods for handling missing sensor readings (e.g., fill with mean, median, or mode; drop rows/columns).",
+    "id": 1523,
+    "workflow_id": 168,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Detection",
+    "description": "Identify and handle outliers using statistical methods or domain-specific thresholds.",
+    "id": 1524,
+    "workflow_id": 168,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Normalization",
+    "description": "Scale data to a common range for easier analysis.",
+    "child_phases": [
+      {
+        "name": "Feature Scaling",
+        "description": "Normalize sensor readings using methods like Min-Max scaling, Standardization, or RobustScaler.",
+        "id": 1526,
+        "workflow_id": 168,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1525,
+    "workflow_id": 168,
+    "display_order": 2
+  },
+  {
+    "name": "Feature Scaling",
+    "description": "Normalize sensor readings using methods like Min-Max scaling, Standardization, or RobustScaler.",
+    "id": 1526,
+    "workflow_id": 168,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Analysis Readiness",
+    "description": "Final checks and transformations to prepare data for analysis.",
+    "child_phases": [
+      {
+        "name": "Data Type Conversion",
+        "description": "Convert data types if necessary (e.g., convert strings to categories, timestamps to datetime format).",
+        "id": 1528,
+        "workflow_id": 168,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Aggregation",
+        "description": "Aggregate sensor readings by time interval or other relevant attributes.",
+        "id": 1529,
+        "workflow_id": 168,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1527,
+    "workflow_id": 168,
+    "display_order": 3
+  },
+  {
+    "name": "Data Type Conversion",
+    "description": "Convert data types if necessary (e.g., convert strings to categories, timestamps to datetime format).",
+    "id": 1528,
+    "workflow_id": 168,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Aggregation",
+    "description": "Aggregate sensor readings by time interval or other relevant attributes.",
+    "id": 1529,
+    "workflow_id": 168,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure Python environment and prepare input data.",
+    "child_phases": [],
+    "id": 1530,
+    "workflow_id": 169,
+    "display_order": 0
+  },
+  {
+    "name": "Data Processing",
+    "description": "Handle JSON and XML formats for user information.",
+    "child_phases": [
+      {
+        "name": "JSON to XML Conversion",
+        "description": "Convert JSON format to XML while reconciling field names.",
+        "id": 1532,
+        "workflow_id": 169,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "XML to JSON Conversion",
+        "description": "Convert XML format to JSON while reconciling field names.",
+        "id": 1533,
+        "workflow_id": 169,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1531,
+    "workflow_id": 169,
+    "display_order": 1
+  },
+  {
+    "name": "JSON to XML Conversion",
+    "description": "Convert JSON format to XML while reconciling field names.",
+    "id": 1532,
+    "workflow_id": 169,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "XML to JSON Conversion",
+    "description": "Convert XML format to JSON while reconciling field names.",
+    "id": 1533,
+    "workflow_id": 169,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Schema Mapping",
+    "description": "Map and reconcile data schemas between the two APIs.",
+    "child_phases": [],
+    "id": 1534,
+    "workflow_id": 169,
+    "display_order": 2
+  },
+  {
+    "name": "Testing",
+    "description": "Ensure proper functioning of conversion and mapping processes.",
+    "child_phases": [],
+    "id": 1535,
+    "workflow_id": 169,
+    "display_order": 3
+  },
+  {
+    "name": "Quiz Generator",
+    "description": "Generates quizzes based on input data.",
+    "child_phases": [
+      {
+        "name": "Input Data Preparation",
+        "description": "Prepare the list of questions with their respective answers.",
+        "id": 1537,
+        "workflow_id": 170,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Quiz Generation",
+        "description": "Generate quiz string including question numbers, text, and answer choices if any.",
+        "child_phases": [
+          {
+            "name": "Question Formatting",
+            "description": "Format each question with its number and text.",
+            "id": 1539,
+            "workflow_id": 170,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Answer Choices Inclusion",
+            "description": "Include answer choices if applicable.",
+            "id": 1540,
+            "workflow_id": 170,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 1538,
+        "workflow_id": 170,
+        "display_order": 1
+      },
+      {
+        "name": "Output Generation",
+        "description": "Output the generated quiz string.",
+        "id": 1541,
+        "workflow_id": 170,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1536,
+    "workflow_id": 170,
+    "display_order": 0
+  },
+  {
+    "name": "Input Data Preparation",
+    "description": "Prepare the list of questions with their respective answers.",
+    "id": 1537,
+    "workflow_id": 170,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Generation",
+    "description": "Generate quiz string including question numbers, text, and answer choices if any.",
+    "child_phases": [
+      {
+        "name": "Question Formatting",
+        "description": "Format each question with its number and text.",
+        "id": 1539,
+        "workflow_id": 170,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Answer Choices Inclusion",
+        "description": "Include answer choices if applicable.",
+        "id": 1540,
+        "workflow_id": 170,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1538,
+    "workflow_id": 170,
+    "display_order": 1
+  },
+  {
+    "name": "Question Formatting",
+    "description": "Format each question with its number and text.",
+    "id": 1539,
+    "workflow_id": 170,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Answer Choices Inclusion",
+    "description": "Include answer choices if applicable.",
+    "id": 1540,
+    "workflow_id": 170,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Output the generated quiz string.",
+    "id": 1541,
+    "workflow_id": 170,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Input Preparation",
+    "description": "Preparing input data for the quiz generator.",
+    "child_phases": [
+      {
+        "name": "Data Collection",
+        "description": "Gathering questions and answer choices.",
+        "id": 1543,
+        "workflow_id": 171,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Validation",
+        "description": "Ensuring all inputs are valid.",
+        "id": 1544,
+        "workflow_id": 171,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1542,
+    "workflow_id": 171,
+    "display_order": 0
+  },
+  {
+    "name": "Data Collection",
+    "description": "Gathering questions and answer choices.",
+    "id": 1543,
+    "workflow_id": 171,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Validation",
+    "description": "Ensuring all inputs are valid.",
+    "id": 1544,
+    "workflow_id": 171,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Generation",
+    "description": "Generating the quiz based on input data.",
+    "child_phases": [
+      {
+        "name": "Random Shuffling",
+        "description": "Shuffling questions and answer choices randomly.",
+        "id": 1546,
+        "workflow_id": 171,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Formatting Quiz String",
+        "description": "Creating a formatted string for the quiz.",
+        "id": 1547,
+        "workflow_id": 171,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1545,
+    "workflow_id": 171,
+    "display_order": 1
+  },
+  {
+    "name": "Random Shuffling",
+    "description": "Shuffling questions and answer choices randomly.",
+    "id": 1546,
+    "workflow_id": 171,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Formatting Quiz String",
+    "description": "Creating a formatted string for the quiz.",
+    "id": 1547,
+    "workflow_id": 171,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Preparation",
+    "description": "Preparing the generated quiz for assessment.",
+    "child_phases": [
+      {
+        "name": "Quiz Review",
+        "description": "Reviewing the generated quiz to ensure accuracy.",
+        "id": 1549,
+        "workflow_id": 171,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Quiz Delivery",
+        "description": "Delivering the quiz string for assessment.",
+        "id": 1550,
+        "workflow_id": 171,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1548,
+    "workflow_id": 171,
+    "display_order": 2
+  },
+  {
+    "name": "Quiz Review",
+    "description": "Reviewing the generated quiz to ensure accuracy.",
+    "id": 1549,
+    "workflow_id": 171,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Delivery",
+    "description": "Delivering the quiz string for assessment.",
+    "id": 1550,
+    "workflow_id": 171,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Load and preprocess CSV data",
+    "child_phases": [
+      {
+        "name": "CSV Loading",
+        "description": "Read CSV files",
+        "id": 1552,
+        "workflow_id": 172,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Handle missing values, outliers etc.",
+        "id": 1553,
+        "workflow_id": 172,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1551,
+    "workflow_id": 172,
+    "display_order": 0
+  },
+  {
+    "name": "CSV Loading",
+    "description": "Read CSV files",
+    "id": 1552,
+    "workflow_id": 172,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Handle missing values, outliers etc.",
+    "id": 1553,
+    "workflow_id": 172,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Effect Size Calculation",
+    "description": "Calculate effect sizes for each study",
+    "id": 1554,
+    "workflow_id": 172,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Meta-Analysis",
+    "description": "Perform meta-analysis on calculated effect sizes",
+    "child_phases": [
+      {
+        "name": "Heterogeneity Assessment",
+        "description": "Check heterogeneity among studies",
+        "id": 1556,
+        "workflow_id": 172,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Pooled Effect Size",
+        "description": "Calculate pooled effect size",
+        "id": 1557,
+        "workflow_id": 172,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1555,
+    "workflow_id": 172,
+    "display_order": 2
+  },
+  {
+    "name": "Heterogeneity Assessment",
+    "description": "Check heterogeneity among studies",
+    "id": 1556,
+    "workflow_id": 172,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Pooled Effect Size",
+    "description": "Calculate pooled effect size",
+    "id": 1557,
+    "workflow_id": 172,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Generate forest plots",
+    "child_phases": [
+      {
+        "name": "Plot Creation",
+        "description": "Create individual study and pooled effects plots",
+        "id": 1559,
+        "workflow_id": 172,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1558,
+    "workflow_id": 172,
+    "display_order": 3
+  },
+  {
+    "name": "Plot Creation",
+    "description": "Create individual study and pooled effects plots",
+    "id": 1559,
+    "workflow_id": 172,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Create summary report in PDF format",
+    "id": 1560,
+    "workflow_id": 172,
+    "display_order": 4,
+    "child_phases": []
+  },
+  {
+    "name": "Project Setup",
+    "description": "Set up the Python environment and necessary libraries.",
+    "child_phases": [
+      {
+        "name": "Dependency Installation",
+        "description": "Install required libraries such as matplotlib, numpy, etc.",
+        "id": 1562,
+        "workflow_id": 173,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1561,
+    "workflow_id": 173,
+    "display_order": 0
+  },
+  {
+    "name": "Dependency Installation",
+    "description": "Install required libraries such as matplotlib, numpy, etc.",
+    "id": 1562,
+    "workflow_id": 173,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Epidemic Simulation Core Development",
+    "description": "Develop the core functionality of the epidemic simulator.",
+    "child_phases": [
+      {
+        "name": "Class Design",
+        "description": "Design classes for Population, Individual, Epidemic, etc.",
+        "id": 1564,
+        "workflow_id": 173,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Simulation Logic",
+        "description": "Implement Monte Carlo simulation logic for infection and recovery events",
+        "id": 1565,
+        "workflow_id": 173,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1563,
+    "workflow_id": 173,
+    "display_order": 1
+  },
+  {
+    "name": "Class Design",
+    "description": "Design classes for Population, Individual, Epidemic, etc.",
+    "id": 1564,
+    "workflow_id": 173,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Simulation Logic",
+    "description": "Implement Monte Carlo simulation logic for infection and recovery events",
+    "id": 1565,
+    "workflow_id": 173,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Parameterization",
+    "description": "Implement user interface or command-line arguments for parameter input.",
+    "child_phases": [
+      {
+        "name": "Input Validation",
+        "description": "Validate parameters to prevent invalid values.",
+        "id": 1567,
+        "workflow_id": 173,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1566,
+    "workflow_id": 173,
+    "display_order": 2
+  },
+  {
+    "name": "Input Validation",
+    "description": "Validate parameters to prevent invalid values.",
+    "id": 1567,
+    "workflow_id": 173,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Epidemic Types",
+    "description": "Implement different types of epidemics like SIR or SEIR.",
+    "child_phases": [
+      {
+        "name": "Additional Features",
+        "description": "Implement optional features such as seasonal variations, vaccination campaigns, etc.",
+        "id": 1569,
+        "workflow_id": 173,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1568,
+    "workflow_id": 173,
+    "display_order": 3
+  },
+  {
+    "name": "Additional Features",
+    "description": "Implement optional features such as seasonal variations, vaccination campaigns, etc.",
+    "id": 1569,
+    "workflow_id": 173,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Develop functionality to visualize the epidemic spread.",
+    "child_phases": [
+      {
+        "name": "Graph Visualization",
+        "description": "Plot infected individuals over time using matplotlib",
+        "id": 1571,
+        "workflow_id": 173,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Map Visualization",
+        "description": "Visualize the epidemic spread on a map using basemap plugin (bonus)",
+        "id": 1572,
+        "workflow_id": 173,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1570,
+    "workflow_id": 173,
+    "display_order": 4
+  },
+  {
+    "name": "Graph Visualization",
+    "description": "Plot infected individuals over time using matplotlib",
+    "id": 1571,
+    "workflow_id": 173,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Map Visualization",
+    "description": "Visualize the epidemic spread on a map using basemap plugin (bonus)",
+    "id": 1572,
+    "workflow_id": 173,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Optimization",
+    "description": "Test the simulation with different parameters and optimize for large populations.",
+    "child_phases": [
+      {
+        "name": "Performance Testing",
+        "description": "Ensure the simulator can handle large populations efficiently.",
+        "id": 1574,
+        "workflow_id": 173,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1573,
+    "workflow_id": 173,
+    "display_order": 5
+  },
+  {
+    "name": "Performance Testing",
+    "description": "Ensure the simulator can handle large populations efficiently.",
+    "id": 1574,
+    "workflow_id": 173,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialize the environment and required variables.",
+    "child_phases": [
+      {
+        "name": "Import Libraries",
+        "description": "Import necessary Python libraries.",
+        "id": 1576,
+        "workflow_id": 174,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Load Data",
+        "description": "Load the input dataset into a dataframe.",
+        "id": 1577,
+        "workflow_id": 174,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1575,
+    "workflow_id": 174,
+    "display_order": 0
+  },
+  {
+    "name": "Import Libraries",
+    "description": "Import necessary Python libraries.",
+    "id": 1576,
+    "workflow_id": 174,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Load Data",
+    "description": "Load the input dataset into a dataframe.",
+    "id": 1577,
+    "workflow_id": 174,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation Logger Creation",
+    "description": "Create and configure the data transformation logger.",
+    "child_phases": [
+      {
+        "name": "Logger Initialization",
+        "description": "Initialize the logging function.",
+        "id": 1579,
+        "workflow_id": 174,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Transformation Details Setup",
+        "description": "Define what information to log for each transformation.",
+        "id": 1580,
+        "workflow_id": 174,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1578,
+    "workflow_id": 174,
+    "display_order": 1
+  },
+  {
+    "name": "Logger Initialization",
+    "description": "Initialize the logging function.",
+    "id": 1579,
+    "workflow_id": 174,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Transformation Details Setup",
+    "description": "Define what information to log for each transformation.",
+    "id": 1580,
+    "workflow_id": 174,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Transformation Pipeline",
+    "description": "Define and apply data transformations.",
+    "child_phases": [
+      {
+        "name": "Dynamic Transformation Addition",
+        "description": "Functionality to add new transformations dynamically during runtime.",
+        "id": 1582,
+        "workflow_id": 174,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Apply Transformations",
+        "description": "Apply the defined transformations on the input dataframe.",
+        "id": 1583,
+        "workflow_id": 174,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Logging Transformations",
+        "description": "Log each transformation along with its details.",
+        "id": 1584,
+        "workflow_id": 174,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1581,
+    "workflow_id": 174,
+    "display_order": 2
+  },
+  {
+    "name": "Dynamic Transformation Addition",
+    "description": "Functionality to add new transformations dynamically during runtime.",
+    "id": 1582,
+    "workflow_id": 174,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Apply Transformations",
+    "description": "Apply the defined transformations on the input dataframe.",
+    "id": 1583,
+    "workflow_id": 174,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Logging Transformations",
+    "description": "Log each transformation along with its details.",
+    "id": 1584,
+    "workflow_id": 174,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output based on transformed data.",
+    "child_phases": [
+      {
+        "name": "Transformed Dataframe Creation",
+        "description": "Create a dataframe containing the transformed data.",
+        "id": 1586,
+        "workflow_id": 174,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Log Dictionary Creation",
+        "description": "Create a dictionary containing transformation details.",
+        "id": 1587,
+        "workflow_id": 174,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1585,
+    "workflow_id": 174,
+    "display_order": 3
+  },
+  {
+    "name": "Transformed Dataframe Creation",
+    "description": "Create a dataframe containing the transformed data.",
+    "id": 1586,
+    "workflow_id": 174,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Log Dictionary Creation",
+    "description": "Create a dictionary containing transformation details.",
+    "id": 1587,
+    "workflow_id": 174,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Results and Cleanup",
+    "description": "Return results and clean up resources.",
+    "child_phases": [
+      {
+        "name": "Return Transformed Dataframe and Log Dictionary",
+        "description": "Return the transformed dataframe and transformation details dictionary.",
+        "id": 1589,
+        "workflow_id": 174,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Clean Up Resources",
+        "description": "Close any opened files or connections, free up memory if necessary.",
+        "id": 1590,
+        "workflow_id": 174,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1588,
+    "workflow_id": 174,
+    "display_order": 4
+  },
+  {
+    "name": "Return Transformed Dataframe and Log Dictionary",
+    "description": "Return the transformed dataframe and transformation details dictionary.",
+    "id": 1589,
+    "workflow_id": 174,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Clean Up Resources",
+    "description": "Close any opened files or connections, free up memory if necessary.",
+    "id": 1590,
+    "workflow_id": 174,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "News Fetching",
+    "description": "Fetch latest news articles from multiple sources using their APIs",
+    "child_phases": [
+      {
+        "name": "BBC News Fetching",
+        "description": "Fetch news articles from BBC API",
+        "id": 1592,
+        "workflow_id": 175,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "CNN News Fetching",
+        "description": "Fetch news articles from CNN API",
+        "id": 1593,
+        "workflow_id": 175,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "The Guardian News Fetching",
+        "description": "Fetch news articles from The Guardian API",
+        "id": 1594,
+        "workflow_id": 175,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1591,
+    "workflow_id": 175,
+    "display_order": 0
+  },
+  {
+    "name": "BBC News Fetching",
+    "description": "Fetch news articles from BBC API",
+    "id": 1592,
+    "workflow_id": 175,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "CNN News Fetching",
+    "description": "Fetch news articles from CNN API",
+    "id": 1593,
+    "workflow_id": 175,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "The Guardian News Fetching",
+    "description": "Fetch news articles from The Guardian API",
+    "id": 1594,
+    "workflow_id": 175,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "News Summarization",
+    "description": "Summarize each article using a text summarization library like Gensim or sumy",
+    "child_phases": [
+      {
+        "name": "Article Summarization",
+        "description": "Summarize each fetched article",
+        "id": 1596,
+        "workflow_id": 175,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1595,
+    "workflow_id": 175,
+    "display_order": 1
+  },
+  {
+    "name": "Article Summarization",
+    "description": "Summarize each fetched article",
+    "id": 1596,
+    "workflow_id": 175,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Digest Preparation",
+    "description": "Prepare a daily digest containing these summaries",
+    "child_phases": [
+      {
+        "name": "Email Formatting",
+        "description": "Format the digest in an email friendly format",
+        "id": 1598,
+        "workflow_id": 175,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1597,
+    "workflow_id": 175,
+    "display_order": 2
+  },
+  {
+    "name": "Email Formatting",
+    "description": "Format the digest in an email friendly format",
+    "id": 1598,
+    "workflow_id": 175,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Email Sending",
+    "description": "Send this daily digest via email",
+    "child_phases": [],
+    "id": 1599,
+    "workflow_id": 175,
+    "display_order": 3
+  },
+  {
+    "name": "Data Loading and Preparation",
+    "description": "Loading dataset from source and initial preprocessing.",
+    "child_phases": [
+      {
+        "name": "Data Loading",
+        "description": "Load the time series data into Python.",
+        "id": 1601,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Initial Preprocessing",
+        "description": "Handling missing values, outliers if any.",
+        "id": 1602,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1600,
+    "workflow_id": 176,
+    "display_order": 0
+  },
+  {
+    "name": "Data Loading",
+    "description": "Load the time series data into Python.",
+    "id": 1601,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Initial Preprocessing",
+    "description": "Handling missing values, outliers if any.",
+    "id": 1602,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Exploratory Data Analysis",
+    "description": "Understanding the dataset's properties.",
+    "child_phases": [
+      {
+        "name": "Data Visualization",
+        "description": "Plotting trends and patterns in the data.",
+        "id": 1604,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Stationarity Check",
+        "description": "Check if the series is stationary for ARIMA models.",
+        "id": 1605,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1603,
+    "workflow_id": 176,
+    "display_order": 1
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Plotting trends and patterns in the data.",
+    "id": 1604,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Stationarity Check",
+    "description": "Check if the series is stationary for ARIMA models.",
+    "id": 1605,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Engineering",
+    "description": "Creating new features that might improve predictive performance.",
+    "child_phases": [
+      {
+        "name": "Creation of Lag Features",
+        "description": "Adding lagged versions of the target variable.",
+        "id": 1607,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Creation of Trend and Seasonality Features",
+        "description": "Adding trend and seasonality components to improve model performance.",
+        "id": 1608,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1606,
+    "workflow_id": 176,
+    "display_order": 2
+  },
+  {
+    "name": "Creation of Lag Features",
+    "description": "Adding lagged versions of the target variable.",
+    "id": 1607,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Creation of Trend and Seasonality Features",
+    "description": "Adding trend and seasonality components to improve model performance.",
+    "id": 1608,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Normalization",
+    "description": "Scaling the data if necessary for certain models like LSTM.",
+    "child_phases": [
+      {
+        "name": "Min-Max Scaling",
+        "description": "Scaling features in the range of [0, 1].",
+        "id": 1610,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Standardization",
+        "description": "Scaling features to have zero mean and unit variance.",
+        "id": 1611,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1609,
+    "workflow_id": 176,
+    "display_order": 3
+  },
+  {
+    "name": "Min-Max Scaling",
+    "description": "Scaling features in the range of [0, 1].",
+    "id": 1610,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Standardization",
+    "description": "Scaling features to have zero mean and unit variance.",
+    "id": 1611,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Selection and Training",
+    "description": "Choosing appropriate model for prediction.",
+    "child_phases": [
+      {
+        "name": "ARIMA Model Building",
+        "description": "Building ARIMA models with appropriate p, d, q values.",
+        "id": 1613,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "LSTM Model Building",
+        "description": "Building LSTM models with different architectures and parameters.",
+        "id": 1614,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1612,
+    "workflow_id": 176,
+    "display_order": 4
+  },
+  {
+    "name": "ARIMA Model Building",
+    "description": "Building ARIMA models with appropriate p, d, q values.",
+    "id": 1613,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "LSTM Model Building",
+    "description": "Building LSTM models with different architectures and parameters.",
+    "id": 1614,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Evaluation",
+    "description": "Evaluating the performance of trained models.",
+    "child_phases": [
+      {
+        "name": "Cross Validation",
+        "description": "Checking model's ability to generalize on unseen data.",
+        "id": 1616,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Metric Calculation",
+        "description": "Calculating appropriate error metrics like MSE or MAE.",
+        "id": 1617,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1615,
+    "workflow_id": 176,
+    "display_order": 5
+  },
+  {
+    "name": "Cross Validation",
+    "description": "Checking model's ability to generalize on unseen data.",
+    "id": 1616,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Metric Calculation",
+    "description": "Calculating appropriate error metrics like MSE or MAE.",
+    "id": 1617,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Prediction and Output Generation",
+    "description": "Generating predictions using trained models.",
+    "child_phases": [
+      {
+        "name": "Model Prediction",
+        "description": "Using trained model to predict future values.",
+        "id": 1619,
+        "workflow_id": 176,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Formatting",
+        "description": "Formatting prediction output in required format.",
+        "id": 1620,
+        "workflow_id": 176,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1618,
+    "workflow_id": 176,
+    "display_order": 6
+  },
+  {
+    "name": "Model Prediction",
+    "description": "Using trained model to predict future values.",
+    "id": 1619,
+    "workflow_id": 176,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Formatting prediction output in required format.",
+    "id": 1620,
+    "workflow_id": 176,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Prepare the environment and load necessary data.",
+    "child_phases": [
+      {
+        "name": "Environment Configuration",
+        "description": "Ensure Python environment is ready with required dependencies.",
+        "id": 1622,
+        "workflow_id": 177,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preparation",
+        "description": "Prepare initial dialogue text and choices dictionary.",
+        "id": 1623,
+        "workflow_id": 177,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1621,
+    "workflow_id": 177,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Configuration",
+    "description": "Ensure Python environment is ready with required dependencies.",
+    "id": 1622,
+    "workflow_id": 177,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare initial dialogue text and choices dictionary.",
+    "id": 1623,
+    "workflow_id": 177,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Dialogue Generation",
+    "description": "Create the main function to generate branching dialogues.",
+    "child_phases": [
+      {
+        "name": "Function Definition",
+        "description": "Define the function with initial dialogue text and choices dictionary as arguments.",
+        "id": 1625,
+        "workflow_id": 177,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prompt User Choice",
+        "description": "Implement logic to print the initial dialogue prompt for user choice.",
+        "id": 1626,
+        "workflow_id": 177,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Handle User Input",
+        "description": "Create logic to get and validate user input based on available choices.",
+        "id": 1627,
+        "workflow_id": 177,
+        "display_order": 2,
+        "child_phases": []
+      },
+      {
+        "name": "Print Response",
+        "description": "Implement logic to print the corresponding response based on user's input.",
+        "id": 1628,
+        "workflow_id": 177,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 1624,
+    "workflow_id": 177,
+    "display_order": 1
+  },
+  {
+    "name": "Function Definition",
+    "description": "Define the function with initial dialogue text and choices dictionary as arguments.",
+    "id": 1625,
+    "workflow_id": 177,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prompt User Choice",
+    "description": "Implement logic to print the initial dialogue prompt for user choice.",
+    "id": 1626,
+    "workflow_id": 177,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Handle User Input",
+    "description": "Create logic to get and validate user input based on available choices.",
+    "id": 1627,
+    "workflow_id": 177,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Print Response",
+    "description": "Implement logic to print the corresponding response based on user's input.",
+    "id": 1628,
+    "workflow_id": 177,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Testing",
+    "description": "Test the application with various scenarios.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual components of the function.",
+        "id": 1630,
+        "workflow_id": 177,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Ensure all components work together correctly.",
+        "id": 1631,
+        "workflow_id": 177,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1629,
+    "workflow_id": 177,
+    "display_order": 2
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual components of the function.",
+    "id": 1630,
+    "workflow_id": 177,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Ensure all components work together correctly.",
+    "id": 1631,
+    "workflow_id": 177,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Iteration and Improvement",
+    "description": "Refine the application based on testing results and feedback.",
+    "child_phases": [
+      {
+        "name": "Feedback Incorporation",
+        "description": "Modify the function based on user feedback.",
+        "id": 1633,
+        "workflow_id": 177,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Performance Optimization",
+        "description": "Improve the efficiency of the application if necessary.",
+        "id": 1634,
+        "workflow_id": 177,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1632,
+    "workflow_id": 177,
+    "display_order": 3
+  },
+  {
+    "name": "Feedback Incorporation",
+    "description": "Modify the function based on user feedback.",
+    "id": 1633,
+    "workflow_id": 177,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Optimization",
+    "description": "Improve the efficiency of the application if necessary.",
+    "id": 1634,
+    "workflow_id": 177,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Initialize necessary variables and environment.",
+    "child_phases": [
+      {
+        "name": "Define Priors",
+        "description": "Set initial beliefs about the coin's bias.",
+        "id": 1636,
+        "workflow_id": 178,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Input Data",
+        "description": "Ensure observed flip results are available.",
+        "id": 1637,
+        "workflow_id": 178,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1635,
+    "workflow_id": 178,
+    "display_order": 0
+  },
+  {
+    "name": "Define Priors",
+    "description": "Set initial beliefs about the coin's bias.",
+    "id": 1636,
+    "workflow_id": 178,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Input Data",
+    "description": "Ensure observed flip results are available.",
+    "id": 1637,
+    "workflow_id": 178,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Simulation",
+    "description": "Perform coin flip simulations using Bayesian inference.",
+    "child_phases": [
+      {
+        "name": "Define Likelihoods",
+        "description": "Set up likelihood functions based on observed data.",
+        "id": 1639,
+        "workflow_id": 178,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Update Beliefs",
+        "description": "Apply Bayes' theorem to update beliefs about the coin's fairness.",
+        "id": 1640,
+        "workflow_id": 178,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1638,
+    "workflow_id": 178,
+    "display_order": 1
+  },
+  {
+    "name": "Define Likelihoods",
+    "description": "Set up likelihood functions based on observed data.",
+    "id": 1639,
+    "workflow_id": 178,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Update Beliefs",
+    "description": "Apply Bayes' theorem to update beliefs about the coin's fairness.",
+    "id": 1640,
+    "workflow_id": 178,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Analysis",
+    "description": "Analyze and interpret the simulation results.",
+    "child_phases": [
+      {
+        "name": "Estimate Fairness Probability",
+        "description": "Calculate the probability that the coin is fair (θ <= 0.5).",
+        "id": 1642,
+        "workflow_id": 178,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1641,
+    "workflow_id": 178,
+    "display_order": 2
+  },
+  {
+    "name": "Estimate Fairness Probability",
+    "description": "Calculate the probability that the coin is fair (θ <= 0.5).",
+    "id": 1642,
+    "workflow_id": 178,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Reporting",
+    "description": "Generate reports and visualizations for better understanding of results.",
+    "child_phases": [
+      {
+        "name": "Visualize Results",
+        "description": "Create plots or charts to illustrate the inference process.",
+        "id": 1644,
+        "workflow_id": 178,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1643,
+    "workflow_id": 178,
+    "display_order": 3
+  },
+  {
+    "name": "Visualize Results",
+    "description": "Create plots or charts to illustrate the inference process.",
+    "id": 1644,
+    "workflow_id": 178,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure the Python environment, import necessary libraries, and prepare input data.",
+    "child_phases": [],
+    "id": 1645,
+    "workflow_id": 179,
+    "display_order": 0
+  },
+  {
+    "name": "L-System Definition",
+    "description": "Define the L-system rules for each fractal type (Dragon curve, Koch snowflake, etc.).",
+    "child_phases": [
+      {
+        "name": "Dragon Curve Rules",
+        "description": "Define the rules and axiom for generating Dragon curves.",
+        "child_phases": [],
+        "id": 1647,
+        "workflow_id": 179,
+        "display_order": 0
+      },
+      {
+        "name": "Koch Snowflake Rules",
+        "description": "Define the rules and axiom for generating Koch snowflakes.",
+        "child_phases": [],
+        "id": 1648,
+        "workflow_id": 179,
+        "display_order": 1
+      }
+    ],
+    "id": 1646,
+    "workflow_id": 179,
+    "display_order": 1
+  },
+  {
+    "name": "Dragon Curve Rules",
+    "description": "Define the rules and axiom for generating Dragon curves.",
+    "child_phases": [],
+    "id": 1647,
+    "workflow_id": 179,
+    "display_order": 0
+  },
+  {
+    "name": "Koch Snowflake Rules",
+    "description": "Define the rules and axiom for generating Koch snowflakes.",
+    "child_phases": [],
+    "id": 1648,
+    "workflow_id": 179,
+    "display_order": 1
+  },
+  {
+    "name": "Iteration Function",
+    "description": "Implement a function to perform iterations on the L-system rules based on user input.",
+    "child_phases": [],
+    "id": 1649,
+    "workflow_id": 179,
+    "display_order": 2
+  },
+  {
+    "name": "String Interpretation",
+    "description": "Implement a function to interpret the generated L-system string and convert it into coordinates.",
+    "child_phases": [],
+    "id": 1650,
+    "workflow_id": 179,
+    "display_order": 3
+  },
+  {
+    "name": "SVG Generation",
+    "description": "Create a function to generate SVG files from the interpreted coordinates.",
+    "child_phases": [
+      {
+        "name": "SVG Header",
+        "description": "Define the initial part of the SVG file (e.g., dimensions, namespace declarations).",
+        "child_phases": [],
+        "id": 1652,
+        "workflow_id": 179,
+        "display_order": 0
+      },
+      {
+        "name": "SVG Paths",
+        "description": "Create a function to generate SVG path data from the interpreted coordinates.",
+        "child_phases": [],
+        "id": 1653,
+        "workflow_id": 179,
+        "display_order": 1
+      },
+      {
+        "name": "SVG Footer",
+        "description": "Define the closing part of the SVG file.",
+        "child_phases": [],
+        "id": 1654,
+        "workflow_id": 179,
+        "display_order": 2
+      }
+    ],
+    "id": 1651,
+    "workflow_id": 179,
+    "display_order": 4
+  },
+  {
+    "name": "SVG Header",
+    "description": "Define the initial part of the SVG file (e.g., dimensions, namespace declarations).",
+    "child_phases": [],
+    "id": 1652,
+    "workflow_id": 179,
+    "display_order": 0
+  },
+  {
+    "name": "SVG Paths",
+    "description": "Create a function to generate SVG path data from the interpreted coordinates.",
+    "child_phases": [],
+    "id": 1653,
+    "workflow_id": 179,
+    "display_order": 1
+  },
+  {
+    "name": "SVG Footer",
+    "description": "Define the closing part of the SVG file.",
+    "child_phases": [],
+    "id": 1654,
+    "workflow_id": 179,
+    "display_order": 2
+  },
+  {
+    "name": "User Interaction",
+    "description": "Implement user input for selecting fractal type, iterations, and other customization options.",
+    "child_phases": [],
+    "id": 1655,
+    "workflow_id": 179,
+    "display_order": 5
+  },
+  {
+    "name": "Main Function",
+    "description": "Combine all the above functions into a main function that generates SVG files based on user input.",
+    "child_phases": [],
+    "id": 1656,
+    "workflow_id": 179,
+    "display_order": 6
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Extract and prepare user performance data from input dictionary.",
+    "child_phases": [
+      {
+        "name": "Input Data Extraction",
+        "description": "Retrieve user performance data from the provided dictionary.",
+        "id": 1658,
+        "workflow_id": 180,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Structuring",
+        "description": "Organize extracted data into a suitable format for processing.",
+        "id": 1659,
+        "workflow_id": 180,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1657,
+    "workflow_id": 180,
+    "display_order": 0
+  },
+  {
+    "name": "Input Data Extraction",
+    "description": "Retrieve user performance data from the provided dictionary.",
+    "id": 1658,
+    "workflow_id": 180,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Structuring",
+    "description": "Organize extracted data into a suitable format for processing.",
+    "id": 1659,
+    "workflow_id": 180,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Analysis",
+    "description": "Analyze user's past performance to identify areas of struggle and proficiency.",
+    "child_phases": [
+      {
+        "name": "Calculate Performance Metrics",
+        "description": "Determine success rates, average difficulty, etc., for each subject.",
+        "id": 1661,
+        "workflow_id": 180,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Identify Struggling Topics",
+        "description": "Pinpoint subjects where the user has struggled based on performance metrics.",
+        "id": 1662,
+        "workflow_id": 180,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1660,
+    "workflow_id": 180,
+    "display_order": 1
+  },
+  {
+    "name": "Calculate Performance Metrics",
+    "description": "Determine success rates, average difficulty, etc., for each subject.",
+    "id": 1661,
+    "workflow_id": 180,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Identify Struggling Topics",
+    "description": "Pinpoint subjects where the user has struggled based on performance metrics.",
+    "id": 1662,
+    "workflow_id": 180,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Difficulty Assessment",
+    "description": "Evaluate the difficulty level of each topic based on past attempts.",
+    "child_phases": [
+      {
+        "name": "Calculate Average Difficulty",
+        "description": "Determine the average difficulty of practice problems for each subject.",
+        "id": 1664,
+        "workflow_id": 180,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Adjust Difficulty Level Based on Past Performance",
+        "description": "Raise or lower recommended topics based on user's success rate at each difficulty level.",
+        "id": 1665,
+        "workflow_id": 180,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1663,
+    "workflow_id": 180,
+    "display_order": 2
+  },
+  {
+    "name": "Calculate Average Difficulty",
+    "description": "Determine the average difficulty of practice problems for each subject.",
+    "id": 1664,
+    "workflow_id": 180,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Adjust Difficulty Level Based on Past Performance",
+    "description": "Raise or lower recommended topics based on user's success rate at each difficulty level.",
+    "id": 1665,
+    "workflow_id": 180,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Adaptive Learning Plan Generation",
+    "description": "Create a personalized study plan prioritizing struggling topics and appropriate difficulty levels.",
+    "child_phases": [
+      {
+        "name": "Prioritize Struggling Topics",
+        "description": "Place struggling subjects at the forefront of the learning plan.",
+        "id": 1667,
+        "workflow_id": 180,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Balance Difficulty Levels",
+        "description": "Ensure that the study plan includes a mix of topics of varying difficulties based on user's past performance.",
+        "id": 1668,
+        "workflow_id": 180,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1666,
+    "workflow_id": 180,
+    "display_order": 3
+  },
+  {
+    "name": "Prioritize Struggling Topics",
+    "description": "Place struggling subjects at the forefront of the learning plan.",
+    "id": 1667,
+    "workflow_id": 180,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Balance Difficulty Levels",
+    "description": "Ensure that the study plan includes a mix of topics of varying difficulties based on user's past performance.",
+    "id": 1668,
+    "workflow_id": 180,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Format and output the generated adaptive learning plan.",
+    "child_phases": [
+      {
+        "name": "Format Learning Plan",
+        "description": "Arrange the recommended topics into a coherent, user-friendly format.",
+        "id": 1670,
+        "workflow_id": 180,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate Output",
+        "description": "Output the formatted learning plan to be presented to the user.",
+        "id": 1671,
+        "workflow_id": 180,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1669,
+    "workflow_id": 180,
+    "display_order": 4
+  },
+  {
+    "name": "Format Learning Plan",
+    "description": "Arrange the recommended topics into a coherent, user-friendly format.",
+    "id": 1670,
+    "workflow_id": 180,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate Output",
+    "description": "Output the formatted learning plan to be presented to the user.",
+    "id": 1671,
+    "workflow_id": 180,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input dictionary containing endpoints, methods, parameters, and responses.",
+    "child_phases": [],
+    "id": 1672,
+    "workflow_id": 181,
+    "display_order": 0
+  },
+  {
+    "name": "Documentation Generation",
+    "description": "Generate markdown-formatted API documentation based on the prepared data.",
+    "child_phases": [
+      {
+        "name": "Endpoint Documentation",
+        "description": "Create markdown for each endpoint including methods, parameters, and responses.",
+        "id": 1674,
+        "workflow_id": 181,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Markdown Formatting",
+        "description": "Format the generated documentation as markdown suitable for display on a README file or wiki page.",
+        "id": 1675,
+        "workflow_id": 181,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1673,
+    "workflow_id": 181,
+    "display_order": 1
+  },
+  {
+    "name": "Endpoint Documentation",
+    "description": "Create markdown for each endpoint including methods, parameters, and responses.",
+    "id": 1674,
+    "workflow_id": 181,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Markdown Formatting",
+    "description": "Format the generated documentation as markdown suitable for display on a README file or wiki page.",
+    "id": 1675,
+    "workflow_id": 181,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Save the generated markdown to a file or return it as output.",
+    "child_phases": [],
+    "id": 1676,
+    "workflow_id": 181,
+    "display_order": 2
+  },
+  {
+    "name": "Function Analysis",
+    "description": "Analyze the input Python function to understand its structure and behavior.",
+    "child_phases": [
+      {
+        "name": "Function Signature Extraction",
+        "description": "Extract the function signature (name, arguments, return type) for identification purposes.",
+        "id": 1678,
+        "workflow_id": 182,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Code Structure Analysis",
+        "description": "Analyze the control flow of the function to understand its main logic.",
+        "id": 1679,
+        "workflow_id": 182,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1677,
+    "workflow_id": 182,
+    "display_order": 0
+  },
+  {
+    "name": "Function Signature Extraction",
+    "description": "Extract the function signature (name, arguments, return type) for identification purposes.",
+    "id": 1678,
+    "workflow_id": 182,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Code Structure Analysis",
+    "description": "Analyze the control flow of the function to understand its main logic.",
+    "id": 1679,
+    "workflow_id": 182,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring Identification",
+    "description": "Identify potential areas in the function that can be improved for performance or readability.",
+    "child_phases": [
+      {
+        "name": "Duplicate Code Detection",
+        "description": "Detect duplicate code blocks and suggest merges.",
+        "id": 1681,
+        "workflow_id": 182,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Conditional Statement Simplification",
+        "description": "Simplify complex conditional statements using techniques like decision tables or boolean algebra.",
+        "id": 1682,
+        "workflow_id": 182,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Loop Optimization",
+        "description": "Optimize loops by reducing iterations, simplifying loop conditions, or using more efficient data structures.",
+        "id": 1683,
+        "workflow_id": 182,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1680,
+    "workflow_id": 182,
+    "display_order": 1
+  },
+  {
+    "name": "Duplicate Code Detection",
+    "description": "Detect duplicate code blocks and suggest merges.",
+    "id": 1681,
+    "workflow_id": 182,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Conditional Statement Simplification",
+    "description": "Simplify complex conditional statements using techniques like decision tables or boolean algebra.",
+    "id": 1682,
+    "workflow_id": 182,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Loop Optimization",
+    "description": "Optimize loops by reducing iterations, simplifying loop conditions, or using more efficient data structures.",
+    "id": 1683,
+    "workflow_id": 182,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring Implementation",
+    "description": "Implement the identified refactorings in the function.",
+    "child_phases": [
+      {
+        "name": "Duplicate Code Merge",
+        "description": "Merge duplicate code blocks into a single block.",
+        "id": 1685,
+        "workflow_id": 182,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Conditional Statement Rewriting",
+        "description": "Rewrite complex conditional statements using the identified simplifications.",
+        "id": 1686,
+        "workflow_id": 182,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Loop Optimization Implementation",
+        "description": "Implement loop optimizations suggested by the analysis phase.",
+        "id": 1687,
+        "workflow_id": 182,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1684,
+    "workflow_id": 182,
+    "display_order": 2
+  },
+  {
+    "name": "Duplicate Code Merge",
+    "description": "Merge duplicate code blocks into a single block.",
+    "id": 1685,
+    "workflow_id": 182,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Conditional Statement Rewriting",
+    "description": "Rewrite complex conditional statements using the identified simplifications.",
+    "id": 1686,
+    "workflow_id": 182,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Loop Optimization Implementation",
+    "description": "Implement loop optimizations suggested by the analysis phase.",
+    "id": 1687,
+    "workflow_id": 182,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Validation and Testing",
+    "description": "Validate the refactored function to ensure it maintains the same behavior while improving performance or readability.",
+    "child_phases": [
+      {
+        "name": "Unit Tests Execution",
+        "description": "Execute unit tests on the refactored function to ensure functionality remains unchanged.",
+        "id": 1689,
+        "workflow_id": 182,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Performance Testing",
+        "description": "Measure the performance of the refactored function and compare it with the original version.",
+        "id": 1690,
+        "workflow_id": 182,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1688,
+    "workflow_id": 182,
+    "display_order": 3
+  },
+  {
+    "name": "Unit Tests Execution",
+    "description": "Execute unit tests on the refactored function to ensure functionality remains unchanged.",
+    "id": 1689,
+    "workflow_id": 182,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Performance Testing",
+    "description": "Measure the performance of the refactored function and compare it with the original version.",
+    "id": 1690,
+    "workflow_id": 182,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare the input data containing the list of packages and their dependencies.",
+    "child_phases": [],
+    "id": 1691,
+    "workflow_id": 183,
+    "display_order": 0
+  },
+  {
+    "name": "Package Parsing",
+    "description": "Parse the input data to extract package names and their respective dependencies.",
+    "child_phases": [
+      {
+        "name": "Handling Duplicates",
+        "description": "Ensure each dependency is recorded only once for a given package.",
+        "id": 1693,
+        "workflow_id": 183,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1692,
+    "workflow_id": 183,
+    "display_order": 1
+  },
+  {
+    "name": "Handling Duplicates",
+    "description": "Ensure each dependency is recorded only once for a given package.",
+    "id": 1693,
+    "workflow_id": 183,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dependency Graph Construction",
+    "description": "Create the dependency graph using the parsed packages and their dependencies.",
+    "child_phases": [
+      {
+        "name": "Graph Structure",
+        "description": "Build the graph structure with packages as keys and dependencies as values.",
+        "id": 1695,
+        "workflow_id": 183,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Handling Compatibility Metadata",
+        "description": "Integrate compatibility metadata into the dependency graph if available.",
+        "id": 1696,
+        "workflow_id": 183,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1694,
+    "workflow_id": 183,
+    "display_order": 2
+  },
+  {
+    "name": "Graph Structure",
+    "description": "Build the graph structure with packages as keys and dependencies as values.",
+    "id": 1695,
+    "workflow_id": 183,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Handling Compatibility Metadata",
+    "description": "Integrate compatibility metadata into the dependency graph if available.",
+    "id": 1696,
+    "workflow_id": 183,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate the output dictionary representing the dependency graph.",
+    "child_phases": [],
+    "id": 1697,
+    "workflow_id": 183,
+    "display_order": 3
+  },
+  {
+    "name": "Data Analysis",
+    "description": "Analyze consecutive steps in a given task sequence.",
+    "child_phases": [
+      {
+        "name": "Task Sequence Retrieval",
+        "description": "Retrieve the task sequence from the input data.",
+        "id": 1699,
+        "workflow_id": 184,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Preprocessing",
+        "description": "Clean and format the task sequence data for analysis.",
+        "id": 1700,
+        "workflow_id": 184,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1698,
+    "workflow_id": 184,
+    "display_order": 0
+  },
+  {
+    "name": "Task Sequence Retrieval",
+    "description": "Retrieve the task sequence from the input data.",
+    "id": 1699,
+    "workflow_id": 184,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Clean and format the task sequence data for analysis.",
+    "id": 1700,
+    "workflow_id": 184,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Suggestion",
+    "description": "Suggest the optimal tools along with their recommended parameters for each step.",
+    "child_phases": [
+      {
+        "name": "Step Analysis",
+        "description": "Analyze individual steps in the task sequence.",
+        "id": 1702,
+        "workflow_id": 184,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Tool Matching",
+        "description": "Match each step with the optimal tool based on predefined rules or machine learning models.",
+        "id": 1703,
+        "workflow_id": 184,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1701,
+    "workflow_id": 184,
+    "display_order": 1
+  },
+  {
+    "name": "Step Analysis",
+    "description": "Analyze individual steps in the task sequence.",
+    "id": 1702,
+    "workflow_id": 184,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Matching",
+    "description": "Match each step with the optimal tool based on predefined rules or machine learning models.",
+    "id": 1703,
+    "workflow_id": 184,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate a list containing tuples of tool name and parameters for each suggested tool.",
+    "child_phases": [
+      {
+        "name": "Tool Parameters Extraction",
+        "description": "Extract the recommended parameters for each suggested tool.",
+        "id": 1705,
+        "workflow_id": 184,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Formatting",
+        "description": "Format the output as a list of tuples containing tool name and parameters.",
+        "id": 1706,
+        "workflow_id": 184,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1704,
+    "workflow_id": 184,
+    "display_order": 2
+  },
+  {
+    "name": "Tool Parameters Extraction",
+    "description": "Extract the recommended parameters for each suggested tool.",
+    "id": 1705,
+    "workflow_id": 184,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format the output as a list of tuples containing tool name and parameters.",
+    "id": 1706,
+    "workflow_id": 184,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure Python environment and gather input data.",
+    "child_phases": [],
+    "id": 1707,
+    "workflow_id": 185,
+    "display_order": 0
+  },
+  {
+    "name": "Data Processing",
+    "description": "Parse and organize the list of packages and their dependencies.",
+    "child_phases": [
+      {
+        "name": "Input Data Parsing",
+        "description": "Read and interpret input data format.",
+        "id": 1709,
+        "workflow_id": 185,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dependency Extraction",
+        "description": "Extract dependency information from parsed data.",
+        "id": 1710,
+        "workflow_id": 185,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1708,
+    "workflow_id": 185,
+    "display_order": 1
+  },
+  {
+    "name": "Input Data Parsing",
+    "description": "Read and interpret input data format.",
+    "id": 1709,
+    "workflow_id": 185,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dependency Extraction",
+    "description": "Extract dependency information from parsed data.",
+    "id": 1710,
+    "workflow_id": 185,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Creation",
+    "description": "Construct the dependency graph model.",
+    "child_phases": [
+      {
+        "name": "Node Creation",
+        "description": "Create nodes for each package in the graph.",
+        "id": 1712,
+        "workflow_id": 185,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Creation",
+        "description": "Create edges based on extracted dependencies.",
+        "id": 1713,
+        "workflow_id": 185,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1711,
+    "workflow_id": 185,
+    "display_order": 2
+  },
+  {
+    "name": "Node Creation",
+    "description": "Create nodes for each package in the graph.",
+    "id": 1712,
+    "workflow_id": 185,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Creation",
+    "description": "Create edges based on extracted dependencies.",
+    "id": 1713,
+    "workflow_id": 185,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Compatibility Analysis",
+    "description": "Implement rules or constraints to ensure valid graphs.",
+    "child_phases": [
+      {
+        "name": "Constraint Definition",
+        "description": "Define compatibility metadata rules.",
+        "id": 1715,
+        "workflow_id": 185,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Graph Validation",
+        "description": "Validate the graph based on defined constraints.",
+        "id": 1716,
+        "workflow_id": 185,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1714,
+    "workflow_id": 185,
+    "display_order": 3
+  },
+  {
+    "name": "Constraint Definition",
+    "description": "Define compatibility metadata rules.",
+    "id": 1715,
+    "workflow_id": 185,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Validation",
+    "description": "Validate the graph based on defined constraints.",
+    "id": 1716,
+    "workflow_id": 185,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Problem Definition",
+    "description": "Understand the task and define the problem statement.",
+    "child_phases": [],
+    "id": 1717,
+    "workflow_id": 186,
+    "display_order": 0
+  },
+  {
+    "name": "Design Algorithm",
+    "description": "Choose an efficient algorithm like trial division or sieve to check primality.",
+    "child_phases": [
+      {
+        "name": "Trial Division Selection",
+        "description": "Decide whether to use trial division or another efficient method.",
+        "child_phases": [],
+        "id": 1719,
+        "workflow_id": 186,
+        "display_order": 0
+      },
+      {
+        "name": "Sieve Method Selection",
+        "description": "If using sieve, choose which variant (e.g., Sieve of Eratosthenes) to implement.",
+        "child_phases": [],
+        "id": 1720,
+        "workflow_id": 186,
+        "display_order": 1
+      }
+    ],
+    "id": 1718,
+    "workflow_id": 186,
+    "display_order": 1
+  },
+  {
+    "name": "Trial Division Selection",
+    "description": "Decide whether to use trial division or another efficient method.",
+    "child_phases": [],
+    "id": 1719,
+    "workflow_id": 186,
+    "display_order": 0
+  },
+  {
+    "name": "Sieve Method Selection",
+    "description": "If using sieve, choose which variant (e.g., Sieve of Eratosthenes) to implement.",
+    "child_phases": [],
+    "id": 1720,
+    "workflow_id": 186,
+    "display_order": 1
+  },
+  {
+    "name": "Function Implementation",
+    "description": "Write the Python function that takes an integer n and returns its primality status.",
+    "child_phases": [
+      {
+        "name": "Input Validation",
+        "description": "Ensure the input is a valid non-negative integer.",
+        "child_phases": [],
+        "id": 1722,
+        "workflow_id": 186,
+        "display_order": 0
+      },
+      {
+        "name": "Prime Check Logic",
+        "description": "Implement the chosen algorithm to check primality.",
+        "child_phases": [],
+        "id": 1723,
+        "workflow_id": 186,
+        "display_order": 1
+      }
+    ],
+    "id": 1721,
+    "workflow_id": 186,
+    "display_order": 2
+  },
+  {
+    "name": "Input Validation",
+    "description": "Ensure the input is a valid non-negative integer.",
+    "child_phases": [],
+    "id": 1722,
+    "workflow_id": 186,
+    "display_order": 0
+  },
+  {
+    "name": "Prime Check Logic",
+    "description": "Implement the chosen algorithm to check primality.",
+    "child_phases": [],
+    "id": 1723,
+    "workflow_id": 186,
+    "display_order": 1
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Test the function with various inputs to ensure it works correctly.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test the function with different edge cases (e.g., 0, 1, primes, non-primes).",
+        "child_phases": [],
+        "id": 1725,
+        "workflow_id": 186,
+        "display_order": 0
+      },
+      {
+        "name": "Performance Testing",
+        "description": "Check the function's performance with large inputs.",
+        "child_phases": [],
+        "id": 1726,
+        "workflow_id": 186,
+        "display_order": 1
+      }
+    ],
+    "id": 1724,
+    "workflow_id": 186,
+    "display_order": 3
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test the function with different edge cases (e.g., 0, 1, primes, non-primes).",
+    "child_phases": [],
+    "id": 1725,
+    "workflow_id": 186,
+    "display_order": 0
+  },
+  {
+    "name": "Performance Testing",
+    "description": "Check the function's performance with large inputs.",
+    "child_phases": [],
+    "id": 1726,
+    "workflow_id": 186,
+    "display_order": 1
+  },
+  {
+    "name": "Documentation and Submission",
+    "description": "Document the code, explain choices made, and submit the assignment.",
+    "child_phases": [],
+    "id": 1727,
+    "workflow_id": 186,
+    "display_order": 4
+  },
+  {
+    "name": "Setup",
+    "description": "Configure Python environment and install required dependencies.",
+    "child_phases": [],
+    "id": 1728,
+    "workflow_id": 187,
+    "display_order": 0
+  },
+  {
+    "name": "Code Analysis",
+    "description": "Parse input code, identify refactoring opportunities.",
+    "child_phases": [
+      {
+        "name": "Variable Renaming",
+        "description": "Identify and rename variables based on common practices.",
+        "id": 1730,
+        "workflow_id": 187,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Method Extraction",
+        "description": "Extract methods from large functions to improve readability.",
+        "id": 1731,
+        "workflow_id": 187,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Conditional Refactoring",
+        "description": "Convert conditional statements into guard clauses.",
+        "id": 1732,
+        "workflow_id": 187,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1729,
+    "workflow_id": 187,
+    "display_order": 1
+  },
+  {
+    "name": "Variable Renaming",
+    "description": "Identify and rename variables based on common practices.",
+    "id": 1730,
+    "workflow_id": 187,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Method Extraction",
+    "description": "Extract methods from large functions to improve readability.",
+    "id": 1731,
+    "workflow_id": 187,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Conditional Refactoring",
+    "description": "Convert conditional statements into guard clauses.",
+    "id": 1732,
+    "workflow_id": 187,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Refactoring",
+    "description": "Apply identified refactorings to the input code.",
+    "child_phases": [],
+    "id": 1733,
+    "workflow_id": 187,
+    "display_order": 2
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output file with refactored code.",
+    "child_phases": [],
+    "id": 1734,
+    "workflow_id": 187,
+    "display_order": 3
+  },
+  {
+    "name": "Testing",
+    "description": "Test the functionality of the refactoring tool using provided tests and edge cases.",
+    "child_phases": [],
+    "id": 1735,
+    "workflow_id": 187,
+    "display_order": 4
+  },
+  {
+    "name": "Error Detection",
+    "description": "Identify errors in input CSV files and output error details.",
+    "child_phases": [
+      {
+        "name": "File Reading",
+        "description": "Read each CSV file.",
+        "id": 1737,
+        "workflow_id": 188,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Identification",
+        "description": "Identify errors in the data such as missing values or outliers.",
+        "id": 1738,
+        "workflow_id": 188,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Error Output",
+        "description": "Output file name, row index, and error description for every erroneous entry.",
+        "id": 1739,
+        "workflow_id": 188,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1736,
+    "workflow_id": 188,
+    "display_order": 0
+  },
+  {
+    "name": "File Reading",
+    "description": "Read each CSV file.",
+    "id": 1737,
+    "workflow_id": 188,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Identification",
+    "description": "Identify errors in the data such as missing values or outliers.",
+    "id": 1738,
+    "workflow_id": 188,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Error Output",
+    "description": "Output file name, row index, and error description for every erroneous entry.",
+    "id": 1739,
+    "workflow_id": 188,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Imputation & Outlier Removal",
+    "description": "Handle different types of errors in the data.",
+    "child_phases": [
+      {
+        "name": "Missing Values Handling",
+        "description": "Implement data imputation techniques like mean, median, mode filling.",
+        "id": 1741,
+        "workflow_id": 188,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Identification",
+        "description": "Use methods such as IQR or Z-score to identify outliers.",
+        "id": 1742,
+        "workflow_id": 188,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Handling",
+        "description": "Cap, remove, or replace outliers based on the given strategy.",
+        "id": 1743,
+        "workflow_id": 188,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1740,
+    "workflow_id": 188,
+    "display_order": 1
+  },
+  {
+    "name": "Missing Values Handling",
+    "description": "Implement data imputation techniques like mean, median, mode filling.",
+    "id": 1741,
+    "workflow_id": 188,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Identification",
+    "description": "Use methods such as IQR or Z-score to identify outliers.",
+    "id": 1742,
+    "workflow_id": 188,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Handling",
+    "description": "Cap, remove, or replace outliers based on the given strategy.",
+    "id": 1743,
+    "workflow_id": 188,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Recovery & Validation",
+    "description": "Validate processed data against predefined rules and implement self-repair mechanisms.",
+    "child_phases": [
+      {
+        "name": "Data Validation",
+        "description": "Check if the processed data adheres to min/max limits.",
+        "id": 1745,
+        "workflow_id": 188,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Self-Repair Mechanisms",
+        "description": "Retry with adjusted parameters or raise alerts for manual intervention if validation fails.",
+        "id": 1746,
+        "workflow_id": 188,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1744,
+    "workflow_id": 188,
+    "display_order": 2
+  },
+  {
+    "name": "Data Validation",
+    "description": "Check if the processed data adheres to min/max limits.",
+    "id": 1745,
+    "workflow_id": 188,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Self-Repair Mechanisms",
+    "description": "Retry with adjusted parameters or raise alerts for manual intervention if validation fails.",
+    "id": 1746,
+    "workflow_id": 188,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Automation Workflow",
+    "description": "Automate the entire process for all input CSV files in bulk.",
+    "child_phases": [
+      {
+        "name": "Error Detection Workflow",
+        "description": "Automate error detection on all input CSV files.",
+        "id": 1748,
+        "workflow_id": 188,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Imputation & Outlier Removal Workflow",
+        "description": "Automate data imputation and outlier removal on all input CSV files.",
+        "id": 1749,
+        "workflow_id": 188,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Recovery & Validation Workflow",
+        "description": "Automate recovery and validation on processed data from all input CSV files.",
+        "id": 1750,
+        "workflow_id": 188,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1747,
+    "workflow_id": 188,
+    "display_order": 3
+  },
+  {
+    "name": "Error Detection Workflow",
+    "description": "Automate error detection on all input CSV files.",
+    "id": 1748,
+    "workflow_id": 188,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Imputation & Outlier Removal Workflow",
+    "description": "Automate data imputation and outlier removal on all input CSV files.",
+    "id": 1749,
+    "workflow_id": 188,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Recovery & Validation Workflow",
+    "description": "Automate recovery and validation on processed data from all input CSV files.",
+    "id": 1750,
+    "workflow_id": 188,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "API Endpoint Fetching",
+    "description": "Retrieve the API endpoint URL and fetch the codebase.",
+    "child_phases": [
+      {
+        "name": "URL Retrieval",
+        "description": "Get the API endpoint URL as input.",
+        "id": 1752,
+        "workflow_id": 189,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Codebase Fetching",
+        "description": "Fetch the codebase from the given API endpoint URL.",
+        "id": 1753,
+        "workflow_id": 189,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1751,
+    "workflow_id": 189,
+    "display_order": 0
+  },
+  {
+    "name": "URL Retrieval",
+    "description": "Get the API endpoint URL as input.",
+    "id": 1752,
+    "workflow_id": 189,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Codebase Fetching",
+    "description": "Fetch the codebase from the given API endpoint URL.",
+    "id": 1753,
+    "workflow_id": 189,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Linting Configuration",
+    "description": "Set up and configure the linter with predefined rules.",
+    "child_phases": [
+      {
+        "name": "Rules Definition",
+        "description": "Define the set of rules to be used for linting.",
+        "id": 1755,
+        "workflow_id": 189,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Linter Setup",
+        "description": "Configure the linter with the defined rules.",
+        "id": 1756,
+        "workflow_id": 189,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1754,
+    "workflow_id": 189,
+    "display_order": 1
+  },
+  {
+    "name": "Rules Definition",
+    "description": "Define the set of rules to be used for linting.",
+    "id": 1755,
+    "workflow_id": 189,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Linter Setup",
+    "description": "Configure the linter with the defined rules.",
+    "id": 1756,
+    "workflow_id": 189,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Linting Execution",
+    "description": "Execute the linter on the fetched codebase.",
+    "child_phases": [
+      {
+        "name": "Codebase Linting",
+        "description": "Run the linter on the fetched API endpoint's codebase.",
+        "id": 1758,
+        "workflow_id": 189,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Linting Results Parsing",
+        "description": "Parse and organize the linting errors/warnings returned by the linter.",
+        "id": 1759,
+        "workflow_id": 189,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1757,
+    "workflow_id": 189,
+    "display_order": 2
+  },
+  {
+    "name": "Codebase Linting",
+    "description": "Run the linter on the fetched API endpoint's codebase.",
+    "id": 1758,
+    "workflow_id": 189,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Linting Results Parsing",
+    "description": "Parse and organize the linting errors/warnings returned by the linter.",
+    "id": 1759,
+    "workflow_id": 189,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Results Reporting",
+    "description": "Prepare and return the linting results.",
+    "child_phases": [
+      {
+        "name": "Error/Warning Classification",
+        "description": "Classify the linting results into errors or warnings.",
+        "id": 1761,
+        "workflow_id": 189,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate a report containing the classified errors/warnings.",
+        "id": 1762,
+        "workflow_id": 189,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1760,
+    "workflow_id": 189,
+    "display_order": 3
+  },
+  {
+    "name": "Error/Warning Classification",
+    "description": "Classify the linting results into errors or warnings.",
+    "id": 1761,
+    "workflow_id": 189,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report containing the classified errors/warnings.",
+    "id": 1762,
+    "workflow_id": 189,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Handles missing values, outliers and performs feature scaling",
+    "child_phases": [
+      {
+        "name": "Handling Missing Values",
+        "description": "Deals with missing data by imputation or removal",
+        "id": 1764,
+        "workflow_id": 190,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outlier Detection & Removal",
+        "description": "Identifies and removes outliers from the dataset",
+        "id": 1765,
+        "workflow_id": 190,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Feature Scaling",
+        "description": "Scales features to have similar ranges for better analysis",
+        "id": 1766,
+        "workflow_id": 190,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1763,
+    "workflow_id": 190,
+    "display_order": 0
+  },
+  {
+    "name": "Handling Missing Values",
+    "description": "Deals with missing data by imputation or removal",
+    "id": 1764,
+    "workflow_id": 190,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outlier Detection & Removal",
+    "description": "Identifies and removes outliers from the dataset",
+    "id": 1765,
+    "workflow_id": 190,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feature Scaling",
+    "description": "Scales features to have similar ranges for better analysis",
+    "id": 1766,
+    "workflow_id": 190,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Model Training",
+    "description": "Trains a linear regression model on the preprocessed data",
+    "child_phases": [],
+    "id": 1767,
+    "workflow_id": 190,
+    "display_order": 1
+  },
+  {
+    "name": "Model Evaluation",
+    "description": "Evaluates the performance of the trained model",
+    "child_phases": [
+      {
+        "name": "Model Accuracy Metrics",
+        "description": "Calculates metrics like Mean Absolute Error, Root Mean Squared Error etc.",
+        "id": 1769,
+        "workflow_id": 190,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Significance Tests",
+        "description": "Performs tests like t-test and F-test to check model significance",
+        "id": 1770,
+        "workflow_id": 190,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1768,
+    "workflow_id": 190,
+    "display_order": 2
+  },
+  {
+    "name": "Model Accuracy Metrics",
+    "description": "Calculates metrics like Mean Absolute Error, Root Mean Squared Error etc.",
+    "id": 1769,
+    "workflow_id": 190,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Significance Tests",
+    "description": "Performs tests like t-test and F-test to check model significance",
+    "id": 1770,
+    "workflow_id": 190,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Visualization",
+    "description": "Creates visualizations for better understanding of the data and results",
+    "child_phases": [
+      {
+        "name": "Data Visualization",
+        "description": "Plots histograms, box plots, scatter plots etc. to understand the data",
+        "id": 1772,
+        "workflow_id": 190,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Model Visualization",
+        "description": "Plots residual plots, Q-Q plot etc. to evaluate model fit",
+        "id": 1773,
+        "workflow_id": 190,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1771,
+    "workflow_id": 190,
+    "display_order": 3
+  },
+  {
+    "name": "Data Visualization",
+    "description": "Plots histograms, box plots, scatter plots etc. to understand the data",
+    "id": 1772,
+    "workflow_id": 190,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Model Visualization",
+    "description": "Plots residual plots, Q-Q plot etc. to evaluate model fit",
+    "id": 1773,
+    "workflow_id": 190,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Generation",
+    "description": "Generate synthetic data from multiple Gaussian distributions.",
+    "child_phases": [],
+    "id": 1774,
+    "workflow_id": 191,
+    "display_order": 0
+  },
+  {
+    "name": "Modeling",
+    "description": "Fit Gaussian Mixture Models using scikit-learn library.",
+    "child_phases": [],
+    "id": 1775,
+    "workflow_id": 191,
+    "display_order": 1
+  },
+  {
+    "name": "Visualization",
+    "description": "Visualize the cluster assignments and data points.",
+    "child_phases": [],
+    "id": 1776,
+    "workflow_id": 191,
+    "display_order": 2
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data including topics and desired outcomes.",
+    "child_phases": [],
+    "id": 1777,
+    "workflow_id": 192,
+    "display_order": 0
+  },
+  {
+    "name": "Lesson Plan Generation",
+    "description": "Generate structured lesson plans with introductory, intermediate, and advanced sections for each topic.",
+    "child_phases": [
+      {
+        "name": "Topic Division",
+        "description": "Divide each topic into three sections based on difficulty level.",
+        "id": 1779,
+        "workflow_id": 192,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Outcome Integration",
+        "description": "Ensure desired outcomes are covered throughout the lessons, adjusting section levels as needed.",
+        "id": 1780,
+        "workflow_id": 192,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1778,
+    "workflow_id": 192,
+    "display_order": 1
+  },
+  {
+    "name": "Topic Division",
+    "description": "Divide each topic into three sections based on difficulty level.",
+    "id": 1779,
+    "workflow_id": 192,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Outcome Integration",
+    "description": "Ensure desired outcomes are covered throughout the lessons, adjusting section levels as needed.",
+    "id": 1780,
+    "workflow_id": 192,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format and present the generated lesson plans in a user-friendly manner.",
+    "child_phases": [],
+    "id": 1781,
+    "workflow_id": 192,
+    "display_order": 2
+  },
+  {
+    "name": "Task Analysis",
+    "description": "Analyze input tasks and contexts to understand requirements.",
+    "child_phases": [
+      {
+        "name": "Task Extraction",
+        "description": "Extract individual tasks from the input list.",
+        "id": 1783,
+        "workflow_id": 193,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Context Analysis",
+        "description": "Analyze task contexts to identify parameters like file format, dimension, colormode etc.",
+        "id": 1784,
+        "workflow_id": 193,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1782,
+    "workflow_id": 193,
+    "display_order": 0
+  },
+  {
+    "name": "Task Extraction",
+    "description": "Extract individual tasks from the input list.",
+    "id": 1783,
+    "workflow_id": 193,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Context Analysis",
+    "description": "Analyze task contexts to identify parameters like file format, dimension, colormode etc.",
+    "id": 1784,
+    "workflow_id": 193,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Selection",
+    "description": "Select optimal tools based on task requirements and user-defined priorities.",
+    "child_phases": [
+      {
+        "name": "Tool Database Retrieval",
+        "description": "Retrieve relevant tools from a database based on task parameters.",
+        "id": 1786,
+        "workflow_id": 193,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Tool Filtering",
+        "description": "Filter tools based on processing time, output quality, and user priorities.",
+        "id": 1787,
+        "workflow_id": 193,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1785,
+    "workflow_id": 193,
+    "display_order": 1
+  },
+  {
+    "name": "Tool Database Retrieval",
+    "description": "Retrieve relevant tools from a database based on task parameters.",
+    "id": 1786,
+    "workflow_id": 193,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Filtering",
+    "description": "Filter tools based on processing time, output quality, and user priorities.",
+    "id": 1787,
+    "workflow_id": 193,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Dynamic Programming",
+    "description": "Apply dynamic programming principles to minimize processing time or maximize output quality.",
+    "child_phases": [
+      {
+        "name": "Cost Function Definition",
+        "description": "Define a cost function that incorporates user-defined priorities.",
+        "id": 1789,
+        "workflow_id": 193,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Optimal Path Calculation",
+        "description": "Calculate the optimal path of tools based on the cost function.",
+        "id": 1790,
+        "workflow_id": 193,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1788,
+    "workflow_id": 193,
+    "display_order": 2
+  },
+  {
+    "name": "Cost Function Definition",
+    "description": "Define a cost function that incorporates user-defined priorities.",
+    "id": 1789,
+    "workflow_id": 193,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Optimal Path Calculation",
+    "description": "Calculate the optimal path of tools based on the cost function.",
+    "id": 1790,
+    "workflow_id": 193,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output containing suggested tools and recommended parameters.",
+    "child_phases": [
+      {
+        "name": "Parameter Mapping",
+        "description": "Map tool parameters to task requirements.",
+        "id": 1792,
+        "workflow_id": 193,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Output Formatting",
+        "description": "Format the output in a user-friendly manner.",
+        "id": 1793,
+        "workflow_id": 193,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1791,
+    "workflow_id": 193,
+    "display_order": 3
+  },
+  {
+    "name": "Parameter Mapping",
+    "description": "Map tool parameters to task requirements.",
+    "id": 1792,
+    "workflow_id": 193,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format the output in a user-friendly manner.",
+    "id": 1793,
+    "workflow_id": 193,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "CurriculumGenerator",
+    "description": "Main function to generate structured lesson plans.",
+    "child_phases": [
+      {
+        "name": "InputPreparation",
+        "description": "Prepare input data such as topics and desired outcomes.",
+        "id": 1795,
+        "workflow_id": 194,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "ContentGeneration",
+        "description": "Generate introductions, main points, and summaries for each topic.",
+        "child_phases": [
+          {
+            "name": "IntroductionGenerator",
+            "description": "Generate an introduction for each topic.",
+            "id": 1797,
+            "workflow_id": 194,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "MainPointsGenerator",
+            "description": "Generate main points for each topic.",
+            "id": 1798,
+            "workflow_id": 194,
+            "display_order": 1,
+            "child_phases": []
+          },
+          {
+            "name": "SummaryGenerator",
+            "description": "Generate a summary for each topic.",
+            "id": 1799,
+            "workflow_id": 194,
+            "display_order": 2,
+            "child_phases": []
+          }
+        ],
+        "id": 1796,
+        "workflow_id": 194,
+        "display_order": 1
+      },
+      {
+        "name": "CurriculumValidation",
+        "description": "Ensure all desired outcomes are covered and no important content is missed.",
+        "child_phases": [
+          {
+            "name": "OutcomeCoverageCheck",
+            "description": "Check if all desired outcomes are covered in the generated curriculum.",
+            "id": 1801,
+            "workflow_id": 194,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "ContentCompletenessCheck",
+            "description": "Ensure no important content is missed in the generated curriculum.",
+            "id": 1802,
+            "workflow_id": 194,
+            "display_order": 1,
+            "child_phases": []
+          }
+        ],
+        "id": 1800,
+        "workflow_id": 194,
+        "display_order": 2
+      },
+      {
+        "name": "OutputFormatting",
+        "description": "Format and present the generated lesson plans.",
+        "id": 1803,
+        "workflow_id": 194,
+        "display_order": 3,
+        "child_phases": []
+      }
+    ],
+    "id": 1794,
+    "workflow_id": 194,
+    "display_order": 0
+  },
+  {
+    "name": "InputPreparation",
+    "description": "Prepare input data such as topics and desired outcomes.",
+    "id": 1795,
+    "workflow_id": 194,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "ContentGeneration",
+    "description": "Generate introductions, main points, and summaries for each topic.",
+    "child_phases": [
+      {
+        "name": "IntroductionGenerator",
+        "description": "Generate an introduction for each topic.",
+        "id": 1797,
+        "workflow_id": 194,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "MainPointsGenerator",
+        "description": "Generate main points for each topic.",
+        "id": 1798,
+        "workflow_id": 194,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "SummaryGenerator",
+        "description": "Generate a summary for each topic.",
+        "id": 1799,
+        "workflow_id": 194,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1796,
+    "workflow_id": 194,
+    "display_order": 1
+  },
+  {
+    "name": "IntroductionGenerator",
+    "description": "Generate an introduction for each topic.",
+    "id": 1797,
+    "workflow_id": 194,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "MainPointsGenerator",
+    "description": "Generate main points for each topic.",
+    "id": 1798,
+    "workflow_id": 194,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "SummaryGenerator",
+    "description": "Generate a summary for each topic.",
+    "id": 1799,
+    "workflow_id": 194,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "CurriculumValidation",
+    "description": "Ensure all desired outcomes are covered and no important content is missed.",
+    "child_phases": [
+      {
+        "name": "OutcomeCoverageCheck",
+        "description": "Check if all desired outcomes are covered in the generated curriculum.",
+        "id": 1801,
+        "workflow_id": 194,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "ContentCompletenessCheck",
+        "description": "Ensure no important content is missed in the generated curriculum.",
+        "id": 1802,
+        "workflow_id": 194,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1800,
+    "workflow_id": 194,
+    "display_order": 2
+  },
+  {
+    "name": "OutcomeCoverageCheck",
+    "description": "Check if all desired outcomes are covered in the generated curriculum.",
+    "id": 1801,
+    "workflow_id": 194,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "ContentCompletenessCheck",
+    "description": "Ensure no important content is missed in the generated curriculum.",
+    "id": 1802,
+    "workflow_id": 194,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "OutputFormatting",
+    "description": "Format and present the generated lesson plans.",
+    "id": 1803,
+    "workflow_id": 194,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data files like requirements.txt or package.json.",
+    "child_phases": [],
+    "id": 1804,
+    "workflow_id": 195,
+    "display_order": 0
+  },
+  {
+    "name": "File Parsing",
+    "description": "Parse dependency metadata from the prepared input files.",
+    "child_phases": [
+      {
+        "name": "Pip Requirements File Parser",
+        "description": "Parse requirements.txt files to extract dependencies.",
+        "id": 1806,
+        "workflow_id": 195,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Npm Package File Parser",
+        "description": "Parse package.json files to extract dependencies.",
+        "id": 1807,
+        "workflow_id": 195,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1805,
+    "workflow_id": 195,
+    "display_order": 1
+  },
+  {
+    "name": "Pip Requirements File Parser",
+    "description": "Parse requirements.txt files to extract dependencies.",
+    "id": 1806,
+    "workflow_id": 195,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Npm Package File Parser",
+    "description": "Parse package.json files to extract dependencies.",
+    "id": 1807,
+    "workflow_id": 195,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Dependency Extraction",
+    "description": "Extract unique dependencies and their relationships from parsed data.",
+    "child_phases": [],
+    "id": 1808,
+    "workflow_id": 195,
+    "display_order": 2
+  },
+  {
+    "name": "Graph Construction",
+    "description": "Construct a directed graph model using the extracted dependencies.",
+    "child_phases": [
+      {
+        "name": "Node Creation",
+        "description": "Create nodes for each unique package in the dependency list.",
+        "id": 1810,
+        "workflow_id": 195,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Creation",
+        "description": "Create edges between nodes based on the relationships between packages.",
+        "id": 1811,
+        "workflow_id": 195,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1809,
+    "workflow_id": 195,
+    "display_order": 3
+  },
+  {
+    "name": "Node Creation",
+    "description": "Create nodes for each unique package in the dependency list.",
+    "id": 1810,
+    "workflow_id": 195,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Creation",
+    "description": "Create edges between nodes based on the relationships between packages.",
+    "id": 1811,
+    "workflow_id": 195,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Visualization",
+    "description": "Generate a visual representation of the constructed graph.",
+    "child_phases": [
+      {
+        "name": "Node Styling",
+        "description": "Style nodes based on package properties like popularity or version.",
+        "id": 1813,
+        "workflow_id": 195,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Edge Styling",
+        "description": "Style edges to indicate dependency strength or direction.",
+        "id": 1814,
+        "workflow_id": 195,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1812,
+    "workflow_id": 195,
+    "display_order": 4
+  },
+  {
+    "name": "Node Styling",
+    "description": "Style nodes based on package properties like popularity or version.",
+    "id": 1813,
+    "workflow_id": 195,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Edge Styling",
+    "description": "Style edges to indicate dependency strength or direction.",
+    "id": 1814,
+    "workflow_id": 195,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Graph Interaction",
+    "description": "Implement functionality for traversal and querying relationships between packages.",
+    "child_phases": [
+      {
+        "name": "Traversal Implementation",
+        "description": "Implement methods to traverse the graph, e.g., depth-first or breadth-first search.",
+        "id": 1816,
+        "workflow_id": 195,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Query Implementation",
+        "description": "Implement methods to query relationships between packages, e.g., dependency chain or common dependencies.",
+        "id": 1817,
+        "workflow_id": 195,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1815,
+    "workflow_id": 195,
+    "display_order": 5
+  },
+  {
+    "name": "Traversal Implementation",
+    "description": "Implement methods to traverse the graph, e.g., depth-first or breadth-first search.",
+    "id": 1816,
+    "workflow_id": 195,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Query Implementation",
+    "description": "Implement methods to query relationships between packages, e.g., dependency chain or common dependencies.",
+    "id": 1817,
+    "workflow_id": 195,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Workflow Initialization",
+    "description": "Initialize the workflow, load existing tasks and dependencies.",
+    "child_phases": [
+      {
+        "name": "Load Existing Tasks",
+        "description": "Load any existing tasks from storage.",
+        "id": 1819,
+        "workflow_id": 196,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Load Dependencies",
+        "description": "Load predefined task dependencies.",
+        "id": 1820,
+        "workflow_id": 196,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1818,
+    "workflow_id": 196,
+    "display_order": 0
+  },
+  {
+    "name": "Load Existing Tasks",
+    "description": "Load any existing tasks from storage.",
+    "id": 1819,
+    "workflow_id": 196,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Load Dependencies",
+    "description": "Load predefined task dependencies.",
+    "id": 1820,
+    "workflow_id": 196,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "AI Task Generation",
+    "description": "Generate new tasks using AI based on predefined tasks and dependencies.",
+    "child_phases": [
+      {
+        "name": "Identify Gaps",
+        "description": "Find missing tasks or incomplete workflows.",
+        "id": 1822,
+        "workflow_id": 196,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate Tasks",
+        "description": "Use AI to generate appropriate tasks to fill gaps.",
+        "id": 1823,
+        "workflow_id": 196,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1821,
+    "workflow_id": 196,
+    "display_order": 1
+  },
+  {
+    "name": "Identify Gaps",
+    "description": "Find missing tasks or incomplete workflows.",
+    "id": 1822,
+    "workflow_id": 196,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate Tasks",
+    "description": "Use AI to generate appropriate tasks to fill gaps.",
+    "id": 1823,
+    "workflow_id": 196,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Task Dependency Analysis",
+    "description": "Analyze and adjust dependencies of generated tasks.",
+    "child_phases": [
+      {
+        "name": "Assign Dependencies",
+        "description": "Assign dependencies to new tasks based on existing workflow.",
+        "id": 1825,
+        "workflow_id": 196,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Resolve Conflicts",
+        "description": "Resolve any conflicts in task ordering or dependencies.",
+        "id": 1826,
+        "workflow_id": 196,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1824,
+    "workflow_id": 196,
+    "display_order": 2
+  },
+  {
+    "name": "Assign Dependencies",
+    "description": "Assign dependencies to new tasks based on existing workflow.",
+    "id": 1825,
+    "workflow_id": 196,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Resolve Conflicts",
+    "description": "Resolve any conflicts in task ordering or dependencies.",
+    "id": 1826,
+    "workflow_id": 196,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Workflow Extension",
+    "description": "Expand the workflow with the newly generated tasks.",
+    "child_phases": [
+      {
+        "name": "Add Tasks",
+        "description": "Insert new tasks into the workflow based on their dependencies.",
+        "id": 1828,
+        "workflow_id": 196,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Update Dependencies",
+        "description": "Update task dependencies as necessary after insertion.",
+        "id": 1829,
+        "workflow_id": 196,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1827,
+    "workflow_id": 196,
+    "display_order": 3
+  },
+  {
+    "name": "Add Tasks",
+    "description": "Insert new tasks into the workflow based on their dependencies.",
+    "id": 1828,
+    "workflow_id": 196,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Update Dependencies",
+    "description": "Update task dependencies as necessary after insertion.",
+    "id": 1829,
+    "workflow_id": 196,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Workflow Validation",
+    "description": "Validate the extended workflow for any issues or errors.",
+    "child_phases": [
+      {
+        "name": "Check Completeness",
+        "description": "Ensure all tasks have been addressed and dependencies resolved.",
+        "id": 1831,
+        "workflow_id": 196,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Test Workflow",
+        "description": "Run test cases to ensure the workflow functions correctly.",
+        "id": 1832,
+        "workflow_id": 196,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1830,
+    "workflow_id": 196,
+    "display_order": 4
+  },
+  {
+    "name": "Check Completeness",
+    "description": "Ensure all tasks have been addressed and dependencies resolved.",
+    "id": 1831,
+    "workflow_id": 196,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Test Workflow",
+    "description": "Run test cases to ensure the workflow functions correctly.",
+    "id": 1832,
+    "workflow_id": 196,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Workflow Output",
+    "description": "Output the extended workflow for review or execution.",
+    "child_phases": [
+      {
+        "name": "Generate Report",
+        "description": "Create a report detailing the changes made to the workflow.",
+        "id": 1834,
+        "workflow_id": 196,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Save Workflow",
+        "description": "Save the extended workflow for future use or execution.",
+        "id": 1835,
+        "workflow_id": 196,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1833,
+    "workflow_id": 196,
+    "display_order": 5
+  },
+  {
+    "name": "Generate Report",
+    "description": "Create a report detailing the changes made to the workflow.",
+    "id": 1834,
+    "workflow_id": 196,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Save Workflow",
+    "description": "Save the extended workflow for future use or execution.",
+    "id": 1835,
+    "workflow_id": 196,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "TaskAnalysis",
+    "description": "Analyze tasks and required steps.",
+    "child_phases": [
+      {
+        "name": "TaskParsing",
+        "description": "Parse task descriptions into structured data.",
+        "id": 1837,
+        "workflow_id": 197,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "StepIdentification",
+        "description": "Identify individual steps required for each task.",
+        "id": 1838,
+        "workflow_id": 197,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1836,
+    "workflow_id": 197,
+    "display_order": 0
+  },
+  {
+    "name": "TaskParsing",
+    "description": "Parse task descriptions into structured data.",
+    "id": 1837,
+    "workflow_id": 197,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "StepIdentification",
+    "description": "Identify individual steps required for each task.",
+    "id": 1838,
+    "workflow_id": 197,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "ToolSelection",
+    "description": "Select appropriate tools for each step.",
+    "child_phases": [
+      {
+        "name": "ToolDatabaseQuery",
+        "description": "Query a database or API for potential tools.",
+        "id": 1840,
+        "workflow_id": 197,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "ToolFiltering",
+        "description": "Filter tools based on task requirements.",
+        "id": 1841,
+        "workflow_id": 197,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1839,
+    "workflow_id": 197,
+    "display_order": 1
+  },
+  {
+    "name": "ToolDatabaseQuery",
+    "description": "Query a database or API for potential tools.",
+    "id": 1840,
+    "workflow_id": 197,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "ToolFiltering",
+    "description": "Filter tools based on task requirements.",
+    "id": 1841,
+    "workflow_id": 197,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "ParameterOptimization",
+    "description": "Optimize tool parameters for each step.",
+    "child_phases": [
+      {
+        "name": "ParameterRangeDefinition",
+        "description": "Define the range of possible parameters.",
+        "id": 1843,
+        "workflow_id": 197,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "ParameterTesting",
+        "description": "Test tools with various parameters.",
+        "id": 1844,
+        "workflow_id": 197,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1842,
+    "workflow_id": 197,
+    "display_order": 2
+  },
+  {
+    "name": "ParameterRangeDefinition",
+    "description": "Define the range of possible parameters.",
+    "id": 1843,
+    "workflow_id": 197,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "ParameterTesting",
+    "description": "Test tools with various parameters.",
+    "id": 1844,
+    "workflow_id": 197,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "ReportGeneration",
+    "description": "Generate a report suggesting tools and parameters.",
+    "child_phases": [
+      {
+        "name": "SuggestionFormatting",
+        "description": "Format suggestions into a user-friendly format.",
+        "id": 1846,
+        "workflow_id": 197,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "ReportOutput",
+        "description": "Output the report in specified format(s).",
+        "id": 1847,
+        "workflow_id": 197,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1845,
+    "workflow_id": 197,
+    "display_order": 3
+  },
+  {
+    "name": "SuggestionFormatting",
+    "description": "Format suggestions into a user-friendly format.",
+    "id": 1846,
+    "workflow_id": 197,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "ReportOutput",
+    "description": "Output the report in specified format(s).",
+    "id": 1847,
+    "workflow_id": 197,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "News Aggregation",
+    "description": "Fetch news articles from multiple RSS feeds.",
+    "child_phases": [
+      {
+        "name": "Feed Selection",
+        "description": "Choose the RSS feeds to aggregate from.",
+        "id": 1849,
+        "workflow_id": 198,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Article Fetching",
+        "description": "Use feedparser to fetch articles from selected feeds.",
+        "id": 1850,
+        "workflow_id": 198,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1848,
+    "workflow_id": 198,
+    "display_order": 0
+  },
+  {
+    "name": "Feed Selection",
+    "description": "Choose the RSS feeds to aggregate from.",
+    "id": 1849,
+    "workflow_id": 198,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Article Fetching",
+    "description": "Use feedparser to fetch articles from selected feeds.",
+    "id": 1850,
+    "workflow_id": 198,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Text Summarization",
+    "description": "Summarize the content of fetched news articles.",
+    "child_phases": [
+      {
+        "name": "Summary Generation",
+        "description": "Use gensimsummarization to generate summaries.",
+        "id": 1852,
+        "workflow_id": 198,
+        "display_order": 0,
+        "child_phases": []
+      }
+    ],
+    "id": 1851,
+    "workflow_id": 198,
+    "display_order": 1
+  },
+  {
+    "name": "Summary Generation",
+    "description": "Use gensimsummarization to generate summaries.",
+    "id": 1852,
+    "workflow_id": 198,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Newsletter Generation",
+    "description": "Combine aggregated and summarized articles into a daily newsletter.",
+    "child_phases": [
+      {
+        "name": "Article Formatting",
+        "description": "Format title, source, publication date, summary, and optional 'Read more' link for each article.",
+        "id": 1854,
+        "workflow_id": 198,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Newsletter Composition",
+        "description": "Compose the daily newsletter in markdown format.",
+        "id": 1855,
+        "workflow_id": 198,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1853,
+    "workflow_id": 198,
+    "display_order": 2
+  },
+  {
+    "name": "Article Formatting",
+    "description": "Format title, source, publication date, summary, and optional 'Read more' link for each article.",
+    "id": 1854,
+    "workflow_id": 198,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Newsletter Composition",
+    "description": "Compose the daily newsletter in markdown format.",
+    "id": 1855,
+    "workflow_id": 198,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Image Loading and Preprocessing",
+    "description": "Load input color image, convert to appropriate format for processing.",
+    "child_phases": [],
+    "id": 1856,
+    "workflow_id": 199,
+    "display_order": 0
+  },
+  {
+    "name": "Color Space Conversion",
+    "description": "Convert RGB image to a suitable color space (e.g., Lab or HSV) for better segmentation.",
+    "child_phases": [],
+    "id": 1857,
+    "workflow_id": 199,
+    "display_order": 1
+  },
+  {
+    "name": "Image Segmentation",
+    "description": "Divide the image into distinct regions based on color similarity using connected component labeling.",
+    "child_phases": [
+      {
+        "name": "Connected Component Labeling",
+        "description": "Label pixels with similar colors as part of the same region.",
+        "child_phases": [],
+        "id": 1859,
+        "workflow_id": 199,
+        "display_order": 0
+      }
+    ],
+    "id": 1858,
+    "workflow_id": 199,
+    "display_order": 2
+  },
+  {
+    "name": "Connected Component Labeling",
+    "description": "Label pixels with similar colors as part of the same region.",
+    "child_phases": [],
+    "id": 1859,
+    "workflow_id": 199,
+    "display_order": 0
+  },
+  {
+    "name": "Postprocessing",
+    "description": "Refine segmented image and label matrix for better results.",
+    "child_phases": [
+      {
+        "name": "Morphological Operations",
+        "description": "Apply operations like dilation, erosion to refine the segmented regions.",
+        "child_phases": [],
+        "id": 1861,
+        "workflow_id": 199,
+        "display_order": 0
+      },
+      {
+        "name": "Small Region Removal",
+        "description": "Remove small noise-like regions from the segmentation.",
+        "child_phases": [],
+        "id": 1862,
+        "workflow_id": 199,
+        "display_order": 1
+      }
+    ],
+    "id": 1860,
+    "workflow_id": 199,
+    "display_order": 3
+  },
+  {
+    "name": "Morphological Operations",
+    "description": "Apply operations like dilation, erosion to refine the segmented regions.",
+    "child_phases": [],
+    "id": 1861,
+    "workflow_id": 199,
+    "display_order": 0
+  },
+  {
+    "name": "Small Region Removal",
+    "description": "Remove small noise-like regions from the segmentation.",
+    "child_phases": [],
+    "id": 1862,
+    "workflow_id": 199,
+    "display_order": 1
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output label matrix and optionally visualize segmented image.",
+    "child_phases": [
+      {
+        "name": "Label Matrix Creation",
+        "description": "Create a label matrix where each pixel's value represents its corresponding region ID.",
+        "child_phases": [],
+        "id": 1864,
+        "workflow_id": 199,
+        "display_order": 0
+      },
+      {
+        "name": "Visualization (optional)",
+        "description": "Display the segmented image with labeled regions for visual inspection.",
+        "child_phases": [],
+        "id": 1865,
+        "workflow_id": 199,
+        "display_order": 1
+      }
+    ],
+    "id": 1863,
+    "workflow_id": 199,
+    "display_order": 4
+  },
+  {
+    "name": "Label Matrix Creation",
+    "description": "Create a label matrix where each pixel's value represents its corresponding region ID.",
+    "child_phases": [],
+    "id": 1864,
+    "workflow_id": 199,
+    "display_order": 0
+  },
+  {
+    "name": "Visualization (optional)",
+    "description": "Display the segmented image with labeled regions for visual inspection.",
+    "child_phases": [],
+    "id": 1865,
+    "workflow_id": 199,
+    "display_order": 1
+  },
+  {
+    "name": "Initialization",
+    "description": "Setup the environment and required variables.",
+    "child_phases": [
+      {
+        "name": "Import Libraries",
+        "description": "Import necessary Python libraries.",
+        "id": 1867,
+        "workflow_id": 200,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Prepare Input Data",
+        "description": "Ensure input data is ready and valid.",
+        "id": 1868,
+        "workflow_id": 200,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1866,
+    "workflow_id": 200,
+    "display_order": 0
+  },
+  {
+    "name": "Import Libraries",
+    "description": "Import necessary Python libraries.",
+    "id": 1867,
+    "workflow_id": 200,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Prepare Input Data",
+    "description": "Ensure input data is ready and valid.",
+    "id": 1868,
+    "workflow_id": 200,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Function Generation",
+    "description": "Generate mathematical functions on-the-fly.",
+    "child_phases": [
+      {
+        "name": "Define Operations",
+        "description": "Define the basic mathematical operations like addition, subtraction, multiplication.",
+        "id": 1870,
+        "workflow_id": 200,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Create Function Factory",
+        "description": "Develop a function that generates new functions based on defined operations.",
+        "id": 1871,
+        "workflow_id": 200,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1869,
+    "workflow_id": 200,
+    "display_order": 1
+  },
+  {
+    "name": "Define Operations",
+    "description": "Define the basic mathematical operations like addition, subtraction, multiplication.",
+    "id": 1870,
+    "workflow_id": 200,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Create Function Factory",
+    "description": "Develop a function that generates new functions based on defined operations.",
+    "id": 1871,
+    "workflow_id": 200,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Main Function Development",
+    "description": "Create the main function with error handling and self-repair mechanisms.",
+    "child_phases": [
+      {
+        "name": "Error Handling Implementation",
+        "description": "Implement try-except blocks to catch errors.",
+        "id": 1873,
+        "workflow_id": 200,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Self-Repair Mechanisms",
+        "description": "Develop strategies for reinitializing problematic parts of state or generating new functions.",
+        "id": 1874,
+        "workflow_id": 200,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1872,
+    "workflow_id": 200,
+    "display_order": 2
+  },
+  {
+    "name": "Error Handling Implementation",
+    "description": "Implement try-except blocks to catch errors.",
+    "id": 1873,
+    "workflow_id": 200,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Self-Repair Mechanisms",
+    "description": "Develop strategies for reinitializing problematic parts of state or generating new functions.",
+    "id": 1874,
+    "workflow_id": 200,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Testing and Validation",
+    "description": "Test the application with different inputs to ensure its functionality and robustness.",
+    "child_phases": [
+      {
+        "name": "Unit Testing",
+        "description": "Test individual components of the application.",
+        "id": 1876,
+        "workflow_id": 200,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Integration Testing",
+        "description": "Ensure all components work together seamlessly.",
+        "id": 1877,
+        "workflow_id": 200,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Error Handling Testing",
+        "description": "Verify that error handling and self-repair mechanisms function correctly.",
+        "id": 1878,
+        "workflow_id": 200,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1875,
+    "workflow_id": 200,
+    "display_order": 3
+  },
+  {
+    "name": "Unit Testing",
+    "description": "Test individual components of the application.",
+    "id": 1876,
+    "workflow_id": 200,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Integration Testing",
+    "description": "Ensure all components work together seamlessly.",
+    "id": 1877,
+    "workflow_id": 200,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling Testing",
+    "description": "Verify that error handling and self-repair mechanisms function correctly.",
+    "id": 1878,
+    "workflow_id": 200,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "File Input/Output Management",
+    "description": "Handling the input OpenAPI/Swagger files and output README.md file.",
+    "child_phases": [
+      {
+        "name": "Read Input File",
+        "description": "Fetching the API documentation from JSON/YAML formatted OpenAPI/Swagger files.",
+        "id": 1880,
+        "workflow_id": 201,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Write Output File",
+        "description": "Generating markdown formatted README.md file.",
+        "id": 1881,
+        "workflow_id": 201,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1879,
+    "workflow_id": 201,
+    "display_order": 0
+  },
+  {
+    "name": "Read Input File",
+    "description": "Fetching the API documentation from JSON/YAML formatted OpenAPI/Swagger files.",
+    "id": 1880,
+    "workflow_id": 201,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Write Output File",
+    "description": "Generating markdown formatted README.md file.",
+    "id": 1881,
+    "workflow_id": 201,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing",
+    "description": "Extracting and processing relevant data from the input file.",
+    "child_phases": [
+      {
+        "name": "Parse Input Format",
+        "description": "Handling both JSON and YAML formats of OpenAPI/Swagger files.",
+        "id": 1883,
+        "workflow_id": 201,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Extract API Information",
+        "description": "Fetching details like endpoints, methods, parameters, etc. from the parsed data.",
+        "id": 1884,
+        "workflow_id": 201,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1882,
+    "workflow_id": 201,
+    "display_order": 1
+  },
+  {
+    "name": "Parse Input Format",
+    "description": "Handling both JSON and YAML formats of OpenAPI/Swagger files.",
+    "id": 1883,
+    "workflow_id": 201,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Extract API Information",
+    "description": "Fetching details like endpoints, methods, parameters, etc. from the parsed data.",
+    "id": 1884,
+    "workflow_id": 201,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Documentation Generation",
+    "description": "Converting extracted data into markdown format.",
+    "child_phases": [
+      {
+        "name": "Create Header Section",
+        "description": "Generating introductory section for the README.md file.",
+        "id": 1886,
+        "workflow_id": 201,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate API List",
+        "description": "Creating a list of APIs with their endpoints and methods.",
+        "id": 1887,
+        "workflow_id": 201,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Add Detailed Information",
+        "description": "Including parameters, request/response details for each API.",
+        "id": 1888,
+        "workflow_id": 201,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1885,
+    "workflow_id": 201,
+    "display_order": 2
+  },
+  {
+    "name": "Create Header Section",
+    "description": "Generating introductory section for the README.md file.",
+    "id": 1886,
+    "workflow_id": 201,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate API List",
+    "description": "Creating a list of APIs with their endpoints and methods.",
+    "id": 1887,
+    "workflow_id": 201,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Add Detailed Information",
+    "description": "Including parameters, request/response details for each API.",
+    "id": 1888,
+    "workflow_id": 201,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Error Handling",
+    "description": "Managing potential errors during execution.",
+    "child_phases": [
+      {
+        "name": "File Reading/Writing Errors",
+        "description": "Handling errors related to reading input files and writing output files.",
+        "id": 1890,
+        "workflow_id": 201,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Processing Errors",
+        "description": "Managing errors encountered while parsing or extracting data from the input file.",
+        "id": 1891,
+        "workflow_id": 201,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1889,
+    "workflow_id": 201,
+    "display_order": 3
+  },
+  {
+    "name": "File Reading/Writing Errors",
+    "description": "Handling errors related to reading input files and writing output files.",
+    "id": 1890,
+    "workflow_id": 201,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Processing Errors",
+    "description": "Managing errors encountered while parsing or extracting data from the input file.",
+    "id": 1891,
+    "workflow_id": 201,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Define the structure and approach for generating lesson plans.",
+    "child_phases": [
+      {
+        "name": "Topic Analysis",
+        "description": "Break down complex topics into simpler subtopics.",
+        "id": 1893,
+        "workflow_id": 202,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Method Selection",
+        "description": "Suggest appropriate teaching methods for each subtopic.",
+        "id": 1894,
+        "workflow_id": 202,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1892,
+    "workflow_id": 202,
+    "display_order": 0
+  },
+  {
+    "name": "Topic Analysis",
+    "description": "Break down complex topics into simpler subtopics.",
+    "id": 1893,
+    "workflow_id": 202,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Method Selection",
+    "description": "Suggest appropriate teaching methods for each subtopic.",
+    "id": 1894,
+    "workflow_id": 202,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Time Duration Assignment",
+    "description": "Assign estimated time durations for each lesson based on the chosen methods and subtopics.",
+    "id": 1895,
+    "workflow_id": 202,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Lesson Plan Generation",
+    "description": "Combine all the defined elements to generate a structured lesson plan.",
+    "child_phases": [
+      {
+        "name": "Lesson Outline Creation",
+        "description": "Create an outline for each lesson including teaching methods, subtopics, and estimated time.",
+        "id": 1897,
+        "workflow_id": 202,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Final Lesson Plan Formatting",
+        "description": "Format the generated lessons into a cohesive and readable lesson plan document.",
+        "id": 1898,
+        "workflow_id": 202,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1896,
+    "workflow_id": 202,
+    "display_order": 2
+  },
+  {
+    "name": "Lesson Outline Creation",
+    "description": "Create an outline for each lesson including teaching methods, subtopics, and estimated time.",
+    "id": 1897,
+    "workflow_id": 202,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Final Lesson Plan Formatting",
+    "description": "Format the generated lessons into a cohesive and readable lesson plan document.",
+    "id": 1898,
+    "workflow_id": 202,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and validate the input JSON data.",
+    "child_phases": [
+      {
+        "name": "Input Validation",
+        "description": "Check if the input is a valid JSON object.",
+        "id": 1900,
+        "workflow_id": 203,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Cleaning",
+        "description": "Remove any unnecessary spaces, tabs or line breaks from the JSON data.",
+        "id": 1901,
+        "workflow_id": 203,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1899,
+    "workflow_id": 203,
+    "display_order": 0
+  },
+  {
+    "name": "Input Validation",
+    "description": "Check if the input is a valid JSON object.",
+    "id": 1900,
+    "workflow_id": 203,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Cleaning",
+    "description": "Remove any unnecessary spaces, tabs or line breaks from the JSON data.",
+    "id": 1901,
+    "workflow_id": 203,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Taxonomy Building",
+    "description": "Recursively process the JSON object to build the taxonomy.",
+    "child_phases": [
+      {
+        "name": "Root Taxon Extraction",
+        "description": "Extract the root taxon from the input JSON.",
+        "id": 1903,
+        "workflow_id": 203,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Nested Taxon Processing",
+        "description": "Recursively process nested taxons and their items.",
+        "child_phases": [
+          {
+            "name": "Taxon Name Extraction",
+            "description": "Extract the name of the current taxon.",
+            "id": 1905,
+            "workflow_id": 203,
+            "display_order": 0,
+            "child_phases": []
+          },
+          {
+            "name": "Parent Taxon Identification",
+            "description": "Identify the parent taxon if it exists.",
+            "id": 1906,
+            "workflow_id": 203,
+            "display_order": 1,
+            "child_phases": []
+          },
+          {
+            "name": "Leaf Items Processing",
+            "description": "If the current taxon is a leaf, add its items to the taxonomy.",
+            "id": 1907,
+            "workflow_id": 203,
+            "display_order": 2,
+            "child_phases": []
+          }
+        ],
+        "id": 1904,
+        "workflow_id": 203,
+        "display_order": 1
+      }
+    ],
+    "id": 1902,
+    "workflow_id": 203,
+    "display_order": 1
+  },
+  {
+    "name": "Root Taxon Extraction",
+    "description": "Extract the root taxon from the input JSON.",
+    "id": 1903,
+    "workflow_id": 203,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Nested Taxon Processing",
+    "description": "Recursively process nested taxons and their items.",
+    "child_phases": [
+      {
+        "name": "Taxon Name Extraction",
+        "description": "Extract the name of the current taxon.",
+        "id": 1905,
+        "workflow_id": 203,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parent Taxon Identification",
+        "description": "Identify the parent taxon if it exists.",
+        "id": 1906,
+        "workflow_id": 203,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Leaf Items Processing",
+        "description": "If the current taxon is a leaf, add its items to the taxonomy.",
+        "id": 1907,
+        "workflow_id": 203,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1904,
+    "workflow_id": 203,
+    "display_order": 1
+  },
+  {
+    "name": "Taxon Name Extraction",
+    "description": "Extract the name of the current taxon.",
+    "id": 1905,
+    "workflow_id": 203,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parent Taxon Identification",
+    "description": "Identify the parent taxon if it exists.",
+    "id": 1906,
+    "workflow_id": 203,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Leaf Items Processing",
+    "description": "If the current taxon is a leaf, add its items to the taxonomy.",
+    "id": 1907,
+    "workflow_id": 203,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Output Formatting",
+    "description": "Format the built taxonomy as a list of tuples.",
+    "id": 1908,
+    "workflow_id": 203,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Data Extraction",
+    "description": "Extract relevant data from the collection of studies.",
+    "child_phases": [
+      {
+        "name": "Study Selection",
+        "description": "Select studies based on predefined criteria.",
+        "id": 1910,
+        "workflow_id": 204,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Data Extraction",
+        "description": "Extract data such as sample size, effect sizes, and standard errors from selected studies.",
+        "id": 1911,
+        "workflow_id": 204,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1909,
+    "workflow_id": 204,
+    "display_order": 0
+  },
+  {
+    "name": "Study Selection",
+    "description": "Select studies based on predefined criteria.",
+    "id": 1910,
+    "workflow_id": 204,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Data Extraction",
+    "description": "Extract data such as sample size, effect sizes, and standard errors from selected studies.",
+    "id": 1911,
+    "workflow_id": 204,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quality Assessment",
+    "description": "Assess the quality of each study.",
+    "child_phases": [
+      {
+        "name": "Bias Assessment",
+        "description": "Evaluate potential biases in each study.",
+        "id": 1913,
+        "workflow_id": 204,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Risk of Bias Rating",
+        "description": "Rate the risk of bias for each study.",
+        "id": 1914,
+        "workflow_id": 204,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1912,
+    "workflow_id": 204,
+    "display_order": 1
+  },
+  {
+    "name": "Bias Assessment",
+    "description": "Evaluate potential biases in each study.",
+    "id": 1913,
+    "workflow_id": 204,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Risk of Bias Rating",
+    "description": "Rate the risk of bias for each study.",
+    "id": 1914,
+    "workflow_id": 204,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Heterogeneity Testing",
+    "description": "Test for heterogeneity among studies.",
+    "child_phases": [
+      {
+        "name": "Chi-Squared Test",
+        "description": "Perform Chi-squared test to assess heterogeneity.",
+        "id": 1916,
+        "workflow_id": 204,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "I² Statistic Calculation",
+        "description": "Calculate I² statistic to quantify heterogeneity.",
+        "id": 1917,
+        "workflow_id": 204,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1915,
+    "workflow_id": 204,
+    "display_order": 2
+  },
+  {
+    "name": "Chi-Squared Test",
+    "description": "Perform Chi-squared test to assess heterogeneity.",
+    "id": 1916,
+    "workflow_id": 204,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "I² Statistic Calculation",
+    "description": "Calculate I² statistic to quantify heterogeneity.",
+    "id": 1917,
+    "workflow_id": 204,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Pooled Effect Size Calculation",
+    "description": "Calculate the pooled effect size from the studies.",
+    "child_phases": [
+      {
+        "name": "Effect Model Selection",
+        "description": "Select appropriate effect model (fixed or random) based on heterogeneity results.",
+        "id": 1919,
+        "workflow_id": 204,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Pooled Effect Size Calculation",
+        "description": "Calculate the pooled effect size using the selected model.",
+        "id": 1920,
+        "workflow_id": 204,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1918,
+    "workflow_id": 204,
+    "display_order": 3
+  },
+  {
+    "name": "Effect Model Selection",
+    "description": "Select appropriate effect model (fixed or random) based on heterogeneity results.",
+    "id": 1919,
+    "workflow_id": 204,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Pooled Effect Size Calculation",
+    "description": "Calculate the pooled effect size using the selected model.",
+    "id": 1920,
+    "workflow_id": 204,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a comprehensive report in markdown format.",
+    "child_phases": [
+      {
+        "name": "Analysis Steps Documentation",
+        "description": "Document all analysis steps taken.",
+        "id": 1922,
+        "workflow_id": 204,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Results Presentation",
+        "description": "Present the results of each phase.",
+        "id": 1923,
+        "workflow_id": 204,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1921,
+    "workflow_id": 204,
+    "display_order": 4
+  },
+  {
+    "name": "Analysis Steps Documentation",
+    "description": "Document all analysis steps taken.",
+    "id": 1922,
+    "workflow_id": 204,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Results Presentation",
+    "description": "Present the results of each phase.",
+    "id": 1923,
+    "workflow_id": 204,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Problem Setup",
+    "description": "Define the task and set up the Python environment.",
+    "child_phases": [],
+    "id": 1924,
+    "workflow_id": 205,
+    "display_order": 0
+  },
+  {
+    "name": "Monte Carlo Method Implementation",
+    "description": "Implement the Monte Carlo method to estimate Pi.",
+    "child_phases": [
+      {
+        "name": "Random Sampling",
+        "description": "Generate random points within a unit square.",
+        "child_phases": [],
+        "id": 1926,
+        "workflow_id": 205,
+        "display_order": 0
+      },
+      {
+        "name": "Circle Checking",
+        "description": "Check if the generated points lie within a unit circle.",
+        "child_phases": [],
+        "id": 1927,
+        "workflow_id": 205,
+        "display_order": 1
+      },
+      {
+        "name": "Pi Estimation",
+        "description": "Calculate the proportion of points inside the circle to estimate Pi.",
+        "child_phases": [],
+        "id": 1928,
+        "workflow_id": 205,
+        "display_order": 2
+      }
+    ],
+    "id": 1925,
+    "workflow_id": 205,
+    "display_order": 1
+  },
+  {
+    "name": "Random Sampling",
+    "description": "Generate random points within a unit square.",
+    "child_phases": [],
+    "id": 1926,
+    "workflow_id": 205,
+    "display_order": 0
+  },
+  {
+    "name": "Circle Checking",
+    "description": "Check if the generated points lie within a unit circle.",
+    "child_phases": [],
+    "id": 1927,
+    "workflow_id": 205,
+    "display_order": 1
+  },
+  {
+    "name": "Pi Estimation",
+    "description": "Calculate the proportion of points inside the circle to estimate Pi.",
+    "child_phases": [],
+    "id": 1928,
+    "workflow_id": 205,
+    "display_order": 2
+  },
+  {
+    "name": "Results Analysis and Validation",
+    "description": "Analyze the results and validate the estimated value of Pi.",
+    "child_phases": [
+      {
+        "name": "Calculate Accuracy",
+        "description": "Measure the accuracy of the estimated Pi value.",
+        "child_phases": [],
+        "id": 1930,
+        "workflow_id": 205,
+        "display_order": 0
+      },
+      {
+        "name": "Validation Against Known Value",
+        "description": "Compare the estimated Pi value with the known mathematical constant.",
+        "child_phases": [],
+        "id": 1931,
+        "workflow_id": 205,
+        "display_order": 1
+      }
+    ],
+    "id": 1929,
+    "workflow_id": 205,
+    "display_order": 2
+  },
+  {
+    "name": "Calculate Accuracy",
+    "description": "Measure the accuracy of the estimated Pi value.",
+    "child_phases": [],
+    "id": 1930,
+    "workflow_id": 205,
+    "display_order": 0
+  },
+  {
+    "name": "Validation Against Known Value",
+    "description": "Compare the estimated Pi value with the known mathematical constant.",
+    "child_phases": [],
+    "id": 1931,
+    "workflow_id": 205,
+    "display_order": 1
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data and ensure the environment is configured.",
+    "child_phases": [],
+    "id": 1932,
+    "workflow_id": 206,
+    "display_order": 0
+  },
+  {
+    "name": "Graph Generation",
+    "description": "Generate adjacency list representation of the directed dependency graph from the input packages dictionary.",
+    "child_phases": [
+      {
+        "name": "Parse Input Data",
+        "description": "Extract dependencies from the input packages dictionary.",
+        "id": 1934,
+        "workflow_id": 206,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Create Adjacency List",
+        "description": "Construct the adjacency list representation of the graph.",
+        "id": 1935,
+        "workflow_id": 206,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1933,
+    "workflow_id": 206,
+    "display_order": 1
+  },
+  {
+    "name": "Parse Input Data",
+    "description": "Extract dependencies from the input packages dictionary.",
+    "id": 1934,
+    "workflow_id": 206,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Create Adjacency List",
+    "description": "Construct the adjacency list representation of the graph.",
+    "id": 1935,
+    "workflow_id": 206,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Dependency Analysis",
+    "description": "Identify incompatible or circular dependencies in the generated graph.",
+    "child_phases": [
+      {
+        "name": "Detect Incompatible Dependencies",
+        "description": "Check for any incompatible packages.",
+        "id": 1937,
+        "workflow_id": 206,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Detect Circular Dependencies",
+        "description": "Identify any cycles in the directed graph.",
+        "id": 1938,
+        "workflow_id": 206,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1936,
+    "workflow_id": 206,
+    "display_order": 2
+  },
+  {
+    "name": "Detect Incompatible Dependencies",
+    "description": "Check for any incompatible packages.",
+    "id": 1937,
+    "workflow_id": 206,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Detect Circular Dependencies",
+    "description": "Identify any cycles in the directed graph.",
+    "id": 1938,
+    "workflow_id": 206,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output based on the analysis results.",
+    "child_phases": [
+      {
+        "name": "Format Output Data",
+        "description": "Prepare the detected incompatible/circular dependencies and adjacency list in a suitable format.",
+        "id": 1940,
+        "workflow_id": 206,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Save or Display Output",
+        "description": "Store the output data or display it to the user.",
+        "id": 1941,
+        "workflow_id": 206,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1939,
+    "workflow_id": 206,
+    "display_order": 3
+  },
+  {
+    "name": "Format Output Data",
+    "description": "Prepare the detected incompatible/circular dependencies and adjacency list in a suitable format.",
+    "id": 1940,
+    "workflow_id": 206,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Save or Display Output",
+    "description": "Store the output data or display it to the user.",
+    "id": 1941,
+    "workflow_id": 206,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data, ensure it's in a suitable format for processing.",
+    "child_phases": [],
+    "id": 1942,
+    "workflow_id": 207,
+    "display_order": 0
+  },
+  {
+    "name": "Named Entity Recognition (NER)",
+    "description": "Extract entities such as people, organizations, locations from the text.",
+    "child_phases": [
+      {
+        "name": "Text Preprocessing",
+        "description": "Clean and tokenize input text.",
+        "child_phases": [],
+        "id": 1944,
+        "workflow_id": 207,
+        "display_order": 0
+      },
+      {
+        "name": "Entity Extraction",
+        "description": "Identify and classify entities using a predefined ontology or NER model.",
+        "child_phases": [],
+        "id": 1945,
+        "workflow_id": 207,
+        "display_order": 1
+      }
+    ],
+    "id": 1943,
+    "workflow_id": 207,
+    "display_order": 1
+  },
+  {
+    "name": "Text Preprocessing",
+    "description": "Clean and tokenize input text.",
+    "child_phases": [],
+    "id": 1944,
+    "workflow_id": 207,
+    "display_order": 0
+  },
+  {
+    "name": "Entity Extraction",
+    "description": "Identify and classify entities using a predefined ontology or NER model.",
+    "child_phases": [],
+    "id": 1945,
+    "workflow_id": 207,
+    "display_order": 1
+  },
+  {
+    "name": "Relationship Extraction",
+    "description": "Identify relationships between extracted entities.",
+    "child_phases": [
+      {
+        "name": "Dependency Parsing",
+        "description": "Analyze grammatical structures to understand entity relationships.",
+        "child_phases": [],
+        "id": 1947,
+        "workflow_id": 207,
+        "display_order": 0
+      },
+      {
+        "name": "Pattern Matching",
+        "description": "Match predefined relationship patterns in the text.",
+        "child_phases": [],
+        "id": 1948,
+        "workflow_id": 207,
+        "display_order": 1
+      }
+    ],
+    "id": 1946,
+    "workflow_id": 207,
+    "display_order": 2
+  },
+  {
+    "name": "Dependency Parsing",
+    "description": "Analyze grammatical structures to understand entity relationships.",
+    "child_phases": [],
+    "id": 1947,
+    "workflow_id": 207,
+    "display_order": 0
+  },
+  {
+    "name": "Pattern Matching",
+    "description": "Match predefined relationship patterns in the text.",
+    "child_phases": [],
+    "id": 1948,
+    "workflow_id": 207,
+    "display_order": 1
+  },
+  {
+    "name": "Graph Construction",
+    "description": "Construct a graph data structure using extracted entities and their relationships.",
+    "child_phases": [
+      {
+        "name": "Node Creation",
+        "description": "Create nodes in the graph for each unique entity.",
+        "child_phases": [],
+        "id": 1950,
+        "workflow_id": 207,
+        "display_order": 0
+      },
+      {
+        "name": "Edge Creation",
+        "description": "Connect entities with edges based on their relationships.",
+        "child_phases": [],
+        "id": 1951,
+        "workflow_id": 207,
+        "display_order": 1
+      }
+    ],
+    "id": 1949,
+    "workflow_id": 207,
+    "display_order": 3
+  },
+  {
+    "name": "Node Creation",
+    "description": "Create nodes in the graph for each unique entity.",
+    "child_phases": [],
+    "id": 1950,
+    "workflow_id": 207,
+    "display_order": 0
+  },
+  {
+    "name": "Edge Creation",
+    "description": "Connect entities with edges based on their relationships.",
+    "child_phases": [],
+    "id": 1951,
+    "workflow_id": 207,
+    "display_order": 1
+  },
+  {
+    "name": "RDF Serialization",
+    "description": "Convert the constructed graph into an RDF-like representation.",
+    "child_phases": [
+      {
+        "name": "Graph Normalization",
+        "description": "Prepare the graph for serialization, ensuring it's in a suitable format.",
+        "child_phases": [],
+        "id": 1953,
+        "workflow_id": 207,
+        "display_order": 0
+      },
+      {
+        "name": "RDF Serialization",
+        "description": "Convert the graph into RDF triples and serialize them.",
+        "child_phases": [],
+        "id": 1954,
+        "workflow_id": 207,
+        "display_order": 1
+      }
+    ],
+    "id": 1952,
+    "workflow_id": 207,
+    "display_order": 4
+  },
+  {
+    "name": "Graph Normalization",
+    "description": "Prepare the graph for serialization, ensuring it's in a suitable format.",
+    "child_phases": [],
+    "id": 1953,
+    "workflow_id": 207,
+    "display_order": 0
+  },
+  {
+    "name": "RDF Serialization",
+    "description": "Convert the graph into RDF triples and serialize them.",
+    "child_phases": [],
+    "id": 1954,
+    "workflow_id": 207,
+    "display_order": 1
+  },
+  {
+    "name": "Task Analysis",
+    "description": "Understand and break down the task into individual steps.",
+    "child_phases": [
+      {
+        "name": "Step Identification",
+        "description": "Identify each unique step required to complete the task.",
+        "id": 1956,
+        "workflow_id": 208,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Dependency Check",
+        "description": "Check if there are any dependencies between the identified steps.",
+        "id": 1957,
+        "workflow_id": 208,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1955,
+    "workflow_id": 208,
+    "display_order": 0
+  },
+  {
+    "name": "Step Identification",
+    "description": "Identify each unique step required to complete the task.",
+    "id": 1956,
+    "workflow_id": 208,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Dependency Check",
+    "description": "Check if there are any dependencies between the identified steps.",
+    "id": 1957,
+    "workflow_id": 208,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Selection",
+    "description": "Select optimal tools for each step.",
+    "child_phases": [
+      {
+        "name": "Tool Research",
+        "description": "Research available tools that can accomplish each step.",
+        "id": 1959,
+        "workflow_id": 208,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Tool Evaluation",
+        "description": "Evaluate the suitability of each tool for its corresponding step.",
+        "id": 1960,
+        "workflow_id": 208,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1958,
+    "workflow_id": 208,
+    "display_order": 1
+  },
+  {
+    "name": "Tool Research",
+    "description": "Research available tools that can accomplish each step.",
+    "id": 1959,
+    "workflow_id": 208,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Evaluation",
+    "description": "Evaluate the suitability of each tool for its corresponding step.",
+    "id": 1960,
+    "workflow_id": 208,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Optimization",
+    "description": "Determine optimal parameters for selected tools.",
+    "child_phases": [
+      {
+        "name": "Parameter Identification",
+        "description": "Identify which parameters are adjustable for each tool.",
+        "id": 1962,
+        "workflow_id": 208,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parameter Testing",
+        "description": "Test different parameter values to optimize performance.",
+        "id": 1963,
+        "workflow_id": 208,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1961,
+    "workflow_id": 208,
+    "display_order": 2
+  },
+  {
+    "name": "Parameter Identification",
+    "description": "Identify which parameters are adjustable for each tool.",
+    "id": 1962,
+    "workflow_id": 208,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Testing",
+    "description": "Test different parameter values to optimize performance.",
+    "id": 1963,
+    "workflow_id": 208,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Workflow Automation",
+    "description": "Automate the workflow by connecting selected tools with optimal parameters.",
+    "child_phases": [
+      {
+        "name": "Tool Integration",
+        "description": "Integrate selected tools into a single workflow.",
+        "id": 1965,
+        "workflow_id": 208,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parameter Configuration",
+        "description": "Configure optimal parameters for each tool in the workflow.",
+        "id": 1966,
+        "workflow_id": 208,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1964,
+    "workflow_id": 208,
+    "display_order": 3
+  },
+  {
+    "name": "Tool Integration",
+    "description": "Integrate selected tools into a single workflow.",
+    "id": 1965,
+    "workflow_id": 208,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parameter Configuration",
+    "description": "Configure optimal parameters for each tool in the workflow.",
+    "id": 1966,
+    "workflow_id": 208,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Code Input",
+    "description": "Receive the code file as input.",
+    "child_phases": [],
+    "id": 1967,
+    "workflow_id": 209,
+    "display_order": 0
+  },
+  {
+    "name": "PEP 8 Compliance Check",
+    "description": "Check the code for PEP 8 style guide compliance using pylint.",
+    "child_phases": [
+      {
+        "name": "Pylint Configuration",
+        "description": "Configure pylint to check for specific rules.",
+        "child_phases": [],
+        "id": 1969,
+        "workflow_id": 209,
+        "display_order": 0
+      },
+      {
+        "name": "Pylint Execution",
+        "description": "Run pylint on the input code file.",
+        "child_phases": [],
+        "id": 1970,
+        "workflow_id": 209,
+        "display_order": 1
+      }
+    ],
+    "id": 1968,
+    "workflow_id": 209,
+    "display_order": 1
+  },
+  {
+    "name": "Pylint Configuration",
+    "description": "Configure pylint to check for specific rules.",
+    "child_phases": [],
+    "id": 1969,
+    "workflow_id": 209,
+    "display_order": 0
+  },
+  {
+    "name": "Pylint Execution",
+    "description": "Run pylint on the input code file.",
+    "child_phases": [],
+    "id": 1970,
+    "workflow_id": 209,
+    "display_order": 1
+  },
+  {
+    "name": "Generate Report",
+    "description": "Generate a report with violated rules based on pylint's output.",
+    "child_phases": [
+      {
+        "name": "Parse Pylint Output",
+        "description": "Extract violated rules from pylint's output.",
+        "child_phases": [],
+        "id": 1972,
+        "workflow_id": 209,
+        "display_order": 0
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate a report based on the extracted violations.",
+        "child_phases": [
+          {
+            "name": "Suggest Fixes",
+            "description": "Include basic suggestions for common violation fixes like missing docstrings or trailing whitespace.",
+            "child_phases": [],
+            "id": 1974,
+            "workflow_id": 209,
+            "display_order": 0
+          }
+        ],
+        "id": 1973,
+        "workflow_id": 209,
+        "display_order": 1
+      }
+    ],
+    "id": 1971,
+    "workflow_id": 209,
+    "display_order": 2
+  },
+  {
+    "name": "Parse Pylint Output",
+    "description": "Extract violated rules from pylint's output.",
+    "child_phases": [],
+    "id": 1972,
+    "workflow_id": 209,
+    "display_order": 0
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report based on the extracted violations.",
+    "child_phases": [
+      {
+        "name": "Suggest Fixes",
+        "description": "Include basic suggestions for common violation fixes like missing docstrings or trailing whitespace.",
+        "child_phases": [],
+        "id": 1974,
+        "workflow_id": 209,
+        "display_order": 0
+      }
+    ],
+    "id": 1973,
+    "workflow_id": 209,
+    "display_order": 1
+  },
+  {
+    "name": "Suggest Fixes",
+    "description": "Include basic suggestions for common violation fixes like missing docstrings or trailing whitespace.",
+    "child_phases": [],
+    "id": 1974,
+    "workflow_id": 209,
+    "display_order": 0
+  },
+  {
+    "name": "Output Report",
+    "description": "Provide the generated report as output.",
+    "child_phases": [],
+    "id": 1975,
+    "workflow_id": 209,
+    "display_order": 3
+  },
+  {
+    "name": "Planning",
+    "description": "Define the structure and format of the lesson plan.",
+    "child_phases": [
+      {
+        "name": "Define Lesson Plan Structure",
+        "description": "Determine how topics, subtopics, objectives, and resources will be organized.",
+        "id": 1977,
+        "workflow_id": 210,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Gather Input Data",
+        "description": "Collect the list of topics or desired outcomes.",
+        "id": 1978,
+        "workflow_id": 210,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1976,
+    "workflow_id": 210,
+    "display_order": 0
+  },
+  {
+    "name": "Define Lesson Plan Structure",
+    "description": "Determine how topics, subtopics, objectives, and resources will be organized.",
+    "id": 1977,
+    "workflow_id": 210,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Gather Input Data",
+    "description": "Collect the list of topics or desired outcomes.",
+    "id": 1978,
+    "workflow_id": 210,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Processing",
+    "description": "Generate the structured lessons based on the input data.",
+    "child_phases": [
+      {
+        "name": "Break Down Topics",
+        "description": "Divide each topic into subtopics if necessary.",
+        "id": 1980,
+        "workflow_id": 210,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Define Objectives",
+        "description": "Formulate clear learning objectives for each subtopic.",
+        "id": 1981,
+        "workflow_id": 210,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Collect Resources",
+        "description": "Gather relevant resources (e.g., videos, articles) for each subtopic.",
+        "id": 1982,
+        "workflow_id": 210,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1979,
+    "workflow_id": 210,
+    "display_order": 1
+  },
+  {
+    "name": "Break Down Topics",
+    "description": "Divide each topic into subtopics if necessary.",
+    "id": 1980,
+    "workflow_id": 210,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Define Objectives",
+    "description": "Formulate clear learning objectives for each subtopic.",
+    "id": 1981,
+    "workflow_id": 210,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Collect Resources",
+    "description": "Gather relevant resources (e.g., videos, articles) for each subtopic.",
+    "id": 1982,
+    "workflow_id": 210,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Formatting",
+    "description": "Format the lesson plan according to the predefined structure.",
+    "child_phases": [
+      {
+        "name": "Create Lesson Plan Template",
+        "description": "Design a template that follows the defined structure.",
+        "id": 1984,
+        "workflow_id": 210,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Populate Lesson Plan",
+        "description": "Fill in the template with the generated lessons, objectives, and resources.",
+        "id": 1985,
+        "workflow_id": 210,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1983,
+    "workflow_id": 210,
+    "display_order": 2
+  },
+  {
+    "name": "Create Lesson Plan Template",
+    "description": "Design a template that follows the defined structure.",
+    "id": 1984,
+    "workflow_id": 210,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Populate Lesson Plan",
+    "description": "Fill in the template with the generated lessons, objectives, and resources.",
+    "id": 1985,
+    "workflow_id": 210,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Review and Output",
+    "description": "Ensure the lesson plan is complete and meets the requirements.",
+    "child_phases": [
+      {
+        "name": "Quality Check",
+        "description": "Review the lesson plan for accuracy, completeness, and coherence.",
+        "id": 1987,
+        "workflow_id": 210,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Generate Output",
+        "description": "Export the lesson plan in the required format (e.g., PDF, Word).",
+        "id": 1988,
+        "workflow_id": 210,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1986,
+    "workflow_id": 210,
+    "display_order": 3
+  },
+  {
+    "name": "Quality Check",
+    "description": "Review the lesson plan for accuracy, completeness, and coherence.",
+    "id": 1987,
+    "workflow_id": 210,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Generate Output",
+    "description": "Export the lesson plan in the required format (e.g., PDF, Word).",
+    "id": 1988,
+    "workflow_id": 210,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data and model for explanation",
+    "child_phases": [
+      {
+        "name": "Load Data",
+        "description": "Load required datasets",
+        "id": 1990,
+        "workflow_id": 211,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Load Model",
+        "description": "Load the trained machine learning model",
+        "id": 1991,
+        "workflow_id": 211,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 1989,
+    "workflow_id": 211,
+    "display_order": 0
+  },
+  {
+    "name": "Load Data",
+    "description": "Load required datasets",
+    "id": 1990,
+    "workflow_id": 211,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Load Model",
+    "description": "Load the trained machine learning model",
+    "id": 1991,
+    "workflow_id": 211,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Model Explainability",
+    "description": "Generate explainable artifacts using XAI libraries",
+    "child_phases": [
+      {
+        "name": "Feature Importance",
+        "description": "Calculate feature importance using SHAP, LIME or ANCHOR",
+        "id": 1993,
+        "workflow_id": 211,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Local Interpretations",
+        "description": "Generate local interpretations for individual predictions",
+        "id": 1994,
+        "workflow_id": 211,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Global Surrogate Models",
+        "description": "Create global surrogate models to explain overall model behavior",
+        "id": 1995,
+        "workflow_id": 211,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1992,
+    "workflow_id": 211,
+    "display_order": 1
+  },
+  {
+    "name": "Feature Importance",
+    "description": "Calculate feature importance using SHAP, LIME or ANCHOR",
+    "id": 1993,
+    "workflow_id": 211,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Local Interpretations",
+    "description": "Generate local interpretations for individual predictions",
+    "id": 1994,
+    "workflow_id": 211,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Global Surrogate Models",
+    "description": "Create global surrogate models to explain overall model behavior",
+    "id": 1995,
+    "workflow_id": 211,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Artifacts Generation",
+    "description": "Generate and save explanation artifacts",
+    "child_phases": [
+      {
+        "name": "Save Feature Importance",
+        "description": "Save feature importance as output",
+        "id": 1997,
+        "workflow_id": 211,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Save Local Interpretations",
+        "description": "Save local interpretations as output",
+        "id": 1998,
+        "workflow_id": 211,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Save Global Surrogate Models",
+        "description": "Save global surrogate models as output",
+        "id": 1999,
+        "workflow_id": 211,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 1996,
+    "workflow_id": 211,
+    "display_order": 2
+  },
+  {
+    "name": "Save Feature Importance",
+    "description": "Save feature importance as output",
+    "id": 1997,
+    "workflow_id": 211,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Save Local Interpretations",
+    "description": "Save local interpretations as output",
+    "id": 1998,
+    "workflow_id": 211,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Save Global Surrogate Models",
+    "description": "Save global surrogate models as output",
+    "id": 1999,
+    "workflow_id": 211,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Setup",
+    "description": "Configure the environment and prepare input data.",
+    "child_phases": [],
+    "id": 2000,
+    "workflow_id": 213,
+    "display_order": 0
+  },
+  {
+    "name": "Code Input",
+    "description": "Take a string containing Python code as input.",
+    "child_phases": [],
+    "id": 2001,
+    "workflow_id": 213,
+    "display_order": 1
+  },
+  {
+    "name": "PEP 8 Style Check",
+    "description": "Perform checks for PEP 8 style using pycodestyle.",
+    "child_phases": [],
+    "id": 2002,
+    "workflow_id": 213,
+    "display_order": 2
+  },
+  {
+    "name": "Syntax Error Linting",
+    "description": "Check for syntax errors using pyflakes3.",
+    "child_phases": [],
+    "id": 2003,
+    "workflow_id": 213,
+    "display_order": 3
+  },
+  {
+    "name": "Test Coverage",
+    "description": "Generate test coverage report.",
+    "child_phases": [
+      {
+        "name": "Test Execution",
+        "description": "Execute tests to generate coverage data.",
+        "child_phases": [],
+        "id": 2005,
+        "workflow_id": 213,
+        "display_order": 0
+      },
+      {
+        "name": "Report Generation",
+        "description": "Generate a report summarizing the findings.",
+        "child_phases": [],
+        "id": 2006,
+        "workflow_id": 213,
+        "display_order": 1
+      }
+    ],
+    "id": 2004,
+    "workflow_id": 213,
+    "display_order": 4
+  },
+  {
+    "name": "Test Execution",
+    "description": "Execute tests to generate coverage data.",
+    "child_phases": [],
+    "id": 2005,
+    "workflow_id": 213,
+    "display_order": 0
+  },
+  {
+    "name": "Report Generation",
+    "description": "Generate a report summarizing the findings.",
+    "child_phases": [],
+    "id": 2006,
+    "workflow_id": 213,
+    "display_order": 1
+  },
+  {
+    "name": "Summary Report",
+    "description": "Combine and summarize all review findings.",
+    "child_phases": [],
+    "id": 2007,
+    "workflow_id": 213,
+    "display_order": 5
+  },
+  {
+    "name": "Data Preprocessing",
+    "description": "Handling missing values and encoding categorical variables",
+    "child_phases": [
+      {
+        "name": "Missing Value Imputation",
+        "description": "Filling missing values with appropriate techniques",
+        "id": 2009,
+        "workflow_id": 214,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Categorical Encoding",
+        "description": "Encoding categorical variables using methods like one-hot encoding or label encoding",
+        "id": 2010,
+        "workflow_id": 214,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2008,
+    "workflow_id": 214,
+    "display_order": 0
+  },
+  {
+    "name": "Missing Value Imputation",
+    "description": "Filling missing values with appropriate techniques",
+    "id": 2009,
+    "workflow_id": 214,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Categorical Encoding",
+    "description": "Encoding categorical variables using methods like one-hot encoding or label encoding",
+    "id": 2010,
+    "workflow_id": 214,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Bias Detection",
+    "description": "Identifying and measuring bias in the dataset using appropriate metrics",
+    "child_phases": [
+      {
+        "name": "Demographic Parity Ratio Calculation",
+        "description": "Measuring if the selection rates of protected groups are similar to those of unprotected groups",
+        "id": 2012,
+        "workflow_id": 214,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Equal Opportunity Ratio Calculation",
+        "description": "Measuring if the false negative rate for protected groups is similar to that of unprotected groups",
+        "id": 2013,
+        "workflow_id": 214,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2011,
+    "workflow_id": 214,
+    "display_order": 1
+  },
+  {
+    "name": "Demographic Parity Ratio Calculation",
+    "description": "Measuring if the selection rates of protected groups are similar to those of unprotected groups",
+    "id": 2012,
+    "workflow_id": 214,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Equal Opportunity Ratio Calculation",
+    "description": "Measuring if the false negative rate for protected groups is similar to that of unprotected groups",
+    "id": 2013,
+    "workflow_id": 214,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Bias Mitigation",
+    "description": "Applying techniques to reduce bias in the dataset",
+    "child_phases": [
+      {
+        "name": "Reweighing",
+        "description": "Adjusting the weights of data points to mitigate bias",
+        "id": 2015,
+        "workflow_id": 214,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Resampling",
+        "description": "Over-sampling or under-sampling techniques to balance protected groups",
+        "id": 2016,
+        "workflow_id": 214,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2014,
+    "workflow_id": 214,
+    "display_order": 2
+  },
+  {
+    "name": "Reweighing",
+    "description": "Adjusting the weights of data points to mitigate bias",
+    "id": 2015,
+    "workflow_id": 214,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Resampling",
+    "description": "Over-sampling or under-sampling techniques to balance protected groups",
+    "id": 2016,
+    "workflow_id": 214,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output",
+    "description": "Generating the processed dataset with reduced bias",
+    "id": 2017,
+    "workflow_id": 214,
+    "display_order": 3,
+    "child_phases": []
+  },
+  {
+    "name": "Problem Definition",
+    "description": "Understand the task and define the problem.",
+    "child_phases": [],
+    "id": 2018,
+    "workflow_id": 215,
+    "display_order": 0
+  },
+  {
+    "name": "Environment Setup",
+    "description": "Ensure the Python environment is configured with required dependencies.",
+    "child_phases": [],
+    "id": 2019,
+    "workflow_id": 215,
+    "display_order": 1
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare input data if any, and set up necessary constants (e.g., N for chessboard size).",
+    "child_phases": [],
+    "id": 2020,
+    "workflow_id": 215,
+    "display_order": 2
+  },
+  {
+    "name": "Model Development",
+    "description": "Develop the random walk model on an NxN chessboard.",
+    "child_phases": [
+      {
+        "name": "Define Chessboard",
+        "description": "Create a function to define an NxN chessboard.",
+        "id": 2022,
+        "workflow_id": 215,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Implement Random Walk",
+        "description": "Create functions for moving randomly in four directions (up, down, left, right).",
+        "id": 2023,
+        "workflow_id": 215,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2021,
+    "workflow_id": 215,
+    "display_order": 3
+  },
+  {
+    "name": "Define Chessboard",
+    "description": "Create a function to define an NxN chessboard.",
+    "id": 2022,
+    "workflow_id": 215,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Implement Random Walk",
+    "description": "Create functions for moving randomly in four directions (up, down, left, right).",
+    "id": 2023,
+    "workflow_id": 215,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Monte Carlo Simulation",
+    "description": "Estimate the expected number of moves to reach the center using Monte Carlo simulations.",
+    "child_phases": [
+      {
+        "name": "Calculate Expected Moves",
+        "description": "Run simulations and calculate the average number of moves required to reach the center.",
+        "id": 2025,
+        "workflow_id": 215,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Error Analysis",
+        "description": "Analyze the standard error or confidence interval for the estimated expected moves.",
+        "id": 2026,
+        "workflow_id": 215,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2024,
+    "workflow_id": 215,
+    "display_order": 4
+  },
+  {
+    "name": "Calculate Expected Moves",
+    "description": "Run simulations and calculate the average number of moves required to reach the center.",
+    "id": 2025,
+    "workflow_id": 215,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Error Analysis",
+    "description": "Analyze the standard error or confidence interval for the estimated expected moves.",
+    "id": 2026,
+    "workflow_id": 215,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Result Presentation",
+    "description": "Present the results in a clear and understandable manner.",
+    "child_phases": [
+      {
+        "name": "Create Visualization",
+        "description": "Visualize the random walks and their paths on the chessboard.",
+        "id": 2028,
+        "workflow_id": 215,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Document Results",
+        "description": "Write a report or document explaining the methodology, results, and any insights gained.",
+        "id": 2029,
+        "workflow_id": 215,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2027,
+    "workflow_id": 215,
+    "display_order": 5
+  },
+  {
+    "name": "Create Visualization",
+    "description": "Visualize the random walks and their paths on the chessboard.",
+    "id": 2028,
+    "workflow_id": 215,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Document Results",
+    "description": "Write a report or document explaining the methodology, results, and any insights gained.",
+    "id": 2029,
+    "workflow_id": 215,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Planning",
+    "description": "Define the structure of the quiz and user performance tracking.",
+    "child_phases": [
+      {
+        "name": "Quiz Structure Definition",
+        "description": "Determine how questions are grouped by difficulty.",
+        "id": 2031,
+        "workflow_id": 216,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "User Performance Tracking",
+        "description": "Create a system to track user answers and correctness.",
+        "id": 2032,
+        "workflow_id": 216,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2030,
+    "workflow_id": 216,
+    "display_order": 0
+  },
+  {
+    "name": "Quiz Structure Definition",
+    "description": "Determine how questions are grouped by difficulty.",
+    "id": 2031,
+    "workflow_id": 216,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "User Performance Tracking",
+    "description": "Create a system to track user answers and correctness.",
+    "id": 2032,
+    "workflow_id": 216,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Question Selection",
+    "description": "Implement the logic for selecting questions based on user performance.",
+    "child_phases": [
+      {
+        "name": "Initial Question Selection",
+        "description": "Start with medium-difficulty questions.",
+        "id": 2034,
+        "workflow_id": 216,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Adaptive Difficulty Adjustment",
+        "description": "Increase or decrease difficulty based on user correctness.",
+        "id": 2035,
+        "workflow_id": 216,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Quiz Termination Condition",
+        "description": "Stop generating questions when the user answers five in a row correctly or incorrectly.",
+        "id": 2036,
+        "workflow_id": 216,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 2033,
+    "workflow_id": 216,
+    "display_order": 1
+  },
+  {
+    "name": "Initial Question Selection",
+    "description": "Start with medium-difficulty questions.",
+    "id": 2034,
+    "workflow_id": 216,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Adaptive Difficulty Adjustment",
+    "description": "Increase or decrease difficulty based on user correctness.",
+    "id": 2035,
+    "workflow_id": 216,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Termination Condition",
+    "description": "Stop generating questions when the user answers five in a row correctly or incorrectly.",
+    "id": 2036,
+    "workflow_id": 216,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "User Interaction",
+    "description": "Create the interface for users to take the quiz and receive feedback.",
+    "child_phases": [
+      {
+        "name": "Quiz Display",
+        "description": "Present questions one at a time to the user.",
+        "id": 2038,
+        "workflow_id": 216,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Answer Submission",
+        "description": "Allow users to submit their answers.",
+        "id": 2039,
+        "workflow_id": 216,
+        "display_order": 1,
+        "child_phases": []
+      },
+      {
+        "name": "Feedback Provision",
+        "description": "Provide immediate feedback on whether the answer is correct or not.",
+        "id": 2040,
+        "workflow_id": 216,
+        "display_order": 2,
+        "child_phases": []
+      }
+    ],
+    "id": 2037,
+    "workflow_id": 216,
+    "display_order": 2
+  },
+  {
+    "name": "Quiz Display",
+    "description": "Present questions one at a time to the user.",
+    "id": 2038,
+    "workflow_id": 216,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Answer Submission",
+    "description": "Allow users to submit their answers.",
+    "id": 2039,
+    "workflow_id": 216,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Feedback Provision",
+    "description": "Provide immediate feedback on whether the answer is correct or not.",
+    "id": 2040,
+    "workflow_id": 216,
+    "display_order": 2,
+    "child_phases": []
+  },
+  {
+    "name": "Quiz Results Recording",
+    "description": "Store and return the questions asked along with their results.",
+    "child_phases": [
+      {
+        "name": "Results Storage",
+        "description": "Save each question presented and its corresponding result.",
+        "id": 2042,
+        "workflow_id": 216,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Results Return",
+        "description": "Return the list of questions asked along with their results upon quiz completion.",
+        "id": 2043,
+        "workflow_id": 216,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2041,
+    "workflow_id": 216,
+    "display_order": 3
+  },
+  {
+    "name": "Results Storage",
+    "description": "Save each question presented and its corresponding result.",
+    "id": 2042,
+    "workflow_id": 216,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Results Return",
+    "description": "Return the list of questions asked along with their results upon quiz completion.",
+    "id": 2043,
+    "workflow_id": 216,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Data Preparation",
+    "description": "Prepare and organize the dataset of tools and their functionalities.",
+    "child_phases": [
+      {
+        "name": "Load Data",
+        "description": "Load the dataset into a Python environment.",
+        "id": 2045,
+        "workflow_id": 217,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Clean Data",
+        "description": "Clean and preprocess the data if necessary.",
+        "id": 2046,
+        "workflow_id": 217,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2044,
+    "workflow_id": 217,
+    "display_order": 0
+  },
+  {
+    "name": "Load Data",
+    "description": "Load the dataset into a Python environment.",
+    "id": 2045,
+    "workflow_id": 217,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Clean Data",
+    "description": "Clean and preprocess the data if necessary.",
+    "id": 2046,
+    "workflow_id": 217,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "User Input Processing",
+    "description": "Process user input regarding their current task step.",
+    "child_phases": [
+      {
+        "name": "Receive Input",
+        "description": "Get user input in plain language.",
+        "id": 2048,
+        "workflow_id": 217,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Parse Input",
+        "description": "Transform user input into a format suitable for matching with tool functionalities.",
+        "id": 2049,
+        "workflow_id": 217,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2047,
+    "workflow_id": 217,
+    "display_order": 1
+  },
+  {
+    "name": "Receive Input",
+    "description": "Get user input in plain language.",
+    "id": 2048,
+    "workflow_id": 217,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Parse Input",
+    "description": "Transform user input into a format suitable for matching with tool functionalities.",
+    "id": 2049,
+    "workflow_id": 217,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Tool Recommendation",
+    "description": "Recommend optimal software tools based on the user's task step.",
+    "child_phases": [
+      {
+        "name": "Match Tools",
+        "description": "Find tools in the dataset that match or are relevant to the user's task.",
+        "id": 2051,
+        "workflow_id": 217,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Rank Tools",
+        "description": "Rank recommended tools based on their suitability for the task step.",
+        "id": 2052,
+        "workflow_id": 217,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2050,
+    "workflow_id": 217,
+    "display_order": 2
+  },
+  {
+    "name": "Match Tools",
+    "description": "Find tools in the dataset that match or are relevant to the user's task.",
+    "id": 2051,
+    "workflow_id": 217,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Rank Tools",
+    "description": "Rank recommended tools based on their suitability for the task step.",
+    "id": 2052,
+    "workflow_id": 217,
+    "display_order": 1,
+    "child_phases": []
+  },
+  {
+    "name": "Output Generation",
+    "description": "Generate output containing the recommended software tools and parameters.",
+    "child_phases": [
+      {
+        "name": "Format Output",
+        "description": "Present the recommendations in a user-friendly format.",
+        "id": 2054,
+        "workflow_id": 217,
+        "display_order": 0,
+        "child_phases": []
+      },
+      {
+        "name": "Display Output",
+        "description": "Show the recommendations to the user.",
+        "id": 2055,
+        "workflow_id": 217,
+        "display_order": 1,
+        "child_phases": []
+      }
+    ],
+    "id": 2053,
+    "workflow_id": 217,
+    "display_order": 3
+  },
+  {
+    "name": "Format Output",
+    "description": "Present the recommendations in a user-friendly format.",
+    "id": 2054,
+    "workflow_id": 217,
+    "display_order": 0,
+    "child_phases": []
+  },
+  {
+    "name": "Display Output",
+    "description": "Show the recommendations to the user.",
+    "id": 2055,
+    "workflow_id": 217,
+    "display_order": 1,
+    "child_phases": []
+  }
+]
+}

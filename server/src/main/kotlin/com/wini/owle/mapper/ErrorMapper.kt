@@ -3,9 +3,13 @@ package com.wini.owle.mapper
 import com.wini.owle.api.ApiError
 import com.wini.owle.error.AuthenticationError
 import com.wini.owle.error.AuthorizationError
-import com.wini.owle.error.DatabaseError
-import com.wini.owle.error.EmptyListNotAllowed
-import com.wini.owle.error.FieldConstraintError
+import com.wini.owle.error.BatchOpOfNoDataObjects
+import com.wini.owle.error.ConnectionFailure
+import com.wini.owle.error.ConstraintError
+import com.wini.owle.error.DbConstraintViolation
+import com.wini.owle.error.DbTransactionError
+import com.wini.owle.error.DeadlockDetected
+import com.wini.owle.error.GenericError
 import com.wini.owle.error.MissingParameter
 import com.wini.owle.error.MultipleParamFailure
 import com.wini.owle.error.MultipleTypeValidations
@@ -26,12 +30,12 @@ object ErrorMapper {
                 is MultipleTypeValidations -> TODO()
                 is ParamValueMalformedLong -> TODO()
                 RequestBodyMalformed -> TODO()
-                DatabaseError.ConnectionFailure -> TODO()
-                DatabaseError.DbConstraintViolation -> TODO()
-                DatabaseError.DeadlockDetected -> TODO()
-                is DatabaseError.Generic -> TODO()
-                DatabaseError.Timeout -> TODO()
-                DatabaseError.DbTransactionError -> TODO()
+                ConnectionFailure -> TODO()
+                DbConstraintViolation -> TODO()
+                DeadlockDetected -> TODO()
+                is GenericError -> TODO()
+                Timeout -> TODO()
+                DbTransactionError -> TODO()
                 AuthenticationError -> TODO()
                 AuthorizationError -> TODO()
                 NoSuchIdError -> TODO()

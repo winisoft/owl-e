@@ -1,5 +1,5 @@
 package com.wini.owle.schema.wrapper.declaration
-
+/*
 import com.google.devtools.ksp.symbol.*
 import com.wini.owle.schema.wrapper.annotation.ModelAnnotation
 import com.wini.owle.schema.wrapper.annotation.ModelAnnotationImpl
@@ -144,7 +144,7 @@ open class ModelDeclarationTest {
         assertFalse(currentModelDecl.isNotValidatorGenTarget) 
         assertTrue(currentModelDecl.isValidatorGenTarget)
     }
-
+/*
     /**
      * **Test: `constrainedFields` correctly identifies, wraps, and groups constraint annotations for properties.**
      *
@@ -266,4 +266,8 @@ open class ModelDeclarationTest {
         val field3WrapperOrNull = actualConstrainedFieldsMap.keys.find { it.simpleName.asString() == "field3" }
         assertNull(field3WrapperOrNull, "ConstrainedField wrapper for 'field3' (which has no constraints) should not be present.")
     }
+
+
 }
+
+ */

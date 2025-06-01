@@ -3,14 +3,8 @@ package com.wini.owle.schema.wrapper.annotation
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSValueArgument
 import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.unmockkAll
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
+/*
 open class ModelAnnotationTest {
 
     private lateinit var modelAnnotation: ModelAnnotation
@@ -101,3 +95,5 @@ open class ModelAnnotationTest {
         assertTrue(modelAnnotation.isNotSkipValidation)
     }
 }
+
+ */

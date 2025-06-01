@@ -1,34 +1,50 @@
 package com.wini.owle.entity.typing
 
-import com.wini.owle.entity.TypeSchemaRefs
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents a reference within a type schema, supporting nested or hierarchical type structures.
  * Each schema reference is tied to a specific type declaration and may contain child references.
  */
-class TypeSchemaRefEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<TypeSchemaRefEntity>(TypeSchemaRefs)
+class TypeSchemaRefEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<TypeSchemaRefEntity>(TypeSchemaRefs)
 
     /**
      * Reference to the parent schema, allowing nested or recursive schemas.
+     *
+     * -- If NULL: this is the “root schema node” for a class (points at the class’s type_nodes.id).
+     * -- If NOT NULL: points at another row in this same table.
      */
     var parentRef by TypeSchemaRefEntity optionalReferencedOn TypeSchemaRefs.parentRef
 
+    var classNode by TypeNodeEntity referencedOn TypeSchemaRefs.classNode
+
+
     /**
-     * The name of the property or field within the schema.
+     * The member’s name (field, method, property, or classvar).
      */
     var name by TypeSchemaRefs.name
 
     /**
      * Type declaration associated with this schema reference.
+     *
+     * -- If attribute/classvar/property: this is the type (type_nodes.id).
+     * -- If method: NULL (you find its signature via callable_signatures.parent_schema_ref_id = this id).
+     * -- If property: could store a type here or resolve via a hidden “getter” callable.
      */
-    var typeDeclarationEntity by TypeDeclarationEntity referencedOn TypeSchemaRefs.typeDeclaration
+    var typeNode by TypeNodeEntity referencedOn TypeSchemaRefs.typeNode
 
     /**
      * Optional description providing details on the schema reference's purpose.
      */
     var description by TypeSchemaRefs.description
+
+    var position by TypeSchemaRefs.position
+
+    var membership by TypeSchemaRefs.membership
+
 }

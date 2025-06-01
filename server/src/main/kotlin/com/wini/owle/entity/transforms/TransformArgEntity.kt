@@ -1,21 +1,21 @@
 package com.wini.owle.entity.transforms
 
-import com.wini.owle.entity.TransformationArgs
-import com.wini.owle.entity.typing.TypeDeclarationEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.entity.typing.TypeNodeEntity
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
-class TransformArgEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<TransformArgEntity>(TransformationArgs)
+class TransformArgEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
-    var transformation by TransformEntity referencedOn TransformationArgs.transformation
+    companion object : ULongEntityClass<TransformArgEntity>(TransformArgs)
 
-    var typeDeclarationEntity by TypeDeclarationEntity referencedOn TransformationArgs.typeDeclaration
+    var transformation by TransformEntity referencedOn TransformArgs.transform
 
-    var name by TransformationArgs.name
+    var typeNode by TypeNodeEntity referencedOn TransformArgs.typeNode
 
-    var description by TransformationArgs.description
+    var name by TransformArgs.name
+
+    var description by TransformArgs.description
 
 }

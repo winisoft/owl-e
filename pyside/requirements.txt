@@ -1,0 +1,25 @@
+# Core dependencies
+mysql-connector-python>=8.0.0
+requests>=2.25.0
+pydantic>=1.8.0
+python-dotenv>=1.0.0
+argparse
+
+# Packaging and parsing
+packaging>=21.0
+setuptools>=60.0
+bs4>=0.0.2
+
+# Development and testing
+pytest>=6.0.0
+pytest-mock>=3.6.0
+black>=21.0.0
+flake8>=3.9.0
+
+# Logging and monitoring
+structlog>=21.0.0
+click>=8.0.0
+
+# Network libraries
+mysql~=0.0.3
+urllib3~=2.3.0

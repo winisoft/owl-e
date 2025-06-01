@@ -1,0 +1,2 @@
+
+This module is a bit unclear in its focus and purpose but kind of necessary. Some types simply have type-specific logic too narrow in its focus to call it simply "processing" the data surrounding that type.

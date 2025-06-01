@@ -3,13 +3,13 @@ package com.wini.owle.dto.transforms
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
-import com.wini.owle.dto.StandardDto
-import com.wini.owle.dto.typing.TypeDeclaration
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.dto.ULongDto
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 /**
@@ -20,40 +20,27 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Transform(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     /**
      * Name of the transformation.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
     /**
      * Detailed description of what the transformation does.
      */
     @ConstraintSimple([StringSafeCharsError::class, StringNotBlankError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
-    val description: String,
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
+    val description: String?,
 
     /**
      * Optional examples to demonstrate the transformation's usage.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_EX_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_512)
     val examples: String?,
 
-    /**
-     * The return type of the transformation, if defined.
-     */
-    val returnsType: TypeDeclaration?
-
-) : StandardDto {
-
-    companion object {
-        const val MAX_NAME_LENGTH = 255
-        const val MAX_DESC_LENGTH = 16_000
-        const val MAX_EX_LENGTH = 512
-    }
-
-}
+) : ULongDto

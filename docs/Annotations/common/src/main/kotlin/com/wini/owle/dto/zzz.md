@@ -1,0 +1,2 @@
+
+*Priority 5*: For the sake of comprehensibility, CompositeDto has an abstract function requiring implementors to be capable of identifying themselves by the names of their ids and the values each holds. Many are missing or out of date.

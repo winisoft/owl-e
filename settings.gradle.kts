@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.repositories
+
 rootProject.name = "Owl-E"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -30,6 +32,7 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+
     }
 }
 
@@ -37,4 +40,4 @@ include(":composeApp")
 include(":server")
 include(":common")
 include(":type-schema")
-include("data-collector")
+include(":jep-utils")

@@ -1,0 +1,1 @@
+internal val LocalDimensions = staticCompositionLocalOf { OwleDimensions() }

@@ -3,11 +3,11 @@ package com.wini.owle.dto.user
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenExact
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.user.enums.CardBrand
 import com.wini.owle.error.IncoherentInstantError
 import com.wini.owle.error.MustContainOnlyNumerals
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringLengthExactError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.TimestampFormatError
@@ -21,8 +21,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PaymentMethod(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
     /**
      * Unique identifier for the payment method, sourced from Stripe.
      */
@@ -61,4 +61,4 @@ data class PaymentMethod(
      */
     @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val updatedAt: String
-) : StandardDto
+) : ULongDto

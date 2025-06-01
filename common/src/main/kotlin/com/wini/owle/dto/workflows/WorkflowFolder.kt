@@ -3,14 +3,15 @@ package com.wini.owle.dto.workflows
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.IncoherentInstantError
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
 import com.wini.owle.error.TimestampFormatError
+import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 /**
@@ -21,8 +22,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WorkflowFolder(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
     
     /**
      * Reference to the parent folder, enabling hierarchical folder structure.
@@ -33,14 +34,14 @@ data class WorkflowFolder(
      * Name of the folder, required and unique for organizing workflows.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_127)
     val name: String,
     
     /**
      * Optional description of the folder's purpose or content.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String? = null,
     
     /**
@@ -59,4 +60,4 @@ data class WorkflowFolder(
      */
     @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val updatedAt: String
-) : StandardDto
+) : ULongDto

@@ -5,7 +5,7 @@ package com.wini.owle.dto
  * that has only a single function called on it to produce that corresponding type
  */
 interface BaseDto {
-    val idText: String get() = "${this::class.simpleName}{${idToString()}}"
-    fun idToString(): String
+    val owleTypedId: String get() = "${this::class.simpleName}={${owleId}}"
+    val owleId: String
 }
 

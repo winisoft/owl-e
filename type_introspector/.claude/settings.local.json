@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest test_callable_ownership.py -v)",
+      "Bash(python:*)"
+    ],
+    "deny": []
+  }
+}

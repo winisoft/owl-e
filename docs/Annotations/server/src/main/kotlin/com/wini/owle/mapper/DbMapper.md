@@ -1,0 +1,1 @@
+//interface ULongIdDbMapper<DTO: ULongDto, E: ULongEntity>: DbMapper<ULong, DTO, E>

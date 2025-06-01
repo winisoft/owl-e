@@ -1,18 +1,18 @@
 package com.wini.owle.entity.steps
 
-import com.wini.owle.entity.ToolParams
-import com.wini.owle.entity.typing.TypeDeclarationEntity
+import com.wini.owle.entity.typing.TypeNodeEntity
 import com.wini.owle.entity.workflows.ToolEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 /**
  * Represents a parameter for a tool within a workflow.
  * Each parameter has a name, type, and can optionally have a default value.
  */
-class ToolParamEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<ToolParamEntity>(ToolParams)
+class ToolParamEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<ToolParamEntity>(ToolParams)
 
     /**
      * The tool associated with this parameter.
@@ -27,10 +27,8 @@ class ToolParamEntity(id: EntityID<Long>) : LongEntity(id) {
     /**
      * The type declaration associated with this parameter, if defined.
      */
-    var typeDeclarationEntity by TypeDeclarationEntity.Companion referencedOn ToolParams.typeDeclaration
+    var typeNode by TypeNodeEntity.Companion referencedOn ToolParams.dataType
 
-    /**
-     * Whether this parameter has a default value.
-     */
-    var hasDefault by ToolParams.hasDefault
+    var defaultValue by ToolParams.defaultValue
+
 }

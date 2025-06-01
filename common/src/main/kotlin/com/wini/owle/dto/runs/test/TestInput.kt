@@ -3,30 +3,30 @@ package com.wini.owle.dto.runs.test
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.runs.enums.GenerationMethod
+import com.wini.owle.dto.workflows.DataPoint
+import com.wini.owle.error.PositiveValueULongError
+import com.wini.owle.error.StringMaxLengthError
+import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 @ModelDefinition
 @Serializable
 data class TestInput(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     val testCase: TestCase,
 
-    val dataPointName: String,
+    val dataPoint: DataPoint,
 
     @ConstraintSimple([StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_VALUE_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_64000)
     val value: String?,
 
     val generationMethod: GenerationMethod
 
-) : StandardDto {
-
-    companion object {
-        const val MAX_VALUE_LENGTH = 64_000
-    }
-}
+) : ULongDto

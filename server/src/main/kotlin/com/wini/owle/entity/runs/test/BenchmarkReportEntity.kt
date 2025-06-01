@@ -1,35 +1,27 @@
 package com.wini.owle.entity.runs.test
 
-import com.wini.owle.entity.BenchmarkingData
+import com.wini.owle.entity.runs.BenchmarkReports
 import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Collects overall benchmarking data for a specific workflow execution,
  * including execution time, step counts, and the distribution of AI and predetermined steps.
  */
-class BenchmarkReportEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<BenchmarkReportEntity>(BenchmarkingData)
+class BenchmarkReportEntity(id: EntityID<ULong>) : ULongEntity(id) {
+    companion object : ULongEntityClass<BenchmarkReportEntity>(BenchmarkReports)
 
     /**
      * Relationship to the associated workflow execution.
      */
-    var workflowExecution by WorkflowRunEntity referencedOn BenchmarkingData.workflowExecution
+    var workflowExecution by WorkflowRunEntity referencedOn BenchmarkReports.workflowExecution
 
     /**
      * Total execution time for the workflow, measured in seconds.
      */
-    var totalExecutionTime by BenchmarkingData.totalExecutionTime
+    var totalExecutionTime by BenchmarkReports.totalExecutionTime
 
-    /**
-     * Number of steps dynamically determined by AI during execution.
-     */
-    var aiDeterminedSteps by BenchmarkingData.aiDeterminedSteps
-
-    /**
-     * Number of steps predetermined and set in the workflow configuration.
-     */
-    var predeterminedSteps by BenchmarkingData.predeterminedSteps
 }

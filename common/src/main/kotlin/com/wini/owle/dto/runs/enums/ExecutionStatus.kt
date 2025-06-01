@@ -4,12 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class ExecutionStatus {
-
+    READY,
     RUNNING,
     COMPLETED,
+    ERRORED,
     FAILED,
-    SKIPPED,
     CANCELLED
-    
 }
 

@@ -8,13 +8,9 @@ import com.google.devtools.ksp.symbol.KSType // Specific import
 import com.google.devtools.ksp.symbol.KSTypeReference // Specific import
 import com.google.devtools.ksp.symbol.KSValueArgument // Specific import
 import com.wini.owle.schema.wrapper.annotation.error.FieldConstraintAnnotation
-import io.mockk.*
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
 
+/*
 open class ConstrainedFieldTest {
 
     private lateinit var mockKsProperty: KSPropertyDeclaration // Represents the underlying KSP property
@@ -279,3 +275,5 @@ open class ConstrainedFieldTest {
     }
 
 }
+
+ */

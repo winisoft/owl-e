@@ -2,6 +2,7 @@ package com.wini.owle.schema.error
 
 import com.google.devtools.ksp.symbol.KSAnnotation
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty1
 
 
 @Target(AnnotationTarget.CLASS)
@@ -27,3 +28,17 @@ annotation class PreventsTimeParadox(
         }
     }
 }
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class TagWithNonSourceUserIdError(
+    val userIdFieldName: String,
+    val sourceFieldName: String
+)
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class TagWithUserSourceUserIdError(
+    val userIdFieldName: String,
+    val sourceFieldName: String
+)

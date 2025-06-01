@@ -3,13 +3,14 @@ package com.wini.owle.dto.workflows
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.PositiveValueIntError
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 /**
@@ -20,21 +21,21 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Step(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     /**
      * Name of the step, used for identification within the workflow.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_512)
     val name: String,
 
     /**
      * Optional description of the step's purpose or action.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
     val description: String?,
 
     /**
@@ -63,15 +64,4 @@ data class Step(
      */
     val tool: Tool,
 
-    /**
-     * Reference to the next step in the workflow sequence.
-     */
-    val nextStep: Step?
-
-) : StandardDto {
-
-    companion object {
-        const val MAX_NAME_LENGTH = 512
-        const val MAX_DESC_LENGTH = 16_000
-    }
-}
+) : ULongDto

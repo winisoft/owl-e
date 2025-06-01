@@ -4,19 +4,21 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
 
 
-interface Service<ID: Any, Dto: BaseDto> {
+interface Service<ID: Any, DTO: BaseDto> {
 
-    fun getAll(): AsyncResult<List<Dto>>
+    fun getAll(): AsyncResult<List<DTO>>
 
-    fun getById(id: ID): AsyncResult<Dto?>
+    fun getById(id: ID): AsyncResult<DTO?>
 
-    fun create(dto: Dto): AsyncResult<Dto>
+    fun getWhere(predicate: (DTO) -> Boolean): AsyncResult<List<DTO>>
 
-    fun create(dtos: List<Dto>): AsyncResult<List<Dto>>
+    fun create(dto: DTO): AsyncResult<DTO>
 
-    fun update(dto: Dto): AsyncResult<Dto>
+    fun create(dtos: List<DTO>): AsyncResult<List<DTO>>
 
-    fun update(dtos: List<Dto>): AsyncResult<List<Dto>>
+    fun update(dto: DTO): AsyncResult<DTO>
+
+    fun update(dtos: List<DTO>): AsyncResult<List<DTO>>
 
     fun delete(id: ID): AsyncResult<Unit>
 

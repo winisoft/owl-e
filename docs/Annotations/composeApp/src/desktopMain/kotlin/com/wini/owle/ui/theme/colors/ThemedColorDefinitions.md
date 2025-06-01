@@ -1,0 +1,1 @@
+val onInformationalContainerDarkHighContrast = Color(0xFF000000)

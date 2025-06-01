@@ -18,13 +18,15 @@ bonsaiCore = "1.2.0"
 compose-multiplatform = "1.7.3"
 coroutinesExtensionsJvm = "1.5.3"
 dokka = "1.9.10"
-exposedCore = "0.56.0"
+exposedCore = "1.0.0-beta-2"
 flexmarkAll = "0.64.0"
 hamcrestVersion = "2.2"
 htmlTestUtils = "1.7.3"
 junit = "4.13.2"
 junitJupiter = "5.10.1"
-koinCore = "4.0.1"
+junitJupiterApi = "5.7.0"
+junitJupiterEngine = "5.7.0"
+koinCore = "4.1.0"
 koinKtor = "3.5.0"
 kotlin = "2.1.0"
 kotlinJs = "1.0.0-pre.844"
@@ -93,6 +95,8 @@ html-test-utils = { module = "org.jetbrains.compose.html:html-test-utils", versi
 html-test-utils-js = { module = "org.jetbrains.compose.html:html-test-utils-js", version.ref = "htmlTestUtils" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiterEngine" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koinKtor" }
 koin-test-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koinKtor" }

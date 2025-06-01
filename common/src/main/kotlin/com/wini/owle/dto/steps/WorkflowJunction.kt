@@ -2,9 +2,10 @@ package com.wini.owle.dto.steps
 
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,8 +17,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WorkflowJunction(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     /**
      * Step in the source workflow from which this transition originates.
@@ -34,4 +35,4 @@ data class WorkflowJunction(
      */
     val triggerInquisition: Inquisition?
 
-) : StandardDto
+) : ULongDto

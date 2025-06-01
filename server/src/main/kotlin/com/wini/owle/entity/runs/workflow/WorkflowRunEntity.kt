@@ -1,28 +1,24 @@
 package com.wini.owle.entity.runs.workflow
 
+import com.wini.owle.entity.runs.WorkflowExecutions
 import com.wini.owle.entity.user.UserEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
-import com.wini.owle.entity.WorkflowExecutions
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents an execution instance of a workflow. Tracks the execution details such as start and end times,
  * user executing the workflow, and current status of the workflow execution.
  */
-class WorkflowRunEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<WorkflowRunEntity>(WorkflowExecutions)
+class WorkflowRunEntity(id: EntityID<ULong>) : ULongEntity(id) {
+    companion object : ULongEntityClass<WorkflowRunEntity>(WorkflowExecutions)
 
     /**
      * The workflow being executed in this instance.
      */
     var workflow by WorkflowEntity referencedOn WorkflowExecutions.workflow
-
-    /**
-     * User initiating and running the workflow execution.
-     */
-    var userEntity by UserEntity referencedOn WorkflowExecutions.user
 
     /**
      * Date and time the workflow execution started.

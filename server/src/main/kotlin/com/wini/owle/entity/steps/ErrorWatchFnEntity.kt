@@ -1,16 +1,18 @@
 package com.wini.owle.entity.steps
 
-import com.wini.owle.entity.ErrorWatchFns
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.entity.typing.TypeNodeEntity
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents a function filter in an error watch, specifying a function
  * name and position that must appear in the call stack for the error watch to trigger.
  */
-class ErrorWatchFnEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<ErrorWatchFnEntity>(ErrorWatchFns)
+class ErrorWatchFnEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<ErrorWatchFnEntity>(ErrorWatchFns)
 
     /**
      * The error watch that this function filter is associated with.
@@ -21,7 +23,7 @@ class ErrorWatchFnEntity(id: EntityID<Long>) : LongEntity(id) {
     /**
      * Name of the function that should appear in the call stack to activate the error watch.
      */
-    var functionName by ErrorWatchFns.functionName
+    var functionNode by TypeNodeEntity referencedOn ErrorWatchFns.functionName
 
     /**
      * Specifies the required position in the call stack for the function name, used to match errors accurately.

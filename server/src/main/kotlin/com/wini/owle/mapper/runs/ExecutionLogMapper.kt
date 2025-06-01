@@ -1,41 +1,33 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.step.StepRunLogLine
-import com.wini.owle.entity.runs.step.StepRunLogLineEntity
-import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.dto.runs.step.ExecutionNotification
+import com.wini.owle.entity.runs.step.ExecutionNotificationEntity
+import com.wini.owle.entity.delegate.DaoDelegate
 import com.wini.owle.mapper.DateTimeConverter
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.runs.enums.LogLevelMapper
 
 
 class ExecutionLogMapper(
-    private val daoFactory: DaoFactory<StepRunLogLineEntity, Long>,
-    private val stepExecutionsMapper: StepExecutionsMapper,
-    private val logLevelMapper: LogLevelMapper,
+    private val daoDelegate: DaoDelegate<ULong, ExecutionNotification, ExecutionNotificationEntity>,
+    private val stepTestRunMapper: StepTestRunMapper,
     private val dateTimeConverter: DateTimeConverter
-) : DbMapper<StepRunLogLine, StepRunLogLineEntity>() {
+): DbMapper<ULong, ExecutionNotification, ExecutionNotificationEntity> {
 
-    override fun toEntity(dto: StepRunLogLine): StepRunLogLineEntity {
-        val applyProps: StepRunLogLineEntity.() -> Unit = {
-            stepExecution = stepExecutionsMapper.toEntity(dto.stepRun)
+    override fun toEntity(dto: ExecutionNotification): ExecutionNotificationEntity {
+        return daoDelegate.findOrCreate(dto) {
+            stepExecution = stepTestRunMapper.toEntity(dto.stepTestRun)
             timestamp = dateTimeConverter.fromString(dto.timestamp)
-            logLevel = logLevelMapper.toEntity(dto.logLevel)
+            logLevel = dto.logLevel
             message = dto.message
         }
-        return if (dto.id == 0L)
-            daoFactory.create().apply(applyProps)
-        else
-            StepRunLogLineEntity.findById(dto.id)
-                ?.apply(applyProps)
-                ?: throw IllegalStateException("ExecutionLog with id=${dto.id} not found")
     }
 
-    override fun toDto(entity: StepRunLogLineEntity): StepRunLogLine {
-        return StepRunLogLine(
+    override fun toDto(entity: ExecutionNotificationEntity): ExecutionNotification {
+        return ExecutionNotification(
             id = entity.id.value,
-            stepRun = stepExecutionsMapper.toDto(entity.stepExecution),
+            stepTestRun = stepTestRunMapper.toDto(entity.stepExecution),
             timestamp = dateTimeConverter.toString(entity.timestamp),
-            logLevel = logLevelMapper.toDto(entity.logLevel),
+            logLevel = entity.logLevel,
             message = entity.message
         )
     }

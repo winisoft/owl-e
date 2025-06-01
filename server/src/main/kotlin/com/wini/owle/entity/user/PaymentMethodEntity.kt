@@ -1,22 +1,22 @@
 package com.wini.owle.entity.user
 
-import com.wini.owle.entity.PaymentMethods
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
 /**
  * Represents a payment method for a user, storing details from Stripe
  * like the card brand, last four digits, and whether it's the default payment method.
  */
-class PaymentMethodEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<PaymentMethodEntity>(PaymentMethods)
+class PaymentMethodEntity(id: EntityID<ULong>) : ULongEntity(id) {
+    
+    companion object : ULongEntityClass<PaymentMethodEntity>(PaymentMethods)
 
     /**
      * Unique identifier for the payment method, sourced from Stripe.
      */
-    var stripePaymentMethodId by PaymentMethods.stripePaymentMethodId
+    var stripePaymentMethodId by PaymentMethods.stripeId
 
     /**
      * The user associated with this payment method.

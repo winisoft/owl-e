@@ -3,6 +3,7 @@ package com.wini.owle.dto.transforms
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.CompositeDto
+import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,19 +17,17 @@ data class TransformTargetType(
     /**
      * The transformation this target type is associated with.
      */
-    @ConstraintSimple([PositiveValueLongError::class])
-    val transformationId: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    val transformationId: ULong,
 
     /**
      * The type declaration representing the eligible type for this transformation.
      */
-    @ConstraintSimple([PositiveValueLongError::class])
-    val typeDeclarationId: Long
+    @ConstraintSimple([PositiveValueULongError::class])
+    val typeDeclarationId: ULong
 
 ) : CompositeDto {
 
-    override fun idToString(): String {
-        return "transformationId=$transformationId,typeDeclarationId=$typeDeclarationId"
-    }
+    override val owleId: String get() = "transformationId=$transformationId,typeDeclarationId=$typeDeclarationId"
 
 }

@@ -1,115 +1,118 @@
 package com.wini.owle.repo
 
-import com.wini.owle.repo.environs.PackageRepoRepository
-import com.wini.owle.repo.environs.ToolPackageDependencyRepository
-import com.wini.owle.repo.environs.VersionSpecRepository
-import com.wini.owle.repo.runs.*
-import com.wini.owle.repo.steps.*
-import com.wini.owle.repo.transforms.*
-import com.wini.owle.repo.typing.*
-import com.wini.owle.repo.user.PaymentMethodRepository
-import com.wini.owle.repo.user.TagRelationRepository
-import com.wini.owle.repo.user.TagRepository
-import com.wini.owle.repo.user.UserRepository
-import com.wini.owle.repo.workflows.*
+import com.wini.owle.entity.environs.marker.EnvMarkerComparisonEntity
+import com.wini.owle.entity.environs.marker.EnvMarkerExpressionEntity
+import com.wini.owle.entity.environs.marker.EnvMarkerLogicalEntity
+import com.wini.owle.entity.environs.pkg.DistributionEntity
+import com.wini.owle.entity.environs.pkg.DistributionPackageEntity
+import com.wini.owle.entity.environs.pkg.PackageDistRequirementEntity
+import com.wini.owle.entity.environs.pkg.PackagePythonRequirementEntity
+import com.wini.owle.entity.environs.version.PythonVersionEntity
+import com.wini.owle.entity.environs.version.PythonVersionSpecifierEntity
+import com.wini.owle.entity.environs.version.VersionEntity
+import com.wini.owle.entity.environs.version.VersionOverflowEntity
+import com.wini.owle.entity.runs.step.StepTestRunEntity
+import com.wini.owle.entity.runs.test.BenchmarkReportEntity
+import com.wini.owle.entity.runs.test.TestCaseEntity
+import com.wini.owle.entity.runs.test.TestOutcomeExpectationEntity
+import com.wini.owle.entity.runs.test.TestInputEntity
+import com.wini.owle.entity.runs.workflow.TestResultEntity
+import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
+import com.wini.owle.entity.steps.*
+import com.wini.owle.entity.tags.TagEntity
+import com.wini.owle.entity.tags.TagRelationEntity
+import com.wini.owle.entity.transforms.*
+import com.wini.owle.entity.typing.*
+import com.wini.owle.entity.user.PaymentMethodEntity
+import com.wini.owle.entity.user.UserEntity
+import com.wini.owle.entity.workflows.*
+import org.jetbrains.exposed.v1.core.dao.id.CompositeID
+import org.jetbrains.exposed.v1.dao.Entity
+import org.jetbrains.exposed.v1.dao.EntityClass
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
 
-val idFactoryModule = module {
+val environsReposModule = module {
+    bindGenericRepo<ULong, EnvMarkerComparisonEntity>(EnvMarkerComparisonEntity)
+    bindGenericRepo<ULong, EnvMarkerExpressionEntity>(EnvMarkerExpressionEntity)
+    bindGenericRepo<ULong, EnvMarkerLogicalEntity>(EnvMarkerLogicalEntity)
 
-    single<PackageRepoIdFactory> { PackageRepoIdFactory }
-    single<PackageIdFactory> { PackageIdFactory }
-    single<ToolPackageDependencyIdFactory> { ToolPackageDependencyIdFactory }
-    single<VersionSpecIdFactory> { VersionSpecIdFactory }
-    single<BenchmarkingDataIdFactory> { BenchmarkingDataIdFactory }
-    single<ExecutionLogsIdFactory> { ExecutionLogsIdFactory }
-    single<StepBenchmarkingDataIdFactory> { StepBenchmarkingDataIdFactory }
-    single<StepExecutionIdFactory> { StepExecutionIdFactory }
-    single<TestCaseIdFactory> { TestCaseIdFactory }
-    single<TestExpectedOutcomeIdFactory> { TestExpectedOutcomeIdFactory }
-    single<TestInputIdFactory> { TestInputIdFactory }
-    single<TestResultIdFactory> { TestResultIdFactory }
-    single<WorkflowExecutionIdFactory> { WorkflowExecutionIdFactory }
-    single<ErrorWatchFnIdFactory> { ErrorWatchFnIdFactory }
-    single<ErrorWatchIdFactory> { ErrorWatchIdFactory }
-    single<InquisitionIdFactory> { InquisitionIdFactory }
-    single<PreReqInjectionIdFactory> { PreReqInjectionIdFactory }
-    single<ProvisionDataPointIdFactory> { ProvisionDataPointIdFactory }
-    single<ProvisionIdFactory> { ProvisionIdFactory }
-    single<RevisionIdFactory> { RevisionIdFactory }
-    single<WorkflowJunctionIdFactory> { WorkflowJunctionIdFactory }
-    single<AppliedTransformArgIdFactory> { AppliedTransformArgIdFactory }
-    single<AppliedTransformIdFactory> { AppliedTransformIdFactory }
-    single<TransformationArgIdFactory> { TransformationArgIdFactory }
-    single<TransformationIdFactory> { TransformationIdFactory }
-    single<TransformTargetTypeIdFactory> { TransformTargetTypeIdFactory }
-    single<TypeBoundIdFactory> { TypeBoundIdFactory }
-    single<TypeDeclarationIdFactory> { TypeDeclarationIdFactory }
-    single<TypeDefinitionIdFactory> { TypeDefinitionIdFactory }
-    single<TypeParameterIdFactory> { TypeParameterIdFactory }
-    single<TypeSchemaRefIdFactory> { TypeSchemaRefIdFactory }
-    single<TypeUnionMemberIdFactory> { TypeUnionMemberIdFactory }
-    single<TypeVarianceIdFactory> { TypeVarianceIdFactory }
-    single<PaymentMethodIdFactory> { PaymentMethodIdFactory }
-    single<TagRelationIdFactory> { TagRelationIdFactory }
-    single<TagIdFactory> { TagIdFactory }
-    single<UserIdFactory> { UserIdFactory }
-    single<DataPointIdFactory> { DataPointIdFactory }
-    single<PhaseIdFactory> { PhaseIdFactory }
-    single<StepIdFactory> { StepIdFactory }
-    single<ToolParamIdFactory> { ToolParamIdFactory }
-    single<ToolIdFactory> { ToolIdFactory }
-    single<WorkflowFolderIdFactory> { WorkflowFolderIdFactory }
-    single<WorkflowMetadataIdFactory> { WorkflowMetadataIdFactory }
-    single<WorkflowIdFactory> { WorkflowIdFactory }
+    bindGenericRepo<String, DistributionEntity>(DistributionEntity)
+    bindGenericRepo<CompositeID, DistributionPackageEntity>(DistributionPackageEntity)
+    bindGenericRepo<ULong, PackageDistRequirementEntity>(PackageDistRequirementEntity)
+    bindGenericRepo<CompositeID, PackagePythonRequirementEntity>(PackagePythonRequirementEntity)
 
+    bindGenericRepo<ULong, PythonVersionEntity>(PythonVersionEntity)
+    bindGenericRepo<ULong, PythonVersionSpecifierEntity>(PythonVersionSpecifierEntity)
+    bindGenericRepo<ULong, VersionEntity>(VersionEntity)
+    bindGenericRepo<ULong, VersionOverflowEntity>(VersionOverflowEntity)
 }
 
-val repositoryModule = module {
+val runsReposModule = module {
+    bindGenericRepo<ULong, BenchmarkReportEntity>(BenchmarkReportEntity)
+    bindGenericRepo<ULong, TestCaseEntity>(TestCaseEntity)
+    bindGenericRepo<ULong, TestInputEntity>(TestInputEntity)
+    bindGenericRepo<ULong, TestOutcomeExpectationEntity>(TestOutcomeExpectationEntity)
+    bindGenericRepo<ULong, TestResultEntity>(TestResultEntity)
+}
 
-    single<PackageRepoRepository> { PackageRepoRepository() }
-    single<VersionSpecRepository> { VersionSpecRepository() }
-    single<TypeDefinitionRepository> { TypeDefinitionRepository() }
-    single<TypeDeclarationRepository> { TypeDeclarationRepository() }
-    single<TypeParameterRepository> { TypeParameterRepository() }
-    single<TypeBoundRepository> { TypeBoundRepository() }
-    single<TypeVarianceRepository> { TypeVarianceRepository() }
-    single<TypeSchemaRefRepository> { TypeSchemaRefRepository() }
-    single<WorkflowFolderRepository> { WorkflowFolderRepository() }
-    single<WorkflowRepository> { WorkflowRepository() }
-    single<WorkflowMetadataRepository> { WorkflowMetadataRepository() }
-    single<ToolRepository> { ToolRepository() }
-    single<ToolParamRepository> { ToolParamRepository() }
-    single<PhaseRepository> { PhaseRepository() }
-    single<StepRepository> { StepRepository() }
-    single<DataPointRepository> { DataPointRepository() }
-    single<TransformationRepository> { TransformationRepository() }
-    single<TransformationArgRepository> { TransformationArgRepository() }
-    single<AppliedTransformRepository> { AppliedTransformRepository() }
-    single<AppliedTransformArgRepository> { AppliedTransformArgRepository() }
-    single<ErrorWatchRepository> { ErrorWatchRepository() }
-    single<ErrorWatchFnRepository> { ErrorWatchFnRepository() }
-    single<InquisitionRepository> { InquisitionRepository() }
-    single<RevisionRepository> { RevisionRepository() }
-    single<WorkflowJunctionRepository> { WorkflowJunctionRepository() }
-    single<PreReqInjectionRepository> { PreReqInjectionRepository() }
-    single<RevisionRepository> { RevisionRepository() }
-    single<ProvisionRepository> { ProvisionRepository() }
-    single<UserRepository> { UserRepository() }
-    single<PaymentMethodRepository> { PaymentMethodRepository() }
-    single<TagRepository> { TagRepository() }
-    single<WorkflowExecutionRepository> { WorkflowExecutionRepository() }
-    single<StepExecutionRepository> { StepExecutionRepository() }
-    single<ExecutionLogRepository> { ExecutionLogRepository() }
-    single<BenchmarkingDataRepository> { BenchmarkingDataRepository() }
-    single<TestCaseRepository> { TestCaseRepository() }
-    single<TestInputRepository> { TestInputRepository() }
-    single<TestExpectedOutcomeRepository> { TestExpectedOutcomeRepository() }
-    single<TestResultRepository> { TestResultRepository() }
-    single<ProvisionRepository> { ProvisionRepository() }
-    single<TypeUnionMemberRepository> { TypeUnionMemberRepository() }
-    single<TransformTargetTypeRepository> { TransformTargetTypeRepository() }
-    single<TagRelationRepository> { TagRelationRepository() }
-    single<ToolPackageDependencyRepository> { ToolPackageDependencyRepository() }
-    single<ProvisionDataPointRepository> { ProvisionDataPointRepository() }
+val stepsReposModule = module {
+    bindGenericRepo<ULong, ToolEntity>(ToolEntity)
+    bindGenericRepo<ULong, ToolParamEntity>(ToolParamEntity)
+    bindGenericRepo<ULong, ErrorWatchEntity>(ErrorWatchEntity)
+    bindGenericRepo<ULong, ErrorWatchFnEntity>(ErrorWatchFnEntity)
+    bindGenericRepo<ULong, InquisitionEntity>(InquisitionEntity)
+    bindGenericRepo<ULong, WorkflowJunctionEntity>(WorkflowJunctionEntity)
+    bindGenericRepo<ULong, DataPointInjectionEntity>(DataPointInjectionEntity)
+    bindGenericRepo<ULong, DataPointWriteEntity>(DataPointWriteEntity)
+    bindGenericRepo<ULong, DataPointReadEntity>(DataPointReadEntity)
+    bindGenericRepo<ULong, DataPointReadEntity>(DataPointReadEntity)
+}
+
+val tagReposModule = module {
+    bindGenericRepo<CompositeID, TagRelationEntity>(TagRelationEntity)
+    bindGenericRepo<ULong, TagEntity>(TagEntity)
+}
+
+val transformsReposModule = module {
+    bindGenericRepo<CompositeID, TransformTargetTypeEntity>(TransformTargetTypeEntity)
+    bindGenericRepo<ULong, TransformEntity>(TransformEntity)
+    bindGenericRepo<ULong, TransformArgEntity>(TransformArgEntity)
+    bindGenericRepo<ULong, TransformOccurrenceEntity>(TransformOccurrenceEntity)
+    bindGenericRepo<ULong, TransformOccurrenceArgEntity>(TransformOccurrenceArgEntity)
+}
+
+val typingReposModule = module {
+    bindGenericRepo<CompositeID, TypeVarBoundEntity>(TypeVarBoundEntity)
+    bindGenericRepo<CompositeID, TypeUnionMemberEntity>(TypeUnionMemberEntity)
+    bindGenericRepo<CompositeID, TypeVarVarianceEntity>(TypeVarVarianceEntity)
+    bindGenericRepo<ULong, TypeNodeEntity>(TypeNodeEntity)
+    bindGenericRepo<ULong, TypeParameterEntity>(TypeParameterEntity)
+    bindGenericRepo<ULong, TypeSchemaRefEntity>(TypeSchemaRefEntity)
+}
+
+val userReposModule = module {
+    bindGenericRepo<ULong, UserEntity>(UserEntity)
+    bindGenericRepo<ULong, PaymentMethodEntity>(PaymentMethodEntity)
+}
+
+val workflowReposModule = module {
+    bindGenericRepo<ULong, WorkflowFolderEntity>(WorkflowFolderEntity)
+    bindGenericRepo<ULong, WorkflowEntity>(WorkflowEntity)
+    bindGenericRepo<ULong, WorkflowMetadataEntity>(WorkflowMetadataEntity)
+    bindGenericRepo<ULong, PhaseEntity>(PhaseEntity)
+    bindGenericRepo<ULong, StepEntity>(StepEntity)
+    bindGenericRepo<ULong, DataPointEntity>(DataPointEntity)
+    bindGenericRepo<ULong, WorkflowRunEntity>(WorkflowRunEntity)
+    bindGenericRepo<ULong, StepTestRunEntity>(StepTestRunEntity)
+}
+
+
+inline fun <reified ID : Any, reified T : Entity<ID>> Module.bindGenericRepo(
+    entityClass: EntityClass<ID, T>
+) {
+    single<EntityClass<ID, T>> { entityClass }
+    single<GenericRepoImpl<ID, T>> { GenericRepoImpl(get()) }
+    single<OwleRepo<ID, T>> { get<GenericRepoImpl<ID, T>>() }
 }

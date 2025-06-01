@@ -1,42 +1,37 @@
 package com.wini.owle.entity.transforms
 
-import com.wini.owle.entity.TransformTargetTypes
-import com.wini.owle.entity.Transformations
-import com.wini.owle.entity.typing.TypeDeclarationEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.entity.typing.TypeNodeEntity
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents a transformation process with a specified return type and related arguments.
  * A transformation can have multiple arguments, target types, and applied transformations.
  */
-class TransformEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<TransformEntity>(Transformations)
+class TransformEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<TransformEntity>(Transforms)
 
     /**
      * Name of the transformation.
      */
-    var name by Transformations.name
+    var name by Transforms.name
 
     /**
      * Detailed description of what the transformation does.
      */
-    var description by Transformations.description
+    var description by Transforms.description
 
     /**
      * Optional examples to demonstrate the transformation's usage.
      */
-    var examples by Transformations.examples
-
-    /**
-     * The return type of the transformation, if defined.
-     */
-    var returnsTypeDeclarationEntity by TypeDeclarationEntity optionalReferencedOn Transformations.returnsTypeDeclaration
+    var examples by Transforms.examples
 
     /**
      * The types for which this transformation can be applied
      */
-    var eligibleTypeDeclarationsEntity by TypeDeclarationEntity via TransformTargetTypes
+    var eligibleTypes by TypeNodeEntity via TransformTargetTypes
 
 }

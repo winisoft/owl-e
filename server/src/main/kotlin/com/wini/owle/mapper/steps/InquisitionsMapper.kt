@@ -2,32 +2,27 @@ package com.wini.owle.mapper.steps
 
 import com.wini.owle.dto.steps.Inquisition
 import com.wini.owle.entity.steps.InquisitionEntity
-import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.entity.delegate.DaoDelegate
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.workflows.DataPointsMapper
+import com.wini.owle.mapper.typing.TypeNodeMapper
+import com.wini.owle.mapper.workflows.DataPointMapper
 import com.wini.owle.mapper.workflows.StepsMapper
 
 
 class InquisitionsMapper(
-    private val daoFactory: DaoFactory<InquisitionEntity, Long>,
+    private val daoDelegate: DaoDelegate<ULong, Inquisition, InquisitionEntity>,
     private val stepsMapper: StepsMapper,
-    private val dataPointsMapper: DataPointsMapper
-): DbMapper<Inquisition, InquisitionEntity>() {
+    private val typeNodeMapper: TypeNodeMapper,
+    private val dataPointMapper: DataPointMapper
+): DbMapper<ULong, Inquisition, InquisitionEntity> {
 
     override fun toEntity(dto: Inquisition): InquisitionEntity {
-        val applyProps: InquisitionEntity.() -> Unit = {
+        return daoDelegate.findOrCreate(dto) {
             workflowStep = stepsMapper.toEntity(dto.step)
-            className = dto.className
-            dataPointEntity = dataPointsMapper.toEntity(dto.dataPoint)
+            condition = typeNodeMapper.toEntity(dto.condition)
+            dataPoint = dataPointMapper.toEntity(dto.dataPoint)
             onMetWorkflowStep = stepsMapper.toEntity(dto.onMetWorkflowStep)
             executionOrder = dto.executionOrder
-        }
-        return if (dto.id == 0L) {
-            daoFactory.create().apply(applyProps)
-        } else {
-            InquisitionEntity.findById(dto.id)
-                ?.apply(applyProps)
-                ?: throw IllegalStateException("Inquisition with id=${dto.id} not found")
         }
     }
 
@@ -35,8 +30,8 @@ class InquisitionsMapper(
         return Inquisition(
             id = entity.id.value,
             step = stepsMapper.toDto(entity.workflowStep),
-            className = entity.className,
-            dataPoint = dataPointsMapper.toDto(entity.dataPointEntity),
+            condition = typeNodeMapper.toDto(entity.condition),
+            dataPoint = dataPointMapper.toDto(entity.dataPoint),
             onMetWorkflowStep = stepsMapper.toDto(entity.onMetWorkflowStep),
             executionOrder = entity.executionOrder
         )

@@ -1,0 +1,1 @@
+class DistributionEntity(id: EntityID<String>)

@@ -3,13 +3,14 @@ package com.wini.owle.dto.workflows
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
-import com.wini.owle.dto.StandardDto
-import com.wini.owle.dto.typing.TypeDeclaration
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.dto.ULongDto
+import com.wini.owle.dto.typing.TypeNode
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 /**
@@ -20,40 +21,33 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Tool(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     /**
      * Name of the tool.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_512)
     val name: String,
 
     /**
      * Optional description of the tool.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String? = null,
 
     /**
      * The main body or code of the tool.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_BODY_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_64000)
     val body: String,
 
     /**
      * The return type of the tool, if defined.
      */
-    val returnTypeDeclaration: TypeDeclaration?
+    val returnTypeDeclaration: TypeNode?
 
-) : StandardDto {
-
-    companion object {
-        const val MAX_NAME_LENGTH = 512
-        const val MAX_DESC_LENGTH = 1024
-        const val MAX_BODY_LENGTH = 64_000
-    }
-}
+) : ULongDto

@@ -1,0 +1,12 @@
+package com.wini.owle.service.steps
+
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
+
+class ProvisionServiceTest {
+
+
+
+}

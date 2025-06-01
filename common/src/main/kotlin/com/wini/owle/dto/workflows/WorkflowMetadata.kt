@@ -2,16 +2,17 @@ package com.wini.owle.dto.workflows
 
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.user.User
-import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto
+import com.wini.owle.dto.workflows.enums.AuthorshipCredit
 import com.wini.owle.dto.workflows.enums.CommercialUse
-import com.wini.owle.dto.workflows.enums.ModificationTermsDto
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.dto.workflows.enums.ModificationTerms
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.Schema
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
 
@@ -23,11 +24,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WorkflowMetadata(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
 
     /**
@@ -75,7 +76,7 @@ data class WorkflowMetadata(
      * - "required" (default): Credit must be displayed.
      * - "unnecessary": Credit display is not required.
      */
-    val creditNotation: AuthorshipCreditDto = AuthorshipCreditDto.REQUIRED,
+    val creditNotation: AuthorshipCredit = AuthorshipCredit.REQUIRED,
 
     /**
      * Allows or disallows redistribution of the entity.
@@ -89,7 +90,7 @@ data class WorkflowMetadata(
      * - "allowModification": Modifications are allowed but cannot be redistributed.
      * - "allowModificationRedistribution": Modifications and redistribution allowed.
      */
-    val modification: ModificationTermsDto = ModificationTermsDto.PROHIBITED,
+    val modification: ModificationTerms = ModificationTerms.PROHIBITED,
 
     /**
      * The version number of the distribution agreement.
@@ -111,4 +112,4 @@ data class WorkflowMetadata(
      */
     val excludedSteps: List<Step> = emptyList(),
 
-) : StandardDto
+    ) : ULongDto

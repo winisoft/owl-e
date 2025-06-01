@@ -1,26 +1,42 @@
 package com.wini.owle.dto
 
-import com.wini.owle.dto.environs.*
-import com.wini.owle.dto.environs.enums.PyPackageRepoType
+import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
+import com.wini.owle.dto.environs.enums.EnvMarkerVariable
+import com.wini.owle.dto.environs.enums.OverflowViolation
+import com.wini.owle.dto.environs.enums.PrereleasePhase
+import com.wini.owle.dto.environs.enums.VersionOperator
+import com.wini.owle.dto.environs.enums.WildcardSegment
+import com.wini.owle.dto.environs.marker.EnvMarkerComparison
+import com.wini.owle.dto.environs.marker.EnvMarkerExpression
+import com.wini.owle.dto.environs.pkg.Distribution
+import com.wini.owle.dto.environs.pkg.PackageDistRequirement
+import com.wini.owle.dto.environs.pkg.DistributionPackage
+import com.wini.owle.dto.environs.version.PythonVersion
+import com.wini.owle.dto.environs.version.PythonVersionSpecifier
+import com.wini.owle.dto.environs.version.Version
+import com.wini.owle.dto.environs.version.VersionOverflow
+import com.wini.owle.dto.environs.version.VersionSpecifier
 import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
-import com.wini.owle.dto.runs.step.StepRun
-import com.wini.owle.dto.runs.step.StepRunLogLine
+import com.wini.owle.dto.runs.step.StepTestRun
+import com.wini.owle.dto.runs.step.ExecutionNotification
 import com.wini.owle.dto.runs.test.*
-import com.wini.owle.dto.runs.workflow.WorkflowExecution
-import com.wini.owle.dto.runs.workflow.WorkflowTestResult
+import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.TestOutcomeActual
 import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.transforms.*
 import com.wini.owle.dto.transforms.enums.TransformOccurrence
 import com.wini.owle.dto.typing.*
-import com.wini.owle.dto.typing.enums.VarianceCardinalityDto
+import com.wini.owle.dto.typing.enums.VarianceCardinality
 import com.wini.owle.dto.user.*
 import com.wini.owle.dto.user.enums.CardBrand
-import com.wini.owle.dto.user.enums.SubscriptionStatus
-import com.wini.owle.dto.user.tags.Tag
-import com.wini.owle.dto.user.tags.TagRelation
+import com.wini.owle.dto.user.enums.UserStatus
+import com.wini.owle.dto.tags.Tag
+import com.wini.owle.dto.tags.TagRelation
+import com.wini.owle.dto.tags.enums.TagSource
+import com.wini.owle.dto.typing.TypeNode
 import com.wini.owle.dto.workflows.*
 import com.wini.owle.dto.workflows.enums.StoreMethod
 
@@ -28,68 +44,140 @@ import com.wini.owle.dto.workflows.enums.StoreMethod
 @Suppress("UNCHECKED_CAST")
 object DtoTestInstanceFactory {
 
-    fun transformationTargetTypeDto(
-        transformationId: Long = 1L,
-        typeDeclarationId: Long = 2L
-    ): TransformTargetType = TransformTargetType(
-        transformationId = transformationId,
-        typeDeclarationId = typeDeclarationId
+    fun envMarkerComparison(
+        id: ULong = 1UL,
+        expression: EnvMarkerExpression = envMarkerExpression(),
+        variable: EnvMarkerVariable? = EnvMarkerVariable.SYS_PLATFORM,
+        operator: ComparisonOperator = ComparisonOperator.EQUALS,
+        value: String = "darwin"
+    ): EnvMarkerComparison = envMarkerComparison(
+        id,
+        expression,
+        variable,
+        operator,
+        value
     )
 
-    fun toolPackageDependencyDto(
-        toolId: Long = 1L,
-        packageId: Long = 2L,
-        versionSpecId: Long = 3L
-    ): ToolPyPackDependency {
-        return ToolPyPackDependency(
-            toolId = toolId,
-            packageId = packageId,
-            versionSpecId = versionSpecId
-        )
-    }
+    fun typeUnionMember(
+        unionTypeNode: TypeNode = typeNode(),
+        memberTypeNode: TypeNode = typeNode(),
+    ): TypeUnionMember = TypeUnionMember(
+        unionTypeNode = unionTypeNode,
+        memberTypeNode = memberTypeNode
+    )
 
-    fun packageDto(
-        id: Long = 1L,
-        name: String = "Package Name",
-        disambiguation: String = "Package Disambiguation",
-        versionSpec: VersionSpec = versionSpecDto()
-    ) : PyPackage {
-        return PyPackage(
-            id = id,
-            name = name,
-            disambiguation = disambiguation,
-            versionSpec = versionSpec
-        )
-    }
+    fun envMarkerExpression(
+        id: ULong = 1UL,
+        requirement: PackageDistRequirement = packageRequiredDist(),
+        parent: EnvMarkerExpression? = envMarkerExpression(),
+        mode: EnvMarkerExpressionMode = EnvMarkerExpressionMode.COMPARATIVE
+    ) : EnvMarkerExpression = EnvMarkerExpression(
+        id = id,
+        parent = parent,
+        mode = mode
+    )
 
-    fun packageRepoDto(
-        id: Long = 1L,
-        sourceType: PyPackageRepoType = PyPackageRepoType.PYPI,
-        sourceUrl: String = "https://pypi.org"
-    ): PyPackageRepo {
-        return PyPackageRepo(
-            id = id,
-            sourceType = sourceType,
-            sourceUrl = sourceUrl
-        )
-    }
+//    fun distributionPackage(
+//        distribution: Distribution = distribution(),
+//        version: Version = version(),
+//        tags: List<Tag> = emptyList(),
+//        extras: List<PackageExtra> = emptyList(),
+//        requirements: List<PackageRequiredDist> = emptyList()
+//    ): DistributionPackage = DistributionPackage(
+//        distribution = distribution,
+//        version = version,
+//        requirements = requirements
+//    )
 
-    fun versionSpecDto(
-        id: Long = 2L,
-        versionMin: String? = "1.0",
-        versionMax: String? = "2.0",
-        versionExact: String? = null
-    ): VersionSpec {
-        return VersionSpec(
-            id = id,
-            versionMin = versionMin,
-            versionMax = versionMax,
-            versionExact = versionExact
-        )
-    }
+    fun distributionPackage(): DistributionPackage = DistributionPackage(
+        distribution = distribution(),
+        version = version(),
+        versionString = "",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        null
+    )
+
+    fun packageRequiredDist(
+        id: ULong = 1UL,
+        dependentDistribution: Distribution = distribution(),
+        dependentVersion: Version = version(),
+        requiredDistribution: Distribution = distribution(),
+        requiredVersion: Version? = version(),
+        operator: VersionOperator = VersionOperator.EXACT,
+        wildcardSegment: WildcardSegment = WildcardSegment.MINOR
+    ) : PackageDistRequirement = PackageDistRequirement(
+        id = id,
+        dependentDistribution = dependentDistribution,
+        dependentVersion = dependentVersion,
+        requiredDistribution = requiredDistribution,
+        requiredVersion = requiredVersion,
+        operator = operator,
+        wildcardSegment = wildcardSegment
+    )
+
+    fun distribution(
+        name: String = "numpy"
+    ): Distribution = Distribution(name)
+
+    fun version(
+        id: ULong = 10UL,
+        epoch: ULong = 0UL,
+        major: ULong = 1UL,
+        minor: ULong = 0UL,
+        micro: ULong = 0UL,
+        phase: PrereleasePhase = PrereleasePhase.FINAL,
+        phaseNumber: ULong? = null,
+        postNumber: ULong? = null,
+        devNumber: ULong? = null,
+        local: String? = null,
+        versionString: String = "1.0",
+        hasOverflow: Boolean = false,
+        overflowComponents: List<VersionOverflow> = emptyList()
+    ): Version = Version(
+        id = id,
+        epoch = epoch,
+        major = major,
+        minor = minor,
+        micro = micro,
+        phase = phase,
+        phaseNumber = phaseNumber,
+        postNumber = postNumber,
+        devNumber = devNumber,
+        local = local,
+        hasOverflow = hasOverflow,
+        overflowComponents = overflowComponents
+    )
+
+    fun versionOverflow(
+        id: ULong,
+        version: Version,
+        violation: OverflowViolation,
+        stringValue: String
+    ): VersionOverflow = VersionOverflow(
+        id = 1UL,
+        version = version(),
+        violation = OverflowViolation.PHASE_NUMBER,
+        stringValue = ""
+    )
+
+    fun versionSpecifier(
+        id: ULong = 0UL
+    ): VersionSpecifier = VersionSpecifier(
+        id = id
+    )
+
 
     fun stepDto(
-        id: Long = 3L,
+        id: ULong = 3UL,
         name: String = "Example Step",
         description: String? = "A step in a workflow",
         workflow: Workflow = workflowDto(),
@@ -107,8 +195,7 @@ object DtoTestInstanceFactory {
             isWorkflowHead = isWorkflowHead,
             tool = tool,
             parentPhase = parentPhase,
-            displayOrder = displayOrder,
-            nextStep = nextStep
+            displayOrder = displayOrder
         )
     }
 
@@ -151,11 +238,31 @@ object DtoTestInstanceFactory {
 //        )
 //    }
 
+    fun pythonVersionSpecifier(
+        id: ULong = 1UL,
+        pythonVersion: PythonVersion = pythonVersion(),
+        operator: VersionOperator = VersionOperator.EXACT,
+        wildcard: WildcardSegment = WildcardSegment.MINOR
+    ): PythonVersionSpecifier = PythonVersionSpecifier(
+        id = id,
+        pythonVersion = pythonVersion,
+        operator = operator,
+        wildcard = wildcard
+    )
+
+    fun pythonVersion(
+        id: ULong = 1UL,
+        version: Version = version()
+    ): PythonVersion = PythonVersion(
+        id,
+        version
+    )
+
     fun workflowDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         name: String = "Example Workflow",
         description: String? = "A sample workflow description",
-        pythonVersion: String = "3.9",
+        pythonVersion: PythonVersion = pythonVersion(),
         parentFolder: WorkflowFolder? = null,
         createdAt: String = "2024-12-20T15:00:00",
         updatedAt: String = "2024-12-21T15:00:00"
@@ -172,13 +279,12 @@ object DtoTestInstanceFactory {
     }
 
     fun toolDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         name: String = "Tool Name",
         description: String? = "Tool Description",
         body: String = "a sample of code",
-        returnTypeDeclaration: TypeDeclaration? = typeDeclarationDto(),
-        steps: List<Step> = emptyList(),
-        packageDependencies: List<ToolPyPackDependency> = emptyList()
+        returnTypeDeclaration: TypeNode? = typeNode(),
+        steps: List<Step> = emptyList()
     ): Tool {
         return Tool(
             id = id,
@@ -190,19 +296,18 @@ object DtoTestInstanceFactory {
     }
 
     fun testCaseDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         user: User = userDto(),
         name: String = "Test Case Name",
         description: String = "Test Case Description",
         workflow: Workflow = workflowDto(),
         step: Step = stepDto(),
         inputs: List<TestInput> = emptyList(),
-        expectedOutcomes: List<TestExpectation> = emptyList(),
-        results: List<WorkflowTestResult> = emptyList()
+        expectedOutcomes: List<TestOutcomeExpectation> = emptyList(),
+        results: List<TestOutcomeActual> = emptyList()
     ) : TestCase {
         return TestCase(
             id = id,
-            user = user,
             name = name,
             description = description,
             workflow = workflow,
@@ -214,12 +319,12 @@ object DtoTestInstanceFactory {
     }
 
     fun dataPointDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         name: String = "Data Point Name",
         description: String? = "Data Point Description",
         presetValue: String? = "Some stuff",
         storeMethod: StoreMethod = StoreMethod.BLOB,
-        typeDeclaration: TypeDeclaration = typeDeclarationDto(),
+        typeDeclaration: TypeNode = typeNode(),
         workflow: Workflow = workflowDto()
     ): DataPoint {
         return DataPoint(
@@ -236,9 +341,9 @@ object DtoTestInstanceFactory {
     }
 
     fun toolParamDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         name: String = "Tool Param",
-        typeDeclaration: TypeDeclaration = typeDeclarationDto(),
+        typeDeclaration: TypeNode = typeNode(),
         tool: Tool = toolDto(),
         hasDefault: Boolean = true
     ) : ToolParam {
@@ -246,39 +351,12 @@ object DtoTestInstanceFactory {
             id = id,
             name = name,
             typeDeclaration = typeDeclaration,
-            tool = tool,
-            hasDefault = hasDefault
-        )
-    }
-
-    fun typeDeclarationDto(
-        id: Long = 1L,
-        typeDefinition: TypeDefinition = typeDefinitionDto(),
-        alias: String? = "alias"
-    ): TypeDeclaration {
-        return TypeDeclaration(
-            id = id,
-            typeDefinition = typeDefinition,
-            alias = alias
-        )
-    }
-
-    fun typeDefinitionDto(
-        id: Long = 1L,
-        name: String = "Type Definition Name",
-        namespace: String = "type.definition.namespace",
-        versionSpec: VersionSpec = versionSpecDto()
-    ) : TypeDefinition {
-        return TypeDefinition(
-            id = id,
-            name = name,
-            namespace = namespace,
-            versionSpec = versionSpec
+            tool = tool
         )
     }
 
     fun paymentMethodDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         stripePaymentMethodId: String? = "1AF002B1B22200",
         user: User = userDto(),
         cardBrand: CardBrand? = CardBrand.VISA,
@@ -300,22 +378,23 @@ object DtoTestInstanceFactory {
     }
 
     fun tagDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         name: String = "Tag Name",
         description: String? = "Tag Description",
-        user: User = userDto()
+        source: TagSource = TagSource.SYSTEM,
+        userId: ULong  = 1UL
     ) : Tag {
         return Tag(
             id = id,
             name = name,
             description = description,
-            user = user
+            source = source
         )
     }
 
     fun tagRelationDto(
-        parentTagId: Long = 1L,
-        childTagId: Long = 2L
+        parentTagId: ULong = 1UL,
+        childTagId: ULong = 2UL
     ) : TagRelation {
         return TagRelation(
             parentTagId = parentTagId,
@@ -324,28 +403,27 @@ object DtoTestInstanceFactory {
     }
 
     fun workflowExecutionDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         workflow: Workflow = workflowDto(),
         user: User = userDto(),
         startedAt: String = "2024-12-21T10:00:00",
         completedAt: String = "2024-12-21T10:00:00",
         status: ExecutionStatus = ExecutionStatus.FAILED,
-        stepRuns: List<StepRun> = emptyList()
-    ) : WorkflowExecution {
-        return WorkflowExecution(
+        stepTestRuns: List<StepTestRun> = emptyList()
+    ) : WorkflowRun {
+        return WorkflowRun(
             id = id,
             workflow = workflow,
-            user = user,
             startedAt = startedAt,
             completedAt = completedAt,
             status = status,
-            stepRuns = stepRuns
+            stepTestRuns = stepTestRuns
         )
     }
 
-    fun benchmarkingDataDto(
-        id: Long = 1L,
-        workflowExecution: WorkflowExecution = workflowExecutionDto(),
+    fun benchmarkData(
+        id: ULong = 1UL,
+        workflowRun: WorkflowRun = workflowExecutionDto(),
         totalExecutionTime: Double = 123.45,
         totalSteps: Int = 35,
         aiDeterminedSteps: Int = 4,
@@ -353,21 +431,18 @@ object DtoTestInstanceFactory {
     ) : BenchmarkReport {
         return BenchmarkReport(
             id = id,
-            workflowExecution = workflowExecution,
-            totalExecutionTime = totalExecutionTime,
-            aiDeterminedSteps = aiDeterminedSteps,
-            predeterminedSteps = preDeterminedSteps
+            workflowRun = workflowRun
         )
     }
 
     fun userDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         email: String = "jim@jim.com",
         password: String = "secretStuff1!",
         resetToken: String? = "3ij3oi2joi342j",
         oauthProvider: String? = "Google",
         oauthId: String? = "IROEJOWejofdjsojfoaj3ioj439u2jiof",
-        subscriptionStatus: SubscriptionStatus = SubscriptionStatus.REGISTERED,
+        userStatus: UserStatus = UserStatus.REGISTERED,
         apiKey: String? = "jowejrojoewjrew",
         createdAt: String = "2024-12-24T15:00:00",
         updatedAt: String = "2024-12-25T15:00:00",
@@ -380,7 +455,7 @@ object DtoTestInstanceFactory {
             resetToken = resetToken,
             oauthProvider = oauthProvider,
             oauthId = oauthId,
-            subscriptionStatus = subscriptionStatus,
+            userStatus = userStatus,
             apiKey = apiKey,
             createdAt = createdAt,
             updatedAt = updatedAt,
@@ -389,15 +464,15 @@ object DtoTestInstanceFactory {
     }
 
     fun executionLogDto(
-        id: Long = 1L,
-        stepRun: StepRun = stepExecutionDto(),
+        id: ULong = 1UL,
+        stepTestRun: StepTestRun = stepRun(),
         timeStamp: String = "2024-12-21T12:00:00Z",
         logLevel: LogLevel = LogLevel.INFO,
         message: String = "Execution Started"
-    ) : StepRunLogLine {
-        return StepRunLogLine(
+    ) : ExecutionNotification {
+        return ExecutionNotification(
             id = id,
-            stepRun = stepRun,
+            stepTestRun = stepTestRun,
             timestamp = timeStamp,
             logLevel = logLevel,
             message = message
@@ -405,7 +480,7 @@ object DtoTestInstanceFactory {
     }
 
 //    fun stepBenchmarkingDataDto(
-//        id: Long = 0L,
+//        id: ULong = 0UL,
 //        stepExecution: StepExecution = stepExecutionDto(),
 //        executionTime: Double = 123.45
 //    ) : BenchmarkReport {
@@ -416,17 +491,33 @@ object DtoTestInstanceFactory {
 //        )
 //    }
 
-    fun stepExecutionDto(
-        id: Long = 1L,
-        workflowExecution: WorkflowExecution = workflowExecutionDto(),
+    fun stepRunLogLine(
+        id: ULong = 1UL,
+        stepTestRun: StepTestRun = stepRun(),
+        timestamp: String = "2024-12-21T10:00:00",
+        logLevel: LogLevel = LogLevel.INFO,
+        message: String = "text ok test text"
+    ) : ExecutionNotification {
+        return ExecutionNotification(
+            id = id,
+            stepTestRun = stepTestRun,
+            timestamp = timestamp,
+            logLevel = logLevel,
+            message = message
+        )
+    }
+
+    fun stepRun(
+        id: ULong = 1UL,
+        workflowRun: WorkflowRun = workflowExecutionDto(),
         step: Step = stepDto(),
         startedAt: String = "2024-12-21T10:00:00",
         completedAt: String = "2024-12-21T10:00:00",
         status: ExecutionStatus = ExecutionStatus.FAILED
-    ) : StepRun {
-        return StepRun(
+    ) : StepTestRun {
+        return StepTestRun(
             id = id,
-            workflowExecution = workflowExecution,
+            workflowRun = workflowRun,
             step = step,
             startedAt = startedAt,
             completedAt = completedAt,
@@ -434,8 +525,8 @@ object DtoTestInstanceFactory {
         )
     }
 
-    fun errorWatchDto(
-        id: Long = 11L,
+    fun errorWatch(
+        id: ULong = 11UL,
         step: Step = stepDto(),
         errorType: String = "RuntimeException",
         triggerStep: Step = stepDto()
@@ -449,23 +540,23 @@ object DtoTestInstanceFactory {
     }
 
     fun errorWatchFnDto(
-        id: Long = 1L,
-        errorWatch: ErrorWatch = errorWatchDto(),
-        functionName: String = "exampleFunction",
+        id: ULong = 1UL,
+        errorWatch: ErrorWatch = errorWatch(),
+        functionNode: TypeNode = typeNode(),
         position: Int = 1,
     ) : ErrorWatchFn {
         return ErrorWatchFn(
             id = id,
             errorWatch = errorWatch,
-            functionName = functionName,
+            functionNode = functionNode,
             position = position
         )
     }
 
     fun inquisitionDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         step: Step = stepDto(),
-        className: String = "Condition",
+        condition: TypeNode = typeNode(),
         dataPoint: DataPoint = dataPointDto(),
         onMetWorkflowStep: Step = stepDto(),
         executionOrder: Int = 1
@@ -473,7 +564,7 @@ object DtoTestInstanceFactory {
         return Inquisition(
             id = id,
             step = step,
-            className = className,
+            condition = condition,
             dataPoint = dataPoint,
             onMetWorkflowStep = onMetWorkflowStep,
             executionOrder = executionOrder
@@ -481,14 +572,14 @@ object DtoTestInstanceFactory {
     }
 
     fun preReqInjectionDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         junction: WorkflowJunction = workflowJunctionDto(),
         sourceDataPoint: DataPoint = dataPointDto(),
         injectedDataPoint: DataPoint = dataPointDto(),
         name: String = "Name",
         description: String? = "Description"
-    ) : InitialDataPointInjector {
-        return InitialDataPointInjector(
+    ) : DataPointInjection {
+        return DataPointInjection(
             id = id,
             junction = junction,
             sourceDataPoint = sourceDataPoint,
@@ -499,7 +590,7 @@ object DtoTestInstanceFactory {
     }
 
     fun workflowJunctionDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         sourceStep: Step = stepDto(),
         targetWorkflow: Workflow = workflowDto(),
         triggerInquisition: Inquisition = inquisitionDto()
@@ -513,41 +604,45 @@ object DtoTestInstanceFactory {
     }
 
     fun provisionDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         step: Step = stepDto(),
         toolParam: ToolParam = toolParamDto(),
         dataPoints: List<DataPoint> = emptyList()
-    ) : Provision {
-        return Provision(
-            id = id,
-            step = step,
-            toolParam = toolParam,
-            dataPoints = dataPoints
+    ) : DataPointRead {
+        return DataPointRead(
+            id = id
         )
     }
 
+    fun transformTargetType(
+        transformationId: ULong = 1UL,
+        typeDeclarationId: ULong = 2UL
+    ): TransformTargetType = TransformTargetType(
+        transformationId = transformationId,
+        typeDeclarationId = typeDeclarationId
+    )
+
     fun transformationDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         name: String = "Transformation Name",
         description: String = "Transformation Description",
         examples: String? = "Example",
-        returnsType: TypeDeclaration = typeDeclarationDto()
+        returnsType: TypeNode = typeNode()
     ) : Transform {
         return Transform(
             id = id,
             name = name,
             description = description,
-            examples = examples,
-            returnsType = returnsType
+            examples = examples
         )
     }
 
     fun revisionDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         dataPoint: DataPoint = dataPointDto(),
         step: Step = stepDto()
-    ) : DataPointSave {
-        return DataPointSave(
+    ) : DataPointWrite {
+        return DataPointWrite(
             id = id,
             dataPoint = dataPoint,
             step = step
@@ -555,10 +650,10 @@ object DtoTestInstanceFactory {
     }
 
     fun typeParameterDto(
-        id: Long = 1L,
-        typeDeclaration: TypeDeclaration = typeDeclarationDto(),
+        id: ULong = 1UL,
+        typeDeclaration: TypeNode = typeNode(),
         position: Int = 1,
-        parameterTypeDeclaration: TypeDeclaration = typeDeclarationDto()
+        parameterTypeDeclaration: TypeNode = typeNode()
     ) : TypeParameter {
         return TypeParameter(
             id = id,
@@ -569,10 +664,10 @@ object DtoTestInstanceFactory {
     }
 
     fun typeSchemaRefDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         parentRef: TypeSchemaRef? = null,
         name: String = "exampleSchema",
-        typeDeclaration: TypeDeclaration = typeDeclarationDto(),
+        typeDeclaration: TypeNode = typeNode(),
         description: String = "Schema reference description",
         childRefs: List<TypeSchemaRef> = emptyList()
     ) : TypeSchemaRef {
@@ -587,7 +682,7 @@ object DtoTestInstanceFactory {
     }
 
     fun phaseDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         workflow: Workflow = workflowDto(),
         parentPhase: Phase? = null,
         name: String = "Phase Name",
@@ -604,41 +699,51 @@ object DtoTestInstanceFactory {
         )
     }
 
+    fun typeNode(): TypeNode = TypeNode(
+        id = 1UL,
+        version = version(),
+        namespace = null,
+        name = "name",
+        alias = null,
+        isGeneric = false
+    )
+
     fun typeUnionMemberDto(
-        unionTypeDeclarationId: Long = 21L,
-        memberTypeDeclarationId: Long = 22L
+        unionTypeDeclarationId: TypeNode = typeNode(),
+        memberTypeDeclarationId: TypeNode = typeNode()
     ): TypeUnionMember {
         return TypeUnionMember(
-            unionTypeDeclarationId = unionTypeDeclarationId,
-            memberTypeDeclarationId = memberTypeDeclarationId
+            unionTypeNode = unionTypeDeclarationId,
+            memberTypeNode = memberTypeDeclarationId
         )
     }
 
 
     fun typeVarianceDto(
-        id: Long = 23L,
-        typeVariableDeclaration: TypeDeclaration = typeDeclarationDto(),
-        varianceCardinality: VarianceCardinalityDto = VarianceCardinalityDto.COVARIANT
-    ): TypeVariance {
-        return TypeVariance(
-            id = id,
-            typeVariableDeclaration = typeVariableDeclaration,
-            varianceCardinality = varianceCardinality
+        id: ULong = 23UL,
+        typeVariableDeclaration: TypeNode = typeNode(),
+        varianceCardinality: VarianceCardinality = VarianceCardinality.COVARIANT
+    ): TypeVarVariance {
+        return TypeVarVariance(
+            typeNode = typeVariableDeclaration,
+            cardinality = varianceCardinality
         )
     }
 
-    fun provisionDataPointDto(
-        provision: Provision = provisionDto(),
-        dataPoint: DataPoint = dataPointDto()
-    ): ProvisionDataPoint {
-        return ProvisionDataPoint(
-            provisionId = provision.id,
-            dataPointId = dataPoint.id
+    fun dataPointWriteDto(
+        id: ULong = 1UL,
+        dataPoint: DataPoint = dataPointDto(),
+        step: Step = stepDto()
+    ): DataPointWrite {
+        return DataPointWrite(
+            id = id,
+            dataPoint = dataPoint,
+            step = step
         )
     }
 
     fun workflowFolderDto(
-        id: Long = 32L,
+        id: ULong = 32UL,
         parentFolder: WorkflowFolder? = null,
         name: String = "ExampleFolder",
         description: String? = "Folder description",
@@ -657,151 +762,145 @@ object DtoTestInstanceFactory {
     }
 
     fun testInputDto(
-        id: Long = 6L,
-        dataPointName: String = "input1",
+        id: ULong = 6UL,
+        dataPoint: DataPoint = dataPointDto(),
         value: String = "value1",
         generationMethod: GenerationMethod = GenerationMethod.MANUAL,
         testCase: TestCase = testCaseDto()
     ): TestInput {
         return TestInput(
             id = id,
-            dataPointName = dataPointName,
+            dataPoint = dataPoint,
             value = value,
             generationMethod = generationMethod,
             testCase = testCase
         )
     }
     fun testExpectedOutcomeDto(
-        id: Long = 7L,
-        dataPointName: String = "output1",
+        id: ULong = 7UL,
+        dataPoint: DataPoint = dataPointDto(),
         expectedValue: String = "expectedValue1",
         comparisonOperator: ComparisonOperator = ComparisonOperator.EQUALS,
         testCase: TestCase = testCaseDto()
-    ): TestExpectation {
-        return TestExpectation(
+    ): TestOutcomeExpectation {
+        return TestOutcomeExpectation(
             id = id,
-            dataPointName = dataPointName,
+            dataPoint = dataPoint,
             expectedValue = expectedValue,
-            comparisonOperator = comparisonOperator,
+            assertion = comparisonOperator,
             testCase = testCase
         )
     }
 
     fun testResultDto(
-        id: Long = 1L,
+        id: ULong = 1UL,
         testCase: TestCase = testCaseDto(),
-        workflowExecution: WorkflowExecution = workflowExecutionDto(),
+        workflowRun: WorkflowRun = workflowExecutionDto(),
         passed: Boolean = true,
         executedAt: String = "2024-12-21T00:00:00Z"
-    ): WorkflowTestResult {
-        return WorkflowTestResult(
+    ): TestOutcomeActual {
+        return TestOutcomeActual(
             id = id,
             testCase = testCase,
-            workflowExecution = workflowExecution,
+            workflowRun = workflowRun,
             passed = passed,
             executedAt = executedAt
         )
     }
 
     fun typeBoundDto(
-        id: Long = 1L,
-        boundTypeDeclaration: TypeDeclaration = typeDeclarationDto(),
-        typeVariableDeclaration: TypeDeclaration = typeDeclarationDto()
-    ) : TypeBound {
-        return TypeBound(
-            id = id,
-            boundTypeDeclaration = boundTypeDeclaration,
-            typeVariableDeclaration = typeVariableDeclaration
+        id: ULong = 1UL,
+        boundTypeDeclaration: TypeNode = typeNode(),
+        typeVariableDeclaration: TypeNode = typeNode()
+    ) : TypeVarBound {
+        return TypeVarBound(
+            boundTypeNode = boundTypeDeclaration,
+            typeVarNode = typeVariableDeclaration
         )
     }
 
-    fun appliedTransformArgDto(
-        id: Long = 0L,
-        appliedTransform: AppliedTransform = appliedTransformDto(),
-        transformationArg: TransformArg = transformationArgDto(),
+    fun appliedTransformArg(
+        id: ULong = 0UL,
+        transformOccurrence: com.wini.owle.dto.transforms.TransformOccurrence = appliedTransformDto(),
+        transformationArg: TransformArg = transformationArg(),
         value: String = ""
-    ) : AppliedTransformArg {
-        return AppliedTransformArg(
+    ) : TransformOccurrenceArg {
+        return TransformOccurrenceArg(
             id = id,
-            appliedTransform = appliedTransform,
+            transformOccurrence = transformOccurrence,
             transformationArg = transformationArg,
             value = value
         )
     }
 
-    fun transformationArgDto(
-        id: Long = 0L,
+    fun transformationArg(
+        id: ULong = 0UL,
         transformation: Transform = transformationDto(),
-        typeDeclaration: TypeDeclaration = typeDeclarationDto(),
         name: String = "Transformation Arg Name",
+        typeNode: TypeNode = typeNode(),
         description: String? = "Transformation Arg Description"
     ): TransformArg {
         return TransformArg(
             id = id,
             transformation = transformation,
-            typeDeclaration = typeDeclaration,
             name = name,
+            typeNode = typeNode,
             description = description
         )
     }
 
     fun appliedTransformDto(
-        id: Long = 0L,
+        id: ULong = 0UL,
         transformation: Transform = transformationDto(),
-        occurrence: TransformOccurrence = TransformOccurrence.PREREQ_INJECTION,
-        resultType: TypeDeclaration = typeDeclarationDto(),
-        dataPoint: DataPoint? = dataPointDto(),
-    ) : AppliedTransform {
-        return AppliedTransform(
+        occurrence: TransformOccurrence = TransformOccurrence.DATA_POINT_INJECTION,
+        resultType: TypeNode = typeNode()
+    ) : com.wini.owle.dto.transforms.TransformOccurrence {
+        return TransformOccurrence(
             id = id,
             transformation = transformation,
             occurrence = occurrence,
-            resultType = resultType,
-            dataPoint = dataPoint
+            resultType = resultType
         )
     }
 
 
     fun <T : BaseDto> createDtoInstance(dtoClass: Class<T>): T {
         return when (dtoClass) {
-            PyPackageRepo::class.java -> packageRepoDto() as T
-            VersionSpec::class.java -> versionSpecDto() as T
             Step::class.java -> stepDto() as T
             Workflow::class.java -> workflowDto() as T
             Tool::class.java -> toolDto() as T
             TestCase::class.java -> testCaseDto() as T
             DataPoint::class.java -> dataPointDto() as T
             ToolParam::class.java -> toolParamDto() as T
-            TypeDeclaration::class.java -> typeDeclarationDto() as T
-            TypeDefinition::class.java -> typeDefinitionDto() as T
+            TypeNode::class.java -> typeNode() as T
             PaymentMethod::class.java -> paymentMethodDto() as T
             Tag::class.java -> tagDto() as T
             TagRelation::class.java -> tagRelationDto() as T
-            BenchmarkReport::class.java -> benchmarkingDataDto() as T
+            BenchmarkReport::class.java -> benchmarkData() as T
             User::class.java -> userDto() as T
-            StepRunLogLine::class.java -> executionLogDto() as T
-            ErrorWatch::class.java -> errorWatchDto() as T
+            ExecutionNotification::class.java -> executionLogDto() as T
+            ErrorWatch::class.java -> errorWatch() as T
             ErrorWatchFn::class.java -> errorWatchFnDto() as T
             Inquisition::class.java -> inquisitionDto() as T
-            InitialDataPointInjector::class.java -> preReqInjectionDto() as T
-            Provision::class.java -> provisionDto() as T
-            DataPointSave::class.java -> revisionDto() as T
+            DataPointInjection::class.java -> preReqInjectionDto() as T
+            DataPointRead::class.java -> provisionDto() as T
+            DataPointWrite::class.java -> revisionDto() as T
             TypeParameter::class.java -> typeParameterDto() as T
             TypeSchemaRef::class.java -> typeSchemaRefDto() as T
             TypeUnionMember::class.java -> typeUnionMemberDto() as T
-            TypeVariance::class.java -> typeVarianceDto() as T
+            TypeVarVariance::class.java -> typeVarianceDto() as T
             Phase::class.java -> phaseDto() as T
-            ProvisionDataPoint::class.java -> provisionDataPointDto() as T
+            DataPointWrite::class.java -> dataPointWriteDto() as T
             WorkflowFolder::class.java -> workflowFolderDto() as T
             TestInput::class.java -> testInputDto() as T
-            TestExpectation::class.java -> testExpectedOutcomeDto() as T
-            WorkflowTestResult::class.java -> testResultDto() as T
-            PyPackage::class.java -> packageDto() as T
-            WorkflowExecution::class.java -> workflowExecutionDto() as T
-            AppliedTransformArg::class.java -> appliedTransformArgDto() as T
-            AppliedTransform::class.java -> appliedTransformDto() as T
+            TestOutcomeExpectation::class.java -> testExpectedOutcomeDto() as T
+            TestOutcomeActual::class.java -> testResultDto() as T
+            DistributionPackage::class.java -> distributionPackage() as T
+            WorkflowRun::class.java -> workflowExecutionDto() as T
+            TransformOccurrenceArg::class.java -> appliedTransformArg() as T
+            TransformOccurrence::class.java -> appliedTransformDto() as T
             Transform::class.java -> transformationDto() as T
-            TransformArg::class.java -> transformationArgDto() as T
+            TransformArg::class.java -> transformationArg() as T
             else -> throw IllegalArgumentException("Unsupported DTO type: ${dtoClass.simpleName}")
         }
     }

@@ -1,11 +1,6 @@
 package com.wini.owle.ksp.doc.oas
 
 import com.wini.owle.ksp.doc.oas.info.Info
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.SpecVersion
-import io.swagger.v3.oas.models.info.Contact
-import io.swagger.v3.oas.models.info.License
-import io.swagger.v3.oas.models.servers.Server
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
@@ -18,7 +13,7 @@ data class OpenApiSpec(
     val info: Info = Info(),
     val paths: Map<String, JsonObject>,
     val components: Map<String, JsonObject> = emptyMap(),
-    val tags: List<Tag> = emptyList()
+    val tags: List<OasTag> = emptyList()
 ) {
 
 

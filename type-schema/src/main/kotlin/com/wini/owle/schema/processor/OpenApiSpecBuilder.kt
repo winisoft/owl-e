@@ -3,7 +3,7 @@ package com.wini.owle.ksp.processor
 import com.google.devtools.ksp.processing.KSPLogger
 import com.wini.owle.ksp.doc.oas.ApiEndpointDoc
 import com.wini.owle.ksp.doc.oas.OpenApiSpec
-import com.wini.owle.ksp.doc.oas.Tag
+import com.wini.owle.ksp.doc.oas.OasTag
 import kotlinx.serialization.json.* // Import all from json
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -20,7 +20,7 @@ class OpenApiSpecBuilder(
 
         val paths = mutableMapOf<String, JsonObject>()
         val tags = endpoints.flatMap { it.tags }.distinct().map {
-            Tag(name = it, description = "")
+            OasTag(name = it, description = "")
         }
 
         for (endpoint in endpoints) {

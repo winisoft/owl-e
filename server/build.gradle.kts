@@ -1,5 +1,5 @@
-import com.google.devtools.ksp.gradle.KspTask
-import com.google.devtools.ksp.gradle.model.Ksp
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
@@ -16,7 +16,6 @@ version = "1.0.0"
 sourceSets {
     main {
         dependencies {
-            ksp(projects.dataCollector)
             implementation(projects.common)
             implementation(libs.logback)
             implementation(libs.ktor.server.core)
@@ -33,61 +32,68 @@ sourceSets {
             implementation(libs.koin.core)
             implementation(libs.koin.ktor)
             implementation(libs.stripe.java)
-            implementation("io.ktor:ktor-server-swagger:3.1.2")
-            implementation("io.ktor:ktor-server-openapi:2.3.13")
         }
     }
     test {
+
+        java.setSrcDirs(listOf("src/test/unit", "src/test/integration"))
+
         dependencies {
+            implementation(projects.common)
             implementation(libs.junit.jupiter)
+            implementation(libs.junit.jupiter.api)
+            implementation(libs.junit.jupiter.engine)
             implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.mockk)
             implementation(libs.hamcrest.hamcrest)
-            implementation(libs.mysql)
             implementation(libs.koin.test.junit5)
-            implementation(libs.assertk.jvm)
-            implementation(libs.mockk)
-            implementation(libs.hamcrest.hamcrest)
-            testImplementation(libs.ktor.server.tests)
-            testImplementation(libs.kotlin.test.junit)
             implementation(libs.ktor.server.tests)
             implementation(libs.kotlin.test.junit)
-            implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-            implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-            testImplementation("org.mockito:mockito-core:5.6.0")
-            testImplementation("org.mockito:mockito-inline:5.2.0")
-            testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+            implementation(libs.assertk.jvm)
+            implementation(libs.mockk)
+            implementation(libs.mysql)
         }
     }
 }
 
-// Add task to generate example JSON files from DtoTestInstanceFactory
-//tasks.register("generateExamples", JavaExec::class) {
-//    description = "Generate example JSON files from DtoTestInstanceFactory"
-//    group = "build"
-//
-//    // Configure classpath for the task
-//    classpath = sourceSets["test"].runtimeClasspath
-//    mainClass.set("com.wini.owle.tools.ExampleGenerator")
-//
-//    // Ensure this task runs before KSP
-//    tasks.named("kspKotlin").configure {
-//        dependsOn("generateExamples")
-//    }
-//}
+tasks {
 
-tasks.test {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+    }
+
+    val unitTest by registering(Test::class) {
+        description = "Runs unit tests (from src/test/unit only)"
+        group = "verification"
+        useJUnitPlatform()
+        testClassesDirs = files(
+            fileTree("build/classes/kotlin/test").matching {
+                include("**/unit/**")
+            }
+        )
+        classpath = sourceSets["test"].runtimeClasspath
+    }
+
+    val integrationTest by registering(Test::class) {
+        description = "Runs integration tests (from src/test/integration only)"
+        group = "verification"
+        useJUnitPlatform()
+        testClassesDirs = files(
+            fileTree("build/classes/kotlin/test").matching {
+                include("**/integration/**")
+            }
+        )
+        classpath = sourceSets["test"].runtimeClasspath
+    }
+
+
+    withType<KotlinCompile>().configureEach {
+        compilerOptions.jvmTarget = JvmTarget.JVM_17
+    }
+
 }
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 application {

@@ -2,9 +2,9 @@ package com.wini.owle.dto.typing
 
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.dto.StandardDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.PositiveValueIntError
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
 
 /**
@@ -15,13 +15,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TypeParameter(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     /**
      * Relationship to the type declaration this parameter is part of.
      */
-    val typeDeclaration: TypeDeclaration,
+    val typeDeclaration: TypeNode,
 
     /**
      * Position of the parameter within the type declaration, useful for ordered parameters (e.g., Dict[keyType, valueType]).
@@ -32,6 +32,6 @@ data class TypeParameter(
     /**
      * Relationship to the type declaration that defines the parameter's type.
      */
-    val parameterTypeDeclaration: TypeDeclaration
+    val parameterTypeDeclaration: TypeNode
 
-) : StandardDto
+) : ULongDto

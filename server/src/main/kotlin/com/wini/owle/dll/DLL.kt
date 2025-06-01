@@ -8,7 +8,7 @@ interface DLL<ID: Any, Dto: BaseDto> {
 
     fun getAll(): AsyncResult<List<Dto>>
 
-    fun getById(id: ID): AsyncResult<Dto>
+    fun getById(id: ID): AsyncResult<Dto?>
 
     fun create(dto: Dto): AsyncResult<Dto>
 

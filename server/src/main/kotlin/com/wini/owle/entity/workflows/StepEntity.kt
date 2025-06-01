@@ -1,17 +1,17 @@
 package com.wini.owle.entity.workflows
 
-import com.wini.owle.entity.Phases
-import com.wini.owle.entity.Steps
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents a step within a workflow, defining its tool dependency, next and previous steps,
  * and whether it serves as the workflow's head step.
  */
-class StepEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<StepEntity>(Steps)
+class StepEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<StepEntity>(Steps)
 
     /**
      * Workflow that contains this step.
@@ -33,10 +33,6 @@ class StepEntity(id: EntityID<Long>) : LongEntity(id) {
      */
     var tool by ToolEntity referencedOn Steps.tool
 
-    /**
-     * Reference to the next step in the workflow sequence.
-     */
-    var defaultNext by StepEntity optionalReferencedOn Steps.defaultNext
 
     /**
      * Indicates if this step is the first step in the workflow.
@@ -53,4 +49,5 @@ class StepEntity(id: EntityID<Long>) : LongEntity(id) {
      */
     var parentPhase by PhaseEntity optionalReferencedOn Phases
 
+    var nextStep by StepEntity optionalReferencedOn Steps
 }

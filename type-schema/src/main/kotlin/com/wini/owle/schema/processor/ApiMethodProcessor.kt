@@ -15,8 +15,6 @@ class ApiMethodProcessor(
 
         val routes = mutableMapOf<String, MutableList<ApiOperationDoc>>()
 
-        logger.warn("ApiMethodProcessor::processRoutes for Endpoint [${declaration.simpleName.asString()}]")
-
         declaration.operations.forEach { operationDeclaration ->
             val opAnnotation = operationDeclaration.apiOpsAnnotation
 

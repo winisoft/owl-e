@@ -1,24 +1,28 @@
 package com.wini.owle.entity.user
 
-import com.wini.owle.entity.Users
-import com.wini.owle.entity.WorkflowMetadataContributors
-import com.wini.owle.entity.workflows.WorkflowMetadataEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
 /**
  * Represents a user in the Owl-E application, with authentication details,
  * subscription status, and related payment methods.
  */
-class UserEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<UserEntity>(Users)
+class UserEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
+    companion object : ULongEntityClass<UserEntity>(Users)
 
     /**
      * User's email, used for login and communication.
      */
     var email by Users.email
+
+    var userName by Users.userName
+
+    var personalFirst by Users.firstName
+
+    var personalLast by Users.lastName
 
     /**
      * User's password, stored as a hashed value.
@@ -35,6 +39,8 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
      */
     var oauthProvider by Users.oauthProvider
 
+    var userStatus by Users.userStatus
+
     /**
      * OAuth provider ID, if the user is authenticated via an external provider.
      */
@@ -43,7 +49,7 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
     /**
      * Current subscription status of the user (e.g., active, on hold).
      */
-    var subscriptionStatus by Users.subscriptionStatus
+    var subscriptionStatus by Users.userStatus
 
     /**
      * API key for accessing restricted resources.

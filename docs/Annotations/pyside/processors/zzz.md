@@ -1,0 +1,2 @@
+
+Processors are a convention for describing the high-order tasks in this app's purview. I didn't maintain the discipline I originally intended; ideally a single function in processor's modules would have a single function that could be plugged into the main script

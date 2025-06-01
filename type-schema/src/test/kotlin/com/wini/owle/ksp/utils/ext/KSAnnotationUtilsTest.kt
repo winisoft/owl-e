@@ -2,12 +2,7 @@ package com.wini.owle.ksp.utils.ext
 
 import com.google.devtools.ksp.symbol.*
 import com.wini.owle.ksp.utils.ConstraintRegistry
-import io.mockk.*
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+
 //
 //class KSAnnotationUtilsTest {
 //

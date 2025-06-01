@@ -3,6 +3,10 @@ package com.wini.owle.api
 import io.ktor.http.*
 
 
+/**
+ * Represents the combination of HTTP method and the arity of the operation. This is only really helpful
+ * insofar as it's something we can pass into the ApplicationCall execution function to guide its logic
+ */
 sealed class OwleApiCall {
 
     data object GetMany : OwleApiCall()

@@ -2,17 +2,15 @@ package com.wini.owle.dto.user
 
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.dto.StandardDto
-import com.wini.owle.dto.user.enums.SubscriptionStatus
+import com.wini.owle.dto.ULongDto
+import com.wini.owle.dto.user.enums.UserStatus
 import com.wini.owle.error.IncoherentInstantError
 import com.wini.owle.error.InvalidOAuthProvider
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.ResetTokenCharsError
 import com.wini.owle.error.StringSafeCharsError
 import com.wini.owle.error.TimestampFormatError
 import com.wini.owle.error.ValidEmailFormatError
-import com.wini.owle.schema.error.InconsistentOAuthId
-import com.wini.owle.schema.error.PreventsTimeParadox
 import kotlinx.serialization.Serializable
 
 /**
@@ -21,16 +19,16 @@ import kotlinx.serialization.Serializable
  */
 @ModelDefinition
 @Serializable
-@PreventsTimeParadox(
-    happensFirstField = "createdAt",
-    happensSecondField = "updatedAt")
-@InconsistentOAuthId(
-    providerName = "oauthProvider",
-    oauthName = "oauthId")
+//@PreventsTimeParadox(
+//    happensFirstField = "createdAt",
+//    happensSecondField = "updatedAt")
+//@InconsistentOAuthId(
+//    providerName = "oauthProvider",
+//    oauthName = "oauthId")
 data class User(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
 
     /**
      * User's email, used for login and communication.
@@ -64,7 +62,7 @@ data class User(
     /**
      * Current subscription status of the user (e.g., active, on hold).
      */
-    val subscriptionStatus: SubscriptionStatus,
+    val userStatus: UserStatus,
 
     /**
      * API key for accessing restricted resources.
@@ -85,4 +83,4 @@ data class User(
     val updatedAt: String,
 
     val paymentMethods: List<PaymentMethod> = emptyList()
-) : StandardDto
+) : ULongDto

@@ -1,0 +1,20 @@
+# Database Configuration
+DB_HOST=localhost
+DB_USER=wini
+DB_PASSWORD=the_eru_shrug_0!
+DB_NAME=owle_dev
+
+# File Paths
+INPUT_DIR=./workdir/in_files
+OUTPUT_DIR=./workdir/out_files
+LOG_DIR=./logs
+
+# Processing Configuration
+COMMIT_EVERY=500
+PYPI_REQUEST_TIMEOUT=10
+MAX_RETRIES=3
+
+# Logging Level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+LOG_LEVEL=INFO 
+
+FULLPATH = r"C:\Users\wini\Desktop\pyside\workdir\in_files\1000000.csv"

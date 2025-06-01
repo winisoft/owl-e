@@ -1,24 +1,19 @@
 package com.wini.owle.entity.runs.test
 
+import com.wini.owle.entity.runs.TestCases
 import com.wini.owle.entity.workflows.StepEntity
-import com.wini.owle.entity.TestCases
-import com.wini.owle.entity.user.UserEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 /**
  * Defines a test case to validate workflows or steps.
  * Each test case may contain multiple inputs, expected outcomes, and historical results.
  */
-class TestCaseEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<TestCaseEntity>(TestCases)
+class TestCaseEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
-    /**
-     * Relationship to the associated user.
-     */
-    var userEntity by UserEntity referencedOn TestCases.user
+    companion object : ULongEntityClass<TestCaseEntity>(TestCases)
 
     /**
      * Relationship to the workflow associated with this test case, if applicable.

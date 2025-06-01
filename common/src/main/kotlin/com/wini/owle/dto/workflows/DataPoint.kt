@@ -3,15 +3,15 @@ package com.wini.owle.dto.workflows
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.error.ConstraintStringLenMax
-import com.wini.owle.dto.StandardDto
-import com.wini.owle.dto.typing.TypeDeclaration
-import com.wini.owle.dto.workflows.Workflow.Companion.MAX_NAME_LENGTH
+import com.wini.owle.dto.ULongDto
+import com.wini.owle.dto.typing.TypeNode
 import com.wini.owle.dto.workflows.enums.StoreMethod
-import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 /**
@@ -22,8 +22,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DataPoint(
 
-    @ConstraintSimple([PositiveValueLongError::class])
-    override val id: Long,
+    @ConstraintSimple([PositiveValueULongError::class])
+    override val id: ULong,
     /**
      * Workflow containing this data point.
      */
@@ -32,21 +32,21 @@ data class DataPoint(
      * Name of the data point, used to identify it within the workflow.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_127)
     val name: String,
 
     /**
      * Explains the meaning of the DataPoint to users
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String? = null,
 
     /**
      * Preset value for the data point, which may be used for initialization or defaults.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_VALUE_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
     val presetValue: String? = null,
     /**
      * Specifies how the data point's value is stored: as text, blob, or file.
@@ -55,7 +55,7 @@ data class DataPoint(
     /**
      * Specifies the data type for the data point, linking to a type declaration.
      */
-    val typeDeclaration: TypeDeclaration,
+    val typeDeclaration: TypeNode,
     /**
      * Timestamp for when the dataPoint was created.
      */
@@ -64,4 +64,4 @@ data class DataPoint(
      * Timestamp for when the dataPoint was last updated.
      */
     val updatedAt: String
-) : StandardDto
+) : ULongDto

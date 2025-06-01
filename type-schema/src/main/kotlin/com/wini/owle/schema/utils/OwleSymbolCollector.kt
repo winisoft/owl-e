@@ -37,33 +37,39 @@ object OwleSymbolCollector {
         if (!modelDone) {
             resolver.getSymbolsWithAnnotation(ModelDefinition::class.qualifiedName!!)
                 .filterIsInstance<KSClassDeclaration>()
-                .toList()
+                .toList().map {
+                    it
+                }
                 .apply {
                     modelDeclarations += map { ModelDeclarationImpl(it) }
                     modelDone = all { it.isResolved }
-                        .also { if (it) logger.warn("Collected ${count()} models") }
+                        .also { if (it) logger.warn("Documenting ${count()} models") }
                 }
         }
 
         if (!endpointsDone) {
             resolver.getSymbolsWithAnnotation(ApiEndpointDefinition::class.qualifiedName!!)
                 .filterIsInstance<KSClassDeclaration>()
-                .toList()
+                .toList().map {
+                    it
+                }
                 .apply {
                     apiEndpointDeclarations += map { ApiEndpointDeclarationImpl(it) }
                     endpointsDone = all { it.isResolved }
-                        .also { if (it) logger.warn("Collected ${count()} endpoints") }
+                        .also { if (it) logger.warn("Documenting ${count()} API endpoints") }
                 }
         }
 
         if (!errorsDone) {
             resolver.getSymbolsWithAnnotation(ErrorDefinition::class.qualifiedName!!)
                 .filterIsInstance<KSClassDeclaration>()
-                .toList()
+                .toList().map {
+                    it
+                }
                 .apply {
                     errorDeclarations += map { ErrorDeclarationImpl(it) }
                     endpointsDone = all { it.isResolved }
-                        .also { if (it) logger.warn("Collected ${count()} errors") }
+                        .also { if (it) logger.warn("Documenting ${count()} error types") }
                 }
         }
 

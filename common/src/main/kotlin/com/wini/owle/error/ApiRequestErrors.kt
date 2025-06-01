@@ -8,8 +8,8 @@ sealed class ApiRequestError: OwleError
 @ErrorDefinition("errors.apiRequest.requestBodyMalformed")
 @Serializable
 data object RequestBodyMalformed : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail: String? get() = null
 }
 
@@ -18,8 +18,8 @@ data object RequestBodyMalformed : ApiRequestError() {
 data class MultipleTypeValidations(
     val violations: List<FieldConstraintError>
 ): ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail: String? get() = null
 }
 
@@ -28,8 +28,8 @@ data class MultipleTypeValidations(
 data class MultipleParamFailure(
     val failed: List<OwleError>
 ) : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail: String? get() = null
 }
 
@@ -38,16 +38,16 @@ data class MultipleParamFailure(
 data class MissingParameter(
     val paramKey: String
 ) : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail = "'$paramKey' was not provided"
 }
 
 @ErrorDefinition("errors.apiRequest.authorizationError")
 @Serializable
 data object AuthorizationError : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail = null
 }
 
@@ -59,8 +59,8 @@ data object AuthorizationError : ApiRequestError() {
 @ErrorDefinition("errors.apiRequest.noSuchIdError")
 @Serializable
 data object NoSuchIdError : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail = null
 }
 
@@ -70,16 +70,16 @@ data object NoSuchIdError : ApiRequestError() {
 @ErrorDefinition("errors.apiRequest.batchOpOfNoDataObjects")
 @Serializable
 data object BatchOpOfNoDataObjects : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail: String? get() = null
 }
 
 @ErrorDefinition("errors.apiRequest.authenticationError")
 @Serializable
 data object AuthenticationError : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail = null
 }
 
@@ -90,7 +90,7 @@ data class ParamValueMalformedLong(
     val paramKey: String,
     val formatDescr: String = "number"
 ) : ApiRequestError() {
-    override val errorCode: String get() = errorResCode()
-    override val message: String get() = errorResMsg()
+    override val errorCode: String get() = ""
+    override val message: String get() = ""
     override val detail = "'$paramKey' must be a valid whole number."
 }

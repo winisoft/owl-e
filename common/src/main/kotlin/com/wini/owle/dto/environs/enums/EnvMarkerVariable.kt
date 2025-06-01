@@ -1,0 +1,28 @@
+package com.wini.owle.dto.environs.enums
+
+
+enum class EnvMarkerVariable {
+
+    PYTHON_VERSION,
+
+    PYTHON_FULL_VERSION,
+
+    OS_NAME,
+
+    SYS_PLATFORM,
+
+    PLATFORM_MACHINE,
+
+    PLATFORM_PYTHON_IMPLEMENTATION,
+
+    PLATFORM_RELEASE,
+
+    PLATFORM_VERSION,
+
+    IMPLEMENTATION_NAME,
+
+    IMPLEMENTATION_VERSION,
+
+    EXTRA
+
+}

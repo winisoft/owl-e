@@ -1,0 +1,774 @@
+id,classifier
+92812,Development Status :: 1 - Planning
+92813,Development Status :: 2 - Pre-Alpha
+92814,Development Status :: 3 - Alpha
+92815,Development Status :: 4 - Beta
+92816,Development Status :: 5 - Production/Stable
+92817,Development Status :: 6 - Mature
+92818,Development Status :: 7 - Inactive
+92820,Environment :: Console
+92821,Environment :: Console :: Curses
+92822,Environment :: Console :: Framebuffer
+92823,Environment :: Console :: Newt
+92824,Environment :: Console :: svgalib
+92825,Environment :: GPU
+92826,Environment :: GPU :: NVIDIA CUDA
+92827,Environment :: GPU :: NVIDIA CUDA :: 1.0
+92828,Environment :: GPU :: NVIDIA CUDA :: 1.1
+92829,Framework :: Django :: 2.0
+92830,Framework :: Django :: 2.1
+92831,Framework :: Django :: 2.2
+92832,Programming Language :: Python :: 2.3
+92833,Programming Language :: Python :: 3.0
+92834,Programming Language :: Python :: 3.1
+92835,Programming Language :: Python :: 3.2
+92836,Framework :: Plone :: 4.0
+92837,Framework :: Plone :: 4.1
+92838,Framework :: Plone :: 4.2
+92839,Framework :: Plone :: 5.0
+92840,Environment :: GPU :: NVIDIA CUDA :: 5.5
+92841,Framework :: Plone :: 6.0
+92842,Environment :: GPU :: NVIDIA CUDA :: 6.5
+92843,Environment :: GPU :: NVIDIA CUDA :: 7.0
+92844,Environment :: GPU :: NVIDIA CUDA :: 7.5
+92845,Framework :: Odoo :: 8.0
+92846,Framework :: Odoo :: 9.0
+92847,Environment :: GPU :: NVIDIA CUDA :: 9.1
+92848,Environment :: GPU :: NVIDIA CUDA :: 9.2
+92849,Framework :: Odoo :: 10.0
+92850,Environment :: GPU :: NVIDIA CUDA :: 10.1
+92851,Environment :: GPU :: NVIDIA CUDA :: 10.2
+92852,Environment :: GPU :: NVIDIA CUDA :: 11
+92853,Framework :: Odoo :: 11.0
+92854,Environment :: GPU :: NVIDIA CUDA :: 11.1
+92855,Environment :: GPU :: NVIDIA CUDA :: 11.2
+92856,Environment :: GPU :: NVIDIA CUDA :: 11.3
+92857,Environment :: GPU :: NVIDIA CUDA :: 11.4
+92858,Environment :: GPU :: NVIDIA CUDA :: 11.5
+92859,Environment :: GPU :: NVIDIA CUDA :: 11.6
+92860,Environment :: GPU :: NVIDIA CUDA :: 11.7
+92861,Environment :: GPU :: NVIDIA CUDA :: 11.8
+92862,Environment :: GPU :: NVIDIA CUDA :: 12
+92863,Framework :: Odoo :: 12.0
+92864,Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.1
+92865,Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.2
+92866,Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.3
+92867,Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.4
+92868,Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.5
+92869,Environment :: GPU :: NVIDIA CUDA :: 12 :: 12.6
+92870,Environment :: Handhelds/PDA's
+92871,Operating System :: MacOS :: MacOS X
+92872,Environment :: MacOS X :: Aqua
+92873,Environment :: MacOS X :: Carbon
+92874,Environment :: MacOS X :: Cocoa
+92875,Environment :: No Input/Output (Daemon)
+92876,Environment :: OpenStack
+92877,Environment :: Other Environment
+92878,Framework :: Pelican :: Plugins
+92879,Environment :: Web Environment
+92880,Environment :: Web Environment :: Buffet
+92881,Environment :: Web Environment :: Mozilla
+92882,Environment :: Web Environment :: ToscaWidgets
+92883,Environment :: WebAssembly
+92884,Environment :: WebAssembly :: Emscripten
+92885,Environment :: WebAssembly :: WASI
+92886,Environment :: Win32 (MS Windows)
+92887,Environment :: X11 Applications
+92888,Environment :: X11 Applications :: GTK
+92889,Topic :: Desktop Environment :: Gnome
+92890,Environment :: X11 Applications :: KDE
+92891,Environment :: X11 Applications :: Qt
+92893,Framework :: AWS CDK
+92894,Framework :: Wagtail :: 1
+92895,Programming Language :: Python :: 2
+92896,Framework :: AiiDA
+92897,Framework :: Ansible
+92898,Framework :: AnyIO
+92899,Framework :: Apache Airflow
+92900,Framework :: Apache Airflow :: Provider
+92901,Framework :: AsyncIO
+92902,Framework :: BEAT
+92903,Framework :: BFG
+92904,Framework :: Bob
+92905,Framework :: Bottle
+92906,Framework :: Buildout
+92907,Framework :: Sphinx :: Extension
+92908,Framework :: Buildout :: Recipe
+92909,Framework :: CastleCMS
+92910,Framework :: Sphinx :: Theme
+92911,Framework :: Celery
+92912,Framework :: Chandler
+92913,Framework :: CherryPy
+92914,Framework :: CubicWeb
+92915,Framework :: Dash
+92916,Framework :: Datasette
+92917,Framework :: Django
+92918,Framework :: Django :: 1.4
+92919,Framework :: Django :: 1.5
+92920,Framework :: Django :: 1.6
+92921,Framework :: Django :: 1.7
+92922,Framework :: Django :: 1.8
+92923,Framework :: Django :: 1.9
+92924,Framework :: Django :: 1.10
+92925,Framework :: Django :: 1.11
+92926,Programming Language :: Python :: 3
+92927,Framework :: Zope :: 4
+92928,Framework :: Zope :: 5
+92929,Framework :: Plone :: 5.1
+92930,Framework :: Plone :: 5.2
+92931,Framework :: Django CMS
+92932,Programming Language :: Python :: 3.4
+92933,Programming Language :: Python :: 3.5
+92934,Programming Language :: Python :: 3.6
+92935,Programming Language :: Python :: 3.7
+92936,Programming Language :: Python :: 3.8
+92937,Programming Language :: Python :: 3.9
+92938,Programming Language :: Python :: 3.10
+92939,Programming Language :: Python :: 3.11
+92940,Framework :: FastAPI
+92941,Framework :: Flake8
+92942,Framework :: Flask
+92943,Framework :: Hatch
+92944,Framework :: Hypothesis
+92945,Framework :: IDLE
+92946,Framework :: IPython
+92947,Framework :: Jupyter
+92948,Framework :: Jupyter :: JupyterLab
+92949,Framework :: Jupyter :: JupyterLab :: Extensions
+92950,Framework :: Jupyter :: JupyterLab :: Extensions :: Mime Renderers
+92951,Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt
+92952,Topic :: Desktop Environment :: Window Managers :: XFCE :: Themes
+92953,Framework :: Kedro
+92954,Framework :: Lektor
+92955,Framework :: Masonite
+92956,Framework :: Matplotlib
+92957,Framework :: MkDocs
+92958,Framework :: Nengo
+92959,Framework :: Odoo
+92960,Framework :: Odoo :: 13.0
+92961,Framework :: Odoo :: 14.0
+92962,Framework :: Odoo :: 15.0
+92963,Framework :: Odoo :: 16.0
+92964,Framework :: Odoo :: 17.0
+92965,Framework :: Odoo :: 18.0
+92966,Framework :: OpenTelemetry
+92967,Framework :: OpenTelemetry :: Distros
+92968,Framework :: OpenTelemetry :: Exporters
+92969,Framework :: OpenTelemetry :: Instrumentations
+92970,Framework :: Opps
+92971,Framework :: Paste
+92972,Framework :: Pelican
+92973,Framework :: Plone
+92974,Programming Language :: Python :: 3.3
+92975,Framework :: Plone :: 4.3
+92976,Framework :: Plone :: 5.3
+92977,Framework :: Plone :: 6.1
+92978,Framework :: Plone :: 6.2
+92979,Framework :: Plone :: Addon
+92980,Framework :: Plone :: Core
+92981,Framework :: Plone :: Distribution
+92982,Framework :: PySimpleGUI
+92983,Framework :: Pycsou
+92984,Framework :: Pydantic
+92985,Framework :: Pylons
+92986,Framework :: Pyodide
+92987,Framework :: Pyramid
+92988,Framework :: Pytest
+92989,Framework :: Review Board
+92990,Framework :: Robot Framework
+92991,Framework :: Robot Framework :: Library
+92992,Framework :: Robot Framework :: Tool
+92993,Framework :: Scrapy
+92994,Framework :: Setuptools Plugin
+92995,Topic :: Documentation :: Sphinx
+92996,Framework :: Sphinx :: Domain
+92997,Framework :: Trac
+92998,Framework :: Trio
+92999,Framework :: Tryton
+93000,Framework :: TurboGears
+93001,Topic :: Desktop Environment :: PicoGUI :: Applications
+93002,Framework :: TurboGears :: Widgets
+93003,Framework :: Twisted
+93004,Framework :: Wagtail
+93005,Framework :: Wagtail :: 6
+93006,Framework :: Wagtail :: 7
+93007,Framework :: ZODB
+93008,Programming Language :: Zope
+93009,Framework :: Zope2
+93010,Framework :: Zope3
+93011,Framework :: aiohttp
+93012,Framework :: cocotb
+93013,Framework :: napari
+93014,Framework :: tox
+93016,Intended Audience :: Customer Service
+93017,Intended Audience :: Developers
+93018,Topic :: Education
+93019,Intended Audience :: End Users/Desktop
+93020,Intended Audience :: Financial and Insurance Industry
+93021,Intended Audience :: Healthcare Industry
+93022,Intended Audience :: Information Technology
+93023,Intended Audience :: Legal Industry
+93024,Intended Audience :: Manufacturing
+93025,Intended Audience :: Other Audience
+93026,Topic :: Religion
+93027,Intended Audience :: Science/Research
+93028,Intended Audience :: System Administrators
+93029,Intended Audience :: Telecommunications Industry
+93031,License :: Aladdin Free Public License (AFPL)
+93032,License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+93033,License :: CeCILL-B Free Software License Agreement (CECILL-B)
+93034,License :: CeCILL-C Free Software License Agreement (CECILL-C)
+93035,License :: DFSG approved
+93036,License :: Eiffel Forum License (EFL)
+93037,License :: Free For Educational Use
+93038,License :: Free For Home Use
+93039,License :: Free To Use But Restricted
+93040,License :: Free for non-commercial use
+93041,License :: Freely Distributable
+93042,License :: Freeware
+93043,License :: GUST Font License 1.0
+93044,License :: GUST Font License 2006-09-30
+93045,License :: Netscape Public License (NPL)
+93046,License :: Nokia Open Source License (NOKOS)
+93047,License :: OSI Approved
+93048,License :: OSI Approved :: Academic Free License (AFL)
+93049,License :: OSI Approved :: Apache Software License
+93050,License :: OSI Approved :: Apple Public Source License
+93051,License :: OSI Approved :: Artistic License
+93052,License :: OSI Approved :: Attribution Assurance License
+93053,License :: OSI Approved :: BSD License
+93054,License :: OSI Approved :: Blue Oak Model License (BlueOak-1.0.0)
+93055,License :: OSI Approved :: Boost Software License 1.0 (BSL-1.0)
+93057,License :: OSI Approved :: CMU License (MIT-CMU)
+93058,License :: OSI Approved :: Common Development and Distribution License 1.0 (CDDL-1.0)
+93059,License :: OSI Approved :: Common Public License
+93060,License :: OSI Approved :: Eclipse Public License 1.0 (EPL-1.0)
+93061,License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)
+93063,License :: OSI Approved :: Eiffel Forum License
+93064,License :: OSI Approved :: European Union Public Licence 1.0 (EUPL 1.0)
+93065,License :: OSI Approved :: European Union Public Licence 1.1 (EUPL 1.1)
+93066,License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)
+93067,License :: OSI Approved :: GNU Affero General Public License v3
+93068,License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+93069,License :: OSI Approved :: GNU Free Documentation License (FDL)
+93070,License :: OSI Approved :: GNU General Public License (GPL)
+93071,License :: OSI Approved :: GNU General Public License v2 (GPLv2)
+93072,License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+93073,License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+93074,License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+93075,License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)
+93076,License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)
+93077,License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+93078,License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
+93079,License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
+93080,License :: OSI Approved :: Historical Permission Notice and Disclaimer (HPND)
+93081,License :: OSI Approved :: IBM Public License
+93082,License :: OSI Approved :: ISC License (ISCL)
+93083,License :: OSI Approved :: MIT License
+93084,License :: OSI Approved :: MIT No Attribution License (MIT-0)
+93085,License :: OSI Approved :: MirOS License (MirOS)
+93086,License :: OSI Approved :: Motosoto License
+93087,License :: OSI Approved :: Mozilla Public License 1.0 (MPL)
+93088,License :: OSI Approved :: Mozilla Public License 1.1 (MPL 1.1)
+93089,License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+93090,License :: OSI Approved :: Mulan Permissive Software License v2 (MulanPSL-2.0)
+93091,License :: OSI Approved :: NASA Open Source Agreement v1.3 (NASA-1.3)
+93092,License :: OSI Approved :: Nethack General Public License
+93093,License :: OSI Approved :: Nokia Open Source License
+93094,License :: OSI Approved :: Open Group Test Suite License
+93095,License :: OSI Approved :: Open Software License 3.0 (OSL-3.0)
+93096,License :: OSI Approved :: PostgreSQL License
+93097,License :: OSI Approved :: Python License (CNRI Python License)
+93098,License :: OSI Approved :: Python Software Foundation License
+93099,License :: OSI Approved :: Qt Public License (QPL)
+93100,License :: OSI Approved :: Ricoh Source Code Public License
+93101,License :: OSI Approved :: SIL Open Font License 1.1 (OFL-1.1)
+93102,License :: OSI Approved :: Sleepycat License
+93103,License :: OSI Approved :: Sun Public License
+93104,License :: OSI Approved :: The Unlicense (Unlicense)
+93105,License :: OSI Approved :: Universal Permissive License (UPL)
+93106,License :: OSI Approved :: University of Illinois/NCSA Open Source License
+93107,License :: OSI Approved :: Vovida Software License 1.0
+93108,License :: OSI Approved :: W3C License
+93109,License :: OSI Approved :: Zero-Clause BSD (0BSD)
+93110,License :: OSI Approved :: Zope Public License
+93111,License :: OSI Approved :: zlib/libpng License
+93112,License :: Other/Proprietary License
+93113,License :: Public Domain
+93114,License :: Repoze Public License
+93116,Natural Language :: Afrikaans
+93117,Natural Language :: Arabic
+93118,Natural Language :: Armenian
+93119,Natural Language :: Basque
+93120,Natural Language :: Bengali
+93121,Natural Language :: Bosnian
+93122,Natural Language :: Bulgarian
+93123,Natural Language :: Cantonese
+93124,Natural Language :: Catalan
+93125,Natural Language :: Catalan (Valencian)
+93126,Natural Language :: Chinese (Simplified)
+93127,Natural Language :: Chinese (Traditional)
+93128,Natural Language :: Croatian
+93129,Natural Language :: Czech
+93130,Natural Language :: Danish
+93131,Natural Language :: Dutch
+93132,Natural Language :: English
+93133,Natural Language :: Esperanto
+93134,Natural Language :: Estonian
+93135,Natural Language :: Finnish
+93136,Natural Language :: French
+93137,Natural Language :: Galician
+93138,Natural Language :: Georgian
+93139,Natural Language :: German
+93140,Natural Language :: Greek
+93141,Natural Language :: Hebrew
+93142,Natural Language :: Hindi
+93143,Natural Language :: Hungarian
+93144,Natural Language :: Icelandic
+93145,Natural Language :: Indonesian
+93146,Natural Language :: Irish
+93147,Natural Language :: Italian
+93148,Natural Language :: Japanese
+93149,Natural Language :: Javanese
+93150,Natural Language :: Korean
+93151,Natural Language :: Latin
+93152,Natural Language :: Latvian
+93153,Natural Language :: Lithuanian
+93154,Natural Language :: Macedonian
+93155,Natural Language :: Malay
+93156,Natural Language :: Marathi
+93157,Natural Language :: Nepali
+93158,Natural Language :: Norwegian
+93159,Natural Language :: Panjabi
+93160,Natural Language :: Persian
+93161,Natural Language :: Polish
+93162,Natural Language :: Portuguese
+93163,Natural Language :: Portuguese (Brazilian)
+93164,Natural Language :: Romanian
+93165,Natural Language :: Russian
+93166,Natural Language :: Serbian
+93167,Natural Language :: Slovak
+93168,Natural Language :: Slovenian
+93169,Natural Language :: Spanish
+93170,Natural Language :: Swedish
+93171,Natural Language :: Tamil
+93172,Natural Language :: Telugu
+93173,Natural Language :: Thai
+93174,Natural Language :: Tibetan
+93175,Natural Language :: Turkish
+93176,Natural Language :: Ukrainian
+93177,Natural Language :: Urdu
+93178,Natural Language :: Vietnamese
+93179,Natural Language :: Yiddish
+93180,Topic :: System :: Operating System
+93181,Operating System :: Android
+93182,Operating System :: BeOS
+93183,Operating System :: MacOS
+93184,Operating System :: MacOS :: MacOS 9
+93185,Operating System :: Microsoft
+93186,Operating System :: Microsoft :: MS-DOS
+93187,Operating System :: Microsoft :: Windows
+93188,Operating System :: Microsoft :: Windows :: Windows 3.1 or Earlier
+93189,Operating System :: Microsoft :: Windows :: Windows 7
+93190,Operating System :: Microsoft :: Windows :: Windows 8
+93191,Operating System :: Microsoft :: Windows :: Windows 8.1
+93192,Operating System :: Microsoft :: Windows :: Windows 10
+93193,Operating System :: Microsoft :: Windows :: Windows 11
+93194,Operating System :: Microsoft :: Windows :: Windows 95/98/2000
+93195,Operating System :: Microsoft :: Windows :: Windows CE
+93196,Operating System :: Microsoft :: Windows :: Windows NT/2000
+93197,Operating System :: Microsoft :: Windows :: Windows Server 2003
+93198,Operating System :: Microsoft :: Windows :: Windows Server 2008
+93199,Operating System :: Microsoft :: Windows :: Windows Vista
+93200,Operating System :: Microsoft :: Windows :: Windows XP
+93201,Operating System :: OS Independent
+93202,Operating System :: OS/2
+93203,Operating System :: Other OS
+93204,Operating System :: PDA Systems
+93205,Operating System :: POSIX
+93206,Operating System :: POSIX :: AIX
+93207,Topic :: System :: Operating System Kernels :: BSD
+93208,Operating System :: POSIX :: BSD :: BSD/OS
+93209,Operating System :: POSIX :: BSD :: FreeBSD
+93210,Operating System :: POSIX :: BSD :: NetBSD
+93211,Operating System :: POSIX :: BSD :: OpenBSD
+93212,Topic :: System :: Operating System Kernels :: GNU Hurd
+93213,Operating System :: POSIX :: HP-UX
+93214,Operating System :: POSIX :: IRIX
+93215,Topic :: System :: Operating System Kernels :: Linux
+93216,Programming Language :: Other
+93217,Operating System :: POSIX :: SCO
+93218,Operating System :: POSIX :: SunOS/Solaris
+93219,Operating System :: PalmOS
+93220,Operating System :: RISC OS
+93221,Operating System :: Unix
+93222,Operating System :: iOS
+93224,Programming Language :: APL
+93225,Programming Language :: ASP
+93226,Programming Language :: Ada
+93227,Programming Language :: Assembly
+93228,Programming Language :: Awk
+93229,Programming Language :: Basic
+93230,Programming Language :: C
+93231,Programming Language :: C#
+93232,Programming Language :: C++
+93233,Programming Language :: Cold Fusion
+93234,Programming Language :: Cython
+93235,Programming Language :: D
+93236,Programming Language :: Delphi/Kylix
+93237,Programming Language :: Dylan
+93238,Programming Language :: Eiffel
+93239,Programming Language :: Emacs-Lisp
+93240,Programming Language :: Erlang
+93241,Programming Language :: Euler
+93242,Programming Language :: Euphoria
+93243,Programming Language :: F#
+93244,Programming Language :: Forth
+93245,Programming Language :: Fortran
+93246,Programming Language :: Go
+93247,Programming Language :: Haskell
+93248,Programming Language :: Hy
+93249,Programming Language :: Java
+93250,Programming Language :: JavaScript
+93251,Programming Language :: Kotlin
+93252,Programming Language :: Lisp
+93253,Programming Language :: Logo
+93254,Programming Language :: Lua
+93255,Programming Language :: ML
+93256,Programming Language :: Modula
+93257,Programming Language :: OCaml
+93258,Programming Language :: Object Pascal
+93259,Programming Language :: Objective C
+93260,Programming Language :: Other Scripting Engines
+93261,Programming Language :: PHP
+93262,Programming Language :: PL/SQL
+93263,Programming Language :: PROGRESS
+93264,Programming Language :: Pascal
+93265,Programming Language :: Perl
+93266,Programming Language :: Pike
+93267,Programming Language :: Pliant
+93268,Programming Language :: Prolog
+93269,Programming Language :: Python
+93270,Programming Language :: Python :: 3 :: Only
+93271,Programming Language :: Python :: 2.4
+93272,Programming Language :: Python :: 2.5
+93273,Programming Language :: Python :: 2.6
+93274,Programming Language :: Python :: 2.7
+93275,Programming Language :: Python :: 3.12
+93276,Programming Language :: Python :: 3.13
+93277,Programming Language :: Python :: 3.14
+93278,Programming Language :: Python :: 3.15
+93279,Programming Language :: Python :: Free Threading
+93280,Programming Language :: Python :: Free Threading :: 1 - Unstable
+93281,Programming Language :: Python :: Free Threading :: 2 - Beta
+93282,Programming Language :: Python :: Free Threading :: 3 - Stable
+93283,Programming Language :: Python :: Free Threading :: 4 - Resilient
+93284,Programming Language :: Python :: Implementation
+93285,Programming Language :: Python :: Implementation :: CPython
+93286,Programming Language :: Python :: Implementation :: GraalPy
+93287,Programming Language :: Python :: Implementation :: IronPython
+93288,Programming Language :: Python :: Implementation :: Jython
+93289,Programming Language :: Python :: Implementation :: MicroPython
+93290,Programming Language :: Python :: Implementation :: PyPy
+93291,Programming Language :: Python :: Implementation :: Stackless
+93292,Programming Language :: R
+93293,Programming Language :: REBOL
+93294,Programming Language :: Rexx
+93295,Programming Language :: Ruby
+93296,Programming Language :: Rust
+93297,Programming Language :: SQL
+93298,Programming Language :: Scheme
+93299,Programming Language :: Simula
+93300,Programming Language :: Smalltalk
+93301,Programming Language :: Tcl
+93302,Programming Language :: Unix Shell
+93303,Programming Language :: Visual Basic
+93304,Programming Language :: XBasic
+93305,Programming Language :: YACC
+93307,Topic :: Adaptive Technologies
+93308,Topic :: Artistic Software
+93309,Topic :: Communications
+93310,Topic :: Communications :: BBS
+93311,Topic :: Communications :: Chat
+93312,Topic :: Communications :: Chat :: ICQ
+93313,Topic :: Communications :: Chat :: Internet Relay Chat
+93314,Topic :: Communications :: Chat :: Unix Talk
+93315,Topic :: Communications :: Conferencing
+93316,Topic :: Communications :: Email
+93317,Topic :: Communications :: Email :: Address Book
+93318,Topic :: Communications :: Email :: Email Clients (MUA)
+93319,Topic :: Text Processing :: Filters
+93320,Topic :: Communications :: Email :: Mail Transport Agents
+93321,Topic :: Communications :: Email :: Mailing List Servers
+93322,Topic :: Communications :: Email :: Post-Office
+93323,Topic :: Communications :: Email :: Post-Office :: IMAP
+93324,Topic :: Communications :: Email :: Post-Office :: POP3
+93325,Topic :: Communications :: FIDO
+93326,Topic :: Communications :: Fax
+93327,Topic :: Communications :: File Sharing
+93328,Topic :: Communications :: File Sharing :: Gnutella
+93329,Topic :: Communications :: File Sharing :: Napster
+93330,Topic :: Communications :: Ham Radio
+93331,Topic :: Communications :: Internet Phone
+93332,Topic :: Communications :: Telephony
+93333,Topic :: Communications :: Usenet News
+93334,Topic :: Database
+93335,Topic :: Database :: Database Engines/Servers
+93336,Topic :: Database :: Front-Ends
+93337,Topic :: Desktop Environment
+93338,Topic :: Desktop Environment :: File Managers
+93339,Topic :: Desktop Environment :: GNUstep
+93340,Topic :: Desktop Environment :: K Desktop Environment (KDE)
+93341,Topic :: Desktop Environment :: PicoGUI
+93342,Topic :: Desktop Environment :: Screen Savers
+93343,Topic :: Desktop Environment :: Window Managers
+93344,Topic :: Desktop Environment :: Window Managers :: Afterstep
+93345,Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets
+93346,Topic :: Desktop Environment :: Window Managers :: Blackbox
+93347,Topic :: Desktop Environment :: Window Managers :: CTWM
+93348,Topic :: Desktop Environment :: Window Managers :: Enlightenment
+93349,Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets
+93350,Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15
+93351,Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16
+93352,Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17
+93353,Topic :: Desktop Environment :: Window Managers :: FVWM
+93354,Topic :: Desktop Environment :: Window Managers :: Fluxbox
+93355,Topic :: Desktop Environment :: Window Managers :: IceWM
+93356,Topic :: Desktop Environment :: Window Managers :: MetaCity
+93357,Topic :: Desktop Environment :: Window Managers :: Oroborus
+93358,Topic :: Desktop Environment :: Window Managers :: Sawfish
+93359,Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30
+93360,Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30
+93361,Topic :: Desktop Environment :: Window Managers :: Waimea
+93362,Topic :: Desktop Environment :: Window Managers :: Window Maker
+93363,Topic :: Desktop Environment :: Window Managers :: XFCE
+93364,Topic :: Text Editors :: Documentation
+93365,Topic :: Education :: Computer Aided Instruction (CAI)
+93366,Topic :: Software Development :: Testing
+93367,Topic :: File Formats
+93368,Topic :: File Formats :: JSON
+93369,Topic :: File Formats :: JSON :: JSON Schema
+93370,Topic :: Games/Entertainment
+93371,Topic :: Games/Entertainment :: Arcade
+93372,Topic :: Games/Entertainment :: Board Games
+93373,Topic :: Games/Entertainment :: First Person Shooters
+93374,Topic :: Games/Entertainment :: Fortune Cookies
+93375,Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)
+93376,Topic :: Games/Entertainment :: Puzzle Games
+93377,Topic :: Games/Entertainment :: Real Time Strategy
+93378,Topic :: Games/Entertainment :: Role-Playing
+93379,Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games
+93380,Topic :: Games/Entertainment :: Simulation
+93381,Topic :: Games/Entertainment :: Turn Based Strategy
+93382,Topic :: Home Automation
+93383,Topic :: Internet
+93384,Topic :: Internet :: File Transfer Protocol (FTP)
+93385,Topic :: Internet :: Finger
+93386,Topic :: Internet :: Log Analysis
+93387,Topic :: Internet :: Name Service (DNS)
+93388,Topic :: Internet :: Proxy Servers
+93389,Topic :: Internet :: WAP
+93390,Topic :: Internet :: WWW/HTTP
+93391,Topic :: Internet :: WWW/HTTP :: Browsers
+93392,Topic :: Internet :: WWW/HTTP :: Dynamic Content
+93393,Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries
+93394,Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Content Management System
+93395,Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards
+93396,Topic :: Office/Business :: News/Diary
+93397,Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Page Counters
+93398,Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Wiki
+93399,Topic :: Internet :: WWW/HTTP :: HTTP Servers
+93400,Topic :: Internet :: WWW/HTTP :: Indexing/Search
+93401,Topic :: Internet :: WWW/HTTP :: Session
+93402,Topic :: Internet :: WWW/HTTP :: Site Management
+93403,Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking
+93404,Topic :: Internet :: WWW/HTTP :: WSGI
+93405,Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+93406,Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware
+93407,Topic :: Internet :: WWW/HTTP :: WSGI :: Server
+93408,Topic :: Internet :: XMPP
+93409,Topic :: Internet :: Z39.50
+93410,Topic :: Multimedia
+93411,Topic :: Multimedia :: Graphics
+93412,Topic :: Multimedia :: Graphics :: 3D Modeling
+93413,Topic :: Multimedia :: Graphics :: 3D Rendering
+93414,Topic :: Multimedia :: Video :: Capture
+93415,Topic :: Multimedia :: Graphics :: Capture :: Digital Camera
+93416,Topic :: Multimedia :: Graphics :: Capture :: Scanners
+93417,Topic :: Multimedia :: Graphics :: Capture :: Screen Capture
+93418,Topic :: Multimedia :: Sound/Audio :: Editors
+93419,Topic :: Multimedia :: Graphics :: Editors :: Raster-Based
+93420,Topic :: Multimedia :: Graphics :: Editors :: Vector-Based
+93421,Topic :: Multimedia :: Graphics :: Graphics Conversion
+93422,Topic :: Multimedia :: Graphics :: Presentation
+93423,Topic :: Multimedia :: Graphics :: Viewers
+93424,Topic :: Multimedia :: Sound/Audio
+93425,Topic :: Multimedia :: Sound/Audio :: Analysis
+93426,Topic :: Multimedia :: Sound/Audio :: CD Audio
+93427,Topic :: Multimedia :: Sound/Audio :: CD Audio :: CD Playing
+93428,Topic :: Multimedia :: Sound/Audio :: CD Audio :: CD Ripping
+93429,Topic :: Multimedia :: Sound/Audio :: CD Audio :: CD Writing
+93430,Topic :: Multimedia :: Sound/Audio :: Capture/Recording
+93431,Topic :: Multimedia :: Video :: Conversion
+93432,Topic :: Multimedia :: Sound/Audio :: MIDI
+93433,Topic :: Multimedia :: Sound/Audio :: Mixers
+93434,Topic :: Multimedia :: Sound/Audio :: Players
+93435,Topic :: Multimedia :: Sound/Audio :: Players :: MP3
+93436,Topic :: Multimedia :: Sound/Audio :: Sound Synthesis
+93437,Topic :: Multimedia :: Sound/Audio :: Speech
+93438,Topic :: Multimedia :: Video
+93439,Topic :: Multimedia :: Video :: Display
+93440,Topic :: Multimedia :: Video :: Non-Linear Editor
+93441,Topic :: Office/Business
+93442,Topic :: Office/Business :: Financial
+93443,Topic :: Office/Business :: Financial :: Accounting
+93444,Topic :: Office/Business :: Financial :: Investment
+93445,Topic :: Office/Business :: Financial :: Point-Of-Sale
+93446,Topic :: Office/Business :: Financial :: Spreadsheet
+93447,Topic :: Office/Business :: Groupware
+93448,Topic :: Office/Business :: Office Suites
+93449,Topic :: Office/Business :: Scheduling
+93450,Topic :: Other/Nonlisted Topic
+93451,Topic :: Printing
+93452,Topic :: Scientific/Engineering
+93453,Topic :: Scientific/Engineering :: Artificial Intelligence
+93454,Topic :: Scientific/Engineering :: Artificial Life
+93455,Topic :: Scientific/Engineering :: Astronomy
+93456,Topic :: Scientific/Engineering :: Atmospheric Science
+93457,Topic :: Scientific/Engineering :: Bio-Informatics
+93458,Topic :: Scientific/Engineering :: Chemistry
+93459,Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)
+93460,Topic :: Scientific/Engineering :: GIS
+93461,Topic :: Scientific/Engineering :: Human Machine Interfaces
+93462,Topic :: Scientific/Engineering :: Hydrology
+93463,Topic :: Scientific/Engineering :: Image Processing
+93464,Topic :: Scientific/Engineering :: Image Recognition
+93465,Topic :: Scientific/Engineering :: Information Analysis
+93466,Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator
+93467,Topic :: Scientific/Engineering :: Mathematics
+93468,Topic :: Scientific/Engineering :: Medical Science Apps.
+93469,Topic :: Scientific/Engineering :: Oceanography
+93470,Topic :: Scientific/Engineering :: Physics
+93471,Topic :: Scientific/Engineering :: Quantum Computing
+93472,Topic :: Scientific/Engineering :: Visualization
+93473,Topic :: Security
+93474,Topic :: Security :: Cryptography
+93475,Topic :: Sociology
+93476,Topic :: Sociology :: Genealogy
+93477,Topic :: Sociology :: History
+93478,Topic :: Software Development
+93479,Topic :: Software Development :: Assemblers
+93480,Topic :: Software Development :: Bug Tracking
+93481,Topic :: Software Development :: Build Tools
+93482,Topic :: Software Development :: Code Generators
+93483,Topic :: Software Development :: Compilers
+93484,Topic :: Software Development :: Debuggers
+93485,Topic :: Software Development :: Disassemblers
+93486,Topic :: Software Development :: Embedded Systems
+93487,Topic :: Software Development :: Embedded Systems :: Controller Area Network (CAN)
+93488,Topic :: Software Development :: Embedded Systems :: Controller Area Network (CAN) :: CANopen
+93489,Topic :: Software Development :: Embedded Systems :: Controller Area Network (CAN) :: J1939
+93490,Topic :: Software Development :: Internationalization
+93491,Topic :: Software Development :: Interpreters
+93492,Topic :: Software Development :: Libraries
+93493,Topic :: Software Development :: Libraries :: Application Frameworks
+93494,Topic :: Software Development :: Libraries :: Java Libraries
+93495,Topic :: Software Development :: Libraries :: PHP Classes
+93496,Topic :: Software Development :: Libraries :: Perl Modules
+93497,Topic :: Software Development :: Libraries :: Pike Modules
+93498,Topic :: Software Development :: Libraries :: Python Modules
+93499,Topic :: Software Development :: Libraries :: Ruby Modules
+93500,Topic :: Software Development :: Libraries :: Tcl Extensions
+93501,Topic :: Software Development :: Libraries :: pygame
+93502,Topic :: Software Development :: Localization
+93503,Topic :: Software Development :: Object Brokering
+93504,Topic :: Software Development :: Object Brokering :: CORBA
+93505,Topic :: Software Development :: Pre-processors
+93506,Topic :: Software Development :: Quality Assurance
+93507,Topic :: Software Development :: Testing :: Acceptance
+93508,Topic :: Software Development :: Testing :: BDD
+93509,Topic :: Software Development :: Testing :: Mocking
+93510,Topic :: Software Development :: Testing :: Traffic Generation
+93511,Topic :: Software Development :: Testing :: Unit
+93512,Topic :: Software Development :: User Interfaces
+93513,Topic :: Software Development :: Version Control
+93514,Topic :: Software Development :: Version Control :: Bazaar
+93515,Topic :: Software Development :: Version Control :: CVS
+93516,Topic :: Software Development :: Version Control :: Git
+93517,Topic :: Software Development :: Version Control :: Mercurial
+93518,Topic :: Software Development :: Version Control :: RCS
+93519,Topic :: Software Development :: Version Control :: SCCS
+93520,Topic :: Software Development :: Widget Sets
+93521,Topic :: System
+93522,Topic :: System :: Archiving
+93523,Topic :: System :: Archiving :: Backup
+93524,Topic :: System :: Archiving :: Compression
+93525,Topic :: System :: Archiving :: Mirroring
+93526,Topic :: System :: Archiving :: Packaging
+93527,Topic :: System :: Benchmark
+93528,Topic :: System :: Boot
+93529,Topic :: System :: Boot :: Init
+93530,Topic :: System :: Clustering
+93531,Topic :: System :: Console Fonts
+93532,Topic :: System :: Distributed Computing
+93533,Topic :: System :: Emulators
+93534,Topic :: System :: Filesystems
+93535,Topic :: System :: Hardware
+93536,Topic :: System :: Hardware :: Hardware Drivers
+93537,Topic :: System :: Hardware :: Mainframes
+93538,Topic :: System :: Hardware :: Symmetric Multi-processing
+93539,Topic :: System :: Hardware :: Universal Serial Bus (USB)
+93540,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Audio
+93541,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Audio/Video (AV)
+93542,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Communications Device Class (CDC)
+93543,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Diagnostic Device
+93544,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Hub
+93545,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Human Interface Device (HID)
+93546,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Mass Storage
+93547,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Miscellaneous
+93548,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Printer
+93549,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Smart Card
+93550,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Vendor
+93551,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Video (UVC)
+93552,Topic :: System :: Hardware :: Universal Serial Bus (USB) :: Wireless Controller
+93553,Topic :: System :: Installation/Setup
+93554,Topic :: System :: Logging
+93555,Topic :: System :: Networking :: Monitoring
+93556,Topic :: System :: Networking
+93557,Topic :: System :: Networking :: Firewalls
+93558,Topic :: System :: Networking :: Monitoring :: Hardware Watchdog
+93559,Topic :: System :: Networking :: Time Synchronization
+93560,Topic :: System :: Operating System Kernels
+93561,Topic :: System :: Power (UPS)
+93562,Topic :: System :: Recovery Tools
+93563,Topic :: System :: Shells
+93564,Topic :: System :: Software Distribution
+93565,Topic :: System :: System Shells
+93566,Topic :: System :: Systems Administration
+93567,Topic :: System :: Systems Administration :: Authentication/Directory
+93568,Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP
+93569,Topic :: System :: Systems Administration :: Authentication/Directory :: NIS
+93570,Topic :: Terminals
+93571,Topic :: Terminals :: Serial
+93572,Topic :: Terminals :: Telnet
+93573,Topic :: Terminals :: Terminal Emulators/X Terminals
+93574,Topic :: Text Editors
+93575,Topic :: Text Editors :: Emacs
+93576,Topic :: Text Editors :: Integrated Development Environments (IDE)
+93577,Topic :: Text Processing
+93578,Topic :: Text Editors :: Word Processors
+93579,Topic :: Text Processing :: Fonts
+93580,Topic :: Text Processing :: General
+93581,Topic :: Text Processing :: Indexing
+93582,Topic :: Text Processing :: Linguistic
+93583,Topic :: Text Processing :: Markup
+93584,Topic :: Text Processing :: Markup :: HTML
+93585,Topic :: Text Processing :: Markup :: LaTeX
+93586,Topic :: Text Processing :: Markup :: Markdown
+93587,Topic :: Text Processing :: Markup :: SGML
+93588,Topic :: Text Processing :: Markup :: VRML
+93589,Topic :: Text Processing :: Markup :: XML
+93590,Topic :: Text Processing :: Markup :: reStructuredText
+93591,Topic :: Utilities
+93593,Typing :: Stubs Only
+93594,Typing :: Typed

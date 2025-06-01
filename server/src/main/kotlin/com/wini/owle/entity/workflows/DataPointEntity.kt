@@ -1,19 +1,20 @@
 package com.wini.owle.entity.workflows
 
-import com.wini.owle.entity.DataPoints
-import com.wini.owle.entity.ProvisionDataPoints
-import com.wini.owle.entity.steps.ToolParamDataPointEntity
-import com.wini.owle.entity.typing.TypeDeclarationEntity
-import org.jetbrains.exposed.dao.LongEntity
-import org.jetbrains.exposed.dao.LongEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.entity.steps.DataPointWriteLinks
+import com.wini.owle.entity.steps.ToolParamDataPointReadEntity
+import com.wini.owle.entity.typing.TypeNodeEntity
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents a data point within a workflow, used for tracking values,
  * inputs, or outputs that may be accessed by workflow steps.
  */
-class DataPointEntity(id: EntityID<Long>) : LongEntity(id) {
-    companion object : LongEntityClass<DataPointEntity>(DataPoints)
+class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
+    
+    companion object : ULongEntityClass<DataPointEntity>(DataPoints)
 
     /**
      * Workflow containing this data point.
@@ -23,7 +24,7 @@ class DataPointEntity(id: EntityID<Long>) : LongEntity(id) {
     /**
      * Specifies the data type for the data point, linking to a type declaration.
      */
-    var typeDeclarationEntity by TypeDeclarationEntity referencedOn DataPoints.typeDeclaration
+    var typeNode by TypeNodeEntity referencedOn DataPoints.typeDeclaration
 
     /**
      * Name of the data point, used to identify it within the workflow.
@@ -45,10 +46,6 @@ class DataPointEntity(id: EntityID<Long>) : LongEntity(id) {
      */
     var description by DataPoints.description
 
-    /**
-     * Provisions that utilize this DataPoint
-     */
-    var provisions by ToolParamDataPointEntity via ProvisionDataPoints
 
     /**
      * Timestamp for when the dataPoint was created.

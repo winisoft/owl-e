@@ -1,11 +1,11 @@
 package com.wini.owle.entity.transforms
 
-import com.wini.owle.entity.TransformTargetTypes
-import com.wini.owle.entity.typing.TypeDeclarationEntity
-import org.jetbrains.exposed.dao.CompositeEntity
-import org.jetbrains.exposed.dao.CompositeEntityClass
-import org.jetbrains.exposed.dao.id.CompositeID
-import org.jetbrains.exposed.dao.id.EntityID
+import com.wini.owle.entity.typing.TypeNodeEntity
+import org.jetbrains.exposed.v1.dao.CompositeEntity
+import org.jetbrains.exposed.v1.dao.CompositeEntityClass
+import org.jetbrains.exposed.v1.core.dao.id.CompositeID
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+
 
 /**
  * Represents the target types for a transformation.
@@ -14,14 +14,14 @@ import org.jetbrains.exposed.dao.id.EntityID
 class TransformTargetTypeEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
     companion object : CompositeEntityClass<TransformTargetTypeEntity>(TransformTargetTypes) {
 
-        fun buildId(transformationId: Long, typeDeclarationId: Long): CompositeID {
+        fun buildId(transformationId: ULong, typeDeclarationId: ULong): CompositeID {
             return CompositeID {
-                it[TransformTargetTypes.transformation] = transformationId
-                it[TransformTargetTypes.eligibleTypeDeclaration] = typeDeclarationId
+                it[TransformTargetTypes.transform] = transformationId
+                it[TransformTargetTypes.eligibleType] = typeDeclarationId
             }
         }
 
-        fun create(transformationId: Long, typeDeclarationId: Long): TransformTargetTypeEntity {
+        fun create(transformationId: ULong, typeDeclarationId: ULong): TransformTargetTypeEntity {
             val compositeID = buildId(transformationId, typeDeclarationId)
             val entityID = EntityID(compositeID, TransformTargetTypes)
             return TransformTargetTypeEntity(entityID)
@@ -31,15 +31,15 @@ class TransformTargetTypeEntity(id: EntityID<CompositeID>) : CompositeEntity(id)
     /**
      * The transformation this target type is associated with.
      */
-    var transformation by TransformEntity referencedOn TransformTargetTypes.transformation
+    var transformation by TransformEntity referencedOn TransformTargetTypes.transform
 
     /**
      * The type declaration representing the eligible type for this transformation.
      */
-    var eligibleTypeDeclarationEntity by TypeDeclarationEntity referencedOn TransformTargetTypes.eligibleTypeDeclaration
+    var eligibleTypeNode by TypeNodeEntity referencedOn TransformTargetTypes.eligibleType
 
     /**
      * The resulting type after the transformation is applied.
      */
-    var resultTypeDeclarationEntity by TypeDeclarationEntity referencedOn TransformTargetTypes
+    var resultTypeNode by TypeNodeEntity referencedOn TransformTargetTypes
 }

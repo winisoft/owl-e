@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class TransformOccurrence {
 
-    PROVISION,
+    DATA_POINT_READ,
 
-    REVISION,
+    DATA_POINT_WRITE,
 
     INQUISITION,
 
-    PREREQ_INJECTION
+    DATA_POINT_INJECTION
 
 }
