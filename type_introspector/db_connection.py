@@ -1,4 +1,5 @@
 import logging
+import os
 
 import mysql.connector
 
@@ -11,9 +12,9 @@ def get_db_connection():
     """Context manager for database connections with automatic cleanup."""
     conn = mysql.connector.connect(
         user='wini', 
-        password='the_eru_shrug_0!',
+        password=os.environ['DB_PASSWORD_DEV'],
         host='localhost',
-        database='owle_dev'
+        database=os.environ['DB_NAME_DEV']
     )
 
     return conn

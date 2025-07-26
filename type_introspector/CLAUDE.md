@@ -110,9 +110,7 @@ preserved in the TypeNodeCache, e.g.:
  - `list`[`str` | `int` | `float`]
  - `list`[`str` | `int` | `float` | `bool`]
                                                                                                                 
- ### Security Considerations                                                                                    
- - Database credentials are hardcoded and should be externalized to environment variables. This will be addressed 
-after the primary objective's completion.            
+ ### Security Considerations                                                                                     
  - The system loads and executes Python modules dynamically, which could pose security risks with untrusted     
  code. Only a cpython release's ./Lib is supported to be introspected on and applying it to any other source set is
  at present not under consideration for development.
