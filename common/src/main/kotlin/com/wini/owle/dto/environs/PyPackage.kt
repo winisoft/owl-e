@@ -1,13 +1,14 @@
 package com.wini.owle.dto.environs
 
-import com.wini.owle.schema.error.PositiveValueLong
+import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.dto.StandardDto
-import com.wini.owle.schema.LongValueMin
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
-import com.wini.owle.schema.error.StringNotEmpty
-import com.wini.owle.schema.error.StringSafeChars
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.StringMaxLengthError
+import com.wini.owle.error.StringNotBlankError
+import com.wini.owle.error.StringNotEmptyError
+import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
 
 
@@ -15,31 +16,30 @@ import kotlinx.serialization.Serializable
  * Represents a unique Python library package, along with its specific version details.
  * Used to store information about packages that can be installed in the workflow.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class PyPackage(
 
-    @LongValueMin(0)
+    /**
+     * The unique identifier of this PyPackage
+     */
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
      * The name of the Python library package (e.g., 'numpy', 'pandas').
      * Required.
      */
-    @StringLengthMin(1)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
      * Optional field to distinguish between packages with similar names.
      * Useful if the package is a fork or variant.
      */
-    @StringLengthMin(1)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_DISAMBIGUATION_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DISAMBIGUATION_LENGTH)
     val disambiguation: String?,
 
     /**

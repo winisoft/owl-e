@@ -1,10 +1,8 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.LongValueMin
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.dto.workflows.Workflow.Companion.MAX_NAME_LENGTH
@@ -14,19 +12,17 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a data point within a workflow, used for tracking values,
  * inputs, or outputs that may be accessed by workflow steps.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class DataPoint(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
     /**
      * Workflow containing this data point.
@@ -35,28 +31,22 @@ data class DataPoint(
     /**
      * Name of the data point, used to identify it within the workflow.
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
      * Explains the meaning of the DataPoint to users
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String? = null,
 
     /**
      * Preset value for the data point, which may be used for initialization or defaults.
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_VALUE_LENGTH)
     val presetValue: String? = null,
     /**
      * Specifies how the data point's value is stored: as text, blob, or file.

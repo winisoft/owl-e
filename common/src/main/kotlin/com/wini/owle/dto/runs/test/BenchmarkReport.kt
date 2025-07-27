@@ -1,25 +1,24 @@
 package com.wini.owle.dto.runs.test
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.DoubleInRange
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.error.ConstraintDoubleRange
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.error.DoubleValueRangeError
 import com.wini.owle.error.PositiveValueIntError
 import com.wini.owle.error.PositiveValueLongError
-import com.wini.owle.schema.error.PositiveValueInt
 import kotlinx.serialization.Serializable
 
 /**
  * Collects overall benchmarking data for a specific workflow execution,
  * including execution time, step counts, and the distribution of AI and predetermined steps.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class BenchmarkReport(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -30,19 +29,19 @@ data class BenchmarkReport(
     /**
      * Total execution time for the workflow, measured in seconds.
      */
-    @DoubleMinAndMax(EXE_TIME_MIN, EXE_TIME_MAX)
+    @ConstraintDoubleRange(DoubleValueRangeError::class, EXE_TIME_MIN, EXE_TIME_MAX)
     val totalExecutionTime: Double,
 
     /**
      * Number of steps dynamically determined by AI during execution.
      */
-    @IntValueMin(0)
+    @ConstraintSimple([PositiveValueIntError::class])
     val aiDeterminedSteps: Int,
 
     /**
      * Number of steps predetermined and set in the workflow configuration.
      */
-    @IntValueMin(0)
+    @ConstraintSimple([PositiveValueIntError::class])
     val predeterminedSteps: Int
 
 ) : StandardDto {

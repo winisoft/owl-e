@@ -1,11 +1,8 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.IntValueMin
-import com.wini.owle.schema.LongValueMin
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.Workflow.Companion.MAX_NAME_LENGTH
 import com.wini.owle.error.PositiveValueIntError
@@ -14,20 +11,17 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.PositiveValueInt
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a phase within a workflow, grouping steps or other phases.
  * Phases support hierarchical organization, enabling subphases.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class Phase(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long = 0L,
 
     /**
@@ -43,24 +37,20 @@ data class Phase(
     /**
      * Name of the phase, used for identification within the workflow.
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
      * Description of the phase, describing its purpose or grouping intent.
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String?,
 
     /**
      * Specifies the order in which the phase appears within the workflow.
      */
-    @IntValueMin(0)
+    @ConstraintSimple([PositiveValueIntError::class])
     val displayOrder: Int
 ) : StandardDto

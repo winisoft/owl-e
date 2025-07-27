@@ -1,9 +1,8 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
@@ -11,11 +10,11 @@ import kotlinx.serialization.Serializable
  * Represents specific usages or instances of types, including aliases and complex structures.
  * Each type declaration can represent either a basic type usage or a complex structure using type parameters.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class TypeDeclaration(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -26,8 +25,8 @@ data class TypeDeclaration(
     /**
      * Optional alias for the type declaration, e.g., 'AliasForType'.
      */
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_ALIAS_LENGTH)
+    @ConstraintSimple([StringNotBlankError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_ALIAS_LENGTH)
     val alias: String? = null
 
 ) : StandardDto {

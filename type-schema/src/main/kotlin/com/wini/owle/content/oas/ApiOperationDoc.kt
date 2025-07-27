@@ -19,7 +19,7 @@ data class ApiOperationDoc(
     val summary: String,
     val description: String,
     val parameters: List<ApiParameterDoc> = emptyList(),
-    val requestBody: ApiSchemaDoc? = null,
+    val requestBody: ApiRequestBodyDoc? = null,
     val responses: Map<Int, ApiResponseDoc> = emptyMap(),
     val tags: List<String>
 )

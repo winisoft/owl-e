@@ -1,24 +1,23 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.error.PositiveValueIntError
 import com.wini.owle.error.PositiveValueLongError
-import com.wini.owle.schema.error.PositiveValueInt
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a conditional check or "inquisition" within a workflow,
  * analyzing a specific data point value and determining if workflow redirection is required.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class Inquisition(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -44,7 +43,7 @@ data class Inquisition(
     /**
      * Determines the order in which this inquisition is executed within its associated workflow step.
      */
-    @IntValueMin(0)
+    @ConstraintSimple([PositiveValueIntError::class])
     val executionOrder: Int
 
 ) : StandardDto

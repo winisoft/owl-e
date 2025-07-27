@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KProperty1
 
 
-
 @Serializable
 data class TimestampEnforcedValid<T : BaseDto>(
     val timestampField: KProperty1<T, String>,

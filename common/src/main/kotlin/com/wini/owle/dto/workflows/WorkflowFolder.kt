@@ -1,12 +1,8 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
-import com.wini.owle.schema.error.TimestampCoherent
-import com.wini.owle.schema.error.TimestampIso8601Format
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.error.IncoherentInstantError
 import com.wini.owle.error.PositiveValueLongError
@@ -15,18 +11,17 @@ import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
 import com.wini.owle.error.TimestampFormatError
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a folder for organizing workflows in a hierarchical structure.
  * Supports nested folders and categorizes workflows.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class WorkflowFolder(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
     
     /**
@@ -37,19 +32,15 @@ data class WorkflowFolder(
     /**
      * Name of the folder, required and unique for organizing workflows.
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
     
     /**
      * Optional description of the folder's purpose or content.
      */
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMin(1)
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String? = null,
     
     /**
@@ -60,14 +51,12 @@ data class WorkflowFolder(
     /**
      * Timestamp for when the folder was created.
      */
-    @TimestampIso8601Format
-    @TimestampCoherent
+    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val createdAt: String,
     
     /**
      * Timestamp for when the folder was last updated.
      */
-    @TimestampIso8601Format
-    @TimestampCoherent
+    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val updatedAt: String
 ) : StandardDto

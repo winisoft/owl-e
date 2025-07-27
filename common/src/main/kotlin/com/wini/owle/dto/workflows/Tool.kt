@@ -1,10 +1,8 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.error.PositiveValueLongError
@@ -12,45 +10,38 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a tool that can be utilized within a step.
  * Contains the tool's body, optional description, return type, and dependencies.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class Tool(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
      * Name of the tool.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
      * Optional description of the tool.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_DESC_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String? = null,
 
     /**
      * The main body or code of the tool.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_BODY_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_BODY_LENGTH)
     val body: String,
 
     /**

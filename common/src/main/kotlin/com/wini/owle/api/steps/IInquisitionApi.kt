@@ -3,41 +3,41 @@ package com.wini.owle.api.steps
 
 
 import com.wini.owle.api.IOwleApi
-import com.wini.owle.schema.api.OpMethod
-import com.wini.owle.schema.api.OpResult
-import com.wini.owle.schema.api.OwleApiOp
+import com.wini.owle.schema.api.ApiOperationHttpMethod
+import com.wini.owle.schema.api.ApiOperationCardinality
+import com.wini.owle.schema.api.ApiOperationDefinition
 
-import com.wini.owle.schema.api.OwleApiSpec
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 
-@OwleApiSpec("api.steps.inquisition", [ "step" ])
+@ApiEndpointDefinition("api.steps.inquisition", [ "step" ])
 interface IInquisitionApi: IOwleApi {
 
     override val endpointPath: String get() = ENDPOINT_PATH
     
-    @OwleApiOp("api.steps.inquisition", OpMethod.GET, OpResult.MANY)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.GET, ApiOperationCardinality.MANY)
     override suspend fun getMany(block: suspend () -> Unit) { super.getMany(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.GET, OpResult.ONE)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.GET, ApiOperationCardinality.ONE)
     override suspend fun getOne(block: suspend () -> Unit) { super.getOne(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.POST, OpResult.MANY)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.POST, ApiOperationCardinality.MANY)
     override suspend fun postMany(block: suspend () -> Unit) { super.postMany(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.POST, OpResult.ONE)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.POST, ApiOperationCardinality.ONE)
     override suspend fun postOne(block: suspend () -> Unit) { super.postOne(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.PUT, OpResult.MANY)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.PUT, ApiOperationCardinality.MANY)
     override suspend fun putMany(block: suspend () -> Unit) { super.putMany(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.PUT, OpResult.ONE)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.PUT, ApiOperationCardinality.ONE)
     override suspend fun putOne(block: suspend () -> Unit) { super.putOne(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.DELETE, OpResult.MANY)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.DELETE, ApiOperationCardinality.MANY)
     override suspend fun deleteMany(block: suspend () -> Unit) { super.deleteMany(block) }
 
-    @OwleApiOp("api.steps.inquisition", OpMethod.DELETE, OpResult.ONE)
+    @ApiOperationDefinition("api.steps.inquisition", ApiOperationHttpMethod.DELETE, ApiOperationCardinality.ONE)
     override suspend fun deleteOne(block: suspend () -> Unit) { super.deleteOne(block) }
 
 

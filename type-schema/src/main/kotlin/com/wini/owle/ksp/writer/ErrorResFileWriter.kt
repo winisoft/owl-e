@@ -3,10 +3,8 @@ package com.wini.owle.ksp.writer
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.wini.owle.ksp.utils.LocalizedStringResolver
-import com.wini.owle.ksp.utils.ext.get
-import com.wini.owle.ksp.utils.ext.isOwleError
+import com.wini.owle.schema.wrapper.declaration.error.ErrorDeclaration
 
 
 class ErrorResFileWriter(
@@ -14,7 +12,7 @@ class ErrorResFileWriter(
     private val logger: KSPLogger
 ) {
 
-    fun generate(errors: List<KSClassDeclaration>) {
+    fun generate(errors: List<ErrorDeclaration>) {
 
         val packageName = "com.wini.owle.error"
         val fileName = "ErrorResourceExtensions"
@@ -29,10 +27,10 @@ class ErrorResFileWriter(
             writer.appendLine("import com.wini.owle.dto.BaseDto")
 
             for (error in errors) {
-                val annotation = error.annotations.firstOrNull { it.isOwleError() } ?: continue
-                val errorId = annotation.get("id")?.toString() ?: continue
+                val annotation = error.errorAnnotation
+                val errorId = annotation.errorResKey
                 val simpleName = error.simpleName.asString()
-                val code = LocalizedStringResolver.resolve("$errorId.code")
+                val code = error.code
                 val message = LocalizedStringResolver.resolve("$errorId.message")
                 val genericSuffix = if (error.typeParameters.isNotEmpty()) "<out BaseDto>" else ""
 

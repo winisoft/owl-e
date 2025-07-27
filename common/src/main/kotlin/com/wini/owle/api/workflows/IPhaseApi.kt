@@ -1,41 +1,41 @@
 package com.wini.owle.api.workflows
 
 import com.wini.owle.api.IOwleApi
-import com.wini.owle.schema.api.OpMethod
-import com.wini.owle.schema.api.OpResult
-import com.wini.owle.schema.api.OwleApiOp
+import com.wini.owle.schema.api.ApiOperationHttpMethod
+import com.wini.owle.schema.api.ApiOperationCardinality
+import com.wini.owle.schema.api.ApiOperationDefinition
 
-import com.wini.owle.schema.api.OwleApiSpec
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 
-@OwleApiSpec("api.workflows.phase", [ "workflows" ])
+@ApiEndpointDefinition("api.workflows.phase", [ "workflows" ])
 interface IPhaseApi: IOwleApi {
 
     override val endpointPath: String get() = ENDPOINT_PATH
     
-    @OwleApiOp("api.workflows.phase", OpMethod.GET, OpResult.MANY)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.GET, ApiOperationCardinality.MANY)
     override suspend fun getMany(block: suspend () -> Unit) { super.getMany(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.GET, OpResult.ONE)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.GET, ApiOperationCardinality.ONE)
     override suspend fun getOne(block: suspend () -> Unit) { super.getOne(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.POST, OpResult.MANY)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.POST, ApiOperationCardinality.MANY)
     override suspend fun postMany(block: suspend () -> Unit) { super.postMany(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.POST, OpResult.ONE)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.POST, ApiOperationCardinality.ONE)
     override suspend fun postOne(block: suspend () -> Unit) { super.postOne(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.PUT, OpResult.MANY)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.PUT, ApiOperationCardinality.MANY)
     override suspend fun putMany(block: suspend () -> Unit) { super.putMany(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.PUT, OpResult.ONE)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.PUT, ApiOperationCardinality.ONE)
     override suspend fun putOne(block: suspend () -> Unit) { super.putOne(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.DELETE, OpResult.MANY)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.DELETE, ApiOperationCardinality.MANY)
     override suspend fun deleteMany(block: suspend () -> Unit) { super.deleteMany(block) }
 
-    @OwleApiOp("api.workflows.phase", OpMethod.DELETE, OpResult.ONE)
+    @ApiOperationDefinition("api.workflows.phase", ApiOperationHttpMethod.DELETE, ApiOperationCardinality.ONE)
     override suspend fun deleteOne(block: suspend () -> Unit) { super.deleteOne(block) }
 
 

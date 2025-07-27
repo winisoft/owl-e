@@ -2,11 +2,11 @@ package com.wini.owle.dto.environs
 
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.environs.enums.PythonPhase
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.ModelDefinition
 import kotlinx.serialization.Serializable
 
 
-@OwleModel
+@ModelDefinition
 @Serializable
 class PythonVersion(
     override val id: Long,

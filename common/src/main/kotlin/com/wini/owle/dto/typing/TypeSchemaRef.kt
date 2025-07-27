@@ -1,28 +1,25 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.error.PositiveValueLongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a reference within a type schema, supporting nested or hierarchical type structures.
  * Each schema reference is tied to a specific type declaration and may contain child references.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class TypeSchemaRef(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -33,10 +30,8 @@ data class TypeSchemaRef(
     /**
      * The name of the property or field within the schema.
      */
-    @StringMustNotContainRestricted
-    @StringLengthMin(0)
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
@@ -48,10 +43,8 @@ data class TypeSchemaRef(
      * Optional description providing details on the schema reference's purpose.
      */
 
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_DESC_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String?,
     val childRefs: List<TypeSchemaRef>
 ) : StandardDto {

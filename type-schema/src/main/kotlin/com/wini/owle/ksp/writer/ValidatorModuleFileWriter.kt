@@ -3,8 +3,7 @@ package com.wini.owle.ksp.writer
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.wini.owle.ksp.utils.ext.isValidatorGenTarget
+import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
 import java.io.OutputStreamWriter
 
 
@@ -17,7 +16,7 @@ class ValidatorModuleFileWriter(
     val importStatements = mutableSetOf<String>()
     val provideDeclaration = mutableSetOf<String>()
 
-    fun generate(modelClasses: List<KSClassDeclaration>) {
+    fun generate(modelClasses: List<ModelDeclaration>) {
 
         val file = codeGenerator.createNewFile(
             Dependencies(false),
@@ -26,14 +25,41 @@ class ValidatorModuleFileWriter(
             "kt"
         )
 
-        modelClasses.filter { it.isValidatorGenTarget }.forEach {
-            val packageName = it.packageName.asString()
-            val className = it.simpleName.asString()
+        val modelFqns: Set<String> = modelClasses.map { it.fqName }.toSet()
+
+        fun findTargetModel(type: com.google.devtools.ksp.symbol.KSType, modelFqns: Set<String>, models: List<ModelDeclaration>): Pair<ModelDeclaration?, Boolean> {
+            val typeFqn = type.declaration.qualifiedName?.asString()
+            if (typeFqn != null && typeFqn in modelFqns) {
+                val target = models.first { it.fqName == typeFqn || it.qualifiedName?.asString() == typeFqn }
+                return target to false
+            }
+            if (typeFqn == "kotlin.collections.List" || typeFqn == "kotlin.collections.MutableList" || typeFqn == "java.util.List") {
+                val argType = type.arguments.firstOrNull()?.type?.resolve()
+                val argFqn = argType?.declaration?.qualifiedName?.asString()
+                if (argFqn != null && argFqn in modelFqns) {
+                    val target = models.first { it.fqName == argFqn || it.qualifiedName?.asString() == argFqn }
+                    return target to true
+                }
+            }
+            return null to false
+        }
+
+        modelClasses.filter { it.isValidatorGenTarget }.forEach { model ->
+            val packageName = model.packageName.asString()
+            val className = model.simpleName.asString()
 
             importStatements.add("import $packageName.*")
             importStatements.add("import ${packageName.replace(".dto.", ".validators.")}.*")
 
-            provideDeclaration.add("single<DtoValidator<$className>> { ${className}Validator() }")
+            // Determine number of dependent validators
+            val dependentCount = model.getAllProperties().mapNotNull { prop ->
+                val (dep, _) = findTargetModel(prop.type.resolve(), modelFqns, modelClasses)
+                dep
+            }.toSet().size
+
+            val getCalls = if (dependentCount == 0) "" else (1..dependentCount).joinToString(", ") { "get()" }
+
+            provideDeclaration.add("single<DtoValidator<$className>> { ${className}Validator($getCalls) }")
         }
 
         OutputStreamWriter(file).use { writer ->

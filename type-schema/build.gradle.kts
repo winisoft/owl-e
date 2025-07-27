@@ -12,10 +12,6 @@ repositories {
 
 sourceSets {
     main {
-        kotlin.srcDir("build/generated/ksp/main/kotlin")
-        resources.srcDir("build/generated/ksp/main/resources")
-
-
         dependencies {
             implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
             implementation(libs.kotlinx.serialization.json)
@@ -24,7 +20,6 @@ sourceSets {
             // OpenAPI spec generation
             implementation("io.swagger.core.v3:swagger-core:2.2.20")
             implementation("io.swagger.core.v3:swagger-models:2.2.20")
-
         }
 
     }
@@ -39,14 +34,6 @@ sourceSets {
             implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
         }
     }
-}
-
-tasks.withType<Copy>().all {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.withType<Jar>().all {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named<Test>("test") {

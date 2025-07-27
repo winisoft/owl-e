@@ -2,32 +2,22 @@ package com.wini.owle.ksp
 
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.wini.owle.ksp.doc.models.DtoModelDoc
 import com.wini.owle.ksp.doc.models.ModelPropertyDoc
 import com.wini.owle.ksp.doc.models.OwleErrorDoc
-import com.wini.owle.ksp.utils.LocalizedStringResolver
 import com.wini.owle.ksp.utils.OwleSymbolCollector
-import com.wini.owle.ksp.utils.ext.filterIsFieldConstraint
-import com.wini.owle.ksp.utils.ext.findConstraintRaisedErrorId
-import com.wini.owle.ksp.utils.ext.isValidatorGenTarget
+import com.wini.owle.ksp.utils.ext.codeAndMessage
 import com.wini.owle.ksp.writer.ErrorResFileWriter
 import com.wini.owle.ksp.writer.KnowledgeBaseModelFileWriter
-
-
-import com.google.devtools.ksp.processing.*
-import com.google.devtools.ksp.symbol.*
-import com.wini.owle.content.doc.DtoModelDoc
-import com.wini.owle.content.doc.ModelPropertyDoc
-import com.wini.owle.content.doc.OwleErrorDoc
-import com.wini.owle.ksp.OwleModel
+import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
+import com.wini.owle.schema.wrapper.declaration.error.ErrorDeclaration
 
 /**
- * A symbol processor designed to facilitate the generation of code and documentation relevant to the Owl-e application. 
+ * A symbol processor designed to facilitate the generation of code and documentation relevant to the Owl-e application.
  * Its primary focus is upon the classes of the common module's 'dto' model types, which are the types the API trades in and
  * the only types relevant to users' interactions with the API or app as a whole.
- * 
- * It generates documentation for each of these model types, which depends on interpreting the annotations defining constraints 
+ *
+ * It generates documentation for each of these model types, which depends on interpreting the annotations defining constraints
  * on the properties of the model and the OwleErrors representing its constraints' violation.
  */
 class ModelSchemaProcessor(
@@ -39,16 +29,12 @@ class ModelSchemaProcessor(
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
 
-        if (!hasGenerated) {
+        if (hasGenerated)
+            return emptyList()
 
-            logger.warn("Collecting for ModelSchemaProcessor")
-
-            OwleSymbolCollector.collect(resolver, logger)
-
-            val models: List<KSClassDeclaration> = OwleSymbolCollector.getModels()
-            val errors: List<KSClassDeclaration> = OwleSymbolCollector.getErrors()
-
+        OwleSymbolCollector.collect(resolver, logger) { (models, errors, _) ->
             logger.warn("Preparing generate res: ${errors.size} errors")
+
             ErrorResFileWriter(codeGenerator, logger).generate(errors)
 
             KnowledgeBaseModelFileWriter(codeGenerator, logger).apply {
@@ -58,54 +44,58 @@ class ModelSchemaProcessor(
                     generate(cd, doc)
                 }
             }
-
-            hasGenerated = true
         }
+
+        hasGenerated = true
 
         return emptyList()
     }
 
     private fun buildDtoDoc(
-        modelClass: KSClassDeclaration,
-        errors: List<KSClassDeclaration>
+        modelClass: ModelDeclaration,
+        errors: List<ErrorDeclaration>
     ): DtoModelDoc {
 
         val name = modelClass.simpleName.asString()
         val typeDoc = modelClass.docString?.trim() ?: "No type-level documentation."
         logger.info("$name has ${modelClass.getAllProperties().count()} properties")
 
-        val properties = modelClass.getAllProperties().map { prop ->
-            val propName = prop.simpleName.asString()
-            val type = prop.type.resolve().declaration.qualifiedName?.asString() ?: "Unknown"
-            val doc = prop.docString?.trim() ?: "No documentation."
+        modelClass.constrainedFields.map { (prop, constraintAnnotations) ->
+            constraintAnnotations.map {
+                val propName = prop.simpleName.asString()
+                val type = prop.type.resolve().declaration.qualifiedName?.asString() ?: "Unknown"
+                val doc = prop.docString?.trim() ?: "No documentation."
 
-            val constraints = prop.annotations.toList().filterIsFieldConstraint().map { ann ->
 
-                val errorId = errors.findConstraintRaisedErrorId(ann)
-                val code: String = LocalizedStringResolver.resolve("$errorId.code")
-                val message: String = LocalizedStringResolver.resolve("$errorId.message")
+                val propDoc = constraintAnnotations.map { constraintAnnotation ->
+                    constraintAnnotation.errorFqNames
+                }.flatMap { fqn ->
+                    fqn.map {
+                        errors.codeAndMessage(it)?.let { (code, msg) ->
+                            OwleErrorDoc(
+                                errorCode = code,
+                                message = msg,
+                                emptyMap<String, Any?>()
+                            )
+                        }
+                    }
+                }.map {
+                    ModelPropertyDoc(
+                        name = propName,
+                        type = type,
+                        description = doc,
+                        constraints = emptyList()
+                    )
+                }
 
-                OwleErrorDoc(
-                    errorCode = code,
-                    message = message,
-                    attributes = ann.arguments.associate { (it.name?.asString() ?: "?") to it.value }
-                )
-            }.toList()
+                return DtoModelDoc(name, typeDoc, propDoc)
+            }
 
-            ModelPropertyDoc(
-                name = propName,
-                type = type,
-                description = doc,
-                constraints = constraints
-            )
-        }.toList()
-
-        logger.warn("Making DtoModelDoc! name: $name, typeDoc: $typeDoc")
-        for (property in properties) {
-            logger.warn("         property: ${property.name.toString()}")
+            logger.warn("Making DtoModelDoc! name: $name, typeDoc: $typeDoc")
         }
 
-        return DtoModelDoc(name, typeDoc, properties)
+        return DtoModelDoc(name, typeDoc, emptyList())
+
     }
 
 //    private fun buildDtoDoc(

@@ -1,7 +1,6 @@
 package com.wini.owle.error
 
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.schema.error.OwleDocsError
 
 
 /**

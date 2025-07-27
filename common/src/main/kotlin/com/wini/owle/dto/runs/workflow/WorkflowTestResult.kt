@@ -1,9 +1,7 @@
 package com.wini.owle.dto.runs.workflow
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.TimestampCoherent
-import com.wini.owle.schema.error.TimestampIso8601Format
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.test.TestCase
 import kotlinx.serialization.Serializable
@@ -12,11 +10,11 @@ import kotlinx.serialization.Serializable
  * Stores the outcome of a test case execution, indicating whether the test passed or failed.
  * Includes the execution timestamp for audit and debugging purposes.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class WorkflowTestResult(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -37,8 +35,7 @@ data class WorkflowTestResult(
     /**
      * Timestamp indicating when the test was executed.
      */
-    @TimestampIso8601Format
-    @TimestampCoherent
+    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val executedAt: String
 
 ) : StandardDto

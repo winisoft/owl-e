@@ -1,22 +1,21 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.error.PositiveValueIntError
 import com.wini.owle.error.PositiveValueLongError
-import com.wini.owle.schema.error.PositiveValueInt
 import kotlinx.serialization.Serializable
 
 /**
  * Represents parameters used within complex types, allowing for parameterized type declarations.
  * Supports types such as 'List[kotlin.Int]' or 'Dict[str, int]', where 'int' or 'str' would be parameters of 'List' or 'Dict'.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class TypeParameter(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -27,7 +26,7 @@ data class TypeParameter(
     /**
      * Position of the parameter within the type declaration, useful for ordered parameters (e.g., Dict[keyType, valueType]).
      */
-    @IntValueMin(0)
+    @ConstraintSimple([PositiveValueIntError::class])
     val position: Int,
 
     /**

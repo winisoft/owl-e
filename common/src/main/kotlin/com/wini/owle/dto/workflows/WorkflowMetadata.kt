@@ -1,7 +1,7 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto
@@ -12,26 +12,22 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
-import com.wini.owle.schema.error.StringNotEmpty
-import com.wini.owle.schema.error.StringSafeChars
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
 
 /**
  * Represents metadata for workflows or steps within the Owl-E application.
  * Includes information on authorship, usage permissions, and sharing configuration.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class WorkflowMetadata(
-    @LongValueMin(0)
+
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
-    /**
-     * The name of the entity (e.g., workflow or step).
-     * Required.
-     */
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
@@ -46,9 +42,7 @@ data class WorkflowMetadata(
      */
     val contributors: List<User>,
 
-    /**
-     * Optional copyright information for the entity.
-     */
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
     val copyrightInformation: String? = null,
 
     /**
@@ -117,4 +111,4 @@ data class WorkflowMetadata(
      */
     val excludedSteps: List<Step> = emptyList(),
 
-    ) : StandardDto
+) : StandardDto

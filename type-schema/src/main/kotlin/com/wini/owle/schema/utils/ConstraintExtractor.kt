@@ -1,46 +1,51 @@
 package com.wini.owle.ksp.utils
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
-import com.wini.owle.ksp.utils.ext.filterIsFieldConstraint
-import com.wini.owle.ksp.utils.ext.findConstraintRaisedErrorId
+import com.wini.owle.ksp.utils.ext.findByFqns
 import com.wini.owle.ksp.utils.ext.getArgument
+import com.wini.owle.schema.wrapper.annotation.error.FieldConstraintAnnotation
+import com.wini.owle.schema.wrapper.declaration.ConstrainedField
+import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
+import com.wini.owle.schema.wrapper.declaration.error.ErrorDeclaration
+
+typealias ConstraintArgFormatter = (FieldConstraintAnnotation, ConstrainedField, String) -> String
+
 
 object ConstraintExtractor {
 
+    val ConstraintArgFormatters: Map<String, ConstraintArgFormatter> = mapOf(
+        "ConstraintStringLenMax" to { ann, prop, className ->
+            val max = ann.getArgument<Int>("maxLength") ?: 255
+            "${className}::${prop.simpleName.asString()}, dto, $max"
+        },
+        "ConstraintStringLenExact" to { ann, prop, className ->
+            val len = ann.getArgument<Int>("length") ?: 0
+            "${className}::${prop.simpleName.asString()}, dto, $len"
+        },
+        "ConstraintDoubleRange" to { ann, prop, className ->
+            val min = ann.getArgument<Double>("minValue") ?: 0.0
+            val max = ann.getArgument<Double>("maxValue") ?: 1.0
+            "${className}::${prop.simpleName.asString()}, dto, $min, $max"
+        },
+        // fallback for @ConstraintSimple or annotations not explicitly mapped
+        "ConstraintSimple" to { _, prop, className ->
+            "${className}::${prop.simpleName.asString()}, dto"
+        }
+    )
+
     fun multiFieldExtract(
-        modelClass: KSClassDeclaration,
+        modelClass: ModelDeclaration,
         className: String,
         logger: KSPLogger
     ): List<String> {
         val lines = mutableListOf<String>()
 
-        modelClass.annotations.forEach { annotation ->
-            val annotationName = annotation.annotationType.resolve().declaration.simpleName.asString()
-
-            when (annotationName) {
-                "PreventsTimeParadoxes" -> {
-                    val first = annotation.getArgument<String>("happensFirstField")
-                    val second = annotation.getArgument<String>("happensSecondField")
-                    if (first != null && second != null) {
-                        lines.add("// Multi-field: PreventsTimeParadoxes")
-                        lines.add("add(PreventsTimeParadoxes($className::$first, $className::$second, dto))")
-                    }
-                }
-
-                "InconsistentOAuthId" -> {
-                    val provider = annotation.getArgument<String>("oauthProviderName")
-                    val id = annotation.getArgument<String>("oauthIdName")
-                    if (provider != null && id != null) {
-                        lines.add("// Multi-field: InconsistentOAuthId")
-                        lines.add("add(InconsistentOAuthId($className::$provider, $className::$id, dto))")
-                    }
-                }
-
-                "TestCaseSubject" -> {
-                    lines.add("// Multi-field: TestCaseSubject")
-                    lines.add("add(TestCaseSubject($className::workflow, $className::step, dto))")
+        modelClass.classConstraints.forEach { (annotation, props) ->
+            when (annotation.className) {
+                "PreventsTimeParadox" -> {
+                    val first = "$className::${props[0].simpleName.asString()}"
+                    val second = "$className::${props[1].simpleName.asString()}"
+                    lines.add("add(PreventsTimeParadoxes($first, $second, dto))")
                 }
             }
         }
@@ -49,9 +54,11 @@ object ConstraintExtractor {
     }
 
     fun propertyExtract(
-        property: KSPropertyDeclaration,
+        property: ConstrainedField,
+        constraints: List<FieldConstraintAnnotation>,
         className: String,
-        logger: KSPLogger
+        logger: KSPLogger,
+        allErrors: List<ErrorDeclaration>
     ): List<String> {
         val propertyName = property.simpleName.asString()
         val propertyType = property.type.resolve()
@@ -59,53 +66,30 @@ object ConstraintExtractor {
         logger.info("Processing property: $propertyName of type ${propertyType.declaration.qualifiedName?.asString()}")
 
         if (propertyType.isMarkedNullable) {
-            logger.info("Skipping nullable property: $propertyName")
+            logger.info("Skipping nullable property: $propertyName as validators typically apply to non-null fields or handle nulls separately.")
             return emptyList()
         }
 
-        val annotations = property.annotations.toList().filterIsFieldConstraint()
-        if (annotations.isEmpty()) {
+        if (property.hasNoConstraints) {
             logger.info("No field constraints found on $propertyName")
+            return emptyList()
         }
 
-        val properties: List<String> = annotations.mapNotNull { annotation ->
-            val annotationName = annotation.annotationType.resolve().declaration.simpleName.asString()
-            val constraintFn = ConstraintRegistry.getErrorQualifiedName(annotationName)
+        return constraints.flatMap { annotation ->
+            val constraintAnnotationShortName = annotation.shortName.asString()
 
-            if (constraintFn == null) {
-                logger.warn("No constraint function found for annotation: $annotationName on property $propertyName")
-                return@mapNotNull null
+            (allErrors.findByFqns(annotation.errorFqNames) ?: emptyList()).map { errorDeclaration: ErrorDeclaration ->
+                val errorSimpleName = errorDeclaration.simpleName.asString()
+
+                val formatter = ConstraintArgFormatters[constraintAnnotationShortName]
+                    ?: ConstraintArgFormatters["ConstraintSimple"]!!
+
+                val argsString = formatter(annotation, property, className)
+
+                "add($errorSimpleName($argsString))"
             }
-
-            val argString = when (annotationName) {
-                "StringLengthMax" -> {
-                    val max = annotation.arguments.find { it.name?.asString() == "maxLength" }?.value as? Int ?: 255
-                    "$className::$propertyName, $max, dto"
-                }
-                "StringLengthMin" -> {
-                    val min = annotation.arguments.find { it.name?.asString() == "minLength" }?.value as? Int ?: 0
-                    "$className::$propertyName, $min, dto"
-                }
-                "StringLengthExact" -> {
-                    val len = annotation.arguments.find { it.name?.asString() == "length" }?.value as? Int ?: 0
-                    "$className::$propertyName, $len, dto"
-                }
-                "IntValueMin" -> {
-                    val min = annotation.arguments.find { it.name?.asString() == "minValue" }?.value as? Int ?: 0
-                    "$className::$propertyName, $min, dto"
-                }
-                "LongValueMin" -> {
-                    val min = annotation.arguments.find { it.name?.asString() == "minValue" }?.value as? Long ?: 0L
-                    "$className::$propertyName, $min, dto"
-                }
-                else -> "$className::$propertyName, dto"
-            }
-
-            logger.info("Resolved constraint for $propertyName: $constraintFn($argString)")
-            "$constraintFn($argString)"
         }
-
-        return properties
     }
+
 
 }

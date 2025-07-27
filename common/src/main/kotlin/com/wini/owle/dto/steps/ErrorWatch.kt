@@ -1,16 +1,16 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.Step
 import kotlinx.serialization.Serializable
 
-@OwleModel
+@ModelDefinition
 @Serializable
 data class ErrorWatch(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     val step: Step,

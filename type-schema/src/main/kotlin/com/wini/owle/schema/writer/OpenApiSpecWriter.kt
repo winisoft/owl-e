@@ -2,6 +2,7 @@ package com.wini.owle.ksp.writer
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
+import com.google.devtools.ksp.processing.KSPLogger
 import com.wini.owle.ksp.doc.oas.ApiEndpointDoc
 import com.wini.owle.ksp.doc.oas.OpenApiSpec
 import com.wini.owle.ksp.processor.fromEndpoints
@@ -12,10 +13,14 @@ import java.io.OutputStreamWriter
 /**
  * Writes the OpenAPI specification to a generated JSON file using the KSP code generator.
  */
-object OpenApiSpecWriter {
+class OpenApiSpecFileWriter(
+    val codeGenerator: CodeGenerator,
+    val logger: KSPLogger
+) {
 
-    fun writeSpec(endpoints: List<ApiEndpointDoc>, codeGenerator: CodeGenerator) {
-        val openApiSpec = OpenApiSpec.fromEndpoints(endpoints)
+    fun writeSpec(endpoints: List<ApiEndpointDoc>) {
+
+        val openApiSpec = OpenApiSpecBuilder(logger).fromEndpoints(endpoints)
         val json = Json { prettyPrint = true; encodeDefaults = true }
         val jsonString = json.encodeToString(openApiSpec)
 

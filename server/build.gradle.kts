@@ -12,20 +12,12 @@ plugins {
 group = "com.wini.owle"
 version = "1.0.0"
 
-sourceSets.main {
-    kotlin.srcDir("build/generated/ksp/main/kotlin")
-    resources.srcDir("build/generated/ksp/main/resources")
-}
-
-sourceSets.test {
-    kotlin.srcDir("build/generated/ksp/test/kotlin")
-}
 
 sourceSets {
     main {
         dependencies {
+            ksp(projects.dataCollector)
             implementation(projects.common)
-            implementation(projects.typeSchema)
             implementation(libs.logback)
             implementation(libs.ktor.server.core)
             implementation(libs.ktor.server.netty)

@@ -1,7 +1,7 @@
 package com.wini.owle.dto.environs
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.CompositeDto
 import com.wini.owle.error.PositiveValueLongError
 import kotlinx.serialization.Serializable
@@ -14,17 +14,26 @@ import kotlinx.serialization.Serializable
  * @param packageId The id of the PyPackage this dependency points to.
  * @param versionSpecId The id of the version specification associated with this package dependency.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class ToolPyPackDependency(
 
-    @LongValueMin(0)
+    /**
+     * The id of the tool associated with this package dependency.
+     */
+    @ConstraintSimple([PositiveValueLongError::class])
     val toolId: Long,
 
-    @LongValueMin(0)
+    /**
+     * The id of the PyPackage this dependency points to.
+     */
+    @ConstraintSimple([PositiveValueLongError::class])
     val packageId: Long,
 
-    @LongValueMin(0)
+    /**
+     * The id of the version specification associated with this package dependency.
+     */
+    @ConstraintSimple([PositiveValueLongError::class])
     val versionSpecId: Long
 
 ) : CompositeDto {

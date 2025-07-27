@@ -1,9 +1,8 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.error.PositiveValueIntError
 import com.wini.owle.error.PositiveValueLongError
@@ -11,38 +10,31 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.PositiveValueInt
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a step within a workflow, defining its tool dependency, next and previous steps,
  * and whether it serves as the workflow's head step.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class Step(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
      * Name of the step, used for identification within the workflow.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
      * Optional description of the step's purpose or action.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String?,
 
     /**
@@ -53,7 +45,7 @@ data class Step(
     /**
      * The order this step is presented among other steps and phases sitting at the same level of the hierarchy
      */
-    @IntValueMin(0)
+    @ConstraintSimple([PositiveValueIntError::class])
     val displayOrder: Int,
 
     /**

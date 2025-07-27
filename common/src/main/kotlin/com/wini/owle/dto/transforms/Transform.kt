@@ -1,10 +1,8 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.error.PositiveValueLongError
@@ -12,44 +10,37 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a transformation process with a specified return type and related arguments.
  * A transformation can have multiple arguments, target types, and applied transformations.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class Transform(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
      * Name of the transformation.
      */
-    @StringLengthMin(1)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
     /**
      * Detailed description of what the transformation does.
      */
-    @StringLengthMin(1)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_DESC_LENGTH)
+    @ConstraintSimple([StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String,
 
     /**
      * Optional examples to demonstrate the transformation's usage.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_EX_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_EX_LENGTH)
     val examples: String?,
 
     /**

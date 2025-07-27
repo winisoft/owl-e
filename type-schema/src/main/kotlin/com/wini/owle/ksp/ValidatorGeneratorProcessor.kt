@@ -8,7 +8,6 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.wini.owle.ksp.utils.OwleSymbolCollector
-import com.wini.owle.ksp.utils.ext.isValidatorGenTarget
 import com.wini.owle.ksp.writer.ValidatorFileWriter
 import com.wini.owle.ksp.writer.ValidatorModuleFileWriter
 
@@ -22,19 +21,18 @@ class ValidatorGeneratorProcessor(
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
 
-        if (!hasGenerated) {
+        if (hasGenerated)
+            return emptyList()
 
-            logger.warn("Collecting for ValidatorGeneratorProcessor")
-            OwleSymbolCollector.collect(resolver, logger)
+        logger.warn("Collecting for ValidatorGeneratorProcessor")
 
-            val models = OwleSymbolCollector.getModels()
-            val errors = OwleSymbolCollector.getErrors()
+        OwleSymbolCollector.collect(resolver, logger) { (models, errors, _) ->
 
             models.filter {
                 it.isValidatorGenTarget
             }.forEach { modelClass ->
                 try {
-                    ValidatorFileWriter(codeGenerator, logger).generateValidator(modelClass)
+                    ValidatorFileWriter(codeGenerator, logger, errors, models).generateValidator(modelClass)
                 } catch (e: Exception) {
                     logger.error("Error generating validator for ${modelClass.simpleName.asString()}: ${e.message}")
                     throw e
@@ -42,9 +40,9 @@ class ValidatorGeneratorProcessor(
             }
 
             ValidatorModuleFileWriter(codeGenerator, logger).generate(models)
-
-            hasGenerated = true
         }
+
+        hasGenerated = true
 
         return emptyList()
     }

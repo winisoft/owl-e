@@ -1,41 +1,41 @@
 package com.wini.owle.api.typing
 
 import com.wini.owle.api.IOwleApi
-import com.wini.owle.schema.api.OpMethod
-import com.wini.owle.schema.api.OpResult
-import com.wini.owle.schema.api.OwleApiOp
+import com.wini.owle.schema.api.ApiOperationHttpMethod
+import com.wini.owle.schema.api.ApiOperationCardinality
+import com.wini.owle.schema.api.ApiOperationDefinition
 
-import com.wini.owle.schema.api.OwleApiSpec
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 
-@OwleApiSpec("api.typing.typeDeclaration", [ "type" ])
+@ApiEndpointDefinition("api.typing.typeDeclaration", [ "type" ])
 interface ITypeDeclarationApi: IOwleApi {
 
     override val endpointPath: String get() = ENDPOINT_PATH
     
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.GET, OpResult.MANY)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.GET, ApiOperationCardinality.MANY)
     override suspend fun getMany(block: suspend () -> Unit) { super.getMany(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.GET, OpResult.ONE)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.GET, ApiOperationCardinality.ONE)
     override suspend fun getOne(block: suspend () -> Unit) { super.getOne(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.POST, OpResult.MANY)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.POST, ApiOperationCardinality.MANY)
     override suspend fun postMany(block: suspend () -> Unit) { super.postMany(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.POST, OpResult.ONE)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.POST, ApiOperationCardinality.ONE)
     override suspend fun postOne(block: suspend () -> Unit) { super.postOne(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.PUT, OpResult.MANY)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.PUT, ApiOperationCardinality.MANY)
     override suspend fun putMany(block: suspend () -> Unit) { super.putMany(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.PUT, OpResult.ONE)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.PUT, ApiOperationCardinality.ONE)
     override suspend fun putOne(block: suspend () -> Unit) { super.putOne(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.DELETE, OpResult.MANY)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.DELETE, ApiOperationCardinality.MANY)
     override suspend fun deleteMany(block: suspend () -> Unit) { super.deleteMany(block) }
 
-    @OwleApiOp("api.typing.typeDeclaration", OpMethod.DELETE, OpResult.ONE)
+    @ApiOperationDefinition("api.typing.typeDeclaration", ApiOperationHttpMethod.DELETE, ApiOperationCardinality.ONE)
     override suspend fun deleteOne(block: suspend () -> Unit) { super.deleteOne(block) }
 
 

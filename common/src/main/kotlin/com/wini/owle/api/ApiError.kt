@@ -1,10 +1,10 @@
 package com.wini.owle.api
 
 import com.wini.owle.error.OwleError
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.ModelDefinition
 import kotlinx.serialization.Serializable
 
-@OwleModel(skipValidation = true)
+@ModelDefinition(skipValidation = true)
 @Serializable
 data class ApiError(
     /**

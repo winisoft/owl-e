@@ -5,6 +5,9 @@ import com.google.devtools.ksp.symbol.*
 import com.wini.owle.ksp.processor.ApiInterfaceProcessor
 import com.wini.owle.ksp.writer.OpenApiSpecFileWriter
 import com.wini.owle.ksp.utils.OwleSymbolCollector
+import com.wini.owle.schema.wrapper.declaration.ApiEndpointDeclaration
+import com.wini.owle.schema.wrapper.declaration.error.ErrorDeclaration
+import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
 
 
 class OwleApiDocProcessor(
@@ -16,29 +19,24 @@ class OwleApiDocProcessor(
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
 
-        if (!hasGenerated) {
+        if (hasGenerated)
+            return emptyList()
 
-            logger.warn("Collecting for ModelSchemaProcessor")
+        logger.warn("Collecting for ModelSchemaProcessor")
 
-            OwleSymbolCollector.collect(resolver, logger)
-
-            val models = OwleSymbolCollector.getModels()
-            val specs = OwleSymbolCollector.getSpecs()
-            val errors = OwleSymbolCollector.getErrors()
-
-            // Now safe to proceed — all are resolved.
-            processSpec(specs, models, errors, resolver, logger)
-
-            hasGenerated = true
+        OwleSymbolCollector.collect(resolver, logger) { (models, errors, endpoints) ->
+            processSpec(endpoints, models, errors, resolver, logger)
         }
+
+        hasGenerated = true
 
         return emptyList()
     }
 
     private fun processSpec(
-        specs: List<KSClassDeclaration>,
-        models: List<KSClassDeclaration>,
-        errors: List<KSClassDeclaration>,
+        specs: List<ApiEndpointDeclaration>,
+        models: List<ModelDeclaration>,
+        errors: List<ErrorDeclaration>,
         resolver: Resolver,
         logger: KSPLogger,
     ) {
@@ -49,7 +47,7 @@ class OwleApiDocProcessor(
             .run {
                 specs.mapNotNull { process(it) }
             }.also { it ->
-                OpenApiSpecFileWriter.writeSpec(it, codeGenerator)
+                OpenApiSpecFileWriter(codeGenerator, logger).writeSpec(it)
             }
 
     }

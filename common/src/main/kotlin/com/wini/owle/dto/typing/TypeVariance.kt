@@ -1,20 +1,21 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.typing.enums.VarianceCardinalityDto
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.schema.error.ConstraintSimple
 import kotlinx.serialization.Serializable
 
 /**
  * Represents variance annotations on type variables, such as 'covariant', 'contravariant', and 'invariant'.
  * Variance annotations define how types relate to their subtypes in generic contexts.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class TypeVariance(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**

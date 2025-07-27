@@ -1,11 +1,8 @@
 package com.wini.owle.dto.user
 
-import com.wini.owle.schema.error.NumeralsOnly
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthExact
-import com.wini.owle.schema.error.StringNotBlank
-import com.wini.owle.schema.error.TimestampCoherent
-import com.wini.owle.schema.error.TimestampIso8601Format
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenExact
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.enums.CardBrand
 import com.wini.owle.error.IncoherentInstantError
@@ -14,18 +11,17 @@ import com.wini.owle.error.PositiveValueLongError
 import com.wini.owle.error.StringLengthExactError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.TimestampFormatError
-import com.wini.owle.schema.error.PositiveValueLong
 import kotlinx.serialization.Serializable
 
 /**
  * Represents a payment method for a user, storing details from Stripe
  * like the card brand, last four digits, and whether it's the default payment method.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class PaymentMethod(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
     /**
      * Unique identifier for the payment method, sourced from Stripe.
@@ -45,9 +41,8 @@ data class PaymentMethod(
     /**
      * Last four digits of the card associated with this payment method.
      */
-    @StringMustNotBeBlank
-    @StringLengthExact(4)
-    @NumeralsOnly
+    @ConstraintSimple([MustContainOnlyNumerals::class, StringNotBlankError::class])
+    @ConstraintStringLenExact(StringLengthExactError::class, 4)
     val lastFour: String?,
 
     /**
@@ -58,14 +53,12 @@ data class PaymentMethod(
     /**
      * Timestamp for when the payment method was created.
      */
-    @TimestampIso8601Format
-    @TimestampCoherent
+    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val createdAt: String,
 
     /**
      * Timestamp for when the payment method was last updated.
      */
-    @TimestampIso8601Format
-    @TimestampCoherent
+    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
     val updatedAt: String
 ) : StandardDto

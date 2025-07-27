@@ -1,21 +1,19 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
 /**
  * Represents an argument value for an applied transformation.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class AppliedTransformArg(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
     /**
      * The applied transformation this argument belongs to.
@@ -28,10 +26,8 @@ data class AppliedTransformArg(
     /**
      * The actual value provided for this argument.
      */
-    @StringLengthMin(0)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_VALUE_LENGTH)
+    @ConstraintSimple([StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_VALUE_LENGTH)
     val value: String
 ) : StandardDto {
 

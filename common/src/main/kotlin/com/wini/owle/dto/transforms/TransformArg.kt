@@ -1,10 +1,8 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringSafeChars
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.error.PositiveValueLongError
@@ -12,17 +10,16 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**
  * Represents an argument for a transformation with its type and description.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class TransformArg(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
     /**
      * The transformation this argument belongs to.
@@ -35,19 +32,15 @@ data class TransformArg(
     /**
      * Name of the argument.
      */
-    @StringLengthMin(1)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_NAME_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
     val name: String,
 
     /**
      * Detailed description of what the argument represents.
      */
-    @StringLengthMin(1)
-    @StringMustNotContainRestricted
-    @StringMustNotBeBlank
-    @StringLengthMax(MAX_DESC_LENGTH)
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_DESC_LENGTH)
     val description: String?
 ) : StandardDto {
 

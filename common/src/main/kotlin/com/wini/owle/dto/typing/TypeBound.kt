@@ -1,7 +1,7 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 
@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
  * Represents bounds on type variables, supporting constraints like 'T: int' for generic types.
  * Allows capturing constraints on type variables in complex type declarations.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class TypeBound(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**

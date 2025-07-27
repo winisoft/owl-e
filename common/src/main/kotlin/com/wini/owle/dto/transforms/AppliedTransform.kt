@@ -1,7 +1,7 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.transforms.enums.TransformOccurrence
 import com.wini.owle.dto.workflows.DataPoint
@@ -13,11 +13,11 @@ import kotlinx.serialization.Serializable
  * Each applied transformation has a type, may recursively reference a previous applied transform,
  * and specifies the result type it produces.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class AppliedTransform(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**

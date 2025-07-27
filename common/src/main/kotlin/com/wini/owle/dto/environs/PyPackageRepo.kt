@@ -6,11 +6,9 @@ import com.wini.owle.error.InvalidUrlFormatError
 import com.wini.owle.error.PositiveValueLongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.schema.error.UrlFormat
-import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.error.StringLengthMax
-import com.wini.owle.schema.error.StringSafeChars
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
 
 
@@ -18,11 +16,14 @@ import kotlinx.serialization.Serializable
  * Represents potential sources or repositories for packages that a workflow step can utilize.
  * Examples include official repositories (like PyPI or Conda) and custom or local sources.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class PyPackageRepo(
 
-    @LongValueMin(0)
+    /**
+     * The unique identifier of this PyPackageRepo
+     */
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**
@@ -34,9 +35,8 @@ data class PyPackageRepo(
      * URL of the repository where the package can be sourced.
      * Required, even for custom or local sources, to ensure accessibility.
      */
-    @StringMustNotContainRestricted
-    @InvalidUrl
-    @StringLengthMax(MAX_SOURCE_URL_LEN)
+    @ConstraintSimple([StringSafeCharsError::class, InvalidUrlFormatError::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_SOURCE_URL_LEN)
     val sourceUrl: String?
 ) : StandardDto {
 

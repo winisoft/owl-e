@@ -1,5 +1,6 @@
 package com.wini.owle.ksp.utils
 
+import jdk.internal.module.Resources
 import java.util.Locale
 import java.util.MissingResourceException
 import java.util.ResourceBundle

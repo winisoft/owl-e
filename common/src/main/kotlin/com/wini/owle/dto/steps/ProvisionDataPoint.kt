@@ -1,17 +1,19 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable
 
 
-@OwleModel
+@ModelDefinition
 @Serializable
 data class ProvisionDataPoint(
-    @LongValueMin(0)
+
+    @ConstraintSimple([PositiveValueLongError::class])
     val provisionId: Long,
-    @LongValueMin(0)
+
+    @ConstraintSimple([PositiveValueLongError::class])
     val dataPointId: Long
 ) : CompositeDto {
 

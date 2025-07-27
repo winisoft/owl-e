@@ -1,7 +1,7 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Workflow
@@ -12,11 +12,11 @@ import kotlinx.serialization.Serializable
  * A junction may include conditions under which the transition is triggered,
  * and prerequisite injections required for the target workflow.
  */
-@OwleModel
+@ModelDefinition
 @Serializable
 data class WorkflowJunction(
 
-    @LongValueMin(0)
+    @ConstraintSimple([PositiveValueLongError::class])
     override val id: Long,
 
     /**

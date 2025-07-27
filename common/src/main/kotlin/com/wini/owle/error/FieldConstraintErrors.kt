@@ -3,7 +3,8 @@ package com.wini.owle.error
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Workflow
-import com.wini.owle.schema.error.OwleDocsError
+import com.wini.owle.error.OwleError
+import com.wini.owle.schema.error.ErrorDefinition
 import com.wini.owle.mapper.DateTimeConverter
 import kotlinx.serialization.Serializable
 import java.net.URL
@@ -18,9 +19,9 @@ sealed class ConstraintError: OwleError {
 }
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
-@OwleDocsError("error.constraint.positiveValueLongError")
+@ErrorDefinition("errors.constraint.positiveValueLongError")
 @Serializable
-data class PositiveValueLongError<T : BaseDto>(
+data class                                                                                                                                                                           PositiveValueLongError<T : BaseDto>(
     val constrainedField: KProperty1<T, Long>,
     val receiver: T
 ) : ConstraintError() {
@@ -33,7 +34,7 @@ data class PositiveValueLongError<T : BaseDto>(
 
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
-@OwleDocsError("error.constraint.positiveValueIntError")
+@ErrorDefinition("errors.constraint.positiveValueIntError")
 @Serializable
 data class PositiveValueIntError<T : BaseDto>(
     val constrainedField: KProperty1<T, Int>,
@@ -47,7 +48,7 @@ data class PositiveValueIntError<T : BaseDto>(
 }
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
-@OwleDocsError("error.constraint.stringNotEmptyError")
+@ErrorDefinition("errors.constraint.stringNotEmptyError")
 @Serializable
 data class StringNotEmptyError<T : BaseDto>(
     val constrainedField: KProperty1<T, String>,
@@ -61,7 +62,7 @@ data class StringNotEmptyError<T : BaseDto>(
 }
 
 /** Fails if the string is blank (contains only whitespace). */
-@OwleDocsError("error.constraint.stringNotBlankError")
+@ErrorDefinition("errors.constraint.stringNotBlankError")
 @Serializable
 data class StringNotBlankError<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -79,7 +80,7 @@ data class StringNotBlankError<T : BaseDto>(
  * Validates that all characters in the input string are from safe character ranges.
  * Intended to permit international language input, but disallow invisible or spoof-prone symbols.
  */
-@OwleDocsError("error.constraint.stringSafeCharsError")
+@ErrorDefinition("errors.constraint.stringSafeCharsError")
 @Serializable
 data class StringContainsRestrictedChars<T : BaseDto>(
     private val constrainedField: KProperty1<T, String?>,
@@ -110,7 +111,7 @@ data class StringContainsRestrictedChars<T : BaseDto>(
     }
 }
 
-@OwleDocsError("error.constraint.mustContainOnlyNumerals")
+@ErrorDefinition("errors.constraint.mustContainOnlyNumerals")
 @Serializable
 data class MustContainOnlyNumerals<T: BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -125,7 +126,7 @@ data class MustContainOnlyNumerals<T: BaseDto>(
 
 }
 
-@OwleDocsError("error.constraint.resetTokenCharsError")
+@ErrorDefinition("errors.constraint.resetTokenCharsError")
 @Serializable
 data class InvalidResetToken<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -146,7 +147,7 @@ data class InvalidResetToken<T : BaseDto>(
 
 }
 
-@OwleDocsError("error.constraint.invalidOAuthProvider")
+@ErrorDefinition("errors.constraint.invalidOAuthProvider")
 @Serializable
 data class InvalidOAuthProvider<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -164,7 +165,7 @@ data class InvalidOAuthProvider<T : BaseDto>(
     }
 }
 
-@OwleDocsError("error.constraint.pythonVersionSegmentFormat")
+@ErrorDefinition("errors.constraint.pythonVersionSegmentFormat")
 @Serializable
 data class PythonVersionSegmentFormat<T: BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -200,7 +201,7 @@ data class StringMustNotBeBlank<T : BaseDto>(
 }
 
 /** Fails if the result of the function exceeds the maximum allowed string length. */
-@OwleDocsError("error.constraint.stringLengthMustBeGt")
+@ErrorDefinition("errors.constraint.stringLengthMustBeGt")
 @Serializable
 data class StringLengthMustBeGt<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -216,7 +217,7 @@ data class StringLengthMustBeGt<T : BaseDto>(
 
 
 /** Fails if the string does not have exactly the required length. */
-@OwleDocsError("error.constraint.stringLengthExactError")
+@ErrorDefinition("errors.constraint.stringLengthExactError")
 @Serializable
 data class StringMustHaveExactRequiredLength<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -233,7 +234,7 @@ data class StringMustHaveExactRequiredLength<T : BaseDto>(
 }
 
 /** Fails if the result of the function exceeds the maximum allowed string length. */
-@OwleDocsError("error.constraint.stringMaxLengthError")
+@ErrorDefinition("errors.constraint.stringMaxLengthError")
 @Serializable
 data class StringMaxLengthError<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -248,7 +249,7 @@ data class StringMaxLengthError<T : BaseDto>(
 }
 
 /** Fails if the result of the function exceeds the maximum allowed string length. */
-@OwleDocsError("error.constraint.stringLengthMustBeLt")
+@ErrorDefinition("errors.constraint.stringLengthMustBeLt")
 @Serializable
 data class StringLengthMustBeLt<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -263,7 +264,7 @@ data class StringLengthMustBeLt<T : BaseDto>(
 }
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
-@OwleDocsError("error.constraint.intMustBeGtOrEqual")
+@ErrorDefinition("errors.constraint.intMustBeGtOrEqual")
 @Serializable
 data class IntMustBeGtOrEqual<T : BaseDto>(
     val constrainedField: KProperty1<T, Int>,
@@ -278,7 +279,7 @@ data class IntMustBeGtOrEqual<T : BaseDto>(
 }
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
-@OwleDocsError("error.constraint.intValueMustMeetMinimum")
+@ErrorDefinition("errors.constraint.intValueMustMeetMinimum")
 @Serializable
 data class IntValueMustMeetMinimum<T : BaseDto>(
     val constrainedField: KProperty1<T, Int>,
@@ -293,7 +294,7 @@ data class IntValueMustMeetMinimum<T : BaseDto>(
 }
 
 /** Fails if the value is less than `minValue`. */
-@OwleDocsError("error.constraint.longValueMustMeetMinimum")
+@ErrorDefinition("errors.constraint.longValueMustMeetMinimum")
 @Serializable
 data class LongValueMustMeetMinimum<T : BaseDto>(
     val constrainedField: KProperty1<T, Long>,
@@ -308,7 +309,7 @@ data class LongValueMustMeetMinimum<T : BaseDto>(
 }
 
 /** Fails if value is outside the specified range. */
-@OwleDocsError("error.constraint.longValueOoB")
+@ErrorDefinition("errors.constraint.longValueOoB")
 @Serializable
 data class LongValueOoB<T : BaseDto>(
     val constrainedField: KProperty1<T, Long>,
@@ -325,7 +326,7 @@ data class LongValueOoB<T : BaseDto>(
 }
 
 /** Fails if value is outside the specified double range. */
-@OwleDocsError("error.constraint.doubleValueRangeError")
+@ErrorDefinition("errors.constraint.doubleValueRangeError")
 @Serializable
 data class DoubleValueOoB<T : BaseDto>(
     val constrainedField: KProperty1<T, Double>,
@@ -343,7 +344,7 @@ data class DoubleValueOoB<T : BaseDto>(
 }
 
 /** Fails if list is empty. */
-@OwleDocsError("error.constraint.listMustNotBeEmpty")
+@ErrorDefinition("errors.constraint.listMustNotBeEmpty")
 @Serializable
 data class ListMustNotBeEmpty<T : BaseDto>(
     val constrainedField: KProperty1<T, List<*>>,
@@ -358,7 +359,7 @@ data class ListMustNotBeEmpty<T : BaseDto>(
 }
 
 /** Fails if value is not a valid email address. */
-@OwleDocsError("error.constraint.validEmailFormatError")
+@ErrorDefinition("errors.constraint.validEmailFormatError")
 @Serializable
 data class InvalidEmailFormat<T : BaseDto>(
     val constrainedField: KProperty1<T, String>,
@@ -380,7 +381,7 @@ data class InvalidEmailFormat<T : BaseDto>(
 }
 
 /** Fails if value is not a well-formed URL. */
-@OwleDocsError("error.constraint.invalidUrlFormatError")
+@ErrorDefinition("errors.constraint.invalidUrlFormatError")
 @Serializable
 data class InvalidUrlFormat<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -393,7 +394,7 @@ data class InvalidUrlFormat<T : BaseDto>(
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}=$value"
 }
 
-@OwleDocsError("error.constraint.timestampFormatError")
+@ErrorDefinition("errors.constraint.timestampFormatError")
 @Serializable
 data class TimestampFormatMustMatchIso8601<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -412,7 +413,7 @@ data class TimestampFormatMustMatchIso8601<T : BaseDto>(
 }
 
 
-@OwleDocsError("error.constraint.incoherentInstantError")
+@ErrorDefinition("errors.constraint.incoherentInstantError")
 @Serializable
 data class TimestampMustBeChronologicallyCoherent<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -451,7 +452,7 @@ data class TestCaseSubject<T : BaseDto>(
 }
 
 /** Fails if all version constraint values are null. */
-@OwleDocsError("error.constraint.versionSpecUndefined")
+@ErrorDefinition("errors.constraint.versionSpecUndefined")
 @Serializable
 data class VersionSpecUndefined<T : BaseDto>(
     val versionMinField: KProperty1<T, String?>,
@@ -472,7 +473,7 @@ data class VersionSpecUndefined<T : BaseDto>(
 
 /** Fails if `completedAt` exists and is before `startedAt`. */
 @Serializable
-@OwleDocsError("error.constraint.preventsTimeParadoxes")
+@ErrorDefinition("errors.constraint.preventsTimeParadoxes")
 data class PreventsTimeParadoxes<T : BaseDto>(
     val happensFirstField: KProperty1<T, String>,
     val happensSecondField: KProperty1<T, String?>,
@@ -494,7 +495,7 @@ data class PreventsTimeParadoxes<T : BaseDto>(
 }
 
 @Serializable
-@OwleDocsError("error.constraint.inconsistentOAuthId")
+@ErrorDefinition("errors.constraint.inconsistentOAuthId")
 data class InconsistentOAuthId<T : BaseDto>(
     val providerField: KProperty1<T, String?>,
     val idField: KProperty1<T, String?>,

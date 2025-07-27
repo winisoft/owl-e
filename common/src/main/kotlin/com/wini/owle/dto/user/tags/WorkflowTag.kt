@@ -1,14 +1,18 @@
 package com.wini.owle.dto.user.tags
 
-import com.wini.owle.schema.error.PositiveValueLong
-import com.wini.owle.schema.OwleModel
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable
 
-@OwleModel
+@ModelDefinition
 @Serializable
 data class WorkflowTag(
+
+    @ConstraintSimple([PositiveValueLongError::class])
     val workflowId: Long,
+
+    @ConstraintSimple([PositiveValueLongError::class])
     val tagId: Long
 ) : CompositeDto {
 
