@@ -1,0 +1,69 @@
+name: Claude Commit Message Generator
+
+# Automatically amends your last commit message using Claude.
+#
+# ✅ Triggers on every push to `main`
+# ✅ Analyzes last commit diff with `git show`
+# ✅ Claude generates a clean, conventional commit message
+# ✅ Rewrites the commit message and force-pushes the update
+# ⚠️ Force-pushes to main —- this should only be used by a cognizant solo dev or in proper dev branches
+# 🔒 Requires ANTHROPIC_API_KEY
+# 🚀 Good for: eliminating lazy commit messages, establishing clean linear history
+
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-commit-message:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout last 2 commits
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get diff from last commit
+        run: git show --no-color > commit.diff
+
+      - name: Claude Suggests Commit Message
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          direct_prompt: |
+            Here's the most recent commit and its full diff:
+            ---
+            {{file:commit.diff}}
+            ---
+            
+            Please generate a clear and concise Git commit message. It should:
+              - begin with a one-line summary
+                  - at least 10, at most 75 character
+                  - using the imperative mood, e.g. 'fix' or 'refactor' -- *not* 'fixes' or 'refactored'
+              - if warranted, provide a more detailed explanatory text after a separating blank line
+                   - each line should be ~72 char width max
+                   - further paragraphs come after blank line separators
+                   - bullet points are permitted in the form of a hyphen and a single space
+            Save only your recommended commit message to a file named `commit_msg.txt`. Do not include anything else.
+
+
+      - name: Validate Claude Commit Message
+        run: ./validate_commit_msg.sh
+
+      - name: Amend and Push Commit Message
+        run: |
+          git commit --amend -F commit_msg.txt
+          git push origin HEAD --force-with-lease
+
+      - name: Fallback on Claude Failure
+        if: failure()
+        run: |
+          echo "Using fallback commit message: Default Commit Message - Generation Failed"
+          echo "Default Commit Message - Generation Failed" > commit_msg.txt
