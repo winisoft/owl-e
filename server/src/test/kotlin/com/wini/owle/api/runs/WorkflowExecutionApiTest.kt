@@ -3,11 +3,10 @@ package com.wini.owle.api.runs
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.api.runs.workflow.WorkflowExecutionApi
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class WorkflowExecutionApiTest : BaseLongPkApiTest<WorkflowExecution, WorkflowExecutionApi>() {
@@ -24,7 +23,7 @@ open class WorkflowExecutionApiTest : BaseLongPkApiTest<WorkflowExecution, Workf
     
     override fun getApiInstance(
         dll: DLL<Long, WorkflowExecution>,
-        validator: BaseValidator<WorkflowExecution>
+        validator: DtoValidator<WorkflowExecution>
     ): WorkflowExecutionApi = WorkflowExecutionApi(dll, validator)
 
 }

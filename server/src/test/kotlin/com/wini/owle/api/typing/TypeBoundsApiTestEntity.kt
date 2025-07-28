@@ -2,11 +2,10 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeBound
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class TypeBoundsApiTestEntity : BaseLongPkApiTest<TypeBound, TypeBoundsApi>() {
@@ -23,6 +22,6 @@ open class TypeBoundsApiTestEntity : BaseLongPkApiTest<TypeBound, TypeBoundsApi>
 
     override fun getApiInstance(
         dll: DLL<Long, TypeBound>,
-        validator: BaseValidator<TypeBound>
+        validator: DtoValidator<TypeBound>
     ): TypeBoundsApi = TypeBoundsApi(dll, validator)
 }

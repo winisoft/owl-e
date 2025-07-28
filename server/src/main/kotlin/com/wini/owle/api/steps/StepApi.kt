@@ -7,7 +7,9 @@ import com.wini.owle.dto.workflows.Step
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.validators.DtoValidator
-
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
+import com.wini.owle.api.workflows.IStepApi
 
 class StepApi(
     dll: DLL<Long, Step>,
@@ -16,33 +18,33 @@ class StepApi(
     dll = dll,
     serializer = Step.serializer(),
     validator = validator
-) {
+), IStepApi {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/step") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/step/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/step") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/step/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/step") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/step/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/step/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
             }
             delete("/api/step/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

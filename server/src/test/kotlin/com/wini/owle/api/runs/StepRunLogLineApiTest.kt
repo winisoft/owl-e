@@ -3,11 +3,10 @@ package com.wini.owle.api.runs
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.api.runs.step.StepRunLogLineApi
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class StepRunLogLineApiTest : BaseLongPkApiTest<StepRunLogLine, StepRunLogLineApi>() {
@@ -24,7 +23,7 @@ open class StepRunLogLineApiTest : BaseLongPkApiTest<StepRunLogLine, StepRunLogL
 
     override fun getApiInstance(
         dll: DLL<Long, StepRunLogLine>,
-        validator: BaseValidator<StepRunLogLine>
+        validator: DtoValidator<StepRunLogLine>
     ): StepRunLogLineApi = StepRunLogLineApi(dll, validator)
 
 }

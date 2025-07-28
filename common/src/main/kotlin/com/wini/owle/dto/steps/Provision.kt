@@ -1,12 +1,13 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.schema.ListHasMembers
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
+import com.wini.owle.schema.error.ListHasMembers
 import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.dto.workflows.ToolParam
+import com.wini.owle.error.ListMustNotBeEmpty
+import com.wini.owle.error.PositiveValueLongError
 import kotlinx.serialization.Serializable
 
 /**

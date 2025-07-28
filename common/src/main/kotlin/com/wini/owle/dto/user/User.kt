@@ -1,20 +1,24 @@
 package com.wini.owle.dto.user
 
-import com.wini.owle.schema.StringMustNotContainRestricted
-import com.wini.owle.schema.EmailTerms
-import com.wini.owle.schema.OAuthProviderEnum
-import com.wini.owle.schema.ResetTokenCharsOnly
-import com.wini.owle.schema.LongValueMin
-import com.wini.owle.schema.OneDigitMinimum
-import com.wini.owle.schema.OneLowercaseMinimum
-import com.wini.owle.schema.OneSpecialCharMinimum
-import com.wini.owle.schema.OneUppercaseMinimum
+import com.wini.owle.schema.error.EmailFormat
+import com.wini.owle.schema.error.ResetTokenCharsOnly
 import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.TimestampCoherent
-import com.wini.owle.schema.TimestampIso8601Format
+import com.wini.owle.schema.error.TimestampCoherent
+import com.wini.owle.schema.error.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.enums.SubscriptionStatus
-import com.wini.owle.schema.PasswordSecurityPolicy
+import com.wini.owle.error.IncoherentInstantError
+import com.wini.owle.error.InvalidOAuthProvider
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.ResetTokenCharsError
+import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.TimestampFormatError
+import com.wini.owle.error.ValidEmailFormatError
+import com.wini.owle.schema.error.InconsistentOAuthId
+import com.wini.owle.schema.error.OAuthProviderEnum
+import com.wini.owle.schema.error.PositiveValueLong
+import com.wini.owle.schema.error.PreventsTimeParadoxes
+import com.wini.owle.schema.error.StringSafeChars
 import kotlinx.serialization.Serializable
 
 /**

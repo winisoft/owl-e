@@ -2,11 +2,10 @@ package com.wini.owle.api.environs
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.VersionSpec
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class VersionSpecApiTest : BaseLongPkApiTest<VersionSpec, VersionSpecApi>() {
@@ -23,7 +22,7 @@ open class VersionSpecApiTest : BaseLongPkApiTest<VersionSpec, VersionSpecApi>()
 
     override fun getApiInstance(
         dll: DLL<Long, VersionSpec>,
-        validator: BaseValidator<VersionSpec>
+        validator: DtoValidator<VersionSpec>
     ): VersionSpecApi = VersionSpecApi(dll, validator)
 
 }

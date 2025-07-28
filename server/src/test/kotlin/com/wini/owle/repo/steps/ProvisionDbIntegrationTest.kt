@@ -7,7 +7,7 @@ import com.wini.owle.entity.EntityTestInstanceFactory.stepDao
 import com.wini.owle.entity.EntityTestInstanceFactory.toolParamDao
 import com.wini.owle.repo.OwleRepoImplTest
 import com.wini.owle.repo.workflows.StepRepository
-import com.wini.owle.repo.workflows.ToolParamRepository
+import com.wini.owle.repo.steps.ToolParamRepository
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeEach

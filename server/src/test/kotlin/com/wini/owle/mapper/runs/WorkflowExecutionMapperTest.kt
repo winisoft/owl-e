@@ -53,7 +53,7 @@ open class WorkflowExecutionMapperTest {
             startedAt = "2023-10-01T10:00:00",
             completedAt = "2023-10-01T11:00:00",
             status = mockk(),
-            stepExecutions = emptyList()
+            stepRuns = emptyList()
         )
 
         // Mock behavior for findById to return null (not found)
@@ -125,7 +125,7 @@ open class WorkflowExecutionMapperTest {
             startedAt = "2025-04-04T12:34:56Z",
             completedAt = "2025-05-04T12:34:56Z",
             status = ExecutionStatus.Failed,
-            stepExecutions = emptyList()
+            stepRuns = emptyList()
         )
 
         // Create mock existing entity to update
@@ -181,7 +181,7 @@ open class WorkflowExecutionMapperTest {
             startedAt = "2025-04-04T12:34:56Z",
             completedAt = "2025-05-04T12:34:56Z",
             status = ExecutionStatus.Failed,
-            stepExecutions = emptyList()
+            stepRuns = emptyList()
         )
 
         // Create mock new entity

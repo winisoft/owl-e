@@ -2,7 +2,7 @@ package com.wini.owle.services.environs
 
 import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.entity.environs.ToolPyPackDepEntity
 import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.environs.ToolPackageDependencyMapper
@@ -29,7 +29,7 @@ open class ToolPyPackageDependencyServiceTest {
         toolId: Long = 1,
         packageId: Long = 2,
         versionSpecId: Long = 3
-    ): ToolPyPackDep = ToolPyPackDep(
+    ): ToolPyPackDependency = ToolPyPackDependency(
         toolId = toolId, 
         packageId = packageId, 
         versionSpecId = versionSpecId
@@ -55,7 +55,7 @@ open class ToolPyPackageDependencyServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: ToolPyPackDep = mockk()
+        val dto: ToolPyPackDependency = mockk()
         val entity: ToolPyPackDepEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
@@ -78,7 +78,7 @@ open class ToolPyPackageDependencyServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: ToolPyPackDep = mockk()
+        val dto: ToolPyPackDependency = mockk()
         val entity: ToolPyPackDepEntity = mockk()
         val exception = RuntimeException("Database error")
 
@@ -102,7 +102,7 @@ open class ToolPyPackageDependencyServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: ToolPyPackDep = ToolPyPackDep(
+        val dto: ToolPyPackDependency = ToolPyPackDependency(
             toolId = 1,
             packageId = 2,
             versionSpecId = 3
@@ -181,7 +181,7 @@ open class ToolPyPackageDependencyServiceTest {
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
         val emptyList = emptyList<ToolPyPackDepEntity>()
-        val emptyDtoList = emptyList<ToolPyPackDep>()
+        val emptyDtoList = emptyList<ToolPyPackDependency>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -277,7 +277,7 @@ open class ToolPyPackageDependencyServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<ToolPyPackDep>()
+        val emptyDtoList = emptyList<ToolPyPackDependency>()
         val emptyEntityList = emptyList<ToolPyPackDepEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList

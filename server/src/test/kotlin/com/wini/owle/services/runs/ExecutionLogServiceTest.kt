@@ -4,7 +4,7 @@ import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.dto.runs.enums.LogLevel
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.entity.runs.step.StepRunLogLineEntity
 import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.runs.ExecutionLogMapper
@@ -28,13 +28,13 @@ open class ExecutionLogServiceTest {
 
     fun createSampleDto(
         mockId: Long = 1L,
-        stepExecution: StepExecution = mockk(),
+        stepRun: StepRun = mockk(),
         timestamp: String = "2025-04-04T13:26:00Z",
         logLevel: LogLevel = mockk(),
         message: String = "Log line message content"
     ): StepRunLogLine = StepRunLogLine(
         id = mockId,
-        stepExecution = stepExecution,
+        stepRun = stepRun,
         timestamp = timestamp,
         logLevel = logLevel,
         message = message

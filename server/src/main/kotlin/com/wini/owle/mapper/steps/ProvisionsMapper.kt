@@ -6,7 +6,7 @@ import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.mapper.workflows.DataPointsMapper
 import com.wini.owle.mapper.workflows.StepsMapper
-import com.wini.owle.mapper.workflows.ToolParamsMapper
+import com.wini.owle.mapper.steps.ToolParamsMapper
 
 
 class ProvisionsMapper(

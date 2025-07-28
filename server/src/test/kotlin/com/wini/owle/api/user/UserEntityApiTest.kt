@@ -2,11 +2,10 @@ package com.wini.owle.api.user
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.User
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class UserEntityApiTest : BaseLongPkApiTest<User, UserApi>() {
@@ -23,7 +22,7 @@ open class UserEntityApiTest : BaseLongPkApiTest<User, UserApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, User>,
-        validator: BaseValidator<User>
+        validator: DtoValidator<User>
     ): UserApi = UserApi(dll, validator)
 
 }

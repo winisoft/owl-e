@@ -1,11 +1,13 @@
 package com.wini.owle.dto.steps
 
-import com.wini.owle.schema.IntValueMin
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
 import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.DataPoint
+import com.wini.owle.error.PositiveValueIntError
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.schema.error.PositiveValueInt
 import kotlinx.serialization.Serializable
 
 /**

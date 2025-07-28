@@ -7,7 +7,8 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.dll.DLL
 import com.wini.owle.validators.DtoValidator
-
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 
 class WorkflowJunctionApi(
     dll: DLL<Long, WorkflowJunction>,
@@ -16,33 +17,33 @@ class WorkflowJunctionApi(
     dll = dll,
     serializer = WorkflowJunction.serializer(),
     validator = validator
-)  {
+), IWorkflowJunctionApi  {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/workflow-junction") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/workflow-junction/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/workflow-junction") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/workflow-junction/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/workflow-junction") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/workflow-junction/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/workflow-junction/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
             }
             delete("/api/workflow-junction/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

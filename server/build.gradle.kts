@@ -26,7 +26,6 @@ sourceSets {
         dependencies {
             implementation(projects.common)
             implementation(projects.typeSchema)
-            ksp(projects.typeSchema)
             implementation(libs.logback)
             implementation(libs.ktor.server.core)
             implementation(libs.ktor.server.netty)
@@ -70,12 +69,33 @@ sourceSets {
     }
 }
 
+// Add task to generate example JSON files from DtoTestInstanceFactory
+//tasks.register("generateExamples", JavaExec::class) {
+//    description = "Generate example JSON files from DtoTestInstanceFactory"
+//    group = "build"
+//
+//    // Configure classpath for the task
+//    classpath = sourceSets["test"].runtimeClasspath
+//    mainClass.set("com.wini.owle.tools.ExampleGenerator")
+//
+//    // Ensure this task runs before KSP
+//    tasks.named("kspKotlin").configure {
+//        dependsOn("generateExamples")
+//    }
+//}
+
 tasks.test {
     useJUnitPlatform()
 }
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 application {

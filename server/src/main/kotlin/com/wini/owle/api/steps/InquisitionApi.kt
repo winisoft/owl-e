@@ -7,7 +7,8 @@ import com.wini.owle.dto.steps.Inquisition
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.validators.DtoValidator
-
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 
 class InquisitionApi(
     dll: DLL<Long, Inquisition>,
@@ -16,33 +17,33 @@ class InquisitionApi(
     dll = dll,
     serializer = Inquisition.serializer(),
     validator = validator
-)  {
+), IInquisitionApi  {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/inquisition") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/inquisition/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/inquisition") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/inquisition/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/inquisition") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/inquisition/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/inquisition/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
             }
             delete("/api/inquisition/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

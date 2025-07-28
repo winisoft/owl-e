@@ -15,9 +15,9 @@ import com.wini.owle.dll.user.UserDll
 import com.wini.owle.dll.workflows.*
 import com.wini.owle.dto.environs.PyPackage
 import com.wini.owle.dto.environs.PyPackageRepo
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.dto.environs.VersionSpec
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.dto.runs.test.*
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
@@ -43,7 +43,7 @@ val dllModule = module {
     single<DLL<Long, VersionSpec>> { VersionSpecDll(get()) }
     single<DLL<Long, BenchmarkReport>> { BenchmarkingDataDll(get()) }
     single<DLL<Long, StepRunLogLine>> { ExecutionLogDll(get()) }
-    single<DLL<Long, StepExecution>> { StepExecutionDll(get()) }
+    single<DLL<Long, StepRun>> { StepExecutionDll(get()) }
     single<DLL<Long, TestCase>> { TestCaseDll(get()) }
     single<DLL<Long, TestExpectation>> { TestExpectedOutcomeDll(get()) }
     single<DLL<Long, TestInput>> { TestInputDll(get()) }
@@ -72,7 +72,7 @@ val dllModule = module {
     single<DLL<Long, WorkflowFolder>> { WorkflowFolderDll(get()) }
     single<DLL<Long, Workflow>> { WorkflowDll(get()) }
     single<DLL<CompositeID, TagRelation>> { TagRelationDll(get()) }
-    single<DLL<CompositeID, ToolPyPackDep>> { ToolPackageDependencyDll(get()) }
+    single<DLL<CompositeID, ToolPyPackDependency>> { ToolPackageDependencyDll(get()) }
     single<DLL<CompositeID, TypeUnionMember>> { TypeUnionMemberDll(get()) }
     single<DLL<CompositeID, TransformTargetType>> { TransformTargetTypeDll(get()) }
     single<DLL<CompositeID, ProvisionDataPoint>> { ProvisionDataPointDll(get()) }

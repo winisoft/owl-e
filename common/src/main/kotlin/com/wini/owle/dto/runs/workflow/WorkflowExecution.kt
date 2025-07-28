@@ -1,16 +1,18 @@
 package com.wini.owle.dto.runs.workflow
 
-import com.wini.owle.content.decorator.PreventsTimeParadoxes
-import com.wini.owle.schema.CompletedTimeBeforeStart
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
 import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.TimestampCoherent
-import com.wini.owle.schema.TimestampIso8601Format
+import com.wini.owle.schema.error.TimestampCoherent
+import com.wini.owle.schema.error.TimestampIso8601Format
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.enums.ExecutionStatus
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.error.IncoherentInstantError
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.TimestampFormatError
+import com.wini.owle.schema.error.PreventsTimeParadoxes
 import kotlinx.serialization.Serializable
 
 
@@ -57,6 +59,6 @@ data class WorkflowExecution(
      */
     val status: ExecutionStatus,
 
-    val stepExecutions: List<StepExecution>
+    val stepRuns: List<StepRun>
 
 ) : StandardDto

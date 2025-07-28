@@ -8,7 +8,8 @@ import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 
 import com.wini.owle.validators.DtoValidator
-
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 
 class TestExpectationApi(
     dll: DLL<Long, TestExpectation>,
@@ -17,33 +18,33 @@ class TestExpectationApi(
     dll = dll,
     serializer = TestExpectation.serializer(),
     validator = validator
-)  {
+), ITestExpectationApi  {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/test-expected-outcome") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/test-expected-outcome/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/test-expected-outcome") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/test-expected-outcome/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/test-expected-outcome") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/test-expected-outcome/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/test-expected-outcome/{id}") {
-                call.execute(OwleApiCall.DeleteOne)
+                deleteOne { call.execute(OwleApiCall.DeleteOne) }
             }
             delete("/api/test-expected-outcome/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

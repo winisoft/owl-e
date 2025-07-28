@@ -1,12 +1,12 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.Tool
-import com.wini.owle.dto.workflows.ToolParam
+import com.wini.owle.dto.steps.ToolParam
 import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.entity.typing.TypeDeclarationEntity
 import com.wini.owle.entity.workflows.ToolEntity
-import com.wini.owle.entity.workflows.ToolParamEntity
+import com.wini.owle.entity.steps.ToolParamEntity
 import com.wini.owle.mapper.DaoFactory
+import com.wini.owle.mapper.steps.ToolParamsMapper
 import com.wini.owle.mapper.typing.TypeDeclarationsMapper
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach

@@ -10,21 +10,45 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation(project(":common"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
-    implementation(libs.kotlinx.serialization.json)
-    
-    // OpenAPI spec generation
-    implementation("io.swagger.core.v3:swagger-core:2.2.20")
-    implementation("io.swagger.core.v3:swagger-models:2.2.20")
+sourceSets {
+    main {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+        resources.srcDir("build/generated/ksp/main/resources")
+
+
+        dependencies {
+            implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
+            implementation(libs.kotlinx.serialization.json)
+            implementation("com.squareup:kotlinpoet:2.2.0")
+
+            // OpenAPI spec generation
+            implementation("io.swagger.core.v3:swagger-core:2.2.20")
+            implementation("io.swagger.core.v3:swagger-models:2.2.20")
+
+        }
+
+    }
+    test {
+        dependencies {
+            implementation(libs.junit.jupiter)
+            implementation(libs.kotlin.test.junit)
+            implementation(libs.hamcrest.hamcrest)
+            implementation(libs.mockk)
+
+            implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+            implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+        }
+    }
 }
 
-sourceSets.main {
-    kotlin.srcDir("build/generated/ksp/main/kotlin")
-    resources.srcDir("build/generated/ksp/main/resources")
+tasks.withType<Copy>().all {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-sourceSets.test {
-    kotlin.srcDir("build/generated/ksp/test/kotlin")
+tasks.withType<Jar>().all {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }

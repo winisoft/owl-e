@@ -1,6 +1,6 @@
 package com.wini.owle.entity.composteid
 
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.dto.steps.ProvisionDataPoint
 import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.dto.typing.TypeUnionMember
@@ -11,7 +11,7 @@ val compositeIdFactoryModule = module {
 
     single<CompositeIdFactory<ProvisionDataPoint>> { ProvisionDataPointIdFactory }
     single<CompositeIdFactory<TagRelation>> { TagRelationIdFactory }
-    single<CompositeIdFactory<ToolPyPackDep>> { ToolPackageDepIdFactory }
+    single<CompositeIdFactory<ToolPyPackDependency>> { ToolPackageDepIdFactory }
     single<CompositeIdFactory<TransformTargetType>> { TransformTargetTypeIdFactory }
     single<CompositeIdFactory<TypeUnionMember>> { TypeUnionMemberIdFactory }
 

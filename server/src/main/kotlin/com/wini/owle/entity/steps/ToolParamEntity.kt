@@ -1,0 +1,36 @@
+package com.wini.owle.entity.steps
+
+import com.wini.owle.entity.ToolParams
+import com.wini.owle.entity.typing.TypeDeclarationEntity
+import com.wini.owle.entity.workflows.ToolEntity
+import org.jetbrains.exposed.dao.LongEntity
+import org.jetbrains.exposed.dao.LongEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+
+/**
+ * Represents a parameter for a tool within a workflow.
+ * Each parameter has a name, type, and can optionally have a default value.
+ */
+class ToolParamEntity(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<ToolParamEntity>(ToolParams)
+
+    /**
+     * The tool associated with this parameter.
+     */
+    var tool by ToolEntity.Companion referencedOn ToolParams.tool
+
+    /**
+     * Name of the parameter.
+     */
+    var name by ToolParams.name
+
+    /**
+     * The type declaration associated with this parameter, if defined.
+     */
+    var typeDeclarationEntity by TypeDeclarationEntity.Companion referencedOn ToolParams.typeDeclaration
+
+    /**
+     * Whether this parameter has a default value.
+     */
+    var hasDefault by ToolParams.hasDefault
+}

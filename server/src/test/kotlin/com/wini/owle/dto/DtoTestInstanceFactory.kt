@@ -2,12 +2,11 @@ package com.wini.owle.dto
 
 import com.wini.owle.dto.environs.*
 import com.wini.owle.dto.environs.enums.PyPackageRepoType
-import com.wini.owle.dto.runs.*
 import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.dto.runs.test.*
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
@@ -23,9 +22,6 @@ import com.wini.owle.dto.user.enums.SubscriptionStatus
 import com.wini.owle.dto.user.tags.Tag
 import com.wini.owle.dto.user.tags.TagRelation
 import com.wini.owle.dto.workflows.*
-import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto
-import com.wini.owle.dto.workflows.enums.CommercialUse
-import com.wini.owle.dto.workflows.enums.ModificationTermsDto
 import com.wini.owle.dto.workflows.enums.StoreMethod
 
 
@@ -44,8 +40,8 @@ object DtoTestInstanceFactory {
         toolId: Long = 1L,
         packageId: Long = 2L,
         versionSpecId: Long = 3L
-    ): ToolPyPackDep {
-        return ToolPyPackDep(
+    ): ToolPyPackDependency {
+        return ToolPyPackDependency(
             toolId = toolId,
             packageId = packageId,
             versionSpecId = versionSpecId
@@ -68,7 +64,7 @@ object DtoTestInstanceFactory {
 
     fun packageRepoDto(
         id: Long = 1L,
-        sourceType: PyPackageRepoType = PyPackageRepoType.Pypi,
+        sourceType: PyPackageRepoType = PyPackageRepoType.PYPI,
         sourceUrl: String = "https://pypi.org"
     ): PyPackageRepo {
         return PyPackageRepo(
@@ -116,44 +112,44 @@ object DtoTestInstanceFactory {
         )
     }
 
-    fun workflowMetadataDto(
-        id: Long = 1L,
-        name: String = "John Arbuckle",
-        version: String = "1.0.0",
-        contributors: List<User> = emptyList(),
-        //authors = listOf("Garfield Cat", "Nermal"),
-        copyrightInformation:String = "2025",
-        contactInformation: String = "lasagnalonely@email.com",
-        thirdPartyLicenses: String = "Ok",
-        distributionVersion: String = "1.0.0",
-        distributionAcceptedAt: String = "",
-        distributionUpdatedAt: String = "",
-        discretionAdvisedContent: Boolean = true,
-        commercialUsage: CommercialUse = CommercialUse.Corporation,
-        authorshipCredit: AuthorshipCreditDto = AuthorshipCreditDto.Required,
-        allowRedistribution: Boolean = false,
-        modification: ModificationTermsDto = ModificationTermsDto.Prohibited,
-        excludedSteps: List<Step> = emptyList()
-    ): WorkflowMetadata {
-        return WorkflowMetadata(
-            id = id,
-            name = name,
-            version = version,
-            contributors = contributors,
-            copyrightInformation = copyrightInformation,
-            contactInformation = contactInformation,
-            thirdPartyLicenses = thirdPartyLicenses,
-            discretionAdvisedContent = discretionAdvisedContent,
-            commercialUsage = commercialUsage,
-            creditNotation = authorshipCredit,
-            allowRedistribution = allowRedistribution,
-            modification = modification,
-            distributionVersion = distributionVersion,
-            distributionAcceptedAt = distributionAcceptedAt,
-            distributionUpdatedAt = distributionUpdatedAt,
-            excludedSteps = excludedSteps
-        )
-    }
+//    fun workflowMetadataDto(
+//        id: Long = 1L,
+//        name: String = "John Arbuckle",
+//        version: String = "1.0.0",
+//        contributors: List<User> = emptyList(),
+//        //authors = listOf("Garfield Cat", "Nermal"),
+//        copyrightInformation:String = "2025",
+//        contactInformation: String = "lasagnalonely@email.com",
+//        thirdPartyLicenses: String = "Ok",
+//        distributionVersion: String = "1.0.0",
+//        distributionAcceptedAt: String = "",
+//        distributionUpdatedAt: String = "",
+//        discretionAdvisedContent: Boolean = true,
+//        commercialUsage: CommercialUse = CommercialUse.PERSONAL_PROFIT,
+//        authorshipCredit: AuthorshipCreditDto = AuthorshipCredit,
+//        allowRedistribution: Boolean = false,
+//        modification: ModificationTermsDto = ModificationTermsDto.Prohibited,
+//        excludedSteps: List<Step> = emptyList()
+//    ): WorkflowMetadata {
+//        return WorkflowMetadata(
+//            id = id,
+//            name = name,
+//            version = version,
+//            contributors = contributors,
+//            copyrightInformation = copyrightInformation,
+//            contactInformation = contactInformation,
+//            thirdPartyLicenses = thirdPartyLicenses,
+//            discretionAdvisedContent = discretionAdvisedContent,
+//            commercialUsage = commercialUsage,
+//            creditNotation = authorshipCredit,
+//            allowRedistribution = allowRedistribution,
+//            modification = modification,
+//            distributionVersion = distributionVersion,
+//            distributionAcceptedAt = distributionAcceptedAt,
+//            distributionUpdatedAt = distributionUpdatedAt,
+//            excludedSteps = excludedSteps
+//        )
+//    }
 
     fun workflowDto(
         id: Long = 1L,
@@ -161,7 +157,6 @@ object DtoTestInstanceFactory {
         description: String? = "A sample workflow description",
         pythonVersion: String = "3.9",
         parentFolder: WorkflowFolder? = null,
-        metadata: WorkflowMetadata = workflowMetadataDto(),
         createdAt: String = "2024-12-20T15:00:00",
         updatedAt: String = "2024-12-21T15:00:00"
     ): Workflow {
@@ -183,7 +178,7 @@ object DtoTestInstanceFactory {
         body: String = "a sample of code",
         returnTypeDeclaration: TypeDeclaration? = typeDeclarationDto(),
         steps: List<Step> = emptyList(),
-        packageDependencies: List<ToolPyPackDep> = emptyList()
+        packageDependencies: List<ToolPyPackDependency> = emptyList()
     ): Tool {
         return Tool(
             id = id,
@@ -205,7 +200,7 @@ object DtoTestInstanceFactory {
         expectedOutcomes: List<TestExpectation> = emptyList(),
         results: List<WorkflowTestResult> = emptyList()
     ) : TestCase {
-        return com.wini.owle.dto.runs.test.TestCase(
+        return TestCase(
             id = id,
             user = user,
             name = name,
@@ -223,7 +218,7 @@ object DtoTestInstanceFactory {
         name: String = "Data Point Name",
         description: String? = "Data Point Description",
         presetValue: String? = "Some stuff",
-        storeMethod: StoreMethod = StoreMethod.Blob,
+        storeMethod: StoreMethod = StoreMethod.BLOB,
         typeDeclaration: TypeDeclaration = typeDeclarationDto(),
         workflow: Workflow = workflowDto()
     ): DataPoint {
@@ -286,7 +281,7 @@ object DtoTestInstanceFactory {
         id: Long = 1L,
         stripePaymentMethodId: String? = "1AF002B1B22200",
         user: User = userDto(),
-        cardBrand: CardBrand? = CardBrand.Visa,
+        cardBrand: CardBrand? = CardBrand.VISA,
         lastFour: String? = "4103",
         isDefault: Boolean = true,
         createdAt: String = "2024-12-21T15:00:00",
@@ -334,8 +329,8 @@ object DtoTestInstanceFactory {
         user: User = userDto(),
         startedAt: String = "2024-12-21T10:00:00",
         completedAt: String = "2024-12-21T10:00:00",
-        status: ExecutionStatus = ExecutionStatus.Failed,
-        stepExecutions: List<StepExecution> = emptyList()
+        status: ExecutionStatus = ExecutionStatus.FAILED,
+        stepRuns: List<StepRun> = emptyList()
     ) : WorkflowExecution {
         return WorkflowExecution(
             id = id,
@@ -344,7 +339,7 @@ object DtoTestInstanceFactory {
             startedAt = startedAt,
             completedAt = completedAt,
             status = status,
-            stepExecutions = stepExecutions
+            stepRuns = stepRuns
         )
     }
 
@@ -360,7 +355,6 @@ object DtoTestInstanceFactory {
             id = id,
             workflowExecution = workflowExecution,
             totalExecutionTime = totalExecutionTime,
-            totalSteps = totalSteps,
             aiDeterminedSteps = aiDeterminedSteps,
             predeterminedSteps = preDeterminedSteps
         )
@@ -373,7 +367,7 @@ object DtoTestInstanceFactory {
         resetToken: String? = "3ij3oi2joi342j",
         oauthProvider: String? = "Google",
         oauthId: String? = "IROEJOWejofdjsojfoaj3ioj439u2jiof",
-        subscriptionStatus: SubscriptionStatus = SubscriptionStatus.Registered,
+        subscriptionStatus: SubscriptionStatus = SubscriptionStatus.REGISTERED,
         apiKey: String? = "jowejrojoewjrew",
         createdAt: String = "2024-12-24T15:00:00",
         updatedAt: String = "2024-12-25T15:00:00",
@@ -396,31 +390,31 @@ object DtoTestInstanceFactory {
 
     fun executionLogDto(
         id: Long = 1L,
-        stepExecution: StepExecution = stepExecutionDto(),
+        stepRun: StepRun = stepExecutionDto(),
         timeStamp: String = "2024-12-21T12:00:00Z",
-        logLevel: LogLevel = LogLevel.Info,
+        logLevel: LogLevel = LogLevel.INFO,
         message: String = "Execution Started"
     ) : StepRunLogLine {
         return StepRunLogLine(
             id = id,
-            stepExecution = stepExecution,
+            stepRun = stepRun,
             timestamp = timeStamp,
             logLevel = logLevel,
             message = message
         )
     }
 
-    fun stepBenchmarkingDataDto(
-        id: Long = 0L,
-        stepExecution: StepExecution = stepExecutionDto(),
-        executionTime: Double = 123.45
-    ) : StepBenchmarkingDataDto {
-        return StepBenchmarkingDataDto(
-            id = id,
-            stepExecution = stepExecution,
-            executionTime = executionTime
-        )
-    }
+//    fun stepBenchmarkingDataDto(
+//        id: Long = 0L,
+//        stepExecution: StepExecution = stepExecutionDto(),
+//        executionTime: Double = 123.45
+//    ) : BenchmarkReport {
+//        return BenchmarkReport(
+//            id = id,
+//            stepExecution = stepExecution,
+//            executionTime = executionTime
+//        )
+//    }
 
     fun stepExecutionDto(
         id: Long = 1L,
@@ -428,9 +422,9 @@ object DtoTestInstanceFactory {
         step: Step = stepDto(),
         startedAt: String = "2024-12-21T10:00:00",
         completedAt: String = "2024-12-21T10:00:00",
-        status: ExecutionStatus = ExecutionStatus.Failed
-    ) : StepExecution {
-        return StepExecution(
+        status: ExecutionStatus = ExecutionStatus.FAILED
+    ) : StepRun {
+        return StepRun(
             id = id,
             workflowExecution = workflowExecution,
             step = step,
@@ -624,7 +618,7 @@ object DtoTestInstanceFactory {
     fun typeVarianceDto(
         id: Long = 23L,
         typeVariableDeclaration: TypeDeclaration = typeDeclarationDto(),
-        varianceCardinality: VarianceCardinalityDto = VarianceCardinalityDto.Covariant
+        varianceCardinality: VarianceCardinalityDto = VarianceCardinalityDto.COVARIANT
     ): TypeVariance {
         return TypeVariance(
             id = id,
@@ -657,7 +651,6 @@ object DtoTestInstanceFactory {
             parentFolder = parentFolder,
             name = name,
             description = description,
-            img = null,
             createdAt = createdAt,
             updatedAt = updatedAt
         )
@@ -667,7 +660,7 @@ object DtoTestInstanceFactory {
         id: Long = 6L,
         dataPointName: String = "input1",
         value: String = "value1",
-        generationMethod: GenerationMethod = GenerationMethod.Manual,
+        generationMethod: GenerationMethod = GenerationMethod.MANUAL,
         testCase: TestCase = testCaseDto()
     ): TestInput {
         return TestInput(
@@ -682,7 +675,7 @@ object DtoTestInstanceFactory {
         id: Long = 7L,
         dataPointName: String = "output1",
         expectedValue: String = "expectedValue1",
-        comparisonOperator: ComparisonOperator = ComparisonOperator.Equals,
+        comparisonOperator: ComparisonOperator = ComparisonOperator.EQUALS,
         testCase: TestCase = testCaseDto()
     ): TestExpectation {
         return TestExpectation(
@@ -755,7 +748,7 @@ object DtoTestInstanceFactory {
     fun appliedTransformDto(
         id: Long = 0L,
         transformation: Transform = transformationDto(),
-        occurrence: TransformOccurrence = TransformOccurrence.PreReqInjection,
+        occurrence: TransformOccurrence = TransformOccurrence.PREREQ_INJECTION,
         resultType: TypeDeclaration = typeDeclarationDto(),
         dataPoint: DataPoint? = dataPointDto(),
     ) : AppliedTransform {

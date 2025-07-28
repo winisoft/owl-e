@@ -14,7 +14,8 @@ val appModule = module {
         repositoryModule,
         serviceModule,
         dllModule,
-        apiModule
+        apiModule,
+        validatorsModule
     )
 }
 

@@ -2,7 +2,7 @@ package com.wini.owle.mapper.runs
 
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.dto.runs.enums.LogLevel
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.entity.runs.enums.LogLevelEntity
 import com.wini.owle.entity.runs.step.StepRunLogLineEntity
 import com.wini.owle.entity.runs.step.StepRunEntity
@@ -40,7 +40,7 @@ open class ExecutionLogMapperTest {
         // Create test DTO
         val dto = StepRunLogLine(
             id = 99L,
-            stepExecution = mockk(),
+            stepRun = mockk(),
             timestamp = "2023-10-01T10:00:00",
             logLevel = LogLevel.Debug,
             message = "Test message"
@@ -71,11 +71,11 @@ open class ExecutionLogMapperTest {
         }
 
         // Setup mock responses from collaborators
-        val stepExecution = mockk<StepExecution>()
+        val stepRun = mockk<StepRun>()
         val timestampStr = "2023-10-01T10:00:00"
         val logLevelDto = LogLevel.Info
         
-        every { stepExecutionsMapper.toDto(entity.stepExecution) } returns stepExecution
+        every { stepExecutionsMapper.toDto(entity.stepExecution) } returns stepRun
         every { dateTimeConverter.toString(entity.timestamp) } returns timestampStr
         every { logLevelMapper.toDto(entity.logLevel) } returns logLevelDto
 
@@ -88,7 +88,7 @@ open class ExecutionLogMapperTest {
         verify(exactly = 1) { logLevelMapper.toDto(entity.logLevel) }
 
         // Verify result contains values from collaborators
-        assertEquals(stepExecution, result.stepExecution)
+        assertEquals(stepRun, result.stepRun)
         assertEquals(timestampStr, result.timestamp)
         assertEquals(logLevelDto, result.logLevel)
         assertEquals("Test message", result.message)
@@ -99,7 +99,7 @@ open class ExecutionLogMapperTest {
         // Create test DTO
         val dto = StepRunLogLine(
             id = 42L,
-            stepExecution = mockk(),
+            stepRun = mockk(),
             timestamp = "2023-10-01T11:00:00",
             logLevel = LogLevel.Warning,
             message = "Updated message"
@@ -113,7 +113,7 @@ open class ExecutionLogMapperTest {
         val timestamp = mockk<Instant>()
         val logLevel = LogLevelEntity.WARNING
         
-        every { stepExecutionsMapper.toEntity(dto.stepExecution) } returns stepRunEntity
+        every { stepExecutionsMapper.toEntity(dto.stepRun) } returns stepRunEntity
         every { dateTimeConverter.fromString(dto.timestamp) } returns timestamp
         every { logLevelMapper.toEntity(dto.logLevel) } returns logLevel
 
@@ -125,7 +125,7 @@ open class ExecutionLogMapperTest {
         val result = mapper.toEntity(dto)
 
         // Verify collaborators were called with correct arguments
-        verify(exactly = 1) { stepExecutionsMapper.toEntity(dto.stepExecution) }
+        verify(exactly = 1) { stepExecutionsMapper.toEntity(dto.stepRun) }
         verify(exactly = 1) { dateTimeConverter.fromString(dto.timestamp) }
         verify(exactly = 1) { logLevelMapper.toEntity(dto.logLevel) }
 
@@ -148,7 +148,7 @@ open class ExecutionLogMapperTest {
         // Create test DTO
         val dto = StepRunLogLine(
             id = 0L,
-            stepExecution = mockk(),
+            stepRun = mockk(),
             timestamp = "2023-10-01T12:00:00",
             logLevel = LogLevel.Error,
             message = "New message"
@@ -162,7 +162,7 @@ open class ExecutionLogMapperTest {
         val timestamp = mockk<Instant>()
         val logLevel = LogLevelEntity.ERROR
         
-        every { stepExecutionsMapper.toEntity(dto.stepExecution) } returns stepRunEntity
+        every { stepExecutionsMapper.toEntity(dto.stepRun) } returns stepRunEntity
         every { dateTimeConverter.fromString(dto.timestamp) } returns timestamp
         every { logLevelMapper.toEntity(dto.logLevel) } returns logLevel
         
@@ -176,7 +176,7 @@ open class ExecutionLogMapperTest {
         verify(exactly = 1) { factory.create() }
 
         // Verify collaborators were called with correct arguments
-        verify(exactly = 1) { stepExecutionsMapper.toEntity(dto.stepExecution) }
+        verify(exactly = 1) { stepExecutionsMapper.toEntity(dto.stepRun) }
         verify(exactly = 1) { dateTimeConverter.fromString(dto.timestamp) }
         verify(exactly = 1) { logLevelMapper.toEntity(dto.logLevel) }
 

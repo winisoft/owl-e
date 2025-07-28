@@ -3,14 +3,13 @@ package com.wini.owle.api.steps
 import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.ProvisionDataPoint
 import com.wini.owle.entity.ProvisionDataPoints
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class ProvisionDataPointEntityApiTest : Base2IdCompositeApiTest<ProvisionDataPoint, ProvisionDataPointApi>() {
@@ -24,7 +23,7 @@ open class ProvisionDataPointEntityApiTest : Base2IdCompositeApiTest<ProvisionDa
 
     override fun getApiInstance(
         dll: DLL<CompositeID, ProvisionDataPoint>,
-        validator: BaseValidator<ProvisionDataPoint>,
+        validator: DtoValidator<ProvisionDataPoint>,
         compositeIdFactory: CompositeIdFactory<ProvisionDataPoint>
     ): ProvisionDataPointApi {
         return ProvisionDataPointApi(

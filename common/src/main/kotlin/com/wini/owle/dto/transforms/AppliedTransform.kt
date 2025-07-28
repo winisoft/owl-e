@@ -1,6 +1,6 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
 import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.transforms.enums.TransformOccurrence

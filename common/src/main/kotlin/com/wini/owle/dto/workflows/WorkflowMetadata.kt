@@ -1,12 +1,21 @@
 package com.wini.owle.dto.workflows
 
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
 import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.enums.AuthorshipCreditDto
 import com.wini.owle.dto.workflows.enums.CommercialUse
 import com.wini.owle.dto.workflows.enums.ModificationTermsDto
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.StringMaxLengthError
+import com.wini.owle.error.StringNotBlankError
+import com.wini.owle.error.StringNotEmptyError
+import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.error.StringLengthMax
+import com.wini.owle.schema.error.StringNotBlank
+import com.wini.owle.schema.error.StringNotEmpty
+import com.wini.owle.schema.error.StringSafeChars
 import kotlinx.serialization.Serializable
 
 /**

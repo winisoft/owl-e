@@ -1,9 +1,9 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
 import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.StringLengthMax
-import com.wini.owle.schema.StringMustNotBeBlank
+import com.wini.owle.schema.error.StringLengthMax
+import com.wini.owle.schema.error.StringNotBlank
 import com.wini.owle.dto.StandardDto
 import kotlinx.serialization.Serializable
 

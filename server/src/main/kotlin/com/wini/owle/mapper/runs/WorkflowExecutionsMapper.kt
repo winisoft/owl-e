@@ -44,7 +44,7 @@ open class WorkflowExecutionsMapper(
             startedAt = dateTimeConverter.toString(entity.startedAt),
             completedAt = entity.completedAt?.let { dateTimeConverter.toString(it) },
             status = executionStatusMapper.toDto(entity.status),
-            stepExecutions = emptyList()
+            stepRuns = emptyList()
         )
     }
 }

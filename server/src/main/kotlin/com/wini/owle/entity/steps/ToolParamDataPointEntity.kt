@@ -3,7 +3,7 @@ package com.wini.owle.entity.steps
 import com.wini.owle.entity.*
 import com.wini.owle.entity.workflows.DataPointEntity
 import com.wini.owle.entity.workflows.StepEntity
-import com.wini.owle.entity.workflows.ToolParamEntity
+import com.wini.owle.entity.steps.ToolParamEntity
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

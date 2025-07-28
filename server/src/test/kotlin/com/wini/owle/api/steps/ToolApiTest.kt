@@ -1,12 +1,11 @@
 package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
+import com.wini.owle.api.workflows.ToolApi
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.workflows.Tool
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class ToolApiTest : BaseLongPkApiTest<Tool, ToolApi>() {
@@ -23,7 +22,7 @@ open class ToolApiTest : BaseLongPkApiTest<Tool, ToolApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, Tool>,
-        validator: BaseValidator<Tool>
+        validator: DtoValidator<Tool>
     ): ToolApi = ToolApi(dll, validator)
 
 }

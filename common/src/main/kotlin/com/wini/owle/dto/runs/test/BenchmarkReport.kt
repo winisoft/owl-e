@@ -1,11 +1,14 @@
 package com.wini.owle.dto.runs.test
 
-import com.wini.owle.schema.DoubleMinAndMax
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
+import com.wini.owle.schema.error.DoubleInRange
 import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
-import com.wini.owle.schema.IntValueMin
+import com.wini.owle.error.DoubleValueRangeError
+import com.wini.owle.error.PositiveValueIntError
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.schema.error.PositiveValueInt
 import kotlinx.serialization.Serializable
 
 /**

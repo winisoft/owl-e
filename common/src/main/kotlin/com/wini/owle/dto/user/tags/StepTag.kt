@@ -1,5 +1,6 @@
 package com.wini.owle.dto.user.tags
 
+import com.wini.owle.schema.error.PositiveValueLong
 import com.wini.owle.schema.OwleModel
 import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable

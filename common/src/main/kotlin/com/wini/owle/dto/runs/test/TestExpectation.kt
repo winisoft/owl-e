@@ -1,9 +1,9 @@
 package com.wini.owle.dto.runs.test
 
-import com.wini.owle.schema.StringMustNotContainRestricted
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
+import com.wini.owle.schema.error.StringSafeChars
 import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.StringLengthMax
+import com.wini.owle.schema.error.StringLengthMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.enums.ComparisonOperator
 import kotlinx.serialization.Serializable

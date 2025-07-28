@@ -17,7 +17,7 @@ class ExecutionLogMapper(
 
     override fun toEntity(dto: StepRunLogLine): StepRunLogLineEntity {
         val applyProps: StepRunLogLineEntity.() -> Unit = {
-            stepExecution = stepExecutionsMapper.toEntity(dto.stepExecution)
+            stepExecution = stepExecutionsMapper.toEntity(dto.stepRun)
             timestamp = dateTimeConverter.fromString(dto.timestamp)
             logLevel = logLevelMapper.toEntity(dto.logLevel)
             message = dto.message
@@ -33,7 +33,7 @@ class ExecutionLogMapper(
     override fun toDto(entity: StepRunLogLineEntity): StepRunLogLine {
         return StepRunLogLine(
             id = entity.id.value,
-            stepExecution = stepExecutionsMapper.toDto(entity.stepExecution),
+            stepRun = stepExecutionsMapper.toDto(entity.stepExecution),
             timestamp = dateTimeConverter.toString(entity.timestamp),
             logLevel = logLevelMapper.toDto(entity.logLevel),
             message = entity.message

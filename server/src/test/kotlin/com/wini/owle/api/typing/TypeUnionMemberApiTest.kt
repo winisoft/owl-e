@@ -3,14 +3,13 @@ package com.wini.owle.api.typing
 import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeUnionMember
 import com.wini.owle.entity.TypeUnionMembers
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMember, TypeUnionMemberApi>() {
@@ -23,7 +22,7 @@ open class TypeUnionMemberApiTest : Base2IdCompositeApiTest<TypeUnionMember, Typ
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TypeUnionMember>,
-        validator: BaseValidator<TypeUnionMember>,
+        validator: DtoValidator<TypeUnionMember>,
         compositeIdFactory: CompositeIdFactory<TypeUnionMember>
     ): TypeUnionMemberApi {
         return TypeUnionMemberApi(

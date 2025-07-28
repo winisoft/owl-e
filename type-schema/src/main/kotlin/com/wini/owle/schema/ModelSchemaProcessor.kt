@@ -1,4 +1,19 @@
-package com.wini.owle.schema
+package com.wini.owle.ksp
+
+import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.wini.owle.ksp.doc.models.DtoModelDoc
+import com.wini.owle.ksp.doc.models.ModelPropertyDoc
+import com.wini.owle.ksp.doc.models.OwleErrorDoc
+import com.wini.owle.ksp.utils.LocalizedStringResolver
+import com.wini.owle.ksp.utils.OwleSymbolCollector
+import com.wini.owle.ksp.utils.ext.filterIsFieldConstraint
+import com.wini.owle.ksp.utils.ext.findConstraintRaisedErrorId
+import com.wini.owle.ksp.utils.ext.isValidatorGenTarget
+import com.wini.owle.ksp.writer.ErrorResFileWriter
+import com.wini.owle.ksp.writer.KnowledgeBaseModelFileWriter
+
 
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
@@ -20,40 +35,41 @@ class ModelSchemaProcessor(
     private val logger: KSPLogger
 ) : SymbolProcessor {
 
+    private var hasGenerated: Boolean = false
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        logger.warn("begin ModelSchemaProcessor")
-        val m = resolver
-            .getSymbolsWithAnnotation(OwleModel::class.qualifiedName!!)
-        logger.warn("got m")
-        logger.warn("m as list size? ${m.toList().count()}")
 
-        val models = resolver
-            .getSymbolsWithAnnotation(OwleModel::class.qualifiedName!!)
-            .filterIsInstance<KSClassDeclaration>()
-        logger.info("Found ${models.count()} @OwleModel class declarations.")
+        if (!hasGenerated) {
 
-        models.forEach { modelClass ->
-            val dtoName = modelClass.simpleName.asString()
-            val packageName = modelClass.packageName.asString()
+            logger.warn("Collecting for ModelSchemaProcessor")
 
-            val dtoDoc = buildDtoDoc(modelClass)
+            OwleSymbolCollector.collect(resolver, logger)
 
-            val file = codeGenerator.createNewFile(
-                Dependencies(false, modelClass.containingFile!!),
-                packageName,
-                "${dtoName}Doc",
-                "md"
-            )
+            val models: List<KSClassDeclaration> = OwleSymbolCollector.getModels()
+            val errors: List<KSClassDeclaration> = OwleSymbolCollector.getErrors()
 
-            file.bufferedWriter().use { writer ->
-                renderDtoDoc(dtoDoc, writer)
+            logger.warn("Preparing generate res: ${errors.size} errors")
+            ErrorResFileWriter(codeGenerator, logger).generate(errors)
+
+            KnowledgeBaseModelFileWriter(codeGenerator, logger).apply {
+                models.map {
+                    it to buildDtoDoc(it, errors)
+                }.forEach { (cd, doc) ->
+                    generate(cd, doc)
+                }
             }
+
+            hasGenerated = true
         }
 
         return emptyList()
     }
 
-    private fun buildDtoDoc(modelClass: KSClassDeclaration): DtoModelDoc {
+    private fun buildDtoDoc(
+        modelClass: KSClassDeclaration,
+        errors: List<KSClassDeclaration>
+    ): DtoModelDoc {
+
         val name = modelClass.simpleName.asString()
         val typeDoc = modelClass.docString?.trim() ?: "No type-level documentation."
         logger.info("$name has ${modelClass.getAllProperties().count()} properties")
@@ -63,59 +79,91 @@ class ModelSchemaProcessor(
             val type = prop.type.resolve().declaration.qualifiedName?.asString() ?: "Unknown"
             val doc = prop.docString?.trim() ?: "No documentation."
 
-            val constraints = prop.annotations.mapNotNull { annotation ->
-                val annDecl = annotation.annotationType.resolve().declaration as? KSClassDeclaration ?: return@mapNotNull null
-                val errorCode = annotation.arguments.firstOrNull { it.name?.asString() == "errorCode" }?.value as? String ?: return@mapNotNull null
-                val message = annotation.arguments.firstOrNull { it.name?.asString() == "message" }?.value as? String
+            val constraints = prop.annotations.toList().filterIsFieldConstraint().map { ann ->
 
-                val attrMap = annotation.arguments.associate { arg ->
-                    arg.name?.asString() to arg.value
-                }.filterKeys { it != "errorCode" && it != "message" }
+                val errorId = errors.findConstraintRaisedErrorId(ann)
+                val code: String = LocalizedStringResolver.resolve("$errorId.code")
+                val message: String = LocalizedStringResolver.resolve("$errorId.message")
 
                 OwleErrorDoc(
-                    errorCode = errorCode,
-                    message = message ?: "$propName violates $errorCode",
-                    attributes = emptyMap() //attrMap
+                    errorCode = code,
+                    message = message,
+                    attributes = ann.arguments.associate { (it.name?.asString() ?: "?") to it.value }
                 )
-            }
+            }.toList()
 
             ModelPropertyDoc(
                 name = propName,
                 type = type,
                 description = doc,
-                constraints = constraints.toList()
+                constraints = constraints
             )
+        }.toList()
+
+        logger.warn("Making DtoModelDoc! name: $name, typeDoc: $typeDoc")
+        for (property in properties) {
+            logger.warn("         property: ${property.name.toString()}")
         }
 
-        return DtoModelDoc(name, typeDoc, properties.toList())
+        return DtoModelDoc(name, typeDoc, properties)
     }
 
-    private fun renderDtoDoc(dto: DtoModelDoc, writer: Appendable) {
-        writer.appendLine("# ${dto.name}")
-        writer.appendLine("---")
-        writer.appendLine("> ${dto.description}")
-        writer.appendLine()
-        writer.appendLine("### Properties:")
-        writer.appendLine()
+//    private fun buildDtoDoc(
+//        modelClass: KSClassDeclaration,
+//        errors: List<KSClassDeclaration>
+//    ): DtoModelDoc {
+//
+//        val name = modelClass.simpleName.asString()
+//        val typeDoc = modelClass.docString?.trim() ?: "No type-level documentation."
+//
+//        val properties = modelClass.getAllProperties().map { prop ->
+//            val propName = prop.simpleName.asString()
+//            val type = prop.type.resolve().declaration.qualifiedName?.asString() ?: "Unknown"
+//            val doc = prop.docString?.trim() ?: "No documentation."
+//
+//            val propertyDocs: List<ModelPropertyDoc> = prop.annotations.mapNotNull { annotation ->
+//
+//                val errorType: KSType = annotation.arguments
+//                    .firstOrNull { it.name?.asString() == "error" }
+//                    ?.value as? KSType
+//                    ?: return@mapNotNull null
+//
+//                val constraints = prop.annotations.map { ann ->
+//
+//                    val constraintAnnoSimpleName = ann.annotationType.resolve().declaration.simpleName.asString()
+//
+//                    val raisedTypeSimpleName = ConstraintRegistry.getErrorQualifiedName(constraintAnnoSimpleName)
+//
+//                    val raisedErrorId = errors.firstOrNull {
+//                        it.simpleName.asString() == raisedTypeSimpleName
+//                    }?.annotations
+//                        ?.filter { it.isOwleError() }
+//                        ?.firstOrNull()
+//                        ?.get("id").toString()
+//
+//                    val code: String = LocalizedStringResolver.resolve("$raisedErrorId.code")
+//                    val message: String = LocalizedStringResolver.resolve("$raisedErrorId.message")
+//
+//                    OwleErrorDoc(
+//                        errorCode = code,
+//                        message = message,
+//                        attributes = ann.arguments.associate { (it.name?.asString() ?: "?") to it.value }
+//                    )
+//                }.toList()
+//
+//                ModelPropertyDoc(
+//                    name = propName,
+//                    type = type,
+//                    description = doc,
+//                    constraints = constraints
+//                )
+//
+//            }.toList()
+//
+//        }
+//
+//    }
 
-        for (prop in dto.properties) {
-            writer.appendLine("- #### **${prop.name}**: `${prop.type}`")
-            writer.appendLine("\t${prop.description}")
-
-            if (prop.constraints.isNotEmpty()) {
-                writer.appendLine("\t- constraints:")
-                for (constraint in prop.constraints) {
-                    writer.appendLine("\t\t- `${constraint.errorCode}`:")
-                    writer.appendLine("\t\t\t${constraint.message}")
-                    for ((key, value) in constraint.attributes) {
-                        writer.appendLine("\t\t\t- $key: $value")
-                    }
-                }
-            }
-
-            writer.appendLine()
-        }
-    }
 }
 
 class ModelSchemaProcessorProvider : SymbolProcessorProvider {

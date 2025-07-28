@@ -1,6 +1,6 @@
 package com.wini.owle.services.environs
 
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.entity.environs.ToolPyPackDepEntity
 import com.wini.owle.mapper.environs.ToolPackageDependencyMapper
 import com.wini.owle.repo.ToolPackageDependencyIdFactory
@@ -13,7 +13,7 @@ class ToolPackageDependencyService(
     repository: ToolPackageDependencyRepository,
     mapper: ToolPackageDependencyMapper,
     entityIdFactory: ToolPackageDependencyIdFactory
-): BaseServiceImpl<CompositeID, ToolPyPackDep, ToolPyPackDepEntity>(
+): BaseServiceImpl<CompositeID, ToolPyPackDependency, ToolPyPackDepEntity>(
     repository = repository,
     mapper = mapper,
     entityIdFactory = entityIdFactory

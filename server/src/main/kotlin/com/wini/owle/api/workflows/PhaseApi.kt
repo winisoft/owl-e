@@ -7,7 +7,8 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import com.wini.owle.api.OwleApiCall
 import com.wini.owle.validators.DtoValidator
-
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 
 class PhaseApi(
     dll: DLL<Long, Phase>,
@@ -16,33 +17,33 @@ class PhaseApi(
     dll = dll,
     serializer = Phase.serializer(),
     validator = validator
-) {
+), IPhaseApi {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/phase") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/phase/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/phase") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/phase/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/phase") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/phase/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/phase/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
             }
             delete("/api/phase/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

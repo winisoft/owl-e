@@ -9,8 +9,8 @@ import com.wini.owle.dto.typing.*
 import com.wini.owle.dto.user.*
 import com.wini.owle.dto.workflows.*
 import com.wini.owle.dto.environs.PyPackageRepo
-import com.wini.owle.dto.environs.ToolPyPackDep
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.environs.ToolPyPackDependency
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.runs.step.StepRunLogLine
 import com.wini.owle.dto.runs.test.*
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
@@ -83,10 +83,10 @@ object Server {
                 get<LongIdEndpointImpl<PyPackageRepo>>().register(this@routing)
                 get<LongIdEndpointImpl<PyPackage>>().register(this@routing)
                 get<LongIdEndpointImpl<VersionSpec>>().register(this@routing)
-                get<CompositeIdEndpointImpl<ToolPyPackDep>>().register(this@routing)
+                get<CompositeIdEndpointImpl<ToolPyPackDependency>>().register(this@routing)
                 get<LongIdEndpointImpl<BenchmarkReport>>().register(this@routing)
                 get<LongIdEndpointImpl<StepRunLogLine>>().register(this@routing)
-                get<LongIdEndpointImpl<StepExecution>>().register(this@routing)
+                get<LongIdEndpointImpl<StepRun>>().register(this@routing)
                 get<LongIdEndpointImpl<TestCase>>().register(this@routing)
                 get<LongIdEndpointImpl<TestExpectation>>().register(this@routing)
                 get<LongIdEndpointImpl<TestInput>>().register(this@routing)

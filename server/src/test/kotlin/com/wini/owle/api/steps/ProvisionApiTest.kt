@@ -2,11 +2,10 @@ package com.wini.owle.api.steps
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.steps.Provision
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class ProvisionApiTest : BaseLongPkApiTest<Provision, ProvisionApi>() {
@@ -23,7 +22,7 @@ open class ProvisionApiTest : BaseLongPkApiTest<Provision, ProvisionApi>() {
 
     override fun getApiInstance(
         dll: DLL<Long, Provision>,
-        validator: BaseValidator<Provision>
+        validator: DtoValidator<Provision>
     ): ProvisionApi = ProvisionApi(dll, validator)
 
 }

@@ -8,7 +8,8 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.api.OwleApiCall
 
 import com.wini.owle.validators.DtoValidator
-
+import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 
 class TypeVarianceApi(
     dll: DLL<Long, TypeVariance>,
@@ -17,33 +18,33 @@ class TypeVarianceApi(
     dll = dll,
     serializer = TypeVariance.serializer(),
     validator = validator
-) {
+), ITypeVarianceApi {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/type-variance") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/type-variance/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/type-variance") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/type-variance/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/type-variance") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/type-variance/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/type-variance/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
+                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
             }
             delete("/api/type-variance/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

@@ -2,11 +2,10 @@ package com.wini.owle.api.user
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.user.PaymentMethod
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class PaymentMethodEntityApiTest : BaseLongPkApiTest<PaymentMethod, PaymentMethodApi>() {
@@ -22,6 +21,6 @@ open class PaymentMethodEntityApiTest : BaseLongPkApiTest<PaymentMethod, Payment
 
     override fun getApiInstance(
         dll: DLL<Long, PaymentMethod>,
-        validator: BaseValidator<PaymentMethod>
+        validator: DtoValidator<PaymentMethod>
     ): PaymentMethodApi = PaymentMethodApi(dll, validator)
 }

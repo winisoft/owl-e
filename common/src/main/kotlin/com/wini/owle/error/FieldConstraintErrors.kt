@@ -1,21 +1,77 @@
 package com.wini.owle.error
 
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.workflows.Step
+import com.wini.owle.dto.workflows.Workflow
+import com.wini.owle.schema.error.OwleDocsError
 import com.wini.owle.mapper.DateTimeConverter
 import kotlinx.serialization.Serializable
 import java.net.URL
 import kotlin.reflect.KProperty1
 
-
-interface Constraint {
-    val isInvalid: Boolean
+/**
+ * Errors that are raised when the validation process for some data object has failed.
+ */
+@Serializable
+sealed class ConstraintError: OwleError {
+    abstract val isInvalid: Boolean
 }
 
+/** Fails if the value of the constrained property is less than the provided minimum. */
+@OwleDocsError("error.constraint.positiveValueLongError")
 @Serializable
-sealed class FieldConstraintError: OwleError, Constraint {
-    abstract override val errorCode: String
-    abstract override val message: String
-    abstract override val detail: String?
+data class PositiveValueLongError<T : BaseDto>(
+    val constrainedField: KProperty1<T, Long>,
+    val receiver: T
+) : ConstraintError() {
+    private val value: Long get() = constrainedField.get(receiver)
+    override val isInvalid: Boolean get() = value >= 0
+    override val detail: String get() = "${receiver.idText}::${constrainedField.name}: min=0, actual=$value"
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
+}
+
+
+/** Fails if the value of the constrained property is less than the provided minimum. */
+@OwleDocsError("error.constraint.positiveValueIntError")
+@Serializable
+data class PositiveValueIntError<T : BaseDto>(
+    val constrainedField: KProperty1<T, Int>,
+    val receiver: T
+) : ConstraintError() {
+    private val value: Int get() = constrainedField.get(receiver)
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val isInvalid: Boolean get() = value >= 0
+    override val detail: String get() = "${receiver.idText}::${constrainedField.name}: min=0, actual=$value"
+}
+
+/** Fails if the value of the constrained property is less than the provided minimum. */
+@OwleDocsError("error.constraint.stringNotEmptyError")
+@Serializable
+data class StringNotEmptyError<T : BaseDto>(
+    val constrainedField: KProperty1<T, String>,
+    val receiver: T
+) : ConstraintError() {
+    private val value: String get() = constrainedField.get(receiver)
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val isInvalid: Boolean get() = value.isEmpty()
+    override val detail: String get() = "${receiver.idText}::${constrainedField.name}: min=0, actual=$value"
+}
+
+/** Fails if the string is blank (contains only whitespace). */
+@OwleDocsError("error.constraint.stringNotBlankError")
+@Serializable
+data class StringNotBlankError<T : BaseDto>(
+    val constrainedField: KProperty1<T, String?>,
+    val receiver: T
+) : ConstraintError() {
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val detail: String get() = "${receiver.idText}::${constrainedField.name}"
+    private val value: String? get() = constrainedField.get(receiver)
+    override val isInvalid: Boolean get() = value?.isBlank() ?: false
 }
 
 
@@ -23,6 +79,7 @@ sealed class FieldConstraintError: OwleError, Constraint {
  * Validates that all characters in the input string are from safe character ranges.
  * Intended to permit international language input, but disallow invisible or spoof-prone symbols.
  */
+@OwleDocsError("error.constraint.stringSafeCharsError")
 @Serializable
 data class StringContainsRestrictedChars<T : BaseDto>(
     private val constrainedField: KProperty1<T, String?>,
@@ -33,9 +90,9 @@ data class StringContainsRestrictedChars<T : BaseDto>(
 
     override val isInvalid: Boolean get() = value?.any { !isAllowedChar(it) } == true
 
-    override val errorCode: String get() = ERROR_CODE
+    override val errorCode: String = errorResCode()
 
-    override val message: String get() = MESSAGE
+    override val message: String get() = errorResMsg()
 
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}"
 
@@ -51,13 +108,9 @@ data class StringContainsRestrictedChars<T : BaseDto>(
         val type = Character.getType(c)
         return type == Character.SURROGATE.toInt() || type == Character.OTHER_SYMBOL.toInt()
     }
-
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_RESTRICTED_CHARS"
-        const val MESSAGE: String = "must not contain restricted characters such as those that are invisible, prone to spoofing, or unsafe to display."
-    }
 }
 
+@OwleDocsError("error.constraint.mustContainOnlyNumerals")
 @Serializable
 data class MustContainOnlyNumerals<T: BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -66,17 +119,13 @@ data class MustContainOnlyNumerals<T: BaseDto>(
 
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value?.let { it.all { ch -> ch.isDigit() } } ?: false
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() =MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}=$value"
-
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_NUMERIC_ONLY"
-        const val MESSAGE: String = "must only contain numeric values."
-    }
 
 }
 
+@OwleDocsError("error.constraint.resetTokenCharsError")
 @Serializable
 data class InvalidResetToken<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -84,8 +133,8 @@ data class InvalidResetToken<T : BaseDto>(
 ) : FieldConstraintError() {
 
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}=$value"
     override val isInvalid: Boolean get() = value
         ?.let { !Regex(REGEX_PATTERN).matches(it) }
@@ -93,38 +142,36 @@ data class InvalidResetToken<T : BaseDto>(
 
     companion object {
         const val REGEX_PATTERN: String = "^[A-Za-z0-9_-]{32,}$"
-        const val ERROR_CODE: String = "TYPE_INVALID_RESET_TOKEN"
-        const val MESSAGE: String = "must hold a URL-safe string of sufficient length for use as a reset token."
     }
 
 }
 
+@OwleDocsError("error.constraint.invalidOAuthProvider")
 @Serializable
 data class InvalidOAuthProvider<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ) : FieldConstraintError() {
 
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}=$value"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value != null && value !in ALLOWED_PROVIDERS
 
     companion object {
         val ALLOWED_PROVIDERS = setOf("google", "github", "facebook", "apple")
-        const val ERROR_CODE: String = "TYPE_INVALID_OAUTH_PROVIDER"
-        const val MESSAGE: String = "must contain only one of the legal values representing an OAuth provider."
     }
 }
 
+@OwleDocsError("error.constraint.pythonVersionSegmentFormat")
 @Serializable
 data class PythonVersionSegmentFormat<T: BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
-): FieldConstraintError() {
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+): ConstraintError() {
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}"
     override val isInvalid: Boolean get() = if (value == null) false else !Regex(PY_VERSION_SEG_REGEX).matches(value!!)
     private val value: String? get() = constrainedField.get(receiver)
@@ -153,25 +200,23 @@ data class StringMustNotBeBlank<T : BaseDto>(
 }
 
 /** Fails if the result of the function exceeds the maximum allowed string length. */
+@OwleDocsError("error.constraint.stringLengthMustBeGt")
 @Serializable
 data class StringLengthMustBeGt<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T,
     val minLength: Int
-) : FieldConstraintError() {
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+) : ConstraintError() {
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}.length: expected>=$minLength, actual=${value?.length}"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value?.length?.let { it < minLength } ?: false
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_STR_LEN_BELOW_MIN"
-        const val MESSAGE: String = "must have length longer than the minimum required count of characters."
-    }
 }
 
 
 /** Fails if the string does not have exactly the required length. */
+@OwleDocsError("error.constraint.stringLengthExactError")
 @Serializable
 data class StringMustHaveExactRequiredLength<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -179,37 +224,61 @@ data class StringMustHaveExactRequiredLength<T : BaseDto>(
     val requirement: Int
 ) : FieldConstraintError() {
 
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: expected=$requirement, actual=${value?.length}"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value?.length?.let { it != requirement } ?: true
 
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_STR_LEN_EXACT"
-        const val MESSAGE: String = "must have a length equal to the required number of characters."
-    }
 }
 
 /** Fails if the result of the function exceeds the maximum allowed string length. */
+@OwleDocsError("error.constraint.stringMaxLengthError")
+@Serializable
+data class StringMaxLengthError<T : BaseDto>(
+    val constrainedField: KProperty1<T, String?>,
+    val receiver: T,
+    val maxLength: Int
+) : ConstraintError() {
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val detail: String get() = "${receiver.idText}::${constrainedField.name}: expected<=$maxLength, actual=${value?.length}"
+    override val isInvalid: Boolean get() = value?.length?.let { it > maxLength } ?: false
+    private val value: String? get() = constrainedField.get(receiver)
+}
+
+/** Fails if the result of the function exceeds the maximum allowed string length. */
+@OwleDocsError("error.constraint.stringLengthMustBeLt")
 @Serializable
 data class StringLengthMustBeLt<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T,
     val maxLength: Int
-) : FieldConstraintError() {
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+) : ConstraintError() {
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: expected<=$maxLength, actual=${value?.length}"
     override val isInvalid: Boolean get() = value?.length?.let { it > maxLength } ?: false
     private val value: String? get() = constrainedField.get(receiver)
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_STR_LEN_ABOVE_MAX"
-        const val MESSAGE: String = "must length less than the maximum permitted count of characters."
-    }
 }
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
+@OwleDocsError("error.constraint.intMustBeGtOrEqual")
+@Serializable
+data class IntMustBeGtOrEqual<T : BaseDto>(
+    val constrainedField: KProperty1<T, Int>,
+    val receiver: T,
+    val minValue: Int
+) : ConstraintError() {
+    private val value: Int get() = constrainedField.get(receiver)
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val isInvalid: Boolean get() = value < minValue
+    override val detail: String get() = "${receiver.idText}::${constrainedField.name}: min=$minValue, actual=$value"
+}
+
+/** Fails if the value of the constrained property is less than the provided minimum. */
+@OwleDocsError("error.constraint.intValueMustMeetMinimum")
 @Serializable
 data class IntValueMustMeetMinimum<T : BaseDto>(
     val constrainedField: KProperty1<T, Int>,
@@ -217,37 +286,29 @@ data class IntValueMustMeetMinimum<T : BaseDto>(
     val minValue: Int
 ) : FieldConstraintError() {
     private val value: Int get() = constrainedField.get(receiver)
-    override val errorCode: String = ERROR_CODE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val isInvalid: Boolean get() = value < minValue
-    override val message: String get() = MESSAGE
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: min=$minValue, actual=$value"
-
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_INT_BELOW_MIN"
-        const val MESSAGE: String = "must have a value greater than or equal to the minimum permitted value"
-    }
 }
 
 /** Fails if the value is less than `minValue`. */
+@OwleDocsError("error.constraint.longValueMustMeetMinimum")
 @Serializable
 data class LongValueMustMeetMinimum<T : BaseDto>(
     val constrainedField: KProperty1<T, Long>,
     val receiver: T,
     val minValue: Long
-) : FieldConstraintError() {
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+) : ConstraintError() {
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: expected>=$minValue, actual=$value"
     override val isInvalid: Boolean get() = value < minValue
     private val value: Long get() = constrainedField.get(receiver)
-
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_LONG_BELOW_MIN"
-        const val MESSAGE: String = "must have a value greater than or equal to the minimum required value."
-    }
 }
 
 /** Fails if value is outside the specified range. */
+@OwleDocsError("error.constraint.longValueOoB")
 @Serializable
 data class LongValueOoB<T : BaseDto>(
     val constrainedField: KProperty1<T, Long>,
@@ -256,14 +317,15 @@ data class LongValueOoB<T : BaseDto>(
     val maxValue: Long
 ) : FieldConstraintError() {
     private val value: Long get() = constrainedField.get(receiver)
-    override val errorCode: String = "TYPE_INVALID_LONG_OUTSIDE_RANGE"
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val isInvalid: Boolean get() = value < minValue || value >= maxValue
-    override val message: String get() = "Must be within $minValue (inclusive) and $maxValue (exclusive)."
     override val detail: String get() =
         "${receiver.idText}::${constrainedField.name}: expected=($minValue..$maxValue), actual=$value"
 }
 
 /** Fails if value is outside the specified double range. */
+@OwleDocsError("error.constraint.doubleValueRangeError")
 @Serializable
 data class DoubleValueOoB<T : BaseDto>(
     val constrainedField: KProperty1<T, Double>,
@@ -272,37 +334,31 @@ data class DoubleValueOoB<T : BaseDto>(
     val maxValue: Double
 ) : FieldConstraintError() {
 
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: expected=($minValue..$maxValue), actual=$value"
     override val isInvalid: Boolean get() = value < minValue || value >= maxValue
     private val value: Double get() = constrainedField.get(receiver)
 
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_DOUBLE_OUTSIDE_RANGE"
-        const val MESSAGE: String = "must have a value that falls between the minimum and maximum permissible values."
-    }
 }
 
 /** Fails if list is empty. */
+@OwleDocsError("error.constraint.listMustNotBeEmpty")
 @Serializable
 data class ListMustNotBeEmpty<T : BaseDto>(
     val constrainedField: KProperty1<T, List<*>>,
     val receiver: T
 ) : FieldConstraintError() {
 
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}"
     override val isInvalid: Boolean get() = constrainedField.get(receiver).isEmpty()
 
-    companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_LIST_EMPTY"
-        const val MESSAGE: String = "Must not be an empty list."
-    }
 }
 
 /** Fails if value is not a valid email address. */
+@OwleDocsError("error.constraint.validEmailFormatError")
 @Serializable
 data class InvalidEmailFormat<T : BaseDto>(
     val constrainedField: KProperty1<T, String>,
@@ -310,8 +366,8 @@ data class InvalidEmailFormat<T : BaseDto>(
 ) : FieldConstraintError() {
 
     private val value: String get() = constrainedField.get(receiver)
-    override val errorCode: String = ERROR_CODE
-    override val message: String get() = MESSAGE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val isInvalid: Boolean get() = !Regex(VALID_EMAIL_REGEX).matches(value)
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}=$value"
 
@@ -324,61 +380,133 @@ data class InvalidEmailFormat<T : BaseDto>(
 }
 
 /** Fails if value is not a well-formed URL. */
+@OwleDocsError("error.constraint.invalidUrlFormatError")
 @Serializable
 data class InvalidUrlFormat<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ) : FieldConstraintError() {
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ERROR_CODE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val isInvalid: Boolean get() = runCatching { URL(value).toURI() }.isFailure
-    override val message: String get() = MESSAGE
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}=$value"
-
-    companion object {
-        const val ERROR_CODE = "TYPE_INVALID_STR_URL"
-        const val MESSAGE = "Must be a valid URL."
-    }
 }
 
+@OwleDocsError("error.constraint.timestampFormatError")
 @Serializable
 data class TimestampFormatMustMatchIso8601<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ) : FieldConstraintError() {
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ERROR_CODE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val isInvalid: Boolean
         get() = value?.let { !Regex(ISO_8601_UTC_REGEX).matches(it) } ?: false
-    override val message: String get() = MESSAGE
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: value='$value'"
 
     companion object {
         const val ISO_8601_UTC_REGEX = """^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$"""
-        const val ERROR_CODE: String = "TYPE_INVALID_TIMESTAMP_FORMAT"
-        const val MESSAGE: String = "must comply with the ISO 8601 specification format (UTC, with Z)."
     }
 }
 
 
+@OwleDocsError("error.constraint.incoherentInstantError")
 @Serializable
 data class TimestampMustBeChronologicallyCoherent<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ) : FieldConstraintError() {
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ERROR_CODE
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
     override val isInvalid: Boolean
         get() = value?.let { DateTimeConverter.isChronologicallyCoherent(it) } ?: true
-    override val message: String get() = MESSAGE
     override val detail: String get() = "${receiver.idText}::${constrainedField.name}: value='$value'"
+}
+
+/** Fails if both workflow and step are null. */
+@Serializable
+data class TestCaseSubject<T : BaseDto>(
+    val workflow: KProperty1<T, Workflow?>,
+    val step: KProperty1<T, Step?>,
+    val receiver: T
+) : ConstraintError() {
+
+    override val errorCode: String = ERROR_CODE
+    override val message: String get() = MESSAGE
+
+    private val workflowValue: Workflow? = workflow.get(receiver)
+    private val stepValue: Step? = step.get(receiver)
+
+    override val isInvalid: Boolean get() = workflowValue == null && stepValue == null
+    override val detail: String get() = if (workflowValue == null) "workflow was null." else "step was null"
 
     companion object {
-        const val ERROR_CODE: String = "TYPE_INVALID_TIMESTAMP_VALUE"
-        const val MESSAGE: String = "must represent a real point in time."
+        const val ERROR_CODE: String = "TYPE_INVALID_TEST_CASE_FOCUS"
+        const val MESSAGE: String = "TestCase must specify either a workflow or step subject."
     }
 
 }
 
+/** Fails if all version constraint values are null. */
+@OwleDocsError("error.constraint.versionSpecUndefined")
+@Serializable
+data class VersionSpecUndefined<T : BaseDto>(
+    val versionMinField: KProperty1<T, String?>,
+    val versionMaxField: KProperty1<T, String?>,
+    val versionExactField: KProperty1<T, String?>,
+    val receiver: T
+) : ConstraintError() {
+
+    private val versionMinValue: String? get() = versionMinField.get(receiver)
+    private val versionMaxValue: String? get() = versionMinField.get(receiver)
+    private val versionExactValue: String? get() = versionMinField.get(receiver)
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val detail: String get() = receiver.idText
+    override val isInvalid: Boolean get() = versionMinValue == null && versionMaxValue == null && versionExactValue == null
+
+}
+
+/** Fails if `completedAt` exists and is before `startedAt`. */
+@Serializable
+@OwleDocsError("error.constraint.preventsTimeParadoxes")
+data class PreventsTimeParadoxes<T : BaseDto>(
+    val happensFirstField: KProperty1<T, String>,
+    val happensSecondField: KProperty1<T, String?>,
+    val receiver: T
+) : ConstraintError() {
+
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+    override val detail: String get() = "${receiver.idText}::${happensFirstField.name}=$beforeTimestamp,::${happensSecondField.name}=${afterTimestamp}"
+
+    private val beforeTimestamp: String get() = happensFirstField.get(receiver)
+    private val afterTimestamp: String? get() = happensSecondField.get(receiver)
+
+    override val isInvalid: Boolean
+        get() = afterTimestamp?.let {
+            DateTimeConverter.fromString(it) < DateTimeConverter.fromString(beforeTimestamp)
+        } ?: false
+
+}
+
+@Serializable
+@OwleDocsError("error.constraint.inconsistentOAuthId")
+data class InconsistentOAuthId<T : BaseDto>(
+    val providerField: KProperty1<T, String?>,
+    val idField: KProperty1<T, String?>,
+    val receiver: T,
+) : ConstraintError() {
+
+    override val errorCode: String = errorResCode()
+    override val message: String get() = errorResMsg()
+
+    override val detail: String get() = "${receiver.idText}::${providerField.name}=$provider, ${idField.name}=$id"
+    override val isInvalid: Boolean
+        get() = (provider == null && id == null) || (id != null && provider == null)
 
 
+}

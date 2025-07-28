@@ -1,15 +1,15 @@
 package com.wini.owle.entity.composteid
 
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.entity.ToolPackageDependencies
 import org.jetbrains.exposed.dao.id.CompositeID
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 
 
-object ToolPackageDepIdFactory : CompositeIdFactoryImpl<ToolPyPackDep>() {
+object ToolPackageDepIdFactory : CompositeIdFactoryImpl<ToolPyPackDependency>() {
 
-    override fun fromDtoInstance(dto: ToolPyPackDep): CompositeID {
+    override fun fromDtoInstance(dto: ToolPyPackDependency): CompositeID {
         return CompositeID {
             it[ToolPackageDependencies.tool] = dto.packageId
             it[ToolPackageDependencies.packageEntity] = dto.packageId

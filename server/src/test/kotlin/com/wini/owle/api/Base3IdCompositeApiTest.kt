@@ -6,7 +6,7 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import com.wini.owle.error.NoSuchIdError
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -44,7 +44,7 @@ abstract class Base3IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
     abstract fun getDto(id1: Long, id2: Long, id3: Long): T
     abstract fun getApiInstance(
         dll: DLL<CompositeID, T>,
-        validator: BaseValidator<T>,
+        validator: DtoValidator<T>,
         compositeIdFactory: CompositeIdFactory<T>
     ): R
     abstract fun compositeId1(): CompositeID
@@ -54,7 +54,7 @@ abstract class Base3IdCompositeApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTe
 
     protected fun setupTestApp(
         dll: DLL<CompositeID, T>,
-        validator: BaseValidator<T> = BaseValidator.alwaysValid(),
+        validator: DtoValidator<T> = DtoValidator.alwaysValid(),
         compositeIdFactory: CompositeIdFactory<T>,
         testBlock: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {

@@ -7,8 +7,19 @@ plugins {
 group = "com.wini.owle"
 version = "unspecified"
 
-repositories {
-    mavenCentral()
+sourceSets.main {
+
+    kotlin.srcDir("build/generated/ksp/main/kotlin")
+    resources.srcDir("build/generated/ksp/main/resources")
+
+    dependencies {
+        implementation(projects.typeSchema)
+        ksp(projects.typeSchema)
+        implementation(libs.koin.core)
+        implementation(libs.kotlinx.serialization.json)
+        implementation(libs.kotlinx.datetime)
+        implementation(kotlin("stdlib"))
+    }
 }
 
 dependencies {
@@ -24,4 +35,12 @@ tasks.test {
 
 kotlin {
     jvmToolchain(17)
+}
+
+tasks.withType<Copy>().all {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType<Jar>().all {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

@@ -1,48 +1,53 @@
 package com.wini.owle.error
 
+import com.wini.owle.schema.error.OwleDocsError
 import kotlinx.serialization.Serializable
 
 sealed class ApiRequestError: OwleError
 
-
+@OwleDocsError("errors.apiRequest.requestBodyMalformed")
 @Serializable
 data object RequestBodyMalformed : ApiRequestError() {
-    override val errorCode: String get() = "MALFORMED_REQUEST_BODY"
-    override val message: String get() = "Request body is missing or not readable as JSON"
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String? get() = null
 }
 
+@OwleDocsError("errors.apiRequest.multipleTypeValidations")
 @Serializable
 data class MultipleTypeValidations(
     val violations: List<FieldConstraintError>
 ): ApiRequestError() {
-    override val errorCode: String get() = "TYPE_INVALID"
-    override val message: String get() = "One or more of the constraints on valid type definitions was violated."
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String? get() = null
 }
 
+@OwleDocsError("errors.apiRequest.multipleParamFailure")
 @Serializable
 data class MultipleParamFailure(
     val failed: List<OwleError>
 ) : ApiRequestError() {
-    override val errorCode: String get() = "MULTI_PARAM_FAILURE"
-    override val message: String get() = "The required values were not provided in valid format."
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String? get() = null
 }
 
+@OwleDocsError("errors.apiRequest.missingParameter")
 @Serializable
 data class MissingParameter(
     val paramKey: String
 ) : ApiRequestError() {
-    override val errorCode = "MISSING_PARAM_VALUE"
-    override val message = "Missing required parameter"
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail = "'$paramKey' was not provided"
 }
 
+@OwleDocsError("errors.apiRequest.authorizationError")
 @Serializable
 data object AuthorizationError : ApiRequestError() {
-    override val errorCode = "AUTHORIZATION_ERROR"
-    override val message = "Authorization Error"
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail = null
 }
 
@@ -51,34 +56,41 @@ data object AuthorizationError : ApiRequestError() {
  * been referenced for selection or deletion did not exist. This indicates a disconnect between clients interacting
  * with the database and the application's efficacy representing the concurrent operations globally
  */
+@OwleDocsError("errors.apiRequest.noSuchIdError")
 @Serializable
 data object NoSuchIdError : ApiRequestError() {
-    override val errorCode = "NO_SUCH_ID"
-    override val message = "No such ID"
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail = null
 }
 
+/**
+ *
+ */
+@OwleDocsError("errors.apiRequest.batchOpOfNoDataObjects")
 @Serializable
-data object EmptyListNotAllowed : ApiRequestError() {
-    override val errorCode: String get() = "BODY_EMPTY_LIST"
-    override val message: String get() = "Request body contained no items"
+data object BatchOpOfNoDataObjects : ApiRequestError() {
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail: String? get() = null
 }
 
+@OwleDocsError("errors.apiRequest.authenticationError")
 @Serializable
 data object AuthenticationError : ApiRequestError() {
-    override val errorCode = "AUTHENTICATION_ERROR"
-    override val message = "Authentication Error"
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail = null
 }
 
 
+@OwleDocsError("errors.apiRequest.paramValueMalformedLong")
 @Serializable
 data class ParamValueMalformedLong(
     val paramKey: String,
     val formatDescr: String = "number"
 ) : ApiRequestError() {
-    override val errorCode = "MALFORMED_PARAM_VALUE"
-    override val message = "Parameter provided in an invalid format."
+    override val errorCode: String get() = errorResCode()
+    override val message: String get() = errorResMsg()
     override val detail = "'$paramKey' must be a valid whole number."
 }

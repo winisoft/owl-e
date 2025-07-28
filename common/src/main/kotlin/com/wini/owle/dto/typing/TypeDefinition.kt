@@ -1,13 +1,18 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.schema.StringMustNotContainRestricted
-import com.wini.owle.schema.LongValueMin
+import com.wini.owle.schema.error.PositiveValueLong
+import com.wini.owle.schema.error.StringSafeChars
 import com.wini.owle.schema.OwleModel
-import com.wini.owle.schema.StringLengthMax
-import com.wini.owle.schema.StringLengthMin
-import com.wini.owle.schema.StringMustNotBeBlank
+import com.wini.owle.schema.error.StringLengthMax
+import com.wini.owle.schema.error.StringNotBlank
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.environs.VersionSpec
+import com.wini.owle.error.PositiveValueLongError
+import com.wini.owle.error.StringMaxLengthError
+import com.wini.owle.error.StringNotBlankError
+import com.wini.owle.error.StringNotEmptyError
+import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.schema.error.StringNotEmpty
 import kotlinx.serialization.Serializable
 
 /**

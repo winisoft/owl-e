@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.runs
 
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.entity.runs.step.StepRunEntity
 import com.wini.owle.mapper.DaoFactory
 import com.wini.owle.mapper.DateTimeConverter
@@ -15,9 +15,9 @@ class StepExecutionsMapper(
     private val stepMapper: StepsMapper,
     private val executionStatusMapper: ExecutionStatusMapper,
     private val dateTimeConverter: DateTimeConverter
-): DbMapper<StepExecution, StepRunEntity>() {
+): DbMapper<StepRun, StepRunEntity>() {
 
-    override fun toEntity(dto: StepExecution): StepRunEntity {
+    override fun toEntity(dto: StepRun): StepRunEntity {
         val applyProps: StepRunEntity.() -> Unit = {
             workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
             step = stepMapper.toEntity(dto.step)
@@ -33,8 +33,8 @@ class StepExecutionsMapper(
                 ?: throw IllegalStateException("StepExecution with id=${dto.id} not found")
     }
 
-    override fun toDto(entity: StepRunEntity): StepExecution {
-        return StepExecution(
+    override fun toDto(entity: StepRunEntity): StepRun {
+        return StepRun(
             id = entity.id.value,
             workflowExecution = workflowExecutionsMapper.toDto(entity.workflowExecution),
             step = stepMapper.toDto(entity.step),

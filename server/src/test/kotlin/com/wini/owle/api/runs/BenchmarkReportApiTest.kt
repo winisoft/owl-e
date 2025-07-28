@@ -3,11 +3,10 @@ package com.wini.owle.api.runs
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.api.runs.test.BenchmarkReportApi
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.runs.test.BenchmarkReport
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class BenchmarkReportApiTest : BaseLongPkApiTest<BenchmarkReport, BenchmarkReportApi>() {
@@ -24,7 +23,7 @@ open class BenchmarkReportApiTest : BaseLongPkApiTest<BenchmarkReport, Benchmark
 
     override fun getApiInstance(
         dll: DLL<Long, BenchmarkReport>,
-        validator: BaseValidator<BenchmarkReport>
+        validator: DtoValidator<BenchmarkReport>
     ): BenchmarkReportApi = BenchmarkReportApi(dll, validator)
 
 }

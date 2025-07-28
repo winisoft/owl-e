@@ -1,6 +1,6 @@
 package com.wini.owle.api
 
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.validators.ValidationResult
 import com.wini.owle.error.FieldConstraintError.StringMustNotBeEmpty
@@ -16,7 +16,7 @@ object TestValidators {
      * 
      * @return A validator that always returns true
      */
-    fun <T : BaseDto> alwaysValid(): BaseValidator<T> = BaseValidator.alwaysValid()
+    fun <T : BaseDto> alwaysValid(): DtoValidator<T> = DtoValidator.alwaysValid()
 
     /**
      * Creates a validator that returns the specified result.
@@ -26,7 +26,7 @@ object TestValidators {
      */
     fun <T : BaseDto> stringEmptyWithId1OnName(
         stringEmpty: StringMustNotBeEmpty = StringMustNotBeEmpty(TYPE_NAME, ID_STRING, FIELD_NAME)
-    ): BaseValidator<T> = object : BaseValidator<T> {
+    ): DtoValidator<T> = object : DtoValidator<T> {
         override fun validate(dto: T): ValidationResult = ValidationResult(
             listOf(
                 stringEmpty

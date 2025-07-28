@@ -3,14 +3,13 @@ package com.wini.owle.api.transforms
 import com.wini.owle.api.Base2IdCompositeApiTest
 import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.entity.TransformTargetTypes
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class TransformEntityTargetTypeApiTest : Base2IdCompositeApiTest<TransformTargetType, TransformTargetTypeApi>() {
@@ -42,7 +41,7 @@ open class TransformEntityTargetTypeApiTest : Base2IdCompositeApiTest<TransformT
 
     override fun getApiInstance(
         dll: DLL<CompositeID, TransformTargetType>,
-        validator: BaseValidator<TransformTargetType>,
+        validator: DtoValidator<TransformTargetType>,
         compositeIdFactory: CompositeIdFactory<TransformTargetType>
     ): TransformTargetTypeApi {
         return TransformTargetTypeApi(

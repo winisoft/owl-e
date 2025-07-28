@@ -2,7 +2,7 @@ package com.wini.owle.mapper.runs
 
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.entity.runs.enums.ExecutionStatusEntity
 import com.wini.owle.entity.runs.step.StepRunEntity
@@ -44,7 +44,7 @@ open class StepExecutionMapperTest {
         // Create test DTOs
         val workflowExecution = mockk<WorkflowExecution>()
         val step = mockk<Step>()
-        val dto = StepExecution(
+        val dto = StepRun(
             id = 99L,
             workflowExecution = workflowExecution,
             step = step,
@@ -117,7 +117,7 @@ open class StepExecutionMapperTest {
         val step = mockk<Step>()
         val statusDto = ExecutionStatus.Running
         
-        val dto = StepExecution(
+        val dto = StepRun(
             id = 42L,
             workflowExecution = workflowExecution,
             step = step,
@@ -166,7 +166,7 @@ open class StepExecutionMapperTest {
         val step = mockk<Step>()
         val statusDto = ExecutionStatus.Completed
         
-        val dto = StepExecution(
+        val dto = StepRun(
             id = 0L,
             workflowExecution = workflowExecution,
             step = step,

@@ -1,11 +1,10 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.Base3IdCompositeApiTest
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 import com.wini.owle.error.OwleError
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.entity.ToolPackageDependencies
 import com.wini.owle.entity.composteid.CompositeIdFactory
 import kotlinx.serialization.KSerializer
@@ -13,22 +12,22 @@ import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.dao.id.CompositeID
 
 
-open class ToolPyPackDepEntityApiTest : Base3IdCompositeApiTest<ToolPyPackDep, ToolPyPackDepApi>() {
+open class ToolPyPackDepEntityApiTest : Base3IdCompositeApiTest<ToolPyPackDependency, ToolPyPackDepApi>() {
 
     final override fun getDto(
         id1: Long,
         id2: Long,
         id3: Long
-    ): ToolPyPackDep = DtoTestInstanceFactory.toolPackageDependencyDto(
+    ): ToolPyPackDependency = DtoTestInstanceFactory.toolPackageDependencyDto(
         toolId = id1,
         packageId = id2,
         versionSpecId = id3
     )
 
     override fun getApiInstance(
-        dll: DLL<CompositeID, ToolPyPackDep>,
-        validator: BaseValidator<ToolPyPackDep>,
-        compositeIdFactory: CompositeIdFactory<ToolPyPackDep>
+        dll: DLL<CompositeID, ToolPyPackDependency>,
+        validator: DtoValidator<ToolPyPackDependency>,
+        compositeIdFactory: CompositeIdFactory<ToolPyPackDependency>
     ): ToolPyPackDepApi {
         return ToolPyPackDepApi(
             dll = dll,
@@ -88,9 +87,9 @@ open class ToolPyPackDepEntityApiTest : Base3IdCompositeApiTest<ToolPyPackDep, T
         get() = "$route/id?toolId=Text&packageId=0.0&versionSpecId=%20"
 
 
-    final override val serializer: KSerializer<ToolPyPackDep> = kotlinx.serialization.serializer()
+    final override val serializer: KSerializer<ToolPyPackDependency> = kotlinx.serialization.serializer()
 
-    override val listSerializer: KSerializer<List<ToolPyPackDep>> = ListSerializer(serializer)
+    override val listSerializer: KSerializer<List<ToolPyPackDependency>> = ListSerializer(serializer)
 
 
 }

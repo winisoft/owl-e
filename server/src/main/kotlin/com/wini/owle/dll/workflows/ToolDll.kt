@@ -5,6 +5,7 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.services.workflows.ToolService
 
+
 class ToolDll(
     private val service: ToolService
 ): DLL<Long, Tool> {

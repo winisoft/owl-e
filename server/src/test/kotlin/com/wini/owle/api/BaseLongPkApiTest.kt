@@ -5,7 +5,7 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.error.NoSuchIdError
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -31,12 +31,12 @@ abstract class BaseLongPkApiTest<T: BaseDto, R: RoutedApi>: BaseEndpointTest<Lon
     abstract fun getDto(id: Long): T
     abstract fun getApiInstance(
         dll: DLL<Long, T>,
-        validator: BaseValidator<T>
+        validator: DtoValidator<T>
     ): R
 
     protected fun setupTestApp(
         dll: DLL<Long, T>,
-        validator: BaseValidator<T> = BaseValidator.alwaysValid(),
+        validator: DtoValidator<T> = DtoValidator.alwaysValid(),
         testBlock: suspend ApplicationTestBuilder.() -> Unit
     ) = testApplication {
         application {

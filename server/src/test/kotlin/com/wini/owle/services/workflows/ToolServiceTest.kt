@@ -2,10 +2,9 @@ package com.wini.owle.services.workflows
 
 import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
-import com.wini.owle.dto.environs.ToolPyPackDep
+import com.wini.owle.dto.environs.ToolPyPackDependency
 import com.wini.owle.dto.typing.TypeDeclaration
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.entity.workflows.ToolEntity
 import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.workflows.ToolsMapper
@@ -34,7 +33,7 @@ open class ToolServiceTest {
         body: String = "a sample of code",
         returnTypeDeclaration: TypeDeclaration? = mockk(),
         steps: List<Step> = mockk(),
-        packageDependencies: List<ToolPyPackDep> = mockk()
+        packageDependencies: List<ToolPyPackDependency> = mockk()
     ): Tool {
         return Tool(
             id = id,

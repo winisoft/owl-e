@@ -4,9 +4,9 @@ import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.PyPackage
+import com.wini.owle.validators.DtoValidator
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
 
 
 open class PyPyPackageEntityApiTest : BaseLongPkApiTest<PyPackage, PyPackageApi>() {
@@ -23,7 +23,7 @@ open class PyPyPackageEntityApiTest : BaseLongPkApiTest<PyPackage, PyPackageApi>
     
     override fun getApiInstance(
         dll: DLL<Long, PyPackage>,
-        validator: BaseValidator<PyPackage>
+        validator: DtoValidator<PyPackage>
     ): PyPackageApi = PyPackageApi(dll, validator)
 
 }

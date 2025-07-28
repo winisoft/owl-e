@@ -4,7 +4,6 @@ import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.Phase
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.error.NoSuchIdError

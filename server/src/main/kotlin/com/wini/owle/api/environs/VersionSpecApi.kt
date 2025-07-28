@@ -1,6 +1,7 @@
 package com.wini.owle.api.environs
 
 import com.wini.owle.api.LongIdEndpointImpl
+import com.wini.owle.api.OwleApiCall
 import com.wini.owle.dto.environs.VersionSpec
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -16,33 +17,33 @@ class VersionSpecApi(
     dll = dll,
     serializer = VersionSpec.serializer(),
     validator = validator
-)  {
+), IVersionSpecApi  {
 
     override fun register(routing: Routing) {
         routing.apply {
             get("/api/version-spec") {
-                call.execute(OwleApiCall.GetMany)
+                getMany { call.execute(OwleApiCall.GetMany) }
             }
             get("/api/version-spec/{id}") {
-                call.execute(OwleApiCall.GetOne)
+                getOne { call.execute(OwleApiCall.GetOne) }
             }
             post("/api/version-spec") {
-                call.execute(OwleApiCall.CreateOne)
+                postMany { call.execute(OwleApiCall.CreateOne) }
             }
             post("/api/version-spec/batch") {
-                call.execute(OwleApiCall.CreateMany)
+                postMany { call.execute(OwleApiCall.CreateMany) }
             }
             put("/api/version-spec") {
-                call.execute(OwleApiCall.UpdateOne)
+                putOne { call.execute(OwleApiCall.UpdateOne) }
             }
             put("/api/version-spec/batch") {
-                call.execute(OwleApiCall.UpdateMany)
+                putMany { call.execute(OwleApiCall.UpdateMany) }
             }
             delete("/api/version-spec/{id}") {
-                call.execute(OwleApiCall.DeleteOne)
+                deleteOne { call.execute(OwleApiCall.DeleteOne) }
             }
             delete("/api/version-spec/batch") {
-                call.execute(OwleApiCall.DeleteMany)
+                deleteMany { call.execute(OwleApiCall.DeleteMany) }
             }
         }
     }

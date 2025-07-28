@@ -1,7 +1,6 @@
 package com.wini.owle.mapper.workflows
 
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.entity.workflows.ToolEntity

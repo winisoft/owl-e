@@ -3,7 +3,7 @@ package com.wini.owle.services.runs
 import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.enums.ExecutionStatus
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.entity.runs.step.StepRunEntity
@@ -34,8 +34,8 @@ open class StepExecutionServiceTest {
         startedAt: String = "2024-12-21T10:00:00Z",
         completedAt: String = "2024-12-21T10:00:00Z",
         status: ExecutionStatus = mockk()
-    ) : StepExecution {
-        return StepExecution(
+    ) : StepRun {
+        return StepRun(
             id = id,
             workflowExecution = workflowExecution,
             step = step,
@@ -65,7 +65,7 @@ open class StepExecutionServiceTest {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: StepExecution = mockk()
+        val dto: StepRun = mockk()
         val entity: StepRunEntity = mockk()
 
         every { mapper.toEntity(dto) } returns entity
@@ -88,7 +88,7 @@ open class StepExecutionServiceTest {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: StepExecution = mockk()
+        val dto: StepRun = mockk()
         val entity: StepRunEntity = mockk()
         val exception = RuntimeException("Database error")
 
@@ -112,7 +112,7 @@ open class StepExecutionServiceTest {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: StepExecution = createSampleDto()
+        val dto: StepRun = createSampleDto()
         val entityId: EntityID<Long> = mockk()
         val entity: StepRunEntity = mockk<StepRunEntity>() {
             every { id } returns mockk()
@@ -185,7 +185,7 @@ open class StepExecutionServiceTest {
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
         val emptyList = emptyList<StepRunEntity>()
-        val emptyDtoList = emptyList<StepExecution>()
+        val emptyDtoList = emptyList<StepRun>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -280,7 +280,7 @@ open class StepExecutionServiceTest {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<StepExecution>()
+        val emptyDtoList = emptyList<StepRun>()
         val emptyEntityList = emptyList<StepRunEntity>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList

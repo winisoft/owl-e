@@ -3,7 +3,7 @@ package com.wini.owle.services.runs
 import com.wini.owle.error.OwleError
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.runs.enums.ExecutionStatus
-import com.wini.owle.dto.runs.step.StepExecution
+import com.wini.owle.dto.runs.step.StepRun
 import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.Workflow
@@ -35,7 +35,7 @@ open class WorkflowExecutionServiceTest {
         startedAt: String = "2024-12-21T10:00:00Z",
         completedAt: String = "2024-12-21T10:00:00Z",
         status: ExecutionStatus = mockk(),
-        stepExecutions: List<StepExecution> = mockk()
+        stepRuns: List<StepRun> = mockk()
     ) : WorkflowExecution {
         return WorkflowExecution(
             id = id,
@@ -44,7 +44,7 @@ open class WorkflowExecutionServiceTest {
             startedAt = startedAt,
             completedAt = completedAt,
             status = status,
-            stepExecutions = stepExecutions
+            stepRuns = stepRuns
         )
     }
 

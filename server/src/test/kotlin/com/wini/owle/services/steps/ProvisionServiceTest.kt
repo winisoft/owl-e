@@ -5,7 +5,7 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.steps.Provision
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.dto.workflows.ToolParam
+import com.wini.owle.dto.steps.ToolParam
 import com.wini.owle.entity.steps.ToolParamDataPointEntity
 import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.steps.ProvisionsMapper

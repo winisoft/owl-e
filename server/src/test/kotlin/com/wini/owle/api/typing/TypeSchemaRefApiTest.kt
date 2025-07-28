@@ -2,11 +2,10 @@ package com.wini.owle.api.typing
 
 import com.wini.owle.api.BaseLongPkApiTest
 import com.wini.owle.dll.DLL
-import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.typing.TypeSchemaRef
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import com.wini.owle.validators.BaseValidator
+import com.wini.owle.validators.DtoValidator
 
 
 open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRef, TypeSchemaRefApi>() {
@@ -23,7 +22,7 @@ open class TypeSchemaRefApiTest : BaseLongPkApiTest<TypeSchemaRef, TypeSchemaRef
 
     override fun getApiInstance(
         dll: DLL<Long, TypeSchemaRef>,
-        validator: BaseValidator<TypeSchemaRef>
+        validator: DtoValidator<TypeSchemaRef>
     ): TypeSchemaRefApi = TypeSchemaRefApi(dll, validator)
 
 }
