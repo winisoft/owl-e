@@ -8,6 +8,8 @@ name: Claude Assistant
 # 🚀 Good for: customizable assistant that responds to GitHub events with smart context awareness
 
 on:
+  push:
+    branches: [ main ]
   issue_comment:
     types: [created]
   pull_request_review_comment:
