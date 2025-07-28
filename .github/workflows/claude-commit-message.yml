@@ -12,7 +12,8 @@ name: Claude Commit Message Generator
 
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: write
