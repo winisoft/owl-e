@@ -38,6 +38,7 @@ jobs:
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.CLAUDE_ACTIONS_GIT_PAT }}
           direct_prompt: |
             First, a crash course on the project in question:
             ```md
