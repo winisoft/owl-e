@@ -106,7 +106,9 @@ docker network owle-run-{id}   (internal: true — no route to anywhere)
 
 An **access point** names an external dependency of a workflow (per workflow, user-authored during design): "Google Location API", "our Postgres", "Anthropic API". Stubs give it behavior; a stub set is either the AP's **default** or bound to a **test case**.
 
-Proposed DDL (house style; FKs elided for brevity):
+> **Authoritative, expanded schema: [SIMULATION-MODEL.md](SIMULATION-MODEL.md).** That doc supersedes the sketch below — notably, response variants bind to a **`SimulationProfile`** (a named reality), not directly to `test_case_id`, so a variant is defined once and *selected* per run/test rather than duplicated.
+
+Sketch DDL (house style; FKs elided for brevity):
 
 ```sql
 CREATE TABLE `access_points` (
@@ -115,7 +117,7 @@ CREATE TABLE `access_points` (
   `name` varchar(255) NOT NULL,
   `description` varchar(8192) DEFAULT NULL,
   `scheme` enum('https','http') NOT NULL DEFAULT 'https',
-  PRIMARY KEY (`id`)
+  `openapi_spec` longtext DEFAULT NULL,          -- optional import provenance; scaffolds routes/stubs  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `access_point_hosts` (          -- an AP can front several hostnames
@@ -128,6 +130,7 @@ CREATE TABLE `access_point_stubs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `access_point_id` bigint unsigned NOT NULL,
   `test_case_id` bigint unsigned DEFAULT NULL,   -- NULL ⇒ default stub set
+  `name` varchar(255) DEFAULT NULL,              -- human-named variant: "Success", "Time Out"…  `state_key` varchar(255) DEFAULT NULL,         -- matches only when this named scenario state is set (§9a)
   `match_order` int unsigned NOT NULL,
   `method` enum('GET','POST','PUT','PATCH','DELETE','ANY') NOT NULL DEFAULT 'ANY',
   `path_pattern` varchar(1024) NOT NULL,         -- /geocode/json, /v1/messages, /users/{id}
@@ -219,6 +222,10 @@ CREATE TABLE `environment_images` (
 
 The generated `/app` is bind-mounted (or layered as a final COPY) so tool-body edits don't invalidate the dependency image.
 
+## 9a. Scenario state — "first call returns A; after step 1234, B"
+
+Stubs may carry a `state_key`. The gateway keeps a tiny named-state set and exposes a **loopback-only control endpoint**; the orchestrator advances state on runner events ("`step_completed` 1234 ⇒ set `post_1234`"). Matching then prefers stubs whose `state_key` is currently set (unset-key stubs are the default reality). State transitions are recorded alongside `network_events` so the audit shows *which reality* served every request. Call-count cases keep using `sequence_position`; the two compose. This is the workflow-progress-keyed statefulness no off-the-shelf tool ships (WireMock's externally-advanceable "scenarios" prove the mechanism; keying to step completion is the Owl-E part) — see [SIMULATION-MODEL.md](SIMULATION-MODEL.md) §4.
+
 ## 9. Junctions & the AI executor
 
 **Junctions.** The runner exits with `/out/junction.json` (`junction_id`, injected values per `data_point_injections`, transform kind `inject` applied). The orchestrator then provisions the *target* workflow's own image + gateway + fixtures and starts it with those data points pre-seeded — literally "starting all over by setting up a new environment, having lifted one or more of the values" (post-write state, per the REPO-STATE §3 persistence rule; a data point not mapped in `data_point_injections` simply isn't lifted). Guardrails: max-hop budget per run, cycle detection across the junction chain, one `workflow_executions` row per hop linked into a chain (add `parent_execution_id` when this lands).
@@ -231,6 +238,7 @@ The generated `/app` is bind-mounted (or layered as a final COPY) so tool-body e
 - **Resolver/installer: uv** (`uv pip compile` / `uv pip sync`) — deterministic hash-pinned locks, fast enough to keep builds interactive. Fallback: pip-tools.
 - **Docker control: shell out to the docker CLI** from Kotlin (`ProcessBuilder`) for M1–M2 — trivial, debuggable, Windows-friendly. Graduate to docker-java when the orchestrator needs event streams. Testcontainers stays in its lane: the *server's own* integration tests (e.g., MySQL), not workflow execution.
 - **DNS: dnsmasq** with `address=/#/<gateway-ip>` (wildcard-answer everything).
+- **Authoring/control plane:** the simulation model (`SimulationProfile` → `AccessPoint` → `Route` → `ResponseVariant`) is authored through Owl-E's own client; a headless gateway consumes the compiled fixture set — there is no live UI in the run path. The model, its matching algorithm, OpenAPI import, and the variant-flipping authoring pattern are specified in [SIMULATION-MODEL.md](SIMULATION-MODEL.md).
 
 ## 11. Delivery plan
 
@@ -239,7 +247,7 @@ Bias: something real running end-to-end before any of the fancy parts.
 - **M0 — hygiene (hours).** Commit the composeApp restoration; delete `docs/composeApp/` (Wini); `.gitignore` `result.*`; decide the §3 write-suppression semantics (REPO-STATE §3 open question); verify/fix the `CompleteExample` dangling type-node ref.
 - **M1 — generated runner, minimal sandbox (first real progress).** `ProgramGenerator` (Kotlin) for a single linear workflow: reads/writes, error watches, inquisitions, default routes — no junctions, no transforms beyond identity. Execute in stock `python:3.12-slim` with `--network none` (fixtures not needed yet: tool bodies for the demo avoid network). Golden-file tests against `CompleteExample`; JSONL ingestion into `workflow_executions`/`execution_logs`. **Demo:** canonical workflow runs, events queryable.
 - **M2 — sealed environment.** `environment_images` + uv pipeline + Dockerfile template; gateway container (dnsmasq + mitmproxy + addon); `network_events` ingestion + containment report v1. **Demo:** the fetch_json step really performs HTTP against a mocked "api.com" and the report shows CONTAINED; a deliberately rogue tool body (calls evil.example) shows DEVIATED.
-- **M3 — access points as product.** Authoring API/DTOs for APs + stubs; test-case stub binding; sequences, latency, faults; rehearse mode. **Demo:** the Google-Location-API scenario — fixture result set, workflow picks the record with properties X/Y/Z, test asserts the outcome.
+- **M3 — access points as product.** Authoring API/DTOs for APs + stubs; test-case stub binding; sequences, latency, faults; rehearse mode; **OpenAPI import** to scaffold an AP from a spec; **scenario state channel** (§9a) with matcher semantics per [SIMULATION-MODEL.md](SIMULATION-MODEL.md) §3. **Demo:** the Google-Location-API scenario — fixture result set, workflow picks the record with properties X/Y/Z, test asserts the outcome; plus a stateful demo — an artifact-availability poll loop flips from not-ready to ready on a step event.
 - **M4 — junctions & agents.** Junction handoff orchestration (`parent_execution_id` chain, hop budget); transforms stdlib in the runner; AI-executor step with recorded/replayed completions. **Demo:** two-workflow junction with injections, then an agentic step whose containment report is green.
 
 ## 12. Open questions for Wini
@@ -250,3 +258,4 @@ Bias: something real running end-to-end before any of the fancy parts.
 4. **Where do runs execute long-term** — always the local Docker daemon, or is a remote executor host in scope early? (M1–M3 assume local.)
 5. **`store_cap`** appears in prose (`Owl-E.md` §6.3) but not in the current `data_points` — is storage-capacity enforcement still wanted in the runner's datastore semantics?
 6. **Tool call-contract authority** — tools now have both `tool_params` rows and `signature_id → callable_signatures`/`callable_parameters`. Proposal: the generator trusts `callable_signatures` when present, and `tool_params` is the authoring-time input that produces/updates the signature. Needs a yes/no.
+7. ~~Where does the authoring UI live~~ — **decided 2026-08-10**: the source prototype is harvested (model + matcher → [SIMULATION-MODEL.md](SIMULATION-MODEL.md)) and retired to a local branch; its UI is not carried forward. What remains is the broader **client-framework** question — keep the existing Compose Multiplatform `composeApp`, or move the Owl-E client to React/TS (Wini leans React/TS; the server REST API backs either). Deferred, not blocking the containment work.
