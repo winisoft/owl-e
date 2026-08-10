@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Owl-E is a sophisticated workflow automation and agentic AI software platform designed to bridge the gap between practical automation needs and advanced AI safety considerations. The project is a multi-platform Kotlin application using Compose Multiplatform for the UI and Ktor for the backend, with several supporting Python utilities for data processing and type introspection.
 
+## Read First — Current State (updated 2026-08-10)
+
+- **[docs/REPO-STATE.md](docs/REPO-STATE.md)** — ground-truth inventory: what exists, what drifted, and the naming map between older prose docs and the actual schema. Read it before trusting anything below or in `docs/Owl-E.md`.
+- **[docs/EXECUTION-ENVIRONMENT.md](docs/EXECUTION-ENVIRONMENT.md)** — the active design focus: generated Python runner + containerized, mock-instrumented execution ("access points").
+- Schema truth is split: `docs/create.sql` (refreshed 2026-08-10) is the **final dump of the now-decommissioned MySQL database** (there is currently no live DB; row exports pending recovery), while the Exposed entity layer (`server/src/main/kotlin/com/wini/owle/entity/**`) is where the code is. They drifted in both directions — reconciliation table in [docs/REPO-STATE.md](docs/REPO-STATE.md) §2.
+- `docs/composeApp/` (if still present) is an accidental byte-identical copy of `composeApp/`; the tracked module was restored 2026-08-10 and the copy is safe to delete.
+
 ## Project Structure
 
 This is a Gradle multi-module project with the following key modules:
