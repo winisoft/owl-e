@@ -10,7 +10,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import kotlinx.serialization.Serializable
 
 

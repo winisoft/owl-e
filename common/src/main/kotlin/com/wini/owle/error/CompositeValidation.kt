@@ -18,11 +18,11 @@ package com.wini.owle.error
  * is during their inclusion in an ApiResponse among the ApiErrors reported; An attempt to access such properties
  * despite their absence appropriately raises this exception.
  */
-abstract class CompositeValidation : OwleError, FieldConstraintError() {
+abstract class CompositeValidation : OwleError, ConstraintError {
 
-    protected abstract val delegateValidations: List<FieldConstraintError>
+    protected abstract val delegateValidations: List<ConstraintError>
 
-    protected val firstFailure: FieldConstraintError? by lazy {
+    protected val firstFailure: ConstraintError? by lazy {
         delegateValidations.firstOrNull { it.isInvalid }
     }
 

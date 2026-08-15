@@ -3,7 +3,7 @@ package com.wini.owle.ksp.processor
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.KSName
-import com.wini.owle.ksp.doc.oas.ApiResponseDoc
+import com.wini.owle.content.oas.ApiResponseDoc
 import com.wini.owle.ksp.utils.ResponseBuilder
 import com.wini.owle.schema.wrapper.annotation.ApiOperationAnnotation
 import com.wini.owle.schema.wrapper.declaration.ApiEndpointDeclaration

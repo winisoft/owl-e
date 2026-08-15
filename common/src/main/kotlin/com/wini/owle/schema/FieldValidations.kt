@@ -88,62 +88,62 @@ annotation class PasswordSecurityPolicy
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringMustNotContainRestricted(
-    val errorCode: String = StringContainsRestrictedChars.ERROR_CODE,
-    val message: String = StringContainsRestrictedChars.MESSAGE
+    val errorCode: String = "", // StringContainsRestrictedChars.ERROR_CODE/,
+    val message: String = "" // StringContainsRestrictedChars.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ResetTokenCharsOnly(
-    val errorCode: String = InvalidResetToken.ERROR_CODE,
-    val message: String = InvalidResetToken.MESSAGE
+    val errorCode: String = "", //InvalidResetToken.ERROR_CODE,
+    val message: String = "" //InvalidResetToken.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringMustNotBeBlank(
-    val errorCode: String = StringMustNotBeBlank.ERROR_CODE,
-    val message: String = StringMustNotBeBlank.MESSAGE
+    val errorCode: String = "", //StringMustNotBeBlank.ERROR_CODE,
+    val message: String = "" //StringMustNotBeBlank.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringLengthMin(
     val minLength: Int,
-    val errorCode: String = StringLengthMustBeGt.ERROR_CODE,
-    val message: String = StringLengthMustBeGt.MESSAGE
+    val errorCode: String = "", //StringLengthMustBeGt.ERROR_CODE,
+    val message: String = "" //StringLengthMustBeGt.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringLengthMax(
     val maxLength: Int,
-    val errorCode: String = StringLengthMustBeLt.ERROR_CODE,
-    val message: String = StringLengthMustBeLt.MESSAGE
+    val errorCode: String = "", //StringLengthMustBeLt.ERROR_CODE,
+    val message: String = "" //StringLengthMustBeLt.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringLengthExact(
     val length: Int,
-    val errorCode: String = StringMustHaveExactRequiredLength.ERROR_CODE,
-    val message: String = StringMustHaveExactRequiredLength.MESSAGE
+    val errorCode: String = "", //StringMustHaveExactRequiredLength.ERROR_CODE,
+    val message: String = "" //StringMustHaveExactRequiredLength.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class IntValueMin(
     val minValue: Int,
-    val errorCode: String = IntValueMustMeetMinimum.ERROR_CODE,
-    val message: String = IntValueMustMeetMinimum.MESSAGE
+    val errorCode: String = "", //IntValueMustMeetMinimum.ERROR_CODE,
+    val message: String = "" //IntValueMustMeetMinimum.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class LongValueMin(
     val minValue: Long,
-    val errorCode: String = LongValueMustMeetMinimum.ERROR_CODE,
-    val message: String = LongValueMustMeetMinimum.MESSAGE,
+    val errorCode: String = "", //LongValueMustMeetMinimum.ERROR_CODE,
+    val message: String = "" //LongValueMustMeetMinimum.MESSAGE,
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -151,48 +151,48 @@ annotation class LongValueMin(
 annotation class DoubleMinAndMax(
     val minValue: Double,
     val maxValue: Double,
-    val errorCode: String = DoubleValueOoB.ERROR_CODE,
-    val message: String = DoubleValueOoB.MESSAGE
+    val errorCode: String = "", //DoubleValueOoB.ERROR_CODE,
+    val message: String = "" //DoubleValueOoB.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ListHasMembers(
-    val errorCode: String = ListMustNotBeEmpty.ERROR_CODE,
-    val message: String = ListMustNotBeEmpty.MESSAGE
+    val errorCode: String = "", //ListMustNotBeEmpty.ERROR_CODE,
+    val message: String = "" //ListMustNotBeEmpty.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class EmailTerms(
-    val errorCode: String = InvalidEmailFormat.ERROR_CODE,
-    val message: String = InvalidEmailFormat.MESSAGE
+    val errorCode: String = "", //InvalidEmailFormat.ERROR_CODE,
+    val message: String = "" //InvalidEmailFormat.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class InvalidUrl(
-    val errorCode: String = InvalidUrlFormat.ERROR_CODE,
-    val message: String = InvalidUrlFormat.MESSAGE
+    val errorCode: String = "", //InvalidUrlFormat.ERROR_CODE,
+    val message: String = "" //InvalidUrlFormat.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class TimestampIso8601Format(
-    val errorCode: String = TimestampFormatMustMatchIso8601.ERROR_CODE,
-    val message: String = TimestampFormatMustMatchIso8601.MESSAGE
+    val errorCode: String = "", //TimestampFormatMustMatchIso8601.ERROR_CODE,
+    val message: String = "" //TimestampFormatMustMatchIso8601.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class TimestampCoherent(
-    val errorCode: String = TimestampMustBeChronologicallyCoherent.ERROR_CODE,
-    val message: String = TimestampMustBeChronologicallyCoherent.MESSAGE
+    val errorCode: String = "", //TimestampMustBeChronologicallyCoherent.ERROR_CODE,
+    val message: String = "" //TimestampMustBeChronologicallyCoherent.MESSAGE
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NumeralsOnly(
-    val errorCode: String = MustContainOnlyNumerals.ERROR_CODE,
-    val message: String = MustContainOnlyNumerals.MESSAGE
+    val errorCode: String = "", //MustContainOnlyNumerals.ERROR_CODE,
+    val message: String = "" //MustContainOnlyNumerals.MESSAGE
 )

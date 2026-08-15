@@ -1,9 +1,8 @@
 package com.wini.owle.dto.environs.pkg
 
 import com.wini.owle.dto.CompositeDto
-import com.wini.owle.dto.ULongDto
-import com.wini.owle.dto.environs.enums.VersionOperator
-import com.wini.owle.dto.environs.enums.WildcardSegment
+import com.wini.owle.dto.environs.version.enums.VersionOperator
+import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.dto.environs.version.Version
 import com.wini.owle.schema.ModelDefinition
 import kotlinx.serialization.Serializable

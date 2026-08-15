@@ -10,7 +10,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
@@ -28,7 +28,7 @@ data class ToolParam(
     /**
      * Name of the parameter.
      */
-    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_127)
     val name: String,
 

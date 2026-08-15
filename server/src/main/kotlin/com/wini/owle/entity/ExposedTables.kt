@@ -1,33 +1,151 @@
 package com.wini.owle.entity
 
-import com.wini.owle.entity.environs.enums.PackageRepoTypeEntity
-import com.wini.owle.entity.runs.enums.ComparisonOperatorEntity
-import com.wini.owle.entity.runs.enums.ExecutionStatusEntity
-import com.wini.owle.entity.runs.enums.GenerationMethodEntity
-import com.wini.owle.entity.runs.enums.LogLevelEntity
-import com.wini.owle.entity.transforms.enums.TransformOccurrenceEntity
-import com.wini.owle.entity.typing.enums.VarianceCardinalityEntity
-import com.wini.owle.entity.user.enums.CardBrandEntity
-import com.wini.owle.entity.user.enums.SubscriptionStatusEntity
-import com.wini.owle.entity.workflows.enums.AuthorshipCreditEntity
-import com.wini.owle.entity.workflows.enums.CommercialUseEntity
-import com.wini.owle.entity.workflows.enums.ModificationTermsEntity
-import com.wini.owle.entity.workflows.enums.StoreMethodEntity
-import com.wini.owle.models.metadata.UserDesignedMetadata
+import com.wini.owle.dto.typing.enums.VarianceCardinality
+import com.wini.owle.dto.user.enums.UserStatus
+import com.wini.owle.dto.workflows.enums.StoreMethod
+import com.wini.owle.entity.runs.enums.ComparisonOperator
+import com.wini.owle.entity.runs.enums.GenerationMethod
+import com.wini.owle.entity.runs.enums.LogLevel
+import com.wini.owle.entity.transforms.Transforms
+import com.wini.owle.entity.user.enums.CardBrand
+import com.wini.owle.entity.workflows.enums.AuthorshipCredit
+import com.wini.owle.entity.workflows.enums.CommercialUse
+import com.wini.owle.entity.workflows.enums.ModificationTerms
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.dao.id.CompositeIdTable
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.json.json
-import org.jetbrains.exposed.sql.json.jsonb
-import org.jetbrains.exposed.sql.kotlin.datetime.CurrentTimestamp
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.datetime.CurrentTimestamp
+import org.jetbrains.exposed.v1.datetime.timestamp
+import org.jetbrains.exposed.v1.json.json
+import org.jetbrains.exposed.v1.json.jsonb
 
+object BenchmarkReports: LongIdTable("benchmark_reports") {
 
-object VersionSpecs : LongIdTable("version_specs") {
-    val versionMin = varchar("versionMin", 127).nullable()
-    val versionMax = varchar("versionMax", 127).nullable()
-    val versionExact = varchar("versionExact", 127).nullable()
+}
+
+object CallableOwners: LongIdTable("callable_owners") {
+
+}
+
+object CallableParameters: LongIdTable("callable_parameters") {
+
+}
+
+object CallableSignatures: LongIdTable("callable_signatures") {
+
+}
+
+object DataPointInjections: LongIdTable("data_point_injections") {
+
+}
+
+object TestCases : LongIdTable("test_cases") {
+    val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
+    val name = varchar("name", 255)
+    val description = text("description").nullable()
+    val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE).nullable()
+    val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE).nullable()
+}
+
+object TestInputs : LongIdTable("test_inputs") {
+    val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
+    val dataPointName = varchar("dataPointName", 255)
+    val value = text("value").nullable()
+    val generationMethod = enumerationByName("generationMethod", 20, GenerationMethod::class)
+}
+
+object TestExpectedOutcomes : LongIdTable("test_expected_outcomes") {
+    val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
+    val dataPointName = varchar("dataPointName", 255)
+    val expectedValue = text("expectedValue").nullable()
+    val comparisonOperator = enumerationByName("comparisonOperator", 20, ComparisonOperator::class)
+}
+
+object TestResults : LongIdTable("test_results") {
+    val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
+    val workflowExecution = reference("workflowExecutionId", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
+    val passed = bool("passed")
+    val executedAt = timestamp("executedAt").defaultExpression(CurrentTimestamp)
+}
+
+object DataPointWriteArgs: LongIdTable("data_point_write_args") {
+
+}
+
+object DataPointWrites: LongIdTable("data_point_writes") {
+
+}
+
+object DataPoints : LongIdTable("data_points") {
+    val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE)
+    val name = varchar("name", 255)
+    val presetValue = text("presetValue").nullable()
+    val storeMethod = enumerationByName("storeMethod", 10, StoreMethod::class).default(St.TEXT)
+    val typeNodeId = reference("type_node_id", TypeNodes, onDelete = ReferenceOption.CASCADE)
+    val description = text("description").nullable()
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
+}
+
+object Distributions: LongIdTable("distributions") {
+
+}
+
+object EnvMarkerComparisons: LongIdTable("env_marker_comparisons") {
+
+}
+
+object EnvMarkerExpressions: LongIdTable("env_marker_expressions") {
+
+}
+
+object EnvMarkerLogicals: LongIdTable("env_marker_logicals") {
+
+}
+
+object PaymentMethods : LongIdTable("payment_methods") {
+    val stripePaymentMethodId = varchar("stripePaymentMethodId", 255).nullable()
+
+    // Payment method definitely doesn't make sense if user is removed => cascade
+    val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
+
+    val cardBrand = enumerationByName("cardBrand", 50, CardBrand::class).nullable()
+    val lastFour = varchar("lastFour", 4).nullable()
+    val isDefault = bool("isDefault").default(false)
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
+}
+
+object ErrorWatchFns : LongIdTable("error_watch_fns") {
+    val errorWatch = reference("errorWatchId", ErrorWatches, onDelete = ReferenceOption.CASCADE)
+    val functionName = varchar("functionName", 255)
+    val position = integer("position")
+    init {
+        uniqueIndex("unique_error_watch_position", errorWatch, position)
+        uniqueIndex("unique_error_watch_function_position", errorWatch, functionName, position)
+    }
+}
+
+object ErrorWatches : LongIdTable("error_watches") {
+    val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE)
+    val errorType = varchar("errorType", 255)
+    val onMetStep = reference("onMetStepId", Steps, onDelete = ReferenceOption.CASCADE)
+}
+
+object ExecutionLogs : LongIdTable("execution_logs") {
+    val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
+    val timestamp = timestamp("timestamp").defaultExpression(CurrentTimestamp)
+    val logLevel = enumerationByName("logLevel", 10, LogLevel::class)
+    val message = text("message")
+}
+
+object Groupers: LongIdTable("groupers") {
+    val name = varchar("name", 512)
+    val description = text("description").nullable()
+    val displayOrder = integer("displayOrder")
+    val parentPhase = reference("parentPhaseId", Groupers, onDelete = ReferenceOption.CASCADE).nullable()
+    val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE)
 }
 
 object Packages : LongIdTable("packages") {
@@ -36,16 +154,193 @@ object Packages : LongIdTable("packages") {
     val versionSpec = reference("versionSpecId", VersionSpecs, onDelete = ReferenceOption.CASCADE)
 }
 
-object TypeDefinitions : LongIdTable("type_definitions") {
-    val name = varchar("name", 255)
-    val namespace = varchar("namespace", 512)
-    val versionSpec = optReference("versionSpecId", VersionSpecs, onDelete = ReferenceOption.CASCADE)
+object InquisitionDataPointReads: LongIdTable("inquisition_data_point_reads") {
+
 }
 
-object TypeDeclarations : LongIdTable("type_declarations") {
-    val typeDefinition = reference("typeDefinitionId", TypeDefinitions, onDelete = ReferenceOption.CASCADE)
-    val alias = varchar("alias", 255).nullable()
+object InquisitionJunctionRedirects: LongIdTable("inquisition_junction_redirects") {
+
 }
+
+object InquisitionStepRedirects: LongIdTable("inquisition_step_redirects") {
+
+}
+
+
+object Metadata: LongIdTable("metadata") {
+
+}
+
+object MultiflowWorkflows: LongIdTable("multiflow_workflows") {
+
+}
+
+object Multiflows: LongIdTable("multiflows") {
+
+}
+
+object PackageDistRequirements: LongIdTable("package_dist_requirements") {
+
+}
+
+object PackageExtras: LongIdTable("package_extras") {
+
+}
+
+object PackagePythonRequirements: LongIdTable("package_python_requirements") {
+}
+
+object PythonVersionSpecifiers: LongIdTable("python_version_specifiers") {
+
+}
+
+object PythonVersions: LongIdTable("python_versions") {
+
+}
+
+object StepDataPointReads: LongIdTable("step_data_point_reads") {
+
+}
+
+object StepDefaultRoutes: LongIdTable("step_default_routes") {
+
+}
+
+object TaggedDistributions: LongIdTable("tagged_distributions") {
+
+}
+
+object TaggedGroupers: LongIdTable("tagged_groupers") {
+
+}
+
+object TaggedPackages: LongIdTable("tagged_packages") {
+
+}
+
+object TaggedSteps: LongIdTable("tagged_steps") {
+
+}
+
+object TaggedTools: LongIdTable("tagged_tools") {
+
+}
+
+object TaggedTransforms: LongIdTable("tagged_transforms") {
+
+}
+
+object TaggedWorkflowFolders: LongIdTable("tagged_workflow_folders") {
+
+}
+
+object TaggedWorkflows: LongIdTable("tagged_workflows") {
+
+}
+
+object TestStepRun: LongIdTable("test_step_run") {
+
+}
+
+object TransformArgs: LongIdTable("transform_args") {
+
+}
+
+object TransformOccurrenceArgs: LongIdTable("transform_occurence_args") {
+
+}
+
+object TransformOccurrenceChains: LongIdTable("transform_occurrence_chains") {
+
+}
+
+object TransformOccurrences: LongIdTable("transform_occurrences") {
+
+}
+
+object Transforms: LongIdTable("transforms") {
+
+}
+
+object TypeAliases: LongIdTable("type_aliases") {
+
+}
+
+object TypeGeneric_params: LongIdTable("type_generic_params") {
+
+}
+
+object TypeInstantiation_args: LongIdTable("type_instantiation_args") {
+
+}
+
+object TypeInstantiations: LongIdTable("type_instantiations") {
+
+}
+
+object TypeNodeRelations: LongIdTable("type_node_relations") {
+
+}
+
+object TypeNodes: LongIdTable("type_nodes") {
+
+}
+
+object TypeSAchema_refs: LongIdTable("type_schema_refs") {
+
+}
+
+object TypesUnion_members: LongIdTable("type_union_members") {
+
+}
+
+object Typevar_bounds: LongIdTable("typevar_bounds") {
+
+}
+
+object Typevar_constraints: LongIdTable("typevar_constraints") {
+
+}
+
+object Typevar_variances: LongIdTable("typevar_variances") {
+
+}
+
+
+object VersionOverflows: LongIdTable("version_overflows") {
+
+}
+
+object Versions: LongIdTable("versions") {
+
+}
+
+
+object WorkflowFolderRelations: LongIdTable("workflow_folder_relations") {
+
+}
+
+
+object WorkflowRequirements: LongIdTable("workflow_requirements") {
+
+}
+
+object Wrkflows: LongIdTable("workflows") {
+
+}
+
+object VersionSpecs : LongIdTable("version_specs") {
+    val versionMin = varchar("versionMin", 127).nullable()
+    val versionMax = varchar("versionMax", 127).nullable()
+    val versionExact = varchar("versionExact", 127).nullable()
+}
+
+object MetadataStepExclusions : CompositeIdTable("metadata_step_exclusions") {
+    val metadata = reference("metadata_id", WorkflowMetadata)
+    val step = reference("excluded_step_id", Steps)
+    override val primaryKey = PrimaryKey(metadata, step)
+}
+
 
 object Provisions : LongIdTable("provisions") {
     val step = reference("step_id", Steps, onDelete = ReferenceOption.CASCADE)
@@ -58,80 +353,7 @@ object ProvisionDataPoints : CompositeIdTable("provision_data_points") {
     override val primaryKey = PrimaryKey(provision, dataPoint)
 }
 
-object TypeParameters : LongIdTable("type_parameters") {
-    val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val position = integer("position")
-    val parameterTypeDeclaration = reference("parameterTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-}
 
-object TypeBounds : LongIdTable("type_bounds") {
-    val typeVariableDeclaration = reference("typeVariableDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val boundTypeDeclaration = reference("boundTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-}
-
-object TypeVariances : LongIdTable("type_variance") {
-    val typeVariableDeclaration = reference("typeVariableDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val variance = enumerationByName("variance", 13, VarianceCardinalityEntity::class)
-        .default(VarianceCardinalityEntity.INVARIANT)
-}
-
-object TypeSchemaRefs : LongIdTable("type_schema_refs") {
-    // parentRef is nullable, but if it's deleted, all children vanish
-    val parentRef = reference("parentRefId", TypeSchemaRefs, onDelete = ReferenceOption.CASCADE).nullable()
-    val name = varchar("name", 255)
-    val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val description = text("description").nullable()
-}
-
-object WorkflowFolders : LongIdTable("workflow_folders") {
-    val name = varchar("name", 255)
-    val description = text("description").nullable()
-    val img = blob("img").nullable()
-
-    val parentFolder = reference("parentFolderId", WorkflowFolders, onDelete = ReferenceOption.CASCADE).nullable()
-    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
-    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
-}
-
-object Workflows : LongIdTable("workflows") {
-    val name = varchar("name", 255)
-    val description = text("description").nullable()
-    val pythonVersion = varchar("pythonVersion", 127).default("3.11")
-    val parentFolder = reference("parentFolderId", WorkflowFolders, onDelete = ReferenceOption.CASCADE).nullable()
-    val img = blob("img").nullable()
-    val metadata = jsonb<UserDesignedMetadata>("metadata", Json)
-    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
-    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
-}
-
-object WorkflowMetadata : LongIdTable("workflow_metadata") {
-    val workflow = reference("workflow_id", Workflows) // assumes Workflows is another LongIdTable
-    val name = varchar("name", 255)
-    val version = varchar("version", 20).default("1.0.0")
-    val copyrightInformation = text("copyright_information").nullable()
-    val contactInformation = text("contact_information").nullable()
-    val thirdPartyLicenses = text("third_party_licenses").nullable()
-    val discretionAdvisedContent = bool("discretion_advised_content").default(false)
-    val commercialUsage = enumerationByName("commercial_usage", 32, CommercialUseEntity::class)
-    val creditNotation = enumerationByName("credit_notation", 32, AuthorshipCreditEntity::class)
-    val allowRedistribution = bool("allow_redistribution").default(false)
-    val modification = enumerationByName("modification", 64, ModificationTermsEntity::class)
-    val distributionVersion = varchar("distribution_version", 20).default("1.0.0")
-    val distributionAcceptedAt = timestamp("distribution_accepted_at")
-    val distributionUpdatedAt = timestamp("distribution_updated_at")
-}
-
-object WorkflowMetadataContributors : CompositeIdTable("workflow_metadata_contributors") {
-    val metadata = reference("metadata_id", WorkflowMetadata)
-    val contributor = reference("contributor_user_id", Users)
-    override val primaryKey = PrimaryKey(metadata, contributor)
-}
-
-object MetadataStepExclusions : CompositeIdTable("metadata_step_exclusions") {
-    val metadata = reference("metadata_id", WorkflowMetadata)
-    val step = reference("excluded_step_id", Steps)
-    override val primaryKey = PrimaryKey(metadata, step)
-}
 
 
 
@@ -149,18 +371,11 @@ object ToolParams : LongIdTable("tool_params") {
     val hasDefault = bool("hasDefault").default(false)
 }
 
-object Phases : LongIdTable("phases") {
-    val name = varchar("name", 512)
-    val description = text("description").nullable()
-    val displayOrder = integer("displayOrder")
-    val parentPhase = reference("parentPhaseId", Phases, onDelete = ReferenceOption.CASCADE).nullable()
-    val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE)
-}
 
 object Steps : LongIdTable("steps") {
     val name = varchar("name", 512)
     val description = text("description").nullable()
-    val parentPhase = reference("parentPhaseId", Phases, onDelete = ReferenceOption.CASCADE).nullable()
+    val parentPhase = reference("parentPhaseId", Groupers, onDelete = ReferenceOption.CASCADE).nullable()
     val isWorkflowHead = bool("isWorkflowHead")
 
     val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE)
@@ -170,72 +385,14 @@ object Steps : LongIdTable("steps") {
     val defaultNext = reference("defaultNextId", Steps, onDelete = ReferenceOption.SET_NULL).nullable()
 
     val displayOrder = integer("displayOrder")
-    val metadata = json("metadata", UserDesignedMetadata.jsonConfig, UserDesignedMetadata.serializer()).nullable()
+    //val metadata = json("metadata", UserDesignedMetadata.jsonConfig, UserDesignedMetadata.serializer()).nullable()
     val img = blob("img").nullable()
     val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
     val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
-object DataPoints : LongIdTable("data_points") {
-    val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE)
-    val name = varchar("name", 255)
-    val presetValue = text("presetValue").nullable()
-    val storeMethod = enumerationByName("storeMethod", 10, StoreMethodEntity::class).default(StoreMethodEntity.TEXT)
-    val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val description = text("description").nullable()
-    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
-    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
-}
 
-object PackageRepositories : LongIdTable("packagerepositories") {
-    val sourceType = enumerationByName("sourcetype", 50, PackageRepoTypeEntity::class)
-    val sourceUrl = text("sourceurl").nullable()
-}
 
-object Transformations : LongIdTable("transformations") {
-    val name = varchar("name", 255)
-    val description = text("description")
-    val examples = text("examples").nullable()
-    val returnsTypeDeclaration = reference("returnsTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE).nullable()
-}
-
-object TransformationArgs : LongIdTable("transformation_args") {
-    val transformation = reference("transformationId", Transformations, onDelete = ReferenceOption.CASCADE)
-    val typeDeclaration = reference("typeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val name = varchar("name", 255)
-    val description = text("description").nullable()
-}
-
-object AppliedTransforms : LongIdTable("applied_transforms") {
-    val transformation = reference("transformationId", Transformations, onDelete = ReferenceOption.CASCADE)
-    val occurrence = enumerationByName("occurrence", 20, TransformOccurrenceEntity::class)
-    val previousTransform = reference("previousTransformId", AppliedTransforms, onDelete = ReferenceOption.CASCADE).nullable()
-    val resultTypeDeclaration = reference("resultTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)
-    val dataPoint = reference("dataPointId", DataPoints, onDelete = ReferenceOption.CASCADE).nullable()
-    val toolResultStep = reference("toolResultStepId", Steps, onDelete = ReferenceOption.CASCADE).nullable()
-}
-
-object AppliedTransformArgs : LongIdTable("applied_transform_args") {
-    val appliedTransform = reference("appliedTransformId", AppliedTransforms, onDelete = ReferenceOption.CASCADE)
-    val transformationArg = reference("transformationArgId", TransformationArgs, onDelete = ReferenceOption.CASCADE)
-    val value = text("value")
-}
-
-object ErrorWatches : LongIdTable("error_watches") {
-    val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE)
-    val errorType = varchar("errorType", 255)
-    val onMetStep = reference("onMetStepId", Steps, onDelete = ReferenceOption.CASCADE)
-}
-
-object ErrorWatchFns : LongIdTable("error_watch_fns") {
-    val errorWatch = reference("errorWatchId", ErrorWatches, onDelete = ReferenceOption.CASCADE)
-    val functionName = varchar("functionName", 255)
-    val position = integer("position")
-    init {
-        uniqueIndex("unique_error_watch_position", errorWatch, position)
-        uniqueIndex("unique_error_watch_function_position", errorWatch, functionName, position)
-    }
-}
 
 object Inquisitions : LongIdTable("inquisitions") {
     val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE)
@@ -248,7 +405,7 @@ object Inquisitions : LongIdTable("inquisitions") {
 object Revisions : LongIdTable("revisions") {
     val dataPoint = reference("dataPointId", DataPoints, onDelete = ReferenceOption.CASCADE)
     val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE)
-    val transformation = reference("transformationId", Transformations, onDelete = ReferenceOption.CASCADE).nullable()
+    val transformation = reference("transformationId", Transforms, onDelete = ReferenceOption.CASCADE).nullable()
 }
 
 object WorkflowJunctions : LongIdTable("workflow_junctions") {
@@ -265,31 +422,7 @@ object PrereqInjections : LongIdTable("prereq_injections") {
     val description = text("description").nullable()
 }
 
-object Users : LongIdTable("users") {
-    val email = varchar("email", 255).uniqueIndex()
-    val password = varchar("password", 255)
-    val resetToken = varchar("resetToken", 255).nullable()
-    val oauthProvider = varchar("oauthProvider", 50).nullable()
-    val oauthId = varchar("oauthId", 255).nullable()
-    val subscriptionStatus = enumerationByName("subscriptionStatus", 20, SubscriptionStatusEntity::class)
-        .default(SubscriptionStatusEntity.REGISTERED)
-    val apiKey = varchar("apiKey", 255).nullable()
-    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
-    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
-}
 
-object PaymentMethods : LongIdTable("payment_methods") {
-    val stripePaymentMethodId = varchar("stripePaymentMethodId", 255).nullable()
-
-    // Payment method definitely doesn't make sense if user is removed => cascade
-    val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
-
-    val cardBrand = enumerationByName("cardBrand", 50, CardBrandEntity::class).nullable()
-    val lastFour = varchar("lastFour", 4).nullable()
-    val isDefault = bool("isDefault").default(false)
-    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
-    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
-}
 
 object Tags : LongIdTable("tags") {
     val name = varchar("name", 255)
@@ -323,12 +456,7 @@ object StepExecutions : LongIdTable("step_executions") {
     val status = enumerationByName("status", 20, ExecutionStatusEntity::class).default(ExecutionStatusEntity.RUNNING)
 }
 
-object ExecutionLogs : LongIdTable("execution_logs") {
-    val stepExecution = reference("stepExecutionId", StepExecutions, onDelete = ReferenceOption.CASCADE)
-    val timestamp = timestamp("timestamp").defaultExpression(CurrentTimestamp)
-    val logLevel = enumerationByName("logLevel", 10, LogLevelEntity::class)
-    val message = text("message")
-}
+
 
 object BenchmarkingData : LongIdTable("benchmarking_data") {
     val workflowExecution = reference("workflowExecutionId", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
@@ -343,34 +471,7 @@ object StepBenchmarkingDatas : LongIdTable("step_benchmarking_data") {
     val executionTime = decimal("executionTime", 10, 3)
 }
 
-object TestCases : LongIdTable("test_cases") {
-    val user = reference("userId", Users, onDelete = ReferenceOption.CASCADE)
-    val name = varchar("name", 255)
-    val description = text("description").nullable()
-    val workflow = reference("workflowId", Workflows, onDelete = ReferenceOption.CASCADE).nullable()
-    val step = reference("stepId", Steps, onDelete = ReferenceOption.CASCADE).nullable()
-}
 
-object TestInputs : LongIdTable("test_inputs") {
-    val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
-    val dataPointName = varchar("dataPointName", 255)
-    val value = text("value").nullable()
-    val generationMethod = enumerationByName("generationMethod", 20, GenerationMethodEntity::class)
-}
-
-object TestExpectedOutcomes : LongIdTable("test_expected_outcomes") {
-    val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
-    val dataPointName = varchar("dataPointName", 255)
-    val expectedValue = text("expectedValue").nullable()
-    val comparisonOperator = enumerationByName("comparisonOperator", 20, ComparisonOperatorEntity::class)
-}
-
-object TestResults : LongIdTable("test_results") {
-    val testCase = reference("testCaseId", TestCases, onDelete = ReferenceOption.CASCADE)
-    val workflowExecution = reference("workflowExecutionId", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
-    val passed = bool("passed")
-    val executedAt = timestamp("executedAt").defaultExpression(CurrentTimestamp)
-}
 
 object TypeUnionMembers : CompositeIdTable("type_union_members") {
     val unionTypeDeclaration = reference("unionTypeDeclarationId", TypeDeclarations, onDelete = ReferenceOption.CASCADE)

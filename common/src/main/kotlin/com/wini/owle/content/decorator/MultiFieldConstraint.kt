@@ -10,20 +10,20 @@ import com.wini.owle.error.PreventsTimeParadoxes
 annotation class PreventsTimeParadoxes(
     val happensFirstField: String,
     val happensSecondField: String,
-    val errorCode: String = PreventsTimeParadoxes.ERROR_CODE,
-    val message: String = PreventsTimeParadoxes.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class InconsistentOAuthId(
-    val oauthProviderName: String = InconsistentOAuthId.ERROR_CODE,
-    val oauthIdName: String = InconsistentOAuthId.MESSAGE
+    val oauthProviderName: String,
+    val oauthIdName: String
 )
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class OAuthProviderEnum(
-    val errorCode: String = InvalidOAuthProvider.ERROR_CODE,
-    val message: String = InvalidOAuthProvider.MESSAGE
+    val errorCode: String,
+    val message: String
 )

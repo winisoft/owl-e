@@ -1,6 +1,7 @@
 package com.wini.owle.schema
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
@@ -55,7 +56,7 @@ object ModelSchemaRegistry {
             }
             
             File("$targetDir/model-registry.json").writeText(
-                json.encodeToString(registry)
+                json.encodeToString<RegistryData>(registry)
             )
         } catch (e: Exception) {
             println("Error saving model registry: ${e.message}")

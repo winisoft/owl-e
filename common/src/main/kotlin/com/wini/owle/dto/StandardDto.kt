@@ -4,8 +4,7 @@ interface StandardDto: BaseDto {
 
     val id: Long
 
-    override fun idToString(): String {
-        return "id=$id"
-    }
+    override val owleId: String
+        get() = "id=$owleId"
 
 }

@@ -9,7 +9,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
@@ -26,11 +26,11 @@ data class DataPointInjection(
 
     val injectedDataPoint: DataPoint,
 
-    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_512)
     val name: String?,
 
-    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String?
 

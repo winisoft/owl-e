@@ -34,14 +34,24 @@ def insert_type_alias(cursor, alias_id: int, target_id: int):
     )
 
 
-def insert_type_node_relation(cursor, parent_node_id: int, child_node_id: int):
+def insert_type_node_relation(
+        cursor,
+        parent_node_id: int,
+        child_node_id: int,
+        relation_kind: str = "inheritance"
+    ):
+    """
+    Two distinct facts share this table, so they are discriminated explicitly:
+      'inheritance'   — child_node subclasses parent_node (from __bases__)
+      'instantiation' — child_node is parent_node parameterised, e.g. list -> list[str]
+    """
     insert_sql = """
         INSERT IGNORE INTO type_node_relations
-            (parent_node_id, child_node_id)
-        VALUES (%s, %s)
+            (parent_node_id, child_node_id, relation_kind)
+        VALUES (%s, %s, %s)
     """
     cursor.execute(insert_sql, (
-        parent_node_id, child_node_id
+        parent_node_id, child_node_id, relation_kind
     ))
 
 

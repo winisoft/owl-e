@@ -1,8 +1,7 @@
 package com.wini.owle.dto.environs.version
 
-import com.wini.owle.dto.CompositeDto
 import com.wini.owle.dto.ULongDto
-import com.wini.owle.dto.environs.enums.PrereleasePhase
+import com.wini.owle.dto.environs.version.enums.PrereleasePhase
 import com.wini.owle.schema.ModelDefinition
 import kotlinx.serialization.Serializable
 

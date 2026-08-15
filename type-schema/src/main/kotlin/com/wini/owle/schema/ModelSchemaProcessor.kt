@@ -2,13 +2,14 @@ package com.wini.owle.ksp
 
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
-import com.wini.owle.ksp.doc.models.DtoModelDoc
-import com.wini.owle.ksp.doc.models.ModelPropertyDoc
-import com.wini.owle.ksp.doc.models.OwleErrorDoc
+import com.wini.owle.content.doc.DtoModelDoc
+import com.wini.owle.content.doc.ModelPropertyDoc
+import com.wini.owle.content.doc.OwleErrorDoc
 import com.wini.owle.ksp.utils.OwleSymbolCollector
 import com.wini.owle.ksp.utils.ext.codeAndMessage
 import com.wini.owle.ksp.writer.ErrorResFileWriter
 import com.wini.owle.ksp.writer.KnowledgeBaseModelFileWriter
+import com.wini.owle.schema.wrapper.annotation.error.FieldConstraintAnnotation
 import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
 import com.wini.owle.schema.wrapper.declaration.error.ErrorDeclaration
 
@@ -51,6 +52,15 @@ class ModelSchemaProcessor(
         return emptyList()
     }
 
+    /**
+     * One [ModelPropertyDoc] per property on [modelClass] — every property, not only the
+     * constrained ones, so the generated doc is a complete description of the type. A
+     * property's [ModelPropertyDoc.constraints] carries the real, resolved [OwleErrorDoc] for
+     * each of its `@Constraint*` annotations; an FQN with no matching `@ErrorDefinition` class
+     * (e.g. a constraint referencing an error type that was never written) is dropped rather
+     * than surfaced, matching how [com.wini.owle.ksp.utils.ConstraintExtractor] already treats
+     * unresolvable error references in the validator-generation path.
+     */
     private fun buildDtoDoc(
         modelClass: ModelDeclaration,
         errors: List<ErrorDeclaration>
@@ -58,44 +68,33 @@ class ModelSchemaProcessor(
 
         val name = modelClass.simpleName.asString()
         val typeDoc = modelClass.docString?.trim() ?: "No type-level documentation."
-        logger.info("$name has ${modelClass.getAllProperties().count()} properties")
 
-        modelClass.constrainedFields.map { (prop, constraintAnnotations) ->
-            constraintAnnotations.map {
-                val propName = prop.simpleName.asString()
-                val type = prop.type.resolve().declaration.qualifiedName?.asString() ?: "Unknown"
-                val doc = prop.docString?.trim() ?: "No documentation."
-
-
-                val propDoc = constraintAnnotations.map { constraintAnnotation ->
-                    constraintAnnotation.errorFqNames
-                }.flatMap { fqn ->
-                    fqn.map {
-                        errors.codeAndMessage(it)?.let { (code, msg) ->
-                            OwleErrorDoc(
-                                errorCode = code,
-                                message = msg,
-                                emptyMap<String, Any?>()
-                            )
-                        }
-                    }
-                }.map {
-                    ModelPropertyDoc(
-                        name = propName,
-                        type = type,
-                        description = doc,
-                        constraints = emptyList()
-                    )
-                }
-
-                return DtoModelDoc(name, typeDoc, propDoc)
+        val constraintsByPropName: Map<String, List<FieldConstraintAnnotation>> =
+            modelClass.constrainedFields.entries.associate { entry ->
+                entry.key.simpleName.asString() to entry.value
             }
 
-            logger.warn("Making DtoModelDoc! name: $name, typeDoc: $typeDoc")
-        }
+        val properties = modelClass.getAllProperties().map { prop ->
+            val propName = prop.simpleName.asString()
+            val type = prop.type.resolve().declaration.qualifiedName?.asString() ?: "Unknown"
+            val doc = prop.docString?.trim() ?: "No documentation."
 
-        return DtoModelDoc(name, typeDoc, emptyList())
+            val constraintDocs = (constraintsByPropName[propName] ?: emptyList())
+                .flatMap { it.errorFqNames }
+                .mapNotNull { errors.codeAndMessage(it) }
+                .map { (code, msg) -> OwleErrorDoc(errorCode = code, message = msg) }
 
+            ModelPropertyDoc(
+                name = propName,
+                type = type,
+                description = doc,
+                constraints = constraintDocs
+            )
+        }.toList()
+
+        logger.info("$name: documented ${properties.size} properties")
+
+        return DtoModelDoc(name, typeDoc, properties)
     }
 
 //    private fun buildDtoDoc(

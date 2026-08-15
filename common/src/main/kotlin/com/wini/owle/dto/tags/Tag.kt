@@ -6,7 +6,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.Schema
 import com.wini.owle.schema.error.ConstraintSimple
@@ -25,11 +25,11 @@ data class Tag(
     @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
-    @ConstraintSimple([StringSafeCharsError::class, StringNotBlankError::class, StringNotEmptyError::class])
+    @ConstraintSimple([StringContainsRestrictedChars::class, StringNotBlankError::class, StringNotEmptyError::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
 
-    @ConstraintSimple([StringSafeCharsError::class, StringNotBlankError::class, StringNotEmptyError::class])
+    @ConstraintSimple([StringContainsRestrictedChars::class, StringNotBlankError::class, StringNotEmptyError::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16384)
     val description: String? = null,
 

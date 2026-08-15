@@ -2,10 +2,7 @@ package com.wini.owle.dto
 
 import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
 import com.wini.owle.dto.environs.enums.EnvMarkerVariable
-import com.wini.owle.dto.environs.enums.OverflowViolation
-import com.wini.owle.dto.environs.enums.PrereleasePhase
-import com.wini.owle.dto.environs.enums.VersionOperator
-import com.wini.owle.dto.environs.enums.WildcardSegment
+
 import com.wini.owle.dto.environs.marker.EnvMarkerComparison
 import com.wini.owle.dto.environs.marker.EnvMarkerExpression
 import com.wini.owle.dto.environs.pkg.Distribution
@@ -16,6 +13,10 @@ import com.wini.owle.dto.environs.version.PythonVersionSpecifier
 import com.wini.owle.dto.environs.version.Version
 import com.wini.owle.dto.environs.version.VersionOverflow
 import com.wini.owle.dto.environs.version.VersionSpecifier
+import com.wini.owle.dto.environs.version.enums.OverflowViolation
+import com.wini.owle.dto.environs.version.enums.PrereleasePhase
+import com.wini.owle.dto.environs.version.enums.VersionOperator
+import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod

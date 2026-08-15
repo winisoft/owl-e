@@ -17,7 +17,7 @@ import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class IntValueLessThan(
-    val errorCode: String = IntValueMustMeetMinimum.ERROR_CODE,
+    val errorCode: String,
     val maximumValue: Int
 )
 
@@ -88,40 +88,40 @@ annotation class StringNotWhitespace(
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringLengthMin(
     val minLength: Int,
-    val errorCode: String = StringLengthMustBeGt.ERROR_CODE,
-    val message: String = StringLengthMustBeGt.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringLengthMax(
     val maxLength: Int,
-    val errorCode: String = StringLengthMustBeLt.ERROR_CODE,
-    val message: String = StringLengthMustBeLt.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class StringLengthExact(
     val requiredLength: Int,
-    val errorCode: String = StringMustHaveExactRequiredLength.ERROR_CODE,
-    val message: String = StringMustHaveExactRequiredLength.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class IntValueMin(
     val minValue: Int,
-    val errorCode: String = IntValueMustMeetMinimum.ERROR_CODE,
-    val message: String = IntValueMustMeetMinimum.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class LongValueMin(
     val minValue: Long,
-    val errorCode: String = LongValueMustMeetMinimum.ERROR_CODE,
-    val message: String = LongValueMustMeetMinimum.MESSAGE,
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -129,15 +129,15 @@ annotation class LongValueMin(
 annotation class DoubleRange(
     val minValue: Double,
     val maxValue: Double,
-    val errorCode: String = DoubleValueOoB.ERROR_CODE,
-    val message: String = DoubleValueOoB.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ListHasMembers(
-    val errorCode: String = ListMustNotBeEmpty.ERROR_CODE,
-    val message: String = ListMustNotBeEmpty.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -150,20 +150,20 @@ annotation class EmailFormat(
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class UrlFormat(
-    val errorCode: String = InvalidUrlFormat.ERROR_CODE,
-    val message: String = InvalidUrlFormat.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class TimestampIso8601Format(
-    val errorCode: String = TimestampFormatMustMatchIso8601.ERROR_CODE,
-    val message: String = TimestampFormatMustMatchIso8601.MESSAGE
+    val errorCode: String,
+    val message: String
 )
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class TimestampCoherent(
-    val errorCode: String = TimestampMustBeChronologicallyCoherent.ERROR_CODE,
-    val message: String = TimestampMustBeChronologicallyCoherent.MESSAGE
+    val errorCode: String,
+    val message: String
 )

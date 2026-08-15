@@ -7,9 +7,9 @@ import com.wini.owle.dto.runs.workflow.WorkflowRun
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.TestAssertion
 import com.wini.owle.dto.workflows.Step
-import com.wini.owle.error.IncoherentInstantError
+import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.PositiveValueULongError
-import com.wini.owle.error.TimestampFormatError
+import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import com.wini.owle.schema.error.PreventsTimeParadox
 import kotlinx.serialization.Serializable
 
@@ -35,13 +35,13 @@ data class StepTestRun(
     /**
      * Timestamp for when the step execution started.
      */
-    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
+    @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
     val startedAt: String = "",
 
     /**
      * Timestamp for when the step execution completed, if applicable.
      */
-    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
+    @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
     val completedAt: String?,
 
     /**

@@ -1,6 +1,6 @@
 package com.wini.owle.entity
 
-import com.wini.owle.dto.environs.enums.PrereleasePhase
+import com.wini.owle.dto.environs.version.enums.PrereleasePhase
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
@@ -577,7 +577,7 @@ object InstanceDbFakeEntityFactory {
         resetToken: String? = null,
         oauthProvider: String? = null,
         oauthId: String? = null,
-        subscriptionStatus: SubscriptionStatusEntity = SubscriptionStatusEntity.REGISTERED,
+        subscriptionStatus: SubscriptionStatus = SubscriptionStatus.REGISTERED,
         apiKey: String? = null,
         createdAt: Instant = Schema.Utils.instant,
         updatedAt: Instant = Schema.Utils.instant,

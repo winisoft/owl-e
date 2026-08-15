@@ -1,4 +1,4 @@
-package com.wini.owle.ksp.doc.oas
+package com.wini.owle.content.oas
 
 import kotlinx.serialization.Serializable
 

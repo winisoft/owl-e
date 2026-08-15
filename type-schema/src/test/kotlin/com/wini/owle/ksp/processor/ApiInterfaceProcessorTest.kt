@@ -4,7 +4,7 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSName
-import com.wini.owle.ksp.doc.oas.ApiRouteDoc
+import com.wini.owle.content.oas.ApiRouteDoc
 import com.wini.owle.schema.wrapper.annotation.ApiEndpointAnnotation
 import com.wini.owle.schema.wrapper.declaration.ApiEndpointDeclaration
 

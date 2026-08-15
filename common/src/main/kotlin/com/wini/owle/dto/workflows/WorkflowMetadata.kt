@@ -11,7 +11,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
@@ -27,7 +27,7 @@ data class WorkflowMetadata(
     @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
-    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
 
@@ -43,7 +43,7 @@ data class WorkflowMetadata(
      */
     val contributors: List<User>,
 
-    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     val copyrightInformation: String? = null,
 
     /**

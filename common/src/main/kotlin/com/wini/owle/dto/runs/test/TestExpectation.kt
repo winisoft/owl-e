@@ -1,24 +1,28 @@
 package com.wini.owle.dto.runs.test
 
 import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.error.ConstraintLongValueMin
+import com.wini.owle.error.LongValueMustMeetMinimum
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.StandardDto
 import com.wini.owle.dto.runs.enums.ComparisonOperator
+import com.wini.owle.error.StringContainsRestrictedChars
+import com.wini.owle.error.StringMaxLengthError
 import kotlinx.serialization.Serializable
 
 @ModelDefinition
 @Serializable
 data class TestExpectation(
 
-    @ConstraintSimple([PositiveValueLongError::class])
+    @ConstraintLongValueMin(LongValueMustMeetMinimum::class, 1)
     override val id: Long,
 
     val testCase: TestCase,
 
     val dataPointName: String,
 
-    @ConstraintSimple([StringSafeCharsError::class])
+    @ConstraintSimple([StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, MAX_VALUE_LENGTH)
     val expectedValue: String?,
 

@@ -16,7 +16,7 @@ data object RequestBodyMalformed : ApiRequestError() {
 @ErrorDefinition("errors.apiRequest.multipleTypeValidations")
 @Serializable
 data class MultipleTypeValidations(
-    val violations: List<FieldConstraintError>
+    val violations: List<ConstraintError>
 ): ApiRequestError() {
     override val errorCode: String get() = ""
     override val message: String get() = ""

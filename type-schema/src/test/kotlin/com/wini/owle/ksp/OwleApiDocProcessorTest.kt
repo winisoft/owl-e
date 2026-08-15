@@ -3,7 +3,7 @@ package com.wini.owle.ksp
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSName
-import com.wini.owle.ksp.doc.oas.ApiEndpointDoc
+import com.wini.owle.content.oas.ApiEndpointDoc
 import com.wini.owle.ksp.processor.ApiInterfaceProcessor
 import com.wini.owle.ksp.utils.OwleSymbolCollector
 import com.wini.owle.ksp.writer.OpenApiSpecFileWriter

@@ -12,7 +12,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
@@ -23,11 +23,11 @@ data class TestCase(
     @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
-    @ConstraintSimple([StringNotEmptyError::class, StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringContainsRestrictedChars::class, StringNotBlankError::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
 
-    @ConstraintSimple([StringNotEmptyError::class, StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringContainsRestrictedChars::class, StringNotBlankError::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
     val description: String?,
 

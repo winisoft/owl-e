@@ -2,7 +2,7 @@ package com.wini.owle
 
 import com.wini.owle.TestHelper.connectToTestDb
 import com.wini.owle.TestHelper.refreshTestDbData
-import com.wini.owle.dto.environs.enums.PrereleasePhase
+import com.wini.owle.dto.environs.version.enums.PrereleasePhase
 import com.wini.owle.dto.typing.enums.TypeNodeKind
 import com.wini.owle.dto.user.enums.OauthProvider
 import com.wini.owle.dto.user.enums.UserStatus
@@ -20,7 +20,6 @@ import com.wini.owle.entity.steps.DataPointWrites
 import com.wini.owle.entity.steps.ToolParamEntity
 import com.wini.owle.entity.steps.ToolParams
 import com.wini.owle.entity.steps.Tools
-import com.wini.owle.entity.transforms.TransformOccurrenceEntity
 import com.wini.owle.entity.typing.TypeGenericParamEntity
 import com.wini.owle.entity.typing.TypeGenericParams
 import com.wini.owle.entity.typing.TypeInstantiationArgEntity

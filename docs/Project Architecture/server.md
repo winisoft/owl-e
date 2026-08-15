@@ -23,7 +23,7 @@ server/
 
 #### 1\. **API Layer (`api/`)**
 
-Each entity has a dedicated API route class (e.g., `WorkflowApi`), an implementation of `RoutedApi`, whose contract enables it to be registered through Ktor's `Routing`  at application start up.
+Each entity has a dedicated API route class (e.g., `WorkflowApiImpl`), an implementation of `RoutedApi`, whose contract enables it to be registered through Ktor's `Routing`  at application start up.
 
 which extends a generic base like `BaseEndpointImpl<ID: Any, T: BaseDto>`. These register routes under a path like `/api/workflow`.
 

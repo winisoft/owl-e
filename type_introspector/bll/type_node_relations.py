@@ -36,7 +36,9 @@ def populate_type_node_relations(cursor, type_node_cache):
                 # Insert the relationship if we found the parent node
                 if parent_nodes:
                     parent_node_id = parent_nodes[0][0]
-                    insert_type_node_relation(cursor, parent_node_id, child_node_id)
+                    insert_type_node_relation(
+                        cursor, parent_node_id, child_node_id, relation_kind="inheritance"
+                    )
 
 
 def populate_callable_ownership(cursor, type_node_cache):

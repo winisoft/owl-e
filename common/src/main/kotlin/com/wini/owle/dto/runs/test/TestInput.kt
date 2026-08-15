@@ -8,7 +8,7 @@ import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
@@ -23,7 +23,7 @@ data class TestInput(
 
     val dataPoint: DataPoint,
 
-    @ConstraintSimple([StringSafeCharsError::class])
+    @ConstraintSimple([StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_64000)
     val value: String?,
 

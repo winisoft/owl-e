@@ -4,13 +4,14 @@ import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.user.enums.UserStatus
-import com.wini.owle.error.IncoherentInstantError
+import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.InvalidOAuthProvider
 import com.wini.owle.error.PositiveValueULongError
-import com.wini.owle.error.ResetTokenCharsError
-import com.wini.owle.error.StringSafeCharsError
-import com.wini.owle.error.TimestampFormatError
-import com.wini.owle.error.ValidEmailFormatError
+import com.wini.owle.error.InvalidResetToken
+import com.wini.owle.error.StringContainsRestrictedChars
+import com.wini.owle.error.TimestampFormatMustMatchIso8601
+import com.wini.owle.error.InvalidEmailFormat
+import com.wini.owle.schema.PasswordSecurityPolicy
 import kotlinx.serialization.Serializable
 
 /**
@@ -33,7 +34,7 @@ data class User(
     /**
      * User's email, used for login and communication.
      */
-    @ConstraintSimple([ValidEmailFormatError::class, StringSafeCharsError::class])
+    @ConstraintSimple([InvalidEmailFormat::class, StringContainsRestrictedChars::class])
     val email: String,
 
     /**
@@ -45,7 +46,7 @@ data class User(
     /**
      * Token used to reset the user's password, if applicable.
      */
-    @ConstraintSimple([ResetTokenCharsError::class])
+    @ConstraintSimple([InvalidResetToken::class])
     val resetToken: String? = null,
 
     /**
@@ -67,19 +68,19 @@ data class User(
     /**
      * API key for accessing restricted resources.
      */
-    @ConstraintSimple([ResetTokenCharsError::class])
+    @ConstraintSimple([InvalidResetToken::class])
     val apiKey: String? = null,
 
     /**
      * Timestamp for when the user was created.
      */
-    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
+    @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
     val createdAt: String,
 
     /**
      * Timestamp for when the user was last updated.
      */
-    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
+    @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
     val updatedAt: String,
 
     val paymentMethods: List<PaymentMethod> = emptyList()

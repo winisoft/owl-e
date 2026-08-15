@@ -9,7 +9,7 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
@@ -32,14 +32,14 @@ data class TransformArg(
     /**
      * Name of the argument.
      */
-    @ConstraintSimple([StringNotEmptyError::class, StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringContainsRestrictedChars::class, StringNotBlankError::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
 
     /**
      * Detailed description of what the argument represents.
      */
-    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringSafeCharsError::class])
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String?
 ) : ULongDto

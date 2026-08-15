@@ -9,6 +9,7 @@ import com.wini.owle.error.MissingParameter
 import com.wini.owle.error.MultipleParamFailure
 import com.wini.owle.error.MultipleTypeValidations
 import com.wini.owle.error.NoSuchIdError
+import com.wini.owle.error.OwleError
 import com.wini.owle.error.ParamValueMalformedLong
 import com.wini.owle.error.RequestBodyMalformed
 import com.wini.owle.ifNullExit
@@ -27,6 +28,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import kotlin.collections.map
 
 /**
  * The common abstract class fulfilling the contract of a
@@ -89,15 +91,19 @@ abstract class BaseApiImpl<ID : Any, DTO : BaseDto>(
         val apiResponse = ApiResponse<D>(
             success = false,
             message = failure.error.message,
-            errors = when (failure.error) {
-                is MultipleTypeValidations ->
-                    (failure.error as MultipleTypeValidations).violations
-                is MultipleParamFailure ->
-                    (failure.error as MultipleParamFailure).failed
-                else ->
-                    listOf(failure.error)
-            }.map {
-                ApiError.fromAsyncError(it)
+            errors = failure.error.let {
+                when (it) {
+                    is MultipleTypeValidations ->
+                        it.violations
+                    is MultipleParamFailure ->
+                        it.failed
+                    else ->
+                        listOf(it)
+                }.map {
+                    it.run {
+                        ApiError(errorCode, message, detail)
+                    }
+                }
             }
         )
 

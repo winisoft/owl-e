@@ -8,9 +8,11 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KProperty1
 
 
-sealed class MultiFieldConstraintError: OwleError, Constraint
+sealed class MultiFieldConstraintError: OwleError, ConstraintError
 
-/** Fails if both workflow and step are null. */
+/*
+/** Fails if both workflow and step are null. *//*
+
 @Serializable
 data class TestCaseSubject<T : BaseDto>(
     val workflow: KProperty1<T, Workflow?>,
@@ -35,6 +37,7 @@ data class TestCaseSubject<T : BaseDto>(
 }
 
 /** Fails if all version constraint values are null. */
+
 @Serializable
 data class VersionSpecUndefined<T : BaseDto>(
     val versionMinField: KProperty1<T, String?>,
@@ -57,7 +60,9 @@ data class VersionSpecUndefined<T : BaseDto>(
     }
 }
 
+
 /** Fails if `completedAt` exists and is before `startedAt`. */
+
 @Serializable
 data class PreventsTimeParadoxes<T : BaseDto>(
     val happensFirstField: KProperty1<T, String>,
@@ -105,3 +110,5 @@ data class InconsistentOAuthId<T : BaseDto>(
     }
 
 }
+
+ */

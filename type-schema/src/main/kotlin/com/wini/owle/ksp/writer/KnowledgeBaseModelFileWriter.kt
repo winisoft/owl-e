@@ -4,7 +4,7 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.wini.owle.ksp.doc.models.DtoModelDoc
+import com.wini.owle.content.doc.DtoModelDoc
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.iterator

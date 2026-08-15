@@ -55,7 +55,7 @@ The execution narrative ("we need space to store these data points, we begin by 
 | start over in a new environment | `workflow_junctions` | unconditional (src step) or triggered by an inquisition |
 | lifting values across the junction | `data_point_injections` | src data point → target workflow's data point |
 | configuring an environment | `workflows.python_version_id` + `workflow_requirements` | backed by a full PyPI metadata mirror: `distributions`, `packages`, `versions`, `package_dist_requirements`, `env_marker_*` (PEP 440/508 modeled relationally) |
-| testing a workflow | `test_cases`, `test_inputs`, `test_expected_outcomes`/`test_outcome_expectation`, `test_results` | inputs/expectations bind to data points |
+| testing a workflow | `test_cases`, `TestInputs`, `test_expected_outcomes`/`test_outcome_expectation`, `test_results` | inputs/expectations bind to data points |
 | execution records | `workflow_executions` (+ code-side `execution_logs`, `test_step_run`) | thin today — extended by the execution-environment design |
 | grouping/UI structure | `phases`, `phase_relations`, `workflow_folders`, `tags` + `tagged_*` | phases are presentational scoping, not control flow |
 
@@ -79,7 +79,7 @@ For a step **S** (this is the spec the runner generator implements; also see EXE
 
 | Module | Size | State |
 |---|---|---|
-| `server/` | 578 .kt | The substantial asset. Full layered CRUD API over the whole domain: `api/{workflows,steps,transforms,typing,environs,user,runs}`, entity + DTO + `dll` (data-logic layer) + validators, Koin DI, KSP-generated API docs (`Generated Project Elements.md` describes this system — it is *not* about workflow codegen). Test split unit/integration. |
+| `server/` | 578 .kt | The substantial asset. Full layered CRUD API over the whole domain: `api/{workflows,steps,transforms,typing,environs,user,runs}`, entity + DTO + `dll` (data-logic layer), Koin DI. `server/validators/**` is DEAD — extends a `BaseValidator` that no longer exists; superseded by `type-schema`'s KSP-generated validators (see `Generated Project Elements.md`, rewritten 2026-08-15 as the full KSP reference). Test split unit/integration. |
 | `composeApp/` | 438 files | Compose Multiplatform client (desktop/web). Extensive resource set; restored from the docs/ mishap. Maturity not re-audited this session. |
 | `common/` | 183 .kt | Shared DTOs/validation. |
 | `type-schema/` | 102 .kt | KSP schema-validation codegen. |

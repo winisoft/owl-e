@@ -1,3 +1,7 @@
 package com.wini.owle.dto
 
-interface CompositeDto: BaseDto
+interface CompositeDto: BaseDto {
+
+    override val owleId: String
+
+}

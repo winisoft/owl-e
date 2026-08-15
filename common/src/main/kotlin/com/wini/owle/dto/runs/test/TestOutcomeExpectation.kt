@@ -19,7 +19,7 @@ data class TestOutcomeExpectation(
 
     val dataPoint: DataPoint,
 
-//    @ConstraintSimple([StringSafeCharsError::class])
+//    @ConstraintSimple([StringContainsRestrictedChars::class])
 //    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
 //    val expectedValue: String?,
 

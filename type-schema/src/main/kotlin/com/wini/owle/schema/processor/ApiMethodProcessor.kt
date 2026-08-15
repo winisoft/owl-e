@@ -1,8 +1,8 @@
 package com.wini.owle.ksp.processor
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.wini.owle.ksp.doc.oas.ApiOperationDoc
-import com.wini.owle.ksp.doc.oas.ApiRouteDoc
+import com.wini.owle.content.oas.ApiOperationDoc
+import com.wini.owle.content.oas.ApiRouteDoc
 import com.wini.owle.ksp.utils.ResponseBuilder
 import com.wini.owle.schema.wrapper.declaration.ApiEndpointDeclaration
 

@@ -25,12 +25,9 @@ sourceSets {
     }
     test {
         dependencies {
-            implementation(libs.junit.jupiter)
-            implementation(libs.kotlin.test.junit)
-            implementation(libs.hamcrest.hamcrest)
-            implementation(libs.mockk)
-            implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-            implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+
+            implementation(libs.kotlin.test)
+
         }
     }
 }

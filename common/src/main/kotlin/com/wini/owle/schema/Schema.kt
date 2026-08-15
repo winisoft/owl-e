@@ -9,14 +9,20 @@ object Schema {
         val instant = Instant.parse("2024-12-20T10:00:00Z")
     }
 
-    const val LEN_127 = 127
-    const val LEN_255 = 255
-    const val LEN_512 = 512
-    const val LEN_1024 = 1024
-    const val LEN_16384 = 16384
-    const val LEN_16000 = 16000
-    const val LEN_64000 = 64_000
-    const val LEN_5012 = 5012
+
+
+    object SizeLimits {
+        const val LEN_127 = 127
+        const val LEN_255 = 255
+        const val LEN_512 = 512
+        const val LEN_1024 = 1024
+
+        const val LEN_8192 = 8192
+        const val LEN_16384 = 16384
+        const val LEN_16000 = 16000
+        const val LEN_64000 = 64_000
+        const val LEN_5012 = 5012
+    }
 
     object DataPoint {
 
@@ -31,8 +37,8 @@ object Schema {
 
     }
     object Workflow {
-        const val NAME_MAX_LENGTH = Schema.LEN_255
-        const val DESC_MAX_LENGTH = Schema.LEN_1024
+        const val NAME_MAX_LENGTH = Schema.SizeLimits.LEN_255
+        const val DESC_MAX_LENGTH = Schema.SizeLimits.LEN_1024
     }
     object WorkflowFolder {
     }

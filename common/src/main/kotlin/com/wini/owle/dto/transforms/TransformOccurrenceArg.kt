@@ -7,7 +7,7 @@ import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
-import com.wini.owle.error.StringSafeCharsError
+import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
@@ -33,7 +33,7 @@ data class TransformOccurrenceArg(
     /**
      * The actual value provided for this argument.
      */
-    @ConstraintSimple([StringSafeCharsError::class, StringNotBlankError::class])
+    @ConstraintSimple([StringContainsRestrictedChars::class, StringNotBlankError::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val value: String
 ) : ULongDto

@@ -1,7 +1,14 @@
 package com.wini.owle.entity.environs
 
-import com.wini.owle.dto.environs.enums.*
+import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
+import com.wini.owle.dto.environs.enums.EnvMarkerLogicOp
+import com.wini.owle.dto.environs.enums.EnvMarkerOperator
+import com.wini.owle.dto.environs.enums.EnvMarkerVariable
 import com.wini.owle.entity.StringIdTable
+import com.wini.owle.entity.environs.version.OverflowViolation
+import com.wini.owle.entity.environs.version.PrereleasePhase
+import com.wini.owle.entity.environs.version.VersionOperator
+import com.wini.owle.entity.environs.version.WildcardSegment
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable

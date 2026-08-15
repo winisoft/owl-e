@@ -4,9 +4,16 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSType
+import com.wini.owle.schema.error.ErrorDefinition
 import com.wini.owle.schema.wrapper.declaration.error.ErrorDeclaration
 
 
+/**
+ * Whether this annotation is Owl-E's [ErrorDefinition] decorator — i.e. it marks the
+ * annotated class as a structured, documentable API error.
+ */
+fun KSAnnotation.isOwleError(): Boolean =
+    annotationType.resolve().declaration.qualifiedName?.asString() == ErrorDefinition.QUALIFIED_NAME
 
 /**
  * Retrieves the value of an annotation argument by its name.

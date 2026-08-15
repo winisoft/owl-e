@@ -5,9 +5,9 @@ import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.runs.test.TestCase
 import com.wini.owle.dto.workflows.DataPoint
-import com.wini.owle.error.IncoherentInstantError
+import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.PositiveValueULongError
-import com.wini.owle.error.TimestampFormatError
+import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import kotlinx.serialization.Serializable
 
 /**

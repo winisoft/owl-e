@@ -1,0 +1,35 @@
+﻿Type-safe project accessors is an incubating feature.
+> Task :common:clean
+> Task :common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :type-schema:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :type-schema:compileKotlin UP-TO-DATE
+> Task :type-schema:compileJava NO-SOURCE
+> Task :type-schema:processResources UP-TO-DATE
+> Task :type-schema:classes UP-TO-DATE
+> Task :type-schema:jar UP-TO-DATE
+
+> Task :common:kspKotlin
+w: [ksp] Documenting 60 models
+w: [ksp] Documenting 56 API endpoints
+w: [ksp] Documenting 45 error types
+w: [ksp] Preparing generate res: 45 errors
+w: [ksp] Collecting for ModelSchemaProcessor
+w: [ksp] Documenting 45 error types
+w: [ksp] OpenApiSpecBuilder::fromEndpoints : 56 endpoints
+w: [ksp] Collecting for ValidatorGeneratorProcessor
+w: [ksp] Documenting 45 error types
+
+> Task :common:compileKotlin
+w: file:///D:/claude_access/owl-e/common/src/main/kotlin/com/wini/owle/error/FieldConstraintErrors.kt:547:18 Condition is always 'false'.
+w: file:///D:/claude_access/owl-e/common/src/main/kotlin/com/wini/owle/error/FieldConstraintErrors.kt:547:43 Condition is always 'false'.
+w: file:///D:/claude_access/owl-e/common/src/main/kotlin/com/wini/owle/error/FieldConstraintErrors.kt:547:64 Condition is always 'true'.
+w: file:///D:/claude_access/owl-e/common/src/main/kotlin/com/wini/owle/error/FieldConstraintErrors.kt:547:83 Condition is always 'false'.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.9/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 6s
+6 actionable tasks: 3 executed, 3 up-to-date

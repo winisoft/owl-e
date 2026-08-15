@@ -1,4 +1,4 @@
-package com.wini.owle.ksp.doc.models
+package com.wini.owle.content.doc
 
 
 

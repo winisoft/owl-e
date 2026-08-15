@@ -28,3 +28,17 @@ annotation class ConstraintDoubleRange(
     val minValue: Double,
     val maxValue: Double,
 )
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ConstraintLongValueMin(
+    val error: KClass<*>,
+    val minValue: Long,
+)
+
+@Target(AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ConstraintLongValueMax(
+    val error: KClass<*>,
+    val maxValue: Long,
+)

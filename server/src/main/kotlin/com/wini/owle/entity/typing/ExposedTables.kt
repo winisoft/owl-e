@@ -7,6 +7,7 @@ import com.wini.owle.entity.environs.Versions
 import org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 
 
 object TypeNodes : ULongIdTable("type_nodes") {
@@ -99,3 +100,4 @@ object TypeInstantiationArgs : ULongIdTable("type_instantiation_args") {
     val param = reference("param_node_id", TypeNodes)
     val paramPosition = integer("param_position")
 }
+

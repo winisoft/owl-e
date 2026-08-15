@@ -4,7 +4,7 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
-import com.wini.owle.ksp.doc.models.OwleErrorDoc
+import com.wini.owle.content.doc.OwleErrorDoc
 import com.wini.owle.ksp.utils.ConstraintRegistry
 import com.wini.owle.ksp.utils.LocalizedStringResolver
 

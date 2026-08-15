@@ -19,5 +19,5 @@ data class DistributionTag(
 
 ): CompositeDto {
 
-    override val owleId: String get() = "distribution=${distribution.name},tag=${tag.owleId}"
+    override val owleId: String get() = "DistributionTag(distribution=${distribution.name},tag=${tag.owleId})"
 }

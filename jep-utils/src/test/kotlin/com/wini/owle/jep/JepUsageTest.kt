@@ -1,4 +1,4 @@
-package com.wini.owle.data
+package com.wini.owle.jep
 
 import com.wini.owle.data.comparePythonVersions
 import org.junit.Test

@@ -1,11 +1,9 @@
 package com.wini.owle.mapper.environs.version
 
-import com.wini.owle.dto.environs.enums.VersionOperator
-import com.wini.owle.dto.environs.enums.WildcardSegment
-import com.wini.owle.dto.environs.version.PythonVersion
+import com.wini.owle.dto.environs.version.enums.VersionOperator
+import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.dto.environs.version.PythonVersionSpecifier
 import com.wini.owle.entity.delegate.DaoDelegate
-import com.wini.owle.entity.environs.version.PythonVersionEntity
 import com.wini.owle.entity.environs.version.PythonVersionSpecifierEntity
 import com.wini.owle.mapper.DbMapper
 

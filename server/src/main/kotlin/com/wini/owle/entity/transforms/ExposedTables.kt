@@ -1,10 +1,13 @@
 package com.wini.owle.entity.transforms
 
 import com.wini.owle.dto.transforms.enums.TransformOccurrence
+import com.wini.owle.entity.DataPoints
+import com.wini.owle.entity.Steps
 import com.wini.owle.entity.typing.TypeNodes
 import org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 
 
 object TransformOccurrences : ULongIdTable("transform_occurrences") {

@@ -1,5 +1,6 @@
 package com.wini.owle.entity.environs.marker
 
+import com.wini.owle.entity.environs.EnvMarkerComparisons
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
 import org.jetbrains.exposed.v1.core.dao.id.EntityID

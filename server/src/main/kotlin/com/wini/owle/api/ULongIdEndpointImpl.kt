@@ -6,6 +6,7 @@ import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.BatchOpOfNoDataObjects
+import com.wini.owle.error.EmptyListNotAllowed
 import com.wini.owle.error.MissingParameter
 import com.wini.owle.error.ParamValueMalformedLong
 import com.wini.owle.error.RequestBodyMalformed

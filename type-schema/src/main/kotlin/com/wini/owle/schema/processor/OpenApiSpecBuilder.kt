@@ -1,9 +1,9 @@
 package com.wini.owle.ksp.processor
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.wini.owle.ksp.doc.oas.ApiEndpointDoc
-import com.wini.owle.ksp.doc.oas.OpenApiSpec
-import com.wini.owle.ksp.doc.oas.OasTag
+import com.wini.owle.content.oas.ApiEndpointDoc
+import com.wini.owle.content.oas.OpenApiSpec
+import com.wini.owle.content.oas.OasTag
 import kotlinx.serialization.json.* // Import all from json
 import kotlin.collections.component1
 import kotlin.collections.component2

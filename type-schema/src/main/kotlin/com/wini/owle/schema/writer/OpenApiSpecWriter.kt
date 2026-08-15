@@ -3,9 +3,9 @@ package com.wini.owle.ksp.writer
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
-import com.wini.owle.ksp.doc.oas.ApiEndpointDoc
-import com.wini.owle.ksp.doc.oas.OpenApiSpec
-import com.wini.owle.ksp.processor.fromEndpoints
+import com.wini.owle.content.oas.ApiEndpointDoc
+import com.wini.owle.content.oas.OpenApiSpec
+import com.wini.owle.ksp.processor.OpenApiSpecBuilder
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.OutputStreamWriter

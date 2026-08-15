@@ -1,10 +1,10 @@
 package com.wini.owle.ksp.utils
 
-import com.wini.owle.ksp.doc.oas.ApiMediaTypeDoc
-import com.wini.owle.ksp.doc.oas.ApiResponseDoc
-import com.wini.owle.ksp.doc.oas.schema.ApiSchemaDoc
-import com.wini.owle.ksp.doc.oas.schema.ArraySchemaDoc
-import com.wini.owle.ksp.doc.oas.schema.RefSchemaDoc
+import com.wini.owle.content.oas.ApiMediaTypeDoc
+import com.wini.owle.content.oas.ApiResponseDoc
+import com.wini.owle.content.oas.schema.ApiSchemaDoc
+import com.wini.owle.content.oas.schema.ArraySchemaDoc
+import com.wini.owle.content.oas.schema.RefSchemaDoc
 
 object ResponseBuilder {
 

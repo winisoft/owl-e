@@ -5,12 +5,12 @@ import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenExact
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.user.enums.CardBrand
-import com.wini.owle.error.IncoherentInstantError
+import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.MustContainOnlyNumerals
 import com.wini.owle.error.PositiveValueULongError
-import com.wini.owle.error.StringLengthExactError
 import com.wini.owle.error.StringNotBlankError
-import com.wini.owle.error.TimestampFormatError
+import com.wini.owle.error.TimestampFormatMustMatchIso8601
+import com.wini.owle.schema.StringLengthExact
 import kotlinx.serialization.Serializable
 
 /**
@@ -42,7 +42,7 @@ data class PaymentMethod(
      * Last four digits of the card associated with this payment method.
      */
     @ConstraintSimple([MustContainOnlyNumerals::class, StringNotBlankError::class])
-    @ConstraintStringLenExact(StringLengthExactError::class, 4)
+    @ConstraintStringLenExact(StringLengthExact::class, 4)
     val lastFour: String?,
 
     /**
@@ -53,12 +53,12 @@ data class PaymentMethod(
     /**
      * Timestamp for when the payment method was created.
      */
-    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
+    @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
     val createdAt: String,
 
     /**
      * Timestamp for when the payment method was last updated.
      */
-    @ConstraintSimple([TimestampFormatError::class, IncoherentInstantError::class])
+    @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
     val updatedAt: String
 ) : ULongDto

@@ -12,7 +12,7 @@ data class TimestampEnforcedValid<T : BaseDto>(
     val receiver: T
 ) : CompositeValidation() {
 
-    override val delegateValidations: List<FieldConstraintError> by lazy {
+    override val delegateValidations: List<ConstraintError> by lazy {
         listOf(
             TimestampFormatMustMatchIso8601(timestampField, receiver),
             TimestampMustBeChronologicallyCoherent(timestampField, receiver),
@@ -35,7 +35,7 @@ class StringEnforcedValid<T : BaseDto>(
     private val provideReceiver: () -> T,
 ) : CompositeValidation() {
     val receiver: T get() = provideReceiver()
-    override val delegateValidations: List<FieldConstraintError> by lazy {
+    override val delegateValidations: List<ConstraintError> by lazy {
         listOf(
             StringLengthMustBeGt(field, receiver, 0),
             StringMustNotBeBlank(field, receiver),

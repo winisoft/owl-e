@@ -132,7 +132,12 @@ def populate_generic_instantiations(
     #, class_generic_params: Dict[Any, List[Any]],
 ) -> None:
     """
-    For each known generic instantiation (from AST), set its base_node_id and populate instantiation_parameters.
+    For each known generic instantiation (from AST), record its origin relation and populate
+    instantiation parameters.
+
+    Note: this records origin as a type_node_relations row of kind 'instantiation' — NOT as a
+    type_nodes.base_node_id column write (that column is dead; see the migration notes). The
+    same origin fact is recorded independently in type_instantiations.origin_node_id.
     Requires: `class_generic_params` mapping classes to the TypeVars they were declared with.
     """
     for obj, node_id in object_to_node_id.items():
@@ -141,8 +146,13 @@ def populate_generic_instantiations(
         if origin is None or origin not in object_to_node_id:
             continue
 
-        base_node_id = object_to_node_id[origin]
-        insert_type_node_relation(cursor, parent_node_id=base_node_id, child_node_id=node_id)
+        origin_node_id = object_to_node_id[origin]
+        insert_type_node_relation(
+            cursor,
+            parent_node_id=origin_node_id,
+            child_node_id=node_id,
+            relation_kind="instantiation",
+        )
 
         args = getattr(obj, "__args__", ())
         for idx, arg in enumerate(args):

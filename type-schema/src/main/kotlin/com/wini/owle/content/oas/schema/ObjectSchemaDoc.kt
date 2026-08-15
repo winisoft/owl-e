@@ -1,6 +1,6 @@
-package com.wini.owle.ksp.doc.oas.schema
+package com.wini.owle.content.oas.schema
 
-import com.wini.owle.ksp.doc.oas.schema.ApiSchemaDoc
+import com.wini.owle.content.oas.schema.ApiSchemaDoc
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject

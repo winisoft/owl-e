@@ -27,6 +27,14 @@ object ConstraintExtractor {
             val max = ann.getArgument<Double>("maxValue") ?: 1.0
             "${className}::${prop.simpleName.asString()}, dto, $min, $max"
         },
+        "ConstraintLongValueMin" to { ann, prop, className ->
+            val min = ann.getArgument<Long>("minValue") ?: 0L
+            "${className}::${prop.simpleName.asString()}, dto, $min"
+        },
+        "ConstraintLongValueMax" to { ann, prop, className ->
+            val max = ann.getArgument<Long>("maxValue") ?: 0L
+            "${className}::${prop.simpleName.asString()}, dto, $max"
+        },
         // fallback for @ConstraintSimple or annotations not explicitly mapped
         "ConstraintSimple" to { _, prop, className ->
             "${className}::${prop.simpleName.asString()}, dto"

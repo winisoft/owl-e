@@ -1,9 +1,9 @@
 package com.wini.owle.ksp.processor
 
 import com.google.devtools.ksp.processing.KSPLogger
-import com.wini.owle.ksp.doc.oas.*
-import com.wini.owle.ksp.doc.oas.schema.ObjectSchemaDoc
-import com.wini.owle.ksp.doc.oas.schema.PrimitiveSchemaDoc
+import com.wini.owle.content.oas.*
+import com.wini.owle.content.oas.schema.ObjectSchemaDoc
+import com.wini.owle.content.oas.schema.PrimitiveSchemaDoc
 import kotlinx.serialization.json.*
 
 /*

@@ -2,10 +2,9 @@ package com.wini.owle.dto
 
 import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
 import com.wini.owle.dto.environs.enums.EnvMarkerVariable
-import com.wini.owle.dto.environs.enums.OverflowViolation
-import com.wini.owle.dto.environs.enums.PrereleasePhase
-import com.wini.owle.dto.environs.enums.VersionOperator
-import com.wini.owle.dto.environs.enums.WildcardSegment
+import com.wini.owle.dto.environs.version.enums.PrereleasePhase
+import com.wini.owle.dto.environs.version.enums.VersionOperator
+import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.dto.environs.marker.EnvMarkerComparison
 import com.wini.owle.dto.environs.marker.EnvMarkerExpression
 import com.wini.owle.dto.environs.pkg.Distribution
@@ -16,10 +15,12 @@ import com.wini.owle.dto.environs.version.PythonVersionSpecifier
 import com.wini.owle.dto.environs.version.Version
 import com.wini.owle.dto.environs.version.VersionOverflow
 import com.wini.owle.dto.environs.version.VersionSpecifier
+import com.wini.owle.dto.environs.version.enums.OverflowViolation
 import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
+import com.wini.owle.dto.runs.enums.TestAssertion
 import com.wini.owle.dto.runs.step.StepTestRun
 import com.wini.owle.dto.runs.step.ExecutionNotification
 import com.wini.owle.dto.runs.test.*
@@ -509,7 +510,6 @@ object DtoTestInstanceFactory {
 
     fun stepRun(
         id: ULong = 1UL,
-        workflowRun: WorkflowRun = workflowExecutionDto(),
         step: Step = stepDto(),
         startedAt: String = "2024-12-21T10:00:00",
         completedAt: String = "2024-12-21T10:00:00",
@@ -517,7 +517,6 @@ object DtoTestInstanceFactory {
     ) : StepTestRun {
         return StepTestRun(
             id = id,
-            workflowRun = workflowRun,
             step = step,
             startedAt = startedAt,
             completedAt = completedAt,
@@ -779,32 +778,25 @@ object DtoTestInstanceFactory {
     fun testExpectedOutcomeDto(
         id: ULong = 7UL,
         dataPoint: DataPoint = dataPointDto(),
-        expectedValue: String = "expectedValue1",
         comparisonOperator: ComparisonOperator = ComparisonOperator.EQUALS,
-        testCase: TestCase = testCaseDto()
+        testAssertion: TestAssertion = TestAssertion.CONTAINS
     ): TestOutcomeExpectation {
         return TestOutcomeExpectation(
             id = id,
             dataPoint = dataPoint,
-            expectedValue = expectedValue,
-            assertion = comparisonOperator,
-            testCase = testCase
+            assertion = testAssertion
         )
     }
 
-    fun testResultDto(
+    fun testOutcomeActual(
         id: ULong = 1UL,
-        testCase: TestCase = testCaseDto(),
-        workflowRun: WorkflowRun = workflowExecutionDto(),
-        passed: Boolean = true,
-        executedAt: String = "2024-12-21T00:00:00Z"
+        dataPoint: DataPoint = dataPointDto(),
+        passed: Boolean = true
     ): TestOutcomeActual {
         return TestOutcomeActual(
             id = id,
-            testCase = testCase,
-            workflowRun = workflowRun,
-            passed = passed,
-            executedAt = executedAt
+            dataPoint = dataPoint,
+            passed = passed
         )
     }
 
@@ -894,7 +886,7 @@ object DtoTestInstanceFactory {
             WorkflowFolder::class.java -> workflowFolderDto() as T
             TestInput::class.java -> testInputDto() as T
             TestOutcomeExpectation::class.java -> testExpectedOutcomeDto() as T
-            TestOutcomeActual::class.java -> testResultDto() as T
+            TestOutcomeActual::class.java -> testOutcomeActual() as T
             DistributionPackage::class.java -> distributionPackage() as T
             WorkflowRun::class.java -> workflowExecutionDto() as T
             TransformOccurrenceArg::class.java -> appliedTransformArg() as T

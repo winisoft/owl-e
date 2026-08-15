@@ -54,7 +54,7 @@ def insert_callable_owners(cursor, owner_id: int, callable_node_id: int):
 def insert_callable_ownership(cursor, owner_node_id: int, callable_node_id: int):
     cursor.execute(
         """
-        INSERT INTO callable_ownership (owner_node_id, callable_node_id)
+        INSERT IGNORE INTO callable_owners (owner_node_id, callable_node_id)
         VALUES (%s, %s)
         """,
         (owner_node_id, callable_node_id)
