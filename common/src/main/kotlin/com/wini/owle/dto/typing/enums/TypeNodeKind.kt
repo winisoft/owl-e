@@ -24,6 +24,18 @@ enum class TypeNodeKind {
     /**
      * Represent among Type Nodes function signatures (the “callable type” itself).
      */
-    CALLABLE
+    CALLABLE,
+
+    METHOD,
+
+    ATTRIBUTE,
+
+    CLASS,
+
+    GENERIC,
+
+    PRIMITIVE,
+
+    FUNCTION
 
 }

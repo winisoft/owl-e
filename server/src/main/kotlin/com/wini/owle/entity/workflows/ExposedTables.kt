@@ -53,6 +53,17 @@ object DataPoints : ULongIdTable("data_points") {
     val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
+object Groupers : ULongIdTable("groupers") {
+    val workflow = reference("workflow_id", Workflows, onDelete = ReferenceOption.CASCADE)
+    val parentGrouper = reference("parent_grouper_id", Groupers, onDelete = ReferenceOption.CASCADE).nullable()
+    val name = varchar("name", 1024)
+    val description = varchar("description", 8192).nullable()
+    val posX = double("pos_x").default(0.0)
+    val posY = double("pos_y").default(0.0)
+    val color = varchar("color", 7).nullable()
+    val isCollapsed = bool("is_collapsed").default(false)
+}
+
 object Phases : ULongIdTable("phases") {
     val name = varchar("name", 1024)
     val description = varchar("description", 8192).nullable()

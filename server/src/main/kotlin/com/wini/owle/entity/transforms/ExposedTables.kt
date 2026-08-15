@@ -1,52 +1,61 @@
 package com.wini.owle.entity.transforms
 
 import com.wini.owle.dto.transforms.enums.TransformOccurrence
-import com.wini.owle.entity.DataPoints
-import com.wini.owle.entity.Steps
+import com.wini.owle.entity.typing.CallableSignatures
 import com.wini.owle.entity.typing.TypeNodes
-import org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
+import com.wini.owle.entity.workflows.DataPoints
+import com.wini.owle.entity.workflows.Steps
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable
-import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
 
+
+object Transforms : ULongIdTable("transforms") {
+    val name = varchar("name", 255)
+    val description = varchar("description", 1024).nullable()
+    val examples = varchar("examples", 2046).nullable()
+    val signature = reference("signature_id", CallableSignatures).nullable()
+}
+
+object TransformArgs : ULongIdTable("transform_args") {
+    val transform = reference("transform_id", Transforms)
+    val typeNode = reference("type_node_id", TypeNodes)
+    val name = varchar("name", 255)
+    val description = varchar("description", 8192).nullable()
+}
 
 object TransformOccurrences : ULongIdTable("transform_occurrences") {
-    val transformation = reference("transformationId", Transforms, onDelete = ReferenceOption.CASCADE).nullable()
-    val occurrence = enumerationByName("occurrence", 20, TransformOccurrence::class)
- //   val parentTransform = reference("parent_transform_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE).nullable()
-//    val childTransform = reference("child_transform_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE).nullable()
+    val transform = reference("transform_id", Transforms)
+    val occurrence = enumerationByName("occurrence", 16, TransformOccurrence::class)
+    val dataPoint = reference("dataPointId", DataPoints).nullable()
+    val toolResultStep = reference("toolResultStepId", Steps).nullable()
+
+    init {
+        check("chkapplied_transformsSource") {
+            (dataPoint.isNotNull() and toolResultStep.isNull()) or
+                (dataPoint.isNull() and toolResultStep.isNotNull())
+        }
+    }
 }
 
-
-object TransformOccurrenceArgs : ULongIdTable("transform_arg_occurrences") {
-    val transformArg = reference("transform_arg_id", TransformArgs, onDelete = ReferenceOption.CASCADE)
-    val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
-    val value = text("value")
-}
-
-object TransformOccurrenceChains : CompositeIdTable("") {
+/**
+ * Table name preserves the DB's own spelling (`occurence`, missing the second `r`).
+ */
+object TransformOccurrenceArgs : ULongIdTable("transform_occurence_args") {
     val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences)
     val transformArg = reference("transform_arg_id", TransformArgs)
     val value = text("value")
 }
 
-object Transforms : ULongIdTable("transforms") {
-    val name = varchar("name", 255)
-    val description = varchar("description", 1024).nullable()
-    val examples = varchar("examples", 255).nullable()
+object TransformOccurrenceChains : CompositeIdTable("transform_occurrence_chains") {
+    val antecedentOccurrence = reference("antecedent_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
+    val subsequentOccurrence = reference("subsequent_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
+    override val primaryKey = PrimaryKey(antecedentOccurrence, subsequentOccurrence)
 }
 
 object TransformTargetTypes : CompositeIdTable("transform_target_types") {
     val transform = reference("transform_id", Transforms, onDelete = ReferenceOption.CASCADE)
-    val eligibleType = reference("eligible_type_id", TypeNodes, onDelete = ReferenceOption.CASCADE)
-    val returnType = reference("return_type_node_id", TypeNodes, onDelete = ReferenceOption.CASCADE)
-    override val primaryKey = PrimaryKey(transform, eligibleType)
-}
-
-
-object TransformArgs : ULongIdTable("transform_args") {
-    val transform = reference("transform_id", Transforms, onDelete = ReferenceOption.CASCADE)
-    val typeNode = reference("type_node_id", TypeNodes, onDelete = ReferenceOption.CASCADE)
-    val name = varchar("name", 255)
-    val description = varchar("description", 8192).nullable()
+    val eligibleTypeNode = reference("eligible_type_node_id", TypeNodes)
+    val returnTypeNode = reference("return_type_node_id", TypeNodes)
+    override val primaryKey = PrimaryKey(transform, eligibleTypeNode)
 }

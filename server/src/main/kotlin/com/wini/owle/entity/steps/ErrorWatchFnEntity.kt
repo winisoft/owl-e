@@ -23,7 +23,7 @@ class ErrorWatchFnEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Name of the function that should appear in the call stack to activate the error watch.
      */
-    var functionNode by TypeNodeEntity referencedOn ErrorWatchFns.functionName
+    var functionNode by TypeNodeEntity referencedOn ErrorWatchFns.functionNode
 
     /**
      * Specifies the required position in the call stack for the function name, used to match errors accurately.
