@@ -1,0 +1,71 @@
+# The `sealed` network is internal:true — Docker attaches no route to the outside world.
+# That is the containment guarantee; everything else in here is about *observation*.
+
+services:
+
+  gateway:
+    build: ./gateway
+    container_name: spike-gateway
+    # NET_ADMIN is required to install the iptables REDIRECT rules.
+    cap_add:
+      - NET_ADMIN
+    networks:
+      sealed:
+        # Static, because the workload's resolver must point at a known address.
+        ipv4_address: 172.28.0.10
+    volumes:
+      - ./out:/out
+      - ./ca:/ca
+    healthcheck:
+      test: ["CMD", "test", "-f", "/ca/mitmproxy-ca-cert.pem"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  workload:
+    build: ./workload
+    container_name: spike-workload
+    depends_on:
+      gateway:
+        condition: service_healthy
+    # Needed only to replace the default route with one pointing at the gateway container,
+    # so that raw-IP egress reaches the sentinel instead of dying unseen in the local kernel.
+    cap_add:
+      - NET_ADMIN
+    # The only configuration the workload receives. Note what is absent:
+    # no HTTP_PROXY, no HTTPS_PROXY, no REQUESTS_CA_BUNDLE, no SSL_CERT_FILE.
+    dns:
+      - 172.28.0.10
+    networks:
+      - sealed
+    volumes:
+      - ./out:/out
+      - ./ca:/ca
+
+  # Packet-level observation, from inside the workload's own network namespace.
+  #
+  # The gateway only sees traffic addressed to it. Raw-IP egress is dropped by the sealed
+  # bridge before it ever reaches the gateway container, so the sentinel alone cannot
+  # report it. This sidecar watches at the workload's interface, upstream of that drop.
+  #
+  # It shares ONLY the network namespace — separate PID and mount namespaces mean the
+  # workload has no way to stop it.
+  tap:
+    build: ./gateway
+    container_name: spike-tap
+    network_mode: "service:workload"
+    depends_on:
+      - workload
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    volumes:
+      - ./out:/out
+    entrypoint: /tap-entrypoint.sh
+
+networks:
+  sealed:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24

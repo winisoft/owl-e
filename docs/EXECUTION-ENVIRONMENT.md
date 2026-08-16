@@ -98,7 +98,17 @@ docker network owle-run-{id}   (internal: true — no route to anywhere)
 
 - No proxy environment variables — interception is transparent (DNS + routing), so nothing in `os.environ` betrays the sandbox and nothing can be stripped to bypass it.
 - Real hostnames resolve; TLS presents certificates chaining to the injected CA, so `requests`/`httpx`/`urllib`/`curl` all just work.
-- A process that pins certificates or tries raw IPs/DoH simply fails to connect (internal network has no route out) — and the attempt lands in the audit as `tls_rejected`/`denied`. That *is* the containment signal, not a gap in it.
+- A process that pins certificates or tries raw IPs/DoH simply fails to connect (internal network has no route out) — and the attempt is both **contained and observed** (see below). That *is* the containment signal, not a gap in it.
+
+**Raw-IP capture is a separate mechanism from the DNS-steered gateway, proven empirically in `spike/containment/` (2026-08-16).** Wildcard DNS only steers traffic that asks for a hostname; a raw-IP connect skips DNS and is dropped by the `internal: true` bridge *before it ever reaches the gateway container* — contained, but invisible to it. Fix: a second observation point, on the **host side of each workload's veth pair**, outside every container namespace. Measured properties:
+
+| vantage | sees raw-IP egress | detectable from inside the workload |
+|---|---|---|
+| gateway container (DNS-steered) | no — bridge drops it first | — |
+| capture process sharing the workload's *network* namespace | yes | **yes** — `/proc/net/packet` and `ss -0` reveal its raw socket even though the process tree is invisible |
+| capture on the host-side veth interface | yes | no — shares no namespace with the workload at all |
+
+Locating the veth requires reading the workload's `eth0` peer ifindex and matching it against the host's interfaces — an **orchestrator** operation (the thing already holding Docker access to provision containers), never something run from inside the sealed network, which must never see a Docker socket. Production capture point: host-side veth, orchestrator-driven. (The netns-sidecar variant is documented in the spike log as the ruled-out alternative, kept for the record of why.)
 
 **Hardening floor** (MVP, all cheap): `--network` internal-only · non-root UID · `--read-only` rootfs + tmpfs `/tmp` · `--cap-drop ALL` · `--security-opt no-new-privileges` · `--memory`/`--cpus`/`--pids-limit` · never mount docker.sock · single `rw` output volume.
 
@@ -222,9 +232,59 @@ CREATE TABLE `environment_images` (
 
 The generated `/app` is bind-mounted (or layered as a final COPY) so tool-body edits don't invalidate the dependency image.
 
+**Content-addressed, not per-workflow.** Two workflows on the same Python version with identical resolved requirements should share one image, not each provision their own. Key `environment_images` on `(python_version_id, lock_hash)` — an image is identified by what's *in* it — and let workflows **reference** a row rather than always minting one. A user re-running a workflow they've already built selects the existing image; they are not expected to "clone" something they already have. (Decided 2026-08-16, in the course of reviewing the containment spike's findings.)
+
+## 8a. Write caps on data points — `store_cap`, resolved
+
+`data_points` gains one nullable unsigned column, `write_cap`:
+
+| value | meaning |
+|---|---|
+| `NULL` | unlimited (today's behavior) |
+| `0` | read-only — preset value only, no step may ever write |
+| `1` | write-once — "you never had a value, now you do," and never again |
+| `N` | budget of N writes |
+
+A violation is the same *shape* of event as undeclared egress, not a distinct failure mode: emit
+`write_cap_exceeded` (data point, step, attempted write, count-so-far) into `execution_logs`, then
+fail the run. No remediation semantics, no author-side handling required — the excess write *is*
+the finding, exactly as an unmatched host is the finding for network egress. This reframes
+`store_cap` as a containment primitive (an in-process analogue of the deviation report) rather than
+a data-integrity feature, which is also why it needs no more machinery than one column and one
+event kind.
+
 ## 9a. Scenario state — "first call returns A; after step 1234, B"
 
 Stubs may carry a `state_key`. The gateway keeps a tiny named-state set and exposes a **loopback-only control endpoint**; the orchestrator advances state on runner events ("`step_completed` 1234 ⇒ set `post_1234`"). Matching then prefers stubs whose `state_key` is currently set (unset-key stubs are the default reality). State transitions are recorded alongside `network_events` so the audit shows *which reality* served every request. Call-count cases keep using `sequence_position`; the two compose. This is the workflow-progress-keyed statefulness no off-the-shelf tool ships (WireMock's externally-advanceable "scenarios" prove the mechanism; keying to step completion is the Owl-E part) — see [SIMULATION-MODEL.md](SIMULATION-MODEL.md) §4.
+
+## 8b. Concurrency — deliberately deferred, constraint recorded now
+
+A Multiflow is currently **one logical thread**: a junction is a tail call (the runner exits, the
+orchestrator provisions the next environment), never a fork. This single fact is what several
+guarantees quietly rest on — worth naming before anyone spends against it:
+
+- `execution_logs.seq` is a **total order**; concurrent branches can only give a partial order.
+- Inquisitions route on "first predicate to evaluate true" — racy if the data points they read can
+  change concurrently under a competing branch.
+- `write_cap` counting (§8a) assumes one writer's view of "how many so far."
+- Simulation's `sequence_position` ("the Nth call to this route") and **scenario situations
+  (§9a) are per-run singletons** — concurrent branches would contend over one active situation.
+- Bit-reproducibility in simulate mode requires a total schedule to record and replay; concurrency
+  needs the schedule itself captured, not just the inputs.
+
+Note the last two: **concurrency breaks the simulation subsystem as much as the execution one.**
+That doubles the blast radius of ever introducing it casually.
+
+Decision: stay sequential until a real workflow demands fan-out. If/when it's added, it must be
+**authored, not implicit** — explicit fork/join nodes with a declared merge policy (first-wins,
+all-must-complete, quorum), `execution_logs` gaining a `branch_id` with `seq` scoped per-branch,
+and — the load-bearing constraint to bake in now, before the state model solidifies further —
+**simulation state (situations, sequence counters) must be branch-scoped, not run-scoped.**
+Implicit forking (a junction silently becoming concurrent) is ruled out; it would degrade every
+guarantee above without anyone deciding to.
+
+This also folds into open question 2 below: pre-warming vs. on-demand junction provisioning is
+partly a concurrency question, not purely a resource one, and should be answered together with it.
 
 ## 9. Junctions & the AI executor
 
@@ -253,9 +313,9 @@ Bias: something real running end-to-end before any of the fancy parts.
 ## 12. Open questions for Wini
 
 1. ~~Write suppression on triggered inquisitions~~ — **decided 2026-08-10**: writes are never suppressed; inquisitions evaluate after writes as post-completion routing predicates. Rationale and corollaries in REPO-STATE §3.
-2. **Junction provisioning strategy** — provision target environments on demand (recommended: correct isolation, slower handoff) vs. pre-warm all junction-reachable workflows per run (fast, resource-hungry)?
-3. **Capture policy defaults** — full request/response bodies for LLM APs only, fingerprints elsewhere? (Doc assumes yes.)
-4. **Where do runs execute long-term** — always the local Docker daemon, or is a remote executor host in scope early? (M1–M3 assume local.)
-5. **`store_cap`** appears in prose (`Owl-E.md` §6.3) but not in the current `data_points` — is storage-capacity enforcement still wanted in the runner's datastore semantics?
-6. **Tool call-contract authority** — tools now have both `tool_params` rows and `signature_id → callable_signatures`/`callable_parameters`. Proposal: the generator trusts `callable_signatures` when present, and `tool_params` is the authoring-time input that produces/updates the signature. Needs a yes/no.
+2. **Junction provisioning strategy** — on demand vs. pre-warmed. Tied to §8b: this is partly a concurrency question (pre-warming several junction targets implies they could run concurrently), so answer together with whether/when fan-out is introduced. Leaning on-demand as long as execution stays sequential (§8b default).
+3. **Capture policy defaults** — full request/response bodies for LLM APs only, fingerprints elsewhere? Scope note (2026-08-16): this is a storage/capture-volume decision, independent of *why* an AP is mocked — a fully deterministic, non-AI workflow gets identical value from mocked APIs (predictability, statistics, CI) and the capture-policy question applies to it the same way. Still open.
+4. **Where do runs execute long-term** — local Docker daemon vs. remote executor. Leaning: both, as a first-class choice, not a migration. Local for anyone who doesn't want to run Docker Desktop year-round; a hosted executor profile ("run it here, or we run it for $X.YZ/min") as an early revenue lever, not an afterthought. Whichever the user configures, the containment guarantee is identical — this is a deployment-target choice, not a rigor tradeoff. Design accordingly rather than bolting hosting on later.
+5. ~~`store_cap`~~ — **decided 2026-08-16**, see §8a: single nullable `write_cap` column, capped writes fail the run the same way undeclared egress does.
+6. ~~Tool call-contract authority~~ — **resolved by the schema migration itself**: `tool_params` no longer exists in the DDL. `callable_signatures`/`callable_parameters` is the sole authority; `step_data_point_reads` and `inquisition_data_point_reads` both key on `callable_parameter_id`. No decision needed — it already happened.
 7. ~~Where does the authoring UI live~~ — **decided 2026-08-10**: the source prototype is harvested (model + matcher → [SIMULATION-MODEL.md](SIMULATION-MODEL.md)) and retired to a local branch; its UI is not carried forward. What remains is the broader **client-framework** question — keep the existing Compose Multiplatform `composeApp`, or move the Owl-E client to React/TS (Wini leans React/TS; the server REST API backs either). Deferred, not blocking the containment work.

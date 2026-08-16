@@ -26,7 +26,9 @@ AccessPoint              an external dependency of a workflow  (kind: HTTP | AMB
          └─ AmbientValue       its content, per profile
 ```
 
-**AccessPoint** — a named external dependency, authored per workflow. `kind` = HTTP (hosts + routes) or AMBIENT (resources). Optional `openapi_spec` records import provenance so a whole surface can be scaffolded from a spec.
+**AccessPoint** — a named external dependency, a **library object** (optionally `user_id`-owned; `NULL` = system-provided), not owned by any one workflow — "Stripe" is a fact about the world, authored once, referenced by every workflow that uses it. `kind` = HTTP (hosts + routes) or AMBIENT (resources). Optional `openapi_spec` records import provenance so a whole surface can be scaffolded from a spec.
+
+**WorkflowAccessPoint** — a workflow's *declaration* that it expects to use a given AccessPoint. This is the join the ownership move above needs: it's what the containment report scores observed egress against ("did this run only touch what the workflow declared?"), separate from the AP's own authoring. (Decided 2026-08-16 — the original per-workflow-owned sketch conflated "this exists" with "this workflow uses it.")
 
 **Route** — the stable request surface under an HTTP access point: `method` (incl. `ANY`) + `path_pattern` with `{param}` segments (`/users/{id}`, `/v1/messages`). Defined once; scaffoldable from OpenAPI.
 
@@ -35,8 +37,18 @@ AccessPoint              an external dependency of a workflow  (kind: HTTP | AMB
 - `body_pattern` — substring/regex.
 - `sequence_position` — match only the Nth call to this route (call-count scenarios).
 - `state_key` — match only while that named scenario state is set (§9a of EXECUTION-ENVIRONMENT; step-progress scenarios).
+- `workflow_id`, `step_id` (both optional) — narrows a variant to firing only within a specific workflow, or a specific step of one, rather than everywhere the route is hit. (Added 2026-08-16.) Most stateful sequences are genuinely route-global — "the 2nd call to this endpoint, from anyone" — so these stay optional rather than becoming required scoping; the orchestrator already knows the current step from the state-channel events (§9a), so evaluating them costs nothing new.
 
 **Serve** fields: `status`, `headers` (JSON), `body` (may interpolate captured `{param}` values and match captures), `latency_ms`, `fault` (`none|timeout|connection_reset`).
+
+**Payload separation (decided 2026-08-16).** A single `response_variants` row was doing four jobs with four different lifecycles — authored config (changes at design time), a hot match predicate (evaluated every request), an immutable payload (should never change once a run has referenced it), and the thing a historical `network_events` row points back to. Collapsing them meant editing a fixture body could silently rewrite what a past containment report appears to have served. Split:
+
+- `response_variants` keeps match fields + a payload reference. Small, hot, freely editable.
+- `response_payloads` — bodies, content-addressed by SHA-256, immutable, deduplicated.
+- the **compiled stub-set** the gateway loads (§6) gets its own hash.
+- `network_events` (EXECUTION-ENVIRONMENT §6) references the compiled snapshot's hash and the variant id — never the live, editable config row.
+
+Same principle `environment_images` already follows (a run names a lockfile + digest, not "whatever `workflow_requirements` currently says"): **the audit references immutable artifacts, never mutable configuration**, so a run stays reproducible and its receipts stay honest regardless of what gets edited afterward.
 
 **SimulationProfile** — a named reality; the selector that decides *which* responses are live. One `is_default` per workflow. Carries an optional sweeping default (`default_disposition` + `default_variant`) so "every route in this workflow answers 501" is one row, not hundreds.
 

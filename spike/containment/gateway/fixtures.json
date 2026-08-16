@@ -1,0 +1,40 @@
+{
+  "_comment": [
+    "The compiled fixture set the gateway serves from. In the real system this is generated",
+    "from a SimulationProfile in the database; here it is hand-written.",
+    "Exactly one access point is declared. Every other host in the universe is undeclared,",
+    "which is the point of the experiment."
+  ],
+  "access_points": [
+    {
+      "name": "Declared Widget API",
+      "hosts": ["api.declared.test"],
+      "routes": [
+        {
+          "method": "GET",
+          "path_pattern": "/v1/widgets",
+          "variants": [
+            {
+              "name": "Success",
+              "status": 200,
+              "headers": { "Content-Type": "application/json" },
+              "body": "{\"widgets\":[{\"id\":1,\"name\":\"SPIKE-FIXTURE-OK\"}],\"served_by\":\"owle-gateway\"}"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "path_pattern": "/v1/widgets/{id}",
+          "variants": [
+            {
+              "name": "Success (by id)",
+              "status": 200,
+              "headers": { "Content-Type": "application/json" },
+              "body": "{\"id\":\"{id}\",\"name\":\"SPIKE-FIXTURE-OK\",\"served_by\":\"owle-gateway\"}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Generated at run time: the mitmproxy CA and the run's artifacts.
+ca/
+out/
+.pytest_cache/
+__pycache__/
