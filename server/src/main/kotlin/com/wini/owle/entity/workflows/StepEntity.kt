@@ -1,13 +1,34 @@
 package com.wini.owle.entity.workflows
 
+import com.wini.owle.entity.steps.DataPointWriteEntity
+import com.wini.owle.entity.steps.DataPointWrites
+import com.wini.owle.entity.steps.ErrorWatchEntity
+import com.wini.owle.entity.steps.ErrorWatches
+import com.wini.owle.entity.steps.InquisitionEntity
+import com.wini.owle.entity.steps.Inquisitions
+import com.wini.owle.entity.steps.StepDataPointReadEntity
+import com.wini.owle.entity.steps.StepDataPointReads
+import com.wini.owle.entity.steps.StepDefaultRouteEntity
+import com.wini.owle.entity.steps.StepDefaultRoutes
+import com.wini.owle.entity.steps.ToolEntity
+import com.wini.owle.entity.steps.WorkflowJunctionEntity
+import com.wini.owle.entity.steps.WorkflowJunctions
+import com.wini.owle.entity.tags.StepTags
+import com.wini.owle.entity.tags.TagEntity
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
- * Represents a step within a workflow, defining its tool dependency, next and previous steps,
- * and whether it serves as the workflow's head step.
+ * One invocation of a tool within a workflow, with everything the six-phase lifecycle needs:
+ * [reads] resolve the tool's arguments, [errorWatches] guard the invocation, [writes] persist
+ * the result, [inquisitions] evaluate afterwards in order, and routing falls through
+ * [defaultRoute] when nothing redirected.
+ *
+ * Position is canvas layout only ([posX]/[posY]/[parentGrouper]) — sequence lives in the routes.
  */
 class StepEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
@@ -33,21 +54,69 @@ class StepEntity(id: EntityID<ULong>) : ULongEntity(id) {
      */
     var tool by ToolEntity referencedOn Steps.tool
 
-
     /**
      * Indicates if this step is the first step in the workflow.
      */
     var isWorkflowHead by Steps.isWorkflowHead
 
     /**
-     * The order this step is presented among other steps and phases sitting at the same level of the hierarchy
+     * The grouper this step is displayed within. If null, it sits at the workflow level.
      */
-    var displayOrder by Steps.displayOrder
+    var parentGrouper by GrouperEntity optionalReferencedOn Steps.parentGrouper
+
+    var posX by Steps.posX
+
+    var posY by Steps.posY
+
+    var color by Steps.color
+
+    var createdAt by Steps.createdAt
+
+    var updatedAt by Steps.updatedAt
+
+    // --- lifecycle wiring -------------------------------------------------------------------
 
     /**
-     * The phase within which this step is displayed. If null, it sits at the workflow level
+     * Argument bindings for the tool's parameters.
      */
-    var parentPhase by PhaseEntity optionalReferencedOn Phases
+    val reads: SizedIterable<StepDataPointReadEntity>
+            by StepDataPointReadEntity referrersOn StepDataPointReads.step
 
-    var nextStep by StepEntity optionalReferencedOn Steps
+    /**
+     * Error handlers guarding the invocation.
+     */
+    val errorWatches: SizedIterable<ErrorWatchEntity> by ErrorWatchEntity referrersOn ErrorWatches.step
+
+    /**
+     * Where this step's result is persisted. Runs unconditionally on normal return.
+     */
+    val writes: SizedIterable<DataPointWriteEntity> by DataPointWriteEntity referrersOn DataPointWrites.step
+
+    /**
+     * Routing predicates, in evaluation order. Evaluated after [writes] land.
+     */
+    val inquisitions: SizedIterable<InquisitionEntity>
+        get() = InquisitionEntity
+            .find { Inquisitions.step eq id }
+            .orderBy(Inquisitions.executionOrder to SortOrder.ASC)
+
+    /**
+     * Junctions leaving this step.
+     */
+    val junctions: SizedIterable<WorkflowJunctionEntity>
+            by WorkflowJunctionEntity referrersOn WorkflowJunctions.sourceStep
+
+    /**
+     * The fallthrough next step. Null means this step is terminal.
+     */
+    val defaultRoute: StepDefaultRouteEntity?
+        get() = StepDefaultRouteEntity.findById(id)
+
+    /**
+     * Steps that route into this one by default.
+     */
+    val routedFrom: SizedIterable<StepDefaultRouteEntity>
+            by StepDefaultRouteEntity referrersOn StepDefaultRoutes.nextStep
+
+    val tags: SizedIterable<TagEntity> by TagEntity.via(StepTags.step, StepTags.tag)
 }

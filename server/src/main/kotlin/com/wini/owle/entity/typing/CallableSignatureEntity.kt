@@ -1,25 +1,40 @@
 package com.wini.owle.entity.typing
 
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
-class CallableSignatureEntity(id: EntityID<ULong>): ULongEntity(id) {
+/**
+ * The call contract of a callable type node: its parameters and return type.
+ *
+ * Bound to the callable's own `type_nodes` row (one signature per node), not to a schema member —
+ * a method's owning class is reached through [CallableOwners] instead.
+ */
+class CallableSignatureEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
     companion object : ULongEntityClass<CallableSignatureEntity>(CallableSignatures)
 
-    var parentSchemaRef by TypeSchemaRefEntity referencedOn CallableSignatures.parentSchemaRef
+    /**
+     * The callable's own type node. Unique — one signature per node.
+     */
+    var typeNode by TypeNodeEntity referencedOn CallableSignatures.typeNode
 
-    var name by CallableSignatures.name
-
-    var returnTypeNode by TypeSchemaRefEntity referencedOn CallableSignatures.returnTypeNode
+    var returnTypeNode by TypeNodeEntity referencedOn CallableSignatures.returnTypeNode
 
     var docstring by CallableSignatures.docString
 
-    var isStatic  by CallableSignatures.isStatic
+    var isStatic by CallableSignatures.isStatic
 
     var isClassmethod by CallableSignatures.isClassMethod
 
-
+    /**
+     * Declared parameters in call order.
+     */
+    val parameters: SizedIterable<CallableParameterEntity>
+        get() = CallableParameterEntity
+            .find { CallableParameters.signature eq id }
+            .orderBy(CallableParameters.position to SortOrder.ASC)
 }

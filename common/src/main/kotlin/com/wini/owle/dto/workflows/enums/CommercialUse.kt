@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class CommercialUse {
-    PERSONAL_NONPROFIT,
+    PERSONAL_NON_PROFIT,
     PERSONAL_PROFIT,
     CORPORATION
 }

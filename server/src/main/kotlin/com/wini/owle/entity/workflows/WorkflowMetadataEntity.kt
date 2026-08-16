@@ -1,55 +1,53 @@
 package com.wini.owle.entity.workflows
 
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
+
 
 /**
- * Represents metadata for workflows or steps within the Owl-E application.
- * Includes information on authorship, usage permissions, and sharing configuration.
+ * Sharing and licensing terms for a workflow that is distributed to other users.
+ * At most one row per workflow.
  */
 class WorkflowMetadataEntity(id: EntityID<ULong>) : ULongEntity(id) {
-    companion object : ULongEntityClass<WorkflowMetadataEntity>(WorkflowMetadatas)
+
+    companion object : ULongEntityClass<WorkflowMetadataEntity>(Metadatas)
 
     /**
-     * The associated workflow entity.
-     * Required. References the `workflows` table.
+     * The associated workflow. Unique — one metadata record per workflow.
      */
-    var workflow by WorkflowEntity referencedOn WorkflowMetadatas.workflow
+    var workflow by WorkflowEntity referencedOn Metadatas.workflow
 
     /**
-     * The name of the entity (e.g., workflow or step).
-     * Required.
+     * The name the workflow is distributed under.
      */
-    var name by WorkflowMetadatas.name
+    var name by Metadatas.name
 
     /**
      * The version of the entity, following semantic versioning (e.g., "1.0.0").
-     * Defaults to "1.0.0" if not provided.
      */
-    var version by WorkflowMetadatas.version
+    var version by Metadatas.version
 
     /**
      * Optional copyright information for the entity.
      */
-    var copyrightInformation by WorkflowMetadatas.copyrightInformation
+    var copyrightInformation by Metadatas.copyrightInformation
 
     /**
      * Optional contact information for the author(s) of the entity.
      */
-    var contactInformation by WorkflowMetadatas.contactInformation
+    var contactInformation by Metadatas.contactInformation
 
     /**
      * Information about third-party licenses that apply to this entity.
-     * Optional.
      */
-    var thirdPartyLicenses by WorkflowMetadatas.thirdPartyLicenses
+    var thirdPartyLicenses by Metadatas.thirdPartyLicenses
 
     /**
-     * Advises users to exercise discretion when using this workflow or step.
-     * Defaults to `false`.
+     * Advises users to exercise discretion when using this workflow.
      */
-    var discretionAdvisedContent by WorkflowMetadatas.discretionAdvisedContent
+    var discretionAdvisedContent by Metadatas.discretionAdvisedContent
 
     /**
      * Permits commercial use under defined terms:
@@ -57,20 +55,19 @@ class WorkflowMetadataEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * - `PERSONAL_PROFIT`: Personal use, regardless of profit.
      * - `CORPORATION`: Corporate use allowed.
      */
-    var commercialUsage by WorkflowMetadatas.commercialUsage
+    var commercialUsage by Metadatas.commercialUsage
 
     /**
      * Defines credit display requirements:
      * - `REQUIRED` (default): Credit must be displayed.
      * - `UNNECESSARY`: Credit display is not required.
      */
-    var creditNotation by WorkflowMetadatas.creditNotation
+    var creditNotation by Metadatas.creditNotation
 
     /**
      * Allows or disallows redistribution of the entity.
-     * Defaults to `false`.
      */
-    var allowRedistribution by WorkflowMetadatas.allowRedistribution
+    var allowRedistribution by Metadatas.allowRedistribution
 
     /**
      * Defines modification permissions:
@@ -78,36 +75,26 @@ class WorkflowMetadataEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * - `ALLOW_MODIFICATION`: Modifications are allowed but cannot be redistributed.
      * - `ALLOW_MODIFICATION_REDISTRIBUTION`: Modifications and redistribution allowed.
      */
-    var modification by WorkflowMetadatas.modification
+    var modification by Metadatas.modification
 
     /**
      * Tracks the version of the accepted distribution terms.
-     * Defaults to "1.0.0".
      */
-    var distributionVersion by WorkflowMetadatas.distributionVersion
+    var distributionVersion by Metadatas.distributionVersion
 
     /**
      * Timestamp when the user initially accepted the distribution agreement.
      */
-    var distributionAcceptedAt by WorkflowMetadatas.distributionAcceptedAt
+    var distributionAcceptedAt by Metadatas.distributionAcceptedAt
 
     /**
      * Timestamp when the distribution agreement was last updated.
      */
-    var distributionUpdatedAt by WorkflowMetadatas.distributionUpdatedAt
+    var distributionUpdatedAt by Metadatas.distributionUpdatedAt
 
     /**
-     * List of contributors (authors) for the entity.
-     * Must have at least one author.
-     * References the `users` table through the `workflow_metadata_contributors` link table.
+     * Steps withheld from the shared bundle. No rows means every step ships.
      */
-    //val contributors by UserDao via WorkflowMetadataContributors
-
-    /**
-     * List of step IDs that have been marked for exclusion from the shared content bundle.
-     * References the `steps` table through the `metadata_step_exclusions` link table.
-     * If no exclusions exist, all steps are included by default.
-     */
-    //val excludedSteps by StepDao via MetadataStepExclusions
+    val excludedSteps: SizedIterable<StepEntity>
+            by StepEntity.via(MetadataStepExclusions.metadata, MetadataStepExclusions.excludedStep)
 }
-

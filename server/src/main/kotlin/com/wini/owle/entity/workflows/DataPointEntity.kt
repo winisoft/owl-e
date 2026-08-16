@@ -1,19 +1,24 @@
 package com.wini.owle.entity.workflows
 
-import com.wini.owle.entity.steps.DataPointWriteLinks
-import com.wini.owle.entity.steps.ToolParamDataPointReadEntity
+import com.wini.owle.entity.steps.DataPointWriteEntity
+import com.wini.owle.entity.steps.DataPointWrites
+import com.wini.owle.entity.steps.StepDataPointReadEntity
+import com.wini.owle.entity.steps.StepDataPointReads
 import com.wini.owle.entity.typing.TypeNodeEntity
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
- * Represents a data point within a workflow, used for tracking values,
- * inputs, or outputs that may be accessed by workflow steps.
+ * A typed slot holding a value for the life of a run.
+ *
+ * Data points are the only thing steps read from and write to, and the only thing an inquisition
+ * can inspect — which is why a result must be given a home here before it can be reasoned about.
  */
 class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
-    
+
     companion object : ULongEntityClass<DataPointEntity>(DataPoints)
 
     /**
@@ -24,7 +29,7 @@ class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Specifies the data type for the data point, linking to a type declaration.
      */
-    var typeNode by TypeNodeEntity referencedOn DataPoints.typeDeclaration
+    var typeNode by TypeNodeEntity referencedOn DataPoints.typeNode
 
     /**
      * Name of the data point, used to identify it within the workflow.
@@ -32,7 +37,17 @@ class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
     var name by DataPoints.name
 
     /**
-     * Preset value for the data point, which may be used for initialization or defaults.
+     * Explains the meaning of the data point to users.
+     */
+    var description by DataPoints.description
+
+    /**
+     * Marks a data point that must be supplied as a run input rather than produced by a step.
+     */
+    var isPrerequisite by DataPoints.isPrerequisite
+
+    /**
+     * Preset value, used for initialization or defaults.
      */
     var presetValue by DataPoints.presetValue
 
@@ -40,12 +55,6 @@ class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * Specifies how the data point's value is stored: as text, blob, or file.
      */
     var storeMethod by DataPoints.storeMethod
-
-    /**
-     * Explains the meaning of the DataPoint to users
-     */
-    var description by DataPoints.description
-
 
     /**
      * Timestamp for when the dataPoint was created.
@@ -56,4 +65,17 @@ class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * Timestamp for when the dataPoint was last updated.
      */
     var updatedAt by DataPoints.updatedAt
+
+    // --- access sites ---------------------------------------------------------------------
+
+    /**
+     * Every step argument this data point supplies.
+     */
+    val readsFrom: SizedIterable<StepDataPointReadEntity>
+            by StepDataPointReadEntity referrersOn StepDataPointReads.dataPoint
+
+    /**
+     * Every step write that targets this data point.
+     */
+    val writesTo: SizedIterable<DataPointWriteEntity> by DataPointWriteEntity referrersOn DataPointWrites.dataPoint
 }

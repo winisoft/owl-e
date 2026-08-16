@@ -7,6 +7,7 @@ import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.entity.steps.Inquisitions
 import com.wini.owle.entity.user.Users
 import com.wini.owle.entity.workflows.DataPoints
+import com.wini.owle.entity.workflows.Multiflows
 import com.wini.owle.entity.workflows.Steps
 import com.wini.owle.entity.workflows.Workflows
 import org.jetbrains.exposed.v1.core.ReferenceOption
@@ -18,9 +19,9 @@ import org.jetbrains.exposed.v1.datetime.timestamp
 object WorkflowExecutions : ULongIdTable("workflow_executions") {
     val workflow = reference("workflow_id", Workflows)
 
-    /** No FK — `multiflows` lives outside this pass's scope (not one of the seven named modules). */
-    val multiflowId = ulong("multiflow_id").nullable()
-    val startedAt = timestamp("started_at").nullable().defaultExpression(CurrentTimestamp)
+    /** Set when the run was entered as part of a Multiflow; members share one container. */
+    val multiflow = reference("multiflow_id", Multiflows).nullable()
+    val startedAt = timestamp("started_at").defaultExpression(CurrentTimestamp).nullable()
     val completedAt = timestamp("completed_at").nullable()
     val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
 }
@@ -76,7 +77,7 @@ object TestResults : ULongIdTable("test_results") {
     val testCase = reference("test_case_id", TestCases)
     val workflowExecution = reference("workflowExecutionId", WorkflowExecutions)
     val passed = bool("passed")
-    val executedAt = timestamp("executedAt").nullable().defaultExpression(CurrentTimestamp)
+    val executedAt = timestamp("executedAt").defaultExpression(CurrentTimestamp).nullable()
 }
 
 object StepTestRuns : ULongIdTable("test_step_run") {

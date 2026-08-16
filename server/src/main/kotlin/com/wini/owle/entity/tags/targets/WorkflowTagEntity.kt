@@ -3,36 +3,18 @@ package com.wini.owle.entity.tags.targets
 import com.wini.owle.entity.tags.TagEntity
 import com.wini.owle.entity.tags.WorkflowTags
 import com.wini.owle.entity.workflows.WorkflowEntity
-import org.jetbrains.exposed.v1.dao.CompositeEntity
-import org.jetbrains.exposed.v1.dao.CompositeEntityClass
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.CompositeEntity
+import org.jetbrains.exposed.v1.dao.CompositeEntityClass
+
 
 /**
  * Represents a tag a given user has associated with a workflow
  */
 class WorkflowTagEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
-    companion object : CompositeEntityClass<WorkflowTagEntity>(WorkflowTags) {
 
-        fun buildId(workflow: WorkflowEntity, tagEntity: TagEntity): CompositeID {
-            return CompositeID {
-                it[WorkflowTags.workflow] = workflow.id
-                it[WorkflowTags.tag] = tagEntity.id
-            }
-        }
-
-        /**
-         * Creates a new WorkflowTagDao by building the CompositeID from the
-         * composite objects. This matches typical Exposed usage for composite keys.
-         */
-        fun create(workflow: WorkflowEntity, tagEntity: TagEntity): WorkflowTagEntity {
-            val compositeId = buildId(workflow, tagEntity)
-            return WorkflowTagEntity(EntityID(compositeId, WorkflowTags)).apply {
-                this.workflow = workflow
-                this.tagEntity = tagEntity
-            }
-        }
-    }
+    companion object : CompositeEntityClass<WorkflowTagEntity>(WorkflowTags)
 
     /**
      * The workflow for which the tag is applied
@@ -42,6 +24,5 @@ class WorkflowTagEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
     /**
      * The tag associated with the workflow
      */
-    var tagEntity by TagEntity.Companion referencedOn WorkflowTags.tag
-
+    var tag by TagEntity referencedOn WorkflowTags.tag
 }

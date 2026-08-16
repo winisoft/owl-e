@@ -1,11 +1,11 @@
 package com.wini.owle.entity.typing
 
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
-class CallableParameterEntity(id: EntityID<ULong>): ULongEntity(id) {
+class CallableParameterEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
     companion object : ULongEntityClass<CallableParameterEntity>(CallableParameters)
 
@@ -37,12 +37,10 @@ class CallableParameterEntity(id: EntityID<ULong>): ULongEntity(id) {
     /**
      * if **kwargs
      */
-    var isKArg by CallableParameters.isKArg
+    var isKwarg by CallableParameters.isKwarg
 
     /**
      * default literal text, if any
      */
     var defaultValueText by CallableParameters.defaultValueText
-
 }
-

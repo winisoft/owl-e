@@ -1,12 +1,12 @@
 package com.wini.owle.entity.tags.targets
 
-import com.wini.owle.entity.tags.TagEntity
 import com.wini.owle.entity.environs.pkg.DistributionEntity
 import com.wini.owle.entity.tags.DistributionTags
-import org.jetbrains.exposed.v1.dao.CompositeEntity
-import org.jetbrains.exposed.v1.dao.CompositeEntityClass
+import com.wini.owle.entity.tags.TagEntity
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.CompositeEntity
+import org.jetbrains.exposed.v1.dao.CompositeEntityClass
 
 
 /**
@@ -24,6 +24,5 @@ class DistributionTagEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
     /**
      * The tag associated with the distribution
      */
-    var tag by TagEntity.Companion referencedOn DistributionTags.tag
-
+    var tag by TagEntity referencedOn DistributionTags.tag
 }

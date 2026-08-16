@@ -44,7 +44,7 @@ object DistributionPackages : CompositeIdTable("packages") {
 object PackageExtras : CompositeIdTable("package_extras") {
     val distribution = reference("distribution", Distributions)
     val packageVersion = reference("package_id", Versions)
-    val name = varchar("name", 255)
+    val name = varchar("name", 255).entityId()
     val description = varchar("description", 4096).nullable()
     override val primaryKey = PrimaryKey(distribution, packageVersion, name)
 }
@@ -83,8 +83,8 @@ object PythonVersions : IdTable<ULong>("python_versions") {
 
 object PythonVersionSpecifiers : CompositeIdTable("python_version_specifiers") {
     val pythonVersion = reference("version_id", PythonVersions)
-    val operator = enumerationByName("operator", 16, VersionOperator::class)
-    val wildcard = enumerationByName("wildcard", 8, WildcardSegment::class).default(WildcardSegment.NONE)
+    val operator = enumerationByName("operator", 16, VersionOperator::class).entityId()
+    val wildcard = enumerationByName("wildcard", 8, WildcardSegment::class).entityId()
     override val primaryKey = PrimaryKey(pythonVersion, operator, wildcard)
 }
 

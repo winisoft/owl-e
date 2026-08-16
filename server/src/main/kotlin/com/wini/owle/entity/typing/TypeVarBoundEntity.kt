@@ -1,31 +1,16 @@
 package com.wini.owle.entity.typing
 
-import com.wini.owle.entity.transforms.TransformTargetTypeEntity
-import com.wini.owle.entity.transforms.TransformTargetTypes
-import org.jetbrains.exposed.v1.dao.CompositeEntity
-import org.jetbrains.exposed.v1.dao.CompositeEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.ULongEntity
+import org.jetbrains.exposed.v1.dao.ULongEntityClass
 
 
 /**
  * Represents bounds on type variables, supporting constraints like 'T: int' for generic types.
  */
-class TypeVarBoundEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
+class TypeVarBoundEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
-    companion object : CompositeEntityClass<TypeVarBoundEntity>(TypeVarBounds) {
-        fun buildId(typeVarNodeId: ULong, boundTypeNodeId: ULong) : CompositeID {
-            return CompositeID {
-                it[TypeVarBounds.typeVarNode] = typeVarNodeId
-                it[TypeVarBounds.boundNode] = boundTypeNodeId
-            }
-        }
-        fun create(typeVarNodeId: ULong, boundTypeNodeId: ULong): TypeVarBoundEntity {
-            val compositeID = buildId(typeVarNodeId, boundTypeNodeId)
-            val entityID = EntityID(compositeID, TypeVarBounds)
-            return TypeVarBoundEntity(entityID)
-        }
-    }
+    companion object : ULongEntityClass<TypeVarBoundEntity>(TypeVarBounds)
 
     /**
      * The TypeNode that is the TypeVar itself
@@ -36,6 +21,4 @@ class TypeVarBoundEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
      * The TypeNode representing the upper bound
      */
     var boundTypeNode by TypeNodeEntity referencedOn TypeVarBounds.boundNode
-
-
 }

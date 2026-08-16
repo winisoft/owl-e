@@ -17,19 +17,19 @@ object TransformTargetTypeDaoDelegate: CompositeIdDaoDelegate<
     override fun buildId(params: Map<String, Any?>): CompositeID {
         return CompositeID.Companion {
             it[TransformTargetTypes.transform] = (params["transformationId"] as Transform).id
-            it[TransformTargetTypes.eligibleType] = (params["typeDeclarationId"] as TypeNode).id
+            it[TransformTargetTypes.eligibleTypeNode] = (params["typeDeclarationId"] as TypeNode).id
         }
     }
 
     override fun extractId(dto: TransformTargetType): CompositeID {
         return CompositeID.Companion {
             it[TransformTargetTypes.transform] = dto.transformationId
-            it[TransformTargetTypes.eligibleType] = dto.typeDeclarationId
+            it[TransformTargetTypes.eligibleTypeNode] = dto.typeDeclarationId
         }
     }
 
     override val columnsByRequestParam: Map<String, Column<out Any>> = mapOf(
         "transformationId" to TransformTargetTypes.transform,
-        "typeDeclarationId" to TransformTargetTypes.eligibleType
+        "typeDeclarationId" to TransformTargetTypes.eligibleTypeNode
     )
 }

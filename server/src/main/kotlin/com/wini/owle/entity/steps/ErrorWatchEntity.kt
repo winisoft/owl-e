@@ -1,9 +1,12 @@
 package com.wini.owle.entity.steps
 
 import com.wini.owle.entity.workflows.StepEntity
+import com.wini.owle.entity.workflows.WorkflowEntity
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
@@ -27,5 +30,18 @@ class ErrorWatchEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Workflow step to execute if this error condition is met.
      */
-    var onMetStep by StepEntity referencedOn ErrorWatches.triggerStep
+    var triggerStep by StepEntity referencedOn ErrorWatches.triggerStep
+
+    /**
+     * The workflow the trigger step must belong to — enforced by a composite FK.
+     */
+    var workflow by WorkflowEntity referencedOn ErrorWatches.workflow
+
+    /**
+     * Ordered call-stack refinements that narrow when this watch fires.
+     */
+    val functions: SizedIterable<ErrorWatchFnEntity>
+        get() = ErrorWatchFnEntity
+            .find { ErrorWatchFns.errorWatch eq id }
+            .orderBy(ErrorWatchFns.position to SortOrder.ASC)
 }

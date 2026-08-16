@@ -1,47 +1,21 @@
 package com.wini.owle.entity.environs.pkg
 
 import com.wini.owle.entity.environs.DistributionPackages
-import com.wini.owle.entity.environs.PackageDistRequirements
-import com.wini.owle.entity.environs.marker.EnvMarkerExpressionEntity
-import com.wini.owle.entity.environs.version.VersionEntity
 import com.wini.owle.entity.environs.Versions
-import org.jetbrains.exposed.v1.dao.CompositeEntity
-import org.jetbrains.exposed.v1.dao.CompositeEntityClass
+import com.wini.owle.entity.environs.version.VersionEntity
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.CompositeEntity
+import org.jetbrains.exposed.v1.dao.CompositeEntityClass
 
 
 /**
- * Represents a unique Python library package, along with its specific version details.
- * Used to store information about packages that can be installed in the workflow.
+ * One released version of a distribution — the PyPI metadata row.
+ *
+ * Keyed by (version, distribution) rather than a surrogate id, which is why everything that
+ * points at a package carries both halves.
  */
 class DistributionPackageEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
-
-    var distribution by DistributionEntity referencedOn DistributionPackages.distribution
-    var version by VersionEntity referencedOn DistributionPackages.version
-
-    var versionString: String by DistributionPackages.versionString
-    var summary: String? by DistributionPackages.summary
-    var keywords: String? by DistributionPackages.keywords
-    var description: String? by DistributionPackages.description
-    var descriptionContentType: String? by DistributionPackages.descriptionContentType
-    var license: String? by DistributionPackages.license
-    var homePage: String? by DistributionPackages.homePage
-    var projectUrl: String? by DistributionPackages.projectUrl
-    var downloadUrl: String? by DistributionPackages.downloadUrl
-    var docsUrl: String? by DistributionPackages.docsUrl
-    var yanked: Boolean by DistributionPackages.yanked
-    var lastSerial: UInt? by DistributionPackages.lastSerial
-
-    var envMarkerExpression by EnvMarkerExpressionEntity referencedOn PackageDistRequirements
-
-//    val requirements: List<VersionEntity>
-//        get() {
-//            return VersionEntity.find {
-//                (PackageDistRequirements.dependentVersion eq version.id)
-//            }.toList()
-//        }
-
 
     companion object : CompositeEntityClass<DistributionPackageEntity>(DistributionPackages) {
 
@@ -56,9 +30,24 @@ class DistributionPackageEntity(id: EntityID<CompositeID>) : CompositeEntity(id)
             val compositeID = buildId(distribution, packageId)
             return DistributionPackageEntity(EntityID(compositeID, DistributionPackages))
         }
-
     }
 
-}
+    var distribution by DistributionEntity referencedOn DistributionPackages.distribution
 
-//val compatVersions by PackagePythonCompatEntity.Companion referrersOn PackagePythonCompats.packageId
+    var version by VersionEntity referencedOn DistributionPackages.version
+
+    /** The version as published, before normalization into [version]'s components. */
+    var versionString: String by DistributionPackages.versionString
+
+    var summary: String? by DistributionPackages.summary
+    var keywords: String? by DistributionPackages.keywords
+    var description: String? by DistributionPackages.description
+    var descriptionContentType: String? by DistributionPackages.descriptionContentType
+    var license: String? by DistributionPackages.license
+    var homePage: String? by DistributionPackages.homePage
+    var projectUrl: String? by DistributionPackages.projectUrl
+    var downloadUrl: String? by DistributionPackages.downloadUrl
+    var docsUrl: String? by DistributionPackages.docsUrl
+    var yanked: Boolean? by DistributionPackages.yanked
+    var lastSerial: UInt? by DistributionPackages.lastSerial
+}

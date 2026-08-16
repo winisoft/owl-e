@@ -1,8 +1,9 @@
 package com.wini.owle.entity.typing
 
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
@@ -21,8 +22,15 @@ class TypeSchemaRefEntity(id: EntityID<ULong>) : ULongEntity(id) {
      */
     var parentRef by TypeSchemaRefEntity optionalReferencedOn TypeSchemaRefs.parentRef
 
-    var classNode by TypeNodeEntity referencedOn TypeSchemaRefs.classNode
+    /**
+     * Nested members declared beneath this one.
+     */
+    val children: SizedIterable<TypeSchemaRefEntity> by TypeSchemaRefEntity optionalReferrersOn TypeSchemaRefs.parentRef
 
+    /**
+     * The type that declares this member.
+     */
+    var classNode by TypeNodeEntity referencedOn TypeSchemaRefs.classNode
 
     /**
      * The member’s name (field, method, property, or classvar).
@@ -33,10 +41,9 @@ class TypeSchemaRefEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * Type declaration associated with this schema reference.
      *
      * -- If attribute/classvar/property: this is the type (type_nodes.id).
-     * -- If method: NULL (you find its signature via callable_signatures.parent_schema_ref_id = this id).
-     * -- If property: could store a type here or resolve via a hidden “getter” callable.
+     * -- If method: NULL — the call contract is on the callable node's own signature.
      */
-    var typeNode by TypeNodeEntity referencedOn TypeSchemaRefs.typeNode
+    var typeNode by TypeNodeEntity optionalReferencedOn TypeSchemaRefs.typeNode
 
     /**
      * Optional description providing details on the schema reference's purpose.
@@ -46,5 +53,4 @@ class TypeSchemaRefEntity(id: EntityID<ULong>) : ULongEntity(id) {
     var position by TypeSchemaRefs.position
 
     var membership by TypeSchemaRefs.membership
-
 }

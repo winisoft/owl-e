@@ -6,8 +6,10 @@ import com.wini.owle.entity.typing.TypeNodes
 import com.wini.owle.entity.workflows.DataPoints
 import com.wini.owle.entity.workflows.Steps
 import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable
 import org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
+import org.jetbrains.exposed.v1.core.or
 
 
 object Transforms : ULongIdTable("transforms") {

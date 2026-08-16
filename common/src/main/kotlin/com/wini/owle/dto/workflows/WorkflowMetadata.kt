@@ -69,7 +69,7 @@ data class WorkflowMetadata(
      * - "personalProfit": Personal use, regardless of profit.
      * - "corporation": Corporate use allowed.
      */
-    val commercialUsage: CommercialUse = CommercialUse.PERSONAL_NONPROFIT,
+    val commercialUsage: CommercialUse = CommercialUse.PERSONAL_NON_PROFIT,
 
     /**
      * Defines credit display requirements:

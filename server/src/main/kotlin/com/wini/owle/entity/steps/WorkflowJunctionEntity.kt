@@ -2,17 +2,20 @@ package com.wini.owle.entity.steps
 
 import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
- * Represents a junction connecting one workflow to another, allowing a transition to a target workflow.
- * A junction may include conditions under which the transition is triggered,
- * and prerequisite injections required for the target workflow.
+ * Connects a step to another workflow.
+ *
+ * A junction is unconditional unless an inquisition claims it via an
+ * [InquisitionJunctionRedirectEntity]; [triggeredBy] resolves that claim.
  */
 class WorkflowJunctionEntity(id: EntityID<ULong>) : ULongEntity(id) {
+
     companion object : ULongEntityClass<WorkflowJunctionEntity>(WorkflowJunctions)
 
     /**
@@ -26,7 +29,16 @@ class WorkflowJunctionEntity(id: EntityID<ULong>) : ULongEntity(id) {
     var targetWorkflow by WorkflowEntity referencedOn WorkflowJunctions.targetWorkflow
 
     /**
-     * Inquisition condition required to activate this junction, if specified.
+     * Values lifted from the source workflow into the target's data points.
      */
-    var triggerInquisitionEntity by InquisitionEntity optionalReferencedOn WorkflowJunctions.triggerInquisition
+    val injections: SizedIterable<DataPointInjectionEntity>
+            by DataPointInjectionEntity referrersOn DataPointInjections.junction
+
+    /**
+     * The inquisition that gates this junction, if any; absent means unconditional.
+     */
+    val triggeredBy: InquisitionJunctionRedirectEntity?
+        get() = InquisitionJunctionRedirectEntity
+            .find { InquisitionJunctionRedirects.junction eq id }
+            .firstOrNull()
 }

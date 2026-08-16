@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 enum class ModificationTerms {
     PROHIBITED,
     ALLOW_MODIFICATION,
-    ALLOW_MODIFICATION_DISTRIBUTION
+    ALLOW_MODIFICATION_REDISTRIBUTION
 }

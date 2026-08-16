@@ -1,43 +1,65 @@
 package com.wini.owle.entity.steps
 
-import com.wini.owle.entity.typing.TypeNodeEntity
-import com.wini.owle.entity.workflows.DataPointEntity
+import com.wini.owle.entity.typing.CallableSignatureEntity
 import com.wini.owle.entity.workflows.StepEntity
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
- * Represents a conditional check or "inquisition" within a workflow,
- * analyzing a specific data point value and determining if workflow redirection is required.
+ * A routing predicate attached to a step's completion.
+ *
+ * Like a tool, an inquisition carries its own Python source in [body] and a typed [signature];
+ * its arguments are bound to data points through [dataPointReads]. Evaluated after the step's
+ * writes land, in [executionOrder]. The first one to evaluate true routes — either to another
+ * step ([stepRedirect]) or across a junction ([junctionRedirect]).
  */
 class InquisitionEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
     companion object : ULongEntityClass<InquisitionEntity>(Inquisitions)
 
     /**
-     * The workflow step that includes this inquisition as a conditional check.
+     * The workflow step whose completion this inquisition evaluates.
      */
-    var workflowStep by StepEntity referencedOn Inquisitions.step
+    var step by StepEntity referencedOn Inquisitions.step
 
     /**
-     * Specifies the class of inquisition (e.g., condition type or criteria).
+     * Author-facing note. Carries no execution meaning.
      */
-    var condition by TypeNodeEntity referencedOn Inquisitions.condition
+    var note by Inquisitions.note
 
     /**
-     * The data point whose value is analyzed by this inquisition to determine workflow direction.
-     */
-    var dataPoint by DataPointEntity referencedOn Inquisitions.dataPoint
-
-    /**
-     * Specifies the workflow step to execute if the condition is met in this inquisition.
-     */
-    var onMetWorkflowStep by StepEntity referencedOn Inquisitions.triggerStep
-
-    /**
-     * Determines the order in which this inquisition is executed within its associated workflow step.
+     * Determines the order in which this inquisition is evaluated within its associated step.
      */
     var executionOrder by Inquisitions.executionOrder
+
+    /**
+     * Typed call contract for [body], when one has been resolved.
+     */
+    var signature by CallableSignatureEntity optionalReferencedOn Inquisitions.signature
+
+    /**
+     * The Python predicate source.
+     */
+    var body by Inquisitions.body
+
+    /**
+     * Data points bound to this predicate's parameters.
+     */
+    val dataPointReads: SizedIterable<InquisitionDataPointReadEntity>
+            by InquisitionDataPointReadEntity referrersOn InquisitionDataPointReads.inquisition
+
+    /**
+     * Where this inquisition routes within the same workflow, if that is its outcome.
+     */
+    val stepRedirect: InquisitionStepRedirectEntity?
+        get() = InquisitionStepRedirectEntity.findById(id)
+
+    /**
+     * The junction this inquisition triggers, if it transitions workflow instead.
+     */
+    val junctionRedirect: InquisitionJunctionRedirectEntity?
+        get() = InquisitionJunctionRedirectEntity.findById(id)
 }
