@@ -24,8 +24,8 @@ object Workflows : ULongIdTable("workflows") {
     val description = varchar("description", 8192).nullable()
     val pythonVersion = reference("python_version_id", PythonVersions)
     val parentFolder = reference("parent_folder_id", WorkflowFolders).nullable()
-    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp).nullable()
-    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp).nullable()
+    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp)
 }
 
 
@@ -34,8 +34,8 @@ object WorkflowFolders : ULongIdTable("workflow_folders") {
     val parentFolder = reference("parent_folder_id", WorkflowFolders).nullable()
     val name = varchar("name", 255)
     val description = varchar("description", 8192).nullable()
-    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp).nullable()
-    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp).nullable()
+    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp)
 }
 
 
@@ -69,8 +69,8 @@ object Steps : ULongIdTable("steps") {
     val name = varchar("name", 255)
     val description = varchar("description", 8192).nullable()
     val isWorkflowHead = bool("is_workflow_head").default(false)
-    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp).nullable()
-    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp).nullable()
+    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp)
     val posX = double("pos_x").default(0.0)
     val posY = double("pos_y").default(0.0)
     val color = varchar("color", 7).nullable()
@@ -91,8 +91,8 @@ object DataPoints : ULongIdTable("data_points") {
     val presetValue = text("preset_value").nullable()
     val storeMethod = enumerationByName("store_method", 8, StoreMethod::class).nullable()
     val typeNode = reference("type_node_id", TypeNodes)
-    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp).nullable()
-    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp).nullable()
+    val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
 }
 
 
@@ -145,8 +145,8 @@ object Multiflows : ULongIdTable("multiflows") {
     val name = varchar("name", 255)
     val description = varchar("description", 8192).nullable()
     val rootWorkflow = reference("root_workflow_id", Workflows)
-    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp).nullable()
-    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp).nullable()
+    val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
+    val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp)
 }
 
 

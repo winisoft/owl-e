@@ -8,8 +8,10 @@ import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
+import com.wini.owle.schema.ModelDefinition
 
 
+@ModelDefinition
 @Serializable
 @ApiEndpointDefinition("api.typing.callableSignatureApi", ["type"], "/callable-signature")
 data class CallableSignature(

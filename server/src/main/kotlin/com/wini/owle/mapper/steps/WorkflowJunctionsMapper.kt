@@ -29,7 +29,6 @@ class WorkflowJunctionsMapper(
             id = entity.id.value,
             sourceStep = stepsMapper.toDto(entity.sourceStep),
             targetWorkflow = workflowMapper.toDto(entity.targetWorkflow),
-            triggerInquisition = entity.triggerInquisitionEntity?.let { inquisitionsMapper.toDto(it) }
         )
     }
 }

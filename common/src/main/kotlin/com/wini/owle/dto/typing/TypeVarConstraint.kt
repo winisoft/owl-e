@@ -3,8 +3,10 @@ package com.wini.owle.dto.typing
 import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
+import com.wini.owle.schema.ModelDefinition
 
 
+@ModelDefinition
 @Serializable
 @ApiEndpointDefinition("api.typing.typeVarConstraint", ["type"], "/type-var-constraint")
 data class TypeVarConstraint(

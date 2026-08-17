@@ -33,7 +33,6 @@ open class WorkflowRunMapper(
             startedAt = dateTimeConverter.toString(entity.startedAt),
             completedAt = entity.completedAt?.let { dateTimeConverter.toString(it) },
             status = entity.status,
-            stepTestRuns = emptyList()
         )
     }
 }

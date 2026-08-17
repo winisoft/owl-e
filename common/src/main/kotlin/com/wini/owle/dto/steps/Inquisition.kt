@@ -7,7 +7,6 @@ import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.typing.TypeNode
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.DataPoint
-import com.wini.owle.error.PositiveValueIntError
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
 
@@ -29,24 +28,9 @@ data class Inquisition(
     val step: Step,
 
     /**
-     * Specifies the class of inquisition (e.g., condition type or criteria).
-     */
-    val condition: TypeNode,
-
-    /**
-     * The data point whose value is analyzed by this inquisition to determine workflow direction.
-     */
-    val dataPoint: DataPoint,
-
-    /**
-     * Specifies the workflow step to execute if the condition is met in this inquisition.
-     */
-    val onMetWorkflowStep: Step,
-
-    /**
      * Determines the order in which this inquisition is executed within its associated workflow step.
      */
-    @ConstraintSimple([PositiveValueIntError::class])
-    val executionOrder: Int
+    @ConstraintSimple([PositiveValueULongError::class])
+    val executionOrder: ULong
 
 ) : ULongDto

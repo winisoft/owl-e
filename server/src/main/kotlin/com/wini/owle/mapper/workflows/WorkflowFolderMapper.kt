@@ -29,7 +29,6 @@ class WorkflowFolderMapper(
             description = entity.description,
             createdAt = dateTimeConverter.toString(entity.createdAt),
             updatedAt = dateTimeConverter.toString(entity.updatedAt),
-            img = null
         )
     }
 }

@@ -47,11 +47,6 @@ data class WorkflowFolder(
     val description: String? = null,
     
     /**
-     * An icon to distinguish the folder for the user
-     */
-    val img: ByteArray? = null,
-    
-    /**
      * Timestamp for when the folder was created.
      */
     @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])

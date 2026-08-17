@@ -16,9 +16,7 @@ class TestInputMapper(
     override fun toEntity(dto: TestInput): TestInputEntity {
         return daoDelegate.findOrCreate(dto) {
             testCase = testCasesMapper.toEntity(dto.testCase)
-            dataPoint = dataPointMapper.toEntity(dto.dataPoint)
             value = dto.value
-            generationMethod = dto.generationMethod
         }
     }
 
@@ -26,9 +24,7 @@ class TestInputMapper(
         return TestInput(
             id = entity.id.value,
             testCase = testCasesMapper.toDto(entity.testCase),
-            dataPoint = dataPointMapper.toDto(entity.dataPoint),
             value = entity.value,
-            generationMethod = entity.generationMethod
         )
     }
 }

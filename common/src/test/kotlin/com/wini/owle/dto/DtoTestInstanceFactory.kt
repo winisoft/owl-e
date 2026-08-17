@@ -394,12 +394,12 @@ object DtoTestInstanceFactory {
     }
 
     fun tagRelationDto(
-        parentTagId: ULong = 1UL,
-        childTagId: ULong = 2UL
+        parentTag: Tag = Tag(),
+        childTag: Tag = Tag()
     ) : TagRelation {
         return TagRelation(
-            parentTagId = parentTagId,
-            childTagId = childTagId
+            parentTag = parentTag,
+            childTag = childTag
         )
     }
 
@@ -417,8 +417,7 @@ object DtoTestInstanceFactory {
             workflow = workflow,
             startedAt = startedAt,
             completedAt = completedAt,
-            status = status,
-            stepTestRuns = stepTestRuns
+            status = status
         )
     }
 
@@ -432,7 +431,7 @@ object DtoTestInstanceFactory {
     ) : BenchmarkReport {
         return BenchmarkReport(
             id = id,
-            workflowRun = workflowRun
+            workflowExecution = workflowRun
         )
     }
 
@@ -518,8 +517,8 @@ object DtoTestInstanceFactory {
         return StepTestRun(
             id = id,
             step = step,
-            startedAt = startedAt,
-            completedAt = completedAt,
+            started = startedAt,
+            completed = completedAt,
             status = status
         )
     }
@@ -542,7 +541,7 @@ object DtoTestInstanceFactory {
         id: ULong = 1UL,
         errorWatch: ErrorWatch = errorWatch(),
         functionNode: TypeNode = typeNode(),
-        position: Int = 1,
+        position: ULong = 1UL,
     ) : ErrorWatchFn {
         return ErrorWatchFn(
             id = id,
@@ -555,17 +554,11 @@ object DtoTestInstanceFactory {
     fun inquisitionDto(
         id: ULong = 1UL,
         step: Step = stepDto(),
-        condition: TypeNode = typeNode(),
-        dataPoint: DataPoint = dataPointDto(),
-        onMetWorkflowStep: Step = stepDto(),
-        executionOrder: Int = 1
+        executionOrder: ULong = 1UL
     ) : Inquisition {
         return Inquisition(
             id = id,
             step = step,
-            condition = condition,
-            dataPoint = dataPoint,
-            onMetWorkflowStep = onMetWorkflowStep,
             executionOrder = executionOrder
         )
     }
@@ -591,14 +584,12 @@ object DtoTestInstanceFactory {
     fun workflowJunctionDto(
         id: ULong = 1UL,
         sourceStep: Step = stepDto(),
-        targetWorkflow: Workflow = workflowDto(),
-        triggerInquisition: Inquisition = inquisitionDto()
+        targetWorkflow: Workflow = workflowDto()
     ) : WorkflowJunction {
         return WorkflowJunction(
             id = id,
             sourceStep = sourceStep,
-            targetWorkflow = targetWorkflow,
-            triggerInquisition = triggerInquisition
+            targetWorkflow = targetWorkflow
         )
     }
 
@@ -666,27 +657,28 @@ object DtoTestInstanceFactory {
         id: ULong = 1UL,
         parentRef: TypeSchemaRef? = null,
         name: String = "exampleSchema",
-        typeDeclaration: TypeNode = typeNode(),
+        typeNode: TypeNode = typeNode(),
         description: String = "Schema reference description",
-        childRefs: List<TypeSchemaRef> = emptyList()
+        children: List<TypeSchemaRef> = emptyList()
     ) : TypeSchemaRef {
         return TypeSchemaRef(
             id = id,
             parentRef = parentRef,
             name = name,
-            typeDeclaration = typeDeclaration,
+            typeNode = typeNode,
             description = description,
-            childRefs = childRefs
+            children = children
         )
     }
 
-    fun phaseDto(
+    fun grouperDto(
         id: ULong = 1UL,
         workflow: Workflow = workflowDto(),
         parentGrouper: Grouper? = null,
         name: String = "Phase Name",
         description: String? = "Phase Description",
-        displayOrder: Int = 1
+        posX: Double,
+        posY: Double,
     ) : Grouper {
         return Grouper(
             id = id,
@@ -694,7 +686,8 @@ object DtoTestInstanceFactory {
             parentGrouper = parentGrouper,
             name = name,
             description = description,
-            displayOrder = displayOrder
+            posX = posX,
+            posY = posY,
         )
     }
 
@@ -724,8 +717,8 @@ object DtoTestInstanceFactory {
         varianceCardinality: VarianceCardinality = VarianceCardinality.COVARIANT
     ): TypeVarVariance {
         return TypeVarVariance(
-            typeNode = typeVariableDeclaration,
-            cardinality = varianceCardinality
+            typeVarNode = typeVariableDeclaration,
+            varianceCardinality = varianceCardinality
         )
     }
 
@@ -769,10 +762,9 @@ object DtoTestInstanceFactory {
     ): TestInput {
         return TestInput(
             id = id,
+            testCase = testCase,
             dataPoint = dataPoint,
             value = value,
-            generationMethod = generationMethod,
-            testCase = testCase
         )
     }
     fun testExpectedOutcomeDto(
@@ -813,28 +805,28 @@ object DtoTestInstanceFactory {
 
     fun appliedTransformArg(
         id: ULong = 0UL,
-        transformOccurrence: com.wini.owle.dto.transforms.TransformOccurrence = appliedTransformDto(),
-        transformationArg: TransformArg = transformationArg(),
+        transformOccurrence: TransformOccurrence = transformOccurrence(),
+        transformArg: TransformArg = transformationArg(),
         value: String = ""
     ) : TransformOccurrenceArg {
         return TransformOccurrenceArg(
             id = id,
             transformOccurrence = transformOccurrence,
-            transformationArg = transformationArg,
+            transformArg = transformArg,
             value = value
         )
     }
 
     fun transformationArg(
         id: ULong = 0UL,
-        transformation: Transform = transformationDto(),
+        transform: Transform = transformationDto(),
         name: String = "Transformation Arg Name",
         typeNode: TypeNode = typeNode(),
         description: String? = "Transformation Arg Description"
     ): TransformArg {
         return TransformArg(
             id = id,
-            transformation = transformation,
+            transform = transform,
             name = name,
             typeNode = typeNode,
             description = description
@@ -844,14 +836,12 @@ object DtoTestInstanceFactory {
     fun appliedTransformDto(
         id: ULong = 0UL,
         transformation: Transform = transformationDto(),
-        occurrence: TransformOccurrence = TransformOccurrence.DATA_POINT_INJECTION,
-        resultType: TypeNode = typeNode()
+        occurrence: TransformOccurrence = TransformOccurrence.DATA_POINT_INJECTION
     ) : com.wini.owle.dto.transforms.TransformOccurrence {
         return TransformOccurrence(
             id = id,
-            transformation = transformation,
-            occurrence = occurrence,
-            resultType = resultType
+            transform = transformation,
+            occurrence = occurrence
         )
     }
 
@@ -881,7 +871,7 @@ object DtoTestInstanceFactory {
             TypeSchemaRef::class.java -> typeSchemaRefDto() as T
             TypeUnionMember::class.java -> typeUnionMemberDto() as T
             TypeVarVariance::class.java -> typeVarianceDto() as T
-            Grouper::class.java -> phaseDto() as T
+            Grouper::class.java -> grouperDto() as T
             DataPointWrite::class.java -> dataPointWriteDto() as T
             WorkflowFolder::class.java -> workflowFolderDto() as T
             TestInput::class.java -> testInputDto() as T

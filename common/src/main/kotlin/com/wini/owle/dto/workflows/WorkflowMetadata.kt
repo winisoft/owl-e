@@ -37,12 +37,6 @@ data class WorkflowMetadata(
      */
     val version: String = "1.0.0",
 
-    /**
-     * List of contributor user IDs for the entity. Must have at least one author.
-     * Required.
-     */
-    val contributors: List<User>,
-
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     val copyrightInformation: String? = null,
 

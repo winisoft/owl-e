@@ -28,7 +28,4 @@ data class TestInput(
     @ConstraintSimple([StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_64000)
     val value: String?,
-
-    val generationMethod: GenerationMethod
-
 ) : ULongDto

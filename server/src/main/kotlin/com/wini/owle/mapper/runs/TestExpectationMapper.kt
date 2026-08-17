@@ -21,7 +21,6 @@ class TestExpectationMapper(
     override fun toDto(entity: TestOutcomeExpectationEntity): TestOutcomeExpectation {
         return TestOutcomeExpectation(
             id = entity.id.value,
-            dataPoint = dataPointMapper.toDto(entity.dataPoint),
             assertion = entity.assertion
         )
     }

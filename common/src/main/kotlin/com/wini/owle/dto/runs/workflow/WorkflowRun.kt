@@ -46,7 +46,4 @@ data class WorkflowRun(
      * Current status of the workflow execution, e.g., running, completed, failed, or cancelled.
      */
     val status: ExecutionStatus,
-
-    val stepTestRuns: List<StepTestRun>
-
 ) : ULongDto

@@ -30,9 +30,4 @@ data class TransformOccurrence(
      */
     val occurrence: TransformOccurrence,
 
-    /**
-     * The type of the result produced by this transformation.
-     */
-    val resultType: TypeNode,
-
 ) : ULongDto

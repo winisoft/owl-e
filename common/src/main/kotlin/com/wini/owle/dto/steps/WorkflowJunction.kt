@@ -31,10 +31,4 @@ data class WorkflowJunction(
      * Workflow that this junction transitions to.
      */
     val targetWorkflow: Workflow,
-
-    /**
-     * Inquisition condition required to activate this junction, if specified.
-     */
-    val triggerInquisition: Inquisition?
-
 ) : ULongDto

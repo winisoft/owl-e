@@ -23,7 +23,6 @@ class DataPointWriteMapper(
     override fun toDto(entity: DataPointWriteEntity): DataPointWrite {
         return DataPointWrite(
             id = 1UL,
-            dataPoint = dataPointMapper.toDto(entity.dataPoint),
             step = stepMapper.toDto(entity.step)
         )
     }

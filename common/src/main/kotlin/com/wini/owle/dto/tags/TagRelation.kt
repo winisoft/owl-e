@@ -1,23 +1,26 @@
 package com.wini.owle.dto.tags
 
 import com.wini.owle.dto.CompositeDto
-import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.schema.error.ConstraintSimple
-import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
+import kotlinx.serialization.Serializable
 
+/**
+ * A parent/child edge in the tag hierarchy.
+ *
+ * Carries the related [Tag]s rather than their raw ids: the entity side holds real references,
+ * and matching that here is what lets the mapping be derived instead of hand-written.
+ */
 @ModelDefinition
 @ApiEndpointDefinition("api.user.tagRelation", ["user"], "/tag-relation")
 @Serializable
 data class TagRelation(
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    val parentTagId: ULong,
+    val parentTag: Tag,
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    val childTagId: ULong
+    val childTag: Tag
+
 ) : CompositeDto {
 
-    override val owleId: String get() = "parentTagId=$parentTagId,childTagId=$childTagId"
+    override val owleId: String get() = "parentTag=${parentTag.owleId},childTag=${childTag.owleId}"
 }

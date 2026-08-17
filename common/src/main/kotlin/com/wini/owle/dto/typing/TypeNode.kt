@@ -16,6 +16,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 /**
  * Represents a type in the Owl-E system
  */
+@ModelDefinition
 @Serializable
 @ApiEndpointDefinition("api.typing.typeNode", ["type"], "/type-node")
 data class TypeNode(

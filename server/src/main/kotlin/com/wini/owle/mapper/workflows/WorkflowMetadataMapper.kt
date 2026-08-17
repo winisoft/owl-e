@@ -53,7 +53,6 @@ class WorkflowMetadataMapper(
             distributionVersion = entity.distributionVersion,
             distributionAcceptedAt = dateTimeConverter.toString(entity.distributionAcceptedAt),
             distributionUpdatedAt = dateTimeConverter.toString(entity.distributionUpdatedAt),
-            contributors = emptyList(),
             excludedSteps = emptyList()
         )
     }

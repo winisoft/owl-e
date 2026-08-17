@@ -1,15 +1,15 @@
 package com.wini.owle.dto.transforms
 
-import com.wini.owle.schema.error.ConstraintSimple
-import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.CompositeDto
-import com.wini.owle.error.PositiveValueULongError
-import kotlinx.serialization.Serializable
+import com.wini.owle.dto.typing.TypeNode
+import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.api.ApiEndpointDefinition
+import kotlinx.serialization.Serializable
 
 /**
- * Represents the target types for a transformation.
- * Each target type defines which types are eligible for a transformation and the resulting type after the transformation is applied.
+ * Declares that a transform accepts one input type, and what it yields for that input.
+ *
+ * Holds the related types rather than their raw ids, mirroring the entity.
  */
 @ModelDefinition
 @ApiEndpointDefinition("api.transforms.transformTargetType", ["transforms"], "/transform-target-type")
@@ -19,17 +19,20 @@ data class TransformTargetType(
     /**
      * The transformation this target type is associated with.
      */
-    @ConstraintSimple([PositiveValueULongError::class])
-    val transformationId: ULong,
+    val transform: Transform,
 
     /**
-     * The type declaration representing the eligible type for this transformation.
+     * The type this transformation may be applied to.
      */
-    @ConstraintSimple([PositiveValueULongError::class])
-    val typeDeclarationId: ULong
+    val eligibleTypeNode: TypeNode,
+
+    /**
+     * The type produced when it is applied to [eligibleTypeNode].
+     */
+    val returnTypeNode: TypeNode
 
 ) : CompositeDto {
 
-    override val owleId: String get() = "transformationId=$transformationId,typeDeclarationId=$typeDeclarationId"
-
+    override val owleId: String
+        get() = "transform=${transform.owleId},eligibleTypeNode=${eligibleTypeNode.owleId}"
 }

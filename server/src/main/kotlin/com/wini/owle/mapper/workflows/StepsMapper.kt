@@ -20,7 +20,6 @@ class StepsMapper(
             description = dto.description
             tool = toolMapper.toEntity(dto.tool)
             isWorkflowHead = dto.isWorkflowHead
-            parentPhase = dto.parentGrouper?.let { phaseMapper.toEntity(it) }
             displayOrder = dto.displayOrder
         }
     }

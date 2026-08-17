@@ -17,7 +17,6 @@ class TransformOccurrenceMapper(
         return daoDelegate.findOrCreate(dto) {
             transformation = transformMapper.toEntity(dto.transform)
             occurrence = dto.occurrence
-            resultType = typeNodeMapper.toEntity(dto.resultType)
         }
     }
 
@@ -26,7 +25,6 @@ class TransformOccurrenceMapper(
             id = entity.id.value,
             transformation = transformMapper.toDto(entity.transformation),
             occurrence = entity.occurrence,
-            resultType = typeNodeMapper.toDto(entity.resultType)
         )
     }
 }

@@ -37,8 +37,6 @@ data class Tag(
 
     val source: TagSource,
 
-    val parentTag: Tag? = null,
-
     val childTags: List<Tag>? = null
 
 ) : ULongDto

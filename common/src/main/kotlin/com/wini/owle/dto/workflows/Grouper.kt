@@ -4,7 +4,6 @@ import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.ULongDto
-import com.wini.owle.error.PositiveValueIntError
 import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError

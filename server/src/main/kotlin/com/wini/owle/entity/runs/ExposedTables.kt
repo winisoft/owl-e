@@ -21,7 +21,7 @@ object WorkflowExecutions : ULongIdTable("workflow_executions") {
 
     /** Set when the run was entered as part of a Multiflow; members share one container. */
     val multiflow = reference("multiflow_id", Multiflows).nullable()
-    val startedAt = timestamp("started_at").defaultExpression(CurrentTimestamp).nullable()
+    val startedAt = timestamp("started_at").defaultExpression(CurrentTimestamp)
     val completedAt = timestamp("completed_at").nullable()
     val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
 }
@@ -77,7 +77,7 @@ object TestResults : ULongIdTable("test_results") {
     val testCase = reference("test_case_id", TestCases)
     val workflowExecution = reference("workflowExecutionId", WorkflowExecutions)
     val passed = bool("passed")
-    val executedAt = timestamp("executedAt").defaultExpression(CurrentTimestamp).nullable()
+    val executedAt = timestamp("executedAt").defaultExpression(CurrentTimestamp)
 }
 
 object StepTestRuns : ULongIdTable("test_step_run") {

@@ -19,9 +19,6 @@ class InquisitionsMapper(
     override fun toEntity(dto: Inquisition): InquisitionEntity {
         return daoDelegate.findOrCreate(dto) {
             workflowStep = stepsMapper.toEntity(dto.step)
-            condition = typeNodeMapper.toEntity(dto.condition)
-            dataPoint = dataPointMapper.toEntity(dto.dataPoint)
-            onMetWorkflowStep = stepsMapper.toEntity(dto.onMetWorkflowStep)
             executionOrder = dto.executionOrder
         }
     }
@@ -30,9 +27,6 @@ class InquisitionsMapper(
         return Inquisition(
             id = entity.id.value,
             step = stepsMapper.toDto(entity.workflowStep),
-            condition = typeNodeMapper.toDto(entity.condition),
-            dataPoint = dataPointMapper.toDto(entity.dataPoint),
-            onMetWorkflowStep = stepsMapper.toDto(entity.onMetWorkflowStep),
             executionOrder = entity.executionOrder
         )
     }

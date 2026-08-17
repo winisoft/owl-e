@@ -210,6 +210,11 @@ object DtoTestInstanceFactory {
         tool: Tool = toolDto(),
         parentGrouper: Grouper? = null,
         displayOrder: Int = 0,
+        posX: Double = 0.0,
+        posY: Double = 0.0,
+        color: String = "#4488CC",
+        createdAt: String = "2024-12-21T15:00:00Z",
+        updatedAt: String = "2024-12-21T15:00:00Z",
         nextStep: Step? = null
     ): Step {
         return Step(
@@ -220,7 +225,12 @@ object DtoTestInstanceFactory {
             isWorkflowHead = isWorkflowHead,
             tool = tool,
             parentGrouper = parentGrouper,
-            displayOrder = displayOrder
+            displayOrder = displayOrder,
+            posX = posX,
+            posY = posY,
+            color = color,
+            createdAt = createdAt,
+            updatedAt = updatedAt
         )
     }
 
@@ -418,12 +428,12 @@ object DtoTestInstanceFactory {
     }
 
     fun tagRelationDto(
-        parentTagId: ULong = 1UL,
-        childTagId: ULong = 2UL
+        parentTag: Tag = tagDto(id = 1UL),
+        childTag: Tag = tagDto(id = 2UL)
     ) : TagRelation {
         return TagRelation(
-            parentTagId = parentTagId,
-            childTagId = childTagId
+            parentTag = parentTag,
+            childTag = childTag
         )
     }
 
@@ -442,7 +452,6 @@ object DtoTestInstanceFactory {
             startedAt = startedAt,
             completedAt = completedAt,
             status = status,
-            stepTestRuns = stepTestRuns
         )
     }
 
@@ -582,15 +591,11 @@ object DtoTestInstanceFactory {
         step: Step = stepDto(),
         condition: TypeNode = typeNode(),
         dataPoint: DataPoint = dataPointDto(),
-        onMetWorkflowStep: Step = stepDto(),
-        executionOrder: Int = 1
+        executionOrder: ULong = 1UL
     ) : Inquisition {
         return Inquisition(
             id = id,
             step = step,
-            condition = condition,
-            dataPoint = dataPoint,
-            onMetWorkflowStep = onMetWorkflowStep,
             executionOrder = executionOrder
         )
     }
@@ -623,7 +628,6 @@ object DtoTestInstanceFactory {
             id = id,
             sourceStep = sourceStep,
             targetWorkflow = targetWorkflow,
-            triggerInquisition = triggerInquisition
         )
     }
 
@@ -639,11 +643,13 @@ object DtoTestInstanceFactory {
     }
 
     fun transformTargetType(
-        transformationId: ULong = 1UL,
-        typeDeclarationId: ULong = 2UL
+        transform: Transform = transformationDto(),
+        eligibleTypeNode: TypeNode = typeNode(),
+        returnTypeNode: TypeNode = typeNode()
     ): TransformTargetType = TransformTargetType(
-        transformationId = transformationId,
-        typeDeclarationId = typeDeclarationId
+        transform = transform,
+        eligibleTypeNode = eligibleTypeNode,
+        returnTypeNode = returnTypeNode
     )
 
     fun transformationDto(
@@ -711,7 +717,8 @@ object DtoTestInstanceFactory {
         parentGrouper: Grouper? = null,
         name: String = "Phase Name",
         description: String? = "Phase Description",
-        displayOrder: Int = 1
+        posX: Double = 0.0,
+        posY: Double = 0.0
     ) : Grouper {
         return Grouper(
             id = id,
@@ -719,7 +726,8 @@ object DtoTestInstanceFactory {
             parentGrouper = parentGrouper,
             name = name,
             description = description,
-            displayOrder = displayOrder
+            posX = posX,
+            posY = posY
         )
     }
 
@@ -784,7 +792,6 @@ object DtoTestInstanceFactory {
             id = id,
             dataPoint = dataPoint,
             value = value,
-            generationMethod = generationMethod,
             testCase = testCase
         )
     }
@@ -866,7 +873,6 @@ object DtoTestInstanceFactory {
             id = id,
             transform = transformation,
             occurrence = occurrence,
-            resultType = resultType
         )
     }
 

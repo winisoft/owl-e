@@ -203,6 +203,11 @@ class DbMapperGeneratorProcessor(
                 .onFailure { logger.warn("[mapper-gen] ${p.dto.simpleName.asString()}: ${it.message}") }
         }
 
+        if (emitted.isNotEmpty()) {
+            runCatching { writeKoinModule(emitted) }
+                .onFailure { logger.warn("[mapper-gen] koin module: ${it.message}") }
+        }
+
         logger.warn("[mapper-gen] generated ${emitted.size} mappers; skipped ${skipped.size}")
         skipped.sortedBy { it.first }.forEach { (n, why) -> logger.warn("[mapper-gen]   SKIP $n : $why") }
         return emptyList()
@@ -259,14 +264,22 @@ class DbMapperGeneratorProcessor(
             return Binding.Direct(name, writable)
         }
 
+        // Conversions below still have to agree on nullability — an `Instant?` column cannot
+        // feed a non-null `String`, and quietly forcing it would hide the mismatch.
+        val sameNullability = nullable == entType.isMarkedNullable
+
         // ISO-8601 text on the DTO, Instant column on the entity
-        if (dtoType.fq() == STRING && entType.fq() == INSTANT) return Binding.Timestamp(name, nullable)
+        if (dtoType.fq() == STRING && entType.fq() == INSTANT) {
+            return if (sameNullability) Binding.Timestamp(name, nullable) else null
+        }
 
         // enum on one side, text on the other
-        if (dtoType.isEnum() && entType.fq() == STRING) return Binding.EnumToText(name, nullable)
+        if (dtoType.isEnum() && entType.fq() == STRING) {
+            return if (sameNullability) Binding.EnumToText(name, nullable) else null
+        }
         if (dtoType.fq() == STRING && entType.isEnum()) {
             val fq = entType.fq() ?: return null
-            return Binding.TextToEnum(name, nullable, fq)
+            return if (sameNullability) Binding.TextToEnum(name, nullable, fq) else null
         }
 
         // a related DTO whose entity counterpart is the entity property's type
@@ -377,6 +390,45 @@ class DbMapperGeneratorProcessor(
 
         codeGenerator.createNewFile(Dependencies(aggregating = false), TARGET_PACKAGE, mapper(dtoName))
             .bufferedWriter().use { it.write(b.toString()) }
+    }
+
+    /**
+     * The Koin bindings for everything that was emitted.
+     *
+     * Written from the same dependency information used to build the constructors, so the module
+     * cannot drift out of step with the mappers: if a mapper is skipped, no binding is produced
+     * for it, and nothing references one that does not exist.
+     */
+    private fun writeKoinModule(plans: List<Plan>) {
+        val b = StringBuilder()
+        b.appendLine("package $TARGET_PACKAGE").appendLine()
+        b.appendLine("import org.koin.dsl.module").appendLine()
+        b.appendLine("/**")
+        b.appendLine(" * Generated Koin bindings for the ${plans.size} derivable DbMappers. Do not edit.")
+        b.appendLine(" *")
+        b.appendLine(" * Mappers whose DTO and entity disagree are absent by construction - see the")
+        b.appendLine(" * `[mapper-gen] SKIP` lines in the build log for what is missing and why.")
+        b.appendLine(" */")
+        b.appendLine("val generatedMapperModule = module {")
+        plans.forEach { p ->
+            val dtoName = p.dto.simpleName.asString()
+            val deps = p.bindings.mapNotNull {
+                when (it) {
+                    is Binding.Relation -> it.dtoSimpleName.takeUnless { _ -> it.selfReferential }
+                    is Binding.RelationList -> it.dtoSimpleName.takeUnless { _ -> it.selfReferential }
+                    else -> null
+                }
+            }.distinct().sorted()
+            val args = (listOf("get()") + deps.map { "get()" }).joinToString(", ")
+            b.appendLine("    single { ${mapper(dtoName)}($args) }")
+        }
+        b.appendLine("}")
+
+        codeGenerator.createNewFile(
+            Dependencies(aggregating = true),
+            TARGET_PACKAGE,
+            "GeneratedMapperModule"
+        ).bufferedWriter().use { it.write(b.toString()) }
     }
 }
 
