@@ -73,7 +73,7 @@ val validatorsModule = module {
     single<DtoValidator<TagRelation>> { TagRelationValidator() }
     single<DtoValidator<User>> { UserValidator() }
     single<DtoValidator<DataPoint>> { DataPointValidator(get(), get()) }
-    single<DtoValidator<Phase>> { PhaseValidator(get()) }
+    single<DtoValidator<Grouper>> { PhaseValidator(get()) }
     single<DtoValidator<WorkflowFolder>> { WorkflowFolderValidator() }
     single<DtoValidator<Workflow>> { WorkflowValidator() }
 

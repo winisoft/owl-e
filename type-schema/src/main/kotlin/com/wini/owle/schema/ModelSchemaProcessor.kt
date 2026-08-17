@@ -156,10 +156,13 @@ class ModelSchemaProcessor(
 }
 
 class ModelSchemaProcessorProvider : SymbolProcessorProvider {
+    /** DTO-derived: generates into `common`. */
     override fun create(
         environment: SymbolProcessorEnvironment
-    ): SymbolProcessor = ModelSchemaProcessor(
-        environment.codeGenerator,
-        environment.logger
-    )
+    ): SymbolProcessor = environment.processorFor(OwleTarget.COMMON) {
+        ModelSchemaProcessor(
+            environment.codeGenerator,
+            environment.logger
+        )
+    }
 }

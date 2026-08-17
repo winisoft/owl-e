@@ -111,7 +111,7 @@ Each member workflow declares its own `python_version_id` and `workflow_requirem
 
 ## 7. Phases → StepGroups (rename)
 
-`phases`/`Phase` is being renamed to **StepGroups**. New generation artifacts use "StepGroup" in prose and identifiers. The existing schema/entity/DTO rename (`phases`, `phase_relations`, `Phase*`, `parent_phase_id`, `tagged_phases`, `PhaseTag`) is a **separate mechanical refactor**, tracked, not performed here — doing it mid-generation-design would just add noise. StepGroups remain control-flow-irrelevant: they scope and name, they don't route.
+`phases`/`Grouper` is being renamed to **StepGroups**. New generation artifacts use "StepGroup" in prose and identifiers. The existing schema/entity/DTO rename (`phases`, `phase_relations`, `Phase*`, `parent_phase_id`, `tagged_phases`, `PhaseTag`) is a **separate mechanical refactor**, tracked, not performed here — doing it mid-generation-design would just add noise. StepGroups remain control-flow-irrelevant: they scope and name, they don't route.
 
 ## 8. Schema-first discipline
 

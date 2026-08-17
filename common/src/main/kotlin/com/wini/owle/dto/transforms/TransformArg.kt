@@ -12,11 +12,13 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents an argument for a transformation with its type and description.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.transforms.transformArg", ["transforms"], "/transform-arg")
 @Serializable
 data class TransformArg(
 
@@ -25,7 +27,7 @@ data class TransformArg(
     /**
      * The transformation this argument belongs to.
      */
-    val transformation: Transform,
+    val transform: Transform,
 
     val typeNode: TypeNode,
 
@@ -33,13 +35,13 @@ data class TransformArg(
      * Name of the argument.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringContainsRestrictedChars::class, StringNotBlankError::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TransformArg.NAME_MAX_LENGTH)
     val name: String,
 
     /**
      * Detailed description of what the argument represents.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TransformArg.DESC_MAX_LENGTH)
     val description: String?
 ) : ULongDto

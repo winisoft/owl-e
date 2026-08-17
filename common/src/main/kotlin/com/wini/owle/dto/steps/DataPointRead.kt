@@ -3,12 +3,14 @@ package com.wini.owle.dto.steps
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents the parameters and data provisions associated with a tool execution within a step.
  * Links the tool parameter to the step and holds any associated data points.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.provision", ["step"], "/provision")
 @Serializable
 data class DataPointRead(
 

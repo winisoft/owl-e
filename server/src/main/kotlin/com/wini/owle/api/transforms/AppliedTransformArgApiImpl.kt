@@ -17,34 +17,6 @@ class AppliedTransformArgApiImpl(
     dll = dll,
     serializer = AppliedTransformArg.serializer(),
     validator = validator
-), IAppliedTransformArgApi {
+) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/applied-transform-arg") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/applied-transform-arg/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/applied-transform-arg") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/applied-transform-arg/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/applied-transform-arg") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/applied-transform-arg/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/applied-transform-arg/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/applied-transform-arg/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

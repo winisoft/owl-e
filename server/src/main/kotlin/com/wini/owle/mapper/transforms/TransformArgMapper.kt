@@ -16,8 +16,8 @@ class TransformArgMapper(
 
     override fun toEntity(dto: TransformArg): TransformArgEntity {
         return daoDelegate.findOrCreate(dto) {
-            transformation = transformMapper.toEntity(dto.transformation)
-            typeNode = typeNodeMapper.toEntity(dto.typeNode)
+            transformation = transformMapper.toEntity(dto.transform)
+            typeNode = typeNodeMapper.toEntity(dto.typeVarNode)
             name = dto.name
             description = dto.description
         }

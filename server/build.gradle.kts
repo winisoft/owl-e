@@ -13,10 +13,24 @@ group = "com.wini.owle"
 version = "1.0.0"
 
 
+// Counterpart to `common`'s declaration. Processors gated to OwleTarget.SERVER run here — the
+// ones whose output needs Exposed entities, Ktor routing, or the DLL, none of which `common`
+// can see. The DTO-derived processors (validators, model/API docs) are gated to COMMON and
+// no-op here, so applying the same processor artifact to both modules is safe.
+ksp {
+    arg("owle.target", "server")
+}
+
 sourceSets {
     main {
+
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+        resources.srcDir("build/generated/ksp/main/resources")
+
         dependencies {
             implementation(projects.common)
+            implementation(projects.typeSchema)
+            ksp(projects.typeSchema)
             implementation(libs.logback)
             implementation(libs.ktor.server.core)
             implementation(libs.ktor.server.netty)

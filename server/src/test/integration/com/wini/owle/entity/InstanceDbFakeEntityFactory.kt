@@ -178,7 +178,7 @@ object InstanceDbFakeEntityFactory {
         functionNode: () -> TypeNodeEntity = { typeNodeEntity() },
         position: Int = 1
     ): ErrorWatchFnEntity = ErrorWatchFnEntity.new(id) {
-        this.errorWatchEntity = errorWatchEntity()
+        this.errorWatch = errorWatchEntity()
         this.functionNode = functionNode()
         this.position = position
     }
@@ -234,7 +234,7 @@ object InstanceDbFakeEntityFactory {
         updatedAt: Instant = Schema.Utils.instant,
     ): PaymentMethodEntity = PaymentMethodEntity.new(id) {
         this.stripePaymentMethodId = stripePaymentMethodId
-        this.userEntity = userEntity()
+        this.user = userEntity()
        // this.cardBrand = cardBrand
         this.lastFour = lastFour
         this.isDefault = isDefault
@@ -264,8 +264,8 @@ object InstanceDbFakeEntityFactory {
         description: String? = "A prerequisite data injection"
     ): DataPointInjectionEntity = DataPointInjectionEntity.new(id) {
         this.junction = junction()
-        this.sourceDataPointEntity = sourceDataPointEntity()
-        this.injectedDataPointEntity = injectedDataPointEntity()
+        this.sourceDataPoint = sourceDataPointEntity()
+        this.injectedDataPoint = injectedDataPointEntity()
         this.name = name
         this.description = description
     }
@@ -409,7 +409,7 @@ object InstanceDbFakeEntityFactory {
         passed: Boolean = true,
         executedAt: Instant = Schema.Utils.instant,
     ): TestResultEntity = TestResultEntity.new(id) {
-        this.testCaseEntity = testCase()
+        this.testCase = testCase()
         this.workflowExecution = workflowExecution()
         this.passed = passed
         this.executedAt = executedAt

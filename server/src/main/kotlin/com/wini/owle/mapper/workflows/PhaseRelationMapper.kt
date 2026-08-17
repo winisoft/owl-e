@@ -1,6 +1,6 @@
 package com.wini.owle.mapper.workflows
 
-import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Grouper
 import com.wini.owle.dto.workflows.PhaseRelation
 import com.wini.owle.entity.delegate.DaoDelegate
 import com.wini.owle.entity.workflows.PhaseEntity
@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 
 class PhaseRelationMapper(
     val daoDelegate: DaoDelegate<CompositeID, PhaseRelation, PhaseRelationEntity>,
-    val phaseMapper: DbMapper<ULong, Phase, PhaseEntity>
+    val grouperMapper: DbMapper<ULong, Grouper, PhaseEntity>
 ): DbMapper<CompositeID, PhaseRelation, PhaseRelationEntity> {
 
     override fun toEntity(dto: PhaseRelation): PhaseRelationEntity {
@@ -20,8 +20,8 @@ class PhaseRelationMapper(
 
     override fun toDto(entity: PhaseRelationEntity): PhaseRelation {
         return PhaseRelation(
-            parent = phaseMapper.toDto(entity.parent),
-            child = phaseMapper.toDto(entity.child)
+            parent = grouperMapper.toDto(entity.parent),
+            child = grouperMapper.toDto(entity.child)
         )
     }
 

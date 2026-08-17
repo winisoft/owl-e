@@ -21,8 +21,8 @@ class TagRelationsMapper(
 
     override fun toDto(entity: TagRelationEntity): TagRelation {
         return TagRelation(
-            parentTagId = entity.parentTagEntity.id.value,
-            childTagId = entity.childTagEntity.id.value
+            parentTagId = entity.parentTag.id.value,
+            childTagId = entity.childTag.id.value
         )
     }
 }

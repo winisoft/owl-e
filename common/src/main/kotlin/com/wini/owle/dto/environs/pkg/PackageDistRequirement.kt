@@ -6,9 +6,11 @@ import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.dto.environs.version.Version
 import com.wini.owle.schema.ModelDefinition
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 @ModelDefinition
+@ApiEndpointDefinition("api.environs.pkg.packageRequiredDist", ["environs"], "/package-required-dist")
 @Serializable
 class PackageDistRequirement(
 

@@ -19,32 +19,4 @@ class InquisitionApi(
     validator = validator
 ), IInquisitionApi  {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/inquisition") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/inquisition/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/inquisition") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/inquisition/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/inquisition") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/inquisition/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/inquisition/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/inquisition/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

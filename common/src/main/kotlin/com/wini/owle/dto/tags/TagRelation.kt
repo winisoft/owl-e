@@ -5,8 +5,10 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintSimple
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @ModelDefinition
+@ApiEndpointDefinition("api.user.tagRelation", ["user"], "/tag-relation")
 @Serializable
 data class TagRelation(
 

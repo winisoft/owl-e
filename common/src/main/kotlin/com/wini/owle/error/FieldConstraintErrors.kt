@@ -563,6 +563,30 @@ data class PositiveValueULongError<T: BaseDto>(
     override val message: String get() = ""
 }
 
+/**
+ * Fails if the value carries more than [maxScale] digits after the decimal point, or more than
+ * [maxPrecision] significant digits overall — the two facts a DB `DECIMAL(precision, scale)`
+ * column enforces natively and a Kotlin `Double` does not. Comparing against a `DECIMAL` type's
+ * own semantics (not float rounding) means going through [java.math.BigDecimal].
+ */
+@ErrorDefinition("errors.constraint.decimalScaleExceeded")
+@Serializable
+data class DecimalScaleExceeded<T : BaseDto>(
+    val constrainedField: KProperty1<T, Double>,
+    val receiver: T,
+    val maxPrecision: Int,
+    val maxScale: Int
+) : ConstraintError {
+    private val value: Double get() = constrainedField.get(receiver)
+    private val asBigDecimal: java.math.BigDecimal get() = java.math.BigDecimal.valueOf(value)
+    override val errorCode: String = ""
+    override val message: String get() = ""
+    override val isInvalid: Boolean
+        get() = asBigDecimal.scale() > maxScale || asBigDecimal.precision() > maxPrecision
+    override val detail: String
+        get() = "${receiver.owleTypedId}::${constrainedField.name}: expected<=DECIMAL($maxPrecision,$maxScale), actual=$value"
+}
+
 /** Fails if the value of the constrained property is less than the provided minimum. */
 @ErrorDefinition("errors.constraint.positiveValueUIntError")
 @Serializable

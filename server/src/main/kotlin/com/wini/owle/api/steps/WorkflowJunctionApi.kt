@@ -19,32 +19,4 @@ class WorkflowJunctionApi(
     validator = validator
 ), IWorkflowJunctionApi  {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/workflow-junction") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/workflow-junction/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/workflow-junction") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/workflow-junction/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/workflow-junction") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/workflow-junction/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/workflow-junction/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/workflow-junction/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

@@ -17,34 +17,6 @@ class ProvisionApi(
     dll = dll,
     serializer = Provision.serializer(),
     validator = validator
-), IProvisionApi {
+) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/provision") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/provision/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/provision") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/provision/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/provision") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/provision/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/provision/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/provision/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

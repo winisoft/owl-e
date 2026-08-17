@@ -11,12 +11,14 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a reference within a type schema, supporting nested or hierarchical type structures.
  * Each schema reference is tied to a specific type declaration and may contain child references.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.typing.typeSchemaRef", ["type"], "/type-schema-ref")
 @Serializable
 data class TypeSchemaRef(
 
@@ -32,26 +34,20 @@ data class TypeSchemaRef(
      * The name of the property or field within the schema.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, MAX_NAME_LENGTH)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeSchemaRef.NAME_MAX_LENGTH)
     val name: String,
 
     /**
      * Type declaration associated with this schema reference.
      */
-    val typeDeclaration: TypeNode,
+    val typeNode: TypeNode,
 
     /**
      * Optional description providing details on the schema reference's purpose.
      */
 
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_5012)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeSchemaRef.DESC_MAX_LENGTH)
     val description: String?,
-    val childRefs: List<TypeSchemaRef>
-) : ULongDto {
-
-    companion object {
-        const val MAX_NAME_LENGTH = 255
-        const val MAX_DESC_LENGTH = 5012
-    }
-}
+    val children: List<TypeSchemaRef>
+) : ULongDto

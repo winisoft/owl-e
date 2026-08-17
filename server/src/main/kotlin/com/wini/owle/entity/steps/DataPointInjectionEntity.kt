@@ -22,12 +22,12 @@ class DataPointInjectionEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Relationship to the source data point in the origin workflow.
      */
-    var sourceDataPointEntity by DataPointEntity referencedOn DataPointInjections.sourceDataPoint
+    var sourceDataPoint by DataPointEntity referencedOn DataPointInjections.sourceDataPoint
 
     /**
      * Relationship to the injected data point in the target workflow.
      */
-    var injectedDataPointEntity by DataPointEntity referencedOn DataPointInjections.targetDataPoint
+    var injectedDataPoint by DataPointEntity referencedOn DataPointInjections.targetDataPoint
 
     /**
      * Optional name for describing the injection.

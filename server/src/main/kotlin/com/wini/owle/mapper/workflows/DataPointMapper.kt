@@ -19,7 +19,7 @@ class DataPointMapper(
             name = dto.name
             presetValue = dto.presetValue
             storeMethod = dto.storeMethod
-            typeNode = typeDeclarationMapper.toEntity(dto.typeDeclaration)
+            typeNode = typeDeclarationMapper.toEntity(dto.typeVarNode)
             description = dto.description
         }
     }

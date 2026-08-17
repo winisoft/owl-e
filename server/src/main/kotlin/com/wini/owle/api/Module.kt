@@ -48,7 +48,7 @@ import com.wini.owle.dto.typing.TypeVarVariance
 import com.wini.owle.dto.user.PaymentMethod
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.DataPoint
-import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Grouper
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.dto.workflows.WorkflowFolder
@@ -414,7 +414,7 @@ val workflowApiModule = module {
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, Phase>>(), get<DtoValidator<Phase>>(), "phase", Phase.serializer()
+            get<DLL<ULong, Grouper>>(), get<DtoValidator<Grouper>>(), "phase", Grouper.serializer()
         )
     }
     single<KtorApi<ULong>> {

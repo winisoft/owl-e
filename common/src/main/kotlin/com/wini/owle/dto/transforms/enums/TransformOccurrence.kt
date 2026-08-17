@@ -1,6 +1,7 @@
 package com.wini.owle.dto.transforms.enums
 
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @Serializable
 enum class TransformOccurrence {

@@ -18,32 +18,4 @@ class TypeNodeApiImpl(
     validator = validator
 ), ITypeDeclarationApi  {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/type-declaration") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/type-declaration/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/type-declaration") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/type-declaration/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/type-declaration") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/type-declaration/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/type-declaration/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/type-declaration/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

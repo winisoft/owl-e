@@ -15,12 +15,14 @@ import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import com.wini.owle.schema.Schema
 import com.wini.owle.schema.error.PreventsTimeParadox
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a workflow, containing steps and data points, and supports organization
  * into folders. Metadata is stored as JSON to allow for flexible information capture.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.workflows.workflow", ["workflows"], "/workflow")
 @PreventsTimeParadox("createdAt", "updatedAt")
 @Serializable
 data class Workflow(

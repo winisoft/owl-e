@@ -6,6 +6,7 @@ import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.runs.workflow.WorkflowRun
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 /**
@@ -13,6 +14,7 @@ import kotlinx.serialization.Serializable
  * including execution time, step counts, and the distribution of AI and predetermined steps.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.test.benchmarkReport", ["runs"], "/benchmark-report")
 @Serializable
 data class BenchmarkReport(
 
@@ -22,7 +24,7 @@ data class BenchmarkReport(
     /**
      * Relationship to the associated workflow execution.
      */
-    val workflowRun: WorkflowRun,
+    val workflowExecution: WorkflowRun,
 
 
 ) : ULongDto

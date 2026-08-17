@@ -3,8 +3,8 @@ package com.wini.owle.dto.workflows
 import com.wini.owle.dto.CompositeDto
 
 data class PhaseRelation(
-    val parent: Phase,
-    val child: Phase
+    val parent: Grouper,
+    val child: Grouper
 ): CompositeDto {
 
     override val owleId: String

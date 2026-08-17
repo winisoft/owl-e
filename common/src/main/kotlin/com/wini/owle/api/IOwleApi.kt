@@ -14,13 +14,20 @@ interface IOwleApi {
     suspend fun deleteMany(block: suspend () -> Unit) { block() }
     suspend fun deleteOne(block: suspend () -> Unit) { block() }
 
-    val getOnePath get() = "/api/$endpointPath/{id}"
-    val getManyPath get() = "/api/$endpointPath"
-    val postOnePath get() = "/api/$endpointPath"
-    val postManyPath get() = "/api/$endpointPath/batch"
-    val putOnePath get() = "/api/$endpointPath"
-    val putManyPath get() = "/api/$endpointPath/batch"
-    val deleteOnePath get() = "/api/$endpointPath/{id}"
-    val deleteManyPath get() = "/api/$endpointPath/batch"
+    /**
+     * The collection route. [endpointPath] is normalized so declarations may write it either
+     * way — `"/type-node"` and `"type-node"` both yield `/api/type-node`. Without the trim,
+     * the leading slash most declarations carry produced `/api//type-node`.
+     */
+    val basePath get() = "/api/" + endpointPath.trim('/')
+
+    val getOnePath get() = "$basePath/{id}"
+    val getManyPath get() = basePath
+    val postOnePath get() = basePath
+    val postManyPath get() = "$basePath/batch"
+    val putOnePath get() = basePath
+    val putManyPath get() = "$basePath/batch"
+    val deleteOnePath get() = "$basePath/{id}"
+    val deleteManyPath get() = "$basePath/batch"
 
 }

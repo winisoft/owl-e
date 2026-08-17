@@ -7,6 +7,7 @@ import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a junction connecting one workflow to another, allowing a transition to a target workflow.
@@ -14,6 +15,7 @@ import kotlinx.serialization.Serializable
  * and prerequisite injections required for the target workflow.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.workflowJunction", ["step"], "/workflow-junction")
 @Serializable
 data class WorkflowJunction(
 

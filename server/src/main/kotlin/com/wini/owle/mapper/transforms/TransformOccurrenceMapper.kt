@@ -15,7 +15,7 @@ class TransformOccurrenceMapper(
 
     override fun toEntity(dto: TransformOccurrence): TransformOccurrenceEntity {
         return daoDelegate.findOrCreate(dto) {
-            transformation = transformMapper.toEntity(dto.transformation)
+            transformation = transformMapper.toEntity(dto.transform)
             occurrence = dto.occurrence
             resultType = typeNodeMapper.toEntity(dto.resultType)
         }

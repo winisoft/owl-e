@@ -58,7 +58,7 @@ import com.wini.owle.dto.user.User
 import com.wini.owle.dto.user.enums.CardBrand
 import com.wini.owle.dto.user.enums.UserStatus
 import com.wini.owle.dto.workflows.DataPoint
-import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Grouper
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.dto.workflows.Workflow
@@ -179,7 +179,7 @@ object DtoTestInstanceFactory {
         devNumber = devNumber,
         local = local,
         hasOverflow = hasOverflow,
-        overflowComponents = overflowComponents
+        versionOverflows = overflowComponents
     )
 
     fun versionOverflow(
@@ -208,7 +208,7 @@ object DtoTestInstanceFactory {
         workflow: Workflow = workflowDto(),
         isWorkflowHead: Boolean = true,
         tool: Tool = toolDto(),
-        parentPhase: Phase? = null,
+        parentGrouper: Grouper? = null,
         displayOrder: Int = 0,
         nextStep: Step? = null
     ): Step {
@@ -219,7 +219,7 @@ object DtoTestInstanceFactory {
             workflow = workflow,
             isWorkflowHead = isWorkflowHead,
             tool = tool,
-            parentPhase = parentPhase,
+            parentGrouper = parentGrouper,
             displayOrder = displayOrder
         )
     }
@@ -316,7 +316,7 @@ object DtoTestInstanceFactory {
             name = name,
             description = description,
             body = body,
-            returnTypeDeclaration = returnTypeDeclaration
+            returnTypeNode = returnTypeDeclaration
         )
     }
 
@@ -358,7 +358,7 @@ object DtoTestInstanceFactory {
             description = description,
             presetValue = presetValue,
             storeMethod = storeMethod,
-            typeDeclaration = typeDeclaration,
+            typeNode = typeDeclaration,
             workflow = workflow,
             createdAt = "2024-12-21T15:00:00",
             updatedAt = "2024-12-21T15:00:00"
@@ -456,7 +456,7 @@ object DtoTestInstanceFactory {
     ) : BenchmarkReport {
         return BenchmarkReport(
             id = id,
-            workflowRun = workflowRun
+            workflowExecution = workflowRun
         )
     }
 
@@ -543,8 +543,8 @@ object DtoTestInstanceFactory {
         return StepTestRun(
             id = id,
             step = step,
-            startedAt = startedAt,
-            completedAt = completedAt,
+            started = startedAt,
+            completed = completedAt,
             status = status
         )
     }
@@ -567,7 +567,7 @@ object DtoTestInstanceFactory {
         id: ULong = 1UL,
         errorWatch: ErrorWatch = errorWatch(),
         functionNode: TypeNode = typeNode(),
-        position: Int = 1,
+        position: ULong = 1uL,
     ) : ErrorWatchFn {
         return ErrorWatchFn(
             id = id,
@@ -699,24 +699,24 @@ object DtoTestInstanceFactory {
             id = id,
             parentRef = parentRef,
             name = name,
-            typeDeclaration = typeDeclaration,
+            typeNode = typeDeclaration,
             description = description,
-            childRefs = childRefs
+            children = childRefs
         )
     }
 
     fun phaseDto(
         id: ULong = 1UL,
         workflow: Workflow = workflowDto(),
-        parentPhase: Phase? = null,
+        parentGrouper: Grouper? = null,
         name: String = "Phase Name",
         description: String? = "Phase Description",
         displayOrder: Int = 1
-    ) : Phase {
-        return Phase(
+    ) : Grouper {
+        return Grouper(
             id = id,
             workflow = workflow,
-            parentPhase = parentPhase,
+            parentGrouper = parentGrouper,
             name = name,
             description = description,
             displayOrder = displayOrder
@@ -749,8 +749,8 @@ object DtoTestInstanceFactory {
         varianceCardinality: VarianceCardinality = VarianceCardinality.COVARIANT
     ): TypeVarVariance {
         return TypeVarVariance(
-            typeNode = typeVariableDeclaration,
-            cardinality = varianceCardinality
+            typeVarNode = typeVariableDeclaration,
+            varianceCardinality = varianceCardinality
         )
     }
 
@@ -835,7 +835,7 @@ object DtoTestInstanceFactory {
         return TransformOccurrenceArg(
             id = id,
             transformOccurrence = transformOccurrence,
-            transformationArg = transformationArg,
+            transformArg = transformationArg,
             value = value
         )
     }
@@ -849,7 +849,7 @@ object DtoTestInstanceFactory {
     ): TransformArg {
         return TransformArg(
             id = id,
-            transformation = transformation,
+            transform = transformation,
             name = name,
             typeNode = typeNode,
             description = description
@@ -864,7 +864,7 @@ object DtoTestInstanceFactory {
     ) : TransformOccurrence {
         return TransformOccurrence(
             id = id,
-            transformation = transformation,
+            transform = transformation,
             occurrence = occurrence,
             resultType = resultType
         )
@@ -896,7 +896,7 @@ object DtoTestInstanceFactory {
             TypeSchemaRef::class.java -> typeSchemaRefDto() as T
             TypeUnionMember::class.java -> typeUnionMemberDto() as T
             TypeVarVariance::class.java -> typeVarianceDto() as T
-            Phase::class.java -> phaseDto() as T
+            Grouper::class.java -> phaseDto() as T
             WorkflowFolder::class.java -> workflowFolderDto() as T
             TestInput::class.java -> testInputDto() as T
             TestOutcomeExpectation::class.java -> testExpectedOutcomeDto() as T

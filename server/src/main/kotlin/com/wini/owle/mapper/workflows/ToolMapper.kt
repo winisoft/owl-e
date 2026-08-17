@@ -17,7 +17,7 @@ class ToolMapper(
             name = dto.name
             description = dto.description
             body = dto.body
-            returnTypeNode = dto.returnTypeDeclaration?.let { typeDeclarationMapper.run { toEntity(it) } }
+            returnTypeNode = dto.returnTypeNode?.let { typeDeclarationMapper.run { toEntity(it) } }
         }
     }
 

@@ -17,34 +17,6 @@ class PreReqInjectionApi(
     dll = dll,
     serializer = InitialDataPointInjector.serializer(),
     validator = validator
-), IPreReqInjectionApi {
+) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/prereq-injection") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/prereq-injection/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/prereq-injection") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/prereq-injection/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/prereq-injection") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/prereq-injection/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/prereq-injection/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/prereq-injection/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

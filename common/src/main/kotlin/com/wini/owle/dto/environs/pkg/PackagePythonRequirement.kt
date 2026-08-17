@@ -6,9 +6,11 @@ import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.dto.environs.version.Version
 import com.wini.owle.schema.ModelDefinition
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 @ModelDefinition
+@ApiEndpointDefinition("api.environs.pkg.packageRequiredPython", ["environs"], "/package-required-python")
 @Serializable
 data class PackagePythonRequirement(
 
@@ -17,12 +19,12 @@ data class PackagePythonRequirement(
     /**
      *
      */
-    val version : Version,
+    val packageVersion : Version,
 
     /**
      *
      */
-    val wildcardSegment: WildcardSegment,
+    val wildcard: WildcardSegment,
 
     val operator: VersionOperator
 

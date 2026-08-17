@@ -13,12 +13,14 @@ import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a folder for organizing workflows in a hierarchical structure.
  * Supports nested folders and categorizes workflows.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.workflows.workflowFolder", ["workflows"], "/workflow-folder")
 @Serializable
 data class WorkflowFolder(
 
@@ -34,14 +36,14 @@ data class WorkflowFolder(
      * Name of the folder, required and unique for organizing workflows.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_127)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.WorkflowFolder.NAME_MAX_LENGTH)
     val name: String,
-    
+
     /**
      * Optional description of the folder's purpose or content.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.WorkflowFolder.DESC_MAX_LENGTH)
     val description: String? = null,
     
     /**

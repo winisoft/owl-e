@@ -17,8 +17,8 @@ class StepTestRunMapper(
     override fun toEntity(dto: StepTestRun): StepTestRunEntity {
         return daoDelegate.findOrCreate(dto) {
             step = stepMapper.toEntity(dto.step)
-            started = dto.startedAt?.let { dateTimeConverter.fromString(it) }
-            completed = dto.completedAt?.let { dateTimeConverter.fromString(it) }
+            started = dto.started?.let { dateTimeConverter.fromString(it) }
+            completed = dto.completed?.let { dateTimeConverter.fromString(it) }
             status = dto.status
         }
     }

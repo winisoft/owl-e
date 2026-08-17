@@ -10,6 +10,7 @@ import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 /**
@@ -18,6 +19,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.workflow.workflowRun", ["runs"], "/workflow-run")
 data class WorkflowRun(
 
     @ConstraintSimple([PositiveValueULongError::class])

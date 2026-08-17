@@ -13,12 +13,14 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a data point within a workflow, used for tracking values,
  * inputs, or outputs that may be accessed by workflow steps.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.workflows.dataPoint", ["workflows"], "/data-point")
 @Serializable
 data class DataPoint(
 
@@ -32,14 +34,14 @@ data class DataPoint(
      * Name of the data point, used to identify it within the workflow.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_127)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.DataPoint.NAME_MAX_LENGTH)
     val name: String,
 
     /**
      * Explains the meaning of the DataPoint to users
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.DataPoint.DESC_MAX_LENGTH)
     val description: String? = null,
 
     /**
@@ -55,7 +57,7 @@ data class DataPoint(
     /**
      * Specifies the data type for the data point, linking to a type declaration.
      */
-    val typeDeclaration: TypeNode,
+    val typeNode: TypeNode,
     /**
      * Timestamp for when the dataPoint was created.
      */

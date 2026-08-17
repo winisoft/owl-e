@@ -17,7 +17,7 @@ class PackagePythonRequiredMapper(
     override fun toEntity(dto: PackagePythonRequirement): PackagePythonRequirementEntity {
          return daoDelegate.findOrCreate(dto) {
             distribution = distributionMapper.toEntity(dto.distribution)
-            version = versionMapper.toEntity(dto.version)
+            version = versionMapper.toEntity(dto.packageVersion)
         }
     }
 

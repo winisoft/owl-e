@@ -2,8 +2,14 @@ package com.wini.owle.dto.environs.version
 
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.environs.version.enums.PrereleasePhase
+import com.wini.owle.error.StringContainsRestrictedChars
+import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.Schema
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /*
 ~Operator['<', '<=', '!=', '==', '>=', '>', '~=', '===']
@@ -34,6 +40,7 @@ import kotlinx.serialization.Serializable
  */
 
 @ModelDefinition
+@ApiEndpointDefinition("api.environs.version.versionApi", ["environs"], "/version")
 @Serializable
 class Version(
     override val id: ULong,
@@ -45,9 +52,11 @@ class Version(
     val phaseNumber: ULong?,
     val postNumber: ULong?,
     val devNumber: ULong?,
+    @ConstraintSimple([StringContainsRestrictedChars::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Version.LOCAL_MAX_LENGTH)
     val local: String?,
     val hasOverflow: Boolean,
-    val overflowComponents: List<VersionOverflow>
+    val versionOverflows: List<VersionOverflow>
 ): ULongDto {
 
     override val owleId: String get() = "epoch={${epoch}},major=${major},minor=${minor},micro=${micro},phase=${phase.name},phaseNumber${phaseNumber},postNumber=${postNumber},devNumber=${devNumber},local=${local},has_overflow=${hasOverflow}"

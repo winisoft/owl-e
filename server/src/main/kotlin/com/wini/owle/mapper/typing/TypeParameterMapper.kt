@@ -13,7 +13,7 @@ class TypeParameterMapper(
 
     override fun toEntity(dto: TypeParameter): TypeParameterEntity {
         return daoDelegate.findOrCreate(dto) {
-            typeNode = typeNodeMapper.toEntity(dto.typeDeclaration)
+            typeNode = typeNodeMapper.toEntity(dto.typeVarNode)
             position = dto.position
             parameterTypeNode = typeNodeMapper.toEntity(dto.parameterTypeDeclaration)
         }

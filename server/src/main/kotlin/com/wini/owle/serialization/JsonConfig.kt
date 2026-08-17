@@ -64,7 +64,7 @@ val polymorphicJson = Json {
             subclass(Tag::class, Tag.serializer())
             subclass(TagRelation::class, TagRelation.serializer())
             subclass(DataPoint::class, DataPoint.serializer())
-            subclass(Phase::class, Phase.serializer())
+            subclass(Grouper::class, Grouper.serializer())
             subclass(Tool::class, Tool.serializer())
             subclass(ToolParam::class, ToolParam.serializer())
             subclass(WorkflowFolder::class, WorkflowFolder.serializer())

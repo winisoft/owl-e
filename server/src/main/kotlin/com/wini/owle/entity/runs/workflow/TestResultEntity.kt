@@ -17,7 +17,7 @@ class TestResultEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Relationship to the associated test case.
      */
-    var testCaseEntity by TestCaseEntity referencedOn TestResults.testCase
+    var testCase by TestCaseEntity referencedOn TestResults.testCase
 
     /**
      * Relationship to the associated workflow execution.

@@ -10,8 +10,10 @@ import com.wini.owle.schema.Schema
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @ModelDefinition
+@ApiEndpointDefinition("api.environs.pkg.distribution", ["environs"], "distribution")
 @Serializable
 class Distribution(
 
@@ -20,7 +22,7 @@ class Distribution(
      * Required.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Workflow.NAME_MAX_LENGTH)
     override val name: String,
 
 ): StringDto

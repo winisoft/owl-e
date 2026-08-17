@@ -18,34 +18,5 @@ class WorkflowApiImpl(
     validator = validator,
     endpointPath = endpointPath,
     serializer = Workflow.serializer()
-), WorkflowApi {
-    override fun register(routing: Routing) {
-        routing.apply {
-
-            get("/api/workflow") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/workflow/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/workflow") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/workflow/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/workflow") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/workflow/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/workflow/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/workflow/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
+) {
 }

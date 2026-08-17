@@ -14,43 +14,44 @@ import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a phase within a workflow, grouping steps or other phases.
- * Phases support hierarchical organization, enabling subphases.
+ * Represents a grouping within a workflow, a wrapper around members that are steps or other Groupers
+ * in themselves. No barrier of access is implied by their boundary, nor do the elements grouped together
+ * coordinate in any extraordinary way - this organizational convenience is wholly to make a workflow more intuitively
+ * understood.
  */
 @ModelDefinition
 @Serializable
-data class Phase(
+data class Grouper(
 
     @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong = 0UL,
 
     /**
-     * Workflow containing this phase.
+     * Workflow containing this grouper.
      */
     val workflow: Workflow,
 
     /**
-     * Reference to the parent phase, if this phase is part of a hierarchical structure.
+     * Reference to the parent grouper, if this grouper is found within a hierarchical structure
+     * of these, or null if this Grouper sits at the 'root scope' of a Workflow.
      */
-    val parentPhase: Phase? = null,
+    val parentGrouper: Grouper? = null,
 
     /**
-     * Name of the phase, used for identification within the workflow.
+     * Name of the grouper, used for identification within the workflow.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_255)
     val name: String,
 
     /**
-     * Description of the phase, describing its purpose or grouping intent.
+     * Description of the grouper, describing its purpose or grouping intent.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String?,
 
-    /**
-     * Specifies the order in which the phase appears within the workflow.
-     */
-    @ConstraintSimple([PositiveValueIntError::class])
-    val displayOrder: Int
+    val posX: Double,
+
+    val posY: Double,
 ) : ULongDto

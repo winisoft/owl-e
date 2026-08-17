@@ -2,6 +2,7 @@ package com.wini.owle.dto.steps
 
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.api.ApiEndpointDefinition
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.typing.TypeNode
 import com.wini.owle.dto.workflows.Step
@@ -15,6 +16,7 @@ import kotlinx.serialization.Serializable
  * analyzing a specific data point value and determining if workflow redirection is required.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.inquisition", ["step"], "/inquisition")
 @Serializable
 data class Inquisition(
 

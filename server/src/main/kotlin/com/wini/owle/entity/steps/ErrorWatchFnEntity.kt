@@ -18,7 +18,7 @@ class ErrorWatchFnEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * The error watch that this function filter is associated with.
      * Deletes cascade to this function filter.
      */
-    var errorWatchEntity by ErrorWatchEntity referencedOn ErrorWatchFns.errorWatch
+    var errorWatch by ErrorWatchEntity referencedOn ErrorWatchFns.errorWatch
 
     /**
      * Name of the function that should appear in the call stack to activate the error watch.

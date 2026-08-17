@@ -35,6 +35,11 @@ object ConstraintExtractor {
             val max = ann.getArgument<Long>("maxValue") ?: 0L
             "${className}::${prop.simpleName.asString()}, dto, $max"
         },
+        "ConstraintDecimalScale" to { ann, prop, className ->
+            val precision = ann.getArgument<Int>("maxPrecision") ?: 0
+            val scale = ann.getArgument<Int>("maxScale") ?: 0
+            "${className}::${prop.simpleName.asString()}, dto, $precision, $scale"
+        },
         // fallback for @ConstraintSimple or annotations not explicitly mapped
         "ConstraintSimple" to { _, prop, className ->
             "${className}::${prop.simpleName.asString()}, dto"

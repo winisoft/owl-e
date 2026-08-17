@@ -184,7 +184,7 @@ object DtoTestInstanceFactory {
         workflow: Workflow = workflowDto(),
         isWorkflowHead: Boolean = true,
         tool: Tool = toolDto(),
-        parentPhase: Phase? = null,
+        parentGrouper: Grouper? = null,
         displayOrder: Int = 0,
         nextStep: Step? = null
     ): Step {
@@ -195,7 +195,7 @@ object DtoTestInstanceFactory {
             workflow = workflow,
             isWorkflowHead = isWorkflowHead,
             tool = tool,
-            parentPhase = parentPhase,
+            parentGrouper = parentGrouper,
             displayOrder = displayOrder
         )
     }
@@ -284,7 +284,7 @@ object DtoTestInstanceFactory {
         name: String = "Tool Name",
         description: String? = "Tool Description",
         body: String = "a sample of code",
-        returnTypeDeclaration: TypeNode? = typeNode(),
+        returnTypeNode: TypeNode? = typeNode(),
         steps: List<Step> = emptyList()
     ): Tool {
         return Tool(
@@ -292,7 +292,7 @@ object DtoTestInstanceFactory {
             name = name,
             description = description,
             body = body,
-            returnTypeDeclaration = returnTypeDeclaration
+            returnTypeNode = returnTypeNode
         )
     }
 
@@ -683,15 +683,15 @@ object DtoTestInstanceFactory {
     fun phaseDto(
         id: ULong = 1UL,
         workflow: Workflow = workflowDto(),
-        parentPhase: Phase? = null,
+        parentGrouper: Grouper? = null,
         name: String = "Phase Name",
         description: String? = "Phase Description",
         displayOrder: Int = 1
-    ) : Phase {
-        return Phase(
+    ) : Grouper {
+        return Grouper(
             id = id,
             workflow = workflow,
-            parentPhase = parentPhase,
+            parentGrouper = parentGrouper,
             name = name,
             description = description,
             displayOrder = displayOrder
@@ -881,7 +881,7 @@ object DtoTestInstanceFactory {
             TypeSchemaRef::class.java -> typeSchemaRefDto() as T
             TypeUnionMember::class.java -> typeUnionMemberDto() as T
             TypeVarVariance::class.java -> typeVarianceDto() as T
-            Phase::class.java -> phaseDto() as T
+            Grouper::class.java -> phaseDto() as T
             DataPointWrite::class.java -> dataPointWriteDto() as T
             WorkflowFolder::class.java -> workflowFolderDto() as T
             TestInput::class.java -> testInputDto() as T

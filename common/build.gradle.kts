@@ -7,6 +7,14 @@ plugins {
 group = "com.wini.owle"
 version = "unspecified"
 
+// `type-schema` is applied as a processor to both this module and `server`, and its processors
+// are not interchangeable between them — generated code lands in whichever module ran it and
+// sees only that module's classpath. This tells the processors which side they're on; see
+// com.wini.owle.ksp.OwleTarget.
+ksp {
+    arg("owle.target", "common")
+}
+
 sourceSets.main {
 
     kotlin.srcDir("build/generated/ksp/main/kotlin")

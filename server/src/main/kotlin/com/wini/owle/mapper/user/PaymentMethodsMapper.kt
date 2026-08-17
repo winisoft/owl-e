@@ -17,7 +17,7 @@ class PaymentMethodsMapper(
     override fun toEntity(dto: PaymentMethod): PaymentMethodEntity {
         return daoDelegate.findOrCreate(dto) {
             stripePaymentMethodId = dto.stripePaymentMethodId
-            userEntity = userMapper.toEntity(dto.user)
+            user = userMapper.toEntity(dto.user)
             cardBrand = dto.cardBrand
             lastFour = dto.lastFour
             isDefault = dto.isDefault
@@ -30,7 +30,7 @@ class PaymentMethodsMapper(
         return PaymentMethod(
             id = entity.id.value,
             stripePaymentMethodId = entity.stripePaymentMethodId,
-            user = userMapper.toDto(entity.userEntity),
+            user = userMapper.toDto(entity.user),
             cardBrand = null, //entity.cardBrand?.let { return PaymentMethod. },
             lastFour = entity.lastFour,
             isDefault = entity.isDefault,

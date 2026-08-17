@@ -16,8 +16,8 @@ class DataPointInjectionMapper(
     override fun toEntity(dto: DataPointInjection): DataPointInjectionEntity {
         return daoDelegate.findOrCreate(dto) {
             junction = workflowJunctionsMapper.toEntity(dto.junction)
-            sourceDataPointEntity = dataPointMapper.toEntity(dto.sourceDataPoint)
-            injectedDataPointEntity = dataPointMapper.toEntity(dto.injectedDataPoint)
+            sourceDataPoint = dataPointMapper.toEntity(dto.sourceDataPoint)
+            injectedDataPoint = dataPointMapper.toEntity(dto.injectedDataPoint)
             name = dto.name
             description = dto.description
         }
@@ -27,8 +27,8 @@ class DataPointInjectionMapper(
         return DataPointInjection(
             id = entity.id.value,
             junction = workflowJunctionsMapper.toDto(entity.junction),
-            sourceDataPoint = dataPointMapper.toDto(entity.sourceDataPointEntity),
-            injectedDataPoint = dataPointMapper.toDto(entity.injectedDataPointEntity),
+            sourceDataPoint = dataPointMapper.toDto(entity.sourceDataPoint),
+            injectedDataPoint = dataPointMapper.toDto(entity.injectedDataPoint),
             name = entity.name,
             description = entity.description
         )

@@ -4,6 +4,7 @@ import com.wini.owle.dto.CompositeDto
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.typing.enums.VarianceCardinality
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 /**
@@ -11,21 +12,22 @@ import kotlinx.serialization.Serializable
  * Variance annotations define how types relate to their subtypes in generic contexts.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.typing.typeVariance", ["type"], "/type-variance")
 @Serializable
 data class TypeVarVariance(
 
     /**
      * Relationship to the type variable declaration.
      */
-    val typeNode: TypeNode,
+    val typeVarNode: TypeNode,
 
     /**
      * Specifies the type variance: covariant, contravariant, or invariant.
      */
-    val cardinality: VarianceCardinality
+    val varianceCardinality: VarianceCardinality
 
 ) : CompositeDto {
 
-    override val owleId: String get() = "typeNode=${typeNode.owleId},cardinality=${cardinality.name}"
+    override val owleId: String get() = "typeVarNode=${typeVarNode.owleId},varianceCardinality=${varianceCardinality.name}"
 
 }

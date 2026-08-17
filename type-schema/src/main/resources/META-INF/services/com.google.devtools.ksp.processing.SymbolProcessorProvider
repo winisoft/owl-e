@@ -1,3 +1,4 @@
 com.wini.owle.ksp.ModelSchemaProcessorProvider
 com.wini.owle.ksp.OwleApiDocProcessorProvider
 com.wini.owle.ksp.ValidatorGeneratorProcessorProvider
+com.wini.owle.ksp.DbMapperGeneratorProcessorProvider

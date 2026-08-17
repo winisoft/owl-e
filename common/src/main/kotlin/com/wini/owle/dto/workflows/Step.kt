@@ -12,12 +12,14 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a step within a workflow, defining its tool dependency, next and previous steps,
  * and whether it serves as the workflow's head step.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.workflows.step", ["workflows"], "/step")
 @Serializable
 data class Step(
 
@@ -28,26 +30,38 @@ data class Step(
      * Name of the step, used for identification within the workflow.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_512)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Step.NAME_MAX_LENGTH)
     val name: String,
 
     /**
      * Optional description of the step's purpose or action.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Step.DESC_MAX_LENGTH)
     val description: String?,
 
     /**
      * The phase within which this step is displayed. If null, it sits at the workflow level
      */
-    val parentPhase: Phase?,
+    val parentGrouper: Grouper?,
 
     /**
      * The order this step is presented among other steps and phases sitting at the same level of the hierarchy
      */
     @ConstraintSimple([PositiveValueIntError::class])
     val displayOrder: Int,
+
+
+    val posX: Double,
+
+    val posY: Double,
+
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Step.COLOR_LENGTH)
+    val color: String,
+
+    val createdAt: String,
+
+    val updatedAt: String,
 
     /**
      * Workflow that contains this step.
@@ -64,4 +78,4 @@ data class Step(
      */
     val tool: Tool,
 
-) : ULongDto
+    ) : ULongDto

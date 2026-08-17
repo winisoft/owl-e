@@ -21,7 +21,7 @@ class PaymentMethodEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * The user associated with this payment method.
      */
-    var userEntity by UserEntity referencedOn PaymentMethods.user
+    var user by UserEntity referencedOn PaymentMethods.user
 
     /**
      * Brand of the card (e.g., Visa, MasterCard) used in this payment method.

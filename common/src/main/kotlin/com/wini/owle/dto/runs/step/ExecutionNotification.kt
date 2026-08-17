@@ -14,12 +14,14 @@ import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Stores individual log messages generated during step execution.
  * Each log entry includes a timestamp, log level, and message content.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.step.stepRunLogLine", ["runs"], "/step-run-logs")
 @Serializable
 data class ExecutionNotification(
 

@@ -23,7 +23,7 @@ data class TransformOccurrence(
     /**
      * The transformation from which this applied instance originates.
      */
-    val transformation: Transform,
+    val transform: Transform,
 
     /**
      * Describes the type of occurrence for the transformation (e.g., 'provision', 'revision').

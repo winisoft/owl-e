@@ -53,10 +53,12 @@ class ValidatorGeneratorProcessor(
  * Provider for the ValidatorGeneratorProcessor
  */
 class ValidatorGeneratorProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return ValidatorGeneratorProcessor(
-            environment.codeGenerator,
-            environment.logger
-        )
-    }
+    /** DTO-derived: generates into `common`, alongside the DTOs it validates. */
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor =
+        environment.processorFor(OwleTarget.COMMON) {
+            ValidatorGeneratorProcessor(
+                environment.codeGenerator,
+                environment.logger
+            )
+        }
 }

@@ -15,7 +15,7 @@ class ErrorWatchFnMapper(
 
     override fun toEntity(dto: ErrorWatchFn): ErrorWatchFnEntity {
         return daoDelegate.findOrCreate(dto) {
-            errorWatchEntity = errorWatchesMapper.toEntity(dto.errorWatch)
+            errorWatch = errorWatchesMapper.toEntity(dto.errorWatch)
             functionNode = typeNodeMapper.toEntity(dto.functionNode)
             position = dto.position
         }
@@ -24,7 +24,7 @@ class ErrorWatchFnMapper(
     override fun toDto(entity: ErrorWatchFnEntity): ErrorWatchFn {
         return ErrorWatchFn(
             id = entity.id.value,
-            errorWatch = errorWatchesMapper.toDto(entity.errorWatchEntity),
+            errorWatch = errorWatchesMapper.toDto(entity.errorWatch),
             functionNode = typeNodeMapper.toDto(entity.functionNode),
             position = entity.position
         )

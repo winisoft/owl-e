@@ -48,7 +48,7 @@ import com.wini.owle.dto.typing.TypeVarVariance
 import com.wini.owle.dto.user.PaymentMethod
 import com.wini.owle.dto.user.User
 import com.wini.owle.dto.workflows.DataPoint
-import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Grouper
 import com.wini.owle.dto.workflows.PhaseRelation
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Tool
@@ -243,7 +243,7 @@ val userMappersModule = module {
 
 val workflowMappersModule = module {
     single<DbMapper<ULong, DataPoint, DataPointEntity>> { DataPointMapper(get(), get(), get()) }
-    single<DbMapper<ULong, Phase, PhaseEntity>> { PhaseMapper(get(), get()) }
+    single<DbMapper<ULong, Grouper, PhaseEntity>> { PhaseMapper(get(), get()) }
     single<DbMapper<CompositeID, PhaseRelation, PhaseRelationEntity>> { PhaseRelationMapper(get(), get()) }
     single<DbMapper<ULong, Step, StepEntity>> { StepsMapper(get(), get(), get(), get()) }
     single<DbMapper<ULong, Tool, ToolEntity>> { ToolMapper(get(), get()) }

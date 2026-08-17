@@ -10,8 +10,10 @@ import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.error.StringMaxLengthError
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.test.testExpectation", ["runs"], "/test-expectation")
 @Serializable
 data class TestExpectation(
 

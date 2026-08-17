@@ -19,32 +19,4 @@ class StepRunLogLineApi(
     validator = validator
 ), IStepRunLogLineApi  {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/execution-log") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/execution-log/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/execution-log") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/execution-log/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/execution-log") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/execution-log/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/execution-log/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) }
-            }
-            delete("/api/execution-log/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

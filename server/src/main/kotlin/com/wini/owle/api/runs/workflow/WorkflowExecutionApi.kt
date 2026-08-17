@@ -19,32 +19,4 @@ class WorkflowExecutionApi(
     validator = validator
 ), IWorkflowExecutionApi  {
     
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/workflow-execution") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/workflow-execution/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/workflow-execution") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/workflow-execution/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/workflow-execution") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/workflow-execution/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/workflow-execution/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) }
-            }
-            delete("/api/workflow-execution/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

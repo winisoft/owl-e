@@ -33,6 +33,6 @@ class TypeSchemaRefValidator(
 //                MAX_DESC_LENGTH
 //            ),
 //        ).plus(
-//            typeDeclarationValidator.fieldValidations(dto.typeDeclaration)
+//            typeDeclarationValidator.fieldValidations(dto.typeVarNode)
 //        )
  //   }}

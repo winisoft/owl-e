@@ -19,34 +19,6 @@ class TypeVarBoundsApiImpl(
     serializer = TypeVarBound.serializer(),
     endpointPath = endpointPath,
     validator = validator
-), TypeVarBoundApi {
+) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/type-bounds") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/type-bounds/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/type-bounds") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/type-bounds/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/type-bounds") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/type-bounds/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/type-bounds/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/type-bounds/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

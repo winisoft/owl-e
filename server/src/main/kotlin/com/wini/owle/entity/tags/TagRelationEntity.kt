@@ -33,10 +33,10 @@ class TagRelationEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
     /**
      * The parent tag in the relationship.
      */
-    var parentTagEntity by TagEntity referencedOn TagRelations.parentTag
+    var parentTag by TagEntity referencedOn TagRelations.parentTag
 
     /**
      * The child tag in the relationship.
      */
-    var childTagEntity by TagEntity referencedOn TagRelations.childTag
+    var childTag by TagEntity referencedOn TagRelations.childTag
 }

@@ -10,11 +10,11 @@ class VersionOverflowEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
     companion object : ULongEntityClass<VersionOverflowEntity>(VersionOverflows)
 
-    var referenceVersion by VersionEntity referencedOn VersionOverflows.version
+    var version by VersionEntity referencedOn VersionOverflows.version
 
     var violation by VersionOverflows.violation
 
-    var value by VersionOverflows.stringValue
+    var stringValue by VersionOverflows.stringValue
 
 }
 

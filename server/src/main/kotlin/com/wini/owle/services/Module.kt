@@ -40,7 +40,7 @@ import com.wini.owle.dto.typing.TypeVarBound
 import com.wini.owle.dto.typing.TypeVarVariance
 import com.wini.owle.dto.user.PaymentMethod
 import com.wini.owle.dto.user.User
-import com.wini.owle.dto.workflows.Phase
+import com.wini.owle.dto.workflows.Grouper
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.dto.workflows.Workflow
@@ -95,7 +95,6 @@ import org.koin.core.module.Module
 import org.koin.core.scope.Scope
 import com.wini.owle.entity.steps.DataPointInjectionEntity
 import com.wini.owle.entity.steps.DataPointWriteEntity
-import com.wini.owle.schema.Schema
 import com.wini.owle.services.workflows.WorkflowHierarchyService
 import com.wini.owle.services.workflows.impl.WorkflowHierarchyServiceImpl
 import org.jetbrains.exposed.v1.dao.CompositeEntity
@@ -240,8 +239,8 @@ val userServicesModule = module {
 }
 
 val workflowServicesModule = module {
-    bindGenericULongService<Phase, PhaseEntity> {
-        get<DbMapper<ULong, Phase, PhaseEntity>>()
+    bindGenericULongService<Grouper, PhaseEntity> {
+        get<DbMapper<ULong, Grouper, PhaseEntity>>()
     }
     bindGenericULongService<Step, StepEntity> {
         get<DbMapper<ULong, Step, StepEntity>>()

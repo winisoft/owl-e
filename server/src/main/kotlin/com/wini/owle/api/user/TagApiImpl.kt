@@ -17,34 +17,6 @@ class TagApiImpl(
     dll = dll,
     serializer = Tag.serializer(),
     validator = validator
-), ITagApi {
+) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/tag") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/tag/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/tag") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/tag/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/tag") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/tag/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/tag/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/tag/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

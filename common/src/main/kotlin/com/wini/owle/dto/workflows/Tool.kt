@@ -12,12 +12,14 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a tool that can be utilized within a step.
  * Contains the tool's body, optional description, return type, and dependencies.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.workflow.tool", ["step"], "/tool")
 @Serializable
 data class Tool(
 
@@ -35,7 +37,7 @@ data class Tool(
      * Optional description of the tool.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Tool.DESC_MAX_LENGTH)
     val description: String? = null,
 
     /**
@@ -48,6 +50,6 @@ data class Tool(
     /**
      * The return type of the tool, if defined.
      */
-    val returnTypeDeclaration: TypeNode?
+    val returnTypeNode: TypeNode?
 
 ) : ULongDto

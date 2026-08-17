@@ -55,10 +55,12 @@ class OwleApiDocProcessor(
 }
 
 class OwleApiDocProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return OwleApiDocProcessor(
-            environment.codeGenerator,
-            environment.logger
-        )
-    }
+    /** DTO-derived: generates into `common`. */
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor =
+        environment.processorFor(OwleTarget.COMMON) {
+            OwleApiDocProcessor(
+                environment.codeGenerator,
+                environment.logger
+            )
+        }
 }

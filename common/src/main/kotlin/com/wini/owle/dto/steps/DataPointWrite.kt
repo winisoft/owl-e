@@ -7,12 +7,14 @@ import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a revision made to a data point following the successful execution of a step.
  * Tracks the affected data point, the responsible step, and optionally, any transformation.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.revision", ["step"], "/revision")
 @Serializable
 data class DataPointWrite(
 

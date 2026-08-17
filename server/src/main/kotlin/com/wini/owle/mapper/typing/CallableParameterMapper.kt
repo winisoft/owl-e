@@ -19,7 +19,7 @@ class CallableParameterMapper(
             position = dto.position
             paramName = dto.paramName
             isVarArg = dto.isVarArg
-            isKArg = dto.isKArg
+            isKArg = dto.isKwarg
             defaultValueText = dto.defaultValueText
         }
     }

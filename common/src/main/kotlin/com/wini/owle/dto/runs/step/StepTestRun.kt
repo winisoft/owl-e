@@ -12,15 +12,17 @@ import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import com.wini.owle.schema.error.PreventsTimeParadox
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents the execution instance of a step within a workflow execution.
  * Tracks the status, start and completion times, and links to execution logs.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.step.stepRun", ["runs"], "/step-run")
 @PreventsTimeParadox(
-    happensFirstField = "startedAt",
-    happensSecondField = "completedAt")
+    happensFirstField = "started",
+    happensSecondField = "completed")
 @Serializable
 data class StepTestRun(
 
@@ -36,13 +38,13 @@ data class StepTestRun(
      * Timestamp for when the step execution started.
      */
     @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
-    val startedAt: String = "",
+    val started: String = "",
 
     /**
      * Timestamp for when the step execution completed, if applicable.
      */
     @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
-    val completedAt: String?,
+    val completed: String?,
 
     /**
      * Execution status of the step, indicating current state.

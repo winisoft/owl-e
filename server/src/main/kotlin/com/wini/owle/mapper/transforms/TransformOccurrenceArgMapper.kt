@@ -15,7 +15,7 @@ class TransformOccurrenceArgMapper(
     override fun toEntity(dto: TransformOccurrenceArg): TransformOccurrenceArgEntity {
         return daoDelegate.findOrCreate(dto) {
             transformOccurrenceEntity = this@TransformOccurrenceArgMapper.transformOccurrenceMapper.toEntity(dto.transformOccurrence)
-            transformationArg = transformArgMapper.toEntity(dto.transformationArg)
+            transformationArg = transformArgMapper.toEntity(dto.transformArg)
             value = dto.value
         }
     }

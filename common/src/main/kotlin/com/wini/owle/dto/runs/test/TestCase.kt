@@ -15,8 +15,10 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.test.testCase", ["runs"], "/test-case")
 @Serializable
 data class TestCase(
 

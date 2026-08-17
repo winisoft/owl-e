@@ -18,34 +18,6 @@ class PaymentMethodApiImpl(
     serializer = PaymentMethod.serializer(),
     endpointPath = endpointPath,
     validator = validator
-), PaymentMethodApi {
+) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/payment-method") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/payment-method/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/payment-method") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/payment-method/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/payment-method") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/payment-method/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/payment-method/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/payment-method/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

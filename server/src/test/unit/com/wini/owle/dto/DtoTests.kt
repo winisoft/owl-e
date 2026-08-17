@@ -82,7 +82,7 @@ open class DtoTest {
         @Nested
         open inner class WorkflowTest : BaseDtoTest<Workflow>(Workflow::class.java)
         @Nested inner class DataPointEntityDtoTest : BaseDtoTest<DataPoint>(DataPoint::class.java)
-        @Nested inner class PhaseTest : BaseDtoTest<Phase>(Phase::class.java)
+        @Nested inner class PhaseTest : BaseDtoTest<Grouper>(Grouper::class.java)
         @Nested inner class ToolTest : BaseDtoTest<Tool>(Tool::class.java)
         @Nested inner class ToolParamTest : BaseDtoTest<ToolParam>(ToolParam::class.java)
         @Nested inner class WorkflowFolderTest : BaseDtoTest<WorkflowFolder>(WorkflowFolder::class.java)

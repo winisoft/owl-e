@@ -5,6 +5,7 @@ import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.CompositeDto
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 
 /**
@@ -12,6 +13,7 @@ import kotlinx.serialization.Serializable
  * Supports union types such as 'Union[int, str]' by linking each member type to the union type declaration.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.typing.typeUnionMember", ["type"], "/type-union-member")
 @Serializable
 data class TypeUnionMember(
 

@@ -14,8 +14,8 @@ class TypeVarVarianceMapper(
 
     override fun toEntity(dto: TypeVarVariance): TypeVarVarianceEntity {
         return daoDelegate.findOrCreate(dto) {
-            typeVarNode = typeNodeMapper.toEntity(dto.typeNode)
-            varianceCardinality = dto.cardinality
+            typeVarNode = typeNodeMapper.toEntity(dto.typeVarNode)
+            varianceCardinality = dto.varianceCardinality
         }
     }
 

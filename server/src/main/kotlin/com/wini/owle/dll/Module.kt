@@ -88,7 +88,7 @@ val userDllsModule = module {
 val workflowDllsModule = module {
     bindGenericDll<ULong, Tag>()
     bindGenericDll<ULong, User>()
-    bindGenericDll<ULong, Phase>()
+    bindGenericDll<ULong, Grouper>()
     bindGenericDll<ULong, Step>()
     bindGenericDll<ULong, ToolParam>()
     bindGenericDll<ULong, Tool>()

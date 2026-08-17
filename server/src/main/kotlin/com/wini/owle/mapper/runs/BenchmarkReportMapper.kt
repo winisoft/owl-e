@@ -13,7 +13,7 @@ class BenchmarkReportMapper(
 
     override fun toEntity(dto: BenchmarkReport): BenchmarkReportEntity {
         return daoDelegate.findOrCreate(dto) {
-            workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowRun)
+            workflowExecution = workflowExecutionsMapper.toEntity(dto.workflowExecution)
         }
     }
 

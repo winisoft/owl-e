@@ -6,12 +6,14 @@ import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents bounds on type variables, supporting constraints like 'T: int' for generic types.
  * Allows capturing constraints on type variables in complex type declarations.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.typing.typeVarBound", ["type"], "/type-bound")
 @Serializable
 data class TypeVarBound(
 

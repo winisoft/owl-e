@@ -11,8 +11,10 @@ import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.test.testInput", ["runs"], "/test-input")
 @Serializable
 data class TestInput(
 

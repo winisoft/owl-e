@@ -20,7 +20,7 @@ class StepsMapper(
             description = dto.description
             tool = toolMapper.toEntity(dto.tool)
             isWorkflowHead = dto.isWorkflowHead
-            parentPhase = dto.parentPhase?.let { phaseMapper.toEntity(it) }
+            parentPhase = dto.parentGrouper?.let { phaseMapper.toEntity(it) }
             displayOrder = dto.displayOrder
         }
     }
@@ -34,7 +34,7 @@ class StepsMapper(
             isWorkflowHead = entity.isWorkflowHead,
             tool = toolMapper.toDto(entity.tool),
             displayOrder = entity.displayOrder,
-            parentPhase = entity.parentPhase?.let { phaseMapper.toDto(it) },
+            parentGrouper = entity.parentPhase?.let { phaseMapper.toDto(it) },
         )
     }
 }

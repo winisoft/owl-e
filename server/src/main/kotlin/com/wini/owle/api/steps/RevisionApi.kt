@@ -17,36 +17,8 @@ class RevisionApi(
     dll = dll,
     serializer = DataPointSave.serializer(),
     validator = validator
-), IRevisionApi {
+) {
 
 
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/revision") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("/api/revision/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("/api/revision") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("/api/revision/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("/api/revision") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("/api/revision/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("/api/revision/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("/api/revision/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

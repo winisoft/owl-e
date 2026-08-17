@@ -2,23 +2,38 @@ package com.wini.owle.dto.typing
 
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.environs.version.Version
+import com.wini.owle.error.StringContainsRestrictedChars
+import com.wini.owle.error.StringMaxLengthError
+import com.wini.owle.error.StringNotBlankError
+import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.Schema
+import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.error.ConstraintStringLenMax
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents a type in the Owl-E system
  */
 @Serializable
+@ApiEndpointDefinition("api.typing.typeNode", ["type"], "/type-node")
 data class TypeNode(
 
     override val id: ULong,
     /** **/
     val version: Version,
     /** **/
+    @ConstraintSimple([StringContainsRestrictedChars::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.NAMESPACE_MAX_LENGTH)
     val namespace: String?,
     /** **/
+    @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.NAME_MAX_LENGTH)
     val name: String,
     /** **/
+    @ConstraintSimple([StringContainsRestrictedChars::class])
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.ALIAS_MAX_LENGTH)
     val alias: String?,
     /** **/
     val isGeneric: Boolean,

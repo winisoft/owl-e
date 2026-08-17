@@ -21,7 +21,7 @@ object PackagePythonRequirementDaoDelegate: CompositeIdDaoDelegate<
     override fun extractId(dto: PackagePythonRequirement): CompositeID {
         return CompositeID {
             it[PackagePythonRequirements.distribution] = dto.distribution.name
-            it[PackagePythonRequirements.packageVersion] = dto.version.id
+            it[PackagePythonRequirements.packageVersion] = dto.packageVersion.id
         }
     }
 

@@ -16,7 +16,7 @@ class ToolParamsMapper(
     override fun toEntity(dto: ToolParam): ToolParamEntity {
         return daoDelegate.findOrCreate(dto) {
             name = dto.name
-            typeNode = typeNodeMapper.toEntity(dto.typeDeclaration)
+            typeNode = typeNodeMapper.toEntity(dto.typeVarNode)
             tool = toolMapper.toEntity(dto.tool)
         }
     }

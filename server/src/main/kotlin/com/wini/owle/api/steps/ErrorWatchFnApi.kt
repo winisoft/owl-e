@@ -19,32 +19,4 @@ class ErrorWatchFnApi(
     validator = validator
 ), IErrorWatchFnApi  {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("api/error-watch-fn") {
-                getMany { call.execute(OwleApiCall.GetMany) }
-            }
-            get("api/error-watch-fn/{id}") {
-                getOne { call.execute(OwleApiCall.GetOne) }
-            }
-            post("api/error-watch-fn") {
-                postMany { call.execute(OwleApiCall.CreateOne) }
-            }
-            post("api/error-watch-fn/batch") {
-                postMany { call.execute(OwleApiCall.CreateMany) }
-            }
-            put("api/error-watch-fn") {
-                putOne { call.execute(OwleApiCall.UpdateOne) }
-            }
-            put("api/error-watch-fn/batch") {
-                putMany { call.execute(OwleApiCall.UpdateMany) }
-            }
-            delete("api/error-watch-fn/{id}") {
-                deleteOne { call.execute(OwleApiCall.DeleteOne) } 
-            }
-            delete("api/error-watch-fn/batch") {
-                deleteMany { call.execute(OwleApiCall.DeleteMany) }
-            }
-        }
-    }
 }

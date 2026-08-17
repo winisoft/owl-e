@@ -9,12 +9,14 @@ import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.PositiveValueULongError
 import com.wini.owle.error.TimestampFormatMustMatchIso8601
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Stores the outcome of a test case execution, indicating whether the test passed or failed.
  * Includes the execution timestamp for audit and debugging purposes.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.workflow.workflowTestResult", ["runs"], "/workflow-test")
 @Serializable
 data class TestOutcomeActual(
 

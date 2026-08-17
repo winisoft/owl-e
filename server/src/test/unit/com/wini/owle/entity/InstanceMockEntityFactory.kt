@@ -114,7 +114,7 @@ object InstanceMockEntityFactory {
         position: Int = 1
     ): ErrorWatchFnEntity = mockk {
         every { this@mockk.id } returns mockk()
-        every { this@mockk.errorWatchEntity } returns errorWatchEntity
+        every { this@mockk.errorWatch } returns errorWatchEntity
         every { this@mockk.functionNode } returns functionNode
         every { this@mockk.position } returns position
     }
@@ -170,7 +170,7 @@ object InstanceMockEntityFactory {
     ): PaymentMethodEntity = mockk {
         every { this@mockk.id } returns mockk()
         every { this@mockk.stripePaymentMethodId } returns stripePaymentMethodId
-        every { this@mockk.userEntity } returns userEntity
+        every { this@mockk.user } returns userEntity
        // every { this@mockk.cardBrand } returns cardBrand
         every { this@mockk.lastFour } returns lastFour
         every { this@mockk.isDefault } returns isDefault
@@ -204,8 +204,8 @@ object InstanceMockEntityFactory {
     ): DataPointInjectionEntity = mockk {
         every { this@mockk.id } returns mockk()
         every { this@mockk.junction } returns junction
-        every { this@mockk.sourceDataPointEntity } returns sourceDataPointEntity
-        every { this@mockk.injectedDataPointEntity } returns injectedDataPointEntity
+        every { this@mockk.sourceDataPoint } returns sourceDataPointEntity
+        every { this@mockk.injectedDataPoint } returns injectedDataPointEntity
         every { this@mockk.name } returns name
         every { this@mockk.description } returns description
     }
@@ -296,8 +296,8 @@ object InstanceMockEntityFactory {
     ): TagRelationEntity = mockk {
         val compositeID = TagRelationEntity.buildId(parentTagId, childTagId)
         every { this@mockk.id } returns EntityID(compositeID, mockk())
-        every { this@mockk.parentTagEntity } returns parentTagEntity
-        every { this@mockk.childTagEntity } returns childTagEntity
+        every { this@mockk.parentTag } returns parentTagEntity
+        every { this@mockk.childTag } returns childTagEntity
     }
 
     fun testCaseDao(
@@ -355,7 +355,7 @@ object InstanceMockEntityFactory {
         executedAt: Instant = mockk()
     ): TestResultEntity = mockk {
         every { this@mockk.id } returns mockk()
-        every { this@mockk.testCaseEntity } returns testCaseEntity
+        every { this@mockk.testCase } returns testCaseEntity
         every { this@mockk.workflowExecution } returns workflowExecution
         every { this@mockk.passed } returns passed
         every { this@mockk.executedAt } returns executedAt

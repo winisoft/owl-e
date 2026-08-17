@@ -17,32 +17,4 @@ class ToolApi(
     validator = validator
 ) {
 
-    override fun register(routing: Routing) {
-        routing.apply {
-            get("/api/tool") {
-                call.execute(OwleApiCall.GetMany)
-            }
-            get("/api/tool/{id}") {
-                call.execute(OwleApiCall.GetOne)
-            }
-            post("/api/tool") {
-                call.execute(OwleApiCall.CreateOne)
-            }
-            post("/api/tool/batch") {
-                call.execute(OwleApiCall.CreateMany)
-            }
-            put("/api/tool") {
-                call.execute(OwleApiCall.UpdateOne)
-            }
-            put("/api/tool/batch") {
-                call.execute(OwleApiCall.UpdateMany)
-            }
-            delete("/api/tool/{id}") {
-                call.execute(OwleApiCall.DeleteOne) 
-            }
-            delete("/api/tool/batch") {
-                call.execute(OwleApiCall.DeleteMany)
-            }
-        }
-    }
 }

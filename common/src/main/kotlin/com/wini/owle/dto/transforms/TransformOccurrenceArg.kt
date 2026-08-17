@@ -10,11 +10,13 @@ import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 /**
  * Represents an argument value for an applied transformation.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.transforms.appliedTransformArg", ["transforms"], "/applied-transform-arg")
 @Serializable
 data class TransformOccurrenceArg(
 
@@ -29,7 +31,7 @@ data class TransformOccurrenceArg(
     /**
      * The transformation argument definition.
      */
-    val transformationArg: TransformArg,
+    val transformArg: TransformArg,
     /**
      * The actual value provided for this argument.
      */

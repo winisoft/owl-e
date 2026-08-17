@@ -16,7 +16,7 @@ class TypeSchemaRefMapper(
         return daoDelegate.findOrCreate(dto) {
             parentRef = dto.parentRef?.let { toEntity(it) }
             name = dto.name
-            typeNode = typeNodeMapper.toEntity(dto.typeDeclaration)
+            typeNode = typeNodeMapper.toEntity(dto.typeVarNode)
             description = dto.description
         }
     }

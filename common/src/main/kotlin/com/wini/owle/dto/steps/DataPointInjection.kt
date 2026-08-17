@@ -12,8 +12,10 @@ import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.api.ApiEndpointDefinition
 
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.initialDataInjector", ["step"], "/prereq-injection")
 @Serializable
 data class DataPointInjection(
 
@@ -27,11 +29,11 @@ data class DataPointInjection(
     val injectedDataPoint: DataPoint,
 
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_512)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.DataPointInjection.NAME_MAX_LENGTH)
     val name: String?,
 
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
+    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.DataPointInjection.DESC_MAX_LENGTH)
     val description: String?
 
 ) : ULongDto
