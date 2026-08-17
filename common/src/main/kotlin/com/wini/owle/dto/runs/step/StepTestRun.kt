@@ -38,13 +38,13 @@ data class StepTestRun(
      * Timestamp for when the step execution started.
      */
     @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
-    val started: String = "",
+    val started: String? = null,
 
     /**
      * Timestamp for when the step execution completed, if applicable.
      */
     @ConstraintSimple([TimestampFormatMustMatchIso8601::class, TimestampMustBeChronologicallyCoherent::class])
-    val completed: String?,
+    val completed: String? = null,
 
     /**
      * Execution status of the step, indicating current state.

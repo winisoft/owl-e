@@ -64,7 +64,7 @@ data class DistributionPackage(
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.DistributionPackage.DOCS_URL_MAX_LENGTH)
     val docsUrl: String?,
 
-    val yanked: Boolean,
+    val yanked: Boolean?,
     val lastSerial: UInt?,
     //val requirements: List<PackageDistRequirement>,
 ) : CompositeDto {

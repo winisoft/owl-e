@@ -4,7 +4,7 @@ import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.schema.error.ConstraintStringLenMax
 import com.wini.owle.dto.ULongDto
-import com.wini.owle.dto.runs.workflow.TestOutcomeActual
+import com.wini.owle.dto.runs.workflow.TestResult
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.error.ListMustNotBeEmpty
@@ -40,8 +40,8 @@ data class TestCase(
     val inputs: List<TestInput>,
 
     @ConstraintSimple([ListMustNotBeEmpty::class])
-    val expectedOutcomes: List<TestOutcomeExpectation>,
+    val expectedOutcomes: List<TestExpectedOutcome>,
 
-    val results: List<TestOutcomeActual>
+    val results: List<TestResult>
 
 ) : ULongDto

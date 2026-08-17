@@ -1,23 +1,25 @@
 package com.wini.owle.dto.tags.targets
 
-import com.wini.owle.dto.tags.TagSubject
-import com.wini.owle.error.PositiveValueULongError
+import com.wini.owle.dto.CompositeDto
+import com.wini.owle.dto.tags.Tag
+import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.schema.error.ConstraintSimple
+import com.wini.owle.schema.api.ApiEndpointDefinition
 import kotlinx.serialization.Serializable
 
+/**
+ * A tag applied to a workflow.
+ */
 @ModelDefinition
+@ApiEndpointDefinition("api.tags.workflowTag", ["user"], "/workflow-tag")
 @Serializable
 data class WorkflowTag(
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    override val subjectId: ULong,
+    val workflow: Workflow,
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    override val tagId: ULong
+    val tag: Tag
 
-) : TagSubject {
+) : CompositeDto {
 
-    override val owleId: String get() = "subjectId=$subjectId,tagId=$tagId"
-
+    override val owleId: String get() = "workflow=${workflow.owleId},tag=${tag.owleId}"
 }

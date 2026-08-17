@@ -57,7 +57,7 @@ data class CallableParameter(
      */
     @ConstraintSimple([StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.CallableParameter.DEFAULT_VALUE_TEXT_MAX_LENGTH)
-    val defaultValueText: String
+    val defaultValueText: String?
 
 ) : ULongDto {
 

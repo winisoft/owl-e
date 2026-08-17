@@ -40,7 +40,7 @@ data class TypeSchemaRef(
     /**
      * Type declaration associated with this schema reference.
      */
-    val typeNode: TypeNode,
+    val typeNode: TypeNode?,
 
     /**
      * Optional description providing details on the schema reference's purpose.

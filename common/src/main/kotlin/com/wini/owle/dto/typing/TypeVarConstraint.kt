@@ -1,6 +1,6 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.dto.CompositeDto
+import com.wini.owle.dto.ULongDto
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
 import com.wini.owle.schema.ModelDefinition
@@ -14,15 +14,13 @@ data class TypeVarConstraint(
     /**
      * The TypeVar's own TypeNode
      */
-    val reference : TypeNode,
+    override val id: ULong,
+
+    val typeVarNode : TypeNode,
 
     /**
      * A TypeNode reference to the bound, e.g. 'int' or 'str'
      */
-    val constraint : TypeNode
+    val constraintNode : TypeNode
 
-) : CompositeDto {
-
-    override val owleId: String get() = "reference=${reference.owleId},constraint=${constraint.owleId}"
-
-}
+) : ULongDto

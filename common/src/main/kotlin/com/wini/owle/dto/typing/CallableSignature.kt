@@ -18,15 +18,13 @@ data class CallableSignature(
 
     override val id: ULong,
 
-    val parentSchemaRef : TypeSchemaRef,
+    val typeNode : TypeNode,
 
-    val returnTypeNode : TypeSchemaRef,
-
-    val name : String?,
+    val returnTypeNode : TypeNode,
 
     @ConstraintSimple([StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.CallableSignature.DOCSTRING_MAX_LENGTH)
-    val docstring : String,
+    val docstring : String?,
 
     val isStatic : Boolean,
 

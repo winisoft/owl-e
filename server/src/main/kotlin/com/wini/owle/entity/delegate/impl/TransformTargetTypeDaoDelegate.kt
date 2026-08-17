@@ -23,8 +23,8 @@ object TransformTargetTypeDaoDelegate: CompositeIdDaoDelegate<
 
     override fun extractId(dto: TransformTargetType): CompositeID {
         return CompositeID.Companion {
-            it[TransformTargetTypes.transform] = dto.transformationId
-            it[TransformTargetTypes.eligibleTypeNode] = dto.typeDeclarationId
+            it[TransformTargetTypes.transform] = dto.transform.id
+            it[TransformTargetTypes.eligibleTypeNode] = dto.eligibleTypeNode.id
         }
     }
 

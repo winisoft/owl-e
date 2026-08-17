@@ -1,9 +1,8 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.dto.CompositeDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
-import com.wini.owle.dto.ULongDto
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
@@ -20,6 +19,8 @@ data class TypeVarBound(
     /**
      * Relationship to the bound type declaration.
      */
+    override val id: ULong,
+
     val boundTypeNode: TypeNode,
 
     /**
@@ -27,9 +28,5 @@ data class TypeVarBound(
      */
     val typeVarNode: TypeNode
 
-) : CompositeDto {
-
-    override val owleId: String get() = ""
-
-}
+) : ULongDto
 

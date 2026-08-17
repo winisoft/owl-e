@@ -64,6 +64,8 @@ import com.wini.owle.dto.workflows.Tool
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.dto.workflows.enums.StoreMethod
+import com.wini.owle.dto.runs.test.TestExpectedOutcome
+import com.wini.owle.dto.runs.workflow.TestResult
 
 @Suppress("UNCHECKED_CAST")
 object DtoTestInstanceFactory {
@@ -209,7 +211,6 @@ object DtoTestInstanceFactory {
         isWorkflowHead: Boolean = true,
         tool: Tool = toolDto(),
         parentGrouper: Grouper? = null,
-        displayOrder: Int = 0,
         posX: Double = 0.0,
         posY: Double = 0.0,
         color: String = "#4488CC",
@@ -225,7 +226,6 @@ object DtoTestInstanceFactory {
             isWorkflowHead = isWorkflowHead,
             tool = tool,
             parentGrouper = parentGrouper,
-            displayOrder = displayOrder,
             posX = posX,
             posY = posY,
             color = color,
@@ -274,12 +274,10 @@ object DtoTestInstanceFactory {
 //    }
 
     fun pythonVersionSpecifier(
-        id: ULong = 1UL,
         pythonVersion: PythonVersion = pythonVersion(),
         operator: VersionOperator = VersionOperator.EXACT,
         wildcard: WildcardSegment = WildcardSegment.MINOR
     ): PythonVersionSpecifier = PythonVersionSpecifier(
-        id = id,
         pythonVersion = pythonVersion,
         operator = operator,
         wildcard = wildcard
@@ -338,8 +336,8 @@ object DtoTestInstanceFactory {
         workflow: Workflow = workflowDto(),
         step: Step = stepDto(),
         inputs: List<TestInput> = emptyList(),
-        expectedOutcomes: List<TestOutcomeExpectation> = emptyList(),
-        results: List<TestOutcomeActual> = emptyList()
+        expectedOutcomes: List<TestExpectedOutcome> = emptyList(),
+        results: List<TestResult> = emptyList()
     ) : TestCase {
         return TestCase(
             id = id,
@@ -757,6 +755,7 @@ object DtoTestInstanceFactory {
         varianceCardinality: VarianceCardinality = VarianceCardinality.COVARIANT
     ): TypeVarVariance {
         return TypeVarVariance(
+            id = 1UL,
             typeVarNode = typeVariableDeclaration,
             varianceCardinality = varianceCardinality
         )
@@ -799,13 +798,15 @@ object DtoTestInstanceFactory {
         id: ULong = 7UL,
         dataPoint: DataPoint = dataPointDto(),
         expectedValue: String = "expectedValue1",
-        assertion: TestAssertion = TestAssertion.EQUALS,
+        operator: ComparisonOperator = ComparisonOperator.EQUALS,
         testCase: TestCase = testCaseDto()
-    ): TestOutcomeExpectation {
-        return TestOutcomeExpectation(
+    ): TestExpectedOutcome {
+        return TestExpectedOutcome(
             id = id,
+            testCase = testCase,
             dataPoint = dataPoint,
-            assertion = assertion
+            expectedValue = expectedValue,
+            operator = operator
         )
     }
 
@@ -815,10 +816,13 @@ object DtoTestInstanceFactory {
         workflowRun: WorkflowRun = workflowExecutionDto(),
         passed: Boolean = true,
         executedAt: String = "2024-12-21T00:00:00Z"
-    ): TestOutcomeActual {
-        return TestOutcomeActual(
+    ): TestResult {
+        return TestResult(
             id = id,
-            passed = passed
+            testCase = testCase,
+            workflowExecution = workflowRun,
+            passed = passed,
+            executedAt = executedAt
         )
     }
 
@@ -828,6 +832,7 @@ object DtoTestInstanceFactory {
         typeVariableDeclaration: TypeNode = typeNode()
     ) : TypeVarBound {
         return TypeVarBound(
+            id = 1UL,
             boundTypeNode = boundTypeDeclaration,
             typeVarNode = typeVariableDeclaration
         )

@@ -1,6 +1,6 @@
 package com.wini.owle.dto.environs.pkg
 
-import com.wini.owle.dto.ULongDto
+import com.wini.owle.dto.CompositeDto
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.error.StringMaxLengthError
 import com.wini.owle.error.StringNotBlankError
@@ -17,13 +17,13 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @ApiEndpointDefinition("api.environs.pkg.packageExtra", ["environs"], "/package-extra")
 @Serializable
 data class PackageExtra(
-    override val id: ULong,
+    val packageVersion: com.wini.owle.dto.environs.version.Version,
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.PackageExtra.NAME_MAX_LENGTH)
     val name: String,
     val distribution: Distribution
-): ULongDto {
+): CompositeDto {
 
-    override val owleId: String get() = "id=$id,name=${name},distribution=${distribution.owleId}"
+    override val owleId: String get() = "distribution=${distribution.owleId},packageVersion=${packageVersion.owleId},name=$name"
 
 }

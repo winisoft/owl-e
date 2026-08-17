@@ -48,6 +48,7 @@ class DbMapperGeneratorProcessor(
         const val TARGET_PACKAGE = "com.wini.owle.mapper.generated"
         const val MODEL_DEFINITION = "com.wini.owle.schema.ModelDefinition"
         const val INSTANT = "kotlinx.datetime.Instant"
+        const val LOCAL_DATE_TIME = "kotlinx.datetime.LocalDateTime"
         const val STRING = "kotlin.String"
 
         val DTO_PACKAGES = listOf(
@@ -87,6 +88,9 @@ class DbMapperGeneratorProcessor(
 
         /** DTO holds an ISO-8601 `String`; the entity column is an `Instant`. */
         data class Timestamp(override val param: String, val nullable: Boolean) : Binding
+
+        /** DTO holds text; the entity column is a `LocalDateTime` (a MySQL `datetime`). */
+        data class DateTime(override val param: String, val nullable: Boolean) : Binding
 
         /** DTO holds the enum, entity stores its name as text. */
         data class EnumToText(override val param: String, val nullable: Boolean) : Binding
@@ -148,10 +152,17 @@ class DbMapperGeneratorProcessor(
             if (ctor == null || ctor.parameters.isEmpty()) {
                 skipped += dtoName to "DTO has no primary constructor parameters"; continue
             }
-            val idType = dto.superTypes.mapNotNull { it.resolve().declaration.qualifiedName?.asString() }
-                .firstNotNullOfOrNull { ID_TYPES[it] }
+            val idType = idTypeOf(dto)
             if (idType == null) {
                 skipped += dtoName to "no known id supertype"; continue
+            }
+            // `DbMapper<ID, DTO, E>` binds one ID to both sides, so a CompositeDto over a
+            // ULong-keyed entity (or the reverse) cannot be expressed however well the
+            // properties line up.
+            val entityIdType = entityIdTypeOf(entity)
+            if (entityIdType != null && entityIdType != idType) {
+                skipped += dtoName to "id kind disagrees: DTO is $idType, entity is $entityIdType"
+                continue
             }
 
             val props = entity.getAllProperties().associateBy { it.simpleName.asString() }
@@ -222,6 +233,34 @@ class DbMapperGeneratorProcessor(
     private fun KSType.render() = declaration.simpleName.asString() + if (isMarkedNullable) "?" else ""
     private fun KSType.isEnum() = (declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS
 
+    /**
+     * The id supertype may be inherited rather than declared directly — the tag DTOs implement
+     * `TagSubject`, which is itself a `CompositeDto` — so the whole supertype graph is searched.
+     */
+    private fun idTypeOf(dto: KSClassDeclaration, depth: Int = 0): String? {
+        if (depth > 5) return null
+        for (st in dto.superTypes) {
+            val decl = st.resolve().declaration
+            ID_TYPES[decl.qualifiedName?.asString()]?.let { return it }
+            (decl as? KSClassDeclaration)?.let { parent ->
+                idTypeOf(parent, depth + 1)?.let { return it }
+            }
+        }
+        return null
+    }
+
+    /** The ID an Exposed entity is keyed by, read from its `*Entity` supertype. */
+    private fun entityIdTypeOf(entity: KSClassDeclaration): String? =
+        entity.superTypes.mapNotNull { it.resolve().declaration.qualifiedName?.asString() }
+            .firstNotNullOfOrNull {
+                when (it) {
+                    "org.jetbrains.exposed.v1.dao.ULongEntity" -> "ULong"
+                    "org.jetbrains.exposed.v1.dao.LongEntity" -> "Long"
+                    "org.jetbrains.exposed.v1.dao.CompositeEntity" -> "CompositeID"
+                    else -> null
+                }
+            }
+
     private fun findDto(resolver: Resolver, simpleName: String): KSClassDeclaration? =
         DTO_PACKAGES.firstNotNullOfOrNull {
             resolver.getClassDeclarationByName(resolver.getKSNameFromString("$it.$simpleName"))
@@ -272,6 +311,9 @@ class DbMapperGeneratorProcessor(
         if (dtoType.fq() == STRING && entType.fq() == INSTANT) {
             return if (sameNullability) Binding.Timestamp(name, nullable) else null
         }
+        if (dtoType.fq() == STRING && entType.fq() == LOCAL_DATE_TIME) {
+            return if (sameNullability) Binding.DateTime(name, nullable) else null
+        }
 
         // enum on one side, text on the other
         if (dtoType.isEnum() && entType.fq() == STRING) {
@@ -289,6 +331,9 @@ class DbMapperGeneratorProcessor(
         if (!looksLikeEntity) return null
         if (related.annotations.none { it.fq() == MODEL_DEFINITION } &&
             findDto(resolver, relName) == null) return null
+
+        // a nullable FK cannot satisfy a non-null DTO relation, or vice versa
+        if (!sameNullability) return null
 
         return Binding.Relation(name, relName, nullable, relName == ownerDtoName, writable)
     }
@@ -341,6 +386,9 @@ class DbMapperGeneratorProcessor(
                 is Binding.Timestamp ->
                     if (bind.nullable) "dto.${bind.param}?.let { DateTimeConverter.fromString(it) }"
                     else "DateTimeConverter.fromString(dto.${bind.param})"
+                is Binding.DateTime ->
+                    if (bind.nullable) "dto.${bind.param}?.let { kotlinx.datetime.LocalDateTime.parse(it) }"
+                    else "kotlinx.datetime.LocalDateTime.parse(dto.${bind.param})"
                 is Binding.EnumToText ->
                     if (bind.nullable) "dto.${bind.param}?.name" else "dto.${bind.param}.name"
                 is Binding.TextToEnum ->
@@ -365,6 +413,9 @@ class DbMapperGeneratorProcessor(
                 is Binding.Timestamp ->
                     if (bind.nullable) "entity.${bind.param}?.let { DateTimeConverter.toString(it) }"
                     else "DateTimeConverter.toString(entity.${bind.param})"
+                is Binding.DateTime ->
+                    if (bind.nullable) "entity.${bind.param}?.toString()"
+                    else "entity.${bind.param}.toString()"
                 is Binding.EnumToText -> {
                     val enumFq = (plan.dto.primaryConstructor!!.parameters
                         .first { it.name?.asString() == bind.param }

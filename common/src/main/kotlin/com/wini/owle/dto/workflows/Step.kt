@@ -45,19 +45,13 @@ data class Step(
      */
     val parentGrouper: Grouper?,
 
-    /**
-     * The order this step is presented among other steps and phases sitting at the same level of the hierarchy
-     */
-    @ConstraintSimple([PositiveValueIntError::class])
-    val displayOrder: Int,
-
 
     val posX: Double,
 
     val posY: Double,
 
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Step.COLOR_LENGTH)
-    val color: String,
+    val color: String?,
 
     val createdAt: String,
 

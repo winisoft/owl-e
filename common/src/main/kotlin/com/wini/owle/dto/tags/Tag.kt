@@ -35,7 +35,7 @@ data class Tag(
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Tag.DESC_MAX_LENGTH)
     val description: String? = null,
 
-    val source: TagSource,
+    val source: TagSource? = null,
 
     val childTags: List<Tag>? = null
 

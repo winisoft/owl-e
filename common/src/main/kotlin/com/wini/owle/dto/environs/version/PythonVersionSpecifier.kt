@@ -1,6 +1,6 @@
 package com.wini.owle.dto.environs.version
 
-import com.wini.owle.dto.ULongDto
+import com.wini.owle.dto.CompositeDto
 import com.wini.owle.dto.environs.version.enums.VersionOperator
 import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.schema.ModelDefinition
@@ -12,12 +12,14 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class PythonVersionSpecifier(
 
-    override val id: ULong,
-
     val pythonVersion: PythonVersion,
 
     val operator: VersionOperator,
 
     val wildcard: WildcardSegment
 
-): ULongDto
+): CompositeDto {
+
+    override val owleId: String
+        get() = "pythonVersion=${pythonVersion.owleId},operator=${operator.name},wildcard=${wildcard.name}"
+}

@@ -20,5 +20,8 @@ class PackageExtraEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
 
     var packageVersion by VersionEntity referencedOn PackageExtras.packageVersion
 
+    /** Part of the composite key, so read-only here: the DaoDelegate sets it via the CompositeID. */
+    val name: String get() = id.value[PackageExtras.name].value
+
     var description by PackageExtras.description
 }

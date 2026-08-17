@@ -53,7 +53,7 @@ data class DataPoint(
     /**
      * Specifies how the data point's value is stored: as text, blob, or file.
      */
-    val storeMethod: StoreMethod,
+    val storeMethod: StoreMethod?,
     /**
      * Specifies the data type for the data point, linking to a type declaration.
      */

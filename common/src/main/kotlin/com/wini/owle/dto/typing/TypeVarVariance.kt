@@ -1,6 +1,6 @@
 package com.wini.owle.dto.typing
 
-import com.wini.owle.dto.CompositeDto
+import com.wini.owle.dto.ULongDto
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.typing.enums.VarianceCardinality
 import kotlinx.serialization.Serializable
@@ -19,6 +19,8 @@ data class TypeVarVariance(
     /**
      * Relationship to the type variable declaration.
      */
+    override val id: ULong,
+
     val typeVarNode: TypeNode,
 
     /**
@@ -26,8 +28,4 @@ data class TypeVarVariance(
      */
     val varianceCardinality: VarianceCardinality
 
-) : CompositeDto {
-
-    override val owleId: String get() = "typeVarNode=${typeVarNode.owleId},varianceCardinality=${varianceCardinality.name}"
-
-}
+) : ULongDto

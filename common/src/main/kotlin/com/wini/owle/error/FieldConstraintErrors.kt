@@ -478,7 +478,7 @@ data class VersionSpecUndefined<T : BaseDto>(
 @Serializable
 @ErrorDefinition("errors.constraint.preventsTimeParadoxes")
 data class PreventsTimeParadoxes<T : BaseDto>(
-    val happensFirstField: KProperty1<T, String>,
+    val happensFirstField: KProperty1<T, String?>,
     val happensSecondField: KProperty1<T, String?>,
     val receiver: T
 ) : ConstraintError {
@@ -487,13 +487,15 @@ data class PreventsTimeParadoxes<T : BaseDto>(
     override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${happensFirstField.name}=$beforeTimestamp,::${happensSecondField.name}=${afterTimestamp}"
 
-    private val beforeTimestamp: String get() = happensFirstField.get(receiver)
+    private val beforeTimestamp: String? get() = happensFirstField.get(receiver)
     private val afterTimestamp: String? get() = happensSecondField.get(receiver)
 
     override val isInvalid: Boolean
-        get() = afterTimestamp?.let {
-            DateTimeConverter.fromString(it) < DateTimeConverter.fromString(beforeTimestamp)
-        } ?: false
+        get() {
+            val before = beforeTimestamp ?: return false
+            val after = afterTimestamp ?: return false
+            return DateTimeConverter.fromString(after) < DateTimeConverter.fromString(before)
+        }
 
 }
 
@@ -508,10 +510,10 @@ data class TagWithUserSourceUserIdError<T : BaseDto>(
     override val errorCode: String = ""
     override val message: String get() = ""
 
-    override val detail: String get() = "${receiver.owleTypedId}::${sourceField.name}=${receiver.source.name}, ${userIdField.name}=[null]"
+    override val detail: String get() = "${receiver.owleTypedId}::${sourceField.name}=${receiver.source?.name}, ${userIdField.name}=[null]"
     override val isInvalid: Boolean
         //TODO
-        get() = (receiver.source.name == TagSource.USER.name) //.userId == null)
+        get() = (receiver.source?.name == TagSource.USER.name) //.userId == null)
 
 }
 
@@ -525,10 +527,10 @@ data class TagWithNonSourceUserIdError<T : BaseDto>(
     override val errorCode: String = ""
     override val message: String get() = ""
     //TODO
-    override val detail: String get() = "${receiver.owleTypedId}::${sourceField.name}=${receiver.source.name}, ${userIdField.name}=[" //${receiver.userId}]"
+    override val detail: String get() = "${receiver.owleTypedId}::${sourceField.name}=${receiver.source?.name}, ${userIdField.name}=[" //${receiver.userId}]"
     override val isInvalid: Boolean
         //TODO
-        get() = (receiver.source.name != TagSource.USER.name)//.userId != null)
+        get() = (receiver.source?.name != TagSource.USER.name)//.userId != null)
 }
 
 @Serializable

@@ -31,7 +31,7 @@ data class TypeNode(
     /** **/
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.NAME_MAX_LENGTH)
-    val name: String,
+    val name: String?,
     /** **/
     @ConstraintSimple([StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.ALIAS_MAX_LENGTH)

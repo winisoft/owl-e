@@ -30,8 +30,8 @@ object TagRelationDaoDelegate: CompositeIdDaoDelegate<
 
     override fun extractId(dto: TagRelation): CompositeID {
         return CompositeID.Companion {
-            it[TagRelations.parentTag] = dto.parentTagId
-            it[TagRelations.childTag] = dto.childTagId
+            it[TagRelations.parentTag] = dto.parentTag.id
+            it[TagRelations.childTag] = dto.childTag.id
         }
     }
 
