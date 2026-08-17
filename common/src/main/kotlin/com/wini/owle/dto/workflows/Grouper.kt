@@ -10,6 +10,7 @@ import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
+import com.wini.owle.schema.api.ApiEndpointDefinition
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,6 +20,7 @@ import kotlinx.serialization.Serializable
  * understood.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.workflows.grouper", ["workflows"], "/grouper")
 @Serializable
 data class Grouper(
 
@@ -53,4 +55,5 @@ data class Grouper(
     val posX: Double,
 
     val posY: Double,
+
 ) : ULongDto

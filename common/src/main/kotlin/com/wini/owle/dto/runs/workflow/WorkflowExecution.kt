@@ -4,7 +4,6 @@ import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.runs.enums.ExecutionStatus
-import com.wini.owle.dto.runs.step.StepTestRun
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.PositiveValueULongError
@@ -19,8 +18,8 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
  */
 @Serializable
 @ModelDefinition
-@ApiEndpointDefinition("api.runs.workflow.workflowRun", ["runs"], "/workflow-run")
-data class WorkflowRun(
+@ApiEndpointDefinition("api.runs.workflow.workflowExecution", ["executions"], "/workflow-execution")
+data class WorkflowExecution(
 
     @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,

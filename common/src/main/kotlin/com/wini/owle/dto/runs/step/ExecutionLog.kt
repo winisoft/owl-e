@@ -3,7 +3,7 @@ package com.wini.owle.dto.runs.step
 import com.wini.owle.dto.ULongDto
 import com.wini.owle.dto.runs.enums.ExecutionEventKind
 import com.wini.owle.dto.runs.enums.ExecutionLogLevel
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.steps.Inquisition
 import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.dto.workflows.Step
@@ -20,7 +20,7 @@ data class ExecutionLog(
 
     override val id: ULong,
 
-    val workflowExecution: WorkflowRun,
+    val workflowExecution: WorkflowExecution,
 
     /** Monotonic position within the run; unique per run. */
     val seq: ULong,
@@ -43,4 +43,4 @@ data class ExecutionLog(
 
     val message: String?,
 
-) : ULongDto
+    ) : ULongDto

@@ -16,7 +16,7 @@ import com.wini.owle.dto.runs.step.StepTestRun
 import com.wini.owle.dto.runs.step.ExecutionNotification
 import com.wini.owle.dto.runs.test.*
 import com.wini.owle.dto.runs.workflow.TestOutcomeActual
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.tags.Tag
 import com.wini.owle.dto.tags.TagRelation
@@ -56,7 +56,7 @@ val runsDllsModule = module {
     bindGenericDll<ULong, TestOutcomeActual>()
     bindGenericDll<ULong, ExecutionNotification>()
     bindGenericDll<ULong, StepTestRun>()
-    bindGenericDll<ULong, WorkflowRun>()
+    bindGenericDll<ULong, WorkflowExecution>()
 }
 val stepDllsModule = module {
     bindGenericDll<ULong, ErrorWatchFn>()

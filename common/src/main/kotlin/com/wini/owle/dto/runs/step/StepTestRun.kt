@@ -3,9 +3,7 @@ package com.wini.owle.dto.runs.step
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
-import com.wini.owle.dto.runs.workflow.WorkflowRun
 import com.wini.owle.dto.runs.enums.ExecutionStatus
-import com.wini.owle.dto.runs.enums.TestAssertion
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 import com.wini.owle.error.PositiveValueULongError

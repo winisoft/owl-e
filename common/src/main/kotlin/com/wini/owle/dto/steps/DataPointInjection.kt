@@ -14,8 +14,11 @@ import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
 
+/**
+ *
+ */
 @ModelDefinition
-@ApiEndpointDefinition("api.steps.initialDataInjector", ["step"], "/prereq-injection")
+@ApiEndpointDefinition("api.steps.dataPointInjection", ["step"], "/datapoint-injection")
 @Serializable
 data class DataPointInjection(
 

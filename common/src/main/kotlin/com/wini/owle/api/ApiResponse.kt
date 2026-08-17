@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @ModelDefinition(skipValidation = true)
 @Serializable
 data class ApiResponse<T>(
+
     /**
      * Indicates the request executed without error.
      */
@@ -25,4 +26,5 @@ data class ApiResponse<T>(
      * Errors that represent the cause of the request's failure
      */
     val errors: List<ApiError>? = null
+
 )

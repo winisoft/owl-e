@@ -24,7 +24,7 @@ import com.wini.owle.dto.runs.enums.TestAssertion
 import com.wini.owle.dto.runs.step.StepTestRun
 import com.wini.owle.dto.runs.step.ExecutionNotification
 import com.wini.owle.dto.runs.test.*
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.runs.workflow.TestOutcomeActual
 import com.wini.owle.dto.steps.*
 import com.wini.owle.dto.transforms.*
@@ -411,8 +411,8 @@ object DtoTestInstanceFactory {
         completedAt: String = "2024-12-21T10:00:00",
         status: ExecutionStatus = ExecutionStatus.FAILED,
         stepTestRuns: List<StepTestRun> = emptyList()
-    ) : WorkflowRun {
-        return WorkflowRun(
+    ) : WorkflowExecution {
+        return WorkflowExecution(
             id = id,
             workflow = workflow,
             startedAt = startedAt,
@@ -423,7 +423,7 @@ object DtoTestInstanceFactory {
 
     fun benchmarkData(
         id: ULong = 1UL,
-        workflowRun: WorkflowRun = workflowExecutionDto(),
+        workflowExecution: WorkflowExecution = workflowExecutionDto(),
         totalExecutionTime: Double = 123.45,
         totalSteps: Int = 35,
         aiDeterminedSteps: Int = 4,
@@ -431,7 +431,7 @@ object DtoTestInstanceFactory {
     ) : BenchmarkReport {
         return BenchmarkReport(
             id = id,
-            workflowExecution = workflowRun
+            workflowExecution = workflowExecution
         )
     }
 
@@ -878,7 +878,7 @@ object DtoTestInstanceFactory {
             TestOutcomeExpectation::class.java -> testExpectedOutcomeDto() as T
             TestOutcomeActual::class.java -> testOutcomeActual() as T
             DistributionPackage::class.java -> distributionPackage() as T
-            WorkflowRun::class.java -> workflowExecutionDto() as T
+            WorkflowExecution::class.java -> workflowExecutionDto() as T
             TransformOccurrenceArg::class.java -> appliedTransformArg() as T
             TransformOccurrence::class.java -> appliedTransformDto() as T
             Transform::class.java -> transformationDto() as T

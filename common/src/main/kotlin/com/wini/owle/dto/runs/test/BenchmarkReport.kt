@@ -3,7 +3,7 @@ package com.wini.owle.dto.runs.test
 import com.wini.owle.schema.error.ConstraintSimple
 import com.wini.owle.schema.ModelDefinition
 import com.wini.owle.dto.ULongDto
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.error.PositiveValueULongError
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
@@ -24,7 +24,7 @@ data class BenchmarkReport(
     /**
      * Relationship to the associated workflow execution.
      */
-    val workflowExecution: WorkflowRun,
+    val workflowExecution: WorkflowExecution,
 
 
-) : ULongDto
+    ) : ULongDto

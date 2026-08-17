@@ -7,7 +7,7 @@ import com.wini.owle.dto.user.*
 import com.wini.owle.dto.workflows.*
 import com.wini.owle.dto.runs.step.ExecutionNotification
 import com.wini.owle.dto.runs.test.*
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.runs.workflow.TestOutcomeActual
 import com.wini.owle.dto.tags.Tag
 import com.wini.owle.dto.tags.TagRelation
@@ -33,7 +33,7 @@ open class DtoTest {
         @Nested inner class TestResultDtoWorkflowTest : BaseDtoTest<TestOutcomeActual>(TestOutcomeActual::class.java)
         @Nested inner class BenchmarkReportTest : BaseDtoTest<BenchmarkReport>(BenchmarkReport::class.java)
         @Nested inner class StepRunLogLineTest : BaseDtoTest<ExecutionNotification>(ExecutionNotification::class.java)
-        @Nested inner class WorkflowExecutionTest : BaseDtoTest<WorkflowRun>(WorkflowRun::class.java)
+        @Nested inner class WorkflowExecutionTest : BaseDtoTest<WorkflowExecution>(WorkflowExecution::class.java)
     }
 
     @Nested

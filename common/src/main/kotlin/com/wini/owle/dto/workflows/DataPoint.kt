@@ -30,6 +30,7 @@ data class DataPoint(
      * Workflow containing this data point.
      */
     val workflow: Workflow,
+
     /**
      * Name of the data point, used to identify it within the workflow.
      */
@@ -50,20 +51,25 @@ data class DataPoint(
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_16000)
     val presetValue: String? = null,
+
     /**
      * Specifies how the data point's value is stored: as text, blob, or file.
      */
     val storeMethod: StoreMethod?,
+
     /**
      * Specifies the data type for the data point, linking to a type declaration.
      */
     val typeNode: TypeNode,
+
     /**
      * Timestamp for when the dataPoint was created.
      */
     val createdAt: String,
+
     /**
      * Timestamp for when the dataPoint was last updated.
      */
     val updatedAt: String
+
 ) : ULongDto

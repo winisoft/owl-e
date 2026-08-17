@@ -109,9 +109,9 @@ Each member workflow declares its own `python_version_id` and `workflow_requirem
 - **Python version:** members must share a compatible version. Validate at assembly; reject a Multiflow whose members demand incompatible interpreters (or, later, split it across containers — out of scope for M1).
 - **Requirements:** union all members' `workflow_requirements`, then resolve/lock once (EXECUTION-ENVIRONMENT §8's uv pipeline) for the whole Multiflow.
 
-## 7. Phases → StepGroups (rename)
+## 7. Phases → Grouper (rename)
 
-`phases`/`Grouper` is being renamed to **StepGroups**. New generation artifacts use "StepGroup" in prose and identifiers. The existing schema/entity/DTO rename (`phases`, `phase_relations`, `Phase*`, `parent_phase_id`, `tagged_phases`, `PhaseTag`) is a **separate mechanical refactor**, tracked, not performed here — doing it mid-generation-design would just add noise. StepGroups remain control-flow-irrelevant: they scope and name, they don't route.
+`phases` are being renamed to **Groupers**. New generation artifacts use "Grouper" in prose and identifiers. The existing schema/entity/DTO rename (`phases`, `phase_relations`, `Phase*`, `parent_phase_id`, `tagged_phases`, `PhaseTag`) is a **separate mechanical refactor**, tracked, not performed here — doing it mid-generation-design would just add noise. Groupers remain control-flow-irrelevant: they scope and name, they don't route.
 
 ## 8. Schema-first discipline
 

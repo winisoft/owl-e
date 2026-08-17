@@ -16,10 +16,10 @@ data class TestResult(
 
     val testCase: TestCase,
 
-    val workflowExecution: WorkflowRun,
+    val workflowExecution: WorkflowExecution,
 
     val passed: Boolean,
 
     val executedAt: String,
 
-) : ULongDto
+    ) : ULongDto

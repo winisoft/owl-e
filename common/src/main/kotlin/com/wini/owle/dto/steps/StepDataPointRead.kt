@@ -6,12 +6,14 @@ import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.transforms.TransformOccurrence
 import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.api.ApiEndpointDefinition
 import kotlinx.serialization.Serializable
 
 /**
  * Supplies one parameter of a step's tool from a data point.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.stepDataPointRead", ["step"], "/step-datapoint-read")
 @Serializable
 data class StepDataPointRead(
 

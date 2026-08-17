@@ -12,6 +12,7 @@ import com.wini.owle.error.StringNotBlankError
 import com.wini.owle.error.StringNotEmptyError
 import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
+import com.wini.owle.schema.api.ApiEndpointDefinition
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,6 +20,7 @@ import kotlinx.serialization.Serializable
  * Each parameter has a name, type, and can optionally have a default value.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.steps.toolParam", ["step"], "/tool-param")
 @Serializable
 data class ToolParam(
 

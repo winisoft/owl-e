@@ -1,23 +1,18 @@
 package com.wini.owle.api.environs
 
-import io.ktor.server.application.*
-import io.ktor.server.routing.*
-import com.wini.owle.dll.DLL
-import com.wini.owle.api.OwleApiCall
 import com.wini.owle.api.ULongIdEndpointImpl
-import com.wini.owle.dto.environs.pkg.PackageDistRequirement
+import com.wini.owle.dll.DLL
+import com.wini.owle.dto.environs.pkg.PackageExtra
 import com.wini.owle.validators.DtoValidator
 
 
 class PackageExtraApiImpl(
     dll: DLL<ULong, PackageExtra>,
-    validator: DtoValidator<PackageDistRequirement>,
+    validator: DtoValidator<PackageExtra>,
     override val endpointPath: String
-) : ULongIdEndpointImpl<PackageDistRequirement>(
+) : ULongIdEndpointImpl<PackageExtra>(
     dll = dll,
-    serializer = PackageDistRequirement.serializer(),
+    serializer = PackageExtra.serializer(),
     endpointPath = endpointPath,
     validator = validator
-) {
-
-}
+)

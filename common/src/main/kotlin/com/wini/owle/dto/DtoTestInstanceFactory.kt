@@ -21,14 +21,13 @@ import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
-import com.wini.owle.dto.runs.enums.TestAssertion
 import com.wini.owle.dto.runs.step.StepTestRun
 import com.wini.owle.dto.runs.step.ExecutionNotification
 import com.wini.owle.dto.runs.test.BenchmarkReport
 import com.wini.owle.dto.runs.test.TestCase
 import com.wini.owle.dto.runs.test.TestOutcomeExpectation
 import com.wini.owle.dto.runs.test.TestInput
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.runs.workflow.TestOutcomeActual
 import com.wini.owle.dto.steps.DataPointInjection
 import com.wini.owle.dto.steps.DataPointRead
@@ -443,8 +442,8 @@ object DtoTestInstanceFactory {
         completedAt: String = "2024-12-21T10:00:00",
         status: ExecutionStatus = ExecutionStatus.FAILED,
         stepTestRuns: List<StepTestRun> = emptyList()
-    ) : WorkflowRun {
-        return WorkflowRun(
+    ) : WorkflowExecution {
+        return WorkflowExecution(
             id = id,
             workflow = workflow,
             startedAt = startedAt,
@@ -455,7 +454,7 @@ object DtoTestInstanceFactory {
 
     fun benchmarkData(
         id: ULong = 1UL,
-        workflowRun: WorkflowRun = workflowExecutionDto(),
+        workflowExecution: WorkflowExecution = workflowExecutionDto(),
         totalExecutionTime: Double = 123.45,
         totalSteps: Int = 35,
         aiDeterminedSteps: Int = 4,
@@ -463,7 +462,7 @@ object DtoTestInstanceFactory {
     ) : BenchmarkReport {
         return BenchmarkReport(
             id = id,
-            workflowExecution = workflowRun
+            workflowExecution = workflowExecution
         )
     }
 
@@ -541,7 +540,7 @@ object DtoTestInstanceFactory {
 
     fun stepRun(
         id: ULong = 1UL,
-        workflowRun: WorkflowRun = workflowExecutionDto(),
+        workflowExecution: WorkflowExecution = workflowExecutionDto(),
         step: Step = stepDto(),
         startedAt: String = "2024-12-21T10:00:00",
         completedAt: String = "2024-12-21T10:00:00",
@@ -813,14 +812,14 @@ object DtoTestInstanceFactory {
     fun testResultDto(
         id: ULong = 1UL,
         testCase: TestCase = testCaseDto(),
-        workflowRun: WorkflowRun = workflowExecutionDto(),
+        workflowExecution: WorkflowExecution = workflowExecutionDto(),
         passed: Boolean = true,
         executedAt: String = "2024-12-21T00:00:00Z"
     ): TestResult {
         return TestResult(
             id = id,
             testCase = testCase,
-            workflowExecution = workflowRun,
+            workflowExecution = workflowExecution,
             passed = passed,
             executedAt = executedAt
         )
@@ -913,7 +912,7 @@ object DtoTestInstanceFactory {
             TestOutcomeExpectation::class.java -> testExpectedOutcomeDto() as T
             TestOutcomeActual::class.java -> testResultDto() as T
             DistributionPackage::class.java -> distributionPackage() as T
-            WorkflowRun::class.java -> workflowExecutionDto() as T
+            WorkflowExecution::class.java -> workflowExecutionDto() as T
             TransformOccurrenceArg::class.java -> appliedTransformArg() as T
             com.wini.owle.dto.transforms.enums.TransformOccurrence::class.java -> appliedTransformDto() as T
             Transform::class.java -> transformationDto() as T

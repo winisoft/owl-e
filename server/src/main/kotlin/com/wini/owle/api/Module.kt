@@ -18,7 +18,7 @@ import com.wini.owle.dto.runs.test.BenchmarkReport
 import com.wini.owle.dto.runs.test.TestCase
 import com.wini.owle.dto.runs.test.TestOutcomeExpectation
 import com.wini.owle.dto.runs.test.TestInput
-import com.wini.owle.dto.runs.workflow.WorkflowRun
+import com.wini.owle.dto.runs.workflow.WorkflowExecution
 import com.wini.owle.dto.runs.workflow.TestOutcomeActual
 import com.wini.owle.dto.steps.DataPointWrite
 import com.wini.owle.dto.steps.ErrorWatch
@@ -168,7 +168,7 @@ val runsApiModule = module {
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, WorkflowRun>>(), get<DtoValidator<WorkflowRun>>(), "workflow-run", WorkflowRun.serializer()
+            get<DLL<ULong, WorkflowExecution>>(), get<DtoValidator<WorkflowExecution>>(), "workflow-run", WorkflowExecution.serializer()
         )
     }
     single<KtorApi<ULong>> {
