@@ -1,7 +1,7 @@
 package com.wini.owle.entity.runs.step
 
 import com.wini.owle.entity.runs.ExecutionLogs
-import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
+import com.wini.owle.entity.runs.workflow.WorkflowExecutionEntity
 import com.wini.owle.entity.steps.InquisitionEntity
 import com.wini.owle.entity.workflows.DataPointEntity
 import com.wini.owle.entity.workflows.StepEntity
@@ -28,7 +28,7 @@ class ExecutionLogEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * The run this event belongs to.
      */
-    var workflowExecution by WorkflowRunEntity referencedOn ExecutionLogs.workflowExecution
+    var workflowExecution by WorkflowExecutionEntity referencedOn ExecutionLogs.workflowExecution
 
     /**
      * Monotonic position within the run. Unique per run.

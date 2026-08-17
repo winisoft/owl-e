@@ -1,7 +1,6 @@
 package com.wini.owle.entity.workflows
 
 import com.wini.owle.entity.environs.pkg.DistributionEntity
-import com.wini.owle.entity.environs.version.VersionEntity
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.CompositeEntity
@@ -20,7 +19,7 @@ class WorkflowRequirementEntity(id: EntityID<CompositeID>) : CompositeEntity(id)
 
     var requiredDist by DistributionEntity referencedOn WorkflowRequirements.requiredDist
 
-    var requiredPackageVersion by VersionEntity optionalReferencedOn WorkflowRequirements.requiredPackageVersion
+    var requiredPackageVersion by WorkflowRequirements.requiredPackageVersion
 
     var requiredExtraName: String? by WorkflowRequirements.requiredExtraName
 }

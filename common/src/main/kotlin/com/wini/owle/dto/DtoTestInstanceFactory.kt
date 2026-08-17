@@ -672,7 +672,8 @@ object DtoTestInstanceFactory {
         return DataPointWrite(
             id = id,
             dataPoint = dataPoint,
-            step = step
+            step = step,
+            transformOccurrence = null
         )
     }
 

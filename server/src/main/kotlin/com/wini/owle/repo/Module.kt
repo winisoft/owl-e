@@ -17,7 +17,7 @@ import com.wini.owle.entity.runs.test.TestCaseEntity
 import com.wini.owle.entity.runs.test.TestOutcomeExpectationEntity
 import com.wini.owle.entity.runs.test.TestInputEntity
 import com.wini.owle.entity.runs.workflow.TestResultEntity
-import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
+import com.wini.owle.entity.runs.workflow.WorkflowExecutionEntity
 import com.wini.owle.entity.steps.*
 import com.wini.owle.entity.tags.TagEntity
 import com.wini.owle.entity.tags.TagRelationEntity
@@ -104,7 +104,7 @@ val workflowReposModule = module {
     bindGenericRepo<ULong, PhaseEntity>(PhaseEntity)
     bindGenericRepo<ULong, StepEntity>(StepEntity)
     bindGenericRepo<ULong, DataPointEntity>(DataPointEntity)
-    bindGenericRepo<ULong, WorkflowRunEntity>(WorkflowRunEntity)
+    bindGenericRepo<ULong, WorkflowExecutionEntity>(WorkflowExecutionEntity)
     bindGenericRepo<ULong, StepTestRunEntity>(StepTestRunEntity)
 }
 

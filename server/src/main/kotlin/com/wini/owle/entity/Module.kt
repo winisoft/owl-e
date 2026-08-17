@@ -85,7 +85,7 @@ import com.wini.owle.entity.runs.test.TestCaseEntity
 import com.wini.owle.entity.runs.test.TestExpectedOutcomeEntity
 import com.wini.owle.entity.runs.test.TestInputEntity
 import com.wini.owle.entity.runs.workflow.TestResultEntity
-import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
+import com.wini.owle.entity.runs.workflow.WorkflowExecutionEntity
 import com.wini.owle.entity.steps.DataPointInjectionEntity
 import com.wini.owle.entity.steps.DataPointWriteEntity
 import com.wini.owle.entity.steps.ErrorWatchEntity
@@ -172,7 +172,7 @@ val runEntitiesModule = module {
     bindULongDelegate<TestOutcomeExpectation, TestExpectedOutcomeEntity>(TestExpectedOutcomeEntity)
     bindULongDelegate<TestInput, TestInputEntity>(TestInputEntity)
     bindULongDelegate<TestOutcomeActual, TestResultEntity>(TestResultEntity)
-    bindULongDelegate<WorkflowExecution, WorkflowRunEntity>(WorkflowRunEntity)
+    bindULongDelegate<WorkflowExecution, WorkflowExecutionEntity>(WorkflowExecutionEntity)
 }
 
 val stepEntitiesModule = module {

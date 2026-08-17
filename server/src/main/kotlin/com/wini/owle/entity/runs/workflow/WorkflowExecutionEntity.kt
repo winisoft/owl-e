@@ -20,9 +20,9 @@ import org.jetbrains.exposed.v1.jdbc.SizedIterable
  * identifies the enclosing closure — every member workflow shares a single container, so runs
  * that share a multiflow id also shared an environment.
  */
-class WorkflowRunEntity(id: EntityID<ULong>) : ULongEntity(id) {
+class WorkflowExecutionEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
-    companion object : ULongEntityClass<WorkflowRunEntity>(WorkflowExecutions)
+    companion object : ULongEntityClass<WorkflowExecutionEntity>(WorkflowExecutions)
 
     /**
      * The workflow being executed in this instance.

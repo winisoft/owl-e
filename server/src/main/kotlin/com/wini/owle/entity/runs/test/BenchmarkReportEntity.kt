@@ -1,7 +1,7 @@
 package com.wini.owle.entity.runs.test
 
 import com.wini.owle.entity.runs.BenchmarkReports
-import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
+import com.wini.owle.entity.runs.workflow.WorkflowExecutionEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
@@ -17,7 +17,7 @@ class BenchmarkReportEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Relationship to the associated workflow execution.
      */
-    var workflowExecution by WorkflowRunEntity referencedOn BenchmarkReports.workflowExecution
+    var workflowExecution by WorkflowExecutionEntity referencedOn BenchmarkReports.workflowExecution
 
     /**
      * Total execution time for the workflow, in seconds to millisecond precision.

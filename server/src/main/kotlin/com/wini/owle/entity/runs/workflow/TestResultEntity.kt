@@ -22,7 +22,7 @@ class TestResultEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Relationship to the associated workflow execution.
      */
-    var workflowExecution by WorkflowRunEntity referencedOn TestResults.workflowExecution
+    var workflowExecution by WorkflowExecutionEntity referencedOn TestResults.workflowExecution
 
     /**
      * Boolean indicating whether the test passed (true) or failed (false).

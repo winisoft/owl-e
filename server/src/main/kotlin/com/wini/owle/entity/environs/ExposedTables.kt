@@ -43,32 +43,67 @@ object DistributionPackages : CompositeIdTable("packages") {
 
 object PackageExtras : CompositeIdTable("package_extras") {
     val distribution = reference("distribution", Distributions)
-    val packageVersion = reference("package_id", Versions)
+
+    /**
+     * The version half of the package key. Deliberately *not* a reference to `versions`: the
+     * database has no such constraint. A package is identified by (distribution, version)
+     * together, and that pair is what the compound foreign key below enforces.
+     */
+    val packageVersion = ulong("package_id")
     val name = varchar("name", 255).entityId()
     val description = varchar("description", 4096).nullable()
     override val primaryKey = PrimaryKey(distribution, packageVersion, name)
+
+    init {
+        foreignKey(
+            packageVersion to DistributionPackages.version,
+            distribution to DistributionPackages.distribution,
+            name = "package_extras_fk_pkg"
+        )
+    }
 }
 
 
 object PackageDistRequirements : ULongIdTable("package_dist_requirements") {
     val dependentDist = reference("dependent_dist", Distributions)
-    val dependentVersion = reference("dependent_package_id", Versions)
+    val dependentVersion = ulong("dependent_package_id")
     val requiredDist = reference("required_dist", Distributions)
-    val requiredVersion = reference("required_package_id", Versions).nullable()
+    val requiredVersion = ulong("required_package_id").nullable()
     val requiredExtraName = varchar("required_extra_name", 255).nullable()
     val operator = enumerationByName("operator", 16, VersionOperator::class)
     val wildcardSegment = enumerationByName("wildcard_segment", 8, WildcardSegment::class)
     val raw = varchar("raw", 1024).nullable()
+
+    init {
+        foreignKey(
+            dependentDist to DistributionPackages.distribution,
+            dependentVersion to DistributionPackages.version,
+            name = "package_dist_requirements_ibfk_1"
+        )
+        foreignKey(
+            requiredDist to DistributionPackages.distribution,
+            requiredVersion to DistributionPackages.version,
+            name = "fk_required_package"
+        )
+    }
 }
 
 
 object PackagePythonRequirements : CompositeIdTable("package_python_requirements") {
     val distribution = reference("distribution", Distributions)
-    val packageVersion = reference("package_id", Versions)
+    val packageVersion = ulong("package_id")
     val pythonVersion = reference("version_id", PythonVersions)
     val operator = enumerationByName("operator", 16, VersionOperator::class)
     val wildcard = enumerationByName("wildcard", 8, WildcardSegment::class).default(WildcardSegment.NONE)
     override val primaryKey = PrimaryKey(packageVersion, distribution)
+
+    init {
+        foreignKey(
+            packageVersion to DistributionPackages.version,
+            distribution to DistributionPackages.distribution,
+            name = "ppr_fk_pkg"
+        )
+    }
 }
 
 

@@ -2,7 +2,7 @@ package com.wini.owle.entity.tags
 
 import com.wini.owle.dto.tags.enums.TagSource
 import com.wini.owle.entity.environs.Distributions
-import com.wini.owle.entity.environs.Versions
+import com.wini.owle.entity.environs.DistributionPackages
 import com.wini.owle.entity.steps.Tools
 import com.wini.owle.entity.transforms.Transforms
 import com.wini.owle.entity.user.Users
@@ -42,9 +42,19 @@ object GrouperTags : CompositeIdTable("tagged_groupers") {
 
 object PackageTags : CompositeIdTable("tagged_packages") {
     val distribution = reference("distribution", Distributions)
-    val packageVersion = reference("package_id", Versions)
+
+    /** Version half of the package key; the pair below is the constraint the database has. */
+    val packageVersion = ulong("package_id")
     val tag = reference("tag_id", Tags)
     override val primaryKey = PrimaryKey(distribution, packageVersion, tag)
+
+    init {
+        foreignKey(
+            distribution to DistributionPackages.distribution,
+            packageVersion to DistributionPackages.version,
+            name = "tagged_packages_ibfk_1"
+        )
+    }
 }
 
 object StepTags : CompositeIdTable("tagged_steps") {

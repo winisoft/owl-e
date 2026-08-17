@@ -6,7 +6,7 @@ import com.wini.owle.dto.workflows.enums.ModificationTerms
 import com.wini.owle.dto.workflows.enums.StoreMethod
 import com.wini.owle.entity.environs.Distributions
 import com.wini.owle.entity.environs.PythonVersions
-import com.wini.owle.entity.environs.Versions
+import com.wini.owle.entity.environs.DistributionPackages
 import com.wini.owle.entity.steps.Tools
 import com.wini.owle.entity.typing.TypeNodes
 import com.wini.owle.entity.user.Users
@@ -127,9 +127,23 @@ object MetadataStepExclusions : CompositeIdTable("metadata_step_exclusions") {
 object WorkflowRequirements : CompositeIdTable("workflow_requirements") {
     val workflow = reference("workflow_id", Workflows, onDelete = ReferenceOption.CASCADE)
     val requiredDist = reference("required_dist", Distributions)
-    val requiredPackageVersion = reference("required_package_id", Versions).nullable()
+
+    /**
+     * Null means "no version was pinned" - install the distribution as-is (`pip install numpy`).
+     * Not a reference to `versions`: a release is identified by (distribution, version) together,
+     * which is what the compound foreign key below enforces.
+     */
+    val requiredPackageVersion = ulong("required_package_id").nullable()
     val requiredExtraName = varchar("required_extra_name", 255).nullable()
     override val primaryKey = PrimaryKey(workflow, requiredDist)
+
+    init {
+        foreignKey(
+            requiredDist to DistributionPackages.distribution,
+            requiredPackageVersion to DistributionPackages.version,
+            name = "workflow_requirements_ibfk_2"
+        )
+    }
 }
 
 
