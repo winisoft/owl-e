@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
  * Represents a tag that can be associated with workflow steps.
  * Tags help categorize or filter steps and have a many-to-many relationship with StepDao.
  */
-class TagRepoTest : ULongIdGenericRepoTest<TagEntity>() {
+open class TagRepoTest : ULongIdGenericRepoTest<TagEntity>() {
 
     override fun mockEntity(): TagEntity = mockk(relaxed = true)
 

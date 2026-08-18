@@ -7,7 +7,7 @@ import io.mockk.mockk
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
-class VersionRepoTest : ULongIdGenericRepoTest<VersionEntity>() {
+open class VersionRepoTest : ULongIdGenericRepoTest<VersionEntity>() {
 
     override fun mockEntity(): VersionEntity = mockk(relaxed = true)
 

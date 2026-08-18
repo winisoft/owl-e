@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class EnvMarkerComparisonRepoTest : ULongIdGenericRepoTest<EnvMarkerComparisonEntity>() {
+open class EnvMarkerComparisonRepoTest : ULongIdGenericRepoTest<EnvMarkerComparisonEntity>() {
 
     override fun mockEntity(): EnvMarkerComparisonEntity = mockk(relaxed = true)
 

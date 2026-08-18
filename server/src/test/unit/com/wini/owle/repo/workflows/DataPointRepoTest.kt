@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Represents a data point within a workflow, used for tracking values,
  * inputs, or outputs that may be accessed by workflow steps.
  */
-class DataPointRepoTest : ULongIdGenericRepoTest<DataPointEntity>() {
+open class DataPointRepoTest : ULongIdGenericRepoTest<DataPointEntity>() {
 
     override fun mockEntity(): DataPointEntity = mockk(relaxed = true)
 

@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class TypeVarBoundRepoTest : ULongIdGenericRepoTest<TypeVarBoundEntity>() {
+open class TypeVarBoundRepoTest : ULongIdGenericRepoTest<TypeVarBoundEntity>() {
 
     override fun mockEntity(): TypeVarBoundEntity = mockk(relaxed = true)
 

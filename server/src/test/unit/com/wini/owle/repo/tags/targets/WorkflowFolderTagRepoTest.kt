@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a workflowFolder
  */
-class WorkflowFolderTagRepoTest : CompositeIdRepoTest<WorkflowFolderTagEntity>() {
+open class WorkflowFolderTagRepoTest : CompositeIdRepoTest<WorkflowFolderTagEntity>() {
 
     override fun mockEntity(): WorkflowFolderTagEntity = mockk(relaxed = true)
 

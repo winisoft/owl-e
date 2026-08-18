@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Represents a conditional check or "inquisition" within a workflow,
  * analyzing a specific data point value and determining if workflow redirection is required.
  */
-class InquisitionRepoTest : ULongIdGenericRepoTest<InquisitionEntity>() {
+open class InquisitionRepoTest : ULongIdGenericRepoTest<InquisitionEntity>() {
 
     override fun mockEntity(): InquisitionEntity = mockk(relaxed = true)
 

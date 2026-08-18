@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 /**
  *
  */
-class TypeVarConstraintRepoTest : ULongIdGenericRepoTest<TypeVarConstraintEntity>() {
+open class TypeVarConstraintRepoTest : ULongIdGenericRepoTest<TypeVarConstraintEntity>() {
 
     override fun mockEntity(): TypeVarConstraintEntity = mockk(relaxed = true)
 

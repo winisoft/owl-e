@@ -9,7 +9,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class VersionOverflowRepoTest : ULongIdGenericRepoTest<VersionOverflowEntity>() {
+open class VersionOverflowRepoTest : ULongIdGenericRepoTest<VersionOverflowEntity>() {
 
     override fun mockEntity(): VersionOverflowEntity = mockk(relaxed = true)
 

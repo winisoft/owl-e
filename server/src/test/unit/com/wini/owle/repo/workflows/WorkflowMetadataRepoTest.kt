@@ -1,7 +1,6 @@
 package com.wini.owle.repo.workflows
 
 import com.wini.owle.entity.workflows.WorkflowMetadataEntity
-import com.wini.owle.entity.workflows.metadata.WorkflowMetadata
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Represents metadata for workflows or steps within the Owl-E application.
  * Includes information on authorship, usage permissions, and sharing configuration.
  */
-class WorkflowMetadataRepoTest : ULongIdGenericRepoTest<WorkflowMetadataEntity>() {
+open class WorkflowMetadataRepoTest : ULongIdGenericRepoTest<WorkflowMetadataEntity>() {
 
     override fun mockEntity(): WorkflowMetadataEntity = mockk(relaxed = true)
 

@@ -1,44 +1,111 @@
 package com.wini.owle.repo
 
-import com.wini.owle.dto.DtoTest
-import com.wini.owle.dto.environs.version.PythonVersion
-import com.wini.owle.entity.InstanceDbFakeEntityFactory.pythonVersionEntity
-import com.wini.owle.entity.environs.version.PythonVersionEntity
+import com.wini.owle.repo.environs.marker.EnvMarkerComparisonRepoTest
+import com.wini.owle.repo.environs.marker.EnvMarkerExpressionRepoTest
+import com.wini.owle.repo.environs.marker.EnvMarkerLogicalRepoTest
+import com.wini.owle.repo.environs.pkg.DistributionPackageRepoTest
+import com.wini.owle.repo.environs.pkg.PackagePythonRequirementRepoTest
+import com.wini.owle.repo.environs.pkg.PackageRequiredDistRepoTest
 import com.wini.owle.repo.environs.version.PythonVersionRepoTest
-import io.mockk.MockKMatcherScope
+import com.wini.owle.repo.environs.version.PythonVersionSpecifierRepoTest
+import com.wini.owle.repo.environs.version.VersionOverflowRepoTest
+import com.wini.owle.repo.environs.version.VersionRepoTest
+import com.wini.owle.repo.runs.test.BenchmarkReportRepoTest
+import com.wini.owle.repo.runs.test.TestCaseRepoTest
+import com.wini.owle.repo.runs.test.TestInputRepoTest
+import com.wini.owle.repo.runs.workflow.TestResultRepoTest
+import com.wini.owle.repo.steps.DataPointInjectionRepoTest
+import com.wini.owle.repo.steps.DataPointWriteRepoTest
+import com.wini.owle.repo.steps.ErrorWatchFnRepoTest
+import com.wini.owle.repo.steps.ErrorWatchRepoTest
+import com.wini.owle.repo.steps.InquisitionRepoTest
+import com.wini.owle.repo.steps.WorkflowJunctionRepoTest
+import com.wini.owle.repo.tags.TagRelationRepoTest
+import com.wini.owle.repo.tags.TagRepoTest
+import com.wini.owle.repo.tags.targets.DistributionTagRepoTest
+import com.wini.owle.repo.tags.targets.PackageTagRepoTest
+import com.wini.owle.repo.tags.targets.StepTagRepoTest
+import com.wini.owle.repo.tags.targets.ToolTagRepoTest
+import com.wini.owle.repo.tags.targets.TransformTagRepoTest
+import com.wini.owle.repo.tags.targets.WorkflowFolderTagRepoTest
+import com.wini.owle.repo.tags.targets.WorkflowTagRepoTest
+import com.wini.owle.repo.transforms.TransformArgRepoTest
+import com.wini.owle.repo.transforms.TransformOccurrenceArgRepoTest
+import com.wini.owle.repo.transforms.TransformOccurrenceRepoTest
+import com.wini.owle.repo.transforms.TransformRepoTest
+import com.wini.owle.repo.transforms.TransformTargetTypeRepoTest
+import com.wini.owle.repo.typing.TypeNodeRepoTest
+import com.wini.owle.repo.typing.TypeSchemaRefRepoTest
+import com.wini.owle.repo.typing.TypeUnionMemberRepoTest
+import com.wini.owle.repo.typing.TypeVarBoundRepoTest
+import com.wini.owle.repo.typing.TypeVarConstraintRepoTest
+import com.wini.owle.repo.typing.TypeVarVarianceRepoTest
+import com.wini.owle.repo.user.PaymentMethodRepoTest
+import com.wini.owle.repo.user.UserRepoTest
+import com.wini.owle.repo.workflows.DataPointRepoTest
+import com.wini.owle.repo.workflows.StepRepoTest
+import com.wini.owle.repo.workflows.ToolRepoTest
+import com.wini.owle.repo.workflows.WorkflowFolderRepoTest
+import com.wini.owle.repo.workflows.WorkflowMetadataRepoTest
+import com.wini.owle.repo.workflows.WorkflowRepoTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
-@Nested
+
+/**
+ * Consolidates every per-type repository test into one nested tree so the JUnit report reads
+ * as a map of the domain rather than a flat list of class names.
+ *
+ * Nothing is declared here. Each entry extends the `*RepoTest` that owns the type, which is
+ * where its fixtures live and where one-off tests for that type belong. The suffixes differ
+ * (`*RepositoryTest` here, `*RepoTest` there) so the two names never collide in the output.
+ */
 @DisplayName("Repository Tests")
 open class RepositoryTest {
-
 
     @Nested
     @DisplayName("Environs Module")
     inner class RepositoryEnvironsModuleTest {
 
         @Nested
+        @DisplayName("DistributionPackageRepository")
+        inner class DistributionPackageRepositoryTest : DistributionPackageRepoTest()
+
+        @Nested
+        @DisplayName("EnvMarkerComparisonRepository")
+        inner class EnvMarkerComparisonRepositoryTest : EnvMarkerComparisonRepoTest()
+
+        @Nested
+        @DisplayName("EnvMarkerExpressionRepository")
+        inner class EnvMarkerExpressionRepositoryTest : EnvMarkerExpressionRepoTest()
+
+        @Nested
+        @DisplayName("EnvMarkerLogicalRepository")
+        inner class EnvMarkerLogicalRepositoryTest : EnvMarkerLogicalRepoTest()
+
+        @Nested
+        @DisplayName("PackagePythonRequirementRepository")
+        inner class PackagePythonRequirementRepositoryTest : PackagePythonRequirementRepoTest()
+
+        @Nested
+        @DisplayName("PackageRequiredDistRepository")
+        inner class PackageRequiredDistRepositoryTest : PackageRequiredDistRepoTest()
+
+        @Nested
         @DisplayName("PythonVersionRepository")
-        inner class PythonVersionRepositoryTest: PythonVersionRepoTest()
+        inner class PythonVersionRepositoryTest : PythonVersionRepoTest()
 
         @Nested
-        @DisplayName("VersionSpecRepository")
-        inner class VersionSpecifierRepositoryTests: ULongIdGenericRepoTest()
+        @DisplayName("PythonVersionSpecifierRepository")
+        inner class PythonVersionSpecifierRepositoryTest : PythonVersionSpecifierRepoTest()
 
         @Nested
-        @DisplayName("DistributionRepository")
-        inner class DistributionRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("VersionOverflowRepository")
+        inner class VersionOverflowRepositoryTest : VersionOverflowRepoTest()
 
         @Nested
-        @DisplayName("OverflowVersionComponentRepository")
-        inner class OverflowVersionComponentRepositoryTest: ULongIdGenericRepoTest()
-
-
-
-        @Nested
-        @DisplayName("SpecifierElementRepository")
-        inner class SpecifierElementRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("VersionRepository")
+        inner class VersionRepositoryTest : VersionRepoTest()
 
     }
 
@@ -47,40 +114,20 @@ open class RepositoryTest {
     inner class RepositoryRunsModuleTest {
 
         @Nested
-        @DisplayName("BenchmarkingDataRepository")
-        inner class BenchmarkingDataRepositoryTest: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("ExecutionLogRepository")
-        inner class ExecutionLogRepositoryTest: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("StepBenchmarkingDataRepository")
-        inner class StepBenchmarkingDatasRepositoryTest: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("StepExecutionRepository")
-        inner class StepExecutionRepositoryTests: ULongIdGenericRepoTest()
+        @DisplayName("BenchmarkReportRepository")
+        inner class BenchmarkReportRepositoryTest : BenchmarkReportRepoTest()
 
         @Nested
         @DisplayName("TestCaseRepository")
-        inner class TestCaseRepositoryTestEntity: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("TestExpectedOutcomeRepository")
-        inner class TestExpectedOutcomeRepositoryTest: ULongIdGenericRepoTest()
+        inner class TestCaseRepositoryTest : TestCaseRepoTest()
 
         @Nested
         @DisplayName("TestInputRepository")
-        inner class TestInputRepositoryTestEntity: ULongIdGenericRepoTest()
+        inner class TestInputRepositoryTest : TestInputRepoTest()
 
         @Nested
         @DisplayName("TestResultRepository")
-        inner class TestResultRepositoryWorkflowTest: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("WorkflowExecutionRepository")
-        inner class WorkflowExecutionRepositoryTests: ULongIdGenericRepoTest()
+        inner class TestResultRepositoryTest : TestResultRepoTest()
 
     }
 
@@ -89,32 +136,70 @@ open class RepositoryTest {
     inner class RepositoryStepsModuleTest {
 
         @Nested
-        @DisplayName("ErrorWatchRepository")
-        inner class ErrorWatchEntityRepositoryTests: ULongIdGenericRepoTest()
+        @DisplayName("DataPointInjectionRepository")
+        inner class DataPointInjectionRepositoryTest : DataPointInjectionRepoTest()
+
+        @Nested
+        @DisplayName("DataPointWriteRepository")
+        inner class DataPointWriteRepositoryTest : DataPointWriteRepoTest()
 
         @Nested
         @DisplayName("ErrorWatchFnRepository")
-        inner class ErrorWatchEntityFnRepositoryTests: ULongIdGenericRepoTest()
+        inner class ErrorWatchFnRepositoryTest : ErrorWatchFnRepoTest()
+
+        @Nested
+        @DisplayName("ErrorWatchRepository")
+        inner class ErrorWatchRepositoryTest : ErrorWatchRepoTest()
 
         @Nested
         @DisplayName("InquisitionRepository")
-        inner class InquisitionEntityRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("PreReqInjectionRepository")
-        inner class PreReqInjectionRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("ProvisionRepository")
-        inner class ProvisionRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("RevisionRepository")
-        inner class RevisionRepositoryTests: ULongIdGenericRepoTest()
+        inner class InquisitionRepositoryTest : InquisitionRepoTest()
 
         @Nested
         @DisplayName("WorkflowJunctionRepository")
-        inner class WorkflowJunctionRepositoryTests: ULongIdGenericRepoTest()
+        inner class WorkflowJunctionRepositoryTest : WorkflowJunctionRepoTest()
+
+    }
+
+    @Nested
+    @DisplayName("Tags Module")
+    inner class RepositoryTagsModuleTest {
+
+        @Nested
+        @DisplayName("DistributionTagRepository")
+        inner class DistributionTagRepositoryTest : DistributionTagRepoTest()
+
+        @Nested
+        @DisplayName("PackageTagRepository")
+        inner class PackageTagRepositoryTest : PackageTagRepoTest()
+
+        @Nested
+        @DisplayName("StepTagRepository")
+        inner class StepTagRepositoryTest : StepTagRepoTest()
+
+        @Nested
+        @DisplayName("TagRelationRepository")
+        inner class TagRelationRepositoryTest : TagRelationRepoTest()
+
+        @Nested
+        @DisplayName("TagRepository")
+        inner class TagRepositoryTest : TagRepoTest()
+
+        @Nested
+        @DisplayName("ToolTagRepository")
+        inner class ToolTagRepositoryTest : ToolTagRepoTest()
+
+        @Nested
+        @DisplayName("TransformTagRepository")
+        inner class TransformTagRepositoryTest : TransformTagRepoTest()
+
+        @Nested
+        @DisplayName("WorkflowFolderTagRepository")
+        inner class WorkflowFolderTagRepositoryTest : WorkflowFolderTagRepoTest()
+
+        @Nested
+        @DisplayName("WorkflowTagRepository")
+        inner class WorkflowTagRepositoryTest : WorkflowTagRepoTest()
 
     }
 
@@ -123,72 +208,68 @@ open class RepositoryTest {
     inner class RepositoryTransformsModuleTest {
 
         @Nested
-        @DisplayName("AppliedTransformArgRepository")
-        inner class AppliedTransformEntityEntityArgRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("TransformArgRepository")
+        inner class TransformArgRepositoryTest : TransformArgRepoTest()
 
         @Nested
-        @DisplayName("AppliedTransformRepository")
-        inner class AppliedTransformEntityEntityRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("TransformOccurrenceArgRepository")
+        inner class TransformOccurrenceArgRepositoryTest : TransformOccurrenceArgRepoTest()
 
         @Nested
-        @DisplayName("TransformationArgRepository")
-        inner class TransformationArgRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("TransformOccurrenceRepository")
+        inner class TransformOccurrenceRepositoryTest : TransformOccurrenceRepoTest()
 
         @Nested
-        @DisplayName("TransformationRepository")
-        inner class TransformationRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("TransformRepository")
+        inner class TransformRepositoryTest : TransformRepoTest()
 
         @Nested
-        @DisplayName("TransformArgTargetTypeRepository")
-        inner class TransformationTargetTypeTest: OwleRepoImplTest()
+        @DisplayName("TransformTargetTypeRepository")
+        inner class TransformTargetTypeRepositoryTest : TransformTargetTypeRepoTest()
 
     }
 
     @Nested
     @DisplayName("Typing Module")
-    inner class RepositoryTypingModuleTests {
+    inner class RepositoryTypingModuleTest {
 
         @Nested
-        @DisplayName("TypeBoundRepository")
-        inner class TypeBoundEntityRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("TypeDeclarationRepository")
-        inner class TypeDeclarationEntityRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("TypeDefinitionRepository")
-        inner class TypeDefinitionEntityRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("TypeParameterRepository")
-        inner class TypeParameterRepositoryTests: ULongIdGenericRepoTest()
+        @DisplayName("TypeNodeRepository")
+        inner class TypeNodeRepositoryTest : TypeNodeRepoTest()
 
         @Nested
         @DisplayName("TypeSchemaRefRepository")
-        inner class TypeSchemaRefRepositoryTests: ULongIdGenericRepoTest()
+        inner class TypeSchemaRefRepositoryTest : TypeSchemaRefRepoTest()
 
         @Nested
-        @DisplayName("TypeVarianceRepository")
-        inner class TypeVariancesRepositoryTest: ULongIdGenericRepoTest()
+        @DisplayName("TypeUnionMemberRepository")
+        inner class TypeUnionMemberRepositoryTest : TypeUnionMemberRepoTest()
+
+        @Nested
+        @DisplayName("TypeVarBoundRepository")
+        inner class TypeVarBoundRepositoryTest : TypeVarBoundRepoTest()
+
+        @Nested
+        @DisplayName("TypeVarConstraintRepository")
+        inner class TypeVarConstraintRepositoryTest : TypeVarConstraintRepoTest()
+
+        @Nested
+        @DisplayName("TypeVarVarianceRepository")
+        inner class TypeVarVarianceRepositoryTest : TypeVarVarianceRepoTest()
 
     }
 
     @Nested
     @DisplayName("User Module")
-    inner class RepositoryUserEntityModuleTest {
+    inner class RepositoryUserModuleTest {
 
         @Nested
         @DisplayName("PaymentMethodRepository")
-        inner class PaymentMethodEntityRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("TagRepository")
-        inner class TagEntityRepositoryTest: ULongIdGenericRepoTest()
+        inner class PaymentMethodRepositoryTest : PaymentMethodRepoTest()
 
         @Nested
         @DisplayName("UserRepository")
-        inner class UserEntityRepositoryTest: ULongIdGenericRepoTest()
+        inner class UserRepositoryTest : UserRepoTest()
 
     }
 
@@ -198,31 +279,28 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("DataPointRepository")
-        inner class DataPointEntityRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("PhaseRepository")
-        inner class PhaseRepositoryTests: ULongIdGenericRepoTest()
+        inner class DataPointRepositoryTest : DataPointRepoTest()
 
         @Nested
         @DisplayName("StepRepository")
-        inner class StepRepositoryTests: ULongIdGenericRepoTest()
-
-        @Nested
-        @DisplayName("ToolParamRepository")
-        inner class ToolParamRepositoryTests: ULongIdGenericRepoTest()
+        inner class StepRepositoryTest : StepRepoTest()
 
         @Nested
         @DisplayName("ToolRepository")
-        inner class ToolRepositoryTest: ULongIdGenericRepoTest()
+        inner class ToolRepositoryTest : ToolRepoTest()
 
         @Nested
         @DisplayName("WorkflowFolderRepository")
-        inner class WorkflowFolderRepositoryTests: ULongIdGenericRepoTest()
+        inner class WorkflowFolderRepositoryTest : WorkflowFolderRepoTest()
+
+        @Nested
+        @DisplayName("WorkflowMetadataRepository")
+        inner class WorkflowMetadataRepositoryTest : WorkflowMetadataRepoTest()
 
         @Nested
         @DisplayName("WorkflowRepository")
-        inner class WorkflowRepositoryTest : ULongIdGenericRepoTest()
+        inner class WorkflowRepositoryTest : WorkflowRepoTest()
 
     }
+
 }

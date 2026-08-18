@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a workflow
  */
-class WorkflowTagRepoTest : CompositeIdRepoTest<WorkflowTagEntity>() {
+open class WorkflowTagRepoTest : CompositeIdRepoTest<WorkflowTagEntity>() {
 
     override fun mockEntity(): WorkflowTagEntity = mockk(relaxed = true)
 

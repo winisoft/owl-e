@@ -1,8 +1,6 @@
 package com.wini.owle.service.workflows
 
 import com.wini.owle.TestHelper
-import com.wini.owle.TestHelper.connectToTestDb
-import com.wini.owle.TestHelper.refreshTestDbData
 import com.wini.owle.allModules
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.environs.version.enums.PrereleasePhase
@@ -41,8 +39,8 @@ class WorkflowFolderServiceTest {
             allowOverride(false)
         }.koin
 
-        connectToTestDb()
-        refreshTestDbData(TestHelper.ImplicatedTables.WorkflowFolderImplicatedTables)
+        TestHelper.connectToTestDb()
+        TestHelper.resetAll()
 
         service = koin.get<WorkflowHierarchyService>()
     }
@@ -94,9 +92,7 @@ class WorkflowFolderServiceTest {
             folder = WorkflowFolderEntity.new(200UL) {
                 this.name = "Folder Name"
             }
-            pythonVersion = PythonVersionEntity.new(300UL) {
-                this.version = version!!
-            }
+            pythonVersion = PythonVersionEntity.new(version!!.id.value) {}
         }
 
         transaction {

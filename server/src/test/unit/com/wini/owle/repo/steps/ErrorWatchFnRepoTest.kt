@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a function filter in an error watch, specifying a function
  * name and position that must appear in the call stack for the error watch to trigger.
  */
-class ErrorWatchFnRepoTest : ULongIdGenericRepoTest<ErrorWatchFnEntity>() {
+open class ErrorWatchFnRepoTest : ULongIdGenericRepoTest<ErrorWatchFnEntity>() {
 
     override fun mockEntity(): ErrorWatchFnEntity = mockk(relaxed = true)
 

@@ -9,7 +9,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class TypeVarVarianceRepoTest : ULongIdGenericRepoTest<TypeVarVarianceEntity>() {
+open class TypeVarVarianceRepoTest : ULongIdGenericRepoTest<TypeVarVarianceEntity>() {
 
     override fun mockEntity(): TypeVarVarianceEntity = mockk(relaxed = true)
 

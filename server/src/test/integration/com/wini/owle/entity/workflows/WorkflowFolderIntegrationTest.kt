@@ -20,7 +20,7 @@ open class WorkflowFolderDbIntegrationTest {
     @BeforeEach
     fun setUp() {
         TestHelper.connectToTestDb()
-        TestHelper.refreshTestDbData(TestHelper.ImplicatedTables.WorkflowFolderImplicatedTables)
+        TestHelper.resetAll()
     }
 
     @Test

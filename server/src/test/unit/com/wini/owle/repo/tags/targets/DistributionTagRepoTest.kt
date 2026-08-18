@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a Distribution
  */
-class DistributionTagRepoTest : CompositeIdRepoTest<DistributionTagEntity>() {
+open class DistributionTagRepoTest : CompositeIdRepoTest<DistributionTagEntity>() {
 
     override fun mockEntity(): DistributionTagEntity = mockk(relaxed = true)
 

@@ -2,15 +2,13 @@ package com.wini.owle.services
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
-import com.wini.owle.dto.DtoTestInstanceFactory
-import com.wini.owle.dto.environs.marker.EnvMarkerComparison
 import com.wini.owle.entity.InstanceDbFakeEntityFactory
 import com.wini.owle.entity.delegate.DaoDelegate
-import com.wini.owle.entity.environs.marker.EnvMarkerComparisonEntity
 import com.wini.owle.error.GenericError
 import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.DbMapper
 import com.wini.owle.repo.GenericRepoImpl
+import io.mockk.MockKMatcherScope
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -24,20 +22,33 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 
-open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
+/**
+ * The service-layer counterpart to [com.wini.owle.repo.GenericRepoTest]: one set of assertions
+ * about what [GenericServiceImpl] does with its repository, mapper and delegate, run against
+ * every type that has a service.
+ *
+ * It was declared generic but written against `T` with `as T` casts throughout,
+ * so it only ever really tested one type and fought the compiler about it. The sample builders
+ * are now abstract, which is what makes the class reusable.
+ */
+abstract class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
 
     private lateinit var service: GenericServiceImpl<ID, T, E>
     private lateinit var repository: GenericRepoImpl<ID, E>
     private lateinit var mapper: DbMapper<ID, T, E>
     private lateinit var daoDelegate: DaoDelegate<ID, T, E>
 
-    fun createSampleDto(): EnvMarkerComparison = DtoTestInstanceFactory.environs.envMarkerComparison()
+    /** A DTO of the type under test. */
+    abstract fun createSampleDto(): T
 
-    fun createSampleEntity(): EnvMarkerComparisonEntity = mockk<EnvMarkerComparisonEntity>() {
-        every { id } returns mockk {
-            every { value } returns mockk<ULong>()
-        }
-    }
+    /** A mocked entity of the type under test. */
+    abstract fun createSampleEntity(): E
+
+    /** An id of the type under test. `mockk`/`any` are reified and cannot take a type parameter. */
+    abstract fun createSampleId(): ID
+
+    /** The `any()` matcher for [ID], for the same reason. */
+    abstract fun MockKMatcherScope.anyID(): ID
 
     @BeforeEach
     fun setUp() {
@@ -50,12 +61,12 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test create, when run succeeds, returns AsyncResult Success with valid data payload`() {
         // Arrange
-        val dto: EnvMarkerComparison = mockk()
-        val entity: EnvMarkerComparisonEntity = mockk()
+        val dto: T = createSampleDto()
+        val entity: E = createSampleEntity()
 
-        every { mapper.toEntity(dto as T) } returns entity as E
+        every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } returns entity
-        every { mapper.toDto(entity) } returns dto as T
+        every { mapper.toDto(entity) } returns dto
 
         // Act
         val result = service.create(dto)
@@ -73,15 +84,15 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test create, when failure occurs, returns AsyncResult Failure with DatabaseError `() {
         // Arrange
-        val dto: EnvMarkerComparison = mockk()
-        val entity: EnvMarkerComparisonEntity = mockk()
+        val dto: T = createSampleDto()
+        val entity: E = createSampleEntity()
         val exception = RuntimeException("Database error")
 
-        every { mapper.toEntity(dto as T) } returns entity as E
+        every { mapper.toEntity(dto) } returns entity
         every { repository.create(entity) } throws exception
 
         // Act
-        val result = service.create(dto as T)
+        val result = service.create(dto)
 
         // Assert
         verify(exactly = 1) { mapper.toEntity(dto) }
@@ -91,22 +102,20 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
 
         val error = (result as AsyncResult.Failure).error
         Assertions.assertTrue(error is GenericError)
-        Assertions.assertEquals("The operation could not be completed.", error.message)
+        Assertions.assertEquals("Database error", error.detail)
     }
 
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: EnvMarkerComparison = DtoTestInstanceFactory.environs.envMarkerComparison()
-        val entityId: EntityID<ULong> = mockk() {
-            every { value } returns mockk()
+        val dto: T = createSampleDto()
+        val entityId: EntityID<ID> = mockk() {
+            every { value } returns createSampleId()
         }
-        val entity: EnvMarkerComparisonEntity = mockk<EnvMarkerComparisonEntity>() {
-            every { id } returns mockk()
-        }
+        val entity: E = createSampleEntity()
 
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(any<ULong>()) } returns entityId
+        every { daoDelegate.buildEntityId(anyID()) } returns entityId
         every { repository.getById(entityId) } returns entity
         every { mapper.toDto(entity) } returns dto
 
@@ -127,11 +136,11 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityId: EntityID<ULong> = mockk() {
-            every { value } returns mockk()
+        val entityId: EntityID<ID> = mockk() {
+            every { value } returns createSampleId()
         }
         every { repository.entityClass.table }
-        every { idFactory.build(any()) } returns entityId
+        every { daoDelegate.buildEntityId(anyID()) } returns entityId
         every { repository.getById(entityId) } returns null
 
         // Act
@@ -149,8 +158,8 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test getAll success`() {
         // Arrange
-        val dtos = listOf(DtoTestInstanceFactory.environs.envMarkerComparison(1UL), DtoTestInstanceFactory.environs.envMarkerComparison(2UL))
-        val entities: List<EnvMarkerComparisonEntity> = mockk()
+        val dtos = listOf(createSampleDto(), createSampleDto())
+        val entities: List<E> = listOf(createSampleEntity())
 
         every { mapper.toEntities(dtos) } returns entities
         every { mapper.toDtos(entities) } returns dtos
@@ -171,8 +180,8 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test getAll returns empty list when no entities exist`() {
         // Arrange
-        val emptyList = emptyList<EnvMarkerComparisonEntity>()
-        val emptyDtoList = emptyList<EnvMarkerComparison>()
+        val emptyList = emptyList<E>()
+        val emptyDtoList = emptyList<T>()
 
         every { repository.getAll(emptyList()) } returns emptyList
         every { mapper.toDtos(emptyList) } returns emptyDtoList
@@ -217,18 +226,18 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         // Arrange
         val dto = createSampleDto()
         val entity = createSampleEntity()
-        val entityId: EntityID<ULong> = mockk() {
-            every { value } returns mockk()
+        val entityId: EntityID<ID> = mockk() {
+            every { value } returns createSampleId()
         }
-        val entityClass: EntityClass<ULong, EnvMarkerComparisonEntity> = mockk()
+        val entityClass: EntityClass<ID, E> = mockk()
         val id = 1UL
 
         every { entity.id } returns entityId
         every { mapper.toEntity(dto) } returns entity
-        every { idFactory.build(entityId.value) } returns entityId
+        every { daoDelegate.buildEntityId(entityId.value) } returns entityId
         every { repository.entityClass } returns entityClass
         every { entityClass.findById(entityId) } returns entity
-        every { repository.getById(entityId) } returns mockk()
+        every { repository.getById(entityId) } returns createSampleEntity()
         every { repository.delete(entityId) } just runs
 
         // Act
@@ -245,7 +254,7 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test batch create success`() {
         // Arrange
-        val dtos = listOf(envMarkerComparison(1UL), envMarkerComparison(2UL))
+        val dtos = listOf(createSampleDto(), createSampleDto())
         val entities = listOf(createSampleEntity(), createSampleEntity())
 
         every { mapper.toEntities(dtos) } returns entities
@@ -268,8 +277,8 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test batch create with empty list`() {
         // Arrange
-        val emptyDtoList = emptyList<EnvMarkerComparison>()
-        val emptyEntityList = emptyList<EnvMarkerComparisonEntity>()
+        val emptyDtoList = emptyList<T>()
+        val emptyEntityList = emptyList<E>()
 
         every { mapper.toEntities(emptyDtoList) } returns emptyEntityList
         every { repository.create(emptyEntityList) } returns emptyEntityList
@@ -291,7 +300,7 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test batch update success`() {
         // Arrange
-        val dtos = listOf(envMarkerComparison(1UL), envMarkerComparison(2UL))
+        val dtos = listOf(createSampleDto(), createSampleDto())
         val entities = listOf(createSampleEntity(), createSampleEntity())
 
         every { mapper.toEntities(dtos) } returns entities
@@ -313,13 +322,13 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
 
     @Test
     fun `test batch delete success`() {
-        val compositeIds = listOf<ULong>(mockk(), mockk())
-        val entityIds = listOf<EntityID<ULong>>(
-            mockk { every { value } returns mockk() },
-            mockk { every { value } returns mockk() }
+        val compositeIds = listOf(createSampleId(), createSampleId())
+        val entityIds = listOf<EntityID<ID>>(
+            mockk { every { value } returns createSampleId() },
+            mockk { every { value } returns createSampleId() }
         )
-        every { idFactory.build(any<ULong>()) }.returnsMany(entityIds[0], entityIds[1])
-        every { repository.delete(any<List<EntityID<ULong>>>()) } just runs
+        every { daoDelegate.buildEntityId(anyID()) }.returnsMany(entityIds[0], entityIds[1])
+        every { repository.delete(entityIds) } just runs
 
         // Act
         val result = service.delete(compositeIds)
@@ -329,8 +338,8 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         Assertions.assertEquals(Unit, (result as AsyncResult.Success).data)
 
         // Verify
-        verify { idFactory.build(compositeIds[0]) }
-        verify { idFactory.build(compositeIds[1]) }
+        verify { daoDelegate.buildEntityId(compositeIds[0]) }
+        verify { daoDelegate.buildEntityId(compositeIds[1]) }
         verify { repository.delete(entityIds) }
     }
 }

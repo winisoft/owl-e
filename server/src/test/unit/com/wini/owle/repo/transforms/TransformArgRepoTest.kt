@@ -10,7 +10,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class TransformArgRepoTest : ULongIdGenericRepoTest<TransformArgEntity>() {
+open class TransformArgRepoTest : ULongIdGenericRepoTest<TransformArgEntity>() {
 
     override fun mockEntity(): TransformArgEntity = mockk(relaxed = true)
 

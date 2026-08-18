@@ -102,8 +102,8 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junitPlatform-commons = { module = "org.junit.platform:junit-platform-commons", version.ref = "junitPlatform" }
 junitPlatform-suite = { module = "org.junit.platform:junit-platform-suite", version.ref = "junitPlatform" }
 junitPlatform-suite-api = { module = "org.junit.platform:junit-platform-suite-api", version.ref = "junitPlatform" }
-junitPlatform-suite-engine = { module = " org.junit.platform:junit-platform-engine", version.ref = "junitPlatform" }
-junitPlatform-launcher = { module = "org.junit.platform:junit-platform-suite", version.ref = "junitPlatform" }
+junitPlatform-suite-engine = { module = "org.junit.platform:junit-platform-suite-engine", version.ref = "junitPlatform" }
+junitPlatform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
 junitPlatform-runner = { module = "org.junit.platform:junit-platform-runner", version.ref = "junitPlatformRunner" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koinKtor" }

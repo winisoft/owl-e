@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Represents individual member types within a union type declaration.
  * Supports union types such as 'Union[int, str]' by linking each member type to the union type declaration.
  */
-class TypeUnionMemberRepoTest : CompositeIdRepoTest<TypeUnionMemberEntity>() {
+open class TypeUnionMemberRepoTest : CompositeIdRepoTest<TypeUnionMemberEntity>() {
 
     override fun mockEntity(): TypeUnionMemberEntity = mockk(relaxed = true)
 

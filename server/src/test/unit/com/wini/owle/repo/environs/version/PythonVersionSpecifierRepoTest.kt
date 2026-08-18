@@ -10,7 +10,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class PythonVersionSpecifierRepoTest : CompositeIdRepoTest<PythonVersionSpecifierEntity>() {
+open class PythonVersionSpecifierRepoTest : CompositeIdRepoTest<PythonVersionSpecifierEntity>() {
 
     override fun mockEntity(): PythonVersionSpecifierEntity = mockk(relaxed = true)
 

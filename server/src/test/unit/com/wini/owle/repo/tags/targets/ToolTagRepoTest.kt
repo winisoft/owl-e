@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a tool
  */
-class ToolTagRepoTest : CompositeIdRepoTest<ToolTagEntity>() {
+open class ToolTagRepoTest : CompositeIdRepoTest<ToolTagEntity>() {
 
     override fun mockEntity(): ToolTagEntity = mockk(relaxed = true)
 

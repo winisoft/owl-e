@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a watch on specific types of errors that may occur during a step's execution.
  * Specifies the error type and the action to take if the error occurs.
  */
-class ErrorWatchRepoTest : ULongIdGenericRepoTest<ErrorWatchEntity>() {
+open class ErrorWatchRepoTest : ULongIdGenericRepoTest<ErrorWatchEntity>() {
 
     override fun mockEntity(): ErrorWatchEntity = mockk(relaxed = true)
 

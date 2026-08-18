@@ -1,7 +1,6 @@
 package com.wini.owle
 
-import com.wini.owle.TestHelper.connectToTestDb
-import com.wini.owle.TestHelper.refreshTestDbData
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.environs.version.enums.PrereleasePhase
 import com.wini.owle.entity.environs.DistributionPackages
 import com.wini.owle.entity.environs.Distributions
@@ -40,27 +39,9 @@ abstract class CompleteTransformsExampleIntegration {
             allowOverride(false)
         }
 
-        connectToTestDb()
+        TestHelper.connectToTestDb()
 
-        refreshTestDbData(
-            implicatedTables = listOf(
-                DataPointWrites,
-                Steps,
-                Tools,
-                TypeInstantiationArgs,
-                TypeInstantiations,
-                TypeGenericParams,
-                WorkflowRequirements,
-                DataPoints,
-                TypeNodes,
-                DistributionPackages,
-                Distributions,
-                Workflows,
-                PythonVersions,
-                Users,
-                Versions
-            )
-        )
+        TestHelper.resetAll()
 
         constructExampleData()
     }

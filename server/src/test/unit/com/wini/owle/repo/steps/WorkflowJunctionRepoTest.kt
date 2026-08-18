@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
  * A junction may include conditions under which the transition is triggered,
  * and prerequisite injections required for the target workflow.
  */
-class WorkflowJunctionRepoTest : ULongIdGenericRepoTest<WorkflowJunctionEntity>() {
+open class WorkflowJunctionRepoTest : ULongIdGenericRepoTest<WorkflowJunctionEntity>() {
 
     override fun mockEntity(): WorkflowJunctionEntity = mockk(relaxed = true)
 

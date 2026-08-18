@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 
 
-class PackageRequiredDistRepoTest : ULongIdGenericRepoTest<PackageDistRequirementEntity>() {
+open class PackageRequiredDistRepoTest : ULongIdGenericRepoTest<PackageDistRequirementEntity>() {
 
     override fun mockEntity(): PackageDistRequirementEntity = mockk(relaxed = true)
 

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Represents a unique Python library package, along with its specific version details.
  * Used to store information about packages that can be installed in the workflow.
  */
-class DistributionPackageRepoTest : CompositeIdRepoTest<DistributionPackageEntity>() {
+open class DistributionPackageRepoTest : CompositeIdRepoTest<DistributionPackageEntity>() {
 
     override fun mockEntity(): DistributionPackageEntity = mockk(relaxed = true)
 

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Specifies version constraints for a package, allowing for precise control
  * over the range or exact version of a dependency.
  */
-class PackagePythonRequirementRepoTest : CompositeIdRepoTest<PackagePythonRequirementEntity>() {
+open class PackagePythonRequirementRepoTest : CompositeIdRepoTest<PackagePythonRequirementEntity>() {
 
     override fun mockEntity(): PackagePythonRequirementEntity = mockk(relaxed = true)
 

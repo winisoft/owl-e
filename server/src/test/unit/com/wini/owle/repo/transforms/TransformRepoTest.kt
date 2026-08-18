@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a transformation process with a specified return type and related arguments.
  * A transformation can have multiple arguments, target types, and applied transformations.
  */
-class TransformRepoTest : ULongIdGenericRepoTest<TransformEntity>() {
+open class TransformRepoTest : ULongIdGenericRepoTest<TransformEntity>() {
 
     override fun mockEntity(): TransformEntity = mockk(relaxed = true)
 

@@ -8,7 +8,7 @@ import io.mockk.mockk
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
-class TagRelationRepoTest : CompositeIdRepoTest<TagRelationEntity>() {
+open class TagRelationRepoTest : CompositeIdRepoTest<TagRelationEntity>() {
 
     override fun mockEntity(): TagRelationEntity = mockk(relaxed = true)
 

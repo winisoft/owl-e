@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Represents a revision made to a data point following the successful execution of a step.
  * Tracks the affected data point, the responsible step, and optionally, any transformation.
  */
-class DataPointWriteRepoTest : ULongIdGenericRepoTest<DataPointWriteEntity>() {
+open class DataPointWriteRepoTest : ULongIdGenericRepoTest<DataPointWriteEntity>() {
 
     override fun mockEntity(): DataPointWriteEntity = mockk(relaxed = true)
 

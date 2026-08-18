@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a Package
  */
-class PackageTagRepoTest : CompositeIdRepoTest<PackageTagEntity>() {
+open class PackageTagRepoTest : CompositeIdRepoTest<PackageTagEntity>() {
 
     override fun mockEntity(): PackageTagEntity = mockk(relaxed = true)
 

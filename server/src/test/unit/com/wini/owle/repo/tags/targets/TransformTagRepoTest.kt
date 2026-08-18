@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a transform
  */
-class TransformTagRepoTest : CompositeIdRepoTest<TransformTagEntity>() {
+open class TransformTagRepoTest : CompositeIdRepoTest<TransformTagEntity>() {
 
     override fun mockEntity(): TransformTagEntity = mockk(relaxed = true)
 

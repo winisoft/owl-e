@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a step
  */
-class StepTagRepoTest : CompositeIdRepoTest<StepTagEntity>() {
+open class StepTagRepoTest : CompositeIdRepoTest<StepTagEntity>() {
 
     override fun mockEntity(): StepTagEntity = mockk(relaxed = true)
 

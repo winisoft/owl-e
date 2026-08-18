@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Represents a folder for organizing workflows in a hierarchical structure.
  * Supports nested folders and categorizes workflows.
  */
-class WorkflowFolderRepoTest : ULongIdGenericRepoTest<WorkflowFolderEntity>() {
+open class WorkflowFolderRepoTest : ULongIdGenericRepoTest<WorkflowFolderEntity>() {
 
     override fun mockEntity(): WorkflowFolderEntity = mockk(relaxed = true)
 

@@ -1,7 +1,6 @@
 package com.wini.owle
 
-import com.wini.owle.TestHelper.connectToTestDb
-import com.wini.owle.TestHelper.refreshTestDbData
+import com.wini.owle.TestHelper
 import com.wini.owle.dto.environs.version.enums.PrereleasePhase
 import com.wini.owle.dto.typing.enums.TypeNodeKind
 import com.wini.owle.dto.user.enums.OauthProvider
@@ -56,26 +55,9 @@ abstract class CompleteExampleIntegration {
             allowOverride(false)
         }
 
-        connectToTestDb()
+        TestHelper.connectToTestDb()
 
-        refreshTestDbData(implicatedTables = listOf(
-            DataPointWrites,
-            Steps,
-            Tools,
-            TypeInstantiationArgs,
-            TypeInstantiations,
-            TypeGenericParams,
-            WorkflowRequirements,
-            DataPoints,
-            TypeNodes,
-            DistributionPackages,
-            Distributions,
-            Groupers,
-            Workflows,
-            PythonVersions,
-            Users,
-            Versions
-        ))
+        TestHelper.resetAll()
 
         constructExampleData()
     }
@@ -126,19 +108,16 @@ abstract class CompleteExampleIntegration {
                 workflow = WorkflowEntity[11910249UL]
                 name = "Data Prep"
                 description = "Perform Steps that Prepare our data set prior to its proper utilization"
-                displayOrder = 0
             }
             GrouperEntity.new(11210450UL) {
                 workflow = WorkflowEntity[11910249UL]
                 name = "Prepare Initial Data Set"
                 description = "Fetch and Verify the Json Data"
-                displayOrder = 0
             }
             GrouperEntity.new(11210451UL) {
                 workflow = WorkflowEntity[11910249UL]
                 name = "Curate Data"
                 description = "Restructure the collected data set to provide a greater utility for our use case"
-                displayOrder = 1
             }
 
             // --- Distributions ---
@@ -418,7 +397,7 @@ abstract class CompleteExampleIntegration {
 
             ToolEntity.new(11611149UL) {
                 name = "fetch_json"
-                signatureNode = null
+                signature = null
                 description = "Makes an HTTP request to pull the source json data"
                 body = """
                     import requests
@@ -430,7 +409,7 @@ abstract class CompleteExampleIntegration {
             }
             ToolEntity.new(11611150UL) {
                 name = "validate_json"
-                signatureNode = null
+                signature = null
                 description = "Validate a JSON string against a schema URI"
                 body = """
                     def validate_json(data, schema_uri):
@@ -440,7 +419,7 @@ abstract class CompleteExampleIntegration {
             }
             ToolEntity.new(11611151UL) {
                 name = "parse_normalize"
-                signatureNode = null
+                signature = null
                 description = "Parse and flatten nested JSON into tabular structure"
                 body = """
                     def parse_normalize():
@@ -450,7 +429,7 @@ abstract class CompleteExampleIntegration {
             }
             ToolEntity.new(11611152UL) {
                 name = "db_enrich"
-                signatureNode = null
+                signature = null
                 description = "Join external database metadata to parsed records"
                 body = """
                     def db_enrich(records, conn):
@@ -460,7 +439,7 @@ abstract class CompleteExampleIntegration {
             }
             ToolEntity.new(11611153UL) {
                 name = "compute_stats"
-                signatureNode = null
+                signature = null
                 description = "Aggregate grouped statistics from enriched data"
                 body = """
                     def compute_stats(rows, group_by):
@@ -470,7 +449,7 @@ abstract class CompleteExampleIntegration {
             }
             ToolEntity.new(11611154UL) {
                 name = "render_and_upload"
-                signatureNode = null
+                signature = null
                 description = "Render plots and upload to S3"
                 body = """
                     def render_and_upload(stats, bucket):
@@ -546,7 +525,6 @@ abstract class CompleteExampleIntegration {
                 name = "Fetch Remote JSON"
                 description = "Flatten and restructure fetched data"
                 isWorkflowHead = true
-                displayOrder = 0
             }
             StepEntity.new(11511650UL) {
                 workflow = WorkflowEntity[11910249UL]
@@ -554,7 +532,6 @@ abstract class CompleteExampleIntegration {
                 tool = ToolEntity[11611150UL]
                 name = "Schema Validate JSON"
                 description = "Join on historical metadata via DB lookup"
-                displayOrder = 1
             }
             StepEntity.new(11511651UL) {
                 workflow = WorkflowEntity[11910249UL]
@@ -562,7 +539,6 @@ abstract class CompleteExampleIntegration {
                 tool = ToolEntity[11611151UL]
                 name = "Parse & Normalize Data"
                 description = "Flatten and restructure fetched data"
-                displayOrder = 0
             }
             StepEntity.new(11511652UL) {
                 workflow = WorkflowEntity[11910249UL]
@@ -570,7 +546,6 @@ abstract class CompleteExampleIntegration {
                 tool = ToolEntity[11611152UL]
                 name = "Enrich from Database"
                 description = "Join on historical metadata via DB lookup"
-                displayOrder = 1
             }
             StepEntity.new(11511653UL) {
                 workflow = WorkflowEntity[11910249UL]
@@ -578,7 +553,6 @@ abstract class CompleteExampleIntegration {
                 tool = ToolEntity[11611153UL]
                 name = "Compute Summary Stats"
                 description = "Group data and compute aggregates like mean, median, count"
-                displayOrder = 2
             }
             StepEntity.new(11511654UL) {
                 workflow = WorkflowEntity[11910249UL]
@@ -586,7 +560,6 @@ abstract class CompleteExampleIntegration {
                 tool = ToolEntity[11611154UL]
                 name = "Render & Upload Plot"
                 description = "Generate visual output and upload to S3"
-                displayOrder = 3
             }
 
             DataPointWriteEntity.new(10011949UL) {
