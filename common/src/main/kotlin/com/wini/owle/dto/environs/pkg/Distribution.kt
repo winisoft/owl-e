@@ -15,7 +15,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @ModelDefinition
 @ApiEndpointDefinition("api.environs.pkg.distribution", ["environs"], "distribution")
 @Serializable
-class Distribution(
+data class Distribution(
 
     /**
      * The name of the Python library package (e.g., 'numpy', 'pandas').

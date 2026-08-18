@@ -12,7 +12,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @ModelDefinition
 @ApiEndpointDefinition("api.environs.pkg.packageRequiredDist", ["environs"], "/package-required-dist")
 @Serializable
-class PackageDistRequirement(
+data class PackageDistRequirement(
 
     override val id: ULong,
 

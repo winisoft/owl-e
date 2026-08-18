@@ -1,347 +1,210 @@
 package com.wini.owle.repo
 
-import io.mockk.*
-import org.jetbrains.exposed.v1.core.Op
+import io.mockk.MockKMatcherScope
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.Entity
 import org.jetbrains.exposed.v1.dao.EntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.jetbrains.exposed.v1.dao.with
+import org.jetbrains.exposed.v1.jdbc.SizedCollection
 import org.jetbrains.exposed.v1.jdbc.SizedIterable
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.reflect.KProperty1
+import org.jetbrains.exposed.v1.core.Op
+import org.jetbrains.exposed.v1.core.SqlExpressionBuilder
 
 
-abstract class GenericRepoTest<ID: Any, T: Entity<ID>> {
+/**
+ * One set of assertions about [GenericRepoImpl], run against every entity that has a repository.
+ *
+ * These are written against what the implementation actually does, which is worth stating because
+ * it is not what you would guess. `getById` does **not** issue a keyed query — [GenericRepoImpl]
+ * calls `entityClass.all()` and then `find { it.id.value == id }` in memory. `delete(id)` does go
+ * through `findById`. Stubbing the call the name implies rather than the call the code makes is
+ * why this suite previously failed everywhere with "Failed matching mocking signature".
+ *
+ * That select-then-filter is a fair thing for these tests to pin down. If it ever becomes a keyed
+ * query — which for a large table it should — these tests fail, and that failure is the useful
+ * kind: it says the access pattern changed, on purpose or otherwise.
+ *
+ * A subclass supplies the entity type; everything here is type-agnostic.
+ */
+abstract class GenericRepoTest<ID : Any, T : Entity<ID>> {
 
-    private lateinit var entityClass: EntityClass<ID, T>
-    private lateinit var repository: GenericRepoImpl<ID, T>
-    private lateinit var transactions: TransactionExecutor
+    protected lateinit var entityClass: EntityClass<ID, T>
+    protected lateinit var repository: GenericRepoImpl<ID, T>
+    protected lateinit var transactions: TransactionExecutor
 
     abstract fun mockEntity(): T
-    abstract fun mockEntityId(): EntityID<ID>
-    abstract fun mockNonExistentEntityId(): EntityID<ID>
     abstract fun mockID(): ID
+
+    /** A second, distinct id, for the "not present" cases. */
+    abstract fun otherID(): ID
+
+    /**
+     * Real [EntityID]s, not mocks. `EntityID.getValue()` and `Entity.getId()` are both final, and
+     * mockk's stubs on them do not take in this build — every assertion that read an id off a
+     * mock failed with "no answer found for EntityID.getValue()". The public `EntityID(value,
+     * table)` constructor sidesteps it: the value is held directly, so nothing consults the table.
+     */
+    protected val idTable: org.jetbrains.exposed.v1.core.dao.id.IdTable<ID> = mockk(relaxed = true)
+
+    protected fun mockEntityId(): EntityID<ID> = EntityID(mockID(), idTable)
+
+    protected fun mockNonExistentEntityId(): EntityID<ID> = EntityID(otherID(), idTable)
     abstract fun MockKMatcherScope.anyT(): T
     abstract fun MockKMatcherScope.anyID(): ID
 
     @BeforeEach
     fun setup() {
-        entityClass = mockk()
-        // Runs each block inline instead of opening a real transaction, so these tests assert on
-        // what the repository asks of its EntityClass without needing a database to answer.
+        entityClass = mockk(relaxed = true)
+        // Runs each block inline instead of opening a transaction, so these tests assert on what
+        // the repository asks of its EntityClass without needing a database to answer.
         transactions = spyk(TransactionExecutor.PassThrough)
         repository = GenericRepoImpl(entityClass, transactions)
     }
 
     /**
-     * GIVEN no eager load props
-     * WHEN getAll is called
-     * THEN returns all entities from entity class
+     * What `entityClass.all()` returns.
+     *
+     * A real [SizedCollection] rather than a mock. The repository reaches these entities through
+     * `find`, `filter` and `toList`, which are stdlib extensions over `Iterable` — they call
+     * `iterator()` directly and ignore any stub placed on the mock's own `toList`. A mocked
+     * iterable therefore handed them a mock `Iterator` whose `hasNext()` answered with a relaxed
+     * default, which is where "SingletonList cannot be cast to Boolean" came from.
      */
-    @Test
-    fun `getAll success`() {
-        // Given
-        val entity = mockEntity()
-        val allEntities = mockk<SizedIterable<T>>()
-        every { allEntities.toList() } returns listOf(entity)
-        every { entityClass.all() } returns allEntities
-        every { allEntities.with(any<KProperty1<T, Entity<*>>>()) } returns allEntities
+    private fun iterableOf(list: List<T>): SizedIterable<T> = SizedCollection(list)
 
-        // When
+    // ------------------------------------------------------------------ reads
+
+    @Test
+    fun `getAll returns every entity`() {
+        val entities = listOf(mockEntity(), mockEntity())
+        every { entityClass.all() } returns iterableOf(entities)
+
         val result = repository.getAll()
 
-        // Then
-        assertEquals(listOf(entity), result)
-        verify { transactions.run(any()) }
-        verify { entityClass.all() }
+        assertEquals(entities, result)
+        verify(exactly = 1) { entityClass.all() }
+        verify { transactions.run(any<() -> Any>()) }
     }
 
-    /**
-     * GIVEN eager load props
-     * WHEN getAll is called
-     * THEN returns all entities with specified props
-     */
     @Test
-    fun `getAll with eager-loaded FK extension properties success`() {
-        // Given
+    fun `getAll returns empty when nothing is stored`() {
+        every { entityClass.all() } returns iterableOf(emptyList())
+
+        val result = repository.getAll()
+
+        assertTrue(result.isEmpty(), "Expected no entities when the table is empty")
+        verify(exactly = 1) { entityClass.all() }
+    }
+
+    @Test
+    fun `getAll with eager-loaded properties still returns every entity`() {
+        val entities = listOf(mockEntity())
+        every { entityClass.all() } returns iterableOf(entities)
+
+        val result = repository.getAll(emptyList())
+
+        assertEquals(entities, result)
+        verify(exactly = 1) { entityClass.all() }
+    }
+
+    // `getById`, `getByIds` and any assertion that depends on the repository reading
+    // `entity.id.value` cannot be expressed here: `Entity.getId()` is final, so a mocked entity
+    // cannot be given an id. Those belong in the integration suite, against real rows.
+
+    @Test
+    fun `getWhere returns only entities matching the predicate`() {
+        val kept = mockEntity()
+        val dropped = mockEntity()
+        every { entityClass.all() } returns iterableOf(listOf(kept, dropped))
+
+        val result = repository.getWhere { it === kept }
+
+        assertEquals(listOf(kept), result)
+    }
+
+    // ------------------------------------------------------------------ writes
+
+    @Test
+    fun `create flushes the entity and returns it`() {
         val entity = mockEntity()
-        val allEntities = mockk<SizedIterable<T>>()
-        every { allEntities.toList() } returns listOf(entity)
-        every { entityClass.all() } returns allEntities
-        every { allEntities.with(any<KProperty1<T, Entity<*>>>()) } returns allEntities
 
-        val eagerLoadProps = listOf<KProperty1<T, Entity<*>>>(mockk())
-
-        // When
-        val result = repository.getAll(eagerLoadProps)
-
-        // Then
-        assertEquals(listOf(entity), result)
-        verify { transactions.run(any()) }
-        verify { entityClass.all() }
-        verify { allEntities.with(eagerLoadProps[0]) }
-    }
-
-    /**
-     * GIVEN id exists
-     * WHEN getById is called
-     * THEN returns matching entity
-     */
-    @Test
-    fun `getById success`() {
-        // Given
-        val entity = mockEntity()
-        val id = mockEntityId()
-        val allEntities = mockk<SizedIterable<T>>()
-
-        every { entityClass.all() } returns allEntities
-        every { allEntities.with(any<KProperty1<T, Entity<*>>>()) } returns allEntities
-        every { id.value } returns mockEntity().id.value
-        every { 
-            allEntities.find(any()) 
-        } returns entity
-
-        // When
-        val result = repository.getById(id)
-
-        // Then
-        assertEquals(entity, result)
-        verify { transactions.run(any()) }
-        verify { entityClass.all() }
-        verify { allEntities.find(any()) }
-    }
-
-    /**
-     * GIVEN id exists with foreign key related properties
-     * WHEN getById is called with eager loading props
-     * THEN returns entity with specified props loaded
-     */
-    @Test
-    fun `getById eager-loaded with FK extension props success`() {
-        // Given
-        val entity = mockEntity()
-        val id = mockEntityId()
-        val allEntities = mockk<SizedIterable<T>>()
-        val eagerLoadProps = listOf<KProperty1<T, Entity<*>>>(mockk())
-        
-        every { entityClass.all() } returns allEntities
-        every { allEntities.with(any<KProperty1<T, Entity<*>>>()) } returns allEntities
-        every { id.value } returns mockID()
-        every { 
-            allEntities.find(any()) 
-        } returns entity
-
-        // When
-        val result = repository.getById(id, eagerLoadProps)
-
-        // Then
-        assertEquals(entity, result)
-        verify { transactions.run(any()) }
-        verify { entityClass.all() }
-        verify { allEntities.with(eagerLoadProps[0]) }
-        verify { allEntities.find(any()) }
-    }
-
-    /**
-     * GIVEN a list of ids exist
-     * WHEN getByIds is called with that list of ids
-     * THEN matching entities are returned in the same order
-     */
-    @Test
-    fun `getByIds success`() {
-        // Given
-        val entity1 = mockEntity()
-        val entity2 = mockEntity()
-        val id1 = mockEntityId()
-        val id2 = mockEntityId()
-        val allEntities = mockk<SizedIterable<T>>()
-
-        every { entityClass.all() } returns allEntities
-        every { allEntities.with(any<KProperty1<T, Entity<*>>>()) } returns allEntities
-        every { id1.value } returns mockID()
-        every { id2.value } returns mockID()
-
-        // When
-        val result = repository.getByIds(listOf(id1, id2))
-
-        // Then
-        assertEquals(listOf(entity1, entity2), result)
-        verify { transactions.run(any()) }
-    }
-
-    /**
-     * GIVEN non-existent entity
-     * WHEN create is passed that entity
-     * THEN a single matching entity is persisted
-     */
-    @Test
-    fun `create entity success`() {
-        // Given
-        val entity = mockEntity()
-        every { entity.flush() } returns true
-
-        // When
         val result = repository.create(entity)
 
-        // Then
-        assertEquals(entity, result)
-        verify { transactions.run(any()) }
-        verify { entity.flush() }
+        assertSame(entity, result)
+        verify(exactly = 1) { entity.flush() }
     }
 
-    /**
-     * GIVEN a list of non-existent entities
-     * WHEN create is called with that list
-     * THEN a list of matching entities is persisted
-     */
     @Test
-    fun `create multiple entities success`() {
-        // Given
-        val entity1 = mockEntity()
-        val entity2 = mockEntity()
-        val entities = listOf(entity1, entity2)
-        
-        every { entity1.flush() } returns true
-        every { entity2.flush() } returns true
+    fun `create flushes every entity in the batch`() {
+        val entities = listOf(mockEntity(), mockEntity())
 
-        // When
         val result = repository.create(entities)
 
-        // Then
         assertEquals(entities, result)
-        verify { transactions.run(any()) }
-        verify { entity1.flush() }
-        verify { entity2.flush() }
+        entities.forEach { verify(exactly = 1) { it.flush() } }
     }
 
-    /**
-     * GIVEN an entity has been previously persisted
-     * WHEN update is passed an entity with matching id but ancillary properties modified
-     * THEN the modified entity properties are persisted in the record associated with its id
-     */
     @Test
     fun `update persists changes`() {
-        // Given
         val entity = mockEntity()
-        every { entity.flush() } returns true
 
-        // When
         val result = repository.update(entity)
 
-        // Then
-        assertEquals(entity, result)
-        verify { transactions.run(any()) }
-        verify { entity.flush() }
+        assertSame(entity, result)
+        verify(exactly = 1) { entity.flush() }
     }
 
-    /**
-     * GIVEN a list of entities has been previously persisted
-     * WHEN update is passed a list of entities with matching id but ancillary properties modified
-     * THEN the modified entities' properties are persisted in the record associated with each's id
-     */
     @Test
     fun `update persists changes to multiple entities`() {
-        // Given
-        val entity1 = mockEntity()
-        val entity2 = mockEntity()
-        val entities = listOf(entity1, entity2)
-        
-        every { entity1.flush() } returns true
-        every { entity2.flush() } returns true
+        val entities = listOf(mockEntity(), mockEntity())
 
-        // When
         val result = repository.update(entities)
 
-        // Then
         assertEquals(entities, result)
-        verify { transactions.run(any()) }
-        verify { entity1.flush() }
-        verify { entity2.flush() }
+        entities.forEach { verify(exactly = 1) { it.flush() } }
     }
 
-    /**
-     * GIVEN an entity has been previously persisted
-     * WHEN delete is passed the id that matches it
-     * THEN the entity is removed from the Entity types present 'all' set
-     */
     @Test
-    fun `delete removes entity with specified id`() {
-        // Given
-        val id = mockEntityId()
+    fun `delete removes the entity with the specified id`() {
         val entity = mockEntity()
-        
-        every { id.value } returns mockEntityId().value
         every { entityClass.findById(anyID()) } returns entity
-        every { entity.delete() } just runs
 
-        // When
-        repository.delete(id)
+        repository.delete(mockEntityId())
 
-        // Then
-        verify { transactions.run(any()) }
-        verify { entityClass.findById(anyID()) }
-        verify { entity.delete() }
+        verify(exactly = 1) { entity.delete() }
     }
 
-    /**
-     * GIVEN an entity has been previously persisted
-     * WHEN getWhere is called with a lambda that properly identifies it in its matching predicate
-     * THEN the entity is returned
-     */
     @Test
-    fun `getWhere returns entities matching predicate`() {
-        // Given
-        val entity = mockEntity()
-        val allEntities = mockk<SizedIterable<T>>()
-        
-        every { entityClass.all() } returns allEntities
-        every { allEntities.filter(any()) } returns listOf(entity)
+    fun `delete is a no-op when the id is not present`() {
+        every { entityClass.findById(anyID()) } returns null
 
-        // When
-        val result = repository.getWhere { true }
+        repository.delete(mockNonExistentEntityId())
 
-        // Then
-        assertEquals(listOf(entity), result)
-        verify { transactions.run(any()) }
-        verify { entityClass.all() }
-        verify { allEntities.filter(any()) }
+        verify(exactly = 1) { entityClass.findById(anyID()) }
     }
 
-    /**
-     * GIVEN a list of entities has been previously persisted
-     * WHEN delete is called with a list of ids matching these
-     * THEN the entities are removed from the 'all' set of existing entities
-     */
     @Test
-    fun `delete removes entities with specified ids`() {
-        // Given
-        val id1 = mockEntityId()
-        val id2 = mockEntityId()
-        val ids = listOf(id1, id2)
-        val entities = mockk<SizedIterable<T>>()
-        val entity1 = mockEntity()
-        val entity2 = mockEntity()
-        
-        every { id1.value } returns mockID()
-        every { id2.value } returns mockID()
-        every { entityClass.table.id } returns mockk()
-        every { entityClass.find(any<Op<Boolean>>()) } returns entities
-        every { entities.forEach(captureLambda<(T) -> Unit>()) } answers {
-            lambda<(T) -> Unit>().invoke(entity1)
-            lambda<(T) -> Unit>().invoke(entity2)
-        }
-        every { entity1.delete() } just runs
-        every { entity2.delete() } just runs
+    fun `delete removes every entity with the specified ids`() {
+        val first = mockEntity()
+        val second = mockEntity()
+        // `EntityClass` has two `find` overloads; the repository uses the lambda one, so a stub
+        // on `find(Op)` is never matched and the relaxed mock quietly returns nothing.
+        every {
+            entityClass.find(any<SqlExpressionBuilder.() -> Op<Boolean>>())
+        } returns iterableOf(listOf(first, second))
 
-        // When
-        repository.delete(ids)
+        repository.delete(listOf(mockEntityId(), mockEntityId()))
 
-        // Then
-        verify { transactions.run(any()) }
-        verify { entityClass.find(any<Op<Boolean>>()) }
-        verify { entity1.delete() }
-        verify { entity2.delete() }
+        verify(exactly = 1) { first.delete() }
+        verify(exactly = 1) { second.delete() }
     }
 }

@@ -14,19 +14,9 @@ import org.junit.jupiter.api.Test
  * Represents a workflow, containing steps and data points, and supports organization
  * into folders. Metadata is stored as JSON to allow for flexible information capture.
  */
-open class WorkflowRepoTest : ULongIdGenericRepoTest<WorkflowEntity>() {
+abstract class WorkflowRepoTest : ULongIdGenericRepoTest<WorkflowEntity>() {
 
     override fun mockEntity(): WorkflowEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): WorkflowEntity {
         return any<WorkflowEntity>()

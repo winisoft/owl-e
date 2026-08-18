@@ -11,19 +11,9 @@ import org.junit.jupiter.api.Test
  * Represents a reference within a type schema, supporting nested or hierarchical type structures.
  * Each schema reference is tied to a specific type declaration and may contain child references.
  */
-open class TypeSchemaRefRepoTest : ULongIdGenericRepoTest<TypeSchemaRefEntity>() {
+abstract class TypeSchemaRefRepoTest : ULongIdGenericRepoTest<TypeSchemaRefEntity>() {
 
     override fun mockEntity(): TypeSchemaRefEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): TypeSchemaRefEntity {
         return any<TypeSchemaRefEntity>()

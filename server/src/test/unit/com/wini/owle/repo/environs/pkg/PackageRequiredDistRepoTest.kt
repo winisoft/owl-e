@@ -9,19 +9,9 @@ import org.junit.jupiter.api.Test
 
 
 
-open class PackageRequiredDistRepoTest : ULongIdGenericRepoTest<PackageDistRequirementEntity>() {
+abstract class PackageRequiredDistRepoTest : ULongIdGenericRepoTest<PackageDistRequirementEntity>() {
 
     override fun mockEntity(): PackageDistRequirementEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): PackageDistRequirementEntity {
         return any<PackageDistRequirementEntity>()

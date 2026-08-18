@@ -15,19 +15,9 @@ import org.junit.jupiter.api.Test
  * Represents a tool that can be utilized within a step.
  * Contains the tool's body, optional description, return type, and dependencies.
  */
-open class ToolRepoTest : ULongIdGenericRepoTest<ToolEntity>() {
+abstract class ToolRepoTest : ULongIdGenericRepoTest<ToolEntity>() {
 
     override fun mockEntity(): ToolEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): ToolEntity {
         return any<ToolEntity>()

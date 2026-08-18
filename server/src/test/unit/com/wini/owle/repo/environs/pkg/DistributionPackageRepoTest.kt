@@ -13,19 +13,9 @@ import org.junit.jupiter.api.Test
  * Represents a unique Python library package, along with its specific version details.
  * Used to store information about packages that can be installed in the workflow.
  */
-open class DistributionPackageRepoTest : CompositeIdRepoTest<DistributionPackageEntity>() {
+abstract class DistributionPackageRepoTest : CompositeIdRepoTest<DistributionPackageEntity>() {
 
     override fun mockEntity(): DistributionPackageEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): DistributionPackageEntity {
         return any<DistributionPackageEntity>()

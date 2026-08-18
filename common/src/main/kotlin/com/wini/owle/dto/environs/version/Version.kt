@@ -42,7 +42,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @ModelDefinition
 @ApiEndpointDefinition("api.environs.version.versionApi", ["environs"], "/version")
 @Serializable
-class Version(
+data class Version(
     override val id: ULong,
     val epoch: ULong,
     val major: ULong,

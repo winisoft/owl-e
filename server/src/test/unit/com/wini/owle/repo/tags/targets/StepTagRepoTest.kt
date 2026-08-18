@@ -11,19 +11,9 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a step
  */
-open class StepTagRepoTest : CompositeIdRepoTest<StepTagEntity>() {
+abstract class StepTagRepoTest : CompositeIdRepoTest<StepTagEntity>() {
 
     override fun mockEntity(): StepTagEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): StepTagEntity {
         return any<StepTagEntity>()

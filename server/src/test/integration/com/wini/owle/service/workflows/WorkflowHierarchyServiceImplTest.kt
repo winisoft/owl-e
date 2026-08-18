@@ -5,6 +5,7 @@ import com.wini.owle.allModules
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.entity.InstanceDbFakeEntityFactory.versionEntity
+import com.wini.owle.entity.InstanceDbFakeEntityFactory.workflowFolderEntity
 import com.wini.owle.entity.environs.version.PythonVersionEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
 import com.wini.owle.entity.workflows.WorkflowFolderEntity
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.Tag
 
 
 @Tag("integration")
-class WorkflowHierarchyServiceImplTest {
+abstract class WorkflowHierarchyServiceImplTest {
 
     lateinit var service: WorkflowHierarchyService
 
@@ -67,9 +68,7 @@ class WorkflowHierarchyServiceImplTest {
     fun `GIVEN two workflows in the same root folder WHEN getByFolder THEN returns those workflows`() = runBlocking {
 
         val folder = transaction {
-            WorkflowFolderEntity.new(200UL) {
-                name = "Folder Name"
-            }
+            workflowFolderEntity(id = 200UL, name = "Folder Name")
         }
         transaction {
             val version = transaction { versionEntity() }

@@ -14,19 +14,9 @@ import org.junit.jupiter.api.Test
  * Represents a step within a workflow, defining its tool dependency, next and previous steps,
  * and whether it serves as the workflow's head step.
  */
-open class StepRepoTest : ULongIdGenericRepoTest<StepEntity>() {
+abstract class StepRepoTest : ULongIdGenericRepoTest<StepEntity>() {
 
     override fun mockEntity(): StepEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): StepEntity {
         return any<StepEntity>()

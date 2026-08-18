@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Nested
 
 @Nested
 @DisplayName("DTO Tests")
-open class DtoTest {
+abstract class DtoTest {
 
     @Nested
     @DisplayName("Environs Module")

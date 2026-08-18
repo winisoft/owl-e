@@ -10,19 +10,9 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-open class PythonVersionSpecifierRepoTest : CompositeIdRepoTest<PythonVersionSpecifierEntity>() {
+abstract class PythonVersionSpecifierRepoTest : CompositeIdRepoTest<PythonVersionSpecifierEntity>() {
 
     override fun mockEntity(): PythonVersionSpecifierEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): PythonVersionSpecifierEntity {
         return any<PythonVersionSpecifierEntity>()

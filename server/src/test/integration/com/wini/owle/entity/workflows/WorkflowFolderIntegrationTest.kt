@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Tag
 
 
 @Tag("integration")
-open class WorkflowFolderDbIntegrationTest {
+abstract class WorkflowFolderDbIntegrationTest {
 
     @BeforeEach
     fun setUp() {

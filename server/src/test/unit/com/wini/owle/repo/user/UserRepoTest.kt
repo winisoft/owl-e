@@ -14,19 +14,9 @@ import org.junit.jupiter.api.Test
  * Represents a user in the Owl-E application, with authentication details,
  * subscription status, and related payment methods.
  */
-open class UserRepoTest : ULongIdGenericRepoTest<UserEntity>() {
+abstract class UserRepoTest : ULongIdGenericRepoTest<UserEntity>() {
 
     override fun mockEntity(): UserEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): UserEntity {
         return any<UserEntity>()

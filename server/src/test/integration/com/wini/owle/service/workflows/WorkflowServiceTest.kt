@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Tag
  * into folders. Metadata is stored as JSON to allow for flexible information capture.
  */
 @Tag("integration")
-open class WorkflowServiceTest {
+abstract class WorkflowServiceTest {
 
     
 

@@ -13,19 +13,9 @@ import org.junit.jupiter.api.Test
  * Defines a test case to validate workflows or steps.
  * Each test case may contain multiple inputs, expected outcomes, and historical results.
  */
-open class TestCaseRepoTest : ULongIdGenericRepoTest<TestCaseEntity>() {
+abstract class TestCaseRepoTest : ULongIdGenericRepoTest<TestCaseEntity>() {
 
     override fun mockEntity(): TestCaseEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): TestCaseEntity {
         return any<TestCaseEntity>()

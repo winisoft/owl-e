@@ -7,6 +7,7 @@ import com.wini.owle.entity.workflows.WorkflowEntity
 import com.wini.owle.entity.workflows.WorkflowFolderEntity
 import com.wini.owle.schema.Schema
 import kotlinx.datetime.Instant
+import com.wini.owle.entity.user.UserEntity
 
 
 /**
@@ -71,5 +72,29 @@ object InstanceDbFakeEntityFactory {
         this.parentFolder = parentFolder()
         this.createdAt = createdAt
         this.updatedAt = updatedAt
+    }
+
+    /**
+     * `workflow_folders.user_id` is NOT NULL, so a folder needs an owner before it can be stored.
+     * Fixtures that skipped this failed with "Field 'user_id' doesn't have a default value".
+     */
+    fun userEntity(
+        id: ULong = 1UL,
+        email: String = "fixture@example.test",
+        password: String = "not-a-real-password"
+    ): UserEntity = UserEntity.new(id) {
+        this.email = email
+        this.password = password
+    }
+
+    fun workflowFolderEntity(
+        id: ULong = 1UL,
+        name: String = "Folder Name",
+        user: () -> UserEntity = { userEntity() },
+        parentFolder: () -> WorkflowFolderEntity? = { null }
+    ): WorkflowFolderEntity = WorkflowFolderEntity.new(id) {
+        this.name = name
+        this.user = user()
+        this.parentFolder = parentFolder()
     }
 }

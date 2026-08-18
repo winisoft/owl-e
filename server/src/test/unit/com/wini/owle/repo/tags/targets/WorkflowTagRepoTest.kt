@@ -11,19 +11,9 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a workflow
  */
-open class WorkflowTagRepoTest : CompositeIdRepoTest<WorkflowTagEntity>() {
+abstract class WorkflowTagRepoTest : CompositeIdRepoTest<WorkflowTagEntity>() {
 
     override fun mockEntity(): WorkflowTagEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): WorkflowTagEntity {
         return any<WorkflowTagEntity>()

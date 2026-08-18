@@ -380,7 +380,7 @@ class DbMapperGeneratorProcessor(
         b.appendLine(" */")
         b.appendLine("class ${mapper(dtoName)}(")
         b.appendLine("    private val daoDelegate: DaoDelegate<${plan.idType}, $dtoName, $entityName>,")
-        collaborators.forEach { b.appendLine("    private val ${ref(it)}: ${mapper(it)},") }
+        collaborators.forEach { b.appendLine("    private val ${ref(it)}: () -> ${mapper(it)},") }
         b.appendLine(") : DbMapper<${plan.idType}, $dtoName, $entityName> {")
         b.appendLine()
 
@@ -401,7 +401,7 @@ class DbMapperGeneratorProcessor(
                     if (bind.nullable) "dto.${bind.param}?.let { ${bind.enumFq}.valueOf(it) }"
                     else "${bind.enumFq}.valueOf(dto.${bind.param})"
                 is Binding.Relation -> {
-                    val call = if (bind.selfReferential) "toEntity" else "${ref(bind.dtoSimpleName)}.toEntity"
+                    val call = if (bind.selfReferential) "toEntity" else "${ref(bind.dtoSimpleName)}().toEntity"
                     if (bind.nullable) "dto.${bind.param}?.let { $call(it) }" else "$call(dto.${bind.param})"
                 }
                 else -> return@forEach
@@ -432,11 +432,11 @@ class DbMapperGeneratorProcessor(
                 is Binding.TextToEnum ->
                     if (bind.nullable) "entity.${bind.param}?.name" else "entity.${bind.param}.name"
                 is Binding.Relation -> {
-                    val call = if (bind.selfReferential) "toDto" else "${ref(bind.dtoSimpleName)}.toDto"
+                    val call = if (bind.selfReferential) "toDto" else "${ref(bind.dtoSimpleName)}().toDto"
                     if (bind.nullable) "entity.${bind.param}?.let { $call(it) }" else "$call(entity.${bind.param})"
                 }
                 is Binding.RelationList -> {
-                    val call = if (bind.selfReferential) "toDto" else "${ref(bind.dtoSimpleName)}.toDto"
+                    val call = if (bind.selfReferential) "toDto" else "${ref(bind.dtoSimpleName)}().toDto"
                     "entity.${bind.param}.map { $call(it) }"
                 }
             }
@@ -521,8 +521,11 @@ class DbMapperGeneratorProcessor(
         plans.sortedBy { it.dto.simpleName.asString() }.forEach { p ->
             val d = p.dto.simpleName.asString()
             val e = p.entity.simpleName.asString()
+            // Koin keys definitions by KClass, so every `DbMapper<..>` erases to the same key
+            // and only the last registration would survive. The generated mapper classes are
+            // distinct types, so they resolve unambiguously.
             b.appendLine("    ${helper(p.idType)}<$d, $e> {")
-            b.appendLine("        get<DbMapper<${p.idType}, $d, $e>>()")
+            b.appendLine("        get<${mapper(d)}>()")
             b.appendLine("    }")
         }
         b.appendLine("}")
@@ -534,6 +537,12 @@ class DbMapperGeneratorProcessor(
     private fun writeKoinModule(plans: List<Plan>) {
         val b = StringBuilder()
         b.appendLine("package $TARGET_PACKAGE").appendLine()
+        b.appendLine("import com.wini.owle.mapper.DbMapper")
+        if (plans.any { it.idType == "CompositeID" }) {
+            b.appendLine("import org.jetbrains.exposed.v1.core.dao.id.CompositeID")
+        }
+        plans.flatMap { listOf(it.dto.qualifiedName!!.asString(), it.entity.qualifiedName!!.asString()) }
+            .distinct().sorted().forEach { b.appendLine("import $it") }
         b.appendLine("import org.koin.dsl.module").appendLine()
         b.appendLine("/**")
         b.appendLine(" * Generated Koin bindings for the ${plans.size} derivable DbMappers. Do not edit.")
@@ -551,7 +560,7 @@ class DbMapperGeneratorProcessor(
                     else -> null
                 }
             }.distinct().sorted()
-            val args = (listOf("get()") + deps.map { "get()" }).joinToString(", ")
+            val args = (listOf("get()") + deps.map { "{ get() }" }).joinToString(", ")
             b.appendLine("    single { ${mapper(dtoName)}($args) }")
         }
         b.appendLine("}")

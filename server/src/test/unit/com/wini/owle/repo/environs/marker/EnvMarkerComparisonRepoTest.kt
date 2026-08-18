@@ -11,19 +11,9 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-open class EnvMarkerComparisonRepoTest : ULongIdGenericRepoTest<EnvMarkerComparisonEntity>() {
+abstract class EnvMarkerComparisonRepoTest : ULongIdGenericRepoTest<EnvMarkerComparisonEntity>() {
 
     override fun mockEntity(): EnvMarkerComparisonEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): EnvMarkerComparisonEntity {
         return any<EnvMarkerComparisonEntity>()

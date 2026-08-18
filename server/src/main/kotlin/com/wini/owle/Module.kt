@@ -29,11 +29,13 @@ import org.koin.dsl.module
 import com.wini.owle.mapper.generated.generatedMapperModule
 import com.wini.owle.mapper.generated.generatedRepoModule
 import com.wini.owle.mapper.generated.generatedServiceModule
+import com.wini.owle.services.bespokeServicesModule
 
 val allModules = listOf(
     generatedMapperModule,
     generatedRepoModule,
     generatedServiceModule,
+    bespokeServicesModule,
     environsEntitiesModule,
     runEntitiesModule,
     stepEntitiesModule,

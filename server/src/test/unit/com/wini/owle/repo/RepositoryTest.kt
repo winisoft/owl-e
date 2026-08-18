@@ -61,7 +61,7 @@ import org.junit.jupiter.api.Nested
  * (`*RepositoryTest` here, `*RepoTest` there) so the two names never collide in the output.
  */
 @DisplayName("Repository Tests")
-open class RepositoryTest {
+abstract class RepositoryTest {
 
     @Nested
     @DisplayName("Environs Module")

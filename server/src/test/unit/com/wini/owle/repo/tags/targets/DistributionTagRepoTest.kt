@@ -11,19 +11,9 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a Distribution
  */
-open class DistributionTagRepoTest : CompositeIdRepoTest<DistributionTagEntity>() {
+abstract class DistributionTagRepoTest : CompositeIdRepoTest<DistributionTagEntity>() {
 
     override fun mockEntity(): DistributionTagEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): DistributionTagEntity {
         return any<DistributionTagEntity>()

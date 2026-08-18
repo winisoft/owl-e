@@ -82,6 +82,8 @@ object DtoTestInstanceFactory {
             com.wini.owle.dto.runs.workflow.WorkflowExecution::class.java -> RunsDtoFactory.workflowExecutionDto() as T
             com.wini.owle.dto.workflows.WorkflowFolder::class.java -> WorkflowsDtoFactory.workflowFolderDto() as T
             com.wini.owle.dto.steps.WorkflowJunction::class.java -> StepsDtoFactory.workflowJunctionDto() as T
+            com.wini.owle.dto.runs.test.TestOutcomeExpectation::class.java -> RunsDtoFactory.testOutcomeExpectationDto() as T
+            com.wini.owle.dto.runs.workflow.TestOutcomeActual::class.java -> RunsDtoFactory.testOutcomeActualDto() as T
             else -> throw IllegalArgumentException("Unsupported DTO type: ${dtoClass.simpleName}")
         }
     }

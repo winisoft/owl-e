@@ -8,19 +8,9 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-open class TransformOccurrenceArgRepoTest : ULongIdGenericRepoTest<TransformOccurrenceArgEntity>() {
+abstract class TransformOccurrenceArgRepoTest : ULongIdGenericRepoTest<TransformOccurrenceArgEntity>() {
 
     override fun mockEntity(): TransformOccurrenceArgEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): TransformOccurrenceArgEntity {
         return any<TransformOccurrenceArgEntity>()

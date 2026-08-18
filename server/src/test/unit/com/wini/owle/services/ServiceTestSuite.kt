@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Nested
 /*
 @Nested
 @DisplayName("Service Layer Tests")
-open class ServiceTestSuite {
+abstract class ServiceTestSuite {
 
     @Nested
     @DisplayName("Environs Module")

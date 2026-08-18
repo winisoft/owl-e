@@ -1,5 +1,6 @@
 package com.wini.owle.service.workflows
 
+import com.wini.owle.entity.InstanceDbFakeEntityFactory
 import com.wini.owle.TestHelper
 import com.wini.owle.allModules
 import com.wini.owle.async.AsyncResult
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.Tag
  * Supports nested folders and categorizes workflows.
  */
 @Tag("integration")
-class WorkflowFolderServiceTest {
+abstract class WorkflowFolderServiceTest {
 
     lateinit var service: WorkflowHierarchyService
 
@@ -89,9 +90,7 @@ class WorkflowFolderServiceTest {
             }
         }
         transaction {
-            folder = WorkflowFolderEntity.new(200UL) {
-                this.name = "Folder Name"
-            }
+            folder = InstanceDbFakeEntityFactory.workflowFolderEntity(id = 200UL, name = "Folder Name")
             pythonVersion = PythonVersionEntity.new(version!!.id.value) {}
         }
 

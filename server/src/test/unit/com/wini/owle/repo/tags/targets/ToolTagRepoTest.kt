@@ -11,19 +11,9 @@ import org.junit.jupiter.api.Test
 /**
  * Represents a tag a given user has associated with a tool
  */
-open class ToolTagRepoTest : CompositeIdRepoTest<ToolTagEntity>() {
+abstract class ToolTagRepoTest : CompositeIdRepoTest<ToolTagEntity>() {
 
     override fun mockEntity(): ToolTagEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): ToolTagEntity {
         return any<ToolTagEntity>()

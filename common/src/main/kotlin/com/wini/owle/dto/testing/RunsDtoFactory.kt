@@ -64,6 +64,7 @@ import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.dto.workflows.enums.StoreMethod
 import com.wini.owle.dto.runs.test.TestExpectedOutcome
 import com.wini.owle.dto.runs.workflow.TestResult
+import com.wini.owle.dto.runs.enums.TestAssertion
 
 /**
  * Canned [runs] DTO instances for tests.
@@ -224,4 +225,24 @@ object RunsDtoFactory {
             executedAt = executedAt
         )
     }
+
+    fun testOutcomeExpectationDto(
+        id: ULong = 1UL,
+        dataPoint: DataPoint = WorkflowsDtoFactory.dataPointDto(),
+        assertion: TestAssertion = TestAssertion.EQUALS
+    ): TestOutcomeExpectation = TestOutcomeExpectation(
+        id = id,
+        dataPoint = dataPoint,
+        assertion = assertion
+    )
+
+    fun testOutcomeActualDto(
+        id: ULong = 1UL,
+        dataPoint: DataPoint? = WorkflowsDtoFactory.dataPointDto(),
+        passed: Boolean = true
+    ): TestOutcomeActual = TestOutcomeActual(
+        id = id,
+        dataPoint = dataPoint,
+        passed = passed
+    )
 }

@@ -13,19 +13,9 @@ import org.junit.jupiter.api.Test
  * Represents metadata for workflows or steps within the Owl-E application.
  * Includes information on authorship, usage permissions, and sharing configuration.
  */
-open class WorkflowMetadataRepoTest : ULongIdGenericRepoTest<WorkflowMetadataEntity>() {
+abstract class WorkflowMetadataRepoTest : ULongIdGenericRepoTest<WorkflowMetadataEntity>() {
 
     override fun mockEntity(): WorkflowMetadataEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): WorkflowMetadataEntity {
         return any<WorkflowMetadataEntity>()

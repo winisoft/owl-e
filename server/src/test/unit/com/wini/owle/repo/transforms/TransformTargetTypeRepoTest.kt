@@ -12,19 +12,9 @@ import org.junit.jupiter.api.Test
  * Represents the target types for a transformation.
  * Each target type defines which types are eligible for a transformation and the resulting type after the transformation is applied.
  */
-open class TransformTargetTypeRepoTest : CompositeIdRepoTest<TransformTargetTypeEntity>() {
+abstract class TransformTargetTypeRepoTest : CompositeIdRepoTest<TransformTargetTypeEntity>() {
 
     override fun mockEntity(): TransformTargetTypeEntity = mockk(relaxed = true)
-
-    override fun mockEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
-
-    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
-        val id = mockk<EntityID<CompositeID>>()
-        return id
-    }
 
     override fun MockKMatcherScope.anyT(): TransformTargetTypeEntity {
         return any<TransformTargetTypeEntity>()

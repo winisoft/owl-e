@@ -17,7 +17,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @ModelDefinition
 @ApiEndpointDefinition("api.environs.version.versionOverflow", ["environs"], "/version-overflow")
 @Serializable
-class VersionOverflow(
+data class VersionOverflow(
     override val id: ULong,
     val version: Version,
     val violation: OverflowViolation,
