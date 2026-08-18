@@ -24,9 +24,10 @@ class TransformOccurrenceEntity(id: EntityID<ULong>) : ULongEntity(id) {
     var transform by TransformEntity referencedOn TransformOccurrences.transform
 
     /**
-     * Which kind of site this is: read, write, inquisition, or inject.
+     * Which kind of site initiated this application: a read, a write, an inquisition argument,
+     * or a junction injection. The column is still `occurrence`; the property follows the DTO.
      */
-    var occurrence by TransformOccurrences.occurrence
+    var initiator by TransformOccurrences.occurrence
 
     /**
      * Source data point, when the input is a stored value.

@@ -4,7 +4,7 @@ import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
 import com.wini.owle.dto.runs.enums.TestAssertion
-import com.wini.owle.dto.transforms.enums.TransformOccurrence
+import com.wini.owle.dto.transforms.enums.TransformOccurrenceInitiator
 import com.wini.owle.dto.typing.enums.VarianceCardinality
 import com.wini.owle.dto.user.enums.CardBrand
 import com.wini.owle.dto.user.enums.UserStatus
@@ -53,7 +53,7 @@ object InstanceMockEntityFactory {
     fun transformOccurrence(
         id: ULong = 1UL,
         transformation: TransformEntity = transformationDao(),
-        occurrence: TransformOccurrence = TransformOccurrence.DATA_POINT_INJECTION,
+        occurrence: TransformOccurrenceInitiator = TransformOccurrenceInitiator.DATA_POINT_INJECTION,
         resultType: TypeNodeEntity = typeDeclarationDao(),
         dataPoint: DataPointEntity? = null
     ): TransformOccurrenceEntity = mockk {

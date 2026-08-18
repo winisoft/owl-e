@@ -5,7 +5,7 @@ import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
 import com.wini.owle.dto.runs.enums.TestAssertion
-import com.wini.owle.dto.transforms.enums.TransformOccurrence
+import com.wini.owle.dto.transforms.enums.TransformOccurrenceInitiator
 import com.wini.owle.dto.typing.enums.VarianceCardinality
 import com.wini.owle.entity.InstanceMockEntityFactory.transformOccurrence
 import com.wini.owle.entity.InstanceMockEntityFactory.transformationArg
@@ -122,7 +122,7 @@ object InstanceDbFakeEntityFactory {
     fun appliedTransformEntity(
         id: ULong = 1UL,
         transformation: () -> TransformEntity = { transformEntity() },
-        occurrence: TransformOccurrence = TransformOccurrence.DATA_POINT_INJECTION,
+        occurrence: TransformOccurrenceInitiator = TransformOccurrenceInitiator.DATA_POINT_INJECTION,
         resultType: () -> TypeNodeEntity = { typeDeclarationEntity() },
         dataPoint: () -> DataPointEntity? = { null },
     ): TransformOccurrenceEntity = TransformOccurrenceEntity.new(id) {
