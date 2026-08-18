@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Collects overall benchmarking data for a specific workflow execution,
  * including execution time, step counts, and the distribution of AI and predetermined steps.
  */
-class BenchmarkReportRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<BenchmarkReportEntity>() {
+class BenchmarkReportRepoTest : ULongIdGenericRepoTest<BenchmarkReportEntity>() {
 
     override fun mockEntity(): BenchmarkReportEntity = mockk(relaxed = true)
 

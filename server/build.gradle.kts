@@ -50,7 +50,10 @@ sourceSets {
     }
     test {
 
+        // Both must be set. `java.setSrcDirs` alone leaves Kotlin's conventional `src/test/kotlin`
+        // on the compile path, which is how a stale duplicate of RepositoryTest kept building.
         java.setSrcDirs(listOf("src/test/unit", "src/test/integration"))
+        kotlin.setSrcDirs(listOf("src/test/unit", "src/test/integration"))
 
         dependencies {
             implementation(projects.common)
@@ -65,6 +68,13 @@ sourceSets {
             implementation(libs.assertk.jvm)
             implementation(libs.mockk)
             implementation(libs.mysql)
+            implementation(libs.junitPlatform.suite)
+            implementation(libs.junitPlatform.suite.api)
+            implementation(libs.junitPlatform.suite.engine)
+            implementation(libs.junitPlatform.launcher)
+            implementation(libs.junitPlatform.runner)
+            implementation(libs.junitPlatform.commons)
+
         }
     }
 }
@@ -78,24 +88,19 @@ tasks {
     val unitTest by registering(Test::class) {
         description = "Runs unit tests (from src/test/unit only)"
         group = "verification"
-        useJUnitPlatform()
-        testClassesDirs = files(
-            fileTree("build/classes/kotlin/test").matching {
-                include("**/unit/**")
-            }
-        )
+        // Filtering by path cannot work: both source dirs declare the same packages, so the
+        // `unit`/`integration` segment never reaches the compiled output and this task matched
+        // zero classes while reporting success. The split is carried by a JUnit tag instead.
+        useJUnitPlatform { excludeTags("integration") }
+        testClassesDirs = sourceSets["test"].output.classesDirs
         classpath = sourceSets["test"].runtimeClasspath
     }
 
     val integrationTest by registering(Test::class) {
         description = "Runs integration tests (from src/test/integration only)"
         group = "verification"
-        useJUnitPlatform()
-        testClassesDirs = files(
-            fileTree("build/classes/kotlin/test").matching {
-                include("**/integration/**")
-            }
-        )
+        useJUnitPlatform { includeTags("integration") }
+        testClassesDirs = sourceSets["test"].output.classesDirs
         classpath = sourceSets["test"].runtimeClasspath
     }
 

@@ -1,6 +1,5 @@
 package com.wini.owle.repo.environs.marker
 
-import com.wini.owle.entity.environs.marker.EnvMarkerExpressionEntity
 import com.wini.owle.entity.environs.marker.EnvMarkerLogicalEntity
 import com.wini.owle.entity.environs.marker.EnvMarkerLogicals
 import com.wini.owle.repo.ULongIdGenericRepoTest
@@ -12,7 +11,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
 
-class EnvMarkerLogicalRepoTest(id: EntityID<ULong>)  : ULongIdGenericRepoTest<EnvMarkerLogicalEntity>() {
+class EnvMarkerLogicalRepoTest : ULongIdGenericRepoTest<EnvMarkerLogicalEntity>() {
 
     override fun mockEntity(): EnvMarkerLogicalEntity = mockk(relaxed = true)
 

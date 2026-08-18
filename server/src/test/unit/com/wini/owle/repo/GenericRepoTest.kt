@@ -29,12 +29,10 @@ abstract class GenericRepoTest<ID: Any, T: Entity<ID>> {
     @BeforeEach
     fun setup() {
         entityClass = mockk()
-        //transactions = mockk()
-//        every<Any> { transactions.run(captureLambda()) } answers {
-//            firstArg<() -> Any>().invoke()
-//        }
-
-        repository = GenericRepoImpl(entityClass)
+        // Runs each block inline instead of opening a real transaction, so these tests assert on
+        // what the repository asks of its EntityClass without needing a database to answer.
+        transactions = spyk(TransactionExecutor.PassThrough)
+        repository = GenericRepoImpl(entityClass, transactions)
     }
 
     /**

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a user in the Owl-E application, with authentication details,
  * subscription status, and related payment methods.
  */
-class UserRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<UserEntity>() {
+class UserRepoTest : ULongIdGenericRepoTest<UserEntity>() {
 
     override fun mockEntity(): UserEntity = mockk(relaxed = true)
 

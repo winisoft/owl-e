@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Each applied transformation has a type, may recursively reference a previous applied transform,
  * and specifies the result type it produces.
  */
-class TransformOccurrenceRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<TransformOccurrenceEntity>() {
+class TransformOccurrenceRepoTest : ULongIdGenericRepoTest<TransformOccurrenceEntity>() {
 
     override fun mockEntity(): TransformOccurrenceEntity = mockk(relaxed = true)
 

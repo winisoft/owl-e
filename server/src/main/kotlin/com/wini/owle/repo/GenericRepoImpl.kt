@@ -5,12 +5,12 @@ import org.jetbrains.exposed.v1.dao.EntityClass
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.with
 import org.jetbrains.exposed.v1.jdbc.SizedIterable
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import kotlin.reflect.KProperty1
 
 
 open class GenericRepoImpl<ID: Any, T>(
-    override val entityClass: EntityClass<ID, T>
+    override val entityClass: EntityClass<ID, T>,
+    private val transactions: TransactionExecutor = ExposedTransactionExecutor
 ): OwleRepo<ID, T> where T : Entity<ID> {
 
     override fun getAll(): List<T> {
@@ -30,7 +30,7 @@ open class GenericRepoImpl<ID: Any, T>(
     }
 
     override fun getByIds(ids: List<EntityID<ID>>): List<T?> {
-        return transaction {
+        return transactions.run {
             ids.map { id ->
                 getByIdWith(entityClass, id.value, emptyList())
             }
@@ -38,41 +38,41 @@ open class GenericRepoImpl<ID: Any, T>(
     }
 
     override fun getWhere(predicate: (T) -> Boolean): List<T> {
-        return transaction {
+        return transactions.run {
             entityClass.all().filter(predicate)
         }
     }
 
     override fun create(entity: T): T {
-        transaction {
+        transactions.run {
             entity.flush()
         }
         return entity
     }
 
     override fun create(entities: List<T>): List<T> {
-        transaction {
+        transactions.run {
             entities.forEach { it.flush() }
         }
         return entities
     }
 
     override fun update(entity: T): T {
-        transaction {
+        transactions.run {
             entity.flush()
         }
         return entity
     }
 
     override fun update(entities: List<T>): List<T> {
-        transaction {
+        transactions.run {
             entities.forEach { it.flush() }
         }
         return entities
     }
 
     override fun delete(id: EntityID<ID>) {
-        transaction {
+        transactions.run {
             entityClass.findById(id.value)?.delete()
         }
     }
@@ -83,7 +83,7 @@ open class GenericRepoImpl<ID: Any, T>(
                 it.value
             }
         }.run {
-            transaction {
+            transactions.run {
                 forEach {
                     it.delete()
                 }
@@ -92,13 +92,13 @@ open class GenericRepoImpl<ID: Any, T>(
     }
 
     private fun getAllEagerLoading(columns: List<KProperty1<T, Entity<*>>>): List<T> {
-        return transaction {
+        return transactions.run {
             getAllWith(entityClass, columns).toList()
         }
     }
 
     private fun getByIdEagerLoading(id: EntityID<ID>, columns: List<KProperty1<T, Entity<*>>>): T? {
-        return transaction {
+        return transactions.run {
             getByIdWith(entityClass, id.value, columns)
         }
     }

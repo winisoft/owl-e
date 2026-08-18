@@ -1,7 +1,6 @@
 package com.wini.owle.repo.environs.pkg
 
 import com.wini.owle.entity.environs.pkg.DistributionPackageEntity
-import com.wini.owle.entity.typing.TypeVarBoundEntity
 import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Represents a unique Python library package, along with its specific version details.
  * Used to store information about packages that can be installed in the workflow.
  */
-class DistributionPackageRepoTest(id: EntityID<CompositeID>): CompositeIdRepoTest<DistributionPackageEntity>() {
+class DistributionPackageRepoTest : CompositeIdRepoTest<DistributionPackageEntity>() {
 
     override fun mockEntity(): DistributionPackageEntity = mockk(relaxed = true)
 

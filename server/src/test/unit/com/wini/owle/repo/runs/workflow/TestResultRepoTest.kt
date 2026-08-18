@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
  * Stores the outcome of a test case execution, indicating whether the test passed or failed.
  * Includes the execution timestamp for audit and debugging purposes.
  */
-class TestResultRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<TestResultEntity>() {
+class TestResultRepoTest : ULongIdGenericRepoTest<TestResultEntity>() {
 
     override fun mockEntity(): TestResultEntity = mockk(relaxed = true)
 

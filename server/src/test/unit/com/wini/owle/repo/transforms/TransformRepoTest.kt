@@ -1,7 +1,6 @@
 package com.wini.owle.repo.transforms
 
 import com.wini.owle.entity.transforms.TransformEntity
-import com.wini.owle.entity.typing.TypeNodeEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a transformation process with a specified return type and related arguments.
  * A transformation can have multiple arguments, target types, and applied transformations.
  */
-class TransformRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<TransformEntity>() {
+class TransformRepoTest : ULongIdGenericRepoTest<TransformEntity>() {
 
     override fun mockEntity(): TransformEntity = mockk(relaxed = true)
 

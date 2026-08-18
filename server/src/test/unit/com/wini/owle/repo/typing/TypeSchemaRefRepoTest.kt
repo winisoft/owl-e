@@ -1,6 +1,5 @@
 package com.wini.owle.repo.typing
 
-import com.wini.owle.entity.typing.TypeNodeEntity
 import com.wini.owle.entity.typing.TypeSchemaRefEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.Test
  * Represents a reference within a type schema, supporting nested or hierarchical type structures.
  * Each schema reference is tied to a specific type declaration and may contain child references.
  */
-class TypeSchemaRefRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<TypeSchemaRefEntity>() {
+class TypeSchemaRefRepoTest : ULongIdGenericRepoTest<TypeSchemaRefEntity>() {
 
     override fun mockEntity(): TypeSchemaRefEntity = mockk(relaxed = true)
 

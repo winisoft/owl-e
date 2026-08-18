@@ -1,28 +1,29 @@
 package com.wini.owle.repo.tags
 
-import com.wini.owle.entity.typing.TypeVarBoundEntity
-import com.wini.owle.repo.ULongIdGenericRepoTest
+import org.jetbrains.exposed.v1.core.dao.id.CompositeID
+import com.wini.owle.entity.tags.TagRelationEntity
+import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
-class TagRelationRepoTest(id: EntityID<ULong>): ULongIdGenericRepoTest<TypeVarBoundEntity>() {
+class TagRelationRepoTest : CompositeIdRepoTest<TagRelationEntity>() {
 
-    override fun mockEntity(): TypeVarBoundEntity = mockk(relaxed = true)
+    override fun mockEntity(): TagRelationEntity = mockk(relaxed = true)
 
-    override fun mockEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
+    override fun mockEntityId(): EntityID<CompositeID> {
+        val id = mockk<EntityID<CompositeID>>()
         return id
     }
 
-    override fun mockNonExistentEntityId(): EntityID<ULong> {
-        val id = mockk<EntityID<ULong>>()
+    override fun mockNonExistentEntityId(): EntityID<CompositeID> {
+        val id = mockk<EntityID<CompositeID>>()
         return id
     }
 
-    override fun MockKMatcherScope.anyT(): TypeVarBoundEntity {
-        return any<TypeVarBoundEntity>()
+    override fun MockKMatcherScope.anyT(): TagRelationEntity {
+        return any<TagRelationEntity>()
     }
 
     

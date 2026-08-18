@@ -21,11 +21,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.junit.jupiter.api.Tag
 
 /**
  * Represents a folder for organizing workflows in a hierarchical structure.
  * Supports nested folders and categorizes workflows.
  */
+@Tag("integration")
 class WorkflowFolderServiceTest {
 
     lateinit var service: WorkflowHierarchyService

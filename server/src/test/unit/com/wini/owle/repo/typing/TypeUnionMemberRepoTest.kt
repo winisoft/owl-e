@@ -1,7 +1,6 @@
 package com.wini.owle.repo.typing
 
 import com.wini.owle.entity.typing.TypeUnionMemberEntity
-import com.wini.owle.entity.typing.TypeVarBoundEntity
 import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Test
  * Represents individual member types within a union type declaration.
  * Supports union types such as 'Union[int, str]' by linking each member type to the union type declaration.
  */
-class TypeUnionMemberRepoTest(id: EntityID<CompositeID>): CompositeIdRepoTest<TypeUnionMemberEntity>() {
+class TypeUnionMemberRepoTest : CompositeIdRepoTest<TypeUnionMemberEntity>() {
 
     override fun mockEntity(): TypeUnionMemberEntity = mockk(relaxed = true)
 

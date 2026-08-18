@@ -9,7 +9,7 @@ import org.jetbrains.exposed.v1.dao.ULongEntityClass
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 
-class EnvMarkerExpressionRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<EnvMarkerExpressionEntity>() {
+class EnvMarkerExpressionRepoTest : ULongIdGenericRepoTest<EnvMarkerExpressionEntity>() {
 
     override fun mockEntity(): EnvMarkerExpressionEntity = mockk(relaxed = true)
 

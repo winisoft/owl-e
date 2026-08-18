@@ -20,8 +20,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.junit.jupiter.api.Tag
 
 
+@Tag("integration")
 class WorkflowHierarchyServiceImplTest {
 
     lateinit var service: WorkflowHierarchyService

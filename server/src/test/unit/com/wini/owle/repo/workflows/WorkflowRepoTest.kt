@@ -1,6 +1,5 @@
 package com.wini.owle.repo.workflows
 
-import com.wini.owle.entity.environs.version.PythonVersionEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a workflow, containing steps and data points, and supports organization
  * into folders. Metadata is stored as JSON to allow for flexible information capture.
  */
-open class WorkflowRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<WorkflowEntity>() {
+open class WorkflowRepoTest : ULongIdGenericRepoTest<WorkflowEntity>() {
 
     override fun mockEntity(): WorkflowEntity = mockk(relaxed = true)
 

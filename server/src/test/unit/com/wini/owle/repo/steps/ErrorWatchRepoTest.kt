@@ -1,7 +1,6 @@
 package com.wini.owle.repo.steps
 
 import com.wini.owle.entity.steps.ErrorWatchEntity
-import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Test
  * Represents a watch on specific types of errors that may occur during a step's execution.
  * Specifies the error type and the action to take if the error occurs.
  */
-class ErrorWatchRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<ErrorWatchEntity>() {
+class ErrorWatchRepoTest : ULongIdGenericRepoTest<ErrorWatchEntity>() {
 
     override fun mockEntity(): ErrorWatchEntity = mockk(relaxed = true)
 

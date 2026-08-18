@@ -1,7 +1,6 @@
 package com.wini.owle.repo.transforms
 
 import com.wini.owle.entity.transforms.TransformTargetTypeEntity
-import com.wini.owle.entity.typing.TypeVarBoundEntity
 import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Represents the target types for a transformation.
  * Each target type defines which types are eligible for a transformation and the resulting type after the transformation is applied.
  */
-class TransformTargetTypeRepoTest(id: EntityID<CompositeID>): CompositeIdRepoTest<TransformTargetTypeEntity>() {
+class TransformTargetTypeRepoTest : CompositeIdRepoTest<TransformTargetTypeEntity>() {
 
     override fun mockEntity(): TransformTargetTypeEntity = mockk(relaxed = true)
 

@@ -4,6 +4,7 @@ import com.wini.owle.dto.DtoTest
 import com.wini.owle.dto.environs.version.PythonVersion
 import com.wini.owle.entity.InstanceDbFakeEntityFactory.pythonVersionEntity
 import com.wini.owle.entity.environs.version.PythonVersionEntity
+import com.wini.owle.repo.environs.version.PythonVersionRepoTest
 import io.mockk.MockKMatcherScope
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -19,10 +20,7 @@ open class RepositoryTest {
 
         @Nested
         @DisplayName("PythonVersionRepository")
-        inner class PythonVersionRepositoryTest: ULongIdGenericRepoTest<PythonVersionEntity>() {
-            override fun mockEntity(): PythonVersionEntity = pythonVersionEntity()
-            override fun MockKMatcherScope.anyT(): PythonVersionEntity = any<PythonVersionEntity>()
-        }
+        inner class PythonVersionRepositoryTest: PythonVersionRepoTest()
 
         @Nested
         @DisplayName("VersionSpecRepository")

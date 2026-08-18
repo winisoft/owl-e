@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  * Represents the prerequisite data injection between workflows.
  * Specifies how `sourceDataPoint` in the completed workflow replaces `injectedDataPoint` in the target workflow.
  */
-class DataPointInjectionRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<DataPointInjectionEntity>() {
+class DataPointInjectionRepoTest : ULongIdGenericRepoTest<DataPointInjectionEntity>() {
 
     override fun mockEntity(): DataPointInjectionEntity = mockk(relaxed = true)
 

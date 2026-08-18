@@ -26,8 +26,10 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.junit.jupiter.api.BeforeEach
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.junit.jupiter.api.Tag
 
 
+@Tag("integration")
 abstract class CompleteTransformsExampleIntegration {
 
     @BeforeEach

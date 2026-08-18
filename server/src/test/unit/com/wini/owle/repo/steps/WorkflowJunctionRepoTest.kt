@@ -1,8 +1,6 @@
 package com.wini.owle.repo.steps
 
 import com.wini.owle.entity.steps.WorkflowJunctionEntity
-import com.wini.owle.entity.workflows.StepEntity
-import com.wini.owle.entity.workflows.WorkflowEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
@@ -17,7 +15,7 @@ import org.junit.jupiter.api.Test
  * A junction may include conditions under which the transition is triggered,
  * and prerequisite injections required for the target workflow.
  */
-class WorkflowJunctionRepoTest(id: EntityID<ULong>) : ULongIdGenericRepoTest<WorkflowJunctionEntity>() {
+class WorkflowJunctionRepoTest : ULongIdGenericRepoTest<WorkflowJunctionEntity>() {
 
     override fun mockEntity(): WorkflowJunctionEntity = mockk(relaxed = true)
 

@@ -10,9 +10,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNull
+import org.junit.jupiter.api.Tag
 
 
 
+@Tag("integration")
 open class WorkflowFolderDbIntegrationTest {
 
     @BeforeEach
