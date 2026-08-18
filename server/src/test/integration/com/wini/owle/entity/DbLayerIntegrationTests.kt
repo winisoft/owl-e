@@ -36,7 +36,7 @@ package com.wini.owle.entity
 //            url = "jdbc:mysql://localhost:3306/owle_test_db",
 //            driver = "com.mysql.cj.jdbc.Driver",
 //            user = "test_runner",
-//            password = "test1234"
+//            password = "b0d!ed_forth"
 //        )
 //    }
 //
