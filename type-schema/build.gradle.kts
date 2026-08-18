@@ -35,8 +35,3 @@ sourceSets {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
-
-tasks.create(name="prepareKotlinBuildScriptModel"){
-
-    description = ""
-}
