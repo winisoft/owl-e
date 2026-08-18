@@ -65,7 +65,7 @@ abstract class DbLayerIntegrationTests<ID: Any, T: Entity<ID>>: KoinTest {
 
     fun connectToTestDb() {
         Database.connect(
-            url = "jdbc:mysql://localhost:3306/owle_test_db",
+            url = "jdbc:mysql://localhost:3306/owle_test",
             driver = "com.mysql.cj.jdbc.Driver",
             user = "test_runner",
             password = "test1234"

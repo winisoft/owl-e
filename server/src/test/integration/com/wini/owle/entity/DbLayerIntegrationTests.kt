@@ -33,7 +33,7 @@ package com.wini.owle.entity
 //
 //    fun connectToTestDb() {
 //        Database.connect(
-//            url = "jdbc:mysql://localhost:3306/owle_test_db",
+//            url = "jdbc:mysql://localhost:3306/owle_test",
 //            driver = "com.mysql.cj.jdbc.Driver",
 //            user = "test_runner",
 //            password = "b0d!ed_forth"
