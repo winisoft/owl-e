@@ -13,7 +13,6 @@ import com.wini.owle.entity.environs.VersionOverflows
 import com.wini.owle.entity.environs.Versions
 import com.wini.owle.entity.runs.BenchmarkReports
 import com.wini.owle.entity.runs.TestCases
-import com.wini.owle.entity.runs.TestOutcomeExpectations
 import com.wini.owle.entity.runs.TestInputs
 import com.wini.owle.entity.runs.TestResults
 import com.wini.owle.entity.runs.WorkflowExecutions
@@ -24,18 +23,14 @@ import com.wini.owle.entity.steps.DataPointInjections
 import com.wini.owle.entity.steps.DataPointReads
 import com.wini.owle.entity.steps.DataPointWriteArgs
 import com.wini.owle.entity.steps.DataPointWrites
-import com.wini.owle.entity.steps.InquisitionArgs
-import com.wini.owle.entity.steps.ToolParams
 import com.wini.owle.entity.steps.Tools
 import com.wini.owle.entity.steps.WorkflowJunctions
 import com.wini.owle.entity.tags.Tags
 import com.wini.owle.entity.tags.DistributionTags
-import com.wini.owle.entity.tags.PackageTags
-import com.wini.owle.entity.tags.PhaseTags
+import com.wini.owle.entity.tags.GrouperTags
 import com.wini.owle.entity.tags.StepTags
 import com.wini.owle.entity.tags.ToolTags
 import com.wini.owle.entity.tags.TransformTags
-import com.wini.owle.entity.tags.TypeNodeTags
 import com.wini.owle.entity.tags.WorkflowFolderTags
 import com.wini.owle.entity.tags.WorkflowTags
 import com.wini.owle.entity.transforms.TransformOccurrenceArgs
@@ -72,7 +67,7 @@ object TestHelper {
             url = "jdbc:mysql://localhost:3306/owle_test_db",
             driver = "com.mysql.cj.jdbc.Driver",
             user = "test_runner",
-            password = "test1234"
+            password = "b0d!ed_forth"
         )
     }
 

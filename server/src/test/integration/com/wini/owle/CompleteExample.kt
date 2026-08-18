@@ -324,7 +324,7 @@ abstract class CompleteExampleIntegration {
             WorkflowRequirementEntity.new {
                 workflow = WorkflowEntity[11910249UL]
                 requiredDist = DistributionEntity["matplotlib"]
-                requiredPackageVersion = VersionEntity.findById(11811450UL)
+                requiredPackageVersion = VersionEntity.findById(11811450UL)?.id?.value
                 requiredExtraName = null
             }
             WorkflowRequirementEntity.new {

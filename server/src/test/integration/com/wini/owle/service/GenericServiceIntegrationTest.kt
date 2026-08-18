@@ -4,7 +4,6 @@ import com.wini.owle.dto.BaseDto
 import com.wini.owle.entity.runs.ExecutionLogs
 import com.wini.owle.entity.runs.StepTestRuns
 import com.wini.owle.entity.runs.TestCases
-import com.wini.owle.entity.runs.TestOutcomeExpectations
 import com.wini.owle.entity.runs.TestInputs
 import com.wini.owle.entity.runs.TestResults
 import com.wini.owle.entity.runs.WorkflowExecutions
@@ -63,10 +62,10 @@ abstract class GenericServiceIntegrationTest<ID: Any, T: BaseDto>: KoinTest {
 
     fun connectToTestDb() {
         Database.connect(
-            url = "jdbc:mysql://localhost:3306/owle_test_db",
+            url = "jdbc:mysql://localhost:3306/owle_test",
             driver = "com.mysql.cj.jdbc.Driver",
             user = "test_runner",
-            password = "test1234"
+            password = "b0d!ed_forth"
         )
     }
 

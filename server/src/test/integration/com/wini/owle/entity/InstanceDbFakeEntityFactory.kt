@@ -1,12 +1,14 @@
 package com.wini.owle.entity
 
 import com.wini.owle.dto.environs.version.enums.PrereleasePhase
+import com.wini.owle.dto.runs.enums.ExecutionLogLevel
 import com.wini.owle.dto.runs.enums.ExecutionStatus
 import com.wini.owle.dto.runs.enums.GenerationMethod
 import com.wini.owle.dto.runs.enums.LogLevel
 import com.wini.owle.dto.runs.enums.TestAssertion
 import com.wini.owle.dto.transforms.enums.TransformOccurrenceInitiator
 import com.wini.owle.dto.typing.enums.VarianceCardinality
+import com.wini.owle.dto.user.enums.CardBrand
 import com.wini.owle.entity.InstanceMockEntityFactory.transformOccurrence
 import com.wini.owle.entity.InstanceMockEntityFactory.transformationArg
 import com.wini.owle.entity.delegate.impl.TagRelationDaoDelegate
@@ -14,11 +16,10 @@ import com.wini.owle.entity.delegate.impl.TypeUnionMemberDaoDelegate
 import com.wini.owle.entity.environs.pkg.DistributionPackageEntity
 import com.wini.owle.entity.environs.version.PythonVersionEntity
 import com.wini.owle.entity.environs.version.VersionEntity
+import com.wini.owle.entity.runs.step.ExecutionLogEntity
 import com.wini.owle.entity.runs.step.StepTestRunEntity
-import com.wini.owle.entity.runs.step.ExecutionNotificationEntity
 import com.wini.owle.entity.runs.test.BenchmarkReportEntity
 import com.wini.owle.entity.runs.test.TestCaseEntity
-import com.wini.owle.entity.runs.test.TestOutcomeExpectationEntity
 import com.wini.owle.entity.runs.test.TestInputEntity
 import com.wini.owle.entity.runs.workflow.TestResultEntity
 import com.wini.owle.entity.steps.*
@@ -28,7 +29,6 @@ import com.wini.owle.entity.user.*
 import com.wini.owle.entity.tags.TagEntity
 import com.wini.owle.entity.tags.TagRelationEntity
 import com.wini.owle.entity.workflows.*
-import com.wini.owle.entity.workflows.enums.StoreMethodEntity
 import com.wini.owle.schema.Schema
 import kotlinx.datetime.Instant
 import java.math.BigDecimal
@@ -47,8 +47,8 @@ object InstanceDbFakeEntityFactory {
         transformArg: () -> TransformArgEntity = { transformationArg() },
         value: String = "example argument value"
     ): TransformOccurrenceArgEntity = TransformOccurrenceArgEntity.new(id) {
-        this.transformOccurrenceEntity = transformOccurrenceEntity()
-        this.transformationArg = transformArg()
+        this.transformOccurrence = transformOccurrenceEntity()
+        this.transformArg = transformArg()
         this.value = value
     }
 
@@ -72,7 +72,7 @@ object InstanceDbFakeEntityFactory {
         name: String = "Arg Name",
         description: String = "Arg Description"
     ): TransformArgEntity = TransformArgEntity.new(id) {
-        this.transformation = transformation()
+        this.transform = transformation()
         this.typeNode = typeNode()
         this.name = name
         this.description = description
@@ -125,14 +125,12 @@ object InstanceDbFakeEntityFactory {
         resultType: () -> TypeNodeEntity = { typeDeclarationEntity() },
         dataPoint: () -> DataPointEntity? = { null },
     ): TransformOccurrenceEntity = TransformOccurrenceEntity.new(id) {
-        this.transformation = transformation()
-        this.occurrence = occurrence
-        this.resultType = resultType()
+        this.transform = transformation()
     }
 
     fun benchmarkingDataEntity(
         id: ULong = 1UL,
-        workflowExecution: () -> WorkflowRunEntity = { workflowExecutionEntity() },
+        workflowExecution: () -> WorkflowExecutionEntity = { workflowExecutionEntity() },
         totalExecutionTime: BigDecimal = 127.0.toBigDecimal(),
     ): BenchmarkReportEntity = BenchmarkReportEntity.new(id) {
         this.workflowExecution = workflowExecution()
@@ -186,10 +184,10 @@ object InstanceDbFakeEntityFactory {
         id: ULong = 1UL,
         stepExecution: () -> StepTestRunEntity = { stepExecutionEntity() },
         timestamp: Instant = Schema.Utils.instant,
-        logLevel: LogLevel = LogLevel.WARNING,
+        logLevel: ExecutionLogLevel = ExecutionLogLevel.WARN,
         message: String = "Execution started"
-    ): ExecutionNotificationEntity = ExecutionNotificationEntity.new(id) {
-        this.stepExecution = stepExecution()
+    ): ExecutionLogEntity = ExecutionLogEntity.new(id) {
+        this.step = stepExecution()
         this.timestamp = timestamp
         this.logLevel = logLevel
         this.message = message
@@ -226,7 +224,7 @@ object InstanceDbFakeEntityFactory {
         id: ULong = 1UL,
         stripePaymentMethodId: String? = "pm_123example",
         user: () -> UserEntity = { userEntity() },
-        cardBrand: CardBrandEntity? = CardBrandEntity.VISA,
+        cardBrand: CardBrand? = CardBrand.VISA,
         lastFour: String? = "4242",
         isDefault: Boolean = true,
         createdAt: Instant = Schema.Utils.instant,
@@ -323,7 +321,7 @@ object InstanceDbFakeEntityFactory {
 
     fun stepExecutionEntity(
         id: ULong = 1UL,
-        workflowExecution: () -> WorkflowRunEntity = { workflowExecutionEntity() },
+        workflowExecution: () -> WorkflowExecutionEntity = { workflowExecutionEntity() },
         step: () -> StepEntity = { stepEntity() },
         startedAt: Instant = Schema.Utils.instant,
         completedAt: Instant? = Schema.Utils.instant,
@@ -404,7 +402,7 @@ object InstanceDbFakeEntityFactory {
     fun testResultEntity(
         id: ULong = 1UL,
         testCase: () -> TestCaseEntity = { testCaseEntity() },
-        workflowExecution: () -> WorkflowRunEntity = { workflowExecutionEntity() },
+        workflowExecution: () -> WorkflowExecutionEntity = { workflowExecutionEntity() },
         passed: Boolean = true,
         executedAt: Instant = Schema.Utils.instant,
     ): TestResultEntity = TestResultEntity.new(id) {
@@ -445,7 +443,7 @@ object InstanceDbFakeEntityFactory {
         name: String = "Argument Name",
         description: String? = "Argument Description"
     ): TransformArgEntity = TransformArgEntity.new(id) {
-        this.transformation = transformation()
+        this.transform = transformation()
         this.typeNode = typeNode()
         this.name = name
         this.description = description
@@ -471,7 +469,7 @@ object InstanceDbFakeEntityFactory {
     ): TransformTargetTypeEntity = TransformTargetTypeEntity.new(
         TransformTargetTypeEntity.buildId(transformationId, typeDeclarationId)
     ) {
-        this.transformation = transformation()
+        this.transform = transformation()
         this.eligibleTypeNode = typeNode()
     }
 
@@ -633,7 +631,7 @@ object InstanceDbFakeEntityFactory {
         completedAt: Instant? = Schema.Utils.instant,
         status: ExecutionStatus = ExecutionStatus.FAILED,
         stepExecutions: List<StepTestRunEntity> = emptyList()
-    ): WorkflowRunEntity = WorkflowRunEntity.new(id) {
+    ): WorkflowExecutionEntity = WorkflowExecutionEntity.new(id) {
         this.workflow = workflow()
         this.startedAt = startedAt
         this.completedAt = completedAt

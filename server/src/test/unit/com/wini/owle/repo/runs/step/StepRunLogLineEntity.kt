@@ -1,6 +1,5 @@
 package com.wini.owle.repo.runs.step
 
-import com.wini.owle.entity.runs.step.ExecutionNotificationEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk

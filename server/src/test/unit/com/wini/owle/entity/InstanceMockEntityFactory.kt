@@ -12,10 +12,8 @@ import com.wini.owle.dto.workflows.enums.StoreMethod
 import com.wini.owle.entity.environs.pkg.PackagePythonRequirementEntity
 import com.wini.owle.entity.environs.pkg.DistributionPackageEntity
 import com.wini.owle.entity.runs.step.StepTestRunEntity
-import com.wini.owle.entity.runs.step.ExecutionNotificationEntity
 import com.wini.owle.entity.runs.test.BenchmarkReportEntity
 import com.wini.owle.entity.runs.test.TestCaseEntity
-import com.wini.owle.entity.runs.test.TestOutcomeExpectationEntity
 import com.wini.owle.entity.runs.test.TestInputEntity
 import com.wini.owle.entity.runs.workflow.TestResultEntity
 import com.wini.owle.entity.steps.*
@@ -64,7 +62,7 @@ object InstanceMockEntityFactory {
 
     fun benchmarkingDataDao(
         id: ULong = 1UL,
-        workflowExecution: WorkflowRunEntity = workflowExecutionDao(),
+        workflowExecution: WorkflowExecutionEntity = workflowExecutionDao(),
         totalExecutionTime: BigDecimal = 127.0.toBigDecimal(),
     ): BenchmarkReportEntity = mockk {
         every { this@mockk.id } returns mockk()
@@ -265,7 +263,7 @@ object InstanceMockEntityFactory {
 
     fun stepExecutionDao(
         id: ULong = 1UL,
-        workflowExecution: WorkflowRunEntity = workflowExecutionDao(),
+        workflowExecution: WorkflowExecutionEntity = workflowExecutionDao(),
         step: StepEntity = stepDao(),
         startedAt: Instant = Instant.parse("2024-12-20T10:00:00Z"),
         completedAt: Instant? = Instant.parse("2024-12-20T10:00:00Z"),
@@ -349,7 +347,7 @@ object InstanceMockEntityFactory {
     fun testResultDao(
         id: ULong = 1UL,
         testCaseEntity: TestCaseEntity = testCaseDao(),
-        workflowExecution: WorkflowRunEntity = workflowExecutionDao(),
+        workflowExecution: WorkflowExecutionEntity = workflowExecutionDao(),
         passed: Boolean = true,
         executedAt: Instant = mockk()
     ): TestResultEntity = mockk {
@@ -564,7 +562,7 @@ object InstanceMockEntityFactory {
         completedAt: Instant? = Instant.parse("2024-12-20T10:00:00Z"),
         status: ExecutionStatus = ExecutionStatus.FAILED,
         stepExecutions: List<StepTestRunEntity> = emptyList()
-    ): WorkflowRunEntity = mockk {
+    ): WorkflowExecutionEntity = mockk {
         every { this@mockk.id } returns mockk()
         every { this@mockk.workflow } returns workflow
         every { this@mockk.startedAt } returns startedAt

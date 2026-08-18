@@ -3,7 +3,6 @@ package com.wini.owle.repo
 import com.wini.owle.entity.runs.ExecutionLogs
 import com.wini.owle.entity.runs.StepTestRuns
 import com.wini.owle.entity.runs.TestCases
-import com.wini.owle.entity.runs.TestOutcomeExpectations
 import com.wini.owle.entity.runs.TestInputs
 import com.wini.owle.entity.runs.TestResults
 import com.wini.owle.entity.runs.WorkflowExecutions
@@ -68,7 +67,7 @@ abstract class DbLayerRepoIntegrationTests<ID: Any, T: Entity<ID>>: KoinTest {
             url = "jdbc:mysql://localhost:3306/owle_test_db",
             driver = "com.mysql.cj.jdbc.Driver",
             user = "test_runner",
-            password = "test1234"
+            password = "b0d!ed_forth"
         )
     }
 

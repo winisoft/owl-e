@@ -2,14 +2,16 @@ package com.wini.owle.services
 
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
+import com.wini.owle.dto.DtoTestInstanceFactory
 import com.wini.owle.dto.environs.marker.EnvMarkerComparison
+import com.wini.owle.entity.InstanceDbFakeEntityFactory
 import com.wini.owle.entity.delegate.DaoDelegate
 import com.wini.owle.entity.environs.marker.EnvMarkerComparisonEntity
 import com.wini.owle.error.GenericError
 import com.wini.owle.error.NoSuchIdError
 import com.wini.owle.mapper.DbMapper
-import com.wini.owle.mapper.environs.marker.EnvMarkerComparisonMapper
 import com.wini.owle.repo.GenericRepoImpl
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
@@ -21,7 +23,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-/*
+
 open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
 
     private lateinit var service: GenericServiceImpl<ID, T, E>
@@ -29,7 +31,7 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     private lateinit var mapper: DbMapper<ID, T, E>
     private lateinit var daoDelegate: DaoDelegate<ID, T, E>
 
-    fun createSampleDto(): EnvMarkerComparison = envMarkerComparison()
+    fun createSampleDto(): EnvMarkerComparison = DtoTestInstanceFactory.environs.envMarkerComparison()
 
     fun createSampleEntity(): EnvMarkerComparisonEntity = mockk<EnvMarkerComparisonEntity>() {
         every { id } returns mockk {
@@ -51,9 +53,9 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         val dto: EnvMarkerComparison = mockk()
         val entity: EnvMarkerComparisonEntity = mockk()
 
-        every { mapper.toEntity(dto) } returns entity
+        every { mapper.toEntity(dto as T) } returns entity as E
         every { repository.create(entity) } returns entity
-        every { mapper.toDto(entity) } returns dto
+        every { mapper.toDto(entity) } returns dto as T
 
         // Act
         val result = service.create(dto)
@@ -75,11 +77,11 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         val entity: EnvMarkerComparisonEntity = mockk()
         val exception = RuntimeException("Database error")
 
-        every { mapper.toEntity(dto) } returns entity
+        every { mapper.toEntity(dto as T) } returns entity as E
         every { repository.create(entity) } throws exception
 
         // Act
-        val result = service.create(dto)
+        val result = service.create(dto as T)
 
         // Assert
         verify(exactly = 1) { mapper.toEntity(dto) }
@@ -95,7 +97,7 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test getById success`() {
         // Arrange
-        val dto: EnvMarkerComparison = envMarkerComparison()
+        val dto: EnvMarkerComparison = DtoTestInstanceFactory.environs.envMarkerComparison()
         val entityId: EntityID<ULong> = mockk() {
             every { value } returns mockk()
         }
@@ -147,7 +149,7 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
     @Test
     fun `test getAll success`() {
         // Arrange
-        val dtos = listOf(envMarkerComparison(1UL), envMarkerComparison(2UL))
+        val dtos = listOf(DtoTestInstanceFactory.environs.envMarkerComparison(1UL), DtoTestInstanceFactory.environs.envMarkerComparison(2UL))
         val entities: List<EnvMarkerComparisonEntity> = mockk()
 
         every { mapper.toEntities(dtos) } returns entities
@@ -332,5 +334,3 @@ open class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         verify { repository.delete(entityIds) }
     }
 }
-
- */
