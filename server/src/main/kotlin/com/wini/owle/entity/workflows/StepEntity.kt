@@ -6,10 +6,8 @@ import com.wini.owle.entity.steps.ErrorWatchEntity
 import com.wini.owle.entity.steps.ErrorWatches
 import com.wini.owle.entity.steps.InquisitionEntity
 import com.wini.owle.entity.steps.Inquisitions
-import com.wini.owle.entity.steps.StepDataPointReadEntity
-import com.wini.owle.entity.steps.StepDataPointReads
-import com.wini.owle.entity.steps.StepDefaultRouteEntity
-import com.wini.owle.entity.steps.StepDefaultRoutes
+import com.wini.owle.entity.steps.DataPointReadEntity
+import com.wini.owle.entity.steps.DataPointReads
 import com.wini.owle.entity.steps.ToolEntity
 import com.wini.owle.entity.steps.WorkflowJunctionEntity
 import com.wini.owle.entity.steps.WorkflowJunctions
@@ -26,7 +24,7 @@ import org.jetbrains.exposed.v1.jdbc.SizedIterable
  * One invocation of a tool within a workflow, with everything the six-phase lifecycle needs:
  * [reads] resolve the tool's arguments, [errorWatches] guard the invocation, [writes] persist
  * the result, [inquisitions] evaluate afterwards in order, and routing falls through
- * [defaultRoute] when nothing redirected.
+ * [defaultNextStep] when nothing redirected.
  *
  * Position is canvas layout only ([posX]/[posY]/[parentGrouper]) — sequence lives in the routes.
  */
@@ -64,6 +62,11 @@ class StepEntity(id: EntityID<ULong>) : ULongEntity(id) {
      */
     var parentGrouper by GrouperEntity optionalReferencedOn Steps.parentGrouper
 
+    /**
+     * The step that follows when nothing has redirected. Null means this step is terminal.
+     */
+    var defaultNextStep by StepEntity optionalReferencedOn Steps.defaultNextStep
+
     var posX by Steps.posX
 
     var posY by Steps.posY
@@ -79,8 +82,8 @@ class StepEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Argument bindings for the tool's parameters.
      */
-    val reads: SizedIterable<StepDataPointReadEntity>
-            by StepDataPointReadEntity referrersOn StepDataPointReads.step
+    val reads: SizedIterable<DataPointReadEntity>
+            by DataPointReadEntity optionalReferrersOn DataPointReads.step
 
     /**
      * Error handlers guarding the invocation.
@@ -107,16 +110,9 @@ class StepEntity(id: EntityID<ULong>) : ULongEntity(id) {
             by WorkflowJunctionEntity referrersOn WorkflowJunctions.sourceStep
 
     /**
-     * The fallthrough next step. Null means this step is terminal.
+     * Steps that fall through to this one.
      */
-    val defaultRoute: StepDefaultRouteEntity?
-        get() = StepDefaultRouteEntity.findById(id)
-
-    /**
-     * Steps that route into this one by default.
-     */
-    val routedFrom: SizedIterable<StepDefaultRouteEntity>
-            by StepDefaultRouteEntity referrersOn StepDefaultRoutes.nextStep
+    val routedFrom: SizedIterable<StepEntity> by StepEntity optionalReferrersOn Steps.defaultNextStep
 
     val tags: SizedIterable<TagEntity> by TagEntity.via(StepTags.step, StepTags.tag)
 }

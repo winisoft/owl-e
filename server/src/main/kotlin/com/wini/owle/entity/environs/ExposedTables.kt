@@ -49,7 +49,7 @@ object PackageExtras : CompositeIdTable("package_extras") {
      * database has no such constraint. A package is identified by (distribution, version)
      * together, and that pair is what the compound foreign key below enforces.
      */
-    val packageVersion = ulong("package_id")
+    val packageVersion = ulong("package_id").entityId()
     val name = varchar("name", 255).entityId()
     val description = varchar("description", 4096).nullable()
     override val primaryKey = PrimaryKey(distribution, packageVersion, name)
@@ -91,7 +91,13 @@ object PackageDistRequirements : ULongIdTable("package_dist_requirements") {
 
 object PackagePythonRequirements : CompositeIdTable("package_python_requirements") {
     val distribution = reference("distribution", Distributions)
-    val packageVersion = ulong("package_id")
+
+    /**
+     * The version half of the package key. Deliberately *not* a reference to `versions`: the
+     * database has no such constraint. A package is identified by (distribution, version)
+     * together, and that pair is what the compound foreign key below enforces.
+     */
+    val packageVersion = ulong("package_id").entityId()
     val pythonVersion = reference("version_id", PythonVersions)
     val operator = enumerationByName("operator", 16, VersionOperator::class)
     val wildcard = enumerationByName("wildcard", 8, WildcardSegment::class).default(WildcardSegment.NONE)

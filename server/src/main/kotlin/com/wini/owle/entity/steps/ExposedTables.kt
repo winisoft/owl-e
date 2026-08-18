@@ -55,13 +55,6 @@ object Inquisitions : ULongIdTable("inquisitions") {
     val body = text("body")
 }
 
-object InquisitionDataPointReads : CompositeIdTable("inquisition_data_point_reads") {
-    val inquisition = reference("inquisition_id", Inquisitions, onDelete = ReferenceOption.CASCADE)
-    val callableParameter = reference("callable_parameter_id", CallableParameters, onDelete = ReferenceOption.CASCADE)
-    val dataPoint = reference("data_point_id", DataPoints)
-    val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences).nullable()
-    override val primaryKey = PrimaryKey(inquisition, callableParameter)
-}
 
 /**
  * Maps 1:1 onto Inquisitions.id — when an inquisition transitions workflow rather than routing
@@ -86,13 +79,6 @@ object InquisitionStepRedirects : IdTable<ULong>("inquisition_step_redirects") {
 }
 
 
-object StepDataPointReads : CompositeIdTable("step_data_point_reads") {
-    val step = reference("step_id", Steps, onDelete = ReferenceOption.CASCADE)
-    val callableParameter = reference("callable_parameter_id", CallableParameters, onDelete = ReferenceOption.CASCADE)
-    val dataPoint = reference("data_point_id", DataPoints)
-    val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences).nullable()
-    override val primaryKey = PrimaryKey(step, callableParameter)
-}
 
 
 object DataPointWrites : ULongIdTable("data_point_writes") {
@@ -109,12 +95,6 @@ object DataPointWriteArgs : CompositeIdTable("data_point_write_args") {
 }
 
 
-object StepDefaultRoutes : IdTable<ULong>("step_default_routes") {
-    override val id: Column<EntityID<ULong>> = reference("step_id", Steps, onDelete = ReferenceOption.CASCADE)
-    val nextStep = reference("next_step_id", Steps)
-    val workflow = reference("workflow_id", Workflows)
-    override val primaryKey = PrimaryKey(id)
-}
 
 
 object WorkflowJunctions : ULongIdTable("workflow_junctions") {
@@ -128,4 +108,25 @@ object DataPointInjections : ULongIdTable("data_point_injections") {
     val targetDataPoint = reference("target_data_point_id", DataPoints)
     val name = varchar("name", 255).nullable()
     val description = varchar("description", 8192).nullable()
+}
+
+
+/**
+ * Supplies one parameter of a callable from a data point, optionally through a transform.
+ *
+ * One table rather than one per owner: a read belongs to exactly one of a step's tool or an
+ * inquisition's predicate, which a CHECK enforces. Splitting it per owner bought nothing the
+ * discriminator does not, and made every new cause of a read a new table.
+ */
+object DataPointReads : ULongIdTable("data_point_reads") {
+    val step = reference("step_id", Steps, onDelete = ReferenceOption.CASCADE).nullable()
+    val inquisition = reference("inquisition_id", Inquisitions, onDelete = ReferenceOption.CASCADE).nullable()
+    val callableParameter = reference("callable_parameter_id", CallableParameters, onDelete = ReferenceOption.CASCADE)
+    val dataPoint = reference("data_point_id", DataPoints)
+    val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences).nullable()
+
+    init {
+        uniqueIndex("uq_step_param", step, callableParameter)
+        uniqueIndex("uq_inquisition_param", inquisition, callableParameter)
+    }
 }

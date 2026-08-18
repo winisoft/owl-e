@@ -1,6 +1,5 @@
 package com.wini.owle.repo.typing
 
-import com.wini.owle.entity.typing.TypeParameterEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.junit.jupiter.api.Test
 

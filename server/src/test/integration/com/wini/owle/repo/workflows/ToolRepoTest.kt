@@ -2,7 +2,6 @@ package com.wini.owle.repo.workflows
 
 import com.wini.owle.entity.steps.Tools
 import com.wini.owle.entity.typing.TypeNodeEntity
-import com.wini.owle.entity.workflows.ToolEntity
 import org.jetbrains.exposed.v1.dao.ULongEntity
 import org.jetbrains.exposed.v1.dao.ULongEntityClass
 import org.jetbrains.exposed.v1.core.dao.id.EntityID

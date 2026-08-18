@@ -58,9 +58,6 @@ import com.wini.owle.entity.environs.pkg.PackagePythonRequirementEntity
 import com.wini.owle.entity.tags.TagRelationEntity
 import com.wini.owle.entity.transforms.TransformTargetTypeEntity
 import com.wini.owle.entity.typing.TypeUnionMemberEntity
-import com.wini.owle.entity.typing.TypeVarBoundEntity
-import com.wini.owle.entity.typing.TypeVarConstraintEntity
-import com.wini.owle.entity.typing.TypeVarVarianceEntity
 import com.wini.owle.validators.DtoValidator
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.koin.dsl.module
@@ -283,31 +280,42 @@ val transformApiModule = module {
 
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, TransformOccurrenceArg>>(), get<DtoValidator<TransformOccurrenceArg>>(), "applied-transform-arg", TransformOccurrenceArg.serializer()
+            get<DLL<ULong, TransformOccurrenceArg>>(),
+            get<DtoValidator<TransformOccurrenceArg>>(),
+            "applied-transform-arg",
+            TransformOccurrenceArg.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, TransformOccurrence>>(), get<DtoValidator<TransformOccurrence>>(), "applied-transform", TransformOccurrence.serializer()
+            get<DLL<ULong, TransformOccurrence>>(),
+            get<DtoValidator<TransformOccurrence>>(),
+            "applied-transform",
+            TransformOccurrence.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, Transform>>(), get<DtoValidator<Transform>>(), "transformation", Transform.serializer()
+            get<DLL<ULong, Transform>>(),
+            get<DtoValidator<Transform>>(),
+            "transformation",
+            Transform.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, TransformArg>>(), get<DtoValidator<TransformArg>>(), "transformation-arg", TransformArg.serializer()
+            get<DLL<ULong, TransformArg>>(),
+            get<DtoValidator<TransformArg>>(),
+            "transformation-arg",
+            TransformArg.serializer()
         )
     }
 }
 val typingApiModule = module {
-    single<KtorApi<CompositeID>> {
-        CompositeIdEndpointImpl(
-            get<DLL<CompositeID,  TypeVarVariance>>(),
+    single<KtorApi<ULong>> {
+        ULongIdEndpointImpl(
+            get<DLL<ULong, TypeVarVariance>>(),
             get<DtoValidator<TypeVarVariance>>(),
-            get<CompositeIdDaoDelegate<TypeVarVariance, TypeVarVarianceEntity>>(),
             "typevar-variance",
             TypeVarVariance.serializer()
         )
@@ -321,20 +329,18 @@ val typingApiModule = module {
             TypeUnionMember.serializer()
         )
     }
-    single<KtorApi<CompositeID>> {
-        CompositeIdEndpointImpl(
-            get<DLL<CompositeID,  TypeVarConstraint>>(),
+    single<KtorApi<ULong>> {
+        ULongIdEndpointImpl(
+            get<DLL<ULong, TypeVarConstraint>>(),
             get<DtoValidator<TypeVarConstraint>>(),
-            get<CompositeIdDaoDelegate<TypeVarConstraint, TypeVarConstraintEntity>>(),
             "typevar-constraint",
             TypeVarConstraint.serializer()
         )
     }
-    single<KtorApi<CompositeID>> {
-        CompositeIdEndpointImpl(
-            get<DLL<CompositeID,  TypeVarBound>>(),
+    single<KtorApi<ULong>> {
+        ULongIdEndpointImpl(
+            get<DLL<ULong, TypeVarBound>>(),
             get<DtoValidator<TypeVarBound>>(),
-            get<CompositeIdDaoDelegate<TypeVarBound, TypeVarBoundEntity>>(),
             "typevar-bound",
             TypeVarBound.serializer()
         )
@@ -350,37 +356,58 @@ val typingApiModule = module {
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, CallableParameter>>(), get<DtoValidator<CallableParameter>>(), "callable-parameter", CallableParameter.serializer()
+            get<DLL<ULong, CallableParameter>>(),
+            get<DtoValidator<CallableParameter>>(),
+            "callable-parameter",
+            CallableParameter.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, TypeSchemaRef>>(), get<DtoValidator<TypeSchemaRef>>(), "schema-ref", TypeSchemaRef.serializer()
+            get<DLL<ULong, TypeSchemaRef>>(),
+            get<DtoValidator<TypeSchemaRef>>(),
+            "schema-ref",
+            TypeSchemaRef.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, TypeParameter>>(), get<DtoValidator<TypeParameter>>(), "type-parameter", TypeParameter.serializer()
+            get<DLL<ULong, TypeParameter>>(),
+            get<DtoValidator<TypeParameter>>(),
+            "type-parameter",
+            TypeParameter.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, TypeNode>>(), get<DtoValidator<TypeNode>>(), "type-node", TypeNode.serializer()
+            get<DLL<ULong, TypeNode>>(),
+            get<DtoValidator<TypeNode>>(),
+            "type-node",
+            TypeNode.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, CallableSignature>>(), get<DtoValidator<CallableSignature>>(), "callable-signature", CallableSignature.serializer()
+            get<DLL<ULong, CallableSignature>>(),
+            get<DtoValidator<CallableSignature>>(),
+            "callable-signature",
+            CallableSignature.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, ClassInheritance>>(), get<DtoValidator<ClassInheritance>>(), "class-inheritance", ClassInheritance.serializer()
+            get<DLL<ULong, ClassInheritance>>(),
+            get<DtoValidator<ClassInheritance>>(),
+            "class-inheritance",
+            ClassInheritance.serializer()
         )
     }
     single<KtorApi<ULong>> {
         ULongIdEndpointImpl(
-            get<DLL<ULong, CallableParameter>>(), get<DtoValidator<CallableParameter>>(), "callable-parameter", CallableParameter.serializer()
+            get<DLL<ULong, CallableParameter>>(),
+            get<DtoValidator<CallableParameter>>(),
+            "callable-parameter",
+            CallableParameter.serializer()
         )
     }
 }

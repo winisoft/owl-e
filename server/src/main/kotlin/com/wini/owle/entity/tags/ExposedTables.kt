@@ -44,7 +44,7 @@ object PackageTags : CompositeIdTable("tagged_packages") {
     val distribution = reference("distribution", Distributions)
 
     /** Version half of the package key; the pair below is the constraint the database has. */
-    val packageVersion = ulong("package_id")
+    val packageVersion = ulong("package_id").entityId()
     val tag = reference("tag_id", Tags)
     override val primaryKey = PrimaryKey(distribution, packageVersion, tag)
 

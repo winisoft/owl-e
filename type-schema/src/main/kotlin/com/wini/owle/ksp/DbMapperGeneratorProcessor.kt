@@ -132,7 +132,9 @@ class DbMapperGeneratorProcessor(
             .toList()
 
         if (entities.isEmpty()) {
-            logger.warn("[mapper-gen] no *Entity declarations found; nothing to generate")
+            // The server module always has entities, so an empty round means KSP handed us a
+            // partial view. Emitting nothing would delete every mapper; fail loudly instead.
+            logger.error("[mapper-gen] no *Entity declarations found - refusing to wipe generated mappers")
             return emptyList()
         }
 
@@ -217,6 +219,10 @@ class DbMapperGeneratorProcessor(
         if (emitted.isNotEmpty()) {
             runCatching { writeKoinModule(emitted) }
                 .onFailure { logger.warn("[mapper-gen] koin module: ${it.message}") }
+            runCatching { writeRepoModule(emitted) }
+                .onFailure { logger.warn("[mapper-gen] repo module: ${it.message}") }
+            runCatching { writeServiceModule(emitted) }
+                .onFailure { logger.warn("[mapper-gen] service module: ${it.message}") }
         }
 
         logger.warn("[mapper-gen] generated ${emitted.size} mappers; skipped ${skipped.size}")
@@ -439,7 +445,11 @@ class DbMapperGeneratorProcessor(
         b.appendLine("        )")
         b.appendLine("}")
 
-        codeGenerator.createNewFile(Dependencies(aggregating = false), TARGET_PACKAGE, mapper(dtoName))
+        // Aggregating: every mapper is derived from the whole entity+DTO set (the closure pass
+        // decides what is emittable), and KSP only hands an incremental round the full file list
+        // when an output claims to aggregate. With `aggregating = false` a round triggered by an
+        // unrelated edit saw zero entities and silently deleted all of them.
+        codeGenerator.createNewFile(Dependencies(aggregating = true), TARGET_PACKAGE, mapper(dtoName))
             .bufferedWriter().use { it.write(b.toString()) }
     }
 
@@ -450,6 +460,77 @@ class DbMapperGeneratorProcessor(
      * cannot drift out of step with the mappers: if a mapper is skipped, no binding is produced
      * for it, and nothing references one that does not exist.
      */
+    /**
+     * The repository bindings for everything that was emitted.
+     *
+     * `bindGenericRepo` is entirely mechanical - one line per (id kind, entity) - so keeping it
+     * hand-written only bought the chance to drift, which is exactly what happened: the file
+     * still named `PhaseEntity`, `ToolParamEntity` and `TypeParameterEntity` long after the
+     * entity layer renamed them.
+     */
+    private fun writeRepoModule(plans: List<Plan>) {
+        val b = StringBuilder()
+        b.appendLine("package $TARGET_PACKAGE").appendLine()
+        b.appendLine("import com.wini.owle.repo.bindGenericRepo")
+        if (plans.any { it.idType == "CompositeID" }) {
+            b.appendLine("import org.jetbrains.exposed.v1.core.dao.id.CompositeID")
+        }
+        plans.map { it.entity.qualifiedName!!.asString() }.distinct().sorted()
+            .forEach { b.appendLine("import $it") }
+        b.appendLine()
+        b.appendLine("import org.koin.dsl.module").appendLine()
+        b.appendLine("/** Generated repository bindings for the ${plans.size} mapped entities. Do not edit. */")
+        b.appendLine("val generatedRepoModule = module {")
+        plans.sortedBy { it.entity.simpleName.asString() }.forEach { p ->
+            val e = p.entity.simpleName.asString()
+            b.appendLine("    bindGenericRepo<${p.idType}, $e>($e)")
+        }
+        b.appendLine("}")
+
+        codeGenerator.createNewFile(Dependencies(aggregating = true), TARGET_PACKAGE, "GeneratedRepoModule")
+            .bufferedWriter().use { it.write(b.toString()) }
+    }
+
+    /**
+     * The service bindings for everything that was emitted. Same reasoning as [writeRepoModule];
+     * the helper to call is chosen by the id kind the mapper was already built around.
+     */
+    private fun writeServiceModule(plans: List<Plan>) {
+        val helper = { idType: String ->
+            when (idType) {
+                "CompositeID" -> "bindCompositeIdGenericService"
+                "String" -> "bindGenericStringIdService"
+                else -> "bindGenericULongService"
+            }
+        }
+        val b = StringBuilder()
+        b.appendLine("package $TARGET_PACKAGE").appendLine()
+        b.appendLine("import com.wini.owle.mapper.DbMapper")
+        b.appendLine("import com.wini.owle.services.bindCompositeIdGenericService")
+        b.appendLine("import com.wini.owle.services.bindGenericStringIdService")
+        b.appendLine("import com.wini.owle.services.bindGenericULongService")
+        if (plans.any { it.idType == "CompositeID" }) {
+            b.appendLine("import org.jetbrains.exposed.v1.core.dao.id.CompositeID")
+        }
+        plans.flatMap { listOf(it.dto.qualifiedName!!.asString(), it.entity.qualifiedName!!.asString()) }
+            .distinct().sorted().forEach { b.appendLine("import $it") }
+        b.appendLine()
+        b.appendLine("import org.koin.dsl.module").appendLine()
+        b.appendLine("/** Generated service bindings for the ${plans.size} mapped types. Do not edit. */")
+        b.appendLine("val generatedServiceModule = module {")
+        plans.sortedBy { it.dto.simpleName.asString() }.forEach { p ->
+            val d = p.dto.simpleName.asString()
+            val e = p.entity.simpleName.asString()
+            b.appendLine("    ${helper(p.idType)}<$d, $e> {")
+            b.appendLine("        get<DbMapper<${p.idType}, $d, $e>>()")
+            b.appendLine("    }")
+        }
+        b.appendLine("}")
+
+        codeGenerator.createNewFile(Dependencies(aggregating = true), TARGET_PACKAGE, "GeneratedServiceModule")
+            .bufferedWriter().use { it.write(b.toString()) }
+    }
+
     private fun writeKoinModule(plans: List<Plan>) {
         val b = StringBuilder()
         b.appendLine("package $TARGET_PACKAGE").appendLine()

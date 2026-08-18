@@ -55,9 +55,6 @@ import com.wini.owle.entity.typing.TypeVarConstraints
 import com.wini.owle.entity.typing.TypeVarVariances
 import com.wini.owle.entity.user.PaymentMethods
 import com.wini.owle.entity.user.Users
-import com.wini.owle.entity.workflows.PhaseRelations
-import com.wini.owle.entity.workflows.Phases
-import com.wini.owle.entity.workflows.StepDefaultRoutes
 import com.wini.owle.entity.workflows.Steps
 import com.wini.owle.entity.workflows.WorkflowFolderRelations
 import com.wini.owle.entity.workflows.WorkflowFolders
@@ -164,7 +161,6 @@ object TestHelper {
         )
 
         val StepImplicatedTables: List<IdTable<*>> = listOf(
-            StepDefaultRoutes,
             WorkflowJunctions,
             StepTags,
             Steps
@@ -364,10 +360,6 @@ object TestHelper {
             WorkflowJunctions
         )
 
-        val StepDefaultRouteImplicatedTables: List<IdTable<*>> = listOf(
-            StepDefaultRoutes
-        )
-
         // 7. Data‑Point‑Injection & Benchmark‑Reports
         val DataPointInjectionImplicatedTables: List<IdTable<*>> = listOf(
             DataPointInjections
@@ -434,7 +426,6 @@ object TestHelper {
             WorkflowFolderRelationImplicatedTables,
             PhaseRelationImplicatedTables,
             WorkflowJunctionImplicatedTables,
-            StepDefaultRouteImplicatedTables,
             DataPointInjectionImplicatedTables,
             BenchmarkReportImplicatedTables,
         ).flatten()

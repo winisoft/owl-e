@@ -27,7 +27,13 @@ class PackageTagEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
     /**
      * The version half of the package key.
      */
-    var packageVersion by VersionEntity referencedOn PackageTags.packageVersion
+    /**
+     * Version half of the package key. Read-only: it arrives with the composite id at
+     * construction, and the database enforces it only as part of the (distribution, version)
+     * foreign key into `packages`.
+     */
+    val packageVersion: VersionEntity
+        get() = VersionEntity[id.value[PackageTags.packageVersion].value]
 
     /**
      * The tag associated with the package

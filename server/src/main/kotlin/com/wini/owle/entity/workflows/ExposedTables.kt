@@ -66,6 +66,15 @@ object Steps : ULongIdTable("steps") {
     val workflow = reference("workflow_id", Workflows)
     val parentGrouper = reference("parent_grouper_id", Groupers).nullable()
     val tool = reference("tool_id", Tools)
+
+    /**
+     * The step that follows this one when nothing has redirected. Null means terminal.
+     *
+     * A composite FK against `uq_step_workflow` keeps the target inside the same workflow -
+     * the only integrity the separate `step_default_routes` table was providing, for a property
+     * that is relevant every time a step is considered at all.
+     */
+    val defaultNextStep = reference("default_next_step_id", Steps).nullable()
     val name = varchar("name", 255)
     val description = varchar("description", 8192).nullable()
     val isWorkflowHead = bool("is_workflow_head").default(false)

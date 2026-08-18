@@ -1,6 +1,5 @@
 package com.wini.owle.repo.runs.workflow
 
-import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
 import com.wini.owle.entity.user.UserEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
 import org.jetbrains.exposed.v1.dao.ULongEntity

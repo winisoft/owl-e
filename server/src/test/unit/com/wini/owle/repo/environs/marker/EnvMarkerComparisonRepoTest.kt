@@ -2,7 +2,6 @@ package com.wini.owle.repo.environs.marker
 
 import com.wini.owle.dto.environs.marker.EnvMarkerComparison
 import com.wini.owle.entity.environs.marker.EnvMarkerComparisonEntity
-import com.wini.owle.entity.environs.marker.EnvMarkerComparisons
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk

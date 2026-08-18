@@ -45,6 +45,11 @@ data class Step(
      */
     val parentGrouper: Grouper?,
 
+    /**
+     * The step that follows when nothing has redirected. Null means this step is terminal.
+     */
+    val defaultNextStep: Step?,
+
 
     val posX: Double,
 

@@ -2,8 +2,8 @@ package com.wini.owle.entity.workflows
 
 import com.wini.owle.entity.steps.DataPointWriteEntity
 import com.wini.owle.entity.steps.DataPointWrites
-import com.wini.owle.entity.steps.StepDataPointReadEntity
-import com.wini.owle.entity.steps.StepDataPointReads
+import com.wini.owle.entity.steps.DataPointReadEntity
+import com.wini.owle.entity.steps.DataPointReads
 import com.wini.owle.entity.typing.TypeNodeEntity
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.dao.ULongEntity
@@ -71,8 +71,8 @@ class DataPointEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Every step argument this data point supplies.
      */
-    val readsFrom: SizedIterable<StepDataPointReadEntity>
-            by StepDataPointReadEntity referrersOn StepDataPointReads.dataPoint
+    val readsFrom: SizedIterable<DataPointReadEntity>
+            by DataPointReadEntity referrersOn DataPointReads.dataPoint
 
     /**
      * Every step write that targets this data point.

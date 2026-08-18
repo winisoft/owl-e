@@ -20,7 +20,6 @@ import com.wini.owle.entity.runs.test.BenchmarkReportEntity
 import com.wini.owle.entity.runs.test.TestCaseEntity
 import com.wini.owle.entity.runs.test.TestOutcomeExpectationEntity
 import com.wini.owle.entity.runs.test.TestInputEntity
-import com.wini.owle.entity.runs.workflow.WorkflowRunEntity
 import com.wini.owle.entity.runs.workflow.TestResultEntity
 import com.wini.owle.entity.steps.*
 import com.wini.owle.entity.transforms.*

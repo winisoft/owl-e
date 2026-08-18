@@ -48,8 +48,8 @@ class InquisitionEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * Data points bound to this predicate's parameters.
      */
-    val dataPointReads: SizedIterable<InquisitionDataPointReadEntity>
-            by InquisitionDataPointReadEntity referrersOn InquisitionDataPointReads.inquisition
+    val dataPointReads: SizedIterable<DataPointReadEntity>
+            by DataPointReadEntity optionalReferrersOn DataPointReads.inquisition
 
     /**
      * Where this inquisition routes within the same workflow, if that is its outcome.

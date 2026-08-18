@@ -19,10 +19,29 @@ class PackageDistRequirementEntity(id: EntityID<ULong>) : ULongEntity(id) {
     companion object : ULongEntityClass<PackageDistRequirementEntity>(PackageDistRequirements)
 
     var dependentDistribution by DistributionEntity referencedOn PackageDistRequirements.dependentDist
-    var dependentVersion by VersionEntity referencedOn PackageDistRequirements.dependentVersion
+    /** Raw version half of the dependent package's key. */
+    var dependentVersionId by PackageDistRequirements.dependentVersion
+
+    /**
+     * Version of the package that declares the dependency. Backed by [dependentVersionId] rather
+     * than a foreign key: the database constrains (dependent_dist, dependent_package_id) into
+     * `packages`, not this column alone.
+     */
+    var dependentVersion: VersionEntity
+        get() = VersionEntity[dependentVersionId]
+        set(value) { dependentVersionId = value.id.value }
 
     var requiredDistribution by DistributionEntity referencedOn PackageDistRequirements.requiredDist
-    var requiredVersion by VersionEntity optionalReferencedOn PackageDistRequirements.requiredVersion
+    /** Raw version half of the required package's key; null means "any version". */
+    var requiredVersionId by PackageDistRequirements.requiredVersion
+
+    /**
+     * Version of the required package, or null when any version satisfies the dependency.
+     * Backed by [requiredVersionId] for the same reason as [dependentVersion].
+     */
+    var requiredVersion: VersionEntity?
+        get() = requiredVersionId?.let { VersionEntity[it] }
+        set(value) { requiredVersionId = value?.id?.value }
 
     /**
      * The extra being pulled in, for requirements written as `dist[extra]`.

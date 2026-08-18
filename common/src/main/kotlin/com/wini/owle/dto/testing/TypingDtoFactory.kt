@@ -64,6 +64,8 @@ import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.dto.workflows.enums.StoreMethod
 import com.wini.owle.dto.runs.test.TestExpectedOutcome
 import com.wini.owle.dto.runs.workflow.TestResult
+import com.wini.owle.dto.typing.CallableParameter
+import com.wini.owle.dto.typing.CallableSignature
 
 /**
  * Canned [typing] DTO instances for tests.
@@ -156,4 +158,40 @@ object TypingDtoFactory {
             typeVarNode = typeVariableDeclaration
         )
     }
+
+    fun callableSignatureDto(
+        id: ULong = 1UL,
+        typeNode: TypeNode = typeNode(),
+        returnTypeNode: TypeNode = typeNode(),
+        docstring: String? = "An example callable.",
+        isStatic: Boolean = false,
+        isClassmethod: Boolean = false
+    ): CallableSignature = CallableSignature(
+        id = id,
+        typeNode = typeNode,
+        returnTypeNode = returnTypeNode,
+        docstring = docstring,
+        isStatic = isStatic,
+        isClassmethod = isClassmethod
+    )
+
+    fun callableParameterDto(
+        id: ULong = 1UL,
+        signature: CallableSignature = callableSignatureDto(),
+        paramTypeNode: TypeNode = typeNode(),
+        position: UInt = 0u,
+        paramName: String = "url",
+        isVarArg: Boolean = false,
+        isKwarg: Boolean = false,
+        defaultValueText: String? = null
+    ): CallableParameter = CallableParameter(
+        id = id,
+        signature = signature,
+        paramTypeNode = paramTypeNode,
+        position = position,
+        paramName = paramName,
+        isVarArg = isVarArg,
+        isKwarg = isKwarg,
+        defaultValueText = defaultValueText
+    )
 }

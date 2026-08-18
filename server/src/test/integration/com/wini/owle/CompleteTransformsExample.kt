@@ -9,7 +9,6 @@ import com.wini.owle.entity.environs.PythonVersions
 import com.wini.owle.entity.environs.Versions
 import com.wini.owle.entity.environs.version.VersionEntity
 import com.wini.owle.entity.steps.DataPointWrites
-import com.wini.owle.entity.steps.ToolParams
 import com.wini.owle.entity.steps.Tools
 import com.wini.owle.entity.transforms.TransformArgEntity
 import com.wini.owle.entity.transforms.TransformEntity
@@ -20,8 +19,6 @@ import com.wini.owle.entity.typing.TypeNodeEntity
 import com.wini.owle.entity.typing.TypeNodes
 import com.wini.owle.entity.user.Users
 import com.wini.owle.entity.workflows.DataPoints
-import com.wini.owle.entity.workflows.PhaseRelations
-import com.wini.owle.entity.workflows.Phases
 import com.wini.owle.entity.workflows.Steps
 import com.wini.owle.entity.workflows.WorkflowRequirements
 import com.wini.owle.entity.workflows.Workflows
@@ -31,7 +28,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 
 
-abstract class CompleteExampleIntegration {
+abstract class CompleteTransformsExampleIntegration {
 
     @BeforeEach
     fun setUp() {
@@ -47,7 +44,6 @@ abstract class CompleteExampleIntegration {
             implicatedTables = listOf(
                 DataPointWrites,
                 Steps,
-                ToolParams,
                 Tools,
                 TypeInstantiationArgs,
                 TypeInstantiations,
@@ -57,8 +53,6 @@ abstract class CompleteExampleIntegration {
                 TypeNodes,
                 DistributionPackages,
                 Distributions,
-                PhaseRelations,
-                Phases,
                 Workflows,
                 PythonVersions,
                 Users,
@@ -347,7 +341,7 @@ abstract class CompleteExampleIntegration {
                 description =
                     "Returns a substring between two provided indexes; if indexes are out of bounds or ordered incorrectly, returns None instead of throwing an error"
                 examples =
-                    "<pre style=\"background-color:#000000; color:#A9B7C6; font-family:Consolas, monospace\"><span style=\"color:#BBB529\">&gt;&gt;&gt;</span> <span style=\"color:#A9B7C6\">username</span> = <span style=\"color:#6A8759\">''Dr. Lucinda Featherstone, PhD''</span><span style=\"color:#BBB529\">&gt;&gt;&gt;</span> <span style=\"color:#A9B7C6\">username</span>[<span style=\"color:#6897BB\">4</span>:<span style=\"color:#6897BB\">11</span>]<span style=\"color:#6A8759\">''Lucinda''</span></pre>');
+                    "<pre style=\"background-color:#000000; color:#A9B7C6; font-family:Consolas, monospace\"><span style=\"color:#BBB529\">&gt;&gt;&gt;</span> <span style=\"color:#A9B7C6\">username</span> = <span style=\"color:#6A8759\">''Dr. Lucinda Featherstone, PhD''</span><span style=\"color:#BBB529\">&gt;&gt;&gt;</span> <span style=\"color:#A9B7C6\">username</span>[<span style=\"color:#6897BB\">4</span>:<span style=\"color:#6897BB\">11</span>]<span style=\"color:#6A8759\">''Lucinda''</span></pre>"
             }
 
             TypeNodeEntity.new(1UL) {
@@ -361,7 +355,7 @@ abstract class CompleteExampleIntegration {
             TransformArgEntity.new(1UL) {
                 name = ""
                 description = ""
-                transformation = TransformEntity[36UL]
+                transform = TransformEntity[36UL]
                 typeNode = TypeNodeEntity[1UL]
             }
         }

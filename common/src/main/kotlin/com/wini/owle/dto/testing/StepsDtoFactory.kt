@@ -64,6 +64,7 @@ import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.dto.workflows.enums.StoreMethod
 import com.wini.owle.dto.runs.test.TestExpectedOutcome
 import com.wini.owle.dto.runs.workflow.TestResult
+import com.wini.owle.dto.typing.CallableParameter
 
 /**
  * Canned [steps] DTO instances for tests.
@@ -162,14 +163,25 @@ object StepsDtoFactory {
         )
     }
 
+    /**
+     * A read owned by a step. Pass [inquisition] instead (and `step = null`) for the other
+     * owner; the database CHECK allows exactly one.
+     */
     fun dataPointReadDto(
         id: ULong = 1UL,
-        step: Step = WorkflowsDtoFactory.stepDto(),
-        toolParam: ToolParam = toolParamDto(),
-        dataPoints: List<DataPoint> = emptyList()
+        step: Step? = WorkflowsDtoFactory.stepDto(),
+        inquisition: Inquisition? = null,
+        callableParameter: CallableParameter = TypingDtoFactory.callableParameterDto(),
+        dataPoint: DataPoint = WorkflowsDtoFactory.dataPointDto(),
+        transformOccurrence: TransformOccurrence? = null
     ) : DataPointRead {
         return DataPointRead(
-            id = id
+            id = id,
+            step = step,
+            inquisition = inquisition,
+            callableParameter = callableParameter,
+            dataPoint = dataPoint,
+            transformOccurrence = transformOccurrence
         )
     }
 

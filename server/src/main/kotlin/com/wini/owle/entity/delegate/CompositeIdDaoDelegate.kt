@@ -29,9 +29,8 @@ abstract class CompositeIdDaoDelegate<DTO: CompositeDto, E: CompositeEntity>(
      * @return The existing or newly created entity.
      */
     override fun findOrCreate(dto: DTO, applyProps: E.() -> Unit): E {
-        return extractId(dto).let { id ->
-            entityClass.findById(id)
-        } ?: entityClass.new {
+        val id = extractId(dto)
+        return entityClass.findById(id) ?: entityClass.new(id) {
             applyProps()
         }
     }

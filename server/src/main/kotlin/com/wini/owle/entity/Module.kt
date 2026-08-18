@@ -133,10 +133,10 @@ import org.koin.dsl.module
  * Some entities are deliberately unbound: the tables they map gained or changed a key shape in the
  * schema reconciliation, and their DTO counterparts have not caught up yet. Specifically —
  *
- *  - StepDataPointRead, InquisitionDataPointRead, DataPointWriteArg, TransformOccurrenceChain,
+ *  - DataPointWriteArg, TransformOccurrenceChain,
  *    CallableOwner, PackageExtra, MultiflowWorkflow, GrouperTag: composite-keyed, no DTO yet.
  *  - Grouper, Multiflow, TypeAlias, InquisitionStepRedirect, InquisitionJunctionRedirect,
- *    StepDefaultRoute: no DTO yet, or the DTO is still CompositeDto against a now ULong-keyed row.
+ *    no DTO yet, or the DTO is still CompositeDto against a now ULong-keyed row.
  *  - TypeVarBound / TypeVarConstraint / TypeVarVariance: entities are now ULong-keyed but their
  *    DTOs are still CompositeDto.
  *

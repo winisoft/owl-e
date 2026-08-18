@@ -17,8 +17,7 @@ import com.wini.owle.entity.environs.version.PythonVersionEntity
 import com.wini.owle.entity.environs.version.VersionEntity
 import com.wini.owle.entity.steps.DataPointWriteEntity
 import com.wini.owle.entity.steps.DataPointWrites
-import com.wini.owle.entity.steps.ToolParamEntity
-import com.wini.owle.entity.steps.ToolParams
+import com.wini.owle.entity.steps.ToolEntity
 import com.wini.owle.entity.steps.Tools
 import com.wini.owle.entity.typing.TypeGenericParamEntity
 import com.wini.owle.entity.typing.TypeGenericParams
@@ -32,13 +31,10 @@ import com.wini.owle.entity.user.UserEntity
 import com.wini.owle.entity.user.Users
 import com.wini.owle.entity.workflows.DataPointEntity
 import com.wini.owle.entity.workflows.DataPoints
-import com.wini.owle.entity.workflows.PhaseEntity
-import com.wini.owle.entity.workflows.PhaseRelationEntity
-import com.wini.owle.entity.workflows.PhaseRelations
-import com.wini.owle.entity.workflows.Phases
+import com.wini.owle.entity.workflows.GrouperEntity
+import com.wini.owle.entity.workflows.Groupers
 import com.wini.owle.entity.workflows.StepEntity
 import com.wini.owle.entity.workflows.Steps
-import com.wini.owle.entity.workflows.ToolEntity
 import com.wini.owle.entity.workflows.WorkflowEntity
 import com.wini.owle.entity.workflows.WorkflowRequirementEntity
 import com.wini.owle.entity.workflows.WorkflowRequirements
@@ -63,7 +59,6 @@ abstract class CompleteExampleIntegration {
         refreshTestDbData(implicatedTables = listOf(
             DataPointWrites,
             Steps,
-            ToolParams,
             Tools,
             TypeInstantiationArgs,
             TypeInstantiations,
@@ -73,8 +68,7 @@ abstract class CompleteExampleIntegration {
             TypeNodes,
             DistributionPackages,
             Distributions,
-            PhaseRelations,
-            Phases,
+            Groupers,
             Workflows,
             PythonVersions,
             Users,
@@ -105,16 +99,12 @@ abstract class CompleteExampleIntegration {
             }
 
             // --- Python Versions ---
-            PythonVersionEntity.new(11811449UL) {
-                isSupported = true
-            }
+            PythonVersionEntity.new(11811449UL){}
 
             // --- Users ---
             UserEntity.new(11711549UL) {
                 email = "wini@whatisnotis.com"
-                userName = "wini"
-                personalFirst = "What Is"
-                personalLast = "Not Is"
+                personalFirst = "wini"
                 password = "test1234"
                 oauthProvider = OauthProvider.GOOGLE
                 userStatus = UserStatus.ACTIVE
@@ -129,33 +119,24 @@ abstract class CompleteExampleIntegration {
                 parentFolder = null
             }
 
-            // --- Phases ---
-            PhaseEntity.new(11210449UL) {
+            // --- Groupers ---
+            GrouperEntity.new(11210449UL) {
                 workflow = WorkflowEntity[11910249UL]
                 name = "Data Prep"
                 description = "Perform Steps that Prepare our data set prior to its proper utilization"
                 displayOrder = 0
             }
-            PhaseEntity.new(11210450UL) {
+            GrouperEntity.new(11210450UL) {
                 workflow = WorkflowEntity[11910249UL]
                 name = "Prepare Initial Data Set"
                 description = "Fetch and Verify the Json Data"
                 displayOrder = 0
             }
-            PhaseEntity.new(11210451UL) {
+            GrouperEntity.new(11210451UL) {
                 workflow = WorkflowEntity[11910249UL]
                 name = "Curate Data"
                 description = "Restructure the collected data set to provide a greater utility for our use case"
                 displayOrder = 1
-            }
-
-            PhaseRelationEntity.new {
-                parent = PhaseEntity[11210449UL]
-                child = PhaseEntity[11210450UL]
-            }
-            PhaseRelationEntity.new {
-                parent = PhaseEntity[11210449UL]
-                child = PhaseEntity[11210451UL]
             }
 
             // --- Distributions ---
@@ -404,32 +385,32 @@ abstract class CompleteExampleIntegration {
 
             TypeInstantiationArgEntity.new(1169749UL) {
                 instantiation = TypeInstantiationEntity[11610549UL] // List[Dict[str, Stats]]
-                paramPosition = 0
+                paramPosition = 0U
                 paramNode = TypeNodeEntity[11611052UL] // Dict[str, Stats]
             }
             TypeInstantiationArgEntity.new(1169750UL) {
                 instantiation = TypeInstantiationEntity[11610550UL] // Dict[str, Stats]
-                paramPosition = 0
+                paramPosition = 0U
                 paramNode = TypeNodeEntity[11611046UL] // str
             }
             TypeInstantiationArgEntity.new(1169751UL) {
                 instantiation = TypeInstantiationEntity[11610550UL] // Dict[str, Stats]
-                paramPosition = 1
+                paramPosition = 1U
                 paramNode = TypeNodeEntity[11611050UL] // Stats
             }
             TypeInstantiationArgEntity.new(1169752UL) {
                 instantiation = TypeInstantiationEntity[11610551UL] // List[Record]
-                paramPosition = 0
+                paramPosition = 0U
                 paramNode = TypeNodeEntity[11611053UL] // Record
             }
             TypeInstantiationArgEntity.new(1169753UL) {
                 instantiation = TypeInstantiationEntity[11610552UL] // Mapping[str, Stats]
-                paramPosition = 0
+                paramPosition = 0U
                 paramNode = TypeNodeEntity[11611046UL] // str
             }
             TypeInstantiationArgEntity.new(1169754UL) {
                 instantiation = TypeInstantiationEntity[11610552UL] // Mapping[str, Stats]
-                paramPosition = 1
+                paramPosition = 1U
                 paramNode = TypeNodeEntity[11611050UL] // Stats
             }
 
@@ -496,69 +477,69 @@ abstract class CompleteExampleIntegration {
                 returnTypeNode = TypeNodeEntity[11611046UL]
             }
 
-            ToolParamEntity.new(11611249UL) {
-                tool = ToolEntity[11611149UL]
-                name = "url"
-                typeNode= TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611250UL) {
-                tool = ToolEntity[11611150UL]
-                name = "data"
-                typeNode=TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611251UL) {
-                tool = ToolEntity[11611150UL]
-                name = "schema_uri"
-                typeNode=TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611252UL) {
-                tool = ToolEntity[11611151UL]
-                name = "data"
-                typeNode=TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611253UL) {
-                tool = ToolEntity[11611152UL]
-                name = "records"
-                typeNode=TypeNodeEntity[11611058UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611254UL) {
-                tool = ToolEntity[11611152UL]
-                name = "conn"
-                typeNode=TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611255UL) {
-                tool = ToolEntity[11611153UL]
-                name = "rows"
-                typeNode=TypeNodeEntity[11611058UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611256UL) {
-                tool = ToolEntity[11611153UL]
-                name = "group_by"
-                typeNode=TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611257UL) {
-                tool = ToolEntity[11611154UL]
-                name = "stats"
-                typeNode=TypeNodeEntity[11611055UL]
-                defaultValue=null
-            }
-            ToolParamEntity.new(11611258UL) {
-                tool = ToolEntity[11611154UL]
-                name = "bucket"
-                typeNode=TypeNodeEntity[11611046UL]
-                defaultValue=null
-            }
+//            ToolParamEntity.new(11611249UL) {
+//                tool = ToolEntity[11611149UL]
+//                name = "url"
+//                typeNode= TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611250UL) {
+//                tool = ToolEntity[11611150UL]
+//                name = "data"
+//                typeNode=TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611251UL) {
+//                tool = ToolEntity[11611150UL]
+//                name = "schema_uri"
+//                typeNode=TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611252UL) {
+//                tool = ToolEntity[11611151UL]
+//                name = "data"
+//                typeNode=TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611253UL) {
+//                tool = ToolEntity[11611152UL]
+//                name = "records"
+//                typeNode=TypeNodeEntity[11611058UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611254UL) {
+//                tool = ToolEntity[11611152UL]
+//                name = "conn"
+//                typeNode=TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611255UL) {
+//                tool = ToolEntity[11611153UL]
+//                name = "rows"
+//                typeNode=TypeNodeEntity[11611058UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611256UL) {
+//                tool = ToolEntity[11611153UL]
+//                name = "group_by"
+//                typeNode=TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611257UL) {
+//                tool = ToolEntity[11611154UL]
+//                name = "stats"
+//                typeNode=TypeNodeEntity[11611055UL]
+//                defaultValue=null
+//            }
+//            ToolParamEntity.new(11611258UL) {
+//                tool = ToolEntity[11611154UL]
+//                name = "bucket"
+//                typeNode=TypeNodeEntity[11611046UL]
+//                defaultValue=null
+//            }
             StepEntity.new(11511649UL) {
                 workflow = WorkflowEntity[11910249UL]
-                parentPhase = PhaseEntity[11210450UL]
+                parentGrouper  = GrouperEntity[11210450UL]
                 tool = ToolEntity[11611149UL]
                 name = "Fetch Remote JSON"
                 description = "Flatten and restructure fetched data"
@@ -567,7 +548,7 @@ abstract class CompleteExampleIntegration {
             }
             StepEntity.new(11511650UL) {
                 workflow = WorkflowEntity[11910249UL]
-                parentPhase = PhaseEntity[11210450UL]
+                parentGrouper = GrouperEntity[11210450UL]
                 tool = ToolEntity[11611150UL]
                 name = "Schema Validate JSON"
                 description = "Join on historical metadata via DB lookup"
@@ -575,7 +556,7 @@ abstract class CompleteExampleIntegration {
             }
             StepEntity.new(11511651UL) {
                 workflow = WorkflowEntity[11910249UL]
-                parentPhase = PhaseEntity[11210451UL]
+                parentGrouper = GrouperEntity[11210451UL]
                 tool = ToolEntity[11611151UL]
                 name = "Parse & Normalize Data"
                 description = "Flatten and restructure fetched data"
@@ -583,7 +564,7 @@ abstract class CompleteExampleIntegration {
             }
             StepEntity.new(11511652UL) {
                 workflow = WorkflowEntity[11910249UL]
-                parentPhase = PhaseEntity[11210451UL]
+                parentGrouper = GrouperEntity[11210451UL]
                 tool = ToolEntity[11611152UL]
                 name = "Enrich from Database"
                 description = "Join on historical metadata via DB lookup"
@@ -591,7 +572,7 @@ abstract class CompleteExampleIntegration {
             }
             StepEntity.new(11511653UL) {
                 workflow = WorkflowEntity[11910249UL]
-                parentPhase = null
+                parentGrouper = null
                 tool = ToolEntity[11611153UL]
                 name = "Compute Summary Stats"
                 description = "Group data and compute aggregates like mean, median, count"
@@ -599,7 +580,7 @@ abstract class CompleteExampleIntegration {
             }
             StepEntity.new(11511654UL) {
                 workflow = WorkflowEntity[11910249UL]
-                parentPhase = null
+                parentGrouper = null
                 tool = ToolEntity[11611154UL]
                 name = "Render & Upload Plot"
                 description = "Generate visual output and upload to S3"

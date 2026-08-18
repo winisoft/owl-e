@@ -248,8 +248,6 @@ object Schema {
         // body is TEXT (65,535).
     }
 
-    object InquisitionDataPointRead {
-    }
 
     object InquisitionStepRedirect {
     }
@@ -257,8 +255,6 @@ object Schema {
     object InquisitionJunctionRedirect {
     }
 
-    object StepDataPointRead {
-    }
 
     object ErrorWatchFn {
     }
@@ -277,8 +273,7 @@ object Schema {
     object DataPointWriteArg {
     }
 
-    /** Retired — the old `data_point_reads`/`tool_param_id` shape no longer exists; superseded
-     *  by [StepDataPointRead] and [InquisitionDataPointRead], both keyed on callable_parameter_id. */
+    /** One read table again, discriminated by owner; see `data_point_reads`. */
     object DataPointRead {
     }
 

@@ -25,7 +25,7 @@ data class TransformOccurrence(
     val transform: Transform,
 
     /**
-     * Describes the type of occurrence for the transformation (e.g., 'provision', 'revision').
+     * Which kind of site initiated this application: a read, a write, an inquisition, or an injection.
      */
     val initiator: TransformOccurrenceInitiator,
 

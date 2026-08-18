@@ -28,7 +28,7 @@ object TransformArgs : ULongIdTable("transform_args") {
 
 object TransformOccurrences : ULongIdTable("transform_occurrences") {
     val transform = reference("transform_id", Transforms)
-    val occurrence = enumerationByName("occurrence", 16, TransformOccurrenceInitiator::class)
+    val initiator = enumerationByName("initiator", 24, TransformOccurrenceInitiator::class)
     val dataPoint = reference("dataPointId", DataPoints).nullable()
     val toolResultStep = reference("toolResultStepId", Steps).nullable()
 

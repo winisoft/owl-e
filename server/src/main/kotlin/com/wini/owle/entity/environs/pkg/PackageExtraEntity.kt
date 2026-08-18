@@ -18,7 +18,13 @@ class PackageExtraEntity(id: EntityID<CompositeID>) : CompositeEntity(id) {
 
     var distribution by DistributionEntity referencedOn PackageExtras.distribution
 
-    var packageVersion by VersionEntity referencedOn PackageExtras.packageVersion
+    /**
+     * Version half of the package key. Read-only: it arrives with the composite id at
+     * construction, and the database enforces it only as part of the (distribution, version)
+     * foreign key into `packages`.
+     */
+    val packageVersion: VersionEntity
+        get() = VersionEntity[id.value[PackageExtras.packageVersion].value]
 
     /** Part of the composite key, so read-only here: the DaoDelegate sets it via the CompositeID. */
     val name: String get() = id.value[PackageExtras.name].value
