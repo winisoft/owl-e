@@ -1,5 +1,6 @@
 package com.wini.owle.ksp
 
+import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.wini.owle.content.doc.DtoModelDoc
@@ -8,6 +9,8 @@ import com.wini.owle.content.doc.OwleErrorDoc
 import com.wini.owle.ksp.utils.OwleSymbolCollector
 import com.wini.owle.ksp.utils.ext.codeAndMessage
 import com.wini.owle.ksp.writer.ErrorResFileWriter
+import com.wini.owle.ksp.writer.KnowledgeBaseErrorFileWriter
+import com.wini.owle.ksp.writer.ReferenceSiteWriter
 import com.wini.owle.ksp.writer.KnowledgeBaseModelFileWriter
 import com.wini.owle.schema.wrapper.annotation.error.FieldConstraintAnnotation
 import com.wini.owle.schema.wrapper.declaration.ModelDeclaration
@@ -38,13 +41,20 @@ class ModelSchemaProcessor(
 
             ErrorResFileWriter(codeGenerator, logger).generate(errors)
 
+            val docs = models.map { it to buildDtoDoc(it, errors) }
+
             KnowledgeBaseModelFileWriter(codeGenerator, logger).apply {
-                models.map {
-                    it to buildDtoDoc(it, errors)
-                }.forEach { (cd, doc) ->
-                    generate(cd, doc)
-                }
+                docs.forEach { (cd, doc) -> generate(cd, doc) }
             }
+
+            KnowledgeBaseErrorFileWriter(codeGenerator, logger)
+                .generate(errors, docs.map { (_, doc) -> doc })
+
+            ReferenceSiteWriter(codeGenerator, logger).generate(
+                models = docs.map { (cd, doc) -> ReferenceSiteWriter.ModelEntry(cd, doc) },
+                errors = errors,
+                endpointAnnotationOf = ::endpointAnnotationOf
+            )
         }
 
         hasGenerated = true
@@ -153,6 +163,28 @@ class ModelSchemaProcessor(
 //
 //    }
 
+    /**
+     * The `(id, tags, path)` a class declares via `@ApiEndpointDefinition`, or null when it
+     * declares none. Read straight off the annotation rather than through the resource bundle:
+     * the path is a literal in source, and routing must not depend on a lookup that can miss.
+     */
+    private fun endpointAnnotationOf(
+        declaration: KSClassDeclaration
+    ): Triple<String, List<String>, String>? {
+        val anno = declaration.annotations.firstOrNull {
+            it.annotationType.resolve().declaration.qualifiedName?.asString() ==
+                "com.wini.owle.schema.api.ApiEndpointDefinition"
+        } ?: return null
+
+        fun arg(name: String): Any? = anno.arguments.firstOrNull { it.name?.asString() == name }?.value
+
+        val id = arg("id") as? String ?: return null
+        @Suppress("UNCHECKED_CAST")
+        val tags = (arg("tags") as? List<Any?>)?.mapNotNull { it as? String }.orEmpty()
+        val path = arg("path") as? String ?: ""
+        return Triple(id, tags, path)
+    }
+
 }
 
 class ModelSchemaProcessorProvider : SymbolProcessorProvider {
@@ -165,4 +197,6 @@ class ModelSchemaProcessorProvider : SymbolProcessorProvider {
             environment.logger
         )
     }
+
+
 }

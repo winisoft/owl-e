@@ -19,14 +19,12 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class ErrorWatchFn(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     val errorWatch: ErrorWatch,
 
     val functionNode: TypeNode,
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    val position: ULong
+        val position: ULong
 
 ) : ULongDto

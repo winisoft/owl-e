@@ -27,7 +27,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class PaymentMethod(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
     /**
      * Unique identifier for the payment method, sourced from Stripe.

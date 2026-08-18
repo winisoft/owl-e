@@ -19,7 +19,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class DataPointWrite(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

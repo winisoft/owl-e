@@ -12,7 +12,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TestOutcomeExpectation(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     //val testCase: TestCase,

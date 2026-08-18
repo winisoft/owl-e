@@ -15,7 +15,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TypeParameter(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

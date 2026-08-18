@@ -11,11 +11,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PhaseTag(
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    override val subjectId: ULong,
+        override val subjectId: ULong,
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    override val tagId: ULong
+        override val tagId: ULong
 
 ) : TagSubject {
 

@@ -10,13 +10,17 @@ interface OwleError {
 
     /**
      * A unique string identifier for errors across the app.
+     *
+     * Defaulted from the generated [owleErrorResources] table, which is built from this type's
+     * `@ErrorDefinition` key and the `.code` bound to it in `docres_en_US.properties`. Implementors
+     * declare their identity in the annotation, not by overriding this.
      */
-    val errorCode: String
+    val errorCode: String get() = owleErrorCodeOf(this::class.simpleName)
 
     /**
      * A simple human-readable explanation of the error. No attempt is made to provide the arguments of expected or actual values.
      */
-    val message: String
+    val message: String get() = owleErrorMessageOf(this::class.simpleName)
     
     /**
      * Additional insights, such as the class name and/or unique identifier of some offending object, he context in which the error 

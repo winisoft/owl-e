@@ -1,9 +1,5 @@
 package com.wini.owle.content.decorator
 
-import com.wini.owle.error.InconsistentOAuthId
-import com.wini.owle.error.InvalidOAuthProvider
-import com.wini.owle.error.PreventsTimeParadoxes
-
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)

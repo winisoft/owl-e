@@ -12,6 +12,8 @@ import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import com.wini.owle.schema.api.ApiEndpointDefinition
 import kotlinx.serialization.Serializable
+import com.wini.owle.schema.error.ConstraintDoubleRange
+import com.wini.owle.error.DoubleValueOoB
 
 /**
  * Represents a grouping within a workflow, a wrapper around members that are steps or other Groupers
@@ -24,8 +26,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Grouper(
 
-    @ConstraintSimple([PositiveValueULongError::class])
-    override val id: ULong = 0UL,
+        override val id: ULong = 0UL,
 
     /**
      * Workflow containing this grouper.
@@ -52,8 +53,10 @@ data class Grouper(
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.SizeLimits.LEN_1024)
     val description: String?,
 
+    @ConstraintDoubleRange(DoubleValueOoB::class, Schema.Canvas.MIN, Schema.Canvas.MAX)
     val posX: Double,
 
+    @ConstraintDoubleRange(DoubleValueOoB::class, Schema.Canvas.MIN, Schema.Canvas.MAX)
     val posY: Double,
 
 ) : ULongDto

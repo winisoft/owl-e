@@ -33,7 +33,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 //    oauthName = "oauthId")
 data class User(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

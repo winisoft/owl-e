@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owl-E Error Reference</title>
+<style>
+:root {
+  --ground:        #2B2B2B;  /* editor background */
+  --chrome:        #3C3F41;  /* tool window       */
+  --gutter:        #313335;  /* line-number strip */
+  --rule:          #4E5254;
+  --text:          #A9B7C6;  /* default text      */
+  --muted:         #808080;  /* line comment      */
+  --keyword:       #CC7832;  /* keyword orange    */
+  --constant:      #9876AA;  /* static final      */
+  --string:        #6A8759;  /* string literal    */
+  --number:        #6897BB;  /* numeric literal   */
+  --annotation:    #BBB529;  /* annotation        */
+  --identifier:    #FFC66D;  /* method name       */
+  --doc:           #629755;  /* doc comment       */
+  --link:          #589DF6;
+  --focus:         #466D94;
+
+  --mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+  --step--1: 0.78rem;
+  --step-0:  0.92rem;
+  --step-1:  1.05rem;
+  --step-2:  1.35rem;
+  --step-3:  1.9rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) minmax(0, 1fr);
+  gap: 0;
+  min-height: 100vh;
+  align-items: start;
+}
+
+/* --- tool window ------------------------------------------------------------------ */
+
+.rail {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+  background: var(--chrome);
+  border-right: 1px solid var(--rule);
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rail-title {
+  font-size: var(--step--1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+.rail nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.rail nav > ul > li > a { color: var(--keyword); }
+.rail nav ul ul { padding-left: 0.9rem; border-left: 1px solid var(--rule); margin-top: 0.15rem; }
+.rail nav ul ul a { color: var(--constant); font-size: var(--step--1); }
+.rail nav a { display: block; padding: 0.1rem 0.35rem; border-radius: 2px; }
+.rail nav a:hover { background: var(--gutter); text-decoration: none; }
+
+.count {
+  color: var(--number);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- editor pane ------------------------------------------------------------------ */
+
+.pane {
+  min-width: 0;
+  padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem) 6rem;
+  max-width: 100ch;
+}
+
+.doc-title {
+  font-size: var(--step-3);
+  font-weight: 700;
+  color: var(--identifier);
+  margin: 0 0 0.35rem;
+  text-wrap: balance;
+}
+
+.lede {
+  border-left: 3px solid var(--doc);
+  background: var(--gutter);
+  padding: 0.85rem 1.1rem;
+  margin: 1.25rem 0 0.75rem;
+  color: var(--doc);
+  font-style: italic;
+  max-width: 72ch;
+}
+
+.tally { color: var(--muted); font-size: var(--step--1); margin: 0 0 2.5rem; }
+.tally strong { color: var(--number); font-weight: 400; font-variant-numeric: tabular-nums; }
+
+.family { margin: 0 0 3rem; }
+
+.family > h2 {
+  font-size: var(--step-2);
+  font-weight: 700;
+  color: var(--keyword);
+  margin: 0;
+  padding-left: 0.85rem;
+  border-left: 3px solid var(--keyword);
+  text-wrap: balance;
+}
+
+.family > .blurb {
+  color: var(--muted);
+  margin: 0.6rem 0 1.75rem 0.85rem;
+  max-width: 68ch;
+}
+
+.entries { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.entry {
+  background: var(--gutter);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.entry > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.9rem; }
+
+.code {
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: var(--constant);
+  word-break: break-all;
+}
+
+.type { color: var(--annotation); font-size: var(--step--1); }
+.type::before { content: "@"; color: var(--muted); }
+
+.message { margin: 0; color: var(--text); max-width: 70ch; }
+
+.notes {
+  margin: 0;
+  color: var(--doc);
+  font-style: italic;
+  font-size: var(--step--1);
+  max-width: 70ch;
+}
+
+.raised { font-size: var(--step--1); }
+
+.raised summary {
+  cursor: pointer;
+  color: var(--muted);
+  list-style: none;
+}
+.raised summary::-webkit-details-marker { display: none; }
+.raised summary::before {
+  content: "\25B8";
+  display: inline-block;
+  width: 1em;
+  color: var(--keyword);
+  transition: transform 120ms ease;
+}
+.raised[open] summary::before { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .raised summary::before { transition: none; }
+}
+.raised summary:hover { color: var(--text); }
+
+.fields {
+  list-style: none;
+  margin: 0.65rem 0 0 1em;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.4rem;
+}
+
+.fields li {
+  background: var(--chrome);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.05rem 0.4rem;
+  color: var(--string);
+  white-space: nowrap;
+}
+.fields li .owner { color: var(--number); }
+.fields li .dot { color: var(--muted); }
+
+.none { color: var(--muted); font-size: var(--step--1); }
+
+@media (max-width: 760px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--rule); }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="rail">
+<h2 class="rail-title">Errors</h2>
+<nav aria-label="Error families"><ul>
+<li><a href="#request-handling">Request handling <span class="count">9</span></a><ul>
+<li><a href="#authentication-error">AUTHENTICATION_ERROR</a></li>
+<li><a href="#authorization-error">AUTHORIZATION_ERROR</a></li>
+<li><a href="#body-empty-list">BODY_EMPTY_LIST</a></li>
+<li><a href="#malformed-param-value">MALFORMED_PARAM_VALUE</a></li>
+<li><a href="#malformed-request-body">MALFORMED_REQUEST_BODY</a></li>
+<li><a href="#missing-param-value">MISSING_PARAM_VALUE</a></li>
+<li><a href="#multi-param-failure">MULTI_PARAM_FAILURE</a></li>
+<li><a href="#no-such-id">NO_SUCH_ID</a></li>
+<li><a href="#type-invalid">TYPE_INVALID</a></li>
+</ul></li>
+<li><a href="#field-constraints">Field constraints <span class="count">33</span></a><ul>
+<li><a href="#type-fail-prop-int32-min0">TYPE_FAIL_PROP_INT32_MIN0</a></li>
+<li><a href="#type-fail-prop-str-len0">TYPE_FAIL_PROP_STR_LEN0</a></li>
+<li><a href="#type-fail-prop-str-len-limit">TYPE_FAIL_PROP_STR_LEN_LIMIT</a></li>
+<li><a href="#type-fail-prop-str-rchr">TYPE_FAIL_PROP_STR_RCHR</a></li>
+<li><a href="#type-fail-prop-str-wsp">TYPE_FAIL_PROP_STR_WSP</a></li>
+<li><a href="#type-fail-prop-uint32-min0">TYPE_FAIL_PROP_UINT32_MIN0</a></li>
+<li><a href="#type-fail-prop-uint64-min0">TYPE_FAIL_PROP_UINT64_MIN0</a></li>
+<li><a href="#type-invalid-decimal-scale">TYPE_INVALID_DECIMAL_SCALE</a></li>
+<li><a href="#type-invalid-double-outside-range">TYPE_INVALID_DOUBLE_OUTSIDE_RANGE</a></li>
+<li><a href="#type-invalid-dt2b4dt1">TYPE_INVALID_DT2B4DT1</a></li>
+<li><a href="#type-invalid-hex-color">TYPE_INVALID_HEX_COLOR</a></li>
+<li><a href="#type-invalid-int-below-min">TYPE_INVALID_INT_BELOW_MIN</a></li>
+<li><a href="#type-invalid-list-empty">TYPE_INVALID_LIST_EMPTY</a></li>
+<li><a href="#type-invalid-long-above-max">TYPE_INVALID_LONG_ABOVE_MAX</a></li>
+<li><a href="#type-invalid-long-below-min">TYPE_INVALID_LONG_BELOW_MIN</a></li>
+<li><a href="#type-invalid-long-outside-range">TYPE_INVALID_LONG_OUTSIDE_RANGE</a></li>
+<li><a href="#type-invalid-numeric-only">TYPE_INVALID_NUMERIC_ONLY</a></li>
+<li><a href="#type-invalid-oauth-id-combination">TYPE_INVALID_OAUTH_ID_COMBINATION</a></li>
+<li><a href="#type-invalid-oauth-provider">TYPE_INVALID_OAUTH_PROVIDER</a></li>
+<li><a href="#type-invalid-py-version-format">TYPE_INVALID_PY_VERSION_FORMAT</a></li>
+<li><a href="#type-invalid-reset-token">TYPE_INVALID_RESET_TOKEN</a></li>
+<li><a href="#type-invalid-str-blank">TYPE_INVALID_STR_BLANK</a></li>
+<li><a href="#type-invalid-str-email">TYPE_INVALID_STR_EMAIL</a></li>
+<li><a href="#type-invalid-str-len-above-max">TYPE_INVALID_STR_LEN_ABOVE_MAX</a></li>
+<li><a href="#type-invalid-str-len-below-min">TYPE_INVALID_STR_LEN_BELOW_MIN</a></li>
+<li><a href="#type-invalid-str-len-exact">TYPE_INVALID_STR_LEN_EXACT</a></li>
+<li><a href="#type-invalid-str-url">TYPE_INVALID_STR_URL</a></li>
+<li><a href="#type-invalid-tag-source-nonuser">TYPE_INVALID_TAG_SOURCE_NONUSER</a></li>
+<li><a href="#type-invalid-tag-source-user">TYPE_INVALID_TAG_SOURCE_USER</a></li>
+<li><a href="#type-invalid-test-case-focus">TYPE_INVALID_TEST_CASE_FOCUS</a></li>
+<li><a href="#type-invalid-timestamp-format">TYPE_INVALID_TIMESTAMP_FORMAT</a></li>
+<li><a href="#type-invalid-timestamp-value">TYPE_INVALID_TIMESTAMP_VALUE</a></li>
+<li><a href="#type-invalid-version-spec-undefined">TYPE_INVALID_VERSION_SPEC_UNDEFINED</a></li>
+</ul></li>
+<li><a href="#database">Database <span class="count">6</span></a><ul>
+<li><a href="#db-connection-failure">DB_CONNECTION_FAILURE</a></li>
+<li><a href="#db-constraint-violation">DB_CONSTRAINT_VIOLATION</a></li>
+<li><a href="#db-deadlock">DB_DEADLOCK</a></li>
+<li><a href="#db-generic-error">DB_GENERIC_ERROR</a></li>
+<li><a href="#db-timeout">DB_TIMEOUT</a></li>
+<li><a href="#db-transaction-error">DB_TRANSACTION_ERROR</a></li>
+</ul></li>
+</ul></nav>
+</aside>
+<main class="pane">
+<h1 class="doc-title">Error Reference</h1>
+<p class="lede">Every failure Owl-E reports carries a stable code, a message stating the rule in general terms, and a detail naming the specific value that broke it. Codes are the contract: they are safe to branch on and will not change wording underneath you.</p>
+<p class="tally"><strong>48</strong> errors across <strong>3</strong> families</p>
+<section class="family" id="request-handling">
+<h2>Request handling</h2>
+<p class="blurb">Raised before a request reaches the domain at all — the body, the parameters, or the caller's identity was not usable.</p>
+<div class="entries">
+<article class="entry" id="authentication-error">
+<header>
+<span class="code">AUTHENTICATION_ERROR</span>
+<span class="type">AuthenticationError</span>
+</header>
+<p class="message">The request could not be authenticated.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="authorization-error">
+<header>
+<span class="code">AUTHORIZATION_ERROR</span>
+<span class="type">AuthorizationError</span>
+</header>
+<p class="message">The authenticated caller is not permitted to perform this operation.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="body-empty-list">
+<header>
+<span class="code">BODY_EMPTY_LIST</span>
+<span class="type">BatchOpOfNoDataObjects</span>
+</header>
+<p class="message">Request body contained no items.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="malformed-param-value">
+<header>
+<span class="code">MALFORMED_PARAM_VALUE</span>
+<span class="type">ParamValueMalformedLong</span>
+</header>
+<p class="message">A parameter was provided in an invalid format.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="malformed-request-body">
+<header>
+<span class="code">MALFORMED_REQUEST_BODY</span>
+<span class="type">RequestBodyMalformed</span>
+</header>
+<p class="message">Request body is missing or not readable as JSON.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="missing-param-value">
+<header>
+<span class="code">MISSING_PARAM_VALUE</span>
+<span class="type">MissingParameter</span>
+</header>
+<p class="message">A required parameter was not provided.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="multi-param-failure">
+<header>
+<span class="code">MULTI_PARAM_FAILURE</span>
+<span class="type">MultipleParamFailure</span>
+</header>
+<p class="message">The required values were not provided in a valid format.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="no-such-id">
+<header>
+<span class="code">NO_SUCH_ID</span>
+<span class="type">NoSuchIdError</span>
+</header>
+<p class="message">No record exists with the requested id.</p>
+<p class="notes">An error whose origin is in the repository layer, which presumably has faithfully informed that the id that had been referenced for selection or deletion did not exist. This indicates a disconnect between clients interacting with the database and the application's efficacy representing the concurrent operations globally</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid">
+<header>
+<span class="code">TYPE_INVALID</span>
+<span class="type">MultipleTypeValidations</span>
+</header>
+<p class="message">One or more of the constraints on valid type definitions was violated.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+</div>
+</section>
+<section class="family" id="field-constraints">
+<h2>Field constraints</h2>
+<p class="blurb">Raised by validation against a DTO. Each names the rule that was broken; the offending value and the field it came from arrive in the error's detail.</p>
+<div class="entries">
+<article class="entry" id="type-fail-prop-int32-min0">
+<header>
+<span class="code">TYPE_FAIL_PROP_INT32_MIN0</span>
+<span class="type">PositiveValueIntError</span>
+</header>
+<p class="message">Value must be greater than or equal to zero.</p>
+<p class="notes">Fails if the value is negative.</p>
+<details class="raised">
+<summary>Raised by 1 field</summary>
+<ul class="fields">
+<li><span class="owner">TypeParameter</span><span class="dot">.</span>position</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-fail-prop-str-len0">
+<header>
+<span class="code">TYPE_FAIL_PROP_STR_LEN0</span>
+<span class="type">StringNotEmptyError</span>
+</header>
+<p class="message">Value must not be an empty string.</p>
+<p class="notes">Fails if the value is the empty string. Null passes: on a nullable field null means &quot;not set&quot;, which is a different and legitimate state from &quot;set to nothing&quot;.</p>
+<details class="raised">
+<summary>Raised by 38 fields</summary>
+<ul class="fields">
+<li><span class="owner">CallableParameter</span><span class="dot">.</span>paramName</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>name</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>presetValue</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>name</li>
+<li><span class="owner">Distribution</span><span class="dot">.</span>name</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>versionString</li>
+<li><span class="owner">EnvMarkerComparison</span><span class="dot">.</span>value</li>
+<li><span class="owner">ErrorWatch</span><span class="dot">.</span>errorType</li>
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>message</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>description</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>name</li>
+<li><span class="owner">PackageExtra</span><span class="dot">.</span>name</li>
+<li><span class="owner">Step</span><span class="dot">.</span>description</li>
+<li><span class="owner">Step</span><span class="dot">.</span>name</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>name</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>description</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>name</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>body</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>name</li>
+<li><span class="owner">ToolParam</span><span class="dot">.</span>name</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>examples</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>description</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>name</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>name</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>description</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>name</li>
+<li><span class="owner">VersionOverflow</span><span class="dot">.</span>stringValue</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>description</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>description</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>copyrightInformation</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>name</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-fail-prop-str-len-limit">
+<header>
+<span class="code">TYPE_FAIL_PROP_STR_LEN_LIMIT</span>
+<span class="type">StringMaxLengthError</span>
+</header>
+<p class="message">Value must be no longer than the maximum permitted number of characters.</p>
+<p class="notes">Fails if the result of the function exceeds the maximum allowed string length.</p>
+<details class="raised">
+<summary>Raised by 61 fields</summary>
+<ul class="fields">
+<li><span class="owner">CallableParameter</span><span class="dot">.</span>defaultValueText</li>
+<li><span class="owner">CallableParameter</span><span class="dot">.</span>paramName</li>
+<li><span class="owner">CallableSignature</span><span class="dot">.</span>docstring</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>name</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>presetValue</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>name</li>
+<li><span class="owner">Distribution</span><span class="dot">.</span>name</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>descriptionContentType</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>docsUrl</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>downloadUrl</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>homePage</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>license</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>projectUrl</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>summary</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>versionString</li>
+<li><span class="owner">ErrorWatch</span><span class="dot">.</span>errorType</li>
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>message</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>description</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>name</li>
+<li><span class="owner">MultiflowWorkflow</span><span class="dot">.</span>color</li>
+<li><span class="owner">PackageExtra</span><span class="dot">.</span>name</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>stripePaymentMethodId</li>
+<li><span class="owner">Step</span><span class="dot">.</span>color</li>
+<li><span class="owner">Step</span><span class="dot">.</span>description</li>
+<li><span class="owner">Step</span><span class="dot">.</span>name</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>name</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>description</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>name</li>
+<li><span class="owner">TestExpectation</span><span class="dot">.</span>expectedValue</li>
+<li><span class="owner">TestInput</span><span class="dot">.</span>value</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>body</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>name</li>
+<li><span class="owner">ToolParam</span><span class="dot">.</span>name</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>description</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>examples</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>description</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformOccurrenceArg</span><span class="dot">.</span>value</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>alias</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>name</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>namespace</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>description</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>name</li>
+<li><span class="owner">User</span><span class="dot">.</span>apiKey</li>
+<li><span class="owner">User</span><span class="dot">.</span>email</li>
+<li><span class="owner">User</span><span class="dot">.</span>oauthId</li>
+<li><span class="owner">User</span><span class="dot">.</span>password</li>
+<li><span class="owner">User</span><span class="dot">.</span>resetToken</li>
+<li><span class="owner">Version</span><span class="dot">.</span>local</li>
+<li><span class="owner">VersionOverflow</span><span class="dot">.</span>stringValue</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>description</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>description</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowRequirement</span><span class="dot">.</span>requiredExtraName</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-fail-prop-str-rchr">
+<header>
+<span class="code">TYPE_FAIL_PROP_STR_RCHR</span>
+<span class="type">StringContainsRestrictedChars</span>
+</header>
+<p class="message">Value must not contain restricted characters such as those that are invisible, prone to spoofing, or unsafe to display.</p>
+<details class="raised">
+<summary>Raised by 59 fields</summary>
+<ul class="fields">
+<li><span class="owner">CallableParameter</span><span class="dot">.</span>defaultValueText</li>
+<li><span class="owner">CallableParameter</span><span class="dot">.</span>paramName</li>
+<li><span class="owner">CallableSignature</span><span class="dot">.</span>docstring</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>name</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>presetValue</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>name</li>
+<li><span class="owner">Distribution</span><span class="dot">.</span>name</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>description</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>descriptionContentType</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>docsUrl</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>downloadUrl</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>homePage</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>keywords</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>license</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>projectUrl</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>summary</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>versionString</li>
+<li><span class="owner">EnvMarkerComparison</span><span class="dot">.</span>value</li>
+<li><span class="owner">ErrorWatch</span><span class="dot">.</span>errorType</li>
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>message</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>description</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>name</li>
+<li><span class="owner">PackageExtra</span><span class="dot">.</span>name</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>stripePaymentMethodId</li>
+<li><span class="owner">Step</span><span class="dot">.</span>description</li>
+<li><span class="owner">Step</span><span class="dot">.</span>name</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>name</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>description</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>name</li>
+<li><span class="owner">TestExpectation</span><span class="dot">.</span>expectedValue</li>
+<li><span class="owner">TestInput</span><span class="dot">.</span>value</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>body</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>name</li>
+<li><span class="owner">ToolParam</span><span class="dot">.</span>name</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>description</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>examples</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>description</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformOccurrenceArg</span><span class="dot">.</span>value</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>alias</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>name</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>namespace</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>description</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>name</li>
+<li><span class="owner">User</span><span class="dot">.</span>email</li>
+<li><span class="owner">Version</span><span class="dot">.</span>local</li>
+<li><span class="owner">VersionOverflow</span><span class="dot">.</span>stringValue</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>description</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>description</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>copyrightInformation</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowRequirement</span><span class="dot">.</span>requiredExtraName</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-fail-prop-str-wsp">
+<header>
+<span class="code">TYPE_FAIL_PROP_STR_WSP</span>
+<span class="type">StringNotBlankError</span>
+</header>
+<p class="message">Value must not be blank, containing only whitespace.</p>
+<p class="notes">Fails if the string is blank (contains only whitespace).</p>
+<details class="raised">
+<summary>Raised by 42 fields</summary>
+<ul class="fields">
+<li><span class="owner">CallableParameter</span><span class="dot">.</span>paramName</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>name</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>presetValue</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>description</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>name</li>
+<li><span class="owner">Distribution</span><span class="dot">.</span>name</li>
+<li><span class="owner">DistributionPackage</span><span class="dot">.</span>versionString</li>
+<li><span class="owner">EnvMarkerComparison</span><span class="dot">.</span>value</li>
+<li><span class="owner">ErrorWatch</span><span class="dot">.</span>errorType</li>
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>message</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>description</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>name</li>
+<li><span class="owner">PackageExtra</span><span class="dot">.</span>name</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>lastFour</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>stripePaymentMethodId</li>
+<li><span class="owner">Step</span><span class="dot">.</span>description</li>
+<li><span class="owner">Step</span><span class="dot">.</span>name</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>name</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>description</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>name</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>body</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>description</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>name</li>
+<li><span class="owner">ToolParam</span><span class="dot">.</span>name</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>description</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>examples</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>description</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>name</li>
+<li><span class="owner">TransformOccurrenceArg</span><span class="dot">.</span>value</li>
+<li><span class="owner">TypeNode</span><span class="dot">.</span>name</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>description</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>name</li>
+<li><span class="owner">VersionOverflow</span><span class="dot">.</span>stringValue</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>description</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>description</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>name</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>copyrightInformation</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>name</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-fail-prop-uint32-min0">
+<header>
+<span class="code">TYPE_FAIL_PROP_UINT32_MIN0</span>
+<span class="type">PositiveValueUIntError</span>
+</header>
+<p class="message">Value must be greater than or equal to zero.</p>
+<p class="notes">Retained for documentation: [UInt] cannot hold a negative value, so the invariant this names is enforced by the type and this check never fires. It previously read `value &gt;= 0U`, which is *always true* — every field carrying it was reported as violating on every validation.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-fail-prop-uint64-min0">
+<header>
+<span class="code">TYPE_FAIL_PROP_UINT64_MIN0</span>
+<span class="type">PositiveValueULongError</span>
+</header>
+<p class="message">Value must be greater than or equal to zero.</p>
+<p class="notes">Retained for documentation: [ULong] cannot hold a negative value, so the invariant this names is enforced by the type and this check never fires. It previously read `value &gt;= 0UL`, which is *always true* — every field carrying it was reported as violating on every validation.</p>
+<details class="raised">
+<summary>Raised by 35 fields</summary>
+<ul class="fields">
+<li><span class="owner">BenchmarkReport</span><span class="dot">.</span>id</li>
+<li><span class="owner">DataPoint</span><span class="dot">.</span>id</li>
+<li><span class="owner">DataPointInjection</span><span class="dot">.</span>id</li>
+<li><span class="owner">DataPointWrite</span><span class="dot">.</span>id</li>
+<li><span class="owner">ErrorWatch</span><span class="dot">.</span>id</li>
+<li><span class="owner">ErrorWatchFn</span><span class="dot">.</span>id</li>
+<li><span class="owner">ErrorWatchFn</span><span class="dot">.</span>position</li>
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>id</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>id</li>
+<li><span class="owner">Inquisition</span><span class="dot">.</span>executionOrder</li>
+<li><span class="owner">Inquisition</span><span class="dot">.</span>id</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>id</li>
+<li><span class="owner">PhaseTag</span><span class="dot">.</span>subjectId</li>
+<li><span class="owner">PhaseTag</span><span class="dot">.</span>tagId</li>
+<li><span class="owner">Step</span><span class="dot">.</span>id</li>
+<li><span class="owner">StepTestRun</span><span class="dot">.</span>id</li>
+<li><span class="owner">Tag</span><span class="dot">.</span>id</li>
+<li><span class="owner">TestCase</span><span class="dot">.</span>id</li>
+<li><span class="owner">TestInput</span><span class="dot">.</span>id</li>
+<li><span class="owner">TestOutcomeActual</span><span class="dot">.</span>id</li>
+<li><span class="owner">TestOutcomeExpectation</span><span class="dot">.</span>id</li>
+<li><span class="owner">Tool</span><span class="dot">.</span>id</li>
+<li><span class="owner">ToolParam</span><span class="dot">.</span>id</li>
+<li><span class="owner">Transform</span><span class="dot">.</span>id</li>
+<li><span class="owner">TransformArg</span><span class="dot">.</span>id</li>
+<li><span class="owner">TransformOccurrence</span><span class="dot">.</span>id</li>
+<li><span class="owner">TransformOccurrenceArg</span><span class="dot">.</span>id</li>
+<li><span class="owner">TypeParameter</span><span class="dot">.</span>id</li>
+<li><span class="owner">TypeSchemaRef</span><span class="dot">.</span>id</li>
+<li><span class="owner">User</span><span class="dot">.</span>id</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>id</li>
+<li><span class="owner">WorkflowExecution</span><span class="dot">.</span>id</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>id</li>
+<li><span class="owner">WorkflowJunction</span><span class="dot">.</span>id</li>
+<li><span class="owner">WorkflowMetadata</span><span class="dot">.</span>id</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-decimal-scale">
+<header>
+<span class="code">TYPE_INVALID_DECIMAL_SCALE</span>
+<span class="type">DecimalScaleExceeded</span>
+</header>
+<p class="message">Value must fit the fixed precision and scale of its column.</p>
+<p class="notes">Fails if the value carries more than [maxScale] digits after the decimal point, or more than [maxPrecision] significant digits overall — the two facts a DB `DECIMAL(precision, scale)` column enforces natively and a Kotlin `Double` does not. Comparing against a `DECIMAL` type's own semantics (not float rounding) means going through [java.math.BigDecimal].</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-double-outside-range">
+<header>
+<span class="code">TYPE_INVALID_DOUBLE_OUTSIDE_RANGE</span>
+<span class="type">DoubleValueOoB</span>
+</header>
+<p class="message">Value must fall within the permitted lower and upper bounds.</p>
+<p class="notes">Fails if value is outside the specified double range.</p>
+<details class="raised">
+<summary>Raised by 6 fields</summary>
+<ul class="fields">
+<li><span class="owner">Grouper</span><span class="dot">.</span>posX</li>
+<li><span class="owner">Grouper</span><span class="dot">.</span>posY</li>
+<li><span class="owner">MultiflowWorkflow</span><span class="dot">.</span>posX</li>
+<li><span class="owner">MultiflowWorkflow</span><span class="dot">.</span>posY</li>
+<li><span class="owner">Step</span><span class="dot">.</span>posX</li>
+<li><span class="owner">Step</span><span class="dot">.</span>posY</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-dt2b4dt1">
+<header>
+<span class="code">TYPE_INVALID_DT2B4DT1</span>
+<span class="type">PreventsTimeParadoxes</span>
+</header>
+<p class="message">The timestamps of events that must occur before and after one another are in the wrong order.</p>
+<p class="notes">Fails if `completedAt` exists and is before `startedAt`.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-hex-color">
+<header>
+<span class="code">TYPE_INVALID_HEX_COLOR</span>
+<span class="type">HexColorFormat</span>
+</header>
+<p class="message">Value must be a hexadecimal colour in full six-digit form, such as #1E88E5.</p>
+<p class="notes">Fails unless the value is a full-form CSS hex colour: `#` followed by exactly six hex digits, either case. Null passes - the column is nullable and &quot;no colour set&quot; is a legitimate state. The short form (`#abc`) is deliberately rejected rather than expanded: the column is `varchar(7)`, and accepting two spellings of the same colour would mean every comparison and every round-trip has to normalise first.</p>
+<details class="raised">
+<summary>Raised by 2 fields</summary>
+<ul class="fields">
+<li><span class="owner">MultiflowWorkflow</span><span class="dot">.</span>color</li>
+<li><span class="owner">Step</span><span class="dot">.</span>color</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-int-below-min">
+<header>
+<span class="code">TYPE_INVALID_INT_BELOW_MIN</span>
+<span class="type">IntValueMustMeetMinimum</span>
+</header>
+<p class="message">Value must be greater than or equal to the minimum permitted value.</p>
+<p class="notes">Fails if the value of the constrained property is less than the provided minimum.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-list-empty">
+<header>
+<span class="code">TYPE_INVALID_LIST_EMPTY</span>
+<span class="type">ListMustNotBeEmpty</span>
+</header>
+<p class="message">Value must not be an empty list.</p>
+<p class="notes">Fails if list is empty.</p>
+<details class="raised">
+<summary>Raised by 1 field</summary>
+<ul class="fields">
+<li><span class="owner">TestCase</span><span class="dot">.</span>expectedOutcomes</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-long-above-max">
+<header>
+<span class="code">TYPE_INVALID_LONG_ABOVE_MAX</span>
+<span class="type">LongValueMustNotExceedMaximum</span>
+</header>
+<p class="message">Value must be less than or equal to the maximum permitted value.</p>
+<p class="notes">Fails if the value exceeds `maxValue`. Pairs with [LongValueMustMeetMinimum]; kept as a separate check rather than a combined range for a more specific per-violation message.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-long-below-min">
+<header>
+<span class="code">TYPE_INVALID_LONG_BELOW_MIN</span>
+<span class="type">LongValueMustMeetMinimum</span>
+</header>
+<p class="message">Value must be greater than or equal to the minimum permitted value.</p>
+<p class="notes">Fails if the value is less than `minValue`.</p>
+<details class="raised">
+<summary>Raised by 1 field</summary>
+<ul class="fields">
+<li><span class="owner">TestExpectation</span><span class="dot">.</span>id</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-long-outside-range">
+<header>
+<span class="code">TYPE_INVALID_LONG_OUTSIDE_RANGE</span>
+<span class="type">LongValueOoB</span>
+</header>
+<p class="message">Value must fall within the permitted lower and upper bounds.</p>
+<p class="notes">Fails if value is outside the specified range.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-numeric-only">
+<header>
+<span class="code">TYPE_INVALID_NUMERIC_ONLY</span>
+<span class="type">MustContainOnlyNumerals</span>
+</header>
+<p class="message">Value must contain only numeric characters.</p>
+<p class="notes">Fails if the value contains anything other than digits.</p>
+<details class="raised">
+<summary>Raised by 1 field</summary>
+<ul class="fields">
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>lastFour</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-oauth-id-combination">
+<header>
+<span class="code">TYPE_INVALID_OAUTH_ID_COMBINATION</span>
+<span class="type">InconsistentOAuthId</span>
+</header>
+<p class="message">OAuth ID and OAuth provider must be set together, or both left unset.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-oauth-provider">
+<header>
+<span class="code">TYPE_INVALID_OAUTH_PROVIDER</span>
+<span class="type">InvalidOAuthProvider</span>
+</header>
+<p class="message">Value must name one of the recognised OAuth providers.</p>
+<details class="raised">
+<summary>Raised by 1 field</summary>
+<ul class="fields">
+<li><span class="owner">User</span><span class="dot">.</span>oauthProvider</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-py-version-format">
+<header>
+<span class="code">TYPE_INVALID_PY_VERSION_FORMAT</span>
+<span class="type">PythonVersionSegmentFormat</span>
+</header>
+<p class="message">Value must comply with Python release versioning as specified in PEP 440.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-reset-token">
+<header>
+<span class="code">TYPE_INVALID_RESET_TOKEN</span>
+<span class="type">InvalidResetToken</span>
+</header>
+<p class="message">Value must be a URL-safe string long enough to serve as a reset token.</p>
+<details class="raised">
+<summary>Raised by 2 fields</summary>
+<ul class="fields">
+<li><span class="owner">User</span><span class="dot">.</span>apiKey</li>
+<li><span class="owner">User</span><span class="dot">.</span>resetToken</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-str-blank">
+<header>
+<span class="code">TYPE_INVALID_STR_BLANK</span>
+<span class="type">StringMustNotBeBlank</span>
+</header>
+<p class="message">Value must not be blank, containing only whitespace.</p>
+<p class="notes">Fails if the string is blank (contains only whitespace).</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-str-email">
+<header>
+<span class="code">TYPE_INVALID_STR_EMAIL</span>
+<span class="type">InvalidEmailFormat</span>
+</header>
+<p class="message">Value must be a valid email address.</p>
+<p class="notes">Fails if value is not a valid email address.</p>
+<details class="raised">
+<summary>Raised by 1 field</summary>
+<ul class="fields">
+<li><span class="owner">User</span><span class="dot">.</span>email</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-str-len-above-max">
+<header>
+<span class="code">TYPE_INVALID_STR_LEN_ABOVE_MAX</span>
+<span class="type">StringLengthMustBeLt</span>
+</header>
+<p class="message">Value must be shorter than the maximum permitted number of characters.</p>
+<p class="notes">Fails if the result of the function exceeds the maximum allowed string length.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-str-len-below-min">
+<header>
+<span class="code">TYPE_INVALID_STR_LEN_BELOW_MIN</span>
+<span class="type">StringLengthMustBeGt</span>
+</header>
+<p class="message">Value must be longer than the minimum required number of characters.</p>
+<p class="notes">Fails if the result of the function exceeds the maximum allowed string length.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-str-len-exact">
+<header>
+<span class="code">TYPE_INVALID_STR_LEN_EXACT</span>
+<span class="type">StringMustHaveExactRequiredLength</span>
+</header>
+<p class="message">Value must be exactly the required number of characters long.</p>
+<p class="notes">Fails if the string does not have exactly the required length.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-str-url">
+<header>
+<span class="code">TYPE_INVALID_STR_URL</span>
+<span class="type">InvalidUrlFormat</span>
+</header>
+<p class="message">Value must be a valid URL.</p>
+<p class="notes">Fails if value is not a well-formed URL.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-tag-source-nonuser">
+<header>
+<span class="code">TYPE_INVALID_TAG_SOURCE_NONUSER</span>
+<span class="type">TagWithNonSourceUserIdError</span>
+</header>
+<p class="message">A tag whose source is not a user must not name a user.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-tag-source-user">
+<header>
+<span class="code">TYPE_INVALID_TAG_SOURCE_USER</span>
+<span class="type">TagWithUserSourceUserIdError</span>
+</header>
+<p class="message">A tag whose source is a user must name the user it belongs to.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-test-case-focus">
+<header>
+<span class="code">TYPE_INVALID_TEST_CASE_FOCUS</span>
+<span class="type">TestCaseSubject</span>
+</header>
+<p class="message">A test case must name either the workflow or the step it exercises.</p>
+<p class="notes">Fails if both workflow and step are null.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="type-invalid-timestamp-format">
+<header>
+<span class="code">TYPE_INVALID_TIMESTAMP_FORMAT</span>
+<span class="type">TimestampFormatMustMatchIso8601</span>
+</header>
+<p class="message">Value must comply with the ISO 8601 format, in UTC and terminated with Z.</p>
+<details class="raised">
+<summary>Raised by 13 fields</summary>
+<ul class="fields">
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>timestamp</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>updatedAt</li>
+<li><span class="owner">StepTestRun</span><span class="dot">.</span>completed</li>
+<li><span class="owner">StepTestRun</span><span class="dot">.</span>started</li>
+<li><span class="owner">User</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">User</span><span class="dot">.</span>updatedAt</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>updatedAt</li>
+<li><span class="owner">WorkflowExecution</span><span class="dot">.</span>completedAt</li>
+<li><span class="owner">WorkflowExecution</span><span class="dot">.</span>startedAt</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>updatedAt</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-timestamp-value">
+<header>
+<span class="code">TYPE_INVALID_TIMESTAMP_VALUE</span>
+<span class="type">TimestampMustBeChronologicallyCoherent</span>
+</header>
+<p class="message">Value must represent a real point in time.</p>
+<details class="raised">
+<summary>Raised by 13 fields</summary>
+<ul class="fields">
+<li><span class="owner">ExecutionNotification</span><span class="dot">.</span>timestamp</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">PaymentMethod</span><span class="dot">.</span>updatedAt</li>
+<li><span class="owner">StepTestRun</span><span class="dot">.</span>completed</li>
+<li><span class="owner">StepTestRun</span><span class="dot">.</span>started</li>
+<li><span class="owner">User</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">User</span><span class="dot">.</span>updatedAt</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">Workflow</span><span class="dot">.</span>updatedAt</li>
+<li><span class="owner">WorkflowExecution</span><span class="dot">.</span>completedAt</li>
+<li><span class="owner">WorkflowExecution</span><span class="dot">.</span>startedAt</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>createdAt</li>
+<li><span class="owner">WorkflowFolder</span><span class="dot">.</span>updatedAt</li>
+</ul>
+</details>
+</article>
+<article class="entry" id="type-invalid-version-spec-undefined">
+<header>
+<span class="code">TYPE_INVALID_VERSION_SPEC_UNDEFINED</span>
+<span class="type">VersionSpecUndefined</span>
+</header>
+<p class="message">At least one of the minimum, maximum, or exact version must be given.</p>
+<p class="notes">Fails if all version constraint values are null.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+</div>
+</section>
+<section class="family" id="database">
+<h2>Database</h2>
+<p class="blurb">Raised when the store itself refuses or fails to complete the work. These describe the condition, not the statement that provoked it.</p>
+<div class="entries">
+<article class="entry" id="db-connection-failure">
+<header>
+<span class="code">DB_CONNECTION_FAILURE</span>
+<span class="type">ConnectionFailure</span>
+</header>
+<p class="message">A connection to the database could not be established.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="db-constraint-violation">
+<header>
+<span class="code">DB_CONSTRAINT_VIOLATION</span>
+<span class="type">DbConstraintViolation</span>
+</header>
+<p class="message">The operation would have violated a database constraint and was rejected.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="db-deadlock">
+<header>
+<span class="code">DB_DEADLOCK</span>
+<span class="type">DeadlockDetected</span>
+</header>
+<p class="message">A deadlock was detected and this transaction was rolled back; the operation may be retried.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="db-generic-error">
+<header>
+<span class="code">DB_GENERIC_ERROR</span>
+<span class="type">GenericError</span>
+</header>
+<p class="message">The database reported an error while handling the operation.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="db-timeout">
+<header>
+<span class="code">DB_TIMEOUT</span>
+<span class="type">Timeout</span>
+</header>
+<p class="message">The database did not respond within the time allowed.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+<article class="entry" id="db-transaction-error">
+<header>
+<span class="code">DB_TRANSACTION_ERROR</span>
+<span class="type">DbTransactionError</span>
+</header>
+<p class="message">The transaction could not be completed and was rolled back.</p>
+<p class="none">Not raised by any annotated field.</p>
+</article>
+</div>
+</section>
+</main>
+</div>
+</body>
+</html>

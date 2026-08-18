@@ -78,11 +78,6 @@ object ConstraintExtractor {
 
         logger.info("Processing property: $propertyName of type ${propertyType.declaration.qualifiedName?.asString()}")
 
-        if (propertyType.isMarkedNullable) {
-            logger.info("Skipping nullable property: $propertyName as validators typically apply to non-null fields or handle nulls separately.")
-            return emptyList()
-        }
-
         if (property.hasNoConstraints) {
             logger.info("No field constraints found on $propertyName")
             return emptyList()
@@ -91,8 +86,23 @@ object ConstraintExtractor {
         return constraints.flatMap { annotation ->
             val constraintAnnotationShortName = annotation.shortName.asString()
 
-            (allErrors.findByFqns(annotation.errorFqNames) ?: emptyList()).map { errorDeclaration: ErrorDeclaration ->
+            (allErrors.findByFqns(annotation.errorFqNames) ?: emptyList()).mapNotNull { errorDeclaration: ErrorDeclaration ->
                 val errorSimpleName = errorDeclaration.simpleName.asString()
+
+                // A nullable field can only be handed to an error whose `constrainedField` is
+                // declared over a nullable property - `KProperty1<T, String?>` accepts
+                // `Step::color`, `KProperty1<T, String>` does not. Errors written for nullable
+                // fields already treat null as passing. This used to be a blanket skip of every
+                // nullable property, which silently dropped the constraint rather than reporting
+                // it, so annotated caps on nullable columns were decorative.
+                if (propertyType.isMarkedNullable && !errorDeclaration.acceptsNullableField()) {
+                    logger.warn(
+                        "$className.$propertyName is nullable but $errorSimpleName constrains a " +
+                            "non-null property; the annotation has no effect. Declare the error's " +
+                            "constrainedField as KProperty1<T, ...?> to apply it."
+                    )
+                    return@mapNotNull null
+                }
 
                 val formatter = ConstraintArgFormatters[constraintAnnotationShortName]
                     ?: ConstraintArgFormatters["ConstraintSimple"]!!
@@ -104,5 +114,12 @@ object ConstraintExtractor {
         }
     }
 
-
+    /**
+     * Whether this error's `constrainedField` parameter is declared over a nullable property,
+     * i.e. its type is `KProperty1<T, X?>` rather than `KProperty1<T, X>`.
+     */
+    private fun ErrorDeclaration.acceptsNullableField(): Boolean {
+        val field = primaryConstructor?.parameters?.firstOrNull() ?: return false
+        return field.type.resolve().arguments.getOrNull(1)?.type?.resolve()?.isMarkedNullable == true
+    }
 }

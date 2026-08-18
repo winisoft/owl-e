@@ -25,7 +25,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class ExecutionNotification(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

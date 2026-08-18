@@ -55,8 +55,13 @@ object Groupers : ULongIdTable("groupers") {
     val parentGrouper = reference("parent_grouper_id", Groupers, onDelete = ReferenceOption.CASCADE).nullable()
     val name = varchar("name", 1024)
     val description = varchar("description", 8192).nullable()
+    /**
+     * Canvas position. `groupers_chk_pos` in the database bounds both axes to +/- 1,000,000; see
+     * `Schema.Canvas` for why the plane stops there rather than anywhere larger.
+     */
     val posX = double("pos_x").default(0.0)
     val posY = double("pos_y").default(0.0)
+    /** `#RRGGBB`, enforced by `groupers_chk_color` in the database and by `HexColorFormat` in the DTO. */
     val color = varchar("color", 7).nullable()
     val isCollapsed = bool("is_collapsed").default(false)
 }
@@ -80,8 +85,13 @@ object Steps : ULongIdTable("steps") {
     val isWorkflowHead = bool("is_workflow_head").default(false)
     val createdAt = timestamp("created_at").defaultExpression(CurrentTimestamp)
     val updatedAt = timestamp("updated_at").defaultExpression(CurrentTimestamp)
+    /**
+     * Canvas position. `steps_chk_pos` in the database bounds both axes to +/- 1,000,000; see
+     * `Schema.Canvas` for why the plane stops there rather than anywhere larger.
+     */
     val posX = double("pos_x").default(0.0)
     val posY = double("pos_y").default(0.0)
+    /** `#RRGGBB`, enforced by `steps_chk_color` in the database and by `HexColorFormat` in the DTO. */
     val color = varchar("color", 7).nullable()
 
     init {

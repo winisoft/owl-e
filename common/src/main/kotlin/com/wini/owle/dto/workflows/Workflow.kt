@@ -27,7 +27,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class Workflow(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

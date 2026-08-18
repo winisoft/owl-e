@@ -19,7 +19,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Inquisition(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**
@@ -30,7 +29,6 @@ data class Inquisition(
     /**
      * Determines the order in which this inquisition is executed within its associated workflow step.
      */
-    @ConstraintSimple([PositiveValueULongError::class])
-    val executionOrder: ULong
+        val executionOrder: ULong
 
 ) : ULongDto

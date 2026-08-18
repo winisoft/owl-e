@@ -40,6 +40,31 @@ object Schema {
         const val LEN_5012 = 5012
     }
 
+    /**
+     * Bounds for the canvas coordinates carried by `steps`, `groupers` and `multiflow_workflows`.
+     *
+     * The database is not what constrains these — `DOUBLE` holds ~1.8e308. The renderer is:
+     * Compose/Skia works in 32-bit floats, whose 24-bit mantissa represents integers exactly only
+     * up to 2^24 (16,777,216). Past that, precision degrades with distance from the origin:
+     *
+     *   |x| ~ 1e6   ULP = 1/16 px   imperceptible
+     *   |x| ~ 1e7   ULP = 1 px      subpixel positioning gone
+     *   |x| ~ 1e8   ULP = 8 px      nodes visibly snap to a grid
+     *
+     * The failure is not clipping, it is drift. Screen position is computed as `world - camera`,
+     * so once both operands are large the subtraction loses its low bits and a node jitters while
+     * the user pans — which reads as a rendering bug, not as a limit anyone chose.
+     *
+     * [MAX] therefore sits an order of magnitude below where that starts, giving a plane 2,000,000
+     * units across (roughly two thousand screen-widths) with 1/16 px fidelity at the very edge.
+     * A graph that genuinely outgrows this wants nesting, which is what a Grouper is for — not a
+     * larger plane, which would only move the drift somewhere the user notices it less.
+     */
+    object Canvas {
+        const val MIN = -1_000_000.0
+        const val MAX = 1_000_000.0
+    }
+
     object DataPoint {
         const val NAME_MAX_LENGTH = SizeLimits.LEN_255
         const val DESC_MAX_LENGTH = SizeLimits.LEN_8192

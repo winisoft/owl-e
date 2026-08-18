@@ -13,6 +13,9 @@ import com.wini.owle.error.StringContainsRestrictedChars
 import com.wini.owle.schema.Schema
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
+import com.wini.owle.schema.error.ConstraintDoubleRange
+import com.wini.owle.error.DoubleValueOoB
+import com.wini.owle.error.HexColorFormat
 
 /**
  * Represents a step within a workflow, defining its tool dependency, next and previous steps,
@@ -23,7 +26,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class Step(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**
@@ -51,10 +53,13 @@ data class Step(
     val defaultNextStep: Step?,
 
 
+    @ConstraintDoubleRange(DoubleValueOoB::class, Schema.Canvas.MIN, Schema.Canvas.MAX)
     val posX: Double,
 
+    @ConstraintDoubleRange(DoubleValueOoB::class, Schema.Canvas.MIN, Schema.Canvas.MAX)
     val posY: Double,
 
+    @ConstraintSimple([HexColorFormat::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.Step.COLOR_LENGTH)
     val color: String?,
 

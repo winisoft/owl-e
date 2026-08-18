@@ -23,7 +23,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class Tool(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

@@ -20,7 +20,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class TransformOccurrenceArg(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

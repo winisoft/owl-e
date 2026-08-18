@@ -17,6 +17,27 @@ class ErrorResFileWriter(
         val packageName = "com.wini.owle.error"
         val fileName = "ErrorResourceExtensions"
 
+        val resolved = errors.map { error ->
+            val key = error.errorAnnotation.errorResKey
+            Triple(
+                error.simpleName.asString(),
+                error.code,
+                LocalizedStringResolver.resolve("$key.message")
+            ) to (error.typeParameters.isNotEmpty() to key)
+        }
+
+        resolved.forEach { (triple, meta) ->
+            val (name, code, message) = triple
+            val (_, key) = meta
+            if (!LocalizedStringResolver.isBound("$key.code") || !LocalizedStringResolver.isBound("$key.message")) {
+                logger.warn(
+                    "[error-res] $name has no resource bound at '$key'; docres_en_US.properties " +
+                        "needs '$key.code' and '$key.message'. Emitting the key as the value."
+                )
+            }
+            check(code.isNotBlank() && message.isNotBlank()) { "$name resolved to a blank code or message" }
+        }
+
         codeGenerator.createNewFile(
             dependencies = Dependencies(false),
             packageName = packageName,
@@ -24,19 +45,35 @@ class ErrorResFileWriter(
         ).bufferedWriter().use { writer ->
             writer.appendLine("package $packageName")
             writer.appendLine()
-            writer.appendLine("import com.wini.owle.dto.BaseDto")
+            writer.appendLine("/**")
+            writer.appendLine(" * Generated from the @ErrorDefinition keys and docres_en_US.properties. Do not edit.")
+            writer.appendLine(" *")
+            writer.appendLine(" * [owleErrorResources] is what backs the default `errorCode` / `message` on OwleError,")
+            writer.appendLine(" * so an error type states its identity once - in its annotation - and the wording stays")
+            writer.appendLine(" * in the resource bundle where it can be translated.")
+            writer.appendLine(" */")
+            writer.appendLine("val owleErrorResources: Map<String, Pair<String, String>> = mapOf(")
+            resolved.sortedBy { it.first.first }.forEach { (triple, _) ->
+                val (name, code, message) = triple
+                writer.appendLine("    ${name.quote()} to (${code.quote()} to ${message.quote()}),")
+            }
+            writer.appendLine(")")
+            writer.appendLine()
+            writer.appendLine("/** The published code for an error class, or an empty string when it declares none. */")
+            writer.appendLine("fun owleErrorCodeOf(simpleName: String?): String = owleErrorResources[simpleName]?.first ?: \"\"")
+            writer.appendLine()
+            writer.appendLine("/** The published message for an error class, or an empty string when it declares none. */")
+            writer.appendLine("fun owleErrorMessageOf(simpleName: String?): String = owleErrorResources[simpleName]?.second ?: \"\"")
 
-            for (error in errors) {
-                val annotation = error.errorAnnotation
-                val errorId = annotation.errorResKey
-                val simpleName = error.simpleName.asString()
-                val code = error.code
-                val message = LocalizedStringResolver.resolve("$errorId.message")
-                val genericSuffix = if (error.typeParameters.isNotEmpty()) "<out BaseDto>" else ""
-
+            resolved.forEach { (triple, meta) ->
+                val (name, code, message) = triple
+                val (generic, _) = meta
+                // A star projection accepts every instantiation, so callers holding a
+                // `PositiveValueIntError<Step>` need not name the type argument.
+                val receiver = if (generic) "$name<*>" else name
                 writer.appendLine()
-                writer.appendLine("fun $simpleName$genericSuffix.errorResCode(): String = ${code.quote()}")
-                writer.appendLine("fun $simpleName$genericSuffix.errorResMsg(): String = ${message.quote()}")
+                writer.appendLine("fun $receiver.errorResCode(): String = ${code.quote()}")
+                writer.appendLine("fun $receiver.errorResMsg(): String = ${message.quote()}")
             }
         }
     }

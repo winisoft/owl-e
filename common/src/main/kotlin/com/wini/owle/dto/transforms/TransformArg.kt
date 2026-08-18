@@ -22,7 +22,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class TransformArg(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
     /**
      * The transformation this argument belongs to.

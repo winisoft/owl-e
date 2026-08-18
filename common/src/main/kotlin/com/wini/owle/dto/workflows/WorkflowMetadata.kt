@@ -24,7 +24,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WorkflowMetadata(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])

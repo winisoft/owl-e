@@ -22,7 +22,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class TestCase(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     @ConstraintSimple([StringNotEmptyError::class, StringContainsRestrictedChars::class, StringNotBlankError::class])

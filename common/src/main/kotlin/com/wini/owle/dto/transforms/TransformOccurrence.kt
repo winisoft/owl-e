@@ -16,7 +16,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TransformOccurrence(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

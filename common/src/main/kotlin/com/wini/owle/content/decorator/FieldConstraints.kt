@@ -1,17 +1,7 @@
 package com.wini.owle.content.decorator
 
-import com.wini.owle.error.DoubleValueOoB
-import com.wini.owle.error.IntValueMustMeetMinimum
 import com.wini.owle.error.InvalidEmailFormat
-import com.wini.owle.error.InvalidUrlFormat
-import com.wini.owle.error.ListMustNotBeEmpty
-import com.wini.owle.error.LongValueMustMeetMinimum
-import com.wini.owle.error.StringLengthMustBeGt
-import com.wini.owle.error.StringLengthMustBeLt
-import com.wini.owle.error.StringMustHaveExactRequiredLength
 import com.wini.owle.error.StringMustNotBeBlank
-import com.wini.owle.error.TimestampFormatMustMatchIso8601
-import com.wini.owle.error.TimestampMustBeChronologicallyCoherent
 
 
 @Target(AnnotationTarget.PROPERTY)

@@ -22,7 +22,7 @@ sealed interface ConstraintError: OwleError {
 
 
 
-/** Fails if the value of the constrained property is less than the provided minimum. */
+/** Fails if the value is negative. */
 @ErrorDefinition("errors.constraint.positiveValueIntError")
 @Serializable
 data class PositiveValueIntError<T : BaseDto>(
@@ -30,23 +30,22 @@ data class PositiveValueIntError<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
     private val value: Int get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
-    override val isInvalid: Boolean get() = value >= 0
+    override val isInvalid: Boolean get() = value < 0
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: min=0, actual=$value"
 }
 
-/** Fails if the value of the constrained property is less than the provided minimum. */
+/**
+ * Fails if the value is the empty string. Null passes: on a nullable field null means "not set",
+ * which is a different and legitimate state from "set to nothing".
+ */
 @ErrorDefinition("errors.constraint.stringNotEmptyError")
 @Serializable
 data class StringNotEmptyError<T : BaseDto>(
-    val constrainedField: KProperty1<T, String>,
+    val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ) : ConstraintError {
-    private val value: String get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
-    override val isInvalid: Boolean get() = value.isEmpty()
+    private val value: String? get() = constrainedField.get(receiver)
+    override val isInvalid: Boolean get() = value?.isEmpty() ?: false
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: min=0, actual=$value"
 }
 
@@ -57,8 +56,6 @@ data class StringNotBlankError<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value?.isBlank() ?: false
@@ -69,6 +66,32 @@ data class StringNotBlankError<T : BaseDto>(
  * Validates that all characters in the input string are from safe character ranges.
  * Intended to permit international language input, but disallow invisible or spoof-prone symbols.
  */
+/**
+ * Fails unless the value is a full-form CSS hex colour: `#` followed by exactly six hex digits,
+ * either case. Null passes - the column is nullable and "no colour set" is a legitimate state.
+ *
+ * The short form (`#abc`) is deliberately rejected rather than expanded: the column is
+ * `varchar(7)`, and accepting two spellings of the same colour would mean every comparison and
+ * every round-trip has to normalise first.
+ */
+@ErrorDefinition("errors.constraint.hexColorFormat")
+@Serializable
+data class HexColorFormat<T : BaseDto>(
+    val constrainedField: KProperty1<T, String?>,
+    val receiver: T
+) : ConstraintError {
+
+    private val value: String? get() = constrainedField.get(receiver)
+
+    override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected=#RRGGBB, actual=$value"
+    override val isInvalid: Boolean get() = value?.matches(PATTERN)?.not() == true
+
+    companion object {
+        private val PATTERN = Regex("^#[0-9a-fA-F]{6}$")
+    }
+}
+
+
 @ErrorDefinition("errors.constraint.stringSafeCharsError")
 @Serializable
 data class StringContainsRestrictedChars<T : BaseDto>(
@@ -80,8 +103,6 @@ data class StringContainsRestrictedChars<T : BaseDto>(
 
     override val isInvalid: Boolean get() = value?.any { !isAllowedChar(it) } == true
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}"
 
     private fun isAllowedChar(c: Char): Boolean {
@@ -98,6 +119,7 @@ data class StringContainsRestrictedChars<T : BaseDto>(
     }
 }
 
+/** Fails if the value contains anything other than digits. */
 @ErrorDefinition("errors.constraint.mustContainOnlyNumerals")
 @Serializable
 data class MustContainOnlyNumerals<T: BaseDto>(
@@ -106,9 +128,7 @@ data class MustContainOnlyNumerals<T: BaseDto>(
 ) : OwleError, ConstraintError {
 
     private val value: String? get() = constrainedField.get(receiver)
-    override val isInvalid: Boolean get() = value?.let { it.all { ch -> ch.isDigit() } } ?: false
-    override val errorCode: String = ""
-    override val message: String get() = ""
+    override val isInvalid: Boolean get() = value?.let { s -> !s.all { it.isDigit() } } ?: false
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}=$value"
 
 }
@@ -121,8 +141,6 @@ data class InvalidResetToken<T : BaseDto>(
 ) : ConstraintError {
 
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}=$value"
     override val isInvalid: Boolean get() = value
         ?.let { !Regex(REGEX_PATTERN).matches(it) }
@@ -141,8 +159,6 @@ data class InvalidOAuthProvider<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}=$value"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value != null && value !in ALLOWED_PROVIDERS
@@ -158,8 +174,6 @@ data class PythonVersionSegmentFormat<T: BaseDto>(
     val constrainedField: KProperty1<T, String?>,
     val receiver: T
 ): ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}"
     override val isInvalid: Boolean get() = if (value == null) false else !Regex(PY_VERSION_SEG_REGEX).matches(value!!)
     private val value: String? get() = constrainedField.get(receiver)
@@ -171,6 +185,7 @@ data class PythonVersionSegmentFormat<T: BaseDto>(
 }
 
 /** Fails if the string is blank (contains only whitespace). */
+@ErrorDefinition("errors.constraint.stringMustNotBeBlank")
 @Serializable
 data class StringMustNotBeBlank<T : BaseDto>(
     val constrainedField: KProperty1<T, String?>,
@@ -195,8 +210,6 @@ data class StringLengthMustBeGt<T : BaseDto>(
     val receiver: T,
     val minLength: Int
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}.length: expected>=$minLength, actual=${value?.length}"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value?.length?.let { it < minLength } ?: false
@@ -212,8 +225,6 @@ data class StringMustHaveExactRequiredLength<T : BaseDto>(
     val requirement: Int
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected=$requirement, actual=${value?.length}"
     private val value: String? get() = constrainedField.get(receiver)
     override val isInvalid: Boolean get() = value?.length?.let { it != requirement } ?: true
@@ -228,8 +239,6 @@ data class StringMaxLengthError<T : BaseDto>(
     val receiver: T,
     val maxLength: Int
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected<=$maxLength, actual=${value?.length}"
     override val isInvalid: Boolean get() = value?.length?.let { it > maxLength } ?: false
     private val value: String? get() = constrainedField.get(receiver)
@@ -243,27 +252,11 @@ data class StringLengthMustBeLt<T : BaseDto>(
     val receiver: T,
     val maxLength: Int
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected<=$maxLength, actual=${value?.length}"
     override val isInvalid: Boolean get() = value?.length?.let { it > maxLength } ?: false
     private val value: String? get() = constrainedField.get(receiver)
 }
 
-/** Fails if the value of the constrained property is less than the provided minimum. */
-@ErrorDefinition("errors.constraint.intMustBeGtOrEqual")
-@Serializable
-data class IntMustBeGtOrEqual<T : BaseDto>(
-    val constrainedField: KProperty1<T, Int>,
-    val receiver: T,
-    val minValue: Int
-) : ConstraintError {
-    private val value: Int get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
-    override val isInvalid: Boolean get() = value < minValue
-    override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: min=$minValue, actual=$value"
-}
 
 /** Fails if the value of the constrained property is less than the provided minimum. */
 @ErrorDefinition("errors.constraint.intValueMustMeetMinimum")
@@ -274,8 +267,6 @@ data class IntValueMustMeetMinimum<T : BaseDto>(
     val minValue: Int
 ) : ConstraintError {
     private val value: Int get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val isInvalid: Boolean get() = value < minValue
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: min=$minValue, actual=$value"
 }
@@ -288,8 +279,6 @@ data class LongValueMustMeetMinimum<T : BaseDto>(
     val receiver: T,
     val minValue: Long
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected>=$minValue, actual=$value"
     override val isInvalid: Boolean get() = value < minValue
     private val value: Long get() = constrainedField.get(receiver)
@@ -304,8 +293,6 @@ data class LongValueMustNotExceedMaximum<T : BaseDto>(
     val receiver: T,
     val maxValue: Long
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected<=$maxValue, actual=$value"
     override val isInvalid: Boolean get() = value > maxValue
     private val value: Long get() = constrainedField.get(receiver)
@@ -321,9 +308,7 @@ data class LongValueOoB<T : BaseDto>(
     val maxValue: Long
 ) : ConstraintError {
     private val value: Long get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
-    override val isInvalid: Boolean get() = value < minValue || value >= maxValue
+    override val isInvalid: Boolean get() = value < minValue || value > maxValue
     override val detail: String get() =
         "${receiver.owleTypedId}::${constrainedField.name}: expected=($minValue..$maxValue), actual=$value"
 }
@@ -338,10 +323,8 @@ data class DoubleValueOoB<T : BaseDto>(
     val maxValue: Double
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: expected=($minValue..$maxValue), actual=$value"
-    override val isInvalid: Boolean get() = value < minValue || value >= maxValue
+    override val isInvalid: Boolean get() = value.isNaN() || value < minValue || value > maxValue
     private val value: Double get() = constrainedField.get(receiver)
 
 }
@@ -354,8 +337,6 @@ data class ListMustNotBeEmpty<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}"
     override val isInvalid: Boolean get() = constrainedField.get(receiver).isEmpty()
 
@@ -370,8 +351,6 @@ data class InvalidEmailFormat<T : BaseDto>(
 ) : ConstraintError {
 
     private val value: String get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val isInvalid: Boolean get() = !Regex(VALID_EMAIL_REGEX).matches(value)
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}=$value"
 
@@ -391,8 +370,6 @@ data class InvalidUrlFormat<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val isInvalid: Boolean get() = runCatching { URL(value).toURI() }.isFailure
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}=$value"
 }
@@ -404,8 +381,6 @@ data class TimestampFormatMustMatchIso8601<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val isInvalid: Boolean
         get() = value?.let { !Regex(ISO_8601_UTC_REGEX).matches(it) } ?: false
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: value='$value'"
@@ -423,14 +398,13 @@ data class TimestampMustBeChronologicallyCoherent<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
     private val value: String? get() = constrainedField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val isInvalid: Boolean
         get() = value?.let { DateTimeConverter.isChronologicallyCoherent(it) } ?: true
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: value='$value'"
 }
 
 /** Fails if both workflow and step are null. */
+@ErrorDefinition("errors.constraint.testCaseSubject")
 @Serializable
 data class TestCaseSubject<T : BaseDto>(
     val workflow: KProperty1<T, Workflow?>,
@@ -467,8 +441,6 @@ data class VersionSpecUndefined<T : BaseDto>(
     private val versionMinValue: String? get() = versionMinField.get(receiver)
     private val versionMaxValue: String? get() = versionMinField.get(receiver)
     private val versionExactValue: String? get() = versionMinField.get(receiver)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = receiver.owleTypedId
     override val isInvalid: Boolean get() = versionMinValue == null && versionMaxValue == null && versionExactValue == null
 
@@ -483,8 +455,6 @@ data class PreventsTimeParadoxes<T : BaseDto>(
     val receiver: T
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val detail: String get() = "${receiver.owleTypedId}::${happensFirstField.name}=$beforeTimestamp,::${happensSecondField.name}=${afterTimestamp}"
 
     private val beforeTimestamp: String? get() = happensFirstField.get(receiver)
@@ -507,8 +477,6 @@ data class TagWithUserSourceUserIdError<T : BaseDto>(
     val receiver: Tag,
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
 
     override val detail: String get() = "${receiver.owleTypedId}::${sourceField.name}=${receiver.source?.name}, ${userIdField.name}=[null]"
     override val isInvalid: Boolean
@@ -524,8 +492,6 @@ data class TagWithNonSourceUserIdError<T : BaseDto>(
     val sourceField: KProperty1<T, String?>,
     val receiver: Tag,
 ) : ConstraintError {
-    override val errorCode: String = ""
-    override val message: String get() = ""
     //TODO
     override val detail: String get() = "${receiver.owleTypedId}::${sourceField.name}=${receiver.source?.name}, ${userIdField.name}=[" //${receiver.userId}]"
     override val isInvalid: Boolean
@@ -541,8 +507,6 @@ data class InconsistentOAuthId<T : BaseDto>(
     val receiver: T,
 ) : ConstraintError {
 
-    override val errorCode: String = ""
-    override val message: String get() = ""
 
     override val detail: String get() = "${receiver.owleTypedId}::${providerField.name}=${providerField.name}, ${idField.name}=${idField.get(receiver)}"
     override val isInvalid: Boolean
@@ -551,7 +515,13 @@ data class InconsistentOAuthId<T : BaseDto>(
 
 }
 
-/** Fails if the value of the constrained property is less than the provided minimum. */
+/**
+ * Retained for documentation: [ULong] cannot hold a negative value, so the invariant this names is
+ * enforced by the type and this check never fires.
+ *
+ * It previously read `value >= 0UL`, which is *always true* — every field carrying it was
+ * reported as violating on every validation.
+ */
 @ErrorDefinition("errors.constraint.positiveValueULongError")
 @Serializable
 data class PositiveValueULongError<T: BaseDto>(
@@ -559,10 +529,8 @@ data class PositiveValueULongError<T: BaseDto>(
     val receiver: T
 ) : ConstraintError {
     private val value: ULong get() = constrainedField.get(receiver)
-    override val isInvalid: Boolean get() = value >= 0UL
+    override val isInvalid: Boolean get() = false
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: min=0, actual=$value"
-    override val errorCode: String get() = ""
-    override val message: String get() = ""
 }
 
 /**
@@ -581,15 +549,19 @@ data class DecimalScaleExceeded<T : BaseDto>(
 ) : ConstraintError {
     private val value: Double get() = constrainedField.get(receiver)
     private val asBigDecimal: java.math.BigDecimal get() = java.math.BigDecimal.valueOf(value)
-    override val errorCode: String = ""
-    override val message: String get() = ""
     override val isInvalid: Boolean
         get() = asBigDecimal.scale() > maxScale || asBigDecimal.precision() > maxPrecision
     override val detail: String
         get() = "${receiver.owleTypedId}::${constrainedField.name}: expected<=DECIMAL($maxPrecision,$maxScale), actual=$value"
 }
 
-/** Fails if the value of the constrained property is less than the provided minimum. */
+/**
+ * Retained for documentation: [UInt] cannot hold a negative value, so the invariant this names is
+ * enforced by the type and this check never fires.
+ *
+ * It previously read `value >= 0U`, which is *always true* — every field carrying it was
+ * reported as violating on every validation.
+ */
 @ErrorDefinition("errors.constraint.positiveValueUIntError")
 @Serializable
 data class PositiveValueUIntError<T: BaseDto>(
@@ -597,8 +569,6 @@ data class PositiveValueUIntError<T: BaseDto>(
     val receiver: T
 ) : ConstraintError {
     private val value: UInt get() = constrainedField.get(receiver)
-    override val isInvalid: Boolean get() = value >= 0U
+    override val isInvalid: Boolean get() = false
     override val detail: String get() = "${receiver.owleTypedId}::${constrainedField.name}: min=0, actual=$value"
-    override val errorCode: String get() = ""
-    override val message: String get() = ""
 }

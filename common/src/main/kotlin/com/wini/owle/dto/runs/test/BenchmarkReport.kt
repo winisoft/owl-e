@@ -18,7 +18,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class BenchmarkReport(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

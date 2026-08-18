@@ -24,7 +24,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @TagWithNonSourceUserIdError("userId", "source")
 @TagWithUserSourceUserIdError("userId", "source")
 data class Tag(
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     @ConstraintSimple([StringContainsRestrictedChars::class, StringNotBlankError::class, StringNotEmptyError::class])

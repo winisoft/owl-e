@@ -18,7 +18,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @Serializable
 data class TestInput(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     val testCase: TestCase,

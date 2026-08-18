@@ -21,7 +21,6 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
 @ApiEndpointDefinition("api.runs.workflow.workflowExecution", ["executions"], "/workflow-execution")
 data class WorkflowExecution(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**

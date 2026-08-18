@@ -24,7 +24,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ToolParam(
 
-    @ConstraintSimple([PositiveValueULongError::class])
     override val id: ULong,
 
     /**
