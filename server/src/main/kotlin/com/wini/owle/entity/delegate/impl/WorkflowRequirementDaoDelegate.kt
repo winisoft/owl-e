@@ -1,35 +1,34 @@
 package com.wini.owle.entity.delegate.impl
 
 import com.wini.owle.dto.workflows.WorkflowRequirement
-import com.wini.owle.entity.delegate.DaoDelegate
+import com.wini.owle.entity.delegate.CompositeIdDaoDelegate
 import com.wini.owle.entity.workflows.WorkflowRequirementEntity
+import com.wini.owle.entity.workflows.WorkflowRequirements.requiredDist
+import com.wini.owle.entity.workflows.WorkflowRequirements.workflow
+import com.wini.owle.entity.workflows.Workflows
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
-object WorkflowRequirementDaoDelegate: DaoDelegate<CompositeID, WorkflowRequirement, WorkflowRequirementEntity> {
-    override val columnsByRequestParam: Map<String, Column<out Any>>
-        get() = TODO("Not yet implemented")
+object WorkflowRequirementDaoDelegate: CompositeIdDaoDelegate<
+        WorkflowRequirement,
+        WorkflowRequirementEntity,
+        >(WorkflowRequirementEntity.Companion) {
+
+    override fun buildId(params: Map<String, Any?>): CompositeID {
+        return CompositeID.Companion {
+
+        }
+    }
 
     override fun extractId(dto: WorkflowRequirement): CompositeID {
-        TODO("Not yet implemented")
+        return CompositeID.Companion {
+
+        }
     }
 
-    override fun buildEntityId(id: CompositeID): EntityID<CompositeID> {
-        TODO("Not yet implemented")
-    }
+    override val columnsByRequestParam: Map<String, Column<out Any>> = mapOf(
 
-    override fun findOrCreate(
-        dto: WorkflowRequirement,
-        applyProps: WorkflowRequirementEntity.() -> Unit
-    ): WorkflowRequirementEntity {
-        TODO("Not yet implemented")
-    }
-
-    override fun buildId(dto: WorkflowRequirement): EntityID<CompositeID> {
-        TODO("Not yet implemented")
-    }
-
+    )
 
 }
