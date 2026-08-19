@@ -22,9 +22,13 @@ object TypeNodes : ULongIdTable("type_nodes") {
     val namespace = varchar("namespace", 1024).nullable()
     val name = varchar("name", 255).nullable()
     val kind = dbEnum<TypeNodeKind>("kind", 13)
-    val alias = varchar("alias", 255).nullable()
     val isGeneric = bool("is_generic").default(false)
-    val dedupHash = char("dedup_hash", 64).nullable().uniqueIndex()
+    /**
+     * Structural identity. Not nullable: MySQL's `UNIQUE` permits unlimited NULLs, so a nullable
+     * hash enforces nothing until written, and a half-populated column raises no complaint. Every
+     * node has a structural form, so every node can carry one.
+     */
+    val dedupHash = char("dedup_hash", 64).uniqueIndex()
 }
 
 object TypeNodeRelations : OwleCompositeIdTable("type_node_relations") {
@@ -32,11 +36,16 @@ object TypeNodeRelations : OwleCompositeIdTable("type_node_relations") {
     val childNode = keyReference("child_node_id", TypeNodes)
     val relationKind = dbEnum<TypeNodeRelationKind>("relation_kind", 16)
         .default(TypeNodeRelationKind.INHERITANCE)
+
+    /**
+     * The base's position in the child's declaration. `class C(A, B)` is not `class C(B, A)` -
+     * order determines the method resolution order, and so which implementation actually runs.
+     */
+    val position = uinteger("position").default(0u)
     override val primaryKey = PrimaryKey(childNode, parentNode)
 }
 
 object TypeSchemaRefs : ULongIdTable("type_schema_refs") {
-    val parentRef = reference("parent_ref_id", TypeSchemaRefs).nullable()
     val classNode = reference("class_node_id", TypeNodes, onDelete = ReferenceOption.CASCADE)
     val name = varchar("name", 255)
     val membership = dbEnum<SchemaMembership>("member_kind", 16)
@@ -82,6 +91,14 @@ object CallableParameters : ULongIdTable("callable_parameters") {
     val paramTypeNode = reference("param_type_node_id", TypeNodes)
     val isVarArg = bool("is_vararg").default(false)
     val isKwarg = bool("is_kwarg").default(false)
+
+    /**
+     * Where the argument may be passed. `def f(a, b, /, c, *, d)` makes `a` and `b`
+     * positional-only and `d` keyword-only; [isVarArg] and [isKwarg] mark `*args` and `**kwargs`
+     * themselves, not the sections they delimit. A generated call site needs both to be legal.
+     */
+    val isPositionalOnly = bool("is_positional_only").default(false)
+    val isKeywordOnly = bool("is_keyword_only").default(false)
     val defaultValueText = varchar("default_value_text", 1024).nullable()
 
     init {

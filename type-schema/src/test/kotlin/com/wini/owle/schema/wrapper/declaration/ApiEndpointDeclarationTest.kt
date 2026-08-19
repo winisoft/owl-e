@@ -1,5 +1,8 @@
 package com.wini.owle.schema.wrapper.declaration
-/*
+
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.*
 import com.wini.owle.schema.api.ApiEndpointDefinition // For QUALIFIED_NAME
 import com.wini.owle.schema.api.ApiOperationDefinition // For QUALIFIED_NAME
@@ -105,6 +108,5 @@ open class ApiEndpointDeclarationTest {
     }
 
 
+*/
 }
-
- */

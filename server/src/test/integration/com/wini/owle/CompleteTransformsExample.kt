@@ -330,7 +330,6 @@ abstract class CompleteTransformsExampleIntegration {
             TypeNodeEntity.new(1UL) {
                 namespace = "builtins"
                 name = "str"
-                alias = null
                 isGeneric = false
 
             }

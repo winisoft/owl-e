@@ -78,7 +78,6 @@ package com.wini.owle.entity
 //        object TypingModule {
 //            val TypeBound: List<IdTable<*>> = listOf(TypeVarBounds, TypeNodes)
 //            val TypeDeclaration: List<IdTable<*>> = listOf(TypeNodes)
-//            val TypeParameter: List<IdTable<*>> = listOf(TypeParameters, TypeNodes)
 //            val TypeSchemaRef: List<IdTable<*>> = listOf(TypeNodes, TypeSchemaRefs)
 //            val TypeUnionMember: List<IdTable<*>> = listOf(TypeUnionMembers, TypeVarBounds, TypeNodes)
 //            val TypeVariance: List<IdTable<*>> = listOf(TypeVarBounds, TypeNodes)

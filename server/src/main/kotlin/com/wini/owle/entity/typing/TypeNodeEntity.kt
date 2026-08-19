@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
 /**
- * Every kind of type (base, instantiation, typevar, union, callable, alias) lives in type_nodes; all queries converge
+ * Every kind of type (base, instantiation, typevar, union, callable) lives in type_nodes; all queries converge
  * on a single primary key space. All insights into the unique characteristics of a given type -- union membership,
  * declared fields, for example -- are a single association away in a related data type.
  */
@@ -25,7 +25,6 @@ class TypeNodeEntity(id: EntityID<ULong>) : ULongEntity(id) {
     var name by TypeNodes.name
 
     /** for TypeVar names or “MyList = List\[int]” */
-    var alias by TypeNodes.alias
 
     var isGeneric by TypeNodes.isGeneric
 

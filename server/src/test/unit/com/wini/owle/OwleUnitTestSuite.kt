@@ -38,6 +38,10 @@ abstract class OwleUnitTestSuite {
     inner class ValidatorMechanism : DtoValidatorTest()
 
     @Nested
+    @DisplayName("Generated Layer")
+    inner class GeneratedLayer : com.wini.owle.wiring.GeneratedLayerTest()
+
+    @Nested
     @DisplayName("DLL Delegation")
     inner class DllDelegation : com.wini.owle.dll.DllDelegationTest()
 

@@ -45,7 +45,6 @@ import com.wini.owle.dto.transforms.TransformOccurrence
 import com.wini.owle.dto.transforms.TransformOccurrenceArg
 import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.dto.typing.TypeNode
-import com.wini.owle.dto.typing.TypeParameter
 import com.wini.owle.dto.typing.TypeSchemaRef
 import com.wini.owle.dto.typing.TypeUnionMember
 import com.wini.owle.dto.typing.TypeVarBound
@@ -84,35 +83,17 @@ object TypingDtoFactory {
         memberTypeNode = memberTypeNode
     )
 
-    fun typeParameterDto(
-        id: ULong = 1UL,
-        typeDeclaration: TypeNode = typeNode(),
-        position: Int = 1,
-        parameterTypeDeclaration: TypeNode = typeNode()
-    ) : TypeParameter {
-        return TypeParameter(
-            id = id,
-            typeDeclaration = typeDeclaration,
-            position = position,
-            parameterTypeDeclaration = parameterTypeDeclaration
-        )
-    }
-
     fun typeSchemaRefDto(
         id: ULong = 1UL,
-        parentRef: TypeSchemaRef? = null,
         name: String = "exampleSchema",
         typeDeclaration: TypeNode = typeNode(),
         description: String = "Schema reference description",
-        childRefs: List<TypeSchemaRef> = emptyList()
     ) : TypeSchemaRef {
         return TypeSchemaRef(
             id = id,
-            parentRef = parentRef,
             name = name,
             typeNode = typeDeclaration,
-            description = description,
-            children = childRefs
+            description = description
         )
     }
 
@@ -121,7 +102,6 @@ object TypingDtoFactory {
         version = EnvironsDtoFactory.version(),
         null,
         "",
-        null,
         false
     )
 
@@ -183,6 +163,8 @@ object TypingDtoFactory {
         paramName: String = "url",
         isVarArg: Boolean = false,
         isKwarg: Boolean = false,
+        isPositionalOnly: Boolean = false,
+        isKeywordOnly: Boolean = false,
         defaultValueText: String? = null
     ): CallableParameter = CallableParameter(
         id = id,
@@ -192,6 +174,8 @@ object TypingDtoFactory {
         paramName = paramName,
         isVarArg = isVarArg,
         isKwarg = isKwarg,
+        isPositionalOnly = isPositionalOnly,
+        isKeywordOnly = isKeywordOnly,
         defaultValueText = defaultValueText
     )
 }

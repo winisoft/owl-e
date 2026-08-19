@@ -42,11 +42,9 @@ object InstanceMockEntityFactory {
     fun typeNodeDao(
         namespace: String? = "builtins",
         name: String? = "List",
-        alias: String? = "CustomType"
     ): TypeNodeEntity = mockk(relaxed = true) {
         every { this@mockk.namespace } returns namespace
         every { this@mockk.name } returns name
-        every { this@mockk.alias } returns alias
     }
 
     /**

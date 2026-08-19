@@ -1,7 +1,8 @@
 package com.wini.owle.schema.wrapper.annotation.error
-/*
+
 import com.google.devtools.ksp.symbol.*
 import com.wini.owle.schema.wrapper.declaration.ConstrainedField
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
@@ -151,5 +152,3 @@ open class ConstraintAnnotationTest {
         assertTrue(fqns.isEmpty(), "Should return empty list if single error value is not KSType or FQN is null")
     }
 }
-
- */

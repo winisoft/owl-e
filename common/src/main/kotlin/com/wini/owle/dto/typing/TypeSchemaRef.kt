@@ -25,11 +25,6 @@ data class TypeSchemaRef(
     override val id: ULong,
 
     /**
-     * Reference to the parent schema, allowing nested or recursive schemas.
-     */
-    val parentRef: TypeSchemaRef?,
-
-    /**
      * The name of the property or field within the schema.
      */
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
@@ -47,6 +42,5 @@ data class TypeSchemaRef(
 
     @ConstraintSimple([StringNotEmptyError::class, StringNotBlankError::class, StringContainsRestrictedChars::class])
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeSchemaRef.DESC_MAX_LENGTH)
-    val description: String?,
-    val children: List<TypeSchemaRef>
+    val description: String?
 ) : ULongDto

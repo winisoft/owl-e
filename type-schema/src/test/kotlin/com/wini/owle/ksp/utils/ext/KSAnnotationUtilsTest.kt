@@ -1,5 +1,8 @@
 package com.wini.owle.ksp.utils.ext
 
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.*
 import com.wini.owle.ksp.utils.ConstraintRegistry
 

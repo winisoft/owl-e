@@ -5,6 +5,7 @@ import com.wini.owle.entity.OwleCompositeIdTable
 import com.wini.owle.entity.dbEnum
 
 import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
+import com.wini.owle.dto.environs.enums.EnvMarkerVariable
 import com.wini.owle.dto.environs.enums.EnvMarkerLogicOp
 import com.wini.owle.dto.environs.enums.EnvMarkerOperator
 import com.wini.owle.entity.StringIdTable
@@ -200,7 +201,7 @@ object EnvMarkerLogicals : ULongIdTable("env_marker_logicals") {
 
 object EnvMarkerComparisons : ULongIdTable("env_marker_comparisons") {
     val expression = reference("expression_id", EnvMarkerExpressions, onDelete = ReferenceOption.CASCADE)
-    val variable = varchar("variable", 255).nullable()
+    val variable = dbEnum<EnvMarkerVariable>("variable", 32).nullable()
     val operator = dbEnum<EnvMarkerOperator>("operator", 18)
     val value = text("value")
 }

@@ -55,7 +55,6 @@ val polymorphicJson = Json {
             subclass(DataPointRead::class, DataPointRead.serializer())
             subclass(DataPointWrite::class, DataPointWrite.serializer())
             subclass(TypeNode::class, TypeNode.serializer())
-            subclass(TypeParameter::class, TypeParameter.serializer())
             subclass(TypeSchemaRef::class, TypeSchemaRef.serializer())
             subclass(TypeUnionMember::class, TypeUnionMember.serializer())
             subclass(TypeVarVariance::class, TypeVarVariance.serializer())

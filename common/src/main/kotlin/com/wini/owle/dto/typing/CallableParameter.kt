@@ -53,6 +53,16 @@ data class CallableParameter(
     val isKwarg: Boolean,
 
     /**
+     * Whether the argument may only be passed positionally - it precedes a `/` in the signature.
+     */
+    val isPositionalOnly: Boolean,
+
+    /**
+     * Whether the argument may only be passed by name - it follows a `*` in the signature.
+     */
+    val isKeywordOnly: Boolean,
+
+    /**
      * default literal text, if any
      */
     @ConstraintSimple([StringContainsRestrictedChars::class])

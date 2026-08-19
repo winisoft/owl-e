@@ -1,5 +1,8 @@
 package com.wini.owle.schema.wrapper.annotation.error
-/*
+
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSValueArgument
 import com.wini.owle.ksp.utils.LocalizedStringResolver
@@ -99,5 +102,3 @@ open class ErrorAnnotationTest {
         verify(exactly = 1) { LocalizedStringResolver.resolve("$errorResKeyVal.message") }
     }
 }
-
- */

@@ -3,41 +3,36 @@ package com.wini.owle.dto.typing.enums
 import com.wini.owle.dto.DbToken
 
 
+/**
+ * The form a type expression takes.
+ *
+ * One axis only: how the type is *written*, which determines which satellite table holds its
+ * detail. A member of a class is not a form of type expression - it is a name bound to a type on an
+ * owner, which is what `type_schema_refs.member_kind` records - so `method` and `attribute` are not
+ * here. Neither are `class` (indistinguishable from [BASE]), `primitive` (primitives are classes in
+ * Python), `generic` (the `is_generic` column already says so), or `function` (a signature is
+ * [CALLABLE]).
+ */
 enum class TypeNodeKind(override val dbValue: String) : DbToken {
 
+    /** A named class or type - `int`, `asyncio.Task`. Located by namespace and name. */
     BASE("base"),
 
     /**
-     * Represent a parameterized generic at runtime (e.g. List[int]). They refer back to their “base” via base_node_id.
+     * A parameterized generic - `list[int]`, `dict[str, int]`. Decomposes into an origin and
+     * ordered arguments via `type_instantiations` and `type_instantiation_args`.
      */
-    @Suppress("KDocUnresolvedReference")
     INSTANTIATION("instantiation"),
 
-    /**
-     * represent a TypeVar (e.g. T).
-     */
+    /** A `TypeVar`. Its bound, constraints and variance live in the three `typevar_*` tables. */
     TYPEVAR("typevar"),
 
     /**
-     * Present to represent a type node for a Union[...] (e.g. Union[int,str]) and will have multiple rows in union_members.
+     * A union - `str | int`. Members are held order-independently in `type_union_members`, because
+     * `str | int` and `int | str` are the same type.
      */
     UNION("union"),
 
-    /**
-     * Represent among Type Nodes function signatures (the “callable type” itself).
-     */
-    CALLABLE("callable"),
-
-    METHOD("method"),
-
-    ATTRIBUTE("attribute"),
-
-    CLASS("class"),
-
-    GENERIC("generic"),
-
-    PRIMITIVE("primitive"),
-
-    FUNCTION("function")
-
+    /** A function signature as a type. Detail in `callable_signatures` and `callable_parameters`. */
+    CALLABLE("callable")
 }

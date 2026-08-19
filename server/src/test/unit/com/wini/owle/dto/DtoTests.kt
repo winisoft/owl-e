@@ -60,7 +60,6 @@ abstract class DtoTest {
     @DisplayName("Typing Module")
     inner class TypingModule {
         @Nested inner class TypeDeclarationEntityDtoTest : BaseDtoTest<TypeNode>(TypeNode::class.java)
-        @Nested inner class TypeParameterTest : BaseDtoTest<TypeParameter>(TypeParameter::class.java)
         @Nested inner class TypeSchemaRefTest : BaseDtoTest<TypeSchemaRef>(TypeSchemaRef::class.java)
         @Nested inner class TypeUnionMemberTest : BaseDtoTest<TypeUnionMember>(TypeUnionMember::class.java)
         @Nested inner class TypeVariancesDtoTest : BaseDtoTest<TypeVarVariance>(TypeVarVariance::class.java)

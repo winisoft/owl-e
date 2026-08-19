@@ -20,12 +20,10 @@ class TypeSchemaRefEntity(id: EntityID<ULong>) : ULongEntity(id) {
      * -- If NULL: this is the “root schema node” for a class (points at the class’s type_nodes.id).
      * -- If NOT NULL: points at another row in this same table.
      */
-    var parentRef by TypeSchemaRefEntity optionalReferencedOn TypeSchemaRefs.parentRef
 
     /**
      * Nested members declared beneath this one.
      */
-    val children: SizedIterable<TypeSchemaRefEntity> by TypeSchemaRefEntity optionalReferrersOn TypeSchemaRefs.parentRef
 
     /**
      * The type that declares this member.

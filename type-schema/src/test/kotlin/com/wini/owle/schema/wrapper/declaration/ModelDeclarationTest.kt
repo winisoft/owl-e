@@ -1,5 +1,8 @@
 package com.wini.owle.schema.wrapper.declaration
-/*
+
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.*
 import com.wini.owle.schema.wrapper.annotation.ModelAnnotation
 import com.wini.owle.schema.wrapper.annotation.ModelAnnotationImpl
@@ -268,6 +271,5 @@ open class ModelDeclarationTest {
     }
 
 
+*/
 }
-
- */

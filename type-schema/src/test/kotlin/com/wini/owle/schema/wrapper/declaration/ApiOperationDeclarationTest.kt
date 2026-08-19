@@ -1,6 +1,7 @@
 package com.wini.owle.schema.wrapper.declaration
-/*
+
 import com.wini.owle.schema.wrapper.annotation.ApiOperationAnnotation
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
@@ -35,5 +36,3 @@ open class ApiOperationDeclarationTest {
 
 
 }
-
- */

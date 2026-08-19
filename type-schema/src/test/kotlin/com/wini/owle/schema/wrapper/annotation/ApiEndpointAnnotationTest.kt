@@ -1,5 +1,8 @@
 package com.wini.owle.schema.wrapper.annotation
 
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSValueArgument

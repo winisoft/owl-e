@@ -1,5 +1,8 @@
 package com.wini.owle.schema.wrapper.declaration.error
-/*
+
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.wini.owle.schema.wrapper.annotation.error.ErrorAnnotation
 import io.mockk.clearAllMocks
@@ -88,5 +91,3 @@ open class ErrorDeclarationTest {
         assertEquals(expectedSimpleName, errorDeclaration.simpleName.asString())
     }
 }
-
- */

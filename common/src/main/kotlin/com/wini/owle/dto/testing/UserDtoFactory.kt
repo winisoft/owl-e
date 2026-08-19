@@ -45,7 +45,6 @@ import com.wini.owle.dto.transforms.TransformOccurrence
 import com.wini.owle.dto.transforms.TransformOccurrenceArg
 import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.dto.typing.TypeNode
-import com.wini.owle.dto.typing.TypeParameter
 import com.wini.owle.dto.typing.TypeSchemaRef
 import com.wini.owle.dto.typing.TypeUnionMember
 import com.wini.owle.dto.typing.TypeVarBound

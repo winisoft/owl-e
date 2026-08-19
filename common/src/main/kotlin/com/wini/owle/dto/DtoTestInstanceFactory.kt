@@ -69,7 +69,6 @@ object DtoTestInstanceFactory {
             com.wini.owle.dto.transforms.TransformOccurrenceArg::class.java -> TransformsDtoFactory.transformOccurrenceArgDto() as T
             com.wini.owle.dto.transforms.TransformTargetType::class.java -> TransformsDtoFactory.transformTargetType() as T
             com.wini.owle.dto.typing.TypeNode::class.java -> TypingDtoFactory.typeNode() as T
-            com.wini.owle.dto.typing.TypeParameter::class.java -> TypingDtoFactory.typeParameterDto() as T
             com.wini.owle.dto.typing.TypeSchemaRef::class.java -> TypingDtoFactory.typeSchemaRefDto() as T
             com.wini.owle.dto.typing.TypeUnionMember::class.java -> TypingDtoFactory.typeUnionMember() as T
             com.wini.owle.dto.typing.TypeVarBound::class.java -> TypingDtoFactory.typeVarBoundDto() as T

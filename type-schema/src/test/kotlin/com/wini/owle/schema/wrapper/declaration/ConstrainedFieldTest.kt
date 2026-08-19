@@ -1,5 +1,8 @@
 package com.wini.owle.schema.wrapper.declaration
 
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.symbol.KSAnnotation // Specific import
 import com.google.devtools.ksp.symbol.KSClassDeclaration // Specific import
 import com.google.devtools.ksp.symbol.KSName // Specific import

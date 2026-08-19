@@ -1,5 +1,8 @@
 package com.wini.owle.ksp
 
+import io.mockk.every
+import io.mockk.mockk
+
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSName

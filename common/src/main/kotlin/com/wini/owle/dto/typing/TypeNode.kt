@@ -33,10 +33,6 @@ data class TypeNode(
     @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.NAME_MAX_LENGTH)
     val name: String?,
     /** **/
-    @ConstraintSimple([StringContainsRestrictedChars::class])
-    @ConstraintStringLenMax(StringMaxLengthError::class, Schema.TypeNode.ALIAS_MAX_LENGTH)
-    val alias: String?,
-    /** **/
     val isGeneric: Boolean,
     /** Schema members defined : this type **/
 //    val schemaRefs : List<TypeSchemaRef>,

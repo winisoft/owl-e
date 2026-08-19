@@ -19,6 +19,12 @@ data class TypeNodeRelation(
 
     val relationKind: TypeNodeRelationKind,
 
+    /**
+     * The base's position in the child's declaration, which fixes the method resolution order:
+     * `class C(A, B)` resolves differently from `class C(B, A)`.
+     */
+    val position: UInt,
+
 ) : CompositeDto {
 
     override val owleId: String get() = "parentNode=${parentNode.owleId},childNode=${childNode.owleId}"

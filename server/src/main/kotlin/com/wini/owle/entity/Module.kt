@@ -39,7 +39,6 @@ import com.wini.owle.dto.transforms.TransformOccurrenceArg
 import com.wini.owle.dto.transforms.TransformTargetType
 import com.wini.owle.dto.typing.CallableParameter
 import com.wini.owle.dto.typing.CallableSignature
-import com.wini.owle.dto.typing.ClassInheritance
 import com.wini.owle.dto.typing.TypeNode
 import com.wini.owle.dto.typing.TypeSchemaRef
 import com.wini.owle.dto.typing.TypeUnionMember
