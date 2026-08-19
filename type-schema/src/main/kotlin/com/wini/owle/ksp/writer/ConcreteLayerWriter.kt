@@ -24,6 +24,8 @@ import com.google.devtools.ksp.processing.KSPLogger
  * Nothing here has behaviour. Each class is its generic base with the type arguments pinned, so
  * the logic remains in one place and stays testable in one place.
  */
+private fun String.quoted(): String = "\"" + this + "\""
+
 class ConcreteLayerWriter(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger
@@ -41,13 +43,18 @@ class ConcreteLayerWriter(
         val entityFq: String,
         val idType: String,
         /** For composite keys, the hand-written delegate object; null when one must be generated. */
-        val existingDelegateFq: String?
+        val existingDelegateFq: String?,
+        /** Route segment from `@ApiEndpointDefinition`; null when the type exposes no endpoint. */
+        val endpointPath: String?,
+        val validatorFq: String?
     ) {
         val delegate: String get() = existingDelegateFq?.substringAfterLast('.') ?: "${dto}DaoDelegate"
         val repo: String get() = "${dto}Repo"
         val service: String get() = "${dto}Service"
         val dll: String get() = "${dto}Dll"
         val mapper: String get() = "${dto}Mapper"
+        val api: String get() = "${dto}Api"
+        val validator: String get() = validatorFq?.substringAfterLast('.') ?: ""
     }
 
     fun generate(layers: List<Layer>) {
@@ -75,6 +82,16 @@ class ConcreteLayerWriter(
         b.appendLine("import com.wini.owle.mapper.generated.${l.mapper}")
         b.appendLine("import com.wini.owle.repo.GenericRepoImpl")
         b.appendLine("import com.wini.owle.services.GenericServiceImpl")
+        if (l.endpointPath != null && l.validatorFq != null) {
+            b.appendLine("import " + l.validatorFq)
+            b.appendLine(
+                when (l.idType) {
+                    "String" -> "import com.wini.owle.api.StringIdEndpointImpl"
+                    "CompositeID" -> "import com.wini.owle.api.CompositeIdEndpointImpl"
+                    else -> "import com.wini.owle.api.ULongIdEndpointImpl"
+                }
+            )
+        }
         l.existingDelegateFq?.let { b.appendLine("import $it") }
         if (l.existingDelegateFq == null) {
             b.appendLine(
@@ -110,6 +127,24 @@ class ConcreteLayerWriter(
         b.appendLine()
         b.appendLine("class ${l.dll}(service: ${l.service}) : GenericDllImpl<${l.idType}, ${l.dto}>(service)")
 
+        if (l.endpointPath != null && l.validatorFq != null) {
+            val endpointBase = when (l.idType) {
+                "String" -> "StringIdEndpointImpl"
+                "CompositeID" -> "CompositeIdEndpointImpl"
+                else -> "ULongIdEndpointImpl"
+            }
+            b.appendLine()
+            b.appendLine("class ${l.api}(")
+            b.appendLine("    dll: ${l.dll},")
+            b.appendLine("    validator: ${l.validator}")
+            if (l.idType == "CompositeID") {
+                b.appendLine("    , daoDelegate: ${l.delegate}")
+                b.appendLine(") : $endpointBase<${l.dto}, ${l.entity}>(dll, validator, daoDelegate, ${l.endpointPath.quoted()}, ${l.dto}.serializer())")
+            } else {
+                b.appendLine(") : $endpointBase<${l.dto}>(dll, validator, ${l.endpointPath.quoted()}, ${l.dto}.serializer())")
+            }
+        }
+
         codeGenerator.createNewFile(Dependencies(aggregating = true), PACKAGE, "${l.dto}Layer")
             .bufferedWriter().use { it.write(b.toString()) }
     }
@@ -137,6 +172,10 @@ class ConcreteLayerWriter(
             b.appendLine("    single { ${l.repo}() }")
             b.appendLine("    single { ${l.service}(get(), get(), get()) }")
             b.appendLine("    single { ${l.dll}(get()) }")
+            if (l.endpointPath != null && l.validatorFq != null) {
+                val args = if (l.idType == "CompositeID") "get(), get(), get()" else "get(), get()"
+                b.appendLine("    single { ${l.api}($args) }")
+            }
         }
         b.appendLine("}")
 

@@ -1,12 +1,7 @@
 package com.wini.owle.services
 
-//import com.wini.owle.service.environs.*
-//import com.wini.owle.service.runs.*
-//import com.wini.owle.service.steps.*
-//import com.wini.owle.service.tags.*
-//import com.wini.owle.service.transforms.*
-//import com.wini.owle.service.typing.*
-//import com.wini.owle.service.workflows.*
+import com.wini.owle.service.workflows.*
+import com.wini.owle.services.environs.marker.EnvMarkerComparisonServiceTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
@@ -14,21 +9,21 @@ import org.junit.jupiter.api.Nested
 @DisplayName("Service Layer Tests")
 abstract class ServiceTestSuite {
 
-//    @Nested
-//    @DisplayName("Environs Module")
-//    inner class ServiceEnvironsModuleTest {
-//
+    @Nested
+    @DisplayName("Environs Module")
+    inner class ServiceEnvironsModuleTest {
+
 //        @Nested
 //        @DisplayName("Distribution")
 //        inner class DistributionServiceTests : DistributionServiceTest()
-//
-//
-//        //@Nested @DisplayName("DistributionPackage")
-//        //inner class DistributionPackageServiceTests: DistributionPackageServiceTest()
-//
-//        @Nested @DisplayName("EnvMarkerComparison")
-//        inner class EnvMarkerComparisonServiceTests: EnvMarkerComparisonServiceTest()
-//
+
+
+        //@Nested @DisplayName("DistributionPackage")
+        //inner class DistributionPackageServiceTests: DistributionPackageServiceTest()
+
+        @Nested @DisplayName("EnvMarkerComparison")
+        inner class EnvMarkerComparisonServiceTests: EnvMarkerComparisonServiceTest()
+
 //        @Nested @DisplayName("EnvMarkerExpression")
 //        inner class EnvMarkerExpressionServiceTests: EnvMarkerExpressionServiceTest()
 //
@@ -55,10 +50,10 @@ abstract class ServiceTestSuite {
 //
 //        @Nested @DisplayName("VersionOverflow")
 //        inner class VersionOverflowServiceTests: VersionOverflowServiceTest()
-//
-//
-//    }
-//
+
+
+    }
+
 //    @Nested
 //    @DisplayName("Runs Module")
 //    inner class ServiceRunsModuleTest {

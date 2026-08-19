@@ -586,7 +586,15 @@ class DbMapperGeneratorProcessor(
             val existing = if (p.idType == "CompositeID") {
                 resolver.getClassDeclarationByName(
                     resolver.getKSNameFromString("com.wini.owle.entity.delegate.impl.${dto}DaoDelegate")
-                )?.qualifiedName?.asString()
+                )?.takeIf { decl ->
+                    // must actually be a CompositeIdDaoDelegate: some stubs implement the bare
+                    // DaoDelegate interface with TODO() bodies, and an endpoint built on one
+                    // would publish a route that throws on every call
+                    decl.superTypes.any {
+                        it.resolve().declaration.qualifiedName?.asString() ==
+                            "com.wini.owle.entity.delegate.CompositeIdDaoDelegate"
+                    }
+                }?.qualifiedName?.asString()
             } else null
 
             ConcreteLayerWriter.Layer(
@@ -595,11 +603,25 @@ class DbMapperGeneratorProcessor(
                 entity = p.entity.simpleName.asString(),
                 entityFq = p.entity.qualifiedName!!.asString(),
                 idType = p.idType,
-                existingDelegateFq = existing
+                existingDelegateFq = existing,
+                endpointPath = endpointPathOf(p.dto),
+                validatorFq = p.dto.qualifiedName!!.asString()
+                    .replace(".dto.", ".validators.") + "Validator"
             )
         }
         ConcreteLayerWriter(codeGenerator, logger).generate(layers)
     }
+
+
+    /** The route segment a DTO declares via `@ApiEndpointDefinition`, trimmed of slashes. */
+    private fun endpointPathOf(dto: KSClassDeclaration): String? = dto.annotations
+        .firstOrNull {
+            it.annotationType.resolve().declaration.qualifiedName?.asString() ==
+                "com.wini.owle.schema.api.ApiEndpointDefinition"
+        }
+        ?.arguments
+        ?.firstOrNull { it.name?.asString() == "path" }
+        ?.value as? String
 
 }
 

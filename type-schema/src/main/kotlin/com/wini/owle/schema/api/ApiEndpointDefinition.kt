@@ -15,7 +15,10 @@ package com.wini.owle.schema.api
  * them out that isn't recoverable from this one annotation.
  */
 @Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.SOURCE)
+// BINARY, not SOURCE: the endpoint classes are generated in `server`, where the DTOs arrive as
+// compiled dependencies. Under SOURCE retention this annotation is discarded at compile time and
+// server's KSP round cannot see it at all, so no route could be derived there.
+@Retention(AnnotationRetention.BINARY)
 annotation class ApiEndpointDefinition(
     val id: String,
     val tags: Array<String> = [],

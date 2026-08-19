@@ -59,7 +59,7 @@ class ValidatorModuleFileWriter(
 
             val getCalls = if (dependentCount == 0) "" else (1..dependentCount).joinToString(", ") { "get()" }
 
-            provideDeclaration.add("single<DtoValidator<$className>> { ${className}Validator($getCalls) }")
+            provideDeclaration.add("single<${className}Validator> { ${className}Validator($getCalls) }")
         }
 
         OutputStreamWriter(file).use { writer ->

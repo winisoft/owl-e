@@ -48,6 +48,11 @@ class ValidatorFileWriter(
 
                 deps.computeIfAbsent(targetModel.fqName) {
                     additionalImports.add("import ${targetModel.packageName.asString()}.$depClassName")
+                    // the collaborator is now the concrete validator, which usually lives in a
+                    // different package than this one
+                    additionalImports.add(
+                        "import ${targetModel.packageName.asString().replace(".dto.", ".validators.")}.${depClassName}Validator"
+                    )
                     Dep(depVarName, targetModel)
                 }
 
@@ -69,7 +74,7 @@ class ValidatorFileWriter(
         }
 
         val constructorParams = deps.values.joinToString(",\n") { dep ->
-            "    private val ${dep.variableName}: DtoValidator<${dep.modelDeclaration.simpleName.asString()}>"
+            "    private val ${dep.variableName}: ${dep.modelDeclaration.simpleName.asString()}Validator"
         }
 
         val file = codeGenerator.createNewFile(

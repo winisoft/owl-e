@@ -1,8 +1,11 @@
 package com.wini.owle
 
 import com.wini.owle.dto.DtoTest
+import com.wini.owle.error.ConstraintErrorTest
+import com.wini.owle.validators.DtoValidatorTest
 import com.wini.owle.repo.RepositoryTest
 import com.wini.owle.services.ServiceTest
+import com.wini.owle.services.ServiceTestSuite
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
@@ -24,7 +27,15 @@ abstract class OwleUnitTestSuite {
     @DisplayName("Repository Tests")
     inner class RepositoryTests : RepositoryTest()
 
-//    @Nested
-//    @DisplayName("Service Tests")
-//    inner class ServiceTests: ServiceTest()
+    @Nested
+    @DisplayName("Constraint Rules")
+    inner class ConstraintRules : ConstraintErrorTest()
+
+    @Nested
+    @DisplayName("Validator Mechanism")
+    inner class ValidatorMechanism : DtoValidatorTest()
+
+    @Nested
+    @DisplayName("Service Tests")
+    inner class ServiceTests: ServiceTestSuite()
 }
