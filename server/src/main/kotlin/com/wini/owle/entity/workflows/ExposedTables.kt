@@ -1,5 +1,7 @@
 package com.wini.owle.entity.workflows
 
+import com.wini.owle.entity.OwleCompositeIdTable
+
 import com.wini.owle.entity.dbEnum
 
 import com.wini.owle.dto.workflows.enums.AuthorshipCredit
@@ -41,9 +43,9 @@ object WorkflowFolders : ULongIdTable("workflow_folders") {
 }
 
 
-object WorkflowFolderRelations : CompositeIdTable("workflow_folder_relations") {
-    val parent = reference("parent_id", WorkflowFolders)
-    val child = reference("child_id", WorkflowFolders)
+object WorkflowFolderRelations : OwleCompositeIdTable("workflow_folder_relations") {
+    val parent = keyReference("parent_id", WorkflowFolders)
+    val child = keyReference("child_id", WorkflowFolders)
     override val primaryKey = PrimaryKey(parent, child)
 }
 
@@ -138,16 +140,16 @@ object Metadatas : ULongIdTable("metadata") {
 }
 
 
-object MetadataStepExclusions : CompositeIdTable("metadata_step_exclusions") {
-    val metadata = reference("metadata_id", Metadatas, onDelete = ReferenceOption.CASCADE)
-    val excludedStep = reference("excluded_step_id", Steps, onDelete = ReferenceOption.CASCADE)
+object MetadataStepExclusions : OwleCompositeIdTable("metadata_step_exclusions") {
+    val metadata = keyReference("metadata_id", Metadatas, onDelete = ReferenceOption.CASCADE)
+    val excludedStep = keyReference("excluded_step_id", Steps, onDelete = ReferenceOption.CASCADE)
     override val primaryKey = PrimaryKey(metadata, excludedStep)
 }
 
 
-object WorkflowRequirements : CompositeIdTable("workflow_requirements") {
-    val workflow = reference("workflow_id", Workflows, onDelete = ReferenceOption.CASCADE)
-    val requiredDist = reference("required_dist", Distributions)
+object WorkflowRequirements : OwleCompositeIdTable("workflow_requirements") {
+    val workflow = keyReference("workflow_id", Workflows, onDelete = ReferenceOption.CASCADE)
+    val requiredDist = keyReference("required_dist", Distributions)
 
     /**
      * Null means "no version was pinned" - install the distribution as-is (`pip install numpy`).
@@ -185,9 +187,9 @@ object Multiflows : ULongIdTable("multiflows") {
 }
 
 
-object MultiflowWorkflows : CompositeIdTable("multiflow_workflows") {
-    val multiflow = reference("multiflow_id", Multiflows, onDelete = ReferenceOption.CASCADE)
-    val workflow = reference("workflow_id", Workflows, onDelete = ReferenceOption.CASCADE)
+object MultiflowWorkflows : OwleCompositeIdTable("multiflow_workflows") {
+    val multiflow = keyReference("multiflow_id", Multiflows, onDelete = ReferenceOption.CASCADE)
+    val workflow = keyReference("workflow_id", Workflows, onDelete = ReferenceOption.CASCADE)
     val posX = double("pos_x").default(0.0)
     val posY = double("pos_y").default(0.0)
     val color = varchar("color", 7).nullable()

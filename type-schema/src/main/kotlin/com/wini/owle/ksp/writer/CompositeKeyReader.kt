@@ -28,8 +28,8 @@ internal object CompositeKeyReader {
         val keyColumns: List<Column> get() = keyProperties.mapNotNull { columns[it] }
     }
 
-    private val TABLE = Regex("""object (\w+)\s*:\s*CompositeIdTable\("(\w+)"\)\s*\{""")
-    private val REFERENCE = Regex("""val (\w+)\s*=\s*reference\("(\w+)",\s*(\w+)[^)]*\)""")
+    private val TABLE = Regex("""object (\w+)\s*:\s*(?:Owle)?CompositeIdTable\("(\w+)"\)\s*\{""")
+    private val REFERENCE = Regex("""val (\w+)\s*=\s*(?:key)?[Rr]eference\("(\w+)",\s*(\w+)[^)]*\)""")
     // the optional type-argument list matches `dbEnum<VersionOperator>("operator", 16)`; without
     // it the key columns of the specifier tables read as absent and their delegates went ungenerated
     private val PLAIN = Regex("""val (\w+)\s*=\s*\w+(?:<[^>]*>)?\("(\w+)"""")

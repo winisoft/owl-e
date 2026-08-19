@@ -4,9 +4,8 @@ import com.wini.owle.async.AsyncResult
 import com.wini.owle.dll.DLL
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.dto.StringDto
-import com.wini.owle.error.BatchOpOfNoDataObjects
+import com.wini.owle.error.EmptyListNotAllowed
 import com.wini.owle.error.MissingParameter
-import com.wini.owle.error.ParamValueMalformedLong
 import com.wini.owle.error.RequestBodyMalformed
 import com.wini.owle.ifNullExit
 import com.wini.owle.validators.DtoValidator
@@ -32,11 +31,18 @@ open class StringIdEndpointImpl<T: StringDto>(
     serializer = serializer
 ) {
 
+    /**
+     * A string id is whatever the caller sent, so the only failure is its absence.
+     *
+     * This was copied from the ULong endpoint and kept that version's second check, which sat
+     * after the null test and so could never fire - and reported `ParamValueMalformedLong`, a
+     * number-format error, for an id that is not a number. A blank id is treated as absent:
+     * `?id=` addresses no row.
+     */
     override fun ApplicationCall.readId(): AsyncResult<String> = parameters["id"]
+        ?.takeIf { it.isNotBlank() }
         .ifNullExit {
             return AsyncResult.Failure(error = MissingParameter("id"))
-        }.ifNullExit {
-            return AsyncResult.Failure(error = ParamValueMalformedLong("id"))
         }.let {
             AsyncResult.Success(it)
         }
@@ -47,7 +53,7 @@ open class StringIdEndpointImpl<T: StringDto>(
         }.getOrElse {
             return RequestBodyMalformed.asFailure()
         }.takeIf { it.isNotEmpty() }.ifNullExit {
-            return BatchOpOfNoDataObjects.asFailure()
+            return EmptyListNotAllowed.asFailure()
         }.let {
             return AsyncResult.Success(it)
         }

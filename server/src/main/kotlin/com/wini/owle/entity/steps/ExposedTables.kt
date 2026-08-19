@@ -1,5 +1,7 @@
 package com.wini.owle.entity.steps
 
+import com.wini.owle.entity.OwleCompositeIdTable
+
 import com.wini.owle.entity.transforms.TransformOccurrences
 import com.wini.owle.entity.typing.CallableParameters
 import com.wini.owle.entity.typing.CallableSignatures
@@ -87,8 +89,8 @@ object DataPointWrites : ULongIdTable("data_point_writes") {
     val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE).nullable()
 }
 
-object DataPointWriteArgs : CompositeIdTable("data_point_write_args") {
-    val dataPointWrite = reference("data_point_write_id", DataPointWrites, onDelete = ReferenceOption.CASCADE)
+object DataPointWriteArgs : OwleCompositeIdTable("data_point_write_args") {
+    val dataPointWrite = keyReference("data_point_write_id", DataPointWrites, onDelete = ReferenceOption.CASCADE)
     val dataPoint = reference("data_point_id", DataPoints, onDelete = ReferenceOption.CASCADE)
     val position = uinteger("position").entityId()
     override val primaryKey = PrimaryKey(dataPointWrite, position)

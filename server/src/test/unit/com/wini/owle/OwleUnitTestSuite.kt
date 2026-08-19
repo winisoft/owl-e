@@ -38,6 +38,14 @@ abstract class OwleUnitTestSuite {
     inner class ValidatorMechanism : DtoValidatorTest()
 
     @Nested
+    @DisplayName("DLL Delegation")
+    inner class DllDelegation : com.wini.owle.dll.DllDelegationTest()
+
+    @Nested
+    @DisplayName("Endpoint Id Parsing")
+    inner class EndpointIds : com.wini.owle.api.EndpointIdTest()
+
+    @Nested
     @DisplayName("Service Layer")
     inner class ServiceLayer : EnvMarkerComparisonServiceTest()
 

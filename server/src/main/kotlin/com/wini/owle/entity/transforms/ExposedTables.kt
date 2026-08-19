@@ -1,5 +1,7 @@
 package com.wini.owle.entity.transforms
 
+import com.wini.owle.entity.OwleCompositeIdTable
+
 import com.wini.owle.entity.dbEnum
 
 import com.wini.owle.dto.transforms.enums.TransformOccurrenceInitiator
@@ -51,15 +53,15 @@ object TransformOccurrenceArgs : ULongIdTable("transform_occurence_args") {
     val value = text("value")
 }
 
-object TransformOccurrenceChains : CompositeIdTable("transform_occurrence_chains") {
-    val antecedentOccurrence = reference("antecedent_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
-    val subsequentOccurrence = reference("subsequent_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
+object TransformOccurrenceChains : OwleCompositeIdTable("transform_occurrence_chains") {
+    val antecedentOccurrence = keyReference("antecedent_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
+    val subsequentOccurrence = keyReference("subsequent_occurrence_id", TransformOccurrences, onDelete = ReferenceOption.CASCADE)
     override val primaryKey = PrimaryKey(antecedentOccurrence, subsequentOccurrence)
 }
 
-object TransformTargetTypes : CompositeIdTable("transform_target_types") {
-    val transform = reference("transform_id", Transforms, onDelete = ReferenceOption.CASCADE)
-    val eligibleTypeNode = reference("eligible_type_node_id", TypeNodes)
+object TransformTargetTypes : OwleCompositeIdTable("transform_target_types") {
+    val transform = keyReference("transform_id", Transforms, onDelete = ReferenceOption.CASCADE)
+    val eligibleTypeNode = keyReference("eligible_type_node_id", TypeNodes)
     val returnTypeNode = reference("return_type_node_id", TypeNodes)
     override val primaryKey = PrimaryKey(transform, eligibleTypeNode)
 }

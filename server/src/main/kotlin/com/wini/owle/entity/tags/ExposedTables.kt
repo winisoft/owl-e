@@ -1,5 +1,7 @@
 package com.wini.owle.entity.tags
 
+import com.wini.owle.entity.OwleCompositeIdTable
+
 import com.wini.owle.entity.dbEnum
 
 import com.wini.owle.dto.tags.enums.TagSource
@@ -24,30 +26,30 @@ object Tags : ULongIdTable("tags") {
     val user = reference("user_id", Users).nullable()
 }
 
-object TagRelations : CompositeIdTable("tag_relations") {
-    val parentTag = reference("parent_tag_id", Tags, onDelete = ReferenceOption.CASCADE)
-    val childTag = reference("child_tag_id", Tags, onDelete = ReferenceOption.CASCADE)
+object TagRelations : OwleCompositeIdTable("tag_relations") {
+    val parentTag = keyReference("parent_tag_id", Tags, onDelete = ReferenceOption.CASCADE)
+    val childTag = keyReference("child_tag_id", Tags, onDelete = ReferenceOption.CASCADE)
     override val primaryKey = PrimaryKey(parentTag, childTag)
 }
 
-object DistributionTags : CompositeIdTable("tagged_distributions") {
-    val distribution = reference("distribution", Distributions, onDelete = ReferenceOption.CASCADE)
-    val tag = reference("tag_id", Tags, onDelete = ReferenceOption.CASCADE)
+object DistributionTags : OwleCompositeIdTable("tagged_distributions") {
+    val distribution = keyReference("distribution", Distributions, onDelete = ReferenceOption.CASCADE)
+    val tag = keyReference("tag_id", Tags, onDelete = ReferenceOption.CASCADE)
     override val primaryKey = PrimaryKey(distribution, tag)
 }
 
-object GrouperTags : CompositeIdTable("tagged_groupers") {
-    val grouper = reference("grouper_id", Groupers)
-    val tag = reference("tag_id", Tags)
+object GrouperTags : OwleCompositeIdTable("tagged_groupers") {
+    val grouper = keyReference("grouper_id", Groupers)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(grouper, tag)
 }
 
-object PackageTags : CompositeIdTable("tagged_packages") {
-    val distribution = reference("distribution", Distributions)
+object PackageTags : OwleCompositeIdTable("tagged_packages") {
+    val distribution = keyReference("distribution", Distributions)
 
     /** Version half of the package key; the pair below is the constraint the database has. */
     val packageVersion = ulong("package_id").entityId()
-    val tag = reference("tag_id", Tags)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(distribution, packageVersion, tag)
 
     init {
@@ -59,32 +61,32 @@ object PackageTags : CompositeIdTable("tagged_packages") {
     }
 }
 
-object StepTags : CompositeIdTable("tagged_steps") {
-    val step = reference("step_id", Steps)
-    val tag = reference("tag_id", Tags)
+object StepTags : OwleCompositeIdTable("tagged_steps") {
+    val step = keyReference("step_id", Steps)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(step, tag)
 }
 
-object ToolTags : CompositeIdTable("tagged_tools") {
-    val tool = reference("tool_id", Tools)
-    val tag = reference("tag_id", Tags)
+object ToolTags : OwleCompositeIdTable("tagged_tools") {
+    val tool = keyReference("tool_id", Tools)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(tool, tag)
 }
 
-object TransformTags : CompositeIdTable("tagged_transforms") {
-    val transform = reference("transform_id", Transforms)
-    val tag = reference("tag_id", Tags)
+object TransformTags : OwleCompositeIdTable("tagged_transforms") {
+    val transform = keyReference("transform_id", Transforms)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(transform, tag)
 }
 
-object WorkflowFolderTags : CompositeIdTable("tagged_workflow_folders") {
-    val workflowFolder = reference("workflow_folder_id", WorkflowFolders)
-    val tag = reference("tag_id", Tags)
+object WorkflowFolderTags : OwleCompositeIdTable("tagged_workflow_folders") {
+    val workflowFolder = keyReference("workflow_folder_id", WorkflowFolders)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(workflowFolder, tag)
 }
 
-object WorkflowTags : CompositeIdTable("tagged_workflows") {
-    val workflow = reference("workflow_id", Workflows)
-    val tag = reference("tag_id", Tags)
+object WorkflowTags : OwleCompositeIdTable("tagged_workflows") {
+    val workflow = keyReference("workflow_id", Workflows)
+    val tag = keyReference("tag_id", Tags)
     override val primaryKey = PrimaryKey(workflow, tag)
 }

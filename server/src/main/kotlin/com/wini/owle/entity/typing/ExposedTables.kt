@@ -1,5 +1,7 @@
 package com.wini.owle.entity.typing
 
+import com.wini.owle.entity.OwleCompositeIdTable
+
 import com.wini.owle.entity.dbEnum
 
 import com.wini.owle.dto.typing.enums.SchemaMembership
@@ -25,9 +27,9 @@ object TypeNodes : ULongIdTable("type_nodes") {
     val dedupHash = char("dedup_hash", 64).nullable().uniqueIndex()
 }
 
-object TypeNodeRelations : CompositeIdTable("type_node_relations") {
-    val parentNode = reference("parent_node_id", TypeNodes)
-    val childNode = reference("child_node_id", TypeNodes)
+object TypeNodeRelations : OwleCompositeIdTable("type_node_relations") {
+    val parentNode = keyReference("parent_node_id", TypeNodes)
+    val childNode = keyReference("child_node_id", TypeNodes)
     val relationKind = dbEnum<TypeNodeRelationKind>("relation_kind", 16)
         .default(TypeNodeRelationKind.INHERITANCE)
     override val primaryKey = PrimaryKey(childNode, parentNode)
@@ -59,9 +61,9 @@ object TypeVarVariances : ULongIdTable("typevar_variances") {
         .default(VarianceCardinality.INVARIANT)
 }
 
-object TypeUnionMembers : CompositeIdTable("type_union_members") {
-    val unionTypeNode = reference("union_node_id", TypeNodes)
-    val memberTypeNode = reference("member_node_id", TypeNodes)
+object TypeUnionMembers : OwleCompositeIdTable("type_union_members") {
+    val unionTypeNode = keyReference("union_node_id", TypeNodes)
+    val memberTypeNode = keyReference("member_node_id", TypeNodes)
     override val primaryKey = PrimaryKey(unionTypeNode, memberTypeNode)
 }
 
@@ -87,9 +89,9 @@ object CallableParameters : ULongIdTable("callable_parameters") {
     }
 }
 
-object CallableOwners : CompositeIdTable("callable_owners") {
-    val ownerNode = reference("owner_node_id", TypeNodes)
-    val callableNode = reference("callable_node_id", TypeNodes)
+object CallableOwners : OwleCompositeIdTable("callable_owners") {
+    val ownerNode = keyReference("owner_node_id", TypeNodes)
+    val callableNode = keyReference("callable_node_id", TypeNodes)
     override val primaryKey = PrimaryKey(ownerNode, callableNode)
 }
 

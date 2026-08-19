@@ -14,6 +14,8 @@ import io.ktor.server.application.*
 import io.ktor.util.*
 import kotlinx.serialization.KSerializer
 import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.EntityIDColumnType
+import org.jetbrains.exposed.v1.core.StringColumnType
 import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.dao.CompositeEntity
 import kotlin.collections.component1
@@ -56,48 +58,54 @@ open class CompositeIdEndpointImpl<T: CompositeDto, E: CompositeEntity>(
     }
 
     /**
-     * Reads Ktor's representation of a request's query parameters and produces from them a CompositeId suitable for
-     * identifying the type represented by the classes generic parameter type, returning null if the required parameters
-     * are either not found or malformed.
+     * Builds a [CompositeID] from a request's query parameters.
+     *
+     * Each key column is parsed as the column itself stores it. That distinction is not cosmetic:
+     * six composite keys (`packages`, `package_extras`, `package_python_requirements`,
+     * `tagged_distributions`, `tagged_packages`, `workflow_requirements`) include the distribution
+     * *name*, a VARCHAR. Parsing every part as a number rejected every valid request to those
+     * endpoints with "must be a valid whole number".
+     *
+     * Numeric parts go through `toULongOrNull`, which also closes a crash: the previous check
+     * accepted anything `toLongOrNull` liked and then called `toULong`, so `?id=-5` passed
+     * validation and threw `NumberFormatException` out of the handler.
+     *
+     * Every bad parameter is reported, not just the first, so one round trip tells the caller
+     * everything that is wrong with the request.
      */
     fun compositeIdFromRequestParams(
         entityColumnsByReqParams: Map<String, Column<out Any>>,
         params: Map<String, List<String>>
     ): AsyncResult<CompositeID> {
         val failed = mutableListOf<OwleError>()
+        val values = mutableMapOf<String, Any?>()
 
-        // map the names of the relevant db table columns to values found under that key in the request query params
-        return entityColumnsByReqParams.keys.associateWith {
-            params[it]
-            // return null if the query parameters come in an unexpected format
-        }.mapNotNull { (key: String, values: List<String>?) ->
+        entityColumnsByReqParams.forEach { (key, column) ->
+            val raw = params[key]?.firstOrNull()
             when {
-                values == null || values.firstOrNull() == null -> {
-                    failed.add(MissingParameter(key))
-                    null
-                }
-                values.first().toLongOrNull() == null -> {
-                    failed.add(ParamValueMalformedLong(key))
-                    null
-                }
-                else -> key to values[0].toULong()
+                raw.isNullOrBlank() -> failed += MissingParameter(key)
+                column.holdsText() -> values[key] = raw
+                else -> raw.toULongOrNull()
+                    ?.let { values[key] = it }
+                    ?: failed.add(ParamValueMalformedLong(key))
             }
-        }.also {
-            // logically 'short-circuits' further consideration of the already-determined invalid data provided
-            if (failed.isNotEmpty())
-                return MultipleParamFailure(failed = failed.toList()).asFailure()
-        }.associate {
-            // map the key under which the parameter was provided (its db column name) to the valid Long value it offered
-            it.first to it.second
-        }.let { validatedParams: Map<String, Any> ->
-            val mm: MutableMap<String, Any?> = daoDelegate.columnsByRequestParam.toMutableMap()
-            validatedParams.forEach {
-                mm[it.key] = it.value
-            }
-            val compositeId = daoDelegate.buildId(mm)
-
-            AsyncResult.Success(compositeId)
         }
+
+        if (failed.isNotEmpty()) return MultipleParamFailure(failed = failed.toList()).asFailure()
+
+        return AsyncResult.Success(daoDelegate.buildId(values))
     }
+
+    /**
+     * Whether the column ultimately stores text.
+     *
+     * A key column is usually an `EntityIDColumnType` wrapping the referenced table's id column,
+     * which may itself be a reference, so the wrappers are unwound to whatever is underneath.
+     */
+    private fun Column<*>.holdsText(): Boolean =
+        generateSequence(columnType) { (it as? EntityIDColumnType<*>)?.idColumn?.columnType }
+            .last() is StringColumnType
+
+
 
 }

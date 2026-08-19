@@ -1,5 +1,7 @@
 package com.wini.owle.entity.environs
 
+import com.wini.owle.entity.OwleCompositeIdTable
+
 import com.wini.owle.entity.dbEnum
 
 import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
@@ -23,9 +25,9 @@ import org.jetbrains.exposed.v1.core.or
 object Distributions : StringIdTable("distributions")
 
 
-object DistributionPackages : CompositeIdTable("packages") {
-    val version = reference("version_id", Versions)
-    val distribution = reference("distribution", Distributions)
+object DistributionPackages : OwleCompositeIdTable("packages") {
+    val version = keyReference("version_id", Versions)
+    val distribution = keyReference("distribution", Distributions)
     val versionString = varchar("version_str", 255)
     val summary = varchar("summary", 4096).nullable()
     val keywords = text("keywords").nullable()
@@ -43,8 +45,8 @@ object DistributionPackages : CompositeIdTable("packages") {
 }
 
 
-object PackageExtras : CompositeIdTable("package_extras") {
-    val distribution = reference("distribution", Distributions)
+object PackageExtras : OwleCompositeIdTable("package_extras") {
+    val distribution = keyReference("distribution", Distributions)
 
     /**
      * The version half of the package key. Deliberately *not* a reference to `versions`: the
@@ -91,8 +93,8 @@ object PackageDistRequirements : ULongIdTable("package_dist_requirements") {
 }
 
 
-object PackagePythonRequirements : CompositeIdTable("package_python_requirements") {
-    val distribution = reference("distribution", Distributions)
+object PackagePythonRequirements : OwleCompositeIdTable("package_python_requirements") {
+    val distribution = keyReference("distribution", Distributions)
 
     /**
      * The version half of the package key. Deliberately *not* a reference to `versions`: the
@@ -124,8 +126,8 @@ object PythonVersions : IdTable<ULong>("python_versions") {
 }
 
 
-object PythonVersionSpecifiers : CompositeIdTable("python_version_specifiers") {
-    val pythonVersion = reference("version_id", PythonVersions)
+object PythonVersionSpecifiers : OwleCompositeIdTable("python_version_specifiers") {
+    val pythonVersion = keyReference("version_id", PythonVersions)
     val operator = dbEnum<VersionOperator>("operator", 16).entityId()
     val wildcard = dbEnum<WildcardSegment>("wildcard", 8).entityId()
     override val primaryKey = PrimaryKey(pythonVersion, operator, wildcard)
