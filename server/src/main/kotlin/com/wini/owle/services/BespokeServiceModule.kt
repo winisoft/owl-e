@@ -6,8 +6,9 @@ import com.wini.owle.entity.workflows.WorkflowFolderEntity
 import com.wini.owle.mapper.generated.TransformMapper
 import com.wini.owle.mapper.generated.WorkflowFolderMapper
 import com.wini.owle.mapper.generated.WorkflowMapper
-import com.wini.owle.repo.GenericRepoImpl
-import com.wini.owle.repo.OwleRepo
+import com.wini.owle.generated.TransformRepo
+import com.wini.owle.generated.WorkflowFolderRepo
+import com.wini.owle.generated.WorkflowRepo
 import com.wini.owle.services.transform.TransformService
 import com.wini.owle.services.transform.TransformServiceImpl
 import com.wini.owle.services.workflows.WorkflowHierarchyService
@@ -29,8 +30,8 @@ val bespokeServicesModule = module {
 
     single<WorkflowHierarchyService> {
         WorkflowHierarchyServiceImpl(
-            folderRepo = get<OwleRepo<ULong, WorkflowFolderEntity>>(),
-            workflowRepo = get<OwleRepo<ULong, WorkflowEntity>>(),
+            folderRepo = get<WorkflowFolderRepo>(),
+            workflowRepo = get<WorkflowRepo>(),
             folderMapper = get<WorkflowFolderMapper>(),
             workflowMapper = get<WorkflowMapper>()
         )
@@ -38,7 +39,7 @@ val bespokeServicesModule = module {
 
     single<TransformService> {
         TransformServiceImpl(
-            transformRepo = get<GenericRepoImpl<ULong, TransformEntity>>(),
+            transformRepo = get<TransformRepo>(),
             transformMapper = get<TransformMapper>()
         )
     }

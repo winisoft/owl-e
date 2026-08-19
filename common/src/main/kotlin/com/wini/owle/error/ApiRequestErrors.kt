@@ -76,3 +76,11 @@ data class ParamValueMalformedLong(
 ) : ApiRequestError() {
     override val detail = "'$paramKey' must be a valid whole number."
 }
+
+
+/** Fails a batch operation whose request body carried no items. */
+@ErrorDefinition("errors.apiRequest.emptyListNotAllowed")
+@Serializable
+data object EmptyListNotAllowed : ApiRequestError() {
+    override val detail: String? get() = null
+}

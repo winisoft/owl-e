@@ -7,9 +7,9 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.Column
 
 
-class StringIdDaoDelegate<DTO: StringDto, E: Entity<String>>(
+open class StringIdDaoDelegate<DTO: StringDto, E: Entity<String>>(
     private val entityClass: StringEntityClass<E>
-): DaoDelegate<String, DTO, Entity<String>> {
+): DaoDelegate<String, DTO, E> {
 
     override val columnsByRequestParam: Map<String, Column<out Any>>
         get() = entityClass.table.idColumns.associateBy { "name" }
@@ -28,8 +28,8 @@ class StringIdDaoDelegate<DTO: StringDto, E: Entity<String>>(
 
     override fun findOrCreate(
         dto: DTO,
-        applyProps: Entity<String>.() -> Unit
-    ): Entity<String> {
+        applyProps: E.() -> Unit
+    ): E {
         return if (dto.name == "")
             entityClass.new { applyProps() }
         else

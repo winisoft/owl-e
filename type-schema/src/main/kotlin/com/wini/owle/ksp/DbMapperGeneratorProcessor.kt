@@ -13,6 +13,7 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSValueParameter
+import com.wini.owle.ksp.writer.ConcreteLayerWriter
 
 /**
  * Generates a `DbMapper` per (DTO, Entity) pair.
@@ -223,6 +224,8 @@ class DbMapperGeneratorProcessor(
                 .onFailure { logger.warn("[mapper-gen] repo module: ${it.message}") }
             runCatching { writeServiceModule(emitted) }
                 .onFailure { logger.warn("[mapper-gen] service module: ${it.message}") }
+            runCatching { writeConcreteLayers(resolver, emitted) }
+                .onFailure { logger.warn("[mapper-gen] layer classes: ${it.message}") }
         }
 
         logger.warn("[mapper-gen] generated ${emitted.size} mappers; skipped ${skipped.size}")
@@ -571,6 +574,33 @@ class DbMapperGeneratorProcessor(
             "GeneratedMapperModule"
         ).bufferedWriter().use { it.write(b.toString()) }
     }
+
+    /**
+     * A named delegate/repo/service/DLL per type, so Koin has distinct keys. See
+     * [ConcreteLayerWriter] for why the generic bindings could never work.
+     */
+    private fun writeConcreteLayers(resolver: Resolver, plans: List<Plan>) {
+        val layers = plans.map { p ->
+            val dto = p.dto.simpleName.asString()
+            // a composite key needs a hand-written delegate; look for one by convention
+            val existing = if (p.idType == "CompositeID") {
+                resolver.getClassDeclarationByName(
+                    resolver.getKSNameFromString("com.wini.owle.entity.delegate.impl.${dto}DaoDelegate")
+                )?.qualifiedName?.asString()
+            } else null
+
+            ConcreteLayerWriter.Layer(
+                dto = dto,
+                dtoFq = p.dto.qualifiedName!!.asString(),
+                entity = p.entity.simpleName.asString(),
+                entityFq = p.entity.qualifiedName!!.asString(),
+                idType = p.idType,
+                existingDelegateFq = existing
+            )
+        }
+        ConcreteLayerWriter(codeGenerator, logger).generate(layers)
+    }
+
 }
 
 class DbMapperGeneratorProcessorProvider : SymbolProcessorProvider {

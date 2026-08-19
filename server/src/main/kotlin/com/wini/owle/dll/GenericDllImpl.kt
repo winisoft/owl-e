@@ -5,7 +5,7 @@ import com.wini.owle.dto.BaseDto
 import com.wini.owle.services.Service
 
 
-class GenericDllImpl<ID: Any, DTO: BaseDto>(
+open class GenericDllImpl<ID: Any, DTO: BaseDto>(
     private val service: Service<ID, DTO>
 ) : DLL<ID, DTO> {
     override fun getAll(): AsyncResult<List<DTO>>                         = service.getAll()
