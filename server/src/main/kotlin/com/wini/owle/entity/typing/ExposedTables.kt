@@ -58,9 +58,9 @@ object TypeVarVariances : ULongIdTable("typevar_variances") {
 }
 
 object TypeUnionMembers : CompositeIdTable("type_union_members") {
-    val unionNode = reference("union_node_id", TypeNodes)
-    val memberNode = reference("member_node_id", TypeNodes)
-    override val primaryKey = PrimaryKey(unionNode, memberNode)
+    val unionTypeNode = reference("union_node_id", TypeNodes)
+    val memberTypeNode = reference("member_node_id", TypeNodes)
+    override val primaryKey = PrimaryKey(unionTypeNode, memberTypeNode)
 }
 
 object CallableSignatures : ULongIdTable("callable_signatures") {

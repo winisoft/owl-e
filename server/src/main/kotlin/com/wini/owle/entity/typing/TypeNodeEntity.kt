@@ -76,11 +76,11 @@ class TypeNodeEntity(id: EntityID<ULong>) : ULongEntity(id) {
 
     /** Member types, when this node is a union. */
     val unionMembers: SizedIterable<TypeNodeEntity>
-            by TypeNodeEntity.via(TypeUnionMembers.unionNode, TypeUnionMembers.memberNode)
+            by TypeNodeEntity.via(TypeUnionMembers.unionTypeNode, TypeUnionMembers.memberTypeNode)
 
     /** Unions this node participates in. */
     val memberOfUnions: SizedIterable<TypeNodeEntity>
-            by TypeNodeEntity.via(TypeUnionMembers.memberNode, TypeUnionMembers.unionNode)
+            by TypeNodeEntity.via(TypeUnionMembers.memberTypeNode, TypeUnionMembers.unionTypeNode)
 
     // --- callables --------------------------------------------------------------------------
 

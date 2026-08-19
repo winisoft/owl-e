@@ -4,9 +4,7 @@ import com.wini.owle.dto.CompositeDto
 import kotlinx.serialization.Serializable
 import com.wini.owle.schema.api.ApiEndpointDefinition
 
-
 @Serializable
-@ApiEndpointDefinition("api.typing.classInheritanceApi", ["type"], "/class-inheritance")
 data class ClassInheritance(
 
     /**

@@ -55,19 +55,6 @@ import com.wini.owle.dto.workflows.WorkflowRequirement
 import com.wini.owle.entity.delegate.DaoDelegate
 import com.wini.owle.entity.delegate.StringIdDaoDelegate
 import com.wini.owle.entity.delegate.ULongIdDaoDelegate
-import com.wini.owle.entity.delegate.impl.ClassInheritanceDaoDelegate
-import com.wini.owle.entity.delegate.impl.DistributionPackageDaoDelegate
-import com.wini.owle.entity.delegate.impl.PackagePythonRequirementDaoDelegate
-import com.wini.owle.entity.delegate.impl.PackageTagDaoDelegate
-import com.wini.owle.entity.delegate.impl.StepTagDaoDelegate
-import com.wini.owle.entity.delegate.impl.TagRelationDaoDelegate
-import com.wini.owle.entity.delegate.impl.ToolTagDaoDelegate
-import com.wini.owle.entity.delegate.impl.TransformTargetTypeDaoDelegate
-import com.wini.owle.entity.delegate.impl.TypeUnionMemberDaoDelegate
-import com.wini.owle.entity.delegate.impl.WorkflowFolderRelationDaoDelegate
-import com.wini.owle.entity.delegate.impl.WorkflowFolderTagDaoDelegate
-import com.wini.owle.entity.delegate.impl.WorkflowRequirementDaoDelegate
-import com.wini.owle.entity.delegate.impl.WorkflowTagDaoDelegate
 import com.wini.owle.entity.environs.marker.EnvMarkerComparisonEntity
 import com.wini.owle.entity.environs.marker.EnvMarkerExpressionEntity
 import com.wini.owle.entity.environs.marker.EnvMarkerLogicalEntity
@@ -144,114 +131,6 @@ import org.koin.dsl.module
  */
 
 val environsEntitiesModule = module {
-    bindULongDelegate<EnvMarkerComparison, EnvMarkerComparisonEntity>(EnvMarkerComparisonEntity)
-    bindULongDelegate<EnvMarkerExpression, EnvMarkerExpressionEntity>(EnvMarkerExpressionEntity)
-    bindULongDelegate<EnvMarkerLogical, EnvMarkerLogicalEntity>(EnvMarkerLogicalEntity)
     single<StringEntityClass<DistributionEntity>> { DistributionEntity }
-    single<DaoDelegate<String, StringDto, Entity<String>>> {
-        StringIdDaoDelegate<StringDto, Entity<String>>(get())
-    }
-    single<DaoDelegate<CompositeID, DistributionPackage, DistributionPackageEntity>> {
-        DistributionPackageDaoDelegate
-    }
-    bindULongDelegate<PackageDistRequirement, PackageDistRequirementEntity>(PackageDistRequirementEntity)
-    single<DaoDelegate<CompositeID, PackagePythonRequirement, PackagePythonRequirementEntity>> {
-        PackagePythonRequirementDaoDelegate
-    }
-
-    bindULongDelegate<PythonVersion, PythonVersionEntity>(PythonVersionEntity)
-    bindULongDelegate<Version, VersionEntity>(VersionEntity)
-    bindULongDelegate<VersionOverflow, VersionOverflowEntity>(VersionOverflowEntity)
 }
 
-val runEntitiesModule = module {
-    bindULongDelegate<StepTestRun, StepTestRunEntity>(StepTestRunEntity)
-    bindULongDelegate<ExecutionNotification, ExecutionLogEntity>(ExecutionLogEntity)
-    bindULongDelegate<BenchmarkReport, BenchmarkReportEntity>(BenchmarkReportEntity)
-    bindULongDelegate<TestCase, TestCaseEntity>(TestCaseEntity)
-    bindULongDelegate<TestOutcomeExpectation, TestExpectedOutcomeEntity>(TestExpectedOutcomeEntity)
-    bindULongDelegate<TestInput, TestInputEntity>(TestInputEntity)
-    bindULongDelegate<TestOutcomeActual, TestResultEntity>(TestResultEntity)
-    bindULongDelegate<WorkflowExecution, WorkflowExecutionEntity>(WorkflowExecutionEntity)
-}
-
-val stepEntitiesModule = module {
-    bindULongDelegate<DataPointInjection, DataPointInjectionEntity>(DataPointInjectionEntity)
-    bindULongDelegate<Inquisition, InquisitionEntity>(InquisitionEntity)
-    bindULongDelegate<DataPointWrite, DataPointWriteEntity>(DataPointWriteEntity)
-    bindULongDelegate<ErrorWatch, ErrorWatchEntity>(ErrorWatchEntity)
-    bindULongDelegate<ErrorWatchFn, ErrorWatchFnEntity>(ErrorWatchFnEntity)
-    bindULongDelegate<Tool, ToolEntity>(ToolEntity)
-    bindULongDelegate<WorkflowJunction, WorkflowJunctionEntity>(WorkflowJunctionEntity)
-}
-
-val tagEntitiesModule = module {
-    bindULongDelegate<Tag, TagEntity>(TagEntity)
-    single<DaoDelegate<CompositeID, TagRelation, TagRelationEntity>> {
-        TagRelationDaoDelegate
-    }
-    single<DaoDelegate<CompositeID, PackageTag, PackageTagEntity>> {
-        PackageTagDaoDelegate
-    }
-    single<DaoDelegate<CompositeID, StepTag, StepTagEntity>> {
-        StepTagDaoDelegate
-    }
-    single<DaoDelegate<CompositeID, ToolTag, ToolTagEntity>> {
-        ToolTagDaoDelegate
-    }
-    single<DaoDelegate<CompositeID, WorkflowFolderTag, WorkflowFolderTagEntity>> {
-        WorkflowFolderTagDaoDelegate
-    }
-    single<DaoDelegate<CompositeID, WorkflowTag, WorkflowTagEntity>> {
-        WorkflowTagDaoDelegate
-    }
-}
-
-val transformEntitiesModule = module {
-    bindULongDelegate<TransformArg, TransformArgEntity>(TransformArgEntity)
-    bindULongDelegate<Transform, TransformEntity>(TransformEntity)
-    bindULongDelegate<TransformOccurrence, TransformOccurrenceEntity>(TransformOccurrenceEntity)
-    bindULongDelegate<TransformOccurrenceArg, TransformOccurrenceArgEntity>(TransformOccurrenceArgEntity)
-    single<DaoDelegate<CompositeID, TransformTargetType, TransformTargetTypeEntity>> {
-        TransformTargetTypeDaoDelegate
-    }
-}
-
-val typingEntitiesModule = module {
-    bindULongDelegate<CallableParameter, CallableParameterEntity>(CallableParameterEntity)
-    bindULongDelegate<CallableSignature, CallableSignatureEntity>(CallableSignatureEntity)
-    bindULongDelegate<TypeNode, TypeNodeEntity>(TypeNodeEntity)
-    single<DaoDelegate<CompositeID, ClassInheritance, TypeNodeRelationEntity>> {
-        ClassInheritanceDaoDelegate
-    }
-    bindULongDelegate<TypeSchemaRef, TypeSchemaRefEntity>(TypeSchemaRefEntity)
-    single<DaoDelegate<CompositeID, TypeUnionMember, TypeUnionMemberEntity>> {
-        TypeUnionMemberDaoDelegate
-    }
-}
-
-val userEntitiesModule = module {
-    bindULongDelegate<User, UserEntity>(UserEntity)
-    bindULongDelegate<PaymentMethod, PaymentMethodEntity>(PaymentMethodEntity)
-}
-
-val workflowEntitiesModule = module {
-    bindULongDelegate<DataPoint, DataPointEntity>(DataPointEntity)
-    bindULongDelegate<com.wini.owle.dto.workflows.Step, StepEntity>(StepEntity)
-    bindULongDelegate<Workflow, WorkflowEntity>(WorkflowEntity)
-    bindULongDelegate<WorkflowFolder, WorkflowFolderEntity>(WorkflowFolderEntity)
-    single<DaoDelegate<CompositeID, WorkflowFolderRelation, WorkflowFolderRelationEntity>> {
-        WorkflowFolderRelationDaoDelegate
-    }
-    bindULongDelegate<WorkflowMetadata, WorkflowMetadataEntity>(WorkflowMetadataEntity)
-    single<DaoDelegate<CompositeID, WorkflowRequirement, WorkflowRequirementEntity>> {
-        WorkflowRequirementDaoDelegate
-    }
-}
-
-inline fun <reified DTO : ULongDto, reified E : ULongEntity> Module.bindULongDelegate(
-    entityClass: ULongEntityClass<E>
-) {
-    single<ULongEntityClass<E>> { entityClass }
-    single<DaoDelegate<ULong, DTO, E>> { ULongIdDaoDelegate(entityClass) }
-}

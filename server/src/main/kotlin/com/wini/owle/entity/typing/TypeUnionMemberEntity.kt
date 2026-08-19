@@ -22,10 +22,10 @@ class TypeUnionMemberEntity(
     /**
      * Relationship to the union type declaration this member belongs to.
      */
-    var unionTypeNode by TypeNodeEntity referencedOn TypeUnionMembers.unionNode
+    var unionTypeNode by TypeNodeEntity referencedOn TypeUnionMembers.unionTypeNode
 
     /**
      * Relationship to the member type declaration within the union.
      */
-    var memberTypeNode by TypeNodeEntity referencedOn TypeUnionMembers.memberNode
+    var memberTypeNode by TypeNodeEntity referencedOn TypeUnionMembers.memberTypeNode
 }

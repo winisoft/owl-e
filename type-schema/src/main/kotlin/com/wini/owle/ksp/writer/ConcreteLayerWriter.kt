@@ -46,9 +46,11 @@ class ConcreteLayerWriter(
         val existingDelegateFq: String?,
         /** Route segment from `@ApiEndpointDefinition`; null when the type exposes no endpoint. */
         val endpointPath: String?,
-        val validatorFq: String?
+        val validatorFq: String?,
+        /** For a composite key: `tableObject` plus one `columnProperty to dtoExpression` per key part. */
+        val compositeKey: CompositeKey? = null
     ) {
-        val delegate: String get() = existingDelegateFq?.substringAfterLast('.') ?: "${dto}DaoDelegate"
+        val delegate: String get() = "${dto}DaoDelegate"
         val repo: String get() = "${dto}Repo"
         val service: String get() = "${dto}Service"
         val dll: String get() = "${dto}Dll"
@@ -57,14 +59,21 @@ class ConcreteLayerWriter(
         val validator: String get() = validatorFq?.substringAfterLast('.') ?: ""
     }
 
+    /** How to reach each key column's value from the DTO. */
+    data class CompositeKey(
+        val tableObject: String,
+        val tableFq: String,
+        val parts: List<Pair<String, String>>
+    )
+
     fun generate(layers: List<Layer>) {
-        val usable = layers.filter { it.idType != "CompositeID" || it.existingDelegateFq != null }
+        val usable = layers.filter { it.idType != "CompositeID" || it.compositeKey != null }
         val skipped = layers - usable.toSet()
 
         skipped.forEach {
             logger.warn(
-                "[layers] ${it.dto}: composite-keyed with no DaoDelegate, so no service or DLL " +
-                    "can be built for it. Write a CompositeIdDaoDelegate for it to join the graph."
+                "[layers] ${it.dto}: composite key could not be derived - its table's primaryKey " +
+                    "columns did not resolve onto DTO properties, so no delegate can be generated."
             )
         }
 
@@ -92,15 +101,14 @@ class ConcreteLayerWriter(
                 }
             )
         }
-        l.existingDelegateFq?.let { b.appendLine("import $it") }
-        if (l.existingDelegateFq == null) {
-            b.appendLine(
-                when (l.idType) {
-                    "String" -> "import com.wini.owle.entity.delegate.StringIdDaoDelegate"
-                    else -> "import com.wini.owle.entity.delegate.ULongIdDaoDelegate"
-                }
-            )
-        }
+        b.appendLine(
+            when (l.idType) {
+                "String" -> "import com.wini.owle.entity.delegate.StringIdDaoDelegate"
+                "CompositeID" -> "import com.wini.owle.entity.delegate.CompositeIdDaoDelegate"
+                else -> "import com.wini.owle.entity.delegate.ULongIdDaoDelegate"
+            }
+        )
+        l.compositeKey?.let { b.appendLine("import ${it.tableFq}") }
         if (l.idType == "CompositeID") {
             b.appendLine("import org.jetbrains.exposed.v1.core.dao.id.CompositeID")
         }
@@ -111,7 +119,19 @@ class ConcreteLayerWriter(
         b.appendLine(" */")
         b.appendLine()
 
-        if (l.existingDelegateFq == null) {
+        val key = l.compositeKey
+        if (key != null) {
+            // only extractId is generated: the other two members derive from `table.idColumns`
+            b.appendLine("class ${l.delegate} : CompositeIdDaoDelegate<${l.dto}, ${l.entity}>(${l.entity}) {")
+            b.appendLine()
+            b.appendLine("    override fun extractId(dto: ${l.dto}): CompositeID = CompositeID {")
+            key.parts.forEach { (column, expression) ->
+                b.appendLine("        it[${key.tableObject}.$column] = $expression")
+            }
+            b.appendLine("    }")
+            b.appendLine("}")
+            b.appendLine()
+        } else {
             val base = if (l.idType == "String") "StringIdDaoDelegate" else "ULongIdDaoDelegate"
             b.appendLine("class ${l.delegate} : $base<${l.dto}, ${l.entity}>(${l.entity})")
             b.appendLine()
@@ -152,8 +172,6 @@ class ConcreteLayerWriter(
     private fun writeModule(layers: List<Layer>) {
         val b = StringBuilder()
         b.appendLine("package $PACKAGE").appendLine()
-        layers.mapNotNull { it.existingDelegateFq }.distinct().sorted()
-            .forEach { b.appendLine("import $it") }
         b.appendLine("import org.koin.dsl.module").appendLine()
         b.appendLine("/**")
         b.appendLine(" * Generated bindings for the ${layers.size} wired types. Do not edit.")
@@ -164,11 +182,7 @@ class ConcreteLayerWriter(
         b.appendLine(" */")
         b.appendLine("val generatedLayerModule = module {")
         layers.sortedBy { it.dto }.forEach { l ->
-            if (l.existingDelegateFq == null) {
-                b.appendLine("    single { ${l.delegate}() }")
-            } else {
-                b.appendLine("    single { ${l.delegate} }")
-            }
+            b.appendLine("    single { ${l.delegate}() }")
             b.appendLine("    single { ${l.repo}() }")
             b.appendLine("    single { ${l.service}(get(), get(), get()) }")
             b.appendLine("    single { ${l.dll}(get()) }")

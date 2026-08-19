@@ -14,6 +14,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSValueParameter
 import com.wini.owle.ksp.writer.ConcreteLayerWriter
+import com.wini.owle.ksp.writer.CompositeKeyReader
 
 /**
  * Generates a `DbMapper` per (DTO, Entity) pair.
@@ -122,7 +123,10 @@ class DbMapperGeneratorProcessor(
         val bindings: List<Binding>
     )
 
+    private var currentResolver: Resolver? = null
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
+        currentResolver = resolver
         if (done) return emptyList()
         done = true
 
@@ -220,10 +224,6 @@ class DbMapperGeneratorProcessor(
         if (emitted.isNotEmpty()) {
             runCatching { writeKoinModule(emitted) }
                 .onFailure { logger.warn("[mapper-gen] koin module: ${it.message}") }
-            runCatching { writeRepoModule(emitted) }
-                .onFailure { logger.warn("[mapper-gen] repo module: ${it.message}") }
-            runCatching { writeServiceModule(emitted) }
-                .onFailure { logger.warn("[mapper-gen] service module: ${it.message}") }
             runCatching { writeConcreteLayers(resolver, emitted) }
                 .onFailure { logger.warn("[mapper-gen] layer classes: ${it.message}") }
         }
@@ -369,7 +369,7 @@ class DbMapperGeneratorProcessor(
             add(plan.dto.qualifiedName!!.asString())
             add(plan.entity.qualifiedName!!.asString())
             add("com.wini.owle.mapper.DbMapper")
-            add("com.wini.owle.entity.delegate.DaoDelegate")
+            add("com.wini.owle.generated.${dtoName}DaoDelegate")
             if (needsConverter) add("com.wini.owle.mapper.DateTimeConverter")
             if (plan.idType == "CompositeID") add("org.jetbrains.exposed.v1.core.dao.id.CompositeID")
         }.distinct().sorted()
@@ -382,7 +382,7 @@ class DbMapperGeneratorProcessor(
         b.appendLine(" * Generated from [$dtoName] and [$entityName]. Do not edit - regenerate instead.")
         b.appendLine(" */")
         b.appendLine("class ${mapper(dtoName)}(")
-        b.appendLine("    private val daoDelegate: DaoDelegate<${plan.idType}, $dtoName, $entityName>,")
+        b.appendLine("    private val daoDelegate: ${dtoName}DaoDelegate,")
         collaborators.forEach { b.appendLine("    private val ${ref(it)}: () -> ${mapper(it)},") }
         b.appendLine(") : DbMapper<${plan.idType}, $dtoName, $entityName> {")
         b.appendLine()
@@ -463,79 +463,6 @@ class DbMapperGeneratorProcessor(
      * cannot drift out of step with the mappers: if a mapper is skipped, no binding is produced
      * for it, and nothing references one that does not exist.
      */
-    /**
-     * The repository bindings for everything that was emitted.
-     *
-     * `bindGenericRepo` is entirely mechanical - one line per (id kind, entity) - so keeping it
-     * hand-written only bought the chance to drift, which is exactly what happened: the file
-     * still named `PhaseEntity`, `ToolParamEntity` and `TypeParameterEntity` long after the
-     * entity layer renamed them.
-     */
-    private fun writeRepoModule(plans: List<Plan>) {
-        val b = StringBuilder()
-        b.appendLine("package $TARGET_PACKAGE").appendLine()
-        b.appendLine("import com.wini.owle.repo.bindGenericRepo")
-        if (plans.any { it.idType == "CompositeID" }) {
-            b.appendLine("import org.jetbrains.exposed.v1.core.dao.id.CompositeID")
-        }
-        plans.map { it.entity.qualifiedName!!.asString() }.distinct().sorted()
-            .forEach { b.appendLine("import $it") }
-        b.appendLine()
-        b.appendLine("import org.koin.dsl.module").appendLine()
-        b.appendLine("/** Generated repository bindings for the ${plans.size} mapped entities. Do not edit. */")
-        b.appendLine("val generatedRepoModule = module {")
-        plans.sortedBy { it.entity.simpleName.asString() }.forEach { p ->
-            val e = p.entity.simpleName.asString()
-            b.appendLine("    bindGenericRepo<${p.idType}, $e>($e)")
-        }
-        b.appendLine("}")
-
-        codeGenerator.createNewFile(Dependencies(aggregating = true), TARGET_PACKAGE, "GeneratedRepoModule")
-            .bufferedWriter().use { it.write(b.toString()) }
-    }
-
-    /**
-     * The service bindings for everything that was emitted. Same reasoning as [writeRepoModule];
-     * the helper to call is chosen by the id kind the mapper was already built around.
-     */
-    private fun writeServiceModule(plans: List<Plan>) {
-        val helper = { idType: String ->
-            when (idType) {
-                "CompositeID" -> "bindCompositeIdGenericService"
-                "String" -> "bindGenericStringIdService"
-                else -> "bindGenericULongService"
-            }
-        }
-        val b = StringBuilder()
-        b.appendLine("package $TARGET_PACKAGE").appendLine()
-        b.appendLine("import com.wini.owle.mapper.DbMapper")
-        b.appendLine("import com.wini.owle.services.bindCompositeIdGenericService")
-        b.appendLine("import com.wini.owle.services.bindGenericStringIdService")
-        b.appendLine("import com.wini.owle.services.bindGenericULongService")
-        if (plans.any { it.idType == "CompositeID" }) {
-            b.appendLine("import org.jetbrains.exposed.v1.core.dao.id.CompositeID")
-        }
-        plans.flatMap { listOf(it.dto.qualifiedName!!.asString(), it.entity.qualifiedName!!.asString()) }
-            .distinct().sorted().forEach { b.appendLine("import $it") }
-        b.appendLine()
-        b.appendLine("import org.koin.dsl.module").appendLine()
-        b.appendLine("/** Generated service bindings for the ${plans.size} mapped types. Do not edit. */")
-        b.appendLine("val generatedServiceModule = module {")
-        plans.sortedBy { it.dto.simpleName.asString() }.forEach { p ->
-            val d = p.dto.simpleName.asString()
-            val e = p.entity.simpleName.asString()
-            // Koin keys definitions by KClass, so every `DbMapper<..>` erases to the same key
-            // and only the last registration would survive. The generated mapper classes are
-            // distinct types, so they resolve unambiguously.
-            b.appendLine("    ${helper(p.idType)}<$d, $e> {")
-            b.appendLine("        get<${mapper(d)}>()")
-            b.appendLine("    }")
-        }
-        b.appendLine("}")
-
-        codeGenerator.createNewFile(Dependencies(aggregating = true), TARGET_PACKAGE, "GeneratedServiceModule")
-            .bufferedWriter().use { it.write(b.toString()) }
-    }
 
     private fun writeKoinModule(plans: List<Plan>) {
         val b = StringBuilder()
@@ -583,19 +510,8 @@ class DbMapperGeneratorProcessor(
         val layers = plans.map { p ->
             val dto = p.dto.simpleName.asString()
             // a composite key needs a hand-written delegate; look for one by convention
-            val existing = if (p.idType == "CompositeID") {
-                resolver.getClassDeclarationByName(
-                    resolver.getKSNameFromString("com.wini.owle.entity.delegate.impl.${dto}DaoDelegate")
-                )?.takeIf { decl ->
-                    // must actually be a CompositeIdDaoDelegate: some stubs implement the bare
-                    // DaoDelegate interface with TODO() bodies, and an endpoint built on one
-                    // would publish a route that throws on every call
-                    decl.superTypes.any {
-                        it.resolve().declaration.qualifiedName?.asString() ==
-                            "com.wini.owle.entity.delegate.CompositeIdDaoDelegate"
-                    }
-                }?.qualifiedName?.asString()
-            } else null
+            val compositeKey = if (p.idType == "CompositeID") compositeKeyFor(p) else null
+            val existing = null as String?
 
             ConcreteLayerWriter.Layer(
                 dto = dto,
@@ -604,6 +520,7 @@ class DbMapperGeneratorProcessor(
                 entityFq = p.entity.qualifiedName!!.asString(),
                 idType = p.idType,
                 existingDelegateFq = existing,
+                compositeKey = compositeKey,
                 endpointPath = endpointPathOf(p.dto),
                 validatorFq = p.dto.qualifiedName!!.asString()
                     .replace(".dto.", ".validators.") + "Validator"
@@ -611,7 +528,6 @@ class DbMapperGeneratorProcessor(
         }
         ConcreteLayerWriter(codeGenerator, logger).generate(layers)
     }
-
 
     /** The route segment a DTO declares via `@ApiEndpointDefinition`, trimmed of slashes. */
     private fun endpointPathOf(dto: KSClassDeclaration): String? = dto.annotations
@@ -623,7 +539,72 @@ class DbMapperGeneratorProcessor(
         ?.firstOrNull { it.name?.asString() == "path" }
         ?.value as? String
 
+    /** Composite tables, read once per round from the entity sources. */
+    private var compositeTables: Map<String, CompositeKeyReader.Table>? = null
+
+    private fun tables(resolver: Resolver): Map<String, CompositeKeyReader.Table> =
+        compositeTables ?: CompositeKeyReader.read(
+            resolver.getAllFiles().mapNotNull { it.filePath }.filter { it.endsWith("ExposedTables.kt") }.toList()
+        ).also { compositeTables = it }
+
+    /**
+     * How to reach each key column's value from the DTO.
+     *
+     * The key columns come from the table's `primaryKey`; the value comes from the DTO property of
+     * the same name. A referenced column takes that property's own key (`.id`, or `.name` where the
+     * target is string-keyed); a plain column takes the property directly. A column with no
+     * matching DTO property yields null, and the type is reported and skipped rather than guessed.
+     */
+    private fun compositeKeyFor(plan: Plan): ConcreteLayerWriter.CompositeKey? {
+        val resolver = currentResolver ?: return null
+        val entityTable = plan.entity.simpleName.asString().removeSuffix("Entity")
+        val table = tables(resolver).values.firstOrNull { candidate ->
+            candidate.objectName.removeSuffix("s") == entityTable ||
+                candidate.objectName == "${entityTable}s" ||
+                candidate.objectName == entityTable
+        } ?: return null
+
+        val dtoProps = plan.dto.primaryConstructor?.parameters
+            ?.mapNotNull { param -> param.name?.asString()?.let { it to param.type.resolve() } }
+            ?.toMap().orEmpty()
+
+        val parts = table.keyColumns.map { column ->
+            val type = dtoProps[column.property] ?: return null
+            val accessor = when {
+                !isDto(type) -> ""
+                isStringKeyed(type) -> ".name"
+                else -> ".id"
+            }
+            column.property to "dto.${column.property}$accessor"
+        }
+        if (parts.size != table.keyProperties.size) return null
+
+        return ConcreteLayerWriter.CompositeKey(
+            tableObject = table.objectName,
+            tableFq = tableFqFor(resolver, table.objectName) ?: return null,
+            parts = parts
+        )
+    }
+
+    /** A DTO, not merely a type declared under the dto package - the enums live there too. */
+    private fun isDto(type: com.google.devtools.ksp.symbol.KSType): Boolean =
+        (type.declaration as? KSClassDeclaration)?.superTypes
+            ?.any { it.resolve().declaration.simpleName.asString() in DTO_SUPERTYPES } == true
+
+    private fun isStringKeyed(type: com.google.devtools.ksp.symbol.KSType): Boolean =
+        (type.declaration as? KSClassDeclaration)?.superTypes
+            ?.any { it.resolve().declaration.simpleName.asString() == "StringDto" } == true
+
+    private fun tableFqFor(resolver: Resolver, objectName: String): String? =
+        resolver.getAllFiles()
+            .flatMap { it.declarations }
+            .filterIsInstance<KSClassDeclaration>()
+            .firstOrNull { it.simpleName.asString() == objectName }
+            ?.qualifiedName?.asString()
+
 }
+
+private val DTO_SUPERTYPES = setOf("BaseDto", "ULongDto", "StringDto", "CompositeDto", "UIntDto")
 
 class DbMapperGeneratorProcessorProvider : SymbolProcessorProvider {
     /** Needs Exposed entities and the DaoDelegate - server only. */

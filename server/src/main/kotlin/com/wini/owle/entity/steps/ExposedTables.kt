@@ -90,7 +90,7 @@ object DataPointWrites : ULongIdTable("data_point_writes") {
 object DataPointWriteArgs : CompositeIdTable("data_point_write_args") {
     val dataPointWrite = reference("data_point_write_id", DataPointWrites, onDelete = ReferenceOption.CASCADE)
     val dataPoint = reference("data_point_id", DataPoints, onDelete = ReferenceOption.CASCADE)
-    val position = uinteger("position")
+    val position = uinteger("position").entityId()
     override val primaryKey = PrimaryKey(dataPointWrite, position)
 }
 
