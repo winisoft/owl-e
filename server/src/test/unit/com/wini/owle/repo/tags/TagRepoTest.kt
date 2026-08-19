@@ -4,7 +4,6 @@ import com.wini.owle.entity.tags.TagEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
 /**
@@ -19,7 +18,6 @@ abstract class TagRepoTest : ULongIdGenericRepoTest<TagEntity>() {
         return any<TagEntity>()
     }
 
-    
 
 }
 

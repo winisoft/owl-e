@@ -4,7 +4,6 @@ import com.wini.owle.entity.runs.workflow.TestResultEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
 /**
@@ -18,8 +17,6 @@ abstract class TestResultRepoTest : ULongIdGenericRepoTest<TestResultEntity>() {
     override fun MockKMatcherScope.anyT(): TestResultEntity {
         return any<TestResultEntity>()
     }
-
-    
 
 }
 

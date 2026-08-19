@@ -4,9 +4,6 @@ import com.wini.owle.entity.environs.pkg.PackagePythonRequirementEntity
 import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.CompositeID
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.junit.jupiter.api.Test
 
 /**
  * Specifies version constraints for a package, allowing for precise control
@@ -20,5 +17,5 @@ abstract class PackagePythonRequirementRepoTest : CompositeIdRepoTest<PackagePyt
         return any<PackagePythonRequirementEntity>()
     }
 
-    
+
 }

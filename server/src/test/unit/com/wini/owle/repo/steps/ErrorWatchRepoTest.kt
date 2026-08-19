@@ -4,10 +4,6 @@ import com.wini.owle.entity.steps.ErrorWatchEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.dao.ULongEntity
-import org.jetbrains.exposed.v1.dao.ULongEntityClass
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.junit.jupiter.api.Test
 
 
 /**
@@ -21,8 +17,6 @@ abstract class ErrorWatchRepoTest : ULongIdGenericRepoTest<ErrorWatchEntity>() {
     override fun MockKMatcherScope.anyT(): ErrorWatchEntity {
         return any<ErrorWatchEntity>()
     }
-
-    
 
 }
 

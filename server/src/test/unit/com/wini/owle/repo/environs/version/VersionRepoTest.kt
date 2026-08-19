@@ -4,7 +4,6 @@ import com.wini.owle.entity.environs.version.VersionEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 
 
 abstract class VersionRepoTest : ULongIdGenericRepoTest<VersionEntity>() {
@@ -15,7 +14,4 @@ abstract class VersionRepoTest : ULongIdGenericRepoTest<VersionEntity>() {
         return any<VersionEntity>()
     }
 
-    
-
 }
-

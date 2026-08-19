@@ -4,9 +4,6 @@ import com.wini.owle.entity.environs.pkg.PackageDistRequirementEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.junit.jupiter.api.Test
-
 
 
 abstract class PackageRequiredDistRepoTest : ULongIdGenericRepoTest<PackageDistRequirementEntity>() {
@@ -16,8 +13,6 @@ abstract class PackageRequiredDistRepoTest : ULongIdGenericRepoTest<PackageDistR
     override fun MockKMatcherScope.anyT(): PackageDistRequirementEntity {
         return any<PackageDistRequirementEntity>()
     }
-
-    
 
 }
 

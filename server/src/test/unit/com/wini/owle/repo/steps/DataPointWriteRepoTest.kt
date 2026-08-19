@@ -4,8 +4,6 @@ import com.wini.owle.entity.steps.DataPointWriteEntity
 import com.wini.owle.repo.ULongIdGenericRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.junit.jupiter.api.Test
 
 
 /**
@@ -19,8 +17,6 @@ abstract class DataPointWriteRepoTest : ULongIdGenericRepoTest<DataPointWriteEnt
     override fun MockKMatcherScope.anyT(): DataPointWriteEntity {
         return any<DataPointWriteEntity>()
     }
-
-    
 
 }
 

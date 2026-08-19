@@ -2,6 +2,7 @@ package com.wini.owle
 
 import com.wini.owle.dto.DtoTest
 import com.wini.owle.repo.RepositoryTest
+import com.wini.owle.services.ServiceTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
@@ -22,4 +23,8 @@ abstract class OwleUnitTestSuite {
     @Nested
     @DisplayName("Repository Tests")
     inner class RepositoryTests : RepositoryTest()
+
+//    @Nested
+//    @DisplayName("Service Tests")
+//    inner class ServiceTests: ServiceTest()
 }

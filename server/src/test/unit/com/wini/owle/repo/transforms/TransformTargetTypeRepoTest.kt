@@ -4,9 +4,6 @@ import com.wini.owle.entity.transforms.TransformTargetTypeEntity
 import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.CompositeID
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.junit.jupiter.api.Test
 
 /**
  * Represents the target types for a transformation.
@@ -20,5 +17,5 @@ abstract class TransformTargetTypeRepoTest : CompositeIdRepoTest<TransformTarget
         return any<TransformTargetTypeEntity>()
     }
 
-    
+
 }

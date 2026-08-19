@@ -4,9 +4,6 @@ import com.wini.owle.entity.tags.targets.PackageTagEntity
 import com.wini.owle.repo.CompositeIdRepoTest
 import io.mockk.MockKMatcherScope
 import io.mockk.mockk
-import org.jetbrains.exposed.v1.core.dao.id.CompositeID
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.junit.jupiter.api.Test
 
 /**
  * Represents a tag a given user has associated with a Package
@@ -19,5 +16,5 @@ abstract class PackageTagRepoTest : CompositeIdRepoTest<PackageTagEntity>() {
         return any<PackageTagEntity>()
     }
 
-    
+
 }
