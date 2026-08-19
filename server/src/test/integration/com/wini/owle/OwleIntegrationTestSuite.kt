@@ -21,6 +21,10 @@ import org.junit.jupiter.api.Tag
 abstract class OwleIntegrationTestSuite {
 
     @Nested
+    @DisplayName("Enum column drift")
+    inner class EnumColumnDrift : com.wini.owle.entity.EnumColumnDriftTest()
+
+    @Nested
     @DisplayName("Workflow Folder (entity)")
     inner class WorkflowFolderEntityTests : WorkflowFolderDbIntegrationTest()
 

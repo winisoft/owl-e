@@ -1,22 +1,24 @@
 package com.wini.owle.dto.tags.enums
 
+import com.wini.owle.dto.DbToken
 
-enum class TagSource {
+
+enum class TagSource(override val dbValue: String) : DbToken {
 
     /**
      * Owl-E defined (internal base categories)
      */
-    SYSTEM,
+    SYSTEM("system"),
 
     /**
      * From external PyPI classifiers
      */
-    PYPI,
+    PYPI("pypi"),
 
     /**
      * User-created tags
      */
-    USER
+    USER("user")
 }
 
 

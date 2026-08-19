@@ -1,14 +1,15 @@
 package com.wini.owle.dto.workflows.enums
 
+import com.wini.owle.dto.DbToken
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class StoreMethod {
+enum class StoreMethod(override val dbValue: String) : DbToken {
 
-    TEXT,
+    TEXT("text"),
 
-    BLOB,
+    BLOB("blob"),
 
-    FILE
+    FILE("file")
 
 }

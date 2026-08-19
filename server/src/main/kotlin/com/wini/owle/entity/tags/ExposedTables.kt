@@ -1,5 +1,7 @@
 package com.wini.owle.entity.tags
 
+import com.wini.owle.entity.dbEnum
+
 import com.wini.owle.dto.tags.enums.TagSource
 import com.wini.owle.entity.environs.Distributions
 import com.wini.owle.entity.environs.DistributionPackages
@@ -18,7 +20,7 @@ import org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
 object Tags : ULongIdTable("tags") {
     val name = varchar("name", 255)
     val description = varchar("description", 8192).nullable()
-    val tagSource = enumerationByName("source", 8, TagSource::class).nullable()
+    val tagSource = dbEnum<TagSource>("source", 8).nullable()
     val user = reference("user_id", Users).nullable()
 }
 

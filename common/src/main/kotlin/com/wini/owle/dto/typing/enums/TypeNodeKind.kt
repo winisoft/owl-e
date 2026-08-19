@@ -1,41 +1,43 @@
 package com.wini.owle.dto.typing.enums
 
+import com.wini.owle.dto.DbToken
 
-enum class TypeNodeKind {
 
-    BASE,
+enum class TypeNodeKind(override val dbValue: String) : DbToken {
+
+    BASE("base"),
 
     /**
      * Represent a parameterized generic at runtime (e.g. List[int]). They refer back to their “base” via base_node_id.
      */
     @Suppress("KDocUnresolvedReference")
-    INSTANTIATION,
+    INSTANTIATION("instantiation"),
 
     /**
      * represent a TypeVar (e.g. T).
      */
-    TYPEVAR,
+    TYPEVAR("typevar"),
 
     /**
      * Present to represent a type node for a Union[...] (e.g. Union[int,str]) and will have multiple rows in union_members.
      */
-    UNION,
+    UNION("union"),
 
     /**
      * Represent among Type Nodes function signatures (the “callable type” itself).
      */
-    CALLABLE,
+    CALLABLE("callable"),
 
-    METHOD,
+    METHOD("method"),
 
-    ATTRIBUTE,
+    ATTRIBUTE("attribute"),
 
-    CLASS,
+    CLASS("class"),
 
-    GENERIC,
+    GENERIC("generic"),
 
-    PRIMITIVE,
+    PRIMITIVE("primitive"),
 
-    FUNCTION
+    FUNCTION("function")
 
 }

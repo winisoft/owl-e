@@ -1,18 +1,19 @@
 package com.wini.owle.dto.runs.enums
 
+import com.wini.owle.dto.DbToken
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class ComparisonOperator {
+enum class ComparisonOperator(override val dbValue: String) : DbToken {
 
-    EQUALS,
+    EQUALS("equals"),
 
-    NOT_EQUALS,
+    NOT_EQUALS("notEquals"),
 
-    CONTAINS,
+    CONTAINS("contains"),
 
-    GREATER_THAN,
+    GREATER_THAN("greaterThan"),
 
-    LESS_THAN
+    LESS_THAN("lessThan")
 
 }

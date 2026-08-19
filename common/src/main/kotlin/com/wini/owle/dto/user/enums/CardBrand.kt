@@ -1,38 +1,39 @@
 package com.wini.owle.dto.user.enums
 
+import com.wini.owle.dto.DbToken
 import kotlinx.serialization.Serializable
 
 
-enum class CardBrand {
+enum class CardBrand(override val dbValue: String) : DbToken {
 
     
-    AMERICAN_EXPRESS,
+    AMERICAN_EXPRESS("American Express"),
 
     
-    DINERS_CLUB,
+    DINERS_CLUB("Diners Club"),
 
     
-    DISCOVER,
+    DISCOVER("Discover"),
 
     
-    EFTPOS_AUSTRALIA,
+    EFTPOS_AUSTRALIA("Eftpos Australia"),
 
     
-    GIROCARD,
+    GIROCARD("Girocard"),
 
     
-    JCB,
+    JCB("JCB"),
 
     
-    MASTERCARD,
+    MASTERCARD("MasterCard"),
 
     
-    UNIONPAY,
+    UNIONPAY("UnionPay"),
 
     
-    VISA,
+    VISA("Visa"),
 
     
-    UNKNOWN
+    UNKNOWN("Unknown")
 
 }

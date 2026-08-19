@@ -1,5 +1,7 @@
 package com.wini.owle.entity.typing
 
+import com.wini.owle.entity.dbEnum
+
 import com.wini.owle.dto.typing.enums.SchemaMembership
 import com.wini.owle.dto.typing.enums.TypeNodeKind
 import com.wini.owle.dto.typing.enums.TypeNodeRelationKind
@@ -17,7 +19,7 @@ object TypeNodes : ULongIdTable("type_nodes") {
     val version = reference("version_id", Versions)
     val namespace = varchar("namespace", 1024).nullable()
     val name = varchar("name", 255).nullable()
-    val kind = enumerationByName("kind", 13, TypeNodeKind::class)
+    val kind = dbEnum<TypeNodeKind>("kind", 13)
     val alias = varchar("alias", 255).nullable()
     val isGeneric = bool("is_generic").default(false)
     val dedupHash = char("dedup_hash", 64).nullable().uniqueIndex()
@@ -26,7 +28,7 @@ object TypeNodes : ULongIdTable("type_nodes") {
 object TypeNodeRelations : CompositeIdTable("type_node_relations") {
     val parentNode = reference("parent_node_id", TypeNodes)
     val childNode = reference("child_node_id", TypeNodes)
-    val relationKind = enumerationByName("relation_kind", 16, TypeNodeRelationKind::class)
+    val relationKind = dbEnum<TypeNodeRelationKind>("relation_kind", 16)
         .default(TypeNodeRelationKind.INHERITANCE)
     override val primaryKey = PrimaryKey(childNode, parentNode)
 }
@@ -35,7 +37,7 @@ object TypeSchemaRefs : ULongIdTable("type_schema_refs") {
     val parentRef = reference("parent_ref_id", TypeSchemaRefs).nullable()
     val classNode = reference("class_node_id", TypeNodes, onDelete = ReferenceOption.CASCADE)
     val name = varchar("name", 255)
-    val membership = enumerationByName("member_kind", 16, SchemaMembership::class)
+    val membership = dbEnum<SchemaMembership>("member_kind", 16)
     val typeNode = reference("type_node_id", TypeNodes).nullable()
     val description = varchar("description", 4096).nullable()
     val position = integer("position").default(0)
@@ -53,7 +55,7 @@ object TypeVarConstraints : ULongIdTable("typevar_constraints") {
 
 object TypeVarVariances : ULongIdTable("typevar_variances") {
     val typeVarNode = reference("typevar_node_id", TypeNodes).uniqueIndex()
-    val variance = enumerationByName("variance", 16, VarianceCardinality::class)
+    val variance = dbEnum<VarianceCardinality>("variance", 16)
         .default(VarianceCardinality.INVARIANT)
 }
 

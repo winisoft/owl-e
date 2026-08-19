@@ -1,5 +1,7 @@
 package com.wini.owle.entity.environs
 
+import com.wini.owle.entity.dbEnum
+
 import com.wini.owle.dto.environs.enums.EnvMarkerExpressionMode
 import com.wini.owle.dto.environs.enums.EnvMarkerLogicOp
 import com.wini.owle.dto.environs.enums.EnvMarkerOperator
@@ -70,8 +72,8 @@ object PackageDistRequirements : ULongIdTable("package_dist_requirements") {
     val requiredDist = reference("required_dist", Distributions)
     val requiredVersion = ulong("required_package_id").nullable()
     val requiredExtraName = varchar("required_extra_name", 255).nullable()
-    val operator = enumerationByName("operator", 16, VersionOperator::class)
-    val wildcardSegment = enumerationByName("wildcard_segment", 8, WildcardSegment::class)
+    val operator = dbEnum<VersionOperator>("operator", 16)
+    val wildcardSegment = dbEnum<WildcardSegment>("wildcard_segment", 8)
     val raw = varchar("raw", 1024).nullable()
 
     init {
@@ -99,8 +101,8 @@ object PackagePythonRequirements : CompositeIdTable("package_python_requirements
      */
     val packageVersion = ulong("package_id").entityId()
     val pythonVersion = reference("version_id", PythonVersions)
-    val operator = enumerationByName("operator", 16, VersionOperator::class)
-    val wildcard = enumerationByName("wildcard", 8, WildcardSegment::class).default(WildcardSegment.NONE)
+    val operator = dbEnum<VersionOperator>("operator", 16)
+    val wildcard = dbEnum<WildcardSegment>("wildcard", 8).default(WildcardSegment.NONE)
     override val primaryKey = PrimaryKey(packageVersion, distribution)
 
     init {
@@ -124,8 +126,8 @@ object PythonVersions : IdTable<ULong>("python_versions") {
 
 object PythonVersionSpecifiers : CompositeIdTable("python_version_specifiers") {
     val pythonVersion = reference("version_id", PythonVersions)
-    val operator = enumerationByName("operator", 16, VersionOperator::class).entityId()
-    val wildcard = enumerationByName("wildcard", 8, WildcardSegment::class).entityId()
+    val operator = dbEnum<VersionOperator>("operator", 16).entityId()
+    val wildcard = dbEnum<WildcardSegment>("wildcard", 8).entityId()
     override val primaryKey = PrimaryKey(pythonVersion, operator, wildcard)
 }
 
@@ -135,7 +137,7 @@ object Versions : ULongIdTable("versions") {
     val major = ulong("major")
     val minor = ulong("minor").default(0uL)
     val micro = ulong("micro").default(0uL)
-    val phase = enumerationByName("phase", 16, PrereleasePhase::class).default(PrereleasePhase.FINAL)
+    val phase = dbEnum<PrereleasePhase>("phase", 16).default(PrereleasePhase.FINAL)
     val phaseNumber = ulong("phase_number").nullable()
     val postNumber = ulong("post_number").nullable()
     val devNumber = ulong("dev_number").nullable()
@@ -170,7 +172,7 @@ object Versions : ULongIdTable("versions") {
 
 object VersionOverflows : ULongIdTable("version_overflows") {
     val version = reference("version_id", Versions, onDelete = ReferenceOption.CASCADE)
-    val violation = enumerationByName("violation", 32, OverflowViolation::class)
+    val violation = dbEnum<OverflowViolation>("violation", 32)
     val stringValue = varchar("string_value", 255)
 
     init {
@@ -182,13 +184,13 @@ object VersionOverflows : ULongIdTable("version_overflows") {
 object EnvMarkerExpressions : ULongIdTable("env_marker_expressions") {
     val requirement = reference("requirement_id", PackageDistRequirements)
     val parent = reference("parent_id", EnvMarkerExpressions).nullable()
-    val mode = enumerationByName("mode", 16, EnvMarkerExpressionMode::class)
+    val mode = dbEnum<EnvMarkerExpressionMode>("mode", 16)
 }
 
 
 object EnvMarkerLogicals : ULongIdTable("env_marker_logicals") {
     val expression = reference("expression_id", EnvMarkerExpressions, onDelete = ReferenceOption.CASCADE)
-    val operator = enumerationByName("operator", 4, EnvMarkerLogicOp::class)
+    val operator = dbEnum<EnvMarkerLogicOp>("operator", 4)
     val leftChild = reference("left_child_id", EnvMarkerExpressions)
     val rightChild = reference("right_child_id", EnvMarkerExpressions)
 }
@@ -197,6 +199,6 @@ object EnvMarkerLogicals : ULongIdTable("env_marker_logicals") {
 object EnvMarkerComparisons : ULongIdTable("env_marker_comparisons") {
     val expression = reference("expression_id", EnvMarkerExpressions, onDelete = ReferenceOption.CASCADE)
     val variable = varchar("variable", 255).nullable()
-    val operator = enumerationByName("operator", 18, EnvMarkerOperator::class)
+    val operator = dbEnum<EnvMarkerOperator>("operator", 18)
     val value = text("value")
 }

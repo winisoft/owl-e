@@ -86,7 +86,9 @@ abstract class WorkflowHierarchyServiceImplTest {
         }
 
         val result = service.getByFolder(folderId = folder.id.value)
-        assertTrue { result is AsyncResult.Success<*> }
+        // a bare `is Success` check reports only "expected true, was false"; naming the
+        // result makes a failure say which error came back
+        assertTrue(result is AsyncResult.Success<*>, "getByFolder failed: $result")
 
 
         val names = (result as AsyncResult.Success<List<Workflow>>).data

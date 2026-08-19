@@ -1,5 +1,7 @@
 package com.wini.owle.entity.runs
 
+import com.wini.owle.entity.dbEnum
+
 import com.wini.owle.dto.runs.enums.ComparisonOperator
 import com.wini.owle.dto.runs.enums.ExecutionEventKind
 import com.wini.owle.dto.runs.enums.ExecutionLogLevel
@@ -23,7 +25,7 @@ object WorkflowExecutions : ULongIdTable("workflow_executions") {
     val multiflow = reference("multiflow_id", Multiflows).nullable()
     val startedAt = timestamp("started_at").defaultExpression(CurrentTimestamp)
     val completedAt = timestamp("completed_at").nullable()
-    val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.RUNNING)
+    val status = dbEnum<ExecutionStatus>("status", 20).default(ExecutionStatus.RUNNING)
 }
 
 object BenchmarkReports : ULongIdTable("benchmark_reports") {
@@ -35,8 +37,8 @@ object ExecutionLogs : ULongIdTable("execution_logs") {
     val workflowExecution = reference("workflow_execution_id", WorkflowExecutions, onDelete = ReferenceOption.CASCADE)
     val seq = ulong("seq")
     val loggedAt = timestamp("logged_at").defaultExpression(CurrentTimestamp)
-    val eventKind = enumerationByName("event_kind", 32, ExecutionEventKind::class)
-    val logLevel = enumerationByName("log_level", 8, ExecutionLogLevel::class).default(ExecutionLogLevel.INFO)
+    val eventKind = dbEnum<ExecutionEventKind>("event_kind", 32)
+    val logLevel = dbEnum<ExecutionLogLevel>("log_level", 8).default(ExecutionLogLevel.INFO)
     val workflow = reference("workflow_id", Workflows).nullable()
     val step = reference("step_id", Steps).nullable()
     val inquisition = reference("inquisition_id", Inquisitions).nullable()
@@ -64,7 +66,7 @@ object TestExpectedOutcomes : ULongIdTable("test_expected_outcomes") {
     val testCase = reference("test_case_id", TestCases)
     val dataPoint = reference("data_point_id", DataPoints)
     val expectedValue = text("expected_value").nullable()
-    val operator = enumerationByName("operator", 16, ComparisonOperator::class)
+    val operator = dbEnum<ComparisonOperator>("operator", 16)
 }
 
 object TestInputs : ULongIdTable("test_inputs") {
@@ -84,5 +86,5 @@ object StepTestRuns : ULongIdTable("test_step_run") {
     val step = reference("step_id", Steps, onDelete = ReferenceOption.CASCADE)
     val started = timestamp("started").nullable()
     val completed = timestamp("completed").nullable()
-    val status = enumerationByName("status", 20, ExecutionStatus::class).default(ExecutionStatus.READY)
+    val status = dbEnum<ExecutionStatus>("status", 20).default(ExecutionStatus.READY)
 }

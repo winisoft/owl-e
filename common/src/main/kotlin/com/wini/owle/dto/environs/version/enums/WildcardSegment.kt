@@ -1,13 +1,15 @@
 package com.wini.owle.dto.environs.version.enums
 
-enum class WildcardSegment {
+import com.wini.owle.dto.DbToken
 
-    NONE,
+enum class WildcardSegment(override val dbValue: String) : DbToken {
 
-    MAJOR,
+    NONE("NONE"),
 
-    MINOR,
+    MAJOR("MAJOR"),
 
-    MICRO
+    MINOR("MINOR"),
+
+    MICRO("MICRO")
 
 }

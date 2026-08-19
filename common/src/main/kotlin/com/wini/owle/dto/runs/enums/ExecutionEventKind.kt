@@ -1,42 +1,43 @@
 package com.wini.owle.dto.runs.enums
 
+import com.wini.owle.dto.DbToken
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class ExecutionEventKind {
+enum class ExecutionEventKind(override val dbValue: String) : DbToken {
 
-    RUN_STARTED,
+    RUN_STARTED("run_started"),
 
-    WORKFLOW_ENTERED,
+    WORKFLOW_ENTERED("workflow_entered"),
 
-    STEP_ENTERED,
+    STEP_ENTERED("step_entered"),
 
-    PARAM_RESOLVED,
+    PARAM_RESOLVED("param_resolved"),
 
-    TOOL_INVOKED,
+    TOOL_INVOKED("tool_invoked"),
 
-    TOOL_RETURNED,
+    TOOL_RETURNED("tool_returned"),
 
-    GUARDED_OK,
+    GUARDED_OK("guarded_ok"),
 
-    ERROR_WATCH_FIRED,
+    ERROR_WATCH_FIRED("error_watch_fired"),
 
-    DATA_POINT_WRITTEN,
+    DATA_POINT_WRITTEN("data_point_written"),
 
-    INQUISITION_EVALUATED,
+    INQUISITION_EVALUATED("inquisition_evaluated"),
 
-    ROUTE_TAKEN,
+    ROUTE_TAKEN("route_taken"),
 
-    JUNCTION_TAKEN,
+    JUNCTION_TAKEN("junction_taken"),
 
-    INJECTION_MIGRATED,
+    INJECTION_MIGRATED("injection_migrated"),
 
-    WORKFLOW_ENDED,
+    WORKFLOW_ENDED("workflow_ended"),
 
-    MULTIFLOW_COMPLETED,
+    MULTIFLOW_COMPLETED("multiflow_completed"),
 
-    RUN_FAILED,
+    RUN_FAILED("run_failed"),
 
-    LOG
+    LOG("log")
 
 }

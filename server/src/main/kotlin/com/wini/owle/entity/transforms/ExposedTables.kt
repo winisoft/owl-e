@@ -1,5 +1,7 @@
 package com.wini.owle.entity.transforms
 
+import com.wini.owle.entity.dbEnum
+
 import com.wini.owle.dto.transforms.enums.TransformOccurrenceInitiator
 import com.wini.owle.entity.typing.CallableSignatures
 import com.wini.owle.entity.typing.TypeNodes
@@ -28,7 +30,7 @@ object TransformArgs : ULongIdTable("transform_args") {
 
 object TransformOccurrences : ULongIdTable("transform_occurrences") {
     val transform = reference("transform_id", Transforms)
-    val initiator = enumerationByName("initiator", 24, TransformOccurrenceInitiator::class)
+    val initiator = dbEnum<TransformOccurrenceInitiator>("initiator", 24)
     val dataPoint = reference("dataPointId", DataPoints).nullable()
     val toolResultStep = reference("toolResultStepId", Steps).nullable()
 

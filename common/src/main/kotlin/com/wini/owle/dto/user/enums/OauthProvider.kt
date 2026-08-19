@@ -1,9 +1,11 @@
 package com.wini.owle.dto.user.enums
 
-enum class OauthProvider {
+import com.wini.owle.dto.DbToken
 
-    GOOGLE,
+enum class OauthProvider(override val dbValue: String) : DbToken {
 
-    GITHUB
+    GOOGLE("google"),
+
+    GITHUB("github")
 
 }

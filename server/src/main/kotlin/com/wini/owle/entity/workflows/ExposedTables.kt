@@ -1,5 +1,7 @@
 package com.wini.owle.entity.workflows
 
+import com.wini.owle.entity.dbEnum
+
 import com.wini.owle.dto.workflows.enums.AuthorshipCredit
 import com.wini.owle.dto.workflows.enums.CommercialUse
 import com.wini.owle.dto.workflows.enums.ModificationTerms
@@ -108,7 +110,7 @@ object DataPoints : ULongIdTable("data_points") {
     /** Marks a data point that must be supplied as a run input rather than produced by a step. */
     val isPrerequisite = bool("is_prerequisite").nullable()
     val presetValue = text("preset_value").nullable()
-    val storeMethod = enumerationByName("store_method", 8, StoreMethod::class).nullable()
+    val storeMethod = dbEnum<StoreMethod>("store_method", 8).nullable()
     val typeNode = reference("type_node_id", TypeNodes)
     val createdAt = timestamp("createdAt").defaultExpression(CurrentTimestamp)
     val updatedAt = timestamp("updatedAt").defaultExpression(CurrentTimestamp)
@@ -123,12 +125,12 @@ object Metadatas : ULongIdTable("metadata") {
     val contactInformation = text("contact_information").nullable()
     val thirdPartyLicenses = text("third_party_licenses").nullable()
     val discretionAdvisedContent = bool("discretion_advised_content").default(false)
-    val commercialUsage = enumerationByName("commercial_usage", 32, CommercialUse::class)
+    val commercialUsage = dbEnum<CommercialUse>("commercial_usage", 32)
         .default(CommercialUse.PERSONAL_NON_PROFIT)
-    val creditNotation = enumerationByName("credit_notation", 16, AuthorshipCredit::class)
+    val creditNotation = dbEnum<AuthorshipCredit>("credit_notation", 16)
         .default(AuthorshipCredit.REQUIRED)
     val allowRedistribution = bool("allow_redistribution").default(false)
-    val modification = enumerationByName("modification", 40, ModificationTerms::class)
+    val modification = dbEnum<ModificationTerms>("modification", 40)
         .default(ModificationTerms.PROHIBITED)
     val distributionVersion = varchar("distribution_version", 255).default("1.0.0")
     val distributionAcceptedAt = datetime("distribution_accepted_at")

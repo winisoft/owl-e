@@ -1,18 +1,19 @@
 package com.wini.owle.dto.runs.enums
 
+import com.wini.owle.dto.DbToken
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class ExecutionLogLevel {
+enum class ExecutionLogLevel(override val dbValue: String) : DbToken {
 
-    TRACE,
+    TRACE("TRACE"),
 
-    DEBUG,
+    DEBUG("DEBUG"),
 
-    INFO,
+    INFO("INFO"),
 
-    WARN,
+    WARN("WARN"),
 
-    ERROR
+    ERROR("ERROR")
 
 }

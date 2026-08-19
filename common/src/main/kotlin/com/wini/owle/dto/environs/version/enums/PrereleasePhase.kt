@@ -1,14 +1,16 @@
 package com.wini.owle.dto.environs.version.enums
 
+import com.wini.owle.dto.DbToken
 
-enum class PrereleasePhase {
 
-    FINAL,
+enum class PrereleasePhase(override val dbValue: String) : DbToken {
 
-    ALPHA,
+    FINAL("final"),
 
-    BETA,
+    ALPHA("alpha"),
 
-    CANDIDATE
+    BETA("beta"),
+
+    CANDIDATE("candidate")
 
 }

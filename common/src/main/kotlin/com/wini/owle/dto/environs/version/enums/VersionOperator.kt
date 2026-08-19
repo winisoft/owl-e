@@ -1,21 +1,23 @@
 package com.wini.owle.dto.environs.version.enums
 
-enum class VersionOperator() {
+import com.wini.owle.dto.DbToken
 
-    LESS_THAN,
+enum class VersionOperator(override val dbValue: String) : DbToken {
 
-    LESS_THAN_OR_EQ,
+    LESS_THAN("LT"),
 
-    NOT_EQ,
+    LESS_THAN_OR_EQ("LE"),
 
-    EQUALS,
+    NOT_EQ("NE"),
 
-    GREATER_THAN_OR_EQ,
+    EQUALS("EQ"),
 
-    GREATER_THAN,
+    GREATER_THAN_OR_EQ("GE"),
 
-    COMPATIBLE,
+    GREATER_THAN("GT"),
 
-    EXACT;
+    COMPATIBLE("COMPATIBLE"),
+
+    EXACT("EXACT");
 
 }

@@ -1,21 +1,23 @@
 package com.wini.owle.dto.environs.version.enums
 
-enum class OverflowViolation {
+import com.wini.owle.dto.DbToken
 
-    EPOCH,
+enum class OverflowViolation(override val dbValue: String) : DbToken {
 
-    MAJOR,
+    EPOCH("epoch"),
 
-    MINOR,
+    MAJOR("major"),
 
-    MICRO,
+    MINOR("minor"),
 
-    MICRO_EXTRA,
+    MICRO("micro"),
 
-    PHASE_NUMBER,
+    MICRO_EXTRA("micro_extra"),
 
-    POST_NUMBER,
+    PHASE_NUMBER("phase_number"),
 
-    DEV_NUMBER;
+    POST_NUMBER("post_number"),
+
+    DEV_NUMBER("dev_number");
 
 }

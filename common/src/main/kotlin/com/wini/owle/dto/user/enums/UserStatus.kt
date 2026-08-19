@@ -1,19 +1,20 @@
 package com.wini.owle.dto.user.enums
 
+import com.wini.owle.dto.DbToken
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-enum class UserStatus {
+enum class UserStatus(override val dbValue: String) : DbToken {
 
-    REGISTERED,
+    REGISTERED("registered"),
 
-    ACTIVE,
+    ACTIVE("active"),
 
-    CANCELLED,
+    CANCELLED("cancelled"),
 
-    ON_HOLD,
+    ON_HOLD("on hold"),
 
-    DELETED
+    DELETED("deleted")
 
 }

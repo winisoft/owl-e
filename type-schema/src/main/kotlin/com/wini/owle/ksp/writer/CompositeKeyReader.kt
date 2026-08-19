@@ -30,7 +30,9 @@ internal object CompositeKeyReader {
 
     private val TABLE = Regex("""object (\w+)\s*:\s*CompositeIdTable\("(\w+)"\)\s*\{""")
     private val REFERENCE = Regex("""val (\w+)\s*=\s*reference\("(\w+)",\s*(\w+)[^)]*\)""")
-    private val PLAIN = Regex("""val (\w+)\s*=\s*\w+\("(\w+)"""")
+    // the optional type-argument list matches `dbEnum<VersionOperator>("operator", 16)`; without
+    // it the key columns of the specifier tables read as absent and their delegates went ungenerated
+    private val PLAIN = Regex("""val (\w+)\s*=\s*\w+(?:<[^>]*>)?\("(\w+)"""")
     private val PRIMARY_KEY = Regex("""primaryKey\s*=\s*PrimaryKey\(([^)]*)\)""")
 
     /** Every composite table declared in [sourceFiles], keyed by its object name. */
