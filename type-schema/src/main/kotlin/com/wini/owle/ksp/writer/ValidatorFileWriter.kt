@@ -59,9 +59,9 @@ class ValidatorFileWriter(
                 val nullableOpener = if (propType.isMarkedNullable) "dto.$propName?.let { " else ""
                 val nullableCloser = if (propType.isMarkedNullable) " }" else ""
                 val validationCall = if (isList) {
-                    "$depVarName.validateAll(dto.$propName).violations"
+                    "$depVarName().validateAll(dto.$propName).violations"
                 } else {
-                    "$depVarName.validate(dto.$propName).violations"
+                    "$depVarName().validate(dto.$propName).violations"
                 }
                 nestedValidationLines.add(
                     if (propType.isMarkedNullable) {
@@ -74,7 +74,7 @@ class ValidatorFileWriter(
         }
 
         val constructorParams = deps.values.joinToString(",\n") { dep ->
-            "    private val ${dep.variableName}: ${dep.modelDeclaration.simpleName.asString()}Validator"
+            "    private val ${dep.variableName}: () -> ${dep.modelDeclaration.simpleName.asString()}Validator"
         }
 
         val file = codeGenerator.createNewFile(

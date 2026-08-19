@@ -64,6 +64,7 @@ import com.wini.owle.dto.workflows.WorkflowFolder
 import com.wini.owle.dto.workflows.enums.StoreMethod
 import com.wini.owle.dto.runs.test.TestExpectedOutcome
 import com.wini.owle.dto.runs.workflow.TestResult
+import com.wini.owle.dto.environs.enums.EnvMarkerOperator
 
 /**
  * Canned [environs] DTO instances for tests.
@@ -78,20 +79,20 @@ object EnvironsDtoFactory {
         id: ULong = 1UL,
         expression: EnvMarkerExpression = envMarkerExpression(),
         variable: EnvMarkerVariable? = EnvMarkerVariable.SYS_PLATFORM,
-        operator: ComparisonOperator = ComparisonOperator.EQUALS,
+        operator: EnvMarkerOperator = EnvMarkerOperator.EQ,
         value: String = "darwin"
-    ): EnvMarkerComparison = envMarkerComparison(
-        id,
-        expression,
-        variable,
-        operator,
-        value
+    ): EnvMarkerComparison = EnvMarkerComparison(
+        id = id,
+        expression = expression,
+        variable = variable,
+        operator = operator,
+        value = value
     )
 
     fun envMarkerExpression(
         id: ULong = 1UL,
         requirement: PackageDistRequirement = packageRequiredDist(),
-        parent: EnvMarkerExpression? = envMarkerExpression(),
+        parent: EnvMarkerExpression? = null,
         mode: EnvMarkerExpressionMode = EnvMarkerExpressionMode.COMPARATIVE
     ) : EnvMarkerExpression = EnvMarkerExpression(
         id = id,

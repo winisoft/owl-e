@@ -3,6 +3,8 @@ package com.wini.owle
 import com.wini.owle.dto.DtoTest
 import com.wini.owle.error.ConstraintErrorTest
 import com.wini.owle.validators.DtoValidatorTest
+import com.wini.owle.services.environs.marker.EnvMarkerComparisonServiceTest
+import com.wini.owle.wiring.DiGraphTest
 import com.wini.owle.repo.RepositoryTest
 import com.wini.owle.services.ServiceTest
 import com.wini.owle.services.ServiceTestSuite
@@ -34,6 +36,14 @@ abstract class OwleUnitTestSuite {
     @Nested
     @DisplayName("Validator Mechanism")
     inner class ValidatorMechanism : DtoValidatorTest()
+
+    @Nested
+    @DisplayName("Service Layer")
+    inner class ServiceLayer : EnvMarkerComparisonServiceTest()
+
+    @Nested
+    @DisplayName("DI Graph")
+    inner class DiGraph : DiGraphTest()
 
     @Nested
     @DisplayName("Service Tests")
