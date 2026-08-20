@@ -63,8 +63,7 @@ object Server {
                 json(Json { prettyPrint = true; isLenient = true; ignoreUnknownKeys = true })
             }
 
-            koinApp.koin.getAll<KtorApi<*>>()
-                .forEach { it.register(this) }
+            koinApp.koin.getAll<KtorApi<*>>().forEach { it.register(this) }
         }
 
     }

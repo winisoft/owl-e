@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+@import './theme.css';
+
+/*
+ * Bridge the design tokens into Tailwind's own namespace so `bg-surface-panel`, `text-secondary`,
+ * `font-mono` and so on work as utilities. Anything Claude Design produces using plain Tailwind
+ * colour names still renders; anything using these reads as Owl-E.
+ */
+@theme inline {
+  --color-surface-base: var(--surface-base);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-panel: var(--surface-panel);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-selected: var(--surface-selected);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-bright: var(--text-bright);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-link: var(--text-link);
+
+  --color-accent: var(--accent);
+  --color-error: var(--status-error);
+  --color-warning: var(--status-warning);
+  --color-success: var(--status-success);
+  --color-info: var(--status-info);
+  --color-running: var(--status-running);
+
+  --color-node-step: var(--node-step);
+  --color-node-grouper: var(--node-grouper);
+  --color-node-inquisition: var(--node-inquisition);
+  --color-node-junction: var(--node-junction);
+  --color-node-datapoint: var(--node-datapoint);
+  --color-node-tool: var(--node-tool);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* IDE-weight scrollbars; the default light ones are jarring against Darcula. */
+* {
+  scrollbar-color: var(--dc-bg-raised) transparent;
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--dc-bg-raised);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--dc-bg-hover);
+  background-clip: content-box;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+::selection {
+  background: var(--surface-selected);
+  color: var(--text-bright);
+}

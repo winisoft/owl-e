@@ -14,11 +14,12 @@ import com.wini.owle.error.ParamValueMalformedLong
 import com.wini.owle.error.RequestBodyMalformed
 import com.wini.owle.ifNullExit
 import com.wini.owle.validators.DtoValidator
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.request.receiveText
-import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
@@ -99,15 +100,19 @@ abstract class BaseApiImpl<ID : Any, DTO : BaseDto>(
                         it.failed
                     else ->
                         listOf(it)
-                }.map {
-                    it.run {
+                }.map { err ->
+                    err.run {
                         ApiError(errorCode, message, detail)
                     }
                 }
             }
         )
 
-        respond(failure.toStatusCode(), Json.encodeToString(serializer, apiResponse))
+        // `respond(status, aString)` sends text/plain — Ktor has no way to know the string is
+        // JSON. The serializer is chosen by hand here because `ApiResponse<D>` is generic and
+        // ContentNegotiation cannot resolve it reflectively, so the content type has to be stated
+        // by hand too.
+        respondJson(failure.toStatusCode(), Json.encodeToString(serializer, apiResponse))
     }
 
     private fun AsyncResult.Failure.toStatusCode(): HttpStatusCode = when (error) {
@@ -202,9 +207,13 @@ abstract class BaseApiImpl<ID : Any, DTO : BaseDto>(
             is AsyncResult.Failure -> failureRespond(result, serializer)
             is AsyncResult.Success -> Json.encodeToString(serializer,
                 ApiResponse(true, data = if (owleCall.successStatus != HttpStatusCode.NoContent) result.data else null)
-            ).apply { respond(owleCall.successStatus, this) }
+            ).apply { respondJson(owleCall.successStatus, this) }
         }
     }
+
+    /** Every response body here is already-serialized JSON, and says so. */
+    private suspend fun ApplicationCall.respondJson(status: HttpStatusCode, body: String) =
+        respondText(body, ContentType.Application.Json, status)
 
     private fun <D> OwleApiCall.responseSerializerForCall(): KSerializer<ApiResponse<D>> {
         return responseSerializer<DTO, D>(serializer, dtoListSerializer, Unit.serializer())

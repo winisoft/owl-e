@@ -1,0 +1,118 @@
+/*
+ * Darcula, as design tokens.
+ *
+ * The raw palette is JetBrains' Darcula — the same values the IDE uses — kept separate from the
+ * semantic names beneath it. Components should never reference a `--dc-*` value directly: they use
+ * the semantic token, so that re-theming means rebinding one block rather than auditing every
+ * component. The syntax colours are here because Owl-E displays Python constantly, and because
+ * they double as a categorical palette that already reads as coherent.
+ */
+
+:root {
+  /* ---- raw palette ------------------------------------------------------ */
+  --dc-bg-deepest: #1e1f22;
+  --dc-bg-editor: #2b2b2b;
+  --dc-bg-panel: #3c3f41;
+  --dc-bg-raised: #45494a;
+  --dc-bg-hover: #4c5052;
+  --dc-bg-selected: #214283;
+
+  --dc-border: #323232;
+  --dc-border-light: #4e5254;
+
+  --dc-fg: #a9b7c6;
+  --dc-fg-muted: #808080;
+  --dc-fg-bright: #ffffff;
+  --dc-fg-dim: #606366;
+
+  /* syntax — also the categorical palette */
+  --dc-orange: #cc7832; /* keyword */
+  --dc-green: #6a8759;  /* string */
+  --dc-blue: #6897bb;   /* number */
+  --dc-yellow: #ffc66d; /* function */
+  --dc-purple: #9876aa; /* field */
+  --dc-teal: #4eade5;   /* link-ish */
+  --dc-red: #ff6b68;    /* error */
+  --dc-olive: #629755;  /* doc comment */
+
+  --dc-link: #287bde;
+  --dc-warning: #bbb529;
+
+  /* ---- semantic tokens -------------------------------------------------- */
+  --surface-base: var(--dc-bg-editor);
+  --surface-sunken: var(--dc-bg-deepest);
+  --surface-panel: var(--dc-bg-panel);
+  --surface-raised: var(--dc-bg-raised);
+  --surface-hover: var(--dc-bg-hover);
+  --surface-selected: var(--dc-bg-selected);
+
+  --border-subtle: var(--dc-border);
+  --border-strong: var(--dc-border-light);
+  --border-focus: var(--dc-link);
+
+  --text-primary: var(--dc-fg);
+  --text-secondary: var(--dc-fg-muted);
+  --text-bright: var(--dc-fg-bright);
+  --text-disabled: var(--dc-fg-dim);
+  --text-link: var(--dc-teal);
+
+  --accent: var(--dc-orange);
+  --accent-contrast: #1e1f22;
+
+  --status-error: var(--dc-red);
+  --status-warning: var(--dc-warning);
+  --status-success: var(--dc-green);
+  --status-info: var(--dc-blue);
+  --status-running: var(--dc-yellow);
+
+  /* ---- workflow element colours ---------------------------------------- */
+  /* Steps and groupers carry a `color` column constrained to #RRGGBB. These are the defaults a
+     new element gets, chosen to stay legible against --surface-base. */
+  --node-step: var(--dc-blue);
+  --node-grouper: var(--dc-purple);
+  --node-inquisition: var(--dc-yellow);
+  --node-junction: var(--dc-teal);
+  --node-datapoint: var(--dc-green);
+  --node-tool: var(--dc-orange);
+
+  --edge-default: #5c6164;
+  --edge-active: var(--dc-yellow);
+  --canvas-grid: #323437;
+
+  /* ---- type ------------------------------------------------------------- */
+  --font-sans: 'Rubik', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+
+  --text-xs: 0.6875rem;  /* 11px — dense table / canvas labels */
+  --text-sm: 0.8125rem;  /* 13px — the IDE default, and this UI's body size */
+  --text-base: 0.875rem; /* 14px */
+  --text-lg: 1rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* ---- space & shape ---------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+
+  --shadow-panel: 0 2px 8px rgb(0 0 0 / 0.35);
+  --shadow-popover: 0 6px 20px rgb(0 0 0 / 0.45);
+
+  --ring: 0 0 0 2px var(--border-focus);
+}
+
+/*
+ * A light variant is deliberately absent. Darcula is the design, not a preference — the palette
+ * above is what components are written against. Adding a light theme later means adding one
+ * `:root[data-theme="light"]` block that rebinds the semantic tokens, and touching nothing else.
+ */
