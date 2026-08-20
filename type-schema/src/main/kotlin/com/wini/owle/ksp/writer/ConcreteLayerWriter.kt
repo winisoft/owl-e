@@ -172,6 +172,8 @@ class ConcreteLayerWriter(
     private fun writeModule(layers: List<Layer>) {
         val b = StringBuilder()
         b.appendLine("package $PACKAGE").appendLine()
+        b.appendLine("import com.wini.owle.api.KtorApi")
+        b.appendLine("import org.koin.dsl.bind")
         b.appendLine("import org.koin.dsl.module").appendLine()
         b.appendLine("/**")
         b.appendLine(" * Generated bindings for the ${layers.size} wired types. Do not edit.")
@@ -188,7 +190,11 @@ class ConcreteLayerWriter(
             b.appendLine("    single { ${l.dll}(get()) }")
             if (l.endpointPath != null && l.validatorFq != null) {
                 val args = if (l.idType == "CompositeID") "get(), get(), get()" else "get(), get()"
-                b.appendLine("    single { ${l.api}($args) }")
+                // also bound under KtorApi: `Server.ktorModule` registers routes with
+                // `koin.getAll<KtorApi<*>>()`, which resolves by the interface's KClass. Keyed
+                // only by its concrete class, an endpoint resolves fine and never gets a route -
+                // every request answered 404 with the whole layer wired correctly behind it.
+                b.appendLine("    single { ${l.api}($args) } bind KtorApi::class")
             }
         }
         b.appendLine("}")

@@ -40,6 +40,12 @@ interface ApiEndpointAnnotation : KSAnnotation {
      * Used to derive schema information for operations.
      */
     val dtoType: String
+
+    /** The DTO's simple name, taken from the declaration. */
+    val dtoNameSingle: String
+
+    /** Its plural - `s` unless the bundle overrides the word. */
+    val dtoNamePlural: String
 }
 
 

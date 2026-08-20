@@ -1,5 +1,7 @@
 package com.wini.owle.services
 
+import com.wini.owle.repo.TransactionExecutor
+
 import com.wini.owle.async.AsyncResult
 import com.wini.owle.dto.BaseDto
 import com.wini.owle.entity.InstanceDbFakeEntityFactory
@@ -55,7 +57,9 @@ abstract class ServiceTest<ID: Any, T: BaseDto, E: Entity<ID>> {
         repository = mockk()
         mapper = mockk()
         daoDelegate = mockk()
-        service = GenericServiceImpl(repository, mapper, daoDelegate)
+        // PassThrough rather than the Exposed default: there is no database behind a unit test,
+        // and what these assert is which calls the service makes, not that a transaction opened
+        service = GenericServiceImpl(repository, mapper, daoDelegate, TransactionExecutor.PassThrough)
     }
 
     @Test

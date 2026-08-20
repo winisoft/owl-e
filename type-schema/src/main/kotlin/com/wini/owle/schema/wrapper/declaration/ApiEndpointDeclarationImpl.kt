@@ -27,7 +27,7 @@ data class ApiEndpointDeclarationImpl(
         .first {
             it.annotationType.resolve().declaration.qualifiedName?.asString() == ApiEndpointDefinition.QUALIFIED_NAME
         }.let { anno ->
-            ApiEndpointAnnotationImpl(anno)
+            ApiEndpointAnnotationImpl(anno, delegate)
         }
 
     private val id: String = apiEndpointAnnotation.arguments.first { ksValue ->

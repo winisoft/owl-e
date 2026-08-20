@@ -1,7 +1,9 @@
 package com.wini.owle.schema.wrapper.annotation
 
 import com.google.devtools.ksp.symbol.KSAnnotation
+import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
+import com.wini.owle.ksp.utils.ApiDocStrings
 import com.wini.owle.ksp.utils.LocalizedStringResolver
 
 /**
@@ -10,7 +12,8 @@ import com.wini.owle.ksp.utils.LocalizedStringResolver
  * Used to define high-level metadata for grouping operations by resource or concept.
  */
 data class ApiEndpointAnnotationImpl(
-    val delegate: KSAnnotation
+    val delegate: KSAnnotation,
+    private val owner: KSClassDeclaration
 ): ApiEndpointAnnotation, KSAnnotation by delegate {
 
     override val id: String = delegate.arguments.first { ksValue ->
@@ -29,7 +32,13 @@ data class ApiEndpointAnnotationImpl(
         }
     }
 
-    override val dtoType: String = LocalizedStringResolver.resolve("$id.dtoType")
+    // read off the class rather than the bundle: a name restated in a properties file is a name
+    // that can disagree with the class, and for sixty-eight types it did
+    override val dtoType: String = owner.qualifiedName?.asString().orEmpty()
+
+    override val dtoNameSingle: String = owner.simpleName.asString()
+
+    override val dtoNamePlural: String = ApiDocStrings.pluralOf(dtoNameSingle)
 
     override val basePath: String = LocalizedStringResolver.resolve("$id.basePath")
 

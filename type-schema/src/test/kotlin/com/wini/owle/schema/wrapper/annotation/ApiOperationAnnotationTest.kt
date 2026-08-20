@@ -56,12 +56,22 @@ open class ApiOperationAnnotationTest {
         val expectedKey = "$opResKeyVal.$expectedHttpMethod.$expectedCardinality"
 
         val expectedPath = "/items"
+
+        // Summary and description no longer resolve per endpoint: they come from one template per
+        // (method, cardinality), with the DTO's name filled in. `opResKey` still keys the path.
         val expectedSummary = "Get all items"
-        val expectedDescription = "Retrieves a list of all items."
+        // no declaring class is supplied here, so the name falls back to the id's last segment
+        // ("test.op.key" -> "Key") and the default plural adds an s
+        val expectedDescription = "Retrieves a list of all Keys."
 
         every { LocalizedStringResolver.resolve("$expectedKey.path") } returns expectedPath
-        every { LocalizedStringResolver.resolve("$expectedKey.summary") } returns expectedSummary
-        every { LocalizedStringResolver.resolve("$expectedKey.description") } returns expectedDescription
+        every {
+            LocalizedStringResolver.resolve("api.op.$expectedHttpMethod.$expectedCardinality.summary")
+        } returns expectedSummary
+        every {
+            LocalizedStringResolver.resolve("api.op.$expectedHttpMethod.$expectedCardinality.description")
+        } returns "Retrieves a list of all {dtoNamePlural}."
+        every { LocalizedStringResolver.isBound(any()) } returns false
 
         // Act
         val annotationImpl = ApiOperationAnnotationImpl(mockKsAnnotation)
@@ -75,8 +85,8 @@ open class ApiOperationAnnotationTest {
         assertEquals(expectedDescription, annotationImpl.description)
 
         verify { LocalizedStringResolver.resolve("$expectedKey.path") }
-        verify { LocalizedStringResolver.resolve("$expectedKey.summary") }
-        verify { LocalizedStringResolver.resolve("$expectedKey.description") }
+        verify { LocalizedStringResolver.resolve("api.op.$expectedHttpMethod.$expectedCardinality.summary") }
+        verify { LocalizedStringResolver.resolve("api.op.$expectedHttpMethod.$expectedCardinality.description") }
     }
 
     @Test
@@ -85,6 +95,8 @@ open class ApiOperationAnnotationTest {
         // We need to ensure that the KSAnnotation ultimately processed by the primary constructor is the one from the function.
 
         val mockFuncDecl = mockk<KSFunctionDeclaration>()
+        // the operation now reads its DTO name off the declaring class
+        every { mockFuncDecl.parentDeclaration } returns null
         val mockUnderlyingAnnotation = mockk<KSAnnotation>(relaxed = true)
 
         mockkConstructor(ApiOperationDeclarationImpl::class)
