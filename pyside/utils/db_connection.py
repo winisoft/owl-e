@@ -90,3 +90,33 @@ def get_db_connection():
             except Exception as e:
                 logger.warning(f"Error closing connection: {e}")
                 pass  # Ignore errors during connection cleanup
+
+@contextmanager
+def server_bound(cursor):
+    """
+    A prepared cursor sharing `cursor`'s connection, and therefore its transaction and savepoints.
+
+    mysql-connector 9.3 builds a statement by interpolating escaped values into the SQL text and
+    then re-parses that text to strip comments. Its parser does not recognise a backslash-escaped
+    quote as escaped, so a value carrying an odd number of quote characters leaves it believing it
+    sits outside a string literal; a hash later in that same value is then read as the start of a
+    comment and everything after it is discarded - including the closing quote and paren, which is
+    a syntax error rather than a corrupted row. Package descriptions carry prose and code samples
+    and hit this regularly: it is what failed the last twelve packages of the derivation pass.
+
+    Server-side binding sends the value as a parameter rather than as SQL text, so none of that
+    parsing is applied to it. Worth using for any column holding free text; the short, controlled
+    values elsewhere in this package do not need it.
+    """
+    conn = getattr(cursor, "_connection", None) or getattr(cursor, "_cnx", None)
+    if conn is None:
+        yield cursor
+        return
+    bound = conn.cursor(prepared=True)
+    try:
+        yield bound
+    finally:
+        try:
+            bound.close()
+        except Exception:
+            pass

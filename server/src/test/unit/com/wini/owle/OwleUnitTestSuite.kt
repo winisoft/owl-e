@@ -42,6 +42,14 @@ abstract class OwleUnitTestSuite {
     inner class GeneratedLayer : com.wini.owle.wiring.GeneratedLayerTest()
 
     @Nested
+    @DisplayName("Version Specifiers")
+    inner class VersionSpecifiers : com.wini.owle.environs.VersionSpecTest()
+
+    @Nested
+    @DisplayName("Marker Evaluation")
+    inner class MarkerEvaluation : com.wini.owle.environs.MarkerEvaluationTest()
+
+    @Nested
     @DisplayName("DLL Delegation")
     inner class DllDelegation : com.wini.owle.dll.DllDelegationTest()
 

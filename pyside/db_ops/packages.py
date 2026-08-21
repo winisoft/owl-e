@@ -2,6 +2,7 @@ from typing import Literal, Optional, Tuple, Union
 from db_ops.versions import logger
 #from models.OwlePackage import OwlePackage
 import logging
+import os
 from typing import Optional, Literal
 
 
@@ -9,15 +10,19 @@ logger = logging.getLogger(__name__)
 
 OverrideOperator = Literal['LT', 'LE', 'GT', 'GE', 'COMPATIBLE']
 
+# Where the banked PyPI responses are read from. The working schema holds derived data only;
+# the raw payloads stay in the archive that phase A filled.
+INFO_SOURCE_SCHEMA = os.getenv('INFO_SOURCE_SCHEMA', 'owle_test_archive')
+
 
 
 
 def get_info(cursor, distribution: str, version_str: str) -> Optional[Tuple[int, str]]:
 
     cursor.execute(
-        """
-        SELECT id, info
-        FROM packages
+        f"""
+        SELECT version_id, info
+        FROM {INFO_SOURCE_SCHEMA}.packages
         WHERE distribution = %s AND version_str = %s
         """,
         (distribution, version_str)
@@ -104,8 +109,10 @@ def insert_extras(cursor, distribution: str, version_id: int, extras: list[str])
     if not extras:
         return
 
+    # the columns are (distribution, package_id, name); `versionId`/`extraName` were an older
+    # spelling and this statement would have failed as written
     sql = """
-    INSERT INTO package_extras (distribution, versionId, extraName)
+    INSERT IGNORE INTO package_extras (distribution, package_id, name)
     VALUES (%s, %s, %s)
     """
     values = [
@@ -126,7 +133,7 @@ def get_target_package(cursor, target_dist: str, version_id: int) -> Optional[in
     Returns None if not found.
     """
     cursor.execute(
-        "SELECT id FROM packages WHERE distribution = %s AND id = %s",
+        "SELECT version_id FROM packages WHERE distribution = %s AND version_id = %s",
         (target_dist, version_id)
     )
     row = cursor.fetchone()
@@ -235,9 +242,9 @@ def find_real_version_for_distribution(
         target = get_single_bound(operator, epoch, major, minor, micro)
 
     query = """
-        SELECT p.id
+        SELECT p.version_id
         FROM packages p
-        JOIN versions v ON p.id = v.id
+        JOIN versions v ON v.id = p.version_id
         WHERE p.distribution = %s
     """
 
@@ -306,9 +313,9 @@ def get_id_from_packages(
     """
 
     sql = f"""
-    SELECT p.id 
+    SELECT p.version_id
     FROM packages p 
-    JOIN versions v ON v.id = p.id
+    JOIN versions v ON v.id = p.version_id
     WHERE {'v.epoch = %s AND v.major = %s AND v.minor = %s AND v.micro = %s'} 
     AND {'v.phase = %s'} 
     AND {'v.phase_number = %s' if phase_number is not None else 'v.phase_number IS %s'}

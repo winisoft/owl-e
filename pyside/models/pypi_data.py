@@ -73,7 +73,9 @@ class PackageInfo(BaseModel):
     packageUrl: Optional[str] = Field(default=None, alias="package_url")
     platform: Optional[str] = None
     projectUrl: Optional[str] = Field(default=None, alias="project_url")
-    projectUrls: ProjectUrls = Field(alias="project_urls")
+    # PyPI sends `"project_urls": null` for packages that declare none; required here, that
+    # rejected the whole payload and discarded every requirement the package declared.
+    projectUrls: Optional[ProjectUrls] = Field(default=None, alias="project_urls")
     providesExtra: Optional[List[str]] = Field(default=None, alias="provides_extra")
     releaseUrl: Optional[str] = Field(default=None, alias="release_url")
     requiresDist: Optional[List[str]] = Field(default=None, alias="requires_dist")

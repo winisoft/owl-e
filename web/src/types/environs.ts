@@ -117,7 +117,9 @@ export type WildcardSegment = 'NONE' | 'MAJOR' | 'MINOR' | 'MICRO'
 /** A package's Requires-Python. The intersection of these is what makes version resolution work. */
 export interface PackagePythonRequirement {
   distribution: Distribution
-  packageVersion: number
+  /** The release that *declares* the requirement — not the interpreter it requires. */
+  packageVersion: Version
+  /** The interpreter this clause names: the `3.9` of `>=3.9`. */
   pythonVersion: PythonVersion
   operator: VersionOperator
   wildcard: WildcardSegment
@@ -156,6 +158,7 @@ export type EnvMarkerVariable =
   | 'PLATFORM_MACHINE'
   | 'PLATFORM_PYTHON_IMPLEMENTATION'
   | 'PLATFORM_RELEASE'
+  | 'PLATFORM_SYSTEM'
   | 'PLATFORM_VERSION'
   | 'IMPLEMENTATION_NAME'
   | 'IMPLEMENTATION_VERSION'

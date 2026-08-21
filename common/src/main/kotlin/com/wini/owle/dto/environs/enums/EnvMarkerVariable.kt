@@ -31,6 +31,9 @@ enum class EnvMarkerVariable(override val dbValue: String) : DbToken {
 
     PLATFORM_RELEASE("platform_release"),
 
+    /** PEP 508 defines this alongside the others; the schema had briefly dropped it. */
+    PLATFORM_SYSTEM("platform_system"),
+
     PLATFORM_VERSION("platform_version"),
 
     IMPLEMENTATION_NAME("implementation_name"),

@@ -5,7 +5,11 @@ from typing import List, Literal, Optional
 from models.RequiresPythonSpecifier import RequiresPythonSpecifier
 from db_ops.versions import get_all_version_fields, get_id_from_python_versions
 from utils.operators import normalize_operator
-from utils.version import determine_wildcard_segment, sanitize_wildcard_version
+from utils.version import (
+    determine_wildcard_segment,
+    determine_compatible_release_segment,
+    sanitize_wildcard_version,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +51,14 @@ def process_requires_python(
                 has_overflow
             )
 
-            wildcard = determine_wildcard_segment(version_str)
+            # `~=` never carries a literal '.*' - its text is just "2.2" - so the general
+            # wildcard detector always answers NONE for it and the pin depth is lost. Its own
+            # function derives that depth from how many segments were actually written.
+            wildcard = (
+                determine_compatible_release_segment(version_str)
+                if operator == 'COMPATIBLE'
+                else determine_wildcard_segment(version_str)
+            )
 
             
             if py_version_id is None:

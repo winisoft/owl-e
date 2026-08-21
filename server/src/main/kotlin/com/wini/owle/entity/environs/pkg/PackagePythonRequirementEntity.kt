@@ -1,5 +1,7 @@
 package com.wini.owle.entity.environs.pkg
 
+import com.wini.owle.dto.environs.version.enums.VersionOperator
+import com.wini.owle.dto.environs.version.enums.WildcardSegment
 import com.wini.owle.entity.environs.PackagePythonRequirements
 import com.wini.owle.entity.environs.version.PythonVersionEntity
 import com.wini.owle.entity.environs.version.VersionEntity
@@ -19,9 +21,6 @@ class PackagePythonRequirementEntity(id: EntityID<CompositeID>) : CompositeEntit
     var distribution by DistributionEntity referencedOn PackagePythonRequirements.distribution
 
     /**
-     * The version half of the constrained package's key.
-     */
-    /**
      * Version half of the package key. Read-only: it arrives with the composite id at
      * construction, and the database enforces it only as part of the (distribution, version)
      * foreign key into `packages`.
@@ -34,7 +33,14 @@ class PackagePythonRequirementEntity(id: EntityID<CompositeID>) : CompositeEntit
      */
     var pythonVersion by PythonVersionEntity referencedOn PackagePythonRequirements.pythonVersion
 
-    var operator by PackagePythonRequirements.operator
+    /**
+     * Read from the composite id for the same reason [packageVersion] is: widening the key to the
+     * whole clause made these identity rather than payload. Changing one does not edit a row, it
+     * names a different one - `>=3.9` and `<3.13` are two rows of the same package.
+     */
+    val operator: VersionOperator
+        get() = id.value[PackagePythonRequirements.operator].value
 
-    var wildcard by PackagePythonRequirements.wildcard
+    val wildcard: WildcardSegment
+        get() = id.value[PackagePythonRequirements.wildcard].value
 }

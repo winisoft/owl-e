@@ -113,6 +113,27 @@ def determine_wildcard_segment(version_str: str) -> Literal['MAJOR', 'MINOR', 'M
     return 'NONE'
 
 
+def determine_compatible_release_segment(version_str: str) -> Literal['MAJOR', 'MINOR', 'MICRO']:
+    """
+    The pin depth of a `~=` (compatible-release) specifier.
+
+    `~=` never writes a literal '.*' - `~=2.2` means `>=2.2, ==2.*`, spelled without a star at
+    all - so `determine_wildcard_segment` always answers 'NONE' for it, which drops the pin depth
+    on the floor. PEP 440 requires at least two release segments and always wildcards the last one
+    written, so the depth is exactly `len(segments) - 1`: two written segments pins MAJOR, three
+    pins MINOR, four pins MICRO. There is no 'NONE' case - a `~=` with nothing wildcarded does not
+    exist.
+    """
+    segments = version_str.split(".")
+    depth = len(segments) - 1
+    if depth <= 1:
+        return 'MAJOR'
+    elif depth == 2:
+        return 'MINOR'
+    else:
+        return 'MICRO'
+
+
 def get_pep440_version_fields(version_str: str) -> Optional[Dict[str, Union[int, str, None]]]:
     from db_ops.versions import logger
     try:

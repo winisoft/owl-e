@@ -1,7 +1,7 @@
 import re
 from typing import Any, List, Literal, Optional, Set
 
-from packaging.markers import Marker
+from packaging.markers import Marker, Variable
 from packaging.requirements import Requirement
 
 from models.marker_types import MarkerComparison, MarkerExpr, MarkerLogical
@@ -94,6 +94,20 @@ def normalize_marker_node(node: Any) -> Any:
     return node
 
 
+# `a < b` reversed is `b > a`; equality and membership keep their meaning either way, except
+# `in`/`not in`, whose operands are not interchangeable and which are left as written.
+_REVERSED_OPERATORS = {"<": ">", "<=": ">=", ">": "<", ">=": "<="}
+
+# PEP 508 defines a closed set of marker variables. `normalize_marker_node` flattens packaging's
+# Variable/Value/Op objects to plain strings, so by the time a comparison is built the only way to
+# tell which side is the variable is by name.
+MARKER_VARIABLES = frozenset({
+    "python_version", "python_full_version", "os_name", "sys_platform", "platform_machine",
+    "platform_python_implementation", "platform_release", "platform_system", "platform_version",
+    "implementation_name", "implementation_version", "extra",
+})
+
+
 def build_marker_expr_tree(node: Any) -> MarkerExpr:
     """
     Convert a normalized marker structure (nested lists or tuples) into a proper MarkerExpr tree.
@@ -126,21 +140,51 @@ def build_marker_expr_tree(node: Any) -> MarkerExpr:
 
         # Handle plain comparative list like ['python_version', '==', '3.6']
         elif len(node) == 3 and all(isinstance(n, str) for n in node):
+            left, operator, right = node
+
+            # Either side may hold the variable: `sys_platform == "win32"` and
+            # `"freebsd" in sys_platform` are both legal PEP 508 and packaging preserves whichever
+            # order was written. Taking the left blindly stored "freebsd" in the variable column,
+            # which surfaced as an opaque truncation error rather than a parse failure.
+            if left in MARKER_VARIABLES:
+                variable, value = left, right
+            elif right in MARKER_VARIABLES:
+                variable, value = right, left
+                # reading right-to-left flips an ordering operator; `in`/`not in` are left as
+                # written, since their operands are not interchangeable
+                operator = _REVERSED_OPERATORS.get(operator, operator)
+            else:
+                variable, value = left, right
+
             return MarkerComparison(
-                variable=node[0],
-                operator=node[1],
-                value=node[2]
+                variable=variable,
+                operator=operator,
+                value=value
             )
 
     # Handle structured comparison tuple like (Variable, Op, Value)
     elif isinstance(node, tuple) and len(node) == 3:
-        variable = getattr(node[0], 'value', node[0])
-        operator = getattr(node[1], 'value', node[1])
-        value = getattr(node[2], 'value', node[2])
+        left, operator, right = node
+        operator = getattr(operator, 'value', operator)
+
+        # PEP 508 lets either side hold the variable: `sys_platform == "win32"` and
+        # `"freebsd" in sys_platform` are both legal, and packaging hands back whichever order was
+        # written. Taking node[0] as the variable stored "freebsd" in the variable column, which
+        # the enum rejects - and because the failure surfaces as a truncation error rather than a
+        # parse error, it looked like a schema problem rather than a reversed comparison.
+        if isinstance(left, Variable):
+            variable, value = left, right
+        elif isinstance(right, Variable):
+            variable, value = right, left
+            # the comparison now reads right-to-left, so an ordering operator has to flip with it
+            operator = _REVERSED_OPERATORS.get(operator, operator)
+        else:
+            variable, value = left, right
+
         return MarkerComparison(
-            variable=variable,
+            variable=getattr(variable, 'value', variable),
             operator=operator,
-            value=value
+            value=getattr(value, 'value', value)
         )
 
     raise TypeError(f"Cannot convert node to MarkerExpr: {node!r}")

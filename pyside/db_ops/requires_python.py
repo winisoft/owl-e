@@ -35,7 +35,7 @@ def insert_requires_python_specifiers(cursor, requires_python_specifiers: list[R
     #`package_id` bigint unsigned NOT NULL,
 
     sql = """ 
-    INSERT INTO package_python_requirements (distribution, package_id, version_id, operator, wildcard)
+    INSERT IGNORE INTO package_python_requirements (distribution, package_id, version_id, operator, wildcard)
     VALUES (%s, %s, %s, %s, %s)
     """
     values = [

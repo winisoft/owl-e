@@ -25,8 +25,8 @@ logging.basicConfig(
 DB_NAME = os.getenv("DB_NAME", "owle_dev")
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
-    "user": os.getenv("DB_USER", "wini"),
-    "password": os.getenv("DB_PASSWORD", "the_eru_shrug_0!"),
+    "user": os.getenv("DB_USER", "dev_assistant"),
+    "password": os.getenv("DB_PASSWORD", "*SandboxSquabble2"),
     "database": DB_NAME,
     "autocommit": False,
     "use_unicode": True,

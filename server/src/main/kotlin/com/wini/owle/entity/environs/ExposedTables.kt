@@ -103,10 +103,24 @@ object PackagePythonRequirements : OwleCompositeIdTable("package_python_requirem
      * together, and that pair is what the compound foreign key below enforces.
      */
     val packageVersion = ulong("package_id").entityId()
-    val pythonVersion = reference("version_id", PythonVersions)
-    val operator = dbEnum<VersionOperator>("operator", 16)
-    val wildcard = dbEnum<WildcardSegment>("wildcard", 8).default(WildcardSegment.NONE)
-    override val primaryKey = PrimaryKey(packageVersion, distribution)
+    val pythonVersion = keyReference("version_id", PythonVersions)
+
+    /**
+     * `operator` and `wildcard` are key columns, so they are registered as such: widening the
+     * primary key to the whole clause only works if Exposed knows the widened set. `reference()`
+     * gives a key part the right *type* without registering it, which is why [pythonVersion] is a
+     * [keyReference] and these two take [asKey].
+     */
+    val operator = dbEnum<VersionOperator>("operator", 16).asKey()
+    val wildcard = dbEnum<WildcardSegment>("wildcard", 8).default(WildcardSegment.NONE).asKey()
+    /**
+     * The whole clause, not just the package.
+     *
+     * A Requires-Python such as `>=3.9,<3.13` is two rows, and keying on (package, distribution)
+     * alone allowed only one - so every bounded range collapsed to whichever clause was written
+     * first. 22% of packages declare more than one.
+     */
+    override val primaryKey = PrimaryKey(packageVersion, distribution, pythonVersion, operator, wildcard)
 
     init {
         foreignKey(
@@ -123,6 +137,50 @@ object PackagePythonRequirements : OwleCompositeIdTable("package_python_requirem
  */
 object PythonVersions : IdTable<ULong>("python_versions") {
     override val id: Column<EntityID<ULong>> = reference("id", Versions, onDelete = ReferenceOption.CASCADE)
+
+    /**
+     * Referenced by requirements, but never released.
+     *
+     * `Requires-Python` routinely bounds against versions that do not exist - `>=3.8,<4.0` is the
+     * common idiom, and Python 4 has never shipped. Because `package_python_requirements` reaches
+     * `python_version_specifiers` through a compound foreign key, an unreleased bound has nowhere
+     * to point and the whole clause set was being discarded: 12% of packages declare one.
+     *
+     * Marking them rather than omitting them keeps "versions that exist" answerable - filter on
+     * this - while letting a specifier reference a bound that does not.
+     */
+    val theoretical = bool("theoretical").default(false)
+
+    /**
+     * Whether we intend to *run* this interpreter, as opposed to merely resolve against it.
+     *
+     * A separate question from [theoretical], and 4.0.0 is why: it is the fifth most referenced
+     * bound in the corpus - `<4` is near-universal - while being a release that has never existed.
+     * Every row is a valid resolution target by construction, so nothing needs a flag for that;
+     * this marks the far smaller set we will execute in and introspect the stdlib of.
+     *
+     * False below 3.4, where the stdlib is old enough that introspecting it is a different job.
+     */
+    val supportTarget = bool("support_target").default(false)
+
+    /**
+     * Which phase this interpreter gets *introspected* in: 1 now, 2 soon, 3 eventually.
+     *
+     * Set only on the terminal micro of each series, because introspection is per running
+     * interpreter - `type_introspector` imports from whichever Python it is executed under, so a
+     * pass costs a whole built environment. Two micros of one series would cost two environments
+     * to produce near-identical type surfaces, so only the terminal is ever introspected and the
+     * rest of its series inherits it.
+     *
+     * Null therefore means two different things depending on [supportTarget]: with it false, the
+     * version is not supported at all; with it true, the version is perfectly runnable and simply
+     * has no introspection pass of its own.
+     *
+     * Development bookkeeping rather than domain truth, and expected to be dropped once the passes
+     * are done.
+     */
+    val supportPriority = ubyte("support_priority").nullable()
+
     override val primaryKey = PrimaryKey(id, name = "PK_python_versions_id")
 }
 

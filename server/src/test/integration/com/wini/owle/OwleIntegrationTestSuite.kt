@@ -21,6 +21,10 @@ import org.junit.jupiter.api.Tag
 abstract class OwleIntegrationTestSuite {
 
     @Nested
+    @DisplayName("Query execution")
+    inner class QueryExecution : com.wini.owle.query.QueryExecutionTest()
+
+    @Nested
     @DisplayName("Enum column drift")
     inner class EnumColumnDrift : com.wini.owle.entity.EnumColumnDriftTest()
 
