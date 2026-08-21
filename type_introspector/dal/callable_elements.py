@@ -36,12 +36,15 @@ def insert_callable_signatures(
 
 def insert_callable_parameter(cursor, signature_id: int, position: int,
                               param_name: str, param_type_node_id: int,
-                              is_vararg: bool = False, is_kwarg: bool = False, default_value_text: Optional[str]=None):
+                              is_vararg: bool = False, is_kwarg: bool = False,
+                              default_value_text: Optional[str] = None,
+                              is_positional_only: bool = False, is_keyword_only: bool = False):
     cursor.execute(
         """
         INSERT INTO callable_parameters
-            (signature_id, position, param_name, param_type_node_id, is_vararg, is_kwarg, default_value_text)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+            (signature_id, position, param_name, param_type_node_id, is_vararg, is_kwarg,
+             default_value_text, is_positional_only, is_keyword_only)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """,
         (
             signature_id,
@@ -50,7 +53,9 @@ def insert_callable_parameter(cursor, signature_id: int, position: int,
             param_type_node_id,
             is_vararg,
             is_kwarg,
-            default_value_text
+            default_value_text,
+            is_positional_only,
+            is_keyword_only
         )
     )
 
@@ -59,16 +64,6 @@ def insert_callable_owners(cursor, owner_id: int, callable_node_id: int):
     cursor.execute(
         "INSERT IGNORE INTO callable_owners (owner_node_id, callable_node_id) VALUES (%s, %s)",
         (owner_id, callable_node_id)
-    )
-
-
-def insert_callable_ownership(cursor, owner_node_id: int, callable_node_id: int):
-    cursor.execute(
-        """
-        INSERT IGNORE INTO callable_owners (owner_node_id, callable_node_id)
-        VALUES (%s, %s)
-        """,
-        (owner_node_id, callable_node_id)
     )
 
 

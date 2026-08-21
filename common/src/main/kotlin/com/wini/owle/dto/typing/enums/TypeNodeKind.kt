@@ -34,5 +34,15 @@ enum class TypeNodeKind(override val dbValue: String) : DbToken {
     UNION("union"),
 
     /** A function signature as a type. Detail in `callable_signatures` and `callable_parameters`. */
-    CALLABLE("callable")
+    CALLABLE("callable"),
+
+    /**
+     * A named alias standing in for another type - including an unresolved forward reference,
+     * whose target is filled in on a later pass. The target is held in `type_aliases`.
+     *
+     * Absent from both this enum and the `type_nodes.kind` column until 2026-08-21, while the
+     * introspector emitted it regardless: `INSERT IGNORE` downgraded the invalid-enum error to a
+     * warning and MySQL stored the empty string, so every alias node was silently unqueryable.
+     */
+    ALIAS("alias")
 }

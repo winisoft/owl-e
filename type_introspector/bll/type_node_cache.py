@@ -194,11 +194,17 @@ class TypeNodeCache:
         if isinstance(obj, str):
             return self._resolve_string_forward_ref(obj, owning_obj)
         
+        # These branches name the type they describe, so the namespace is that type's own home -
+        # `builtins` or `typing` - never the module the value happened to be reached through.
+        # Using the owning object's `__module__` gave `typing.Any` a separate node per importing
+        # module: roughly 400 of them per interpreter, none of which could ever dedup, because
+        # `namespace` is half of `dedup_hash`. They also stored `type(int)` and
+        # `typing._SpecialForm` - the metaclass and the base class - rather than the thing itself.
         if isinstance(obj, int):
-            return TypeNode(obj=type(int), namespace="builtins", kind="base", py_version_id=self.py_version_id, name="int", is_generic=False, module=getattr(owning_obj, '__module__', ''))
+            return TypeNode(obj=int, namespace="builtins", kind="base", py_version_id=self.py_version_id, name="int", is_generic=False, module=None)
         
         if isinstance(obj, float):
-            return TypeNode(obj=type(float), namespace="builtins", kind="base", py_version_id=self.py_version_id, name="float", is_generic=False, module=getattr(owning_obj, '__module__', ''))
+            return TypeNode(obj=float, namespace="builtins", kind="base", py_version_id=self.py_version_id, name="float", is_generic=False, module=None)
 
         # Type variables used in generic classes or functions
         if isinstance(obj, typing.TypeVar):
@@ -206,11 +212,11 @@ class TypeNodeCache:
 
         # Special case for `None` which is its own type
         if obj is type(None):
-            return TypeNode(obj=obj, kind="base", py_version_id=self.py_version_id, name="NoneType", is_generic=False, owning_obj=owning_obj, module=getattr(owning_obj, '__module__', ''))
+            return TypeNode(obj=obj, kind="base", py_version_id=self.py_version_id, name="NoneType", is_generic=False, owning_obj=owning_obj, namespace="builtins", module=None)
 
         # Special case for typing.Any
         if obj is typing.Any:
-            return TypeNode(obj=obj, kind="base", py_version_id=self.py_version_id, name="Any", is_generic=False, owning_obj=owning_obj, module=getattr(owning_obj, '__module__', ''))
+            return TypeNode(obj=obj, kind="base", py_version_id=self.py_version_id, name="Any", is_generic=False, owning_obj=owning_obj, namespace="typing", module=None)
 
         # Union types in 3.10+ use a dedicated syntax tree (`X | Y`) tracked as UnionType
         if hasattr(types, "UnionType") and isinstance(obj, types.UnionType):
@@ -218,7 +224,7 @@ class TypeNodeCache:
 
         # Special typing constructs like `typing.Optional` or `typing.Literal`
         if isinstance(obj, typing._SpecialForm):
-            return TypeNode(obj=typing._SpecialForm, kind="base", py_version_id=self.py_version_id, name=str(obj), is_generic=False, owning_obj=owning_obj, module=getattr(owning_obj, '__module__', ''))
+            return TypeNode(obj=obj, kind="base", py_version_id=self.py_version_id, name=str(obj), is_generic=False, owning_obj=owning_obj, namespace="typing", module=None)
 
         # Generic aliases like List[int], Dict[str, float], etc.
         if isinstance(obj, GENERIC_ALIAS_TYPES):
@@ -315,11 +321,26 @@ class TypeNodeCache:
                 if mod:
                     globalns = vars(mod)
 
-            evaluated = (
-                ref._evaluate(globalns=globalns, localns=None, recursive_guard=frozenset())
-                if sys.version_info >= (3, 11)
-                else ref._evaluate(globalns=globalns, localns=None, recursive_guard=frozenset())
-            )
+            # `ForwardRef._evaluate` is private and its signature has moved: `type_params` was
+            # added in 3.13 and `recursive_guard` became keyword-only. The previous version check
+            # had two identical arms, so it asserted a difference it did not implement. Try the
+            # newest shape first and fall back, rather than pin behaviour to a version test that
+            # will be wrong again at the next release.
+            evaluated = None
+            for attempt in (
+                lambda: ref._evaluate(globalns, None, type_params=(), recursive_guard=frozenset()),
+                lambda: ref._evaluate(globalns=globalns, localns=None, recursive_guard=frozenset()),
+                lambda: ref._evaluate(globalns, None, frozenset()),
+            ):
+                try:
+                    evaluated = attempt()
+                    break
+                except TypeError:
+                    continue
+            else:
+                raise UnrepresentableTypeException(
+                    f"No supported ForwardRef._evaluate signature on this interpreter: {ref_text!r}"
+                )
 
             parsed = ast.parse(ref_text, mode="eval")
             used_names = {n.id for n in ast.walk(parsed) if isinstance(n, ast.Name)}

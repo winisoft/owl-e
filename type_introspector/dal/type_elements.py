@@ -11,7 +11,7 @@ def insert_type_schema_ref(cursor, class_node_id: int, name: str, member_kind: L
                            type_node_id: int, position: int):
     cursor.execute(
         """
-        INSERT IGNORE INTO type_schema_refs
+        INSERT INTO type_schema_refs
             (class_node_id, name, member_kind, type_node_id, description, position)
         VALUES (%s, %s, %s, %s, %s, %s)
         """,
@@ -63,10 +63,16 @@ def insert_type_node(
     Inserts a row into type_nodes and returns the newly generated ID.
     """
     dedup_hash = node.dedup_hash()
+    # ON DUPLICATE KEY rather than INSERT IGNORE: both make a repeat insert harmless, but IGNORE
+    # downgrades *every* error to a warning - an invalid enum silently became the empty string,
+    # which is how 26 alias nodes ended up unqueryable. This form still absorbs the duplicate
+    # dedup_hash and lets anything else raise. `LAST_INSERT_ID(id)` makes `lastrowid` report the
+    # existing row on a collision, so the id is correct either way.
     insert_sql = """
-        INSERT IGNORE INTO type_nodes
+        INSERT INTO type_nodes
             (version_id, namespace, name, kind, is_generic, dedup_hash)
         VALUES (%s, %s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)
     """
     cursor.execute(insert_sql, (
         node.py_version_id, node.namespace, node.name, node.kind, node.is_generic, dedup_hash

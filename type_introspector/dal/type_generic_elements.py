@@ -28,7 +28,7 @@ def insert_type_instantiation_arg(
             (instantiation_id, arg_node_id, position)
         )
         if cursor.rowcount == 0:
-            print(f"No rows inserted for instantiation arg: inst_id={instantiation_id}, arg_id={arg_node_id}, pos={position}")
+            pass  # per-row logging removed: one line per insert is millions of lines
             return cursor.lastrowid, False
         return cursor.lastrowid, True
     except mysql.connector.errors.IntegrityError as e:
@@ -43,7 +43,7 @@ def insert_type_instantiation_arg(
             )
             row = cursor.fetchone()
             if row:
-                print(f"Found existing instantiation arg: inst_id={instantiation_id}, arg_id={arg_node_id}, pos={position}")
+                pass  # per-row logging removed: one line per insert is millions of lines
                 return row[0], False
             raise RuntimeError(f"Duplicate entry for (instantiation_id={instantiation_id}, position={position}) but SELECT found nothing")
         else:
@@ -63,7 +63,7 @@ def insert_type_instantiation(cursor, instantiation_node_id: int, origin_node_id
         )
 
         if cursor.rowcount == 0:
-            print(f"No rows inserted for instantiation: inst_node={instantiation_node_id}, origin_node={origin_node_id}")
+            pass  # per-row logging removed: one line per insert is millions of lines
             # Must already exist, fetch it
             cursor.execute(
                 """
@@ -75,10 +75,10 @@ def insert_type_instantiation(cursor, instantiation_node_id: int, origin_node_id
             row = cursor.fetchone()
             if not row:
                 raise RuntimeError(f"Failed to locate type_instantiation after ignored insert: ({instantiation_node_id}, {origin_node_id})")
-            print(f"Found existing instantiation: inst_node={instantiation_node_id}, origin_node={origin_node_id}")
+            pass  # per-row logging removed: one line per insert is millions of lines
             return row[0], False
         else:
-            print(f"Successfully inserted new instantiation: inst_node={instantiation_node_id}, origin_node={origin_node_id}")
+            pass  # per-row logging removed: one line per insert is millions of lines
             return cursor.lastrowid, True
     except mysql.connector.errors.IntegrityError as e:
         print(f"IntegrityError inserting instantiation: {e}")

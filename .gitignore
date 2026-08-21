@@ -6,8 +6,10 @@ xcuserdata
 !src/**/build/
 local.properties
 **/.env
-.idea
+.idea/
+.vscode/
 .DS_Store
+Thumbs.db
 captures
 .externalNativeBuild
 .cxx
@@ -21,3 +23,15 @@ background
 **/.obsidian
 air
 credentials.md
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.pyright/
+.ruff_cache/

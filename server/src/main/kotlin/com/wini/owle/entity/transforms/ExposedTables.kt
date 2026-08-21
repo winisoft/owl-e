@@ -4,6 +4,7 @@ import com.wini.owle.entity.OwleCompositeIdTable
 
 import com.wini.owle.entity.dbEnum
 
+import com.wini.owle.dto.transforms.enums.TransformArgSource
 import com.wini.owle.dto.transforms.enums.TransformOccurrenceInitiator
 import com.wini.owle.entity.typing.CallableSignatures
 import com.wini.owle.entity.typing.TypeNodes
@@ -50,7 +51,40 @@ object TransformOccurrences : ULongIdTable("transform_occurrences") {
 object TransformOccurrenceArgs : ULongIdTable("transform_occurence_args") {
     val transformOccurrence = reference("transform_occurrence_id", TransformOccurrences)
     val transformArg = reference("transform_arg_id", TransformArgs)
-    val value = text("value")
+
+    /** Which of the columns below carries this argument's value. */
+    val sourceKind = dbEnum<TransformArgSource>("source_kind", 24)
+
+    /** The literal, when [sourceKind] is [TransformArgSource.LITERAL]. Null otherwise. */
+    val value = text("value").nullable()
+
+    val sourceDataPoint = reference("source_data_point_id", DataPoints).nullable()
+
+    /** The step whose tool result is being passed. */
+    val sourceStep = reference("source_step_id", Steps).nullable()
+
+    /**
+     * Another occurrence, whose result is this argument.
+     *
+     * One column for three of the cases a user would describe separately: a transformed read, a
+     * transformed tool result, and the far end of a chain are all one occurrence's output.
+     */
+    val sourceOccurrence = reference("source_occurrence_id", TransformOccurrences).nullable()
+
+    init {
+        // Exactly one source, and it agrees with the discriminator - the same shape
+        // `TransformOccurrences` uses for its own subject, rather than a second idiom.
+        check("chk_transform_occurrence_arg_source") {
+            ((sourceKind eq TransformArgSource.LITERAL) and value.isNotNull() and
+                sourceDataPoint.isNull() and sourceStep.isNull() and sourceOccurrence.isNull()) or
+            ((sourceKind eq TransformArgSource.DATA_POINT) and value.isNull() and
+                sourceDataPoint.isNotNull() and sourceStep.isNull() and sourceOccurrence.isNull()) or
+            ((sourceKind eq TransformArgSource.TOOL_RESULT) and value.isNull() and
+                sourceDataPoint.isNull() and sourceStep.isNotNull() and sourceOccurrence.isNull()) or
+            ((sourceKind eq TransformArgSource.TRANSFORM_RESULT) and value.isNull() and
+                sourceDataPoint.isNull() and sourceStep.isNull() and sourceOccurrence.isNotNull())
+        }
+    }
 }
 
 object TransformOccurrenceChains : OwleCompositeIdTable("transform_occurrence_chains") {

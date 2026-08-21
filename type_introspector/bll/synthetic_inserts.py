@@ -47,38 +47,42 @@ def populate(py_version_id: int, type_node_cache: TypeNodeCache) -> TypeNodeCach
 
 
 
-def populate_simple_unions(py_version_id: int, 
+# How many members a synthetic union may have.
+#
+# These functions pre-materialise composite types so a user can *select* `int | None` when nothing
+# in the stdlib happens to return it. That is worth doing, but it is combinatorial: unions of up to
+# five members over fourteen primitives is 3,458 types, and feeding those back in as arguments to
+# `dict[X, Y]` is 12 million per interpreter - 84 million across seven. Pairs cover `X | None` and
+# the ordinary two-type union, which is what people actually reach for; beyond that it is
+# speculation priced by the million. Raise deliberately, not by accident.
+MAX_UNION_MEMBERS = 2
+
+
+def populate_simple_unions(py_version_id: int,
     type_node_cache: TypeNodeCache) -> TypeNodeCache:
 
     core_types: Set[Tuple[int, TypeNode]] = set()
     pending_inserts: Set[UnionTypeNode] = set()
 
     for ns, name in BUILTIN_PRIMITIVE_NS_NAMES:
-        tups = type_node_cache.find(kind='base', namespace=ns, name=name)
-        if len(tups) == 0:
-            print("create ns: " + ns + " name: " + name)
-        for id1, n1 in tups:
-            for (id2, n2) in core_types_except([id1], core_types):
-                union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash()}, member_type_node_ids={id1, id2})
-                pending_inserts.add(union_node)
+        for tup in type_node_cache.find(kind='base', namespace=ns, name=name):
+            core_types.add(tup)
 
-                for (id3, n3) in core_types_except([id1, id2], core_types):
-                    union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash(), n3.dedup_hash()}, member_type_node_ids={id1, id2, id3})
-                    pending_inserts.add(union_node)
-
-                    for (id4, n4) in core_types_except([id1, id2, id3], core_types):
-                        union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash(), n3.dedup_hash(), n4.dedup_hash()}, member_type_node_ids={id1, id2, id3, id4})
-                        pending_inserts.add(union_node)
-
-                        for (id5, n5) in core_types_except([id1, id2, id3, id4], core_types):
-                            union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash(), n3.dedup_hash(), n4.dedup_hash(), n5.dedup_hash()}, member_type_node_ids={id1, id2, id3, id4, id5})
-                            pending_inserts.add(union_node)
+    ordered = sorted(core_types, key=lambda t: t[0])
+    for i, (id1, n1) in enumerate(ordered):
+        for (id2, n2) in ordered[i + 1:]:
+            pending_inserts.add(
+                UnionTypeNode(
+                    obj=None, py_version_id=py_version_id,
+                    member_hashes={n1.dedup_hash(), n2.dedup_hash()},
+                    member_type_node_ids={id1, id2},
+                )
+            )
 
     for pending_insert in pending_inserts:
         type_node_cache.register(pending_insert)
 
     return type_node_cache
-
 
 
 def populate_simple_instantiations(py_version_id: int, 
@@ -138,11 +142,18 @@ def populate_union_instantiations(py_version_id: int,
                 inst_node = InstantiatedTypeNode(None, py_version_id, base_1arg_id, [t_id])
                 pending_inserts.add(inst_node)
 
+    # Only primitives on both sides here. `all_types` includes every union, and a two-argument
+    # generic over it is the square of that set - which is where the 12 million came from.
+    primitive_ids = set()
+    for ns, name in BUILTIN_PRIMITIVE_NS_NAMES:
+        for tn_id, _ in type_node_cache.find(kind='base', namespace=ns, name=name):
+            primitive_ids.add(tn_id)
+
     for ns, name in BUILTIN_GENERIC_PRIMITIVE_2ARG_NS_NAMES:
         tups = type_node_cache.find(kind='base', namespace=ns, name=name)
         for (gen_2arg_id, _) in tups:
-            for t1_id in all_types:
-                for t2_id in all_types:
+            for t1_id in primitive_ids:
+                for t2_id in primitive_ids:
                     inst_node = InstantiatedTypeNode(None, py_version_id, gen_2arg_id, [t1_id, t2_id])
                     pending_inserts.add(inst_node)
 

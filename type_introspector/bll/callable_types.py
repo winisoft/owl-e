@@ -28,7 +28,11 @@ def populate_callable_ancillary_types(cursor, type_node_cache):
         sig_id = insert_callable_signatures(cursor, tn_id, tn_callable.return_type_id, tn_callable.docstring)
         
         for pid, param in tn_callable.callable_params:
-            insert_callable_parameter(cursor, sig_id, param.position, param.name, pid, param.is_vararg, param.is_kwarg, param.default_value)
+            insert_callable_parameter(
+                cursor, sig_id, param.position, param.name, pid,
+                param.is_vararg, param.is_kwarg, param.default_value,
+                param.is_positional_only, param.is_keyword_only
+            )
 
 
 # `include_extras` arrived in 3.9. On 3.8 passing it raises TypeError for *every* callable, which
@@ -255,11 +259,11 @@ def should_skip_callable(obj: Any) -> bool:
     if obj is None:
         return True
 
-    if type(obj) != classmethod and type(obj) != staticmethod and type(object) != type:
-        source_path = inspect.getsourcefile(obj)
-        if not source_path or "lib/python" in source_path:
-            return True
-    
+    # A source-path filter used to sit here, skipping anything under `lib/python`. Its guard read
+    # `type(object) != type`, which is always False, so it never ran - and that is the only reason
+    # this tool works: repairing the typo would make it skip the entire standard library, which is
+    # precisely what it exists to introspect. Removed rather than fixed. Callables with no
+    # retrievable source are already excluded by `is_safe_callable`.
     module = getattr(obj, "__module__", None)
     name = getattr(obj, "__name__", None)
     
@@ -384,6 +388,8 @@ def ensure_callable_param(
         position = position,
         is_vararg = param.kind == inspect.Parameter.VAR_POSITIONAL,
         is_kwarg = param.kind == inspect.Parameter.VAR_KEYWORD,
+        is_positional_only = param.kind == inspect.Parameter.POSITIONAL_ONLY,
+        is_keyword_only = param.kind == inspect.Parameter.KEYWORD_ONLY,
         default_value = None if param.default is inspect.Parameter.empty else _default_text(param.default),
         type_node = node
     )
@@ -392,7 +398,8 @@ def ensure_callable_param(
 
 
 def get_callable_log_text(scoped_callable: ScopedCallableTypeNode, type_node_cache) -> str:
-    node_id, return_type_node = type_node_cache.by_id[scoped_callable.return_type_id]
+    return_type_node = type_node_cache.by_id.get(scoped_callable.return_type_id)
+    node_id = scoped_callable.return_type_id
     return_type_desc = f"""{return_type_node.name if return_type_node.name else '(Unnamed)'}
             node_id:    {node_id}
             namespace:  {return_type_node.namespace if return_type_node.namespace else 'None'}

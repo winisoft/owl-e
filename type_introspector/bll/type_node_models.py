@@ -96,7 +96,9 @@ class CallableParameter:
             is_vararg: bool,
             is_kwarg: bool,
             default_value: Optional[str],
-            type_node: TypeNode
+            type_node: TypeNode,
+            is_positional_only: bool = False,
+            is_keyword_only: bool = False
     ):
         self.name = name
         self.docstring = docstring
@@ -105,6 +107,11 @@ class CallableParameter:
         self.is_kwarg = is_kwarg
         self.default_value = default_value
         self.type_node = type_node
+        # How the argument may be *passed*, which is a different question from what it holds.
+        # `inspect.Parameter.kind` has carried this all along; the columns existed and were never
+        # written.
+        self.is_positional_only = is_positional_only
+        self.is_keyword_only = is_keyword_only
 
 
 class ScopedCallableTypeNode(TypeNode):
