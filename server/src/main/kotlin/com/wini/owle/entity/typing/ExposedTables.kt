@@ -78,7 +78,15 @@ object TypeUnionMembers : OwleCompositeIdTable("type_union_members") {
 
 object CallableSignatures : ULongIdTable("callable_signatures") {
     val typeNode = reference("type_node_id", TypeNodes).uniqueIndex()
-    val returnTypeNode = reference("return_type_node_id", TypeNodes)
+    /**
+     * Null when the callable declares no return annotation at all.
+     *
+     * Distinct from a node for `NoneType`: `def f() -> None` annotates its return, `def f()` does
+     * not, and most of the standard library is the latter - C functions carry no annotations, and
+     * neither does a great deal of older pure-Python code. Modelling that as "absent" rather than
+     * refusing the row is what lets those callables be recorded at all.
+     */
+    val returnTypeNode = reference("return_type_node_id", TypeNodes).nullable()
     val docString = varchar("docstring", 8192).nullable()
     val isStatic = bool("is_static").default(false)
     val isClassMethod = bool("is_classmethod").default(false)
@@ -88,7 +96,8 @@ object CallableParameters : ULongIdTable("callable_parameters") {
     val signature = reference("signature_id", CallableSignatures)
     val position = uinteger("position")
     val paramName = varchar("param_name", 255)
-    val paramTypeNode = reference("param_type_node_id", TypeNodes)
+    /** Null when the parameter carries no annotation - see [CallableSignatures.returnTypeNode]. */
+    val paramTypeNode = reference("param_type_node_id", TypeNodes).nullable()
     val isVarArg = bool("is_vararg").default(false)
     val isKwarg = bool("is_kwarg").default(false)
 

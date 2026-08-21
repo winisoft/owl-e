@@ -22,7 +22,8 @@ class CallableSignatureEntity(id: EntityID<ULong>) : ULongEntity(id) {
      */
     var typeNode by TypeNodeEntity referencedOn CallableSignatures.typeNode
 
-    var returnTypeNode by TypeNodeEntity referencedOn CallableSignatures.returnTypeNode
+    /** Null when the callable declares no return annotation - see [CallableSignatures.returnTypeNode]. */
+    var returnTypeNode by TypeNodeEntity optionalReferencedOn CallableSignatures.returnTypeNode
 
     var docstring by CallableSignatures.docString
 

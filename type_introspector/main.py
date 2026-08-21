@@ -50,11 +50,17 @@ def populate_introspected_type_data() -> None:
                 type_node_cache = typevars.populate_type_nodes_of_typevars(modules, type_node_cache)
                 type_node_cache = synthetic_inserts.populate(py_version_id, type_node_cache)
                 type_node_cache = callable_types.introspect_callables(modules, classes, py_version_id, type_node_cache)
+                # The callable nodes exist by now, but their signatures and parameters are separate
+                # tables and nothing was writing them: this pass was defined and never called.
+                callable_types.populate_callable_ancillary_types(cursor, type_node_cache)
+                type_nodes.populate_class_generic_params(cursor, type_node_cache)
 
                 print(">> Phase 3: insert ownership/composition and subclass relations...")
                 type_node_relations.populate_type_node_relations(cursor, type_node_cache)
                 type_nodes.populate_type_schema_refs(cursor, type_node_cache)
-                type_node_relations.populate_callable_ownership(cursor, type_node_cache)
+                # Ownership is written during introspection instead - see the note in
+                # `introspect_callables`. Reconstructing it from the deduped cache here could only
+                # ever recover one owner per callable, which is what left this table thin.
 
                 conn.commit()
                 print("Completed full type system population.")

@@ -21,7 +21,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
  * Each log entry includes a timestamp, log level, and message content.
  */
 @ModelDefinition
-@ApiEndpointDefinition("api.runs.step.stepRunLogLine", ["runs"], "/step-run-logs")
+@ApiEndpointDefinition("api.runs.step.executionNotification", ["runs"], "/execution-notification")
 @Serializable
 data class ExecutionNotification(
 

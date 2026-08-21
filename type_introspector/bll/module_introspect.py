@@ -68,12 +68,20 @@ def discover_classes_from_modules(modules: List[IntrospectedModule], py_version_
             if inspect.isclass(obj):
                 docstring = inspect.getdoc(obj)
                 is_generic = hasattr(obj, "__class_getitem__")
+                # The unresolved form of the hierarchy: names now, `IntrospectedClass` objects
+                # later, once every module has been walked and a base declared elsewhere can
+                # actually be looked up. `__bases__` is absent on a few exotic classes.
+                try:
+                    base_class_names = [b.__name__ for b in getattr(obj, "__bases__", ())]
+                except Exception:
+                    base_class_names = []
                 discoveries.append(
                     ClassDiscovery(
                         module=mod,
                         class_name = attr_name,
                         obj = obj,
                         docstring=docstring,
+                        base_class_names=base_class_names,
                         is_generic=is_generic,
                         py_version_id = py_version_id
                     )
@@ -97,15 +105,30 @@ def introspect_class_objects(
 
     results = []
 
+    # Index the discoveries by the class object itself, so resolving a base is a lookup rather
+    # than a scan. The same class is frequently discovered under several modules (`os.PathLike`
+    # and `posixpath.PathLike` are one object), so a key maps to every discovery of it - which is
+    # what the previous scan collected too.
+    by_obj = {}
+    for known in discovered_classes:
+        if known.obj is not None and hasattr(known.obj, "__bases__"):
+            by_obj.setdefault(id(known.obj), []).append(known)
+
     for dc in discovered_classes:
         if not hasattr(dc.obj, "__bases__"):
             continue  # Skip anything not a class (or failed resolution)
 
         base_classes = [
-            known for known in discovered_classes
-            if known.obj and hasattr(known.obj, "__bases__") and known.obj in dc.obj.__bases__
+            known
+            for base in dc.obj.__bases__
+            for known in by_obj.get(id(base), ())
         ]
 
-        results.append(IntrospectedClass(dc.module, dc.class_name, dc.obj, dc.docstring, dc.is_generic, base_classes))
+        results.append(
+            IntrospectedClass(
+                dc.module, dc.class_name, dc.obj, dc.docstring,
+                dc.is_generic, base_classes, dc.py_version_id
+            )
+        )
 
     return results

@@ -8,6 +8,7 @@ import com.wini.owle.dto.testing.TransformsDtoFactory
 import com.wini.owle.dto.testing.TypingDtoFactory
 import com.wini.owle.dto.testing.UserDtoFactory
 import com.wini.owle.dto.testing.WorkflowsDtoFactory
+import com.wini.owle.dto.*
 
 /**
  * Canned DTO instances for tests.
@@ -35,34 +36,35 @@ object DtoTestInstanceFactory {
     @Suppress("UNCHECKED_CAST")
     fun <T : BaseDto> createDtoInstance(dtoClass: Class<T>): T {
         return when (dtoClass) {
-            com.wini.owle.dto.runs.test.BenchmarkReport::class.java -> RunsDtoFactory.benchmarkReportDto() as T
-            com.wini.owle.dto.workflows.DataPoint::class.java -> WorkflowsDtoFactory.dataPointDto() as T
-            com.wini.owle.dto.steps.DataPointInjection::class.java -> StepsDtoFactory.dataPointInjectionDto() as T
-            com.wini.owle.dto.steps.DataPointRead::class.java -> StepsDtoFactory.dataPointReadDto() as T
-            com.wini.owle.dto.steps.DataPointWrite::class.java -> StepsDtoFactory.dataPointWriteDto() as T
-            com.wini.owle.dto.environs.pkg.Distribution::class.java -> EnvironsDtoFactory.distribution() as T
-            com.wini.owle.dto.environs.pkg.DistributionPackage::class.java -> EnvironsDtoFactory.distributionPackage() as T
             com.wini.owle.dto.environs.marker.EnvMarkerComparison::class.java -> EnvironsDtoFactory.envMarkerComparison() as T
             com.wini.owle.dto.environs.marker.EnvMarkerExpression::class.java -> EnvironsDtoFactory.envMarkerExpression() as T
-            com.wini.owle.dto.steps.ErrorWatch::class.java -> StepsDtoFactory.errorWatchDto() as T
-            com.wini.owle.dto.steps.ErrorWatchFn::class.java -> StepsDtoFactory.errorWatchFnDto() as T
-            com.wini.owle.dto.runs.step.ExecutionNotification::class.java -> RunsDtoFactory.executionLogDto() as T
-            com.wini.owle.dto.workflows.Grouper::class.java -> WorkflowsDtoFactory.grouperDto() as T
-            com.wini.owle.dto.steps.Inquisition::class.java -> StepsDtoFactory.inquisitionDto() as T
+            com.wini.owle.dto.environs.pkg.Distribution::class.java -> EnvironsDtoFactory.distribution() as T
+            com.wini.owle.dto.environs.pkg.DistributionPackage::class.java -> EnvironsDtoFactory.distributionPackage() as T
             com.wini.owle.dto.environs.pkg.PackageDistRequirement::class.java -> EnvironsDtoFactory.packageRequiredDist() as T
-            com.wini.owle.dto.user.PaymentMethod::class.java -> UserDtoFactory.paymentMethodDto() as T
             com.wini.owle.dto.environs.version.PythonVersion::class.java -> EnvironsDtoFactory.pythonVersion() as T
             com.wini.owle.dto.environs.version.PythonVersionSpecifier::class.java -> EnvironsDtoFactory.pythonVersionSpecifier() as T
-            com.wini.owle.dto.workflows.Step::class.java -> WorkflowsDtoFactory.stepDto() as T
+            com.wini.owle.dto.environs.version.Version::class.java -> EnvironsDtoFactory.version() as T
+            com.wini.owle.dto.environs.version.VersionOverflow::class.java -> EnvironsDtoFactory.versionOverflow() as T
+            com.wini.owle.dto.runs.step.ExecutionNotification::class.java -> RunsDtoFactory.executionLogDto() as T
             com.wini.owle.dto.runs.step.StepTestRun::class.java -> RunsDtoFactory.stepRun() as T
-            com.wini.owle.dto.tags.Tag::class.java -> TagsDtoFactory.tagDto() as T
-            com.wini.owle.dto.tags.TagRelation::class.java -> TagsDtoFactory.tagRelationDto() as T
+            com.wini.owle.dto.runs.test.BenchmarkReport::class.java -> RunsDtoFactory.benchmarkReportDto() as T
             com.wini.owle.dto.runs.test.TestCase::class.java -> RunsDtoFactory.testCaseDto() as T
             com.wini.owle.dto.runs.test.TestExpectedOutcome::class.java -> RunsDtoFactory.testExpectedOutcomeDto() as T
             com.wini.owle.dto.runs.test.TestInput::class.java -> RunsDtoFactory.testInputDto() as T
+            com.wini.owle.dto.runs.test.TestOutcomeExpectation::class.java -> RunsDtoFactory.testOutcomeExpectationDto() as T
+            com.wini.owle.dto.runs.workflow.TestOutcomeActual::class.java -> RunsDtoFactory.testOutcomeActualDto() as T
             com.wini.owle.dto.runs.workflow.TestResult::class.java -> RunsDtoFactory.testResultDto() as T
-            com.wini.owle.dto.workflows.Tool::class.java -> WorkflowsDtoFactory.toolDto() as T
+            com.wini.owle.dto.runs.workflow.WorkflowExecution::class.java -> RunsDtoFactory.workflowExecutionDto() as T
+            com.wini.owle.dto.steps.DataPointInjection::class.java -> StepsDtoFactory.dataPointInjectionDto() as T
+            com.wini.owle.dto.steps.DataPointRead::class.java -> StepsDtoFactory.dataPointReadDto() as T
+            com.wini.owle.dto.steps.DataPointWrite::class.java -> StepsDtoFactory.dataPointWriteDto() as T
+            com.wini.owle.dto.steps.ErrorWatch::class.java -> StepsDtoFactory.errorWatchDto() as T
+            com.wini.owle.dto.steps.ErrorWatchFn::class.java -> StepsDtoFactory.errorWatchFnDto() as T
+            com.wini.owle.dto.steps.Inquisition::class.java -> StepsDtoFactory.inquisitionDto() as T
             com.wini.owle.dto.steps.ToolParam::class.java -> StepsDtoFactory.toolParamDto() as T
+            com.wini.owle.dto.steps.WorkflowJunction::class.java -> StepsDtoFactory.workflowJunctionDto() as T
+            com.wini.owle.dto.tags.Tag::class.java -> TagsDtoFactory.tagDto() as T
+            com.wini.owle.dto.tags.TagRelation::class.java -> TagsDtoFactory.tagRelationDto() as T
             com.wini.owle.dto.transforms.Transform::class.java -> TransformsDtoFactory.transformDto() as T
             com.wini.owle.dto.transforms.TransformArg::class.java -> TransformsDtoFactory.transformArgDto() as T
             com.wini.owle.dto.transforms.TransformOccurrence::class.java -> TransformsDtoFactory.transformOccurrenceDto() as T
@@ -73,16 +75,14 @@ object DtoTestInstanceFactory {
             com.wini.owle.dto.typing.TypeUnionMember::class.java -> TypingDtoFactory.typeUnionMember() as T
             com.wini.owle.dto.typing.TypeVarBound::class.java -> TypingDtoFactory.typeVarBoundDto() as T
             com.wini.owle.dto.typing.TypeVarVariance::class.java -> TypingDtoFactory.typeVarianceDto() as T
+            com.wini.owle.dto.user.PaymentMethod::class.java -> UserDtoFactory.paymentMethodDto() as T
             com.wini.owle.dto.user.User::class.java -> UserDtoFactory.userDto() as T
-            com.wini.owle.dto.environs.version.Version::class.java -> EnvironsDtoFactory.version() as T
-            com.wini.owle.dto.environs.version.VersionOverflow::class.java -> EnvironsDtoFactory.versionOverflow() as T
-            com.wini.owle.dto.environs.version.VersionSpecifier::class.java -> EnvironsDtoFactory.versionSpecifier() as T
+            com.wini.owle.dto.workflows.DataPoint::class.java -> WorkflowsDtoFactory.dataPointDto() as T
+            com.wini.owle.dto.workflows.Grouper::class.java -> WorkflowsDtoFactory.grouperDto() as T
+            com.wini.owle.dto.workflows.Step::class.java -> WorkflowsDtoFactory.stepDto() as T
+            com.wini.owle.dto.workflows.Tool::class.java -> WorkflowsDtoFactory.toolDto() as T
             com.wini.owle.dto.workflows.Workflow::class.java -> WorkflowsDtoFactory.workflowDto() as T
-            com.wini.owle.dto.runs.workflow.WorkflowExecution::class.java -> RunsDtoFactory.workflowExecutionDto() as T
             com.wini.owle.dto.workflows.WorkflowFolder::class.java -> WorkflowsDtoFactory.workflowFolderDto() as T
-            com.wini.owle.dto.steps.WorkflowJunction::class.java -> StepsDtoFactory.workflowJunctionDto() as T
-            com.wini.owle.dto.runs.test.TestOutcomeExpectation::class.java -> RunsDtoFactory.testOutcomeExpectationDto() as T
-            com.wini.owle.dto.runs.workflow.TestOutcomeActual::class.java -> RunsDtoFactory.testOutcomeActualDto() as T
             else -> throw IllegalArgumentException("Unsupported DTO type: ${dtoClass.simpleName}")
         }
     }

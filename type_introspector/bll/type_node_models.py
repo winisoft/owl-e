@@ -1,14 +1,28 @@
-from typing import List, Literal, Optional, Type
+from typing import List, Literal, Optional, Type, Union, Set, Tuple
 from hashlib import sha256
 
 from bll.dto_models import IntrospectedModule
+
+
+def module_namespace(module) -> Optional[str]:
+    """
+    The namespace a node belongs to, from whichever form the caller had to hand.
+
+    Callers hold either an `IntrospectedModule` or - far more often - a bare `__module__` string
+    off the object being described, and an object with no `__module__` yields the empty string.
+    All three collapse to the same thing here, since `namespace` is what actually identifies a
+    node in `dedup_hash`.
+    """
+    if module is None:
+        return None
+    return getattr(module, "name", module) or None
 
 
 class TypeNode:
 
     def __init__(
         self,
-        module: Optional[IntrospectedModule],
+        module: Optional[Union[IntrospectedModule, str]],
         obj: Optional[type],
         name: Optional[str],
         kind: Literal['base','typevar','union','instantiation','callable', 'alias'],
@@ -20,12 +34,12 @@ class TypeNode:
     ):
         self.module = module
         self.obj = obj
-        self.namespace: Optional[str] = module.name if module else None
         self.name = name
         self.kind = kind
         self.is_generic = is_generic
         self.py_version_id = py_version_id
-        self.namespace = namespace if namespace else module.name
+        # an explicit namespace wins; otherwise derive it from whatever `module` turned out to be
+        self.namespace: Optional[str] = namespace if namespace else module_namespace(module)
         self.owning_obj = owning_obj
         self.docstring = docstring
 
@@ -130,7 +144,7 @@ class ModuleScopeCallableTypeNode(ScopedCallableTypeNode):
             name: str,
             py_version_id: int,
             docstring: Optional[str],
-            callable_params: Optional[List[tuple[int, CallableParameter]]],
+            callable_params: Optional[List[Tuple[int, CallableParameter]]],
             parameter_type_node_ids: Optional[List[int]],
             return_type_obj: Optional[Type],
             return_type_id: int
@@ -164,7 +178,7 @@ class ClassScopeCallableTypeNode(ScopedCallableTypeNode):
             py_version_id: int,
             class_type: Type,
             class_name: str,
-            callable_params: Optional[: list[tuple[int, CallableParameter]]],
+            callable_params: Optional[List[Tuple[int, CallableParameter]]],
             parameter_type_node_ids: Optional[List[int]],
             docstring: Optional[str],
             return_type_obj: Optional[Type],
@@ -195,9 +209,9 @@ class UnionTypeNode(TypeNode):
     def __init__(
             self,
             py_version_id: int,
-            member_hashes: set[str],
+            member_hashes: Set[str],
             obj: Optional[type],
-            member_type_node_ids: set[int]
+            member_type_node_ids: Set[int]
     ):
         super().__init__(
             module = None,

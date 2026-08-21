@@ -17,7 +17,7 @@ import com.wini.owle.schema.api.ApiEndpointDefinition
  * Tracks the status, start and completion times, and links to execution logs.
  */
 @ModelDefinition
-@ApiEndpointDefinition("api.runs.step.stepRun", ["runs"], "/step-run")
+@ApiEndpointDefinition("api.runs.step.stepTestRun", ["runs"], "/step-test-run")
 @PreventsTimeParadox(
     happensFirstField = "started",
     happensSecondField = "completed")

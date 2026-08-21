@@ -3,11 +3,12 @@ import inspect
 import re
 import sys
 import types
-from typing import Any, Callable, Dict, List, Optional, Tuple, Type, get_type_hints
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, get_type_hints, Union
 
 from bll.dto_models import IntrospectedClass, IntrospectedModule
 from custom_errors import UnrepresentableTypeException
 from bll.type_node_models import ClassScopeCallableTypeNode, ModuleScopeCallableTypeNode, ScopedCallableTypeNode, TypeNode
+from dal.callable_elements import insert_callable_owners
 from dal.callable_elements import insert_callable_signatures
 from dal.callable_elements import insert_callable_parameter
 
@@ -30,6 +31,19 @@ def populate_callable_ancillary_types(cursor, type_node_cache):
             insert_callable_parameter(cursor, sig_id, param.position, param.name, pid, param.is_vararg, param.is_kwarg, param.default_value)
 
 
+# `include_extras` arrived in 3.9. On 3.8 passing it raises TypeError for *every* callable, which
+# `is_safe_callable` read as "not introspectable" - the 3.8 pass collected zero callables because
+# of it. Annotated metadata simply is not available there, which is the honest answer rather than
+# a reason to reject the callable.
+_SUPPORTS_INCLUDE_EXTRAS = sys.version_info >= (3, 9)
+
+
+def get_type_hints_compat(obj, globalns=None):
+    if _SUPPORTS_INCLUDE_EXTRAS:
+        return get_type_hints(obj, globalns=globalns, include_extras=True)
+    return get_type_hints(obj, globalns=globalns)
+
+
 def is_safe_callable(obj: Any) -> bool:
     """
     Return True if the object appears to be a real function or method
@@ -50,11 +64,15 @@ def is_safe_callable(obj: Any) -> bool:
 
     try:
         sig = inspect.signature(obj)
-    except (ValueError, TypeError):
+    except Exception:
+        # Deliberately broad. Under PEP 649 (3.14) `signature` evaluates deferred annotations,
+        # so a stdlib function annotated with a TYPE_CHECKING-only name raises NameError here -
+        # `_colorize.can_colorize`, annotated `IO[str] | IO[bytes] | None`, aborted the whole
+        # 3.14 run. Any failure to read a signature simply means it is not safely introspectable.
         return False
 
     try:
-        get_type_hints(obj, include_extras=True)
+        get_type_hints_compat(obj)
     except Exception:
         return False
 
@@ -68,7 +86,7 @@ def introspect_callables(
     type_node_cache
 ):
      
-     callables: List[Tuple[Any, str, Any, Any, dict[str, Any]]] = []
+     callables: List[Tuple[Any, str, Any, Any, Dict[str, Any]]] = []
      for m in modules:
         for attr_name in dir(m.type):
             obj = getattr(m.type, attr_name, None)
@@ -80,13 +98,56 @@ def introspect_callables(
             if is_safe_callable(attr_value):
                 callables.append((attr_value, attr_name, c.obj, c.class_name, vars(sys.modules[c.module.name])))
 
+     # One unmodellable signature should not end the pass. The stdlib is full of callables whose
+     # annotations cannot be represented - C functions carrying none, dynamically built wrappers,
+     # deprecated shims - and aborting on the first leaves the entire version uncollected. These
+     # are counted and reported rather than swallowed, so a pass that quietly collected very
+     # little is visible as such.
+     failures = {}
+     done = 0
      for obj, name, owning_obj, class_name, globalns in callables:
          if should_skip_callable(obj):
             continue
-         
-         introspect_callable(obj, name, owning_obj, globalns, py_version_id, type_node_cache, class_name)
-        
+
+         try:
+             callable_id, _ = introspect_callable(
+                 obj, name, owning_obj, globalns, py_version_id, type_node_cache, class_name
+             )
+             done += 1
+
+             # Ownership is recorded here, not reconstructed later, because callable nodes dedup:
+             # a method inherited by fifty classes is ONE node reachable from fifty owners, and a
+             # deduped node remembers only the class it was first seen under. This loop still has
+             # every (owner, callable) pair, so it is the only place the full multiplicity exists.
+             if isinstance(owning_obj, type):
+                 try:
+                     owner_id, _ = type_node_cache.get_or_create(owning_obj)
+                     insert_callable_owners(type_node_cache.cursor, owner_id, callable_id)
+                 except Exception:
+                     pass
+         except Exception as e:
+             failures[type(e).__name__] = failures.get(type(e).__name__, 0) + 1
+
+     print(f"   callables: {done} introspected, {sum(failures.values())} skipped")
+     for kind, count in sorted(failures.items(), key=lambda kv: -kv[1]):
+         print(f"     {kind}: {count}")
+
      return type_node_cache
+
+
+def _static_kind(owning_obj: Any, name: str, wrapper: type) -> bool:
+    """
+    Whether `name` is declared on `owning_obj` as a `staticmethod` / `classmethod`.
+
+    Looked up on the *owning class*, not on the bound function: asking the function object for
+    its own name finds nothing. `getattr_static` deliberately avoids the descriptor protocol, so
+    it raises for anything supplied dynamically through `__getattr__` - common enough in the
+    stdlib that it has to be tolerated rather than allowed to end the pass.
+    """
+    try:
+        return isinstance(inspect.getattr_static(owning_obj, name), wrapper)
+    except Exception:
+        return False
 
 
 def introspect_callable(
@@ -97,7 +158,7 @@ def introspect_callable(
     py_version_id: int,
     type_node_cache,
     class_name: Optional[str]
-) -> tuple[int, ModuleScopeCallableTypeNode | ClassScopeCallableTypeNode]:
+) -> Tuple[int, Union[ModuleScopeCallableTypeNode, ClassScopeCallableTypeNode]]:
     
     docstring = inspect.getdoc(obj)
     return_type_obj = discover_callable_return_type(obj, globalns)
@@ -137,9 +198,16 @@ def introspect_callable(
             docstring=docstring,
             return_type_obj=return_type_obj,
             return_type_id=return_type_id,
-            module = IntrospectedModule(type = owning_obj, name = owning_obj.__name__, py_version_id=py_version_id),
-            is_staticmethod = isinstance(inspect.getattr_static(obj, name), staticmethod),
-            is_classmethod = isinstance(inspect.getattr_static(obj, name), classmethod)
+            # `owning_obj` is the class here, so its module is `__module__`; `__name__` would
+            # name the class and file every method under a namespace like `ComboBox` rather than
+            # `tkinter.tix`, which is also what stopped ownership lookups finding their class.
+            module = IntrospectedModule(
+                type = owning_obj,
+                name = getattr(owning_obj, "__module__", "") or owning_obj.__name__,
+                py_version_id = py_version_id
+            ),
+            is_staticmethod = _static_kind(owning_obj, name, staticmethod),
+            is_classmethod = _static_kind(owning_obj, name, classmethod)
         )
 
     callable_id = type_node_cache.register(scoped_callable)
@@ -162,19 +230,24 @@ def introspect_callable_parameters(
         type_hints = safe_get_type_hints(obj, globalns)
 
         for i, (sig_param_name, sig_param) in enumerate(sig.parameters.items()):
-            param_result = ensure_callable_param(
-                obj=obj, name=sig_param_name, param=sig_param, hint=str(type_hints.get(sig_param_name, Any)), position=i, type_node_cache=type_node_cache)
-            if not param_result:
-                return [], []
-            else:
-                (callable_param_tn_id, callable_param, _) = param_result
-                ids.append(callable_param_tn_id)
-                params.append((callable_param_tn_id, callable_param))
+            # The resolved annotation object, not its repr: `str()` here turned every hint into a
+            # string, which the cache rejects outright as an unrepresentable form - so every
+            # parameter failed, and the `return [], []` below discarded the whole signature with
+            # it. That is why `callable_parameters` came back empty for all 37,010 callables.
+            hint = type_hints.get(sig_param_name, Any)
+            (callable_param_tn_id, callable_param, _) = ensure_callable_param(
+                obj=obj, name=sig_param_name, param=sig_param, hint=hint,
+                position=i, type_node_cache=type_node_cache
+            )
+            ids.append(callable_param_tn_id)
+            params.append((callable_param_tn_id, callable_param))
 
     except (ValueError, TypeError) as e:
-        print(f"Could not introspect callable signature for {sig_param_name}: {e}")
+        # `obj` rather than a parameter name: `inspect.signature` can raise before the loop binds
+        # one, and naming it here raised NameError on top of the real error.
+        print(f"Could not introspect callable signature for {obj!r}: {e}")
         return [], []
-    
+
     return ids, params
 
 
@@ -233,10 +306,10 @@ def safe_get_type_hints(obj: Any, globalns: Optional[Dict[str, Any]] = None) -> 
             're': re,
             '__builtins__': builtins
         }
-        return get_type_hints(obj, include_extras=True, globalns=combined_globals)
+        return get_type_hints_compat(obj, globalns=combined_globals)
     except Exception as e:
         with open(r"C:\Users\wini\Downloads\return_type_attempts.txt", "a", encoding="utf-8") as f:
-            f.write(f"[TypeHintError] {getattr(obj, '__module__', '?')}.{getattr(obj, '__name__', '?')} → {type(e).__name__}: {e}\n")
+            f.write(f"[TypeHintError] {getattr(obj, '__module__', '?')}.{getattr(obj, '__name__', '?')} -> {type(e).__name__}: {e}\n")
         return {}
 
 
@@ -265,23 +338,45 @@ def discover_callable_return_type(
         except Exception:
             name = repr(func)
             mod = '<unknown>'
-        print(f"[ERROR] {mod}.{name} → {e}\n")
+        print(f"[ERROR] {mod}.{name} -> {e}\n")
         return None
+
+
+def _default_text(value: Any) -> Optional[str]:
+    """
+    A parameter's default rendered as text, because the column stores text and a default can be
+    any object at all - an enum member, a sentinel, a function, a mutable container.
+
+    `repr` rather than `str`, so `None` stays distinguishable from `"None"` and `0` from `"0"`.
+    An object whose `repr` itself raises still yields something recordable instead of failing the
+    whole insert, and the result is clipped to the column width.
+    """
+    try:
+        text = repr(value)
+    except Exception:
+        text = f"<unrepresentable {type(value).__name__}>"
+    return text[:1024]
 
 
 def ensure_callable_param(
-    obj: Any, 
+    obj: Any,
     name: str,
     param: inspect.Parameter,
-    hint: str,
+    hint: Any,
     position: int,
     type_node_cache
-) -> Optional[Tuple[int, CallableParameter, TypeNode]]:
+) -> Tuple[Optional[int], CallableParameter, Optional[TypeNode]]:
+    """
+    A parameter always yields a row; only its *type* may be missing.
 
+    An annotation that cannot be modelled is recorded as an absent type rather than dropping the
+    parameter - the parameter demonstrably exists and its position matters, and
+    `callable_parameters.param_type_node_id` is nullable for exactly this case.
+    """
     try:
         param_node_id, node = type_node_cache.get_or_create(hint, obj, is_callable_return_or_param=True)
     except UnrepresentableTypeException:
-        return None
+        param_node_id, node = None, None
 
     callable_param = CallableParameter(
         name = name,
@@ -289,7 +384,7 @@ def ensure_callable_param(
         position = position,
         is_vararg = param.kind == inspect.Parameter.VAR_POSITIONAL,
         is_kwarg = param.kind == inspect.Parameter.VAR_KEYWORD,
-        default_value = None if param.default is inspect.Parameter.empty else param.default,
+        default_value = None if param.default is inspect.Parameter.empty else _default_text(param.default),
         type_node = node
     )
 

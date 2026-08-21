@@ -17,7 +17,7 @@ class CallableParameterEntity(id: EntityID<ULong>) : ULongEntity(id) {
     /**
      * The TypeNode of this parameter's type
      */
-    var paramTypeNode by TypeNodeEntity referencedOn CallableParameters.paramTypeNode
+    var paramTypeNode by TypeNodeEntity optionalReferencedOn CallableParameters.paramTypeNode
 
     /**
      * A 0-based index of parameter positions

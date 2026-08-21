@@ -21,15 +21,16 @@
  pip install -r requirements.txt                                                                                
  ```                                                                                                            
                                                                                                                 
- ### Database Setup                                                                                             
- The application requires a MySQL database with the following configuration:                                    
- - Host: localhost                                                                                              
- - Database: owle_dev                                                                                           
- - User: wini                                                                                                   
- - Password: the_eru_shrug_0!                                                                                   
-                                                                                                                
- Note: Database credentials are currently hardcoded in `db_connection.py:12-17`. 
- At present, rectifying this is a low priority. 
+ ### Database Setup
+The application requires a MySQL database.
+
+**Credentials live in `credentials.md` at the repository root** - untracked and gitignored.
+It lists every database user, its password, and the privileges each holds per schema. Do not
+copy values out of it into tracked files.
+
+`db_connection.py` reads `DB_NAME_DEV` and `DB_PASSWORD_DEV` from the environment and connects
+as user `wini`; set both from `credentials.md` before running.
+
                                                                                                                 
  ## Architecture                                                                                                
                                                                                                                 

@@ -2,7 +2,11 @@ import ast
 import inspect
 import sys
 import types
-from typing import Any, Dict, ForwardRef, List, Optional, Tuple, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
+try:
+    from typing import ForwardRef
+except ImportError:  # 3.6 spells it with a leading underscore
+    from typing import _ForwardRef as ForwardRef
 import typing
 
 from custom_errors import UnrepresentableTypeException
@@ -12,7 +16,14 @@ from bll.callable_types import is_safe_callable
 from dal.type_elements import insert_type_node, insert_type_union, insert_type_alias
 from dal.typevar_elements import insert_typevar_bounds, insert_typevar_constraints, insert_typevar_variance
 
-GENERIC_ALIAS_TYPES = (getattr(typing, "_GenericAlias", object), getattr(types, "GenericAlias", object))
+# Absent members are dropped rather than defaulted to `object`: `isinstance(x, object)` is true of
+# everything, so on 3.8 - where `types.GenericAlias` does not exist - that default sent every
+# object down the parameterised-generic path, including plain classes like `abc.ABC`, which have
+# no origin to resolve. `isinstance(x, ())` is simply False, which is the intended "no match".
+GENERIC_ALIAS_TYPES = tuple(
+    alias for alias in (getattr(typing, "_GenericAlias", None), getattr(types, "GenericAlias", None))
+    if alias is not None
+)
 
 
 def _is_generic_class(cls: type) -> bool:
@@ -56,39 +67,54 @@ class TypeNodeCache:
 
 
     def populate_typevar_ancillary_types(self, cursor, typevars: List[Tuple[int, TypeVarTypeNode]]) -> "TypeNodeCache":
+        """
+        A TypeVar's bound, constraints and variance.
 
-        for (_, typevar) in typevars:
-            for typevar_id, typevar_node in typevars:
-                if isinstance(typevar_node, TypeVarTypeNode):
-                    if typevar.dedup_hash() == typevar_node.dedup_hash():
-                        continue
+        Previously this walked `typevars` twice and skipped whenever the two entries had the same
+        dedup hash - which, given it is called with a single freshly-registered node, was always.
+        Nothing was ever written.
 
-                    if typevar_node.obj:
+        Variance is recorded for every TypeVar including the invariant default, since "invariant"
+        is a real answer rather than an absent one, and the column enumerates it.
+        """
+        for typevar_id, typevar_node in typevars:
+            if not isinstance(typevar_node, TypeVarTypeNode) or not typevar_node.obj:
+                continue
 
-                        if hasattr(typevar_node.obj, "__bound__"):
-                            try:
-                                bound_id, _ = self.infer_correct_node_type(obj=typevar_node.obj.__bound__, owning_obj=typevar_node.obj)
-                            except UnrepresentableTypeException:
-                                continue
+            obj = typevar_node.obj
 
-                            insert_typevar_bounds(cursor, typevar_id, bound_id)
+            # Read these off a genuine TypeVar only. On the `TypeVar` class itself - and on a few
+            # look-alikes reached through `dir()` - `__bound__` and `__constraints__` resolve to
+            # the raw getset descriptors rather than to a value or a tuple, which is what the
+            # "'getset_descriptor' object is not iterable" warnings were.
+            if not isinstance(obj, typing.TypeVar):
+                continue
 
-                        if hasattr(typevar_node.obj, "__constraints__"):
-                            for constraint in typevar_node.obj.__constraints__:
-                                try:
-                                    constraint_id, _ = self.infer_correct_node_type(obj=constraint, owning_obj=typevar_node.obj)
-                                except UnrepresentableTypeException:
-                                    continue
+            bound = getattr(obj, "__bound__", None)
+            if bound is not None:
+                try:
+                    bound_id, _ = self.get_or_create(bound, obj)
+                    insert_typevar_bounds(cursor, typevar_id, bound_id)
+                except (UnrepresentableTypeException, ValueError):
+                    pass
 
-                                insert_typevar_constraints(cursor, typevar_id, constraint_id)
+            constraints = getattr(obj, "__constraints__", ()) or ()
+            for constraint in (constraints if isinstance(constraints, (tuple, list)) else ()):
+                try:
+                    constraint_id, _ = self.get_or_create(constraint, obj)
+                    insert_typevar_constraints(cursor, typevar_id, constraint_id)
+                except (UnrepresentableTypeException, ValueError):
+                    pass
 
-                        if getattr(typevar_node.obj, "__covariant__", False):
-                            insert_typevar_variance(cursor, typevar_id, "covariant")
-                        elif getattr(typevar_node.obj, "__contravariant__", False):
-                            insert_typevar_variance(cursor, typevar_id, "contravariant")
-        
+            if getattr(obj, "__covariant__", False):
+                variance = "covariant"
+            elif getattr(obj, "__contravariant__", False):
+                variance = "contravariant"
+            else:
+                variance = "invariant"
+            insert_typevar_variance(cursor, typevar_id, variance)
+
         return self
-
 
     def get_or_create(
         self,
@@ -141,9 +167,20 @@ class TypeNodeCache:
                 f"Unannotated type cannot produce a TypeNode. module: {getattr(owning_obj, '__module__', '')} function: {getattr(owning_obj, '__name__', '')}"
             )
 
-        # String annotations and Ellipsis are not valid type objects by themselves
-        if isinstance(obj, (str, list)) or obj is Ellipsis:
+        # String annotations are not valid type objects by themselves
+        if isinstance(obj, (str, list)):
             raise UnrepresentableTypeException(f"Unrepresentable type form: {obj!r}")
+
+        # `...` is meaningless as an annotation on its own, but it is a real and common *argument*:
+        # `Callable[..., int]` and `Tuple[int, ...]` both yield it from `get_args`, and the two are
+        # not the same type as `Callable[[], int]` and `Tuple[int]`. Dropping it would silently
+        # collapse that distinction, so it gets a canonical node of its own and dedups like any
+        # other. It only ever reaches here from an argument position.
+        if obj is Ellipsis:
+            return TypeNode(
+                obj=obj, kind="base", py_version_id=self.py_version_id, name="...",
+                is_generic=False, namespace="builtins", owning_obj=owning_obj, module=None
+            )
 
         # Un-evaluated forward references like `ForwardRef('MyClass')`
         if isinstance(obj, ForwardRef):
@@ -250,6 +287,7 @@ class TypeNodeCache:
             once more type information is known.
             """
             return AliasTypeNode(
+                module=None,
                 obj=None,
                 py_version_id=self.py_version_id,
                 name=obj.__forward_arg__,
@@ -301,11 +339,15 @@ class TypeNodeCache:
         """
         Constructs a TypeNode representing a generic type variable.
         """
+        # The TypeVar itself, not its class. `type(obj)` is `typing.TypeVar` for every type
+        # variable in existence, which discards which one this is and leaves `__bound__` /
+        # `__constraints__` resolving to class-level getset descriptors instead of values - so no
+        # bound, constraint or variance could ever be read from it.
         return TypeVarTypeNode(
-            obj=type(obj),
+            obj=obj,
             py_version_id=self.py_version_id,
             name=obj.__name__,
-            module=None
+            module=getattr(obj, "__module__", None)
         )
 
 
@@ -315,8 +357,15 @@ class TypeNodeCache:
 
         The member types are recursively resolved.
         """
-        member_ids = [self.get_or_create(arg, owning_obj)[0] for arg in obj.__args__]
-        return UnionTypeNode(py_version_id=self.py_version_id, obj=obj, member_type_node_ids=member_ids)
+        members = [self.get_or_create(arg, owning_obj) for arg in obj.__args__]
+        member_ids = [node_id for node_id, _ in members]
+        # `dedup_hash` is built from these, which is what makes `Union[int, str]` discovered in two
+        # places resolve to a single node rather than two indistinguishable ones.
+        member_hashes = {node.dedup_hash() for _, node in members}
+        return UnionTypeNode(
+            py_version_id=self.py_version_id, member_hashes=member_hashes,
+            obj=obj, member_type_node_ids=member_ids
+        )
 
 
     def _instantiated_type_node(self, obj: Any, owning_obj: Any) -> TypeNode:
@@ -330,7 +379,19 @@ class TypeNodeCache:
         if origin is None:
             raise ValueError(f"Cannot resolve origin for {obj}")
         origin_id, _ = self.get_or_create(origin, owning_obj)
-        arg_ids = [self.get_or_create(arg, owning_obj)[0] for arg in args]
+
+        # A Callable's parameter list arrives as a genuine Python list:
+        # `get_args(Callable[[str], int])` is `([str], int)`. Flattened in order, so the arguments
+        # read parameters-then-return - the same shape `Callable[..., int]` already produces, where
+        # the placeholder is one node and the return follows it. A bare list is still not a type,
+        # which is why it stays rejected in `infer_correct_node_type`; it is only meaningful here.
+        arg_ids = []
+        for arg in args:
+            if isinstance(arg, list):
+                arg_ids.extend(self.get_or_create(a, owning_obj)[0] for a in arg)
+            else:
+                arg_ids.append(self.get_or_create(arg, owning_obj)[0])
+
         return InstantiatedTypeNode(obj, self.py_version_id, origin_id, arg_ids)
 
 
@@ -343,10 +404,37 @@ class TypeNodeCache:
         name = getattr(obj, "__name__", None)
         if not name:
             raise ValueError(f"Type missing __name__: {obj}")
-        return TypeNode(obj=obj, kind="base", py_version_id=self.py_version_id, name=name, is_generic=_is_generic_class(obj), owning_obj=owning_obj, module=getattr(owning_obj, '__module__', ''))
+        # The namespace is where the type is *defined*, taken from the type itself - not from
+        # whatever object we happened to reach it through. Reading `__module__` off the owning
+        # object meant an `IntrospectedModule` answered with its own defining module, so 1,959
+        # standard-library types were filed under `bll.dto_models`, this tool's internals. It also
+        # makes `os.PathLike` one node whether it is found via `os` or `posixpath`, since
+        # `namespace` is half of `dedup_hash`.
+        namespace = getattr(obj, "__module__", None) or getattr(owning_obj, "name", None)
+        return TypeNode(
+            obj=obj, kind="base", py_version_id=self.py_version_id, name=name,
+            is_generic=_is_generic_class(obj), owning_obj=owning_obj,
+            namespace=namespace, module=None
+        )
 
     def __getitem__(self, node_id: int) -> Optional[TypeNode]:
         if node_id:
             return self.by_id[node_id]
         return None
+
+
+    def __iter__(self):
+        """
+        Every registered node, as `(node_id, node)`.
+
+        Without this, `for a, b in cache` silently falls back to the legacy sequence protocol and
+        calls `__getitem__(0)` - which returns None here, since `__getitem__` takes a node id and
+        treats 0 as absent. Callers iterating the cache got `cannot unpack non-iterable NoneType`
+        rather than anything suggesting the real cause.
+        """
+        return iter(list(self.by_id.items()))
+
+
+    def __len__(self) -> int:
+        return len(self.by_id)
 

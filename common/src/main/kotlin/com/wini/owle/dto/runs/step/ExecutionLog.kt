@@ -9,12 +9,14 @@ import com.wini.owle.dto.workflows.DataPoint
 import com.wini.owle.dto.workflows.Step
 import com.wini.owle.dto.workflows.Workflow
 import com.wini.owle.schema.ModelDefinition
+import com.wini.owle.schema.api.ApiEndpointDefinition
 import kotlinx.serialization.Serializable
 
 /**
  * One event in a run's audit trail - the record the containment guarantee rests on.
  */
 @ModelDefinition
+@ApiEndpointDefinition("api.runs.step.executionLog", ["runs"], "/execution-log")
 @Serializable
 data class ExecutionLog(
 

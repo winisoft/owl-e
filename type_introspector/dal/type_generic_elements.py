@@ -6,10 +6,17 @@ from typing import Tuple
 
 def insert_type_instantiation_arg(
     cursor,
-    instantiation_node_id: int,
+    instantiation_id: int,
     arg_node_id: int,
     position: int
 ) -> Tuple[int, bool]:
+    """
+    `instantiation_id` is the `type_instantiations` row id returned by
+    [insert_type_instantiation] - NOT the instantiation's `type_nodes` id, which is what the
+    parameter used to be called. Passing the node id satisfied no foreign key, and because the
+    insert below is an INSERT IGNORE the violation was reported as "no rows inserted" rather than
+    raised, leaving `type_instantiation_args` empty.
+    """
     """Returns (id, was_inserted) where was_inserted indicates if a new row was created."""
     try:
         cursor.execute(
@@ -18,10 +25,10 @@ def insert_type_instantiation_arg(
                 (instantiation_id, param_node_id, param_position)
             VALUES (%s, %s, %s)
             """,
-            (instantiation_node_id, arg_node_id, position)
+            (instantiation_id, arg_node_id, position)
         )
         if cursor.rowcount == 0:
-            print(f"No rows inserted for instantiation arg: inst_id={instantiation_node_id}, arg_id={arg_node_id}, pos={position}")
+            print(f"No rows inserted for instantiation arg: inst_id={instantiation_id}, arg_id={arg_node_id}, pos={position}")
             return cursor.lastrowid, False
         return cursor.lastrowid, True
     except mysql.connector.errors.IntegrityError as e:
@@ -32,13 +39,13 @@ def insert_type_instantiation_arg(
                 SELECT id FROM type_instantiation_args
                 WHERE instantiation_id = %s AND param_position = %s
                 """,
-                (instantiation_node_id, position)
+                (instantiation_id, position)
             )
             row = cursor.fetchone()
             if row:
-                print(f"Found existing instantiation arg: inst_id={instantiation_node_id}, arg_id={arg_node_id}, pos={position}")
+                print(f"Found existing instantiation arg: inst_id={instantiation_id}, arg_id={arg_node_id}, pos={position}")
                 return row[0], False
-            raise RuntimeError(f"Duplicate entry for (instantiation_id={instantiation_node_id}, position={position}) but SELECT found nothing")
+            raise RuntimeError(f"Duplicate entry for (instantiation_id={instantiation_id}, position={position}) but SELECT found nothing")
         else:
             print(f"IntegrityError inserting instantiation arg: {e}")
             raise

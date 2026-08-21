@@ -57,21 +57,21 @@ def populate_simple_unions(py_version_id: int,
         tups = type_node_cache.find(kind='base', namespace=ns, name=name)
         if len(tups) == 0:
             print("create ns: " + ns + " name: " + name)
-        for id1, _ in tups:
-            for (id2, _) in core_types_except([id1], core_types):
-                union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_type_node_ids={id1, id2}, )
+        for id1, n1 in tups:
+            for (id2, n2) in core_types_except([id1], core_types):
+                union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash()}, member_type_node_ids={id1, id2})
                 pending_inserts.add(union_node)
 
-                for (id3, _) in core_types_except([id1, id2], core_types):
-                    union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_type_node_ids={id1, id2, id3})
+                for (id3, n3) in core_types_except([id1, id2], core_types):
+                    union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash(), n3.dedup_hash()}, member_type_node_ids={id1, id2, id3})
                     pending_inserts.add(union_node)
 
-                    for (id4, _) in core_types_except([id1, id2, id3], core_types):
-                        union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_type_node_ids={id1, id2, id3, id4})
+                    for (id4, n4) in core_types_except([id1, id2, id3], core_types):
+                        union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash(), n3.dedup_hash(), n4.dedup_hash()}, member_type_node_ids={id1, id2, id3, id4})
                         pending_inserts.add(union_node)
 
-                        for (id5, _) in core_types_except([id1, id2, id3, id4], core_types):
-                            union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_type_node_ids={id1, id2, id3, id4, id5})
+                        for (id5, n5) in core_types_except([id1, id2, id3, id4], core_types):
+                            union_node = UnionTypeNode(obj=None, py_version_id=py_version_id, member_hashes={n1.dedup_hash(), n2.dedup_hash(), n3.dedup_hash(), n4.dedup_hash(), n5.dedup_hash()}, member_type_node_ids={id1, id2, id3, id4, id5})
                             pending_inserts.add(union_node)
 
     for pending_insert in pending_inserts:
@@ -124,11 +124,12 @@ def populate_union_instantiations(py_version_id: int,
         for builtin_id, _ in tups:
             all_types.add(builtin_id)
 
-    union_tups: List[Tuple[int, TypeNode]] = type_node_cache.find(node_type = type(UnionTypeNode))
-    for union_tup in union_tups:
-        for u_id, _ in union_tup:
-            union_types.add(u_id)
-            all_types.add(u_id)
+    # `type(UnionTypeNode)` is the metaclass, which matches nothing; and `find` already returns
+    # the (id, node) pairs, so the extra inner loop was unpacking an int.
+    union_tups: List[Tuple[int, TypeNode]] = type_node_cache.find(node_type = UnionTypeNode)
+    for u_id, _ in union_tups:
+        union_types.add(u_id)
+        all_types.add(u_id)
 
     for ns, name in BUILTIN_GENERIC_PRIMITIVE_1ARG_NS_NAMES:
         gen_1arg_tups = type_node_cache.find(kind='base', namespace=ns, name=name)
@@ -140,8 +141,8 @@ def populate_union_instantiations(py_version_id: int,
     for ns, name in BUILTIN_GENERIC_PRIMITIVE_2ARG_NS_NAMES:
         tups = type_node_cache.find(kind='base', namespace=ns, name=name)
         for (gen_2arg_id, _) in tups:
-            for t1_id, _ in all_types:
-                for t2_id, _ in all_types:
+            for t1_id in all_types:
+                for t2_id in all_types:
                     inst_node = InstantiatedTypeNode(None, py_version_id, gen_2arg_id, [t1_id, t2_id])
                     pending_inserts.add(inst_node)
 

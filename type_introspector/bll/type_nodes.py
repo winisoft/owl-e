@@ -3,7 +3,11 @@ import datetime
 import decimal
 import sys
 from types import ModuleType
-from typing import ForwardRef, Optional, Tuple, Any, Dict, List
+from typing import Optional, Tuple, Any, Dict, List, Type
+try:
+    from typing import ForwardRef
+except ImportError:  # 3.6 spells it with a leading underscore
+    from typing import _ForwardRef as ForwardRef
 import logging
 import typing
 import inspect
@@ -22,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 
-def classify_module(module: ModuleType) -> Dict[str, List[Tuple[str, type[Any]]]]:
+def classify_module(module: ModuleType) -> Dict[str, List[Tuple[str, Type[Any]]]]:
     base_types = []
     generic_types = []
     callables = []
@@ -83,9 +87,10 @@ def populate_ad_hoc_module_type_nodes(py_version_id: int, type_node_cache: TypeN
     return type_node_cache
 
 
-def populate_ad_hoc_type_nodes(module: ModuleType, module_types: Dict[str, List[Tuple[str, type[Any]]]], py_version_id: int, type_node_cache: TypeNodeCache) -> TypeNodeCache:
+def populate_ad_hoc_type_nodes(module: ModuleType, module_types: Dict[str, List[Tuple[str, Type[Any]]]], py_version_id: int, type_node_cache: TypeNodeCache) -> TypeNodeCache:
     for (name, obj) in module_types['base_types']:
         node = TypeNode(
+            module=None,
             kind="base",
             py_version_id=py_version_id,
             name=name,
@@ -98,6 +103,7 @@ def populate_ad_hoc_type_nodes(module: ModuleType, module_types: Dict[str, List[
         type_node_cache.register(node)
     for (name, obj) in module_types['generic_types']:
         node = TypeNode(
+            module=None,
             namespace=module.__name__,
             kind="base",
             py_version_id=py_version_id,
@@ -165,10 +171,14 @@ def populate_generic_instantiations(
 
 def populate_type_inst_and_type_inst_params(cursor, node: Tuple[int, InstantiatedTypeNode]):
 
-    insert_type_instantiation(cursor, instantiation_node_id = node[0], origin_node_id = node[1].origin_type_node_id)
+    instantiation_id, _ = insert_type_instantiation(
+        cursor, instantiation_node_id = node[0], origin_node_id = node[1].origin_type_node_id
+    )
 
     for i, param_id in enumerate(node[1].arg_type_node_ids):
-        insert_type_instantiation_arg(cursor, instantiation_node_id = node[0], arg_node_id = param_id, position = i)
+        insert_type_instantiation_arg(
+            cursor, instantiation_id = instantiation_id, arg_node_id = param_id, position = i
+        )
 
 
 def populate_type_schema_refs(cursor, type_node_cache: TypeNodeCache):
@@ -305,3 +315,38 @@ def normalize_type_to_type_node(
 
     return None
 
+
+def populate_class_generic_params(cursor, type_node_cache: TypeNodeCache) -> None:
+    """
+    The TypeVars a generic class declares, positionally.
+
+    `class Mapping(Generic[KT, VT])` declares two, and `__parameters__` reports them in order.
+    This is the class's own parameter list, which is a different fact from
+    `type_instantiation_args` - that records what a particular *use site* filled those parameters
+    with, this records that the slots exist at all.
+
+    Nothing populated this table before: `populate_generic_instantiations` was the only writer and
+    it is not part of any phase.
+    """
+    for node_id, node in list(type_node_cache):
+        if getattr(node, "kind", None) != "base":
+            continue
+
+        cls = getattr(node, "obj", None)
+        if not isinstance(cls, type):
+            continue
+
+        # On a class that declares `__parameters__` as a slot or property, attribute access
+        # returns the descriptor itself rather than a tuple of TypeVars.
+        params = getattr(cls, "__parameters__", ())
+        if not isinstance(params, (tuple, list)):
+            continue
+
+        for idx, typevar in enumerate(params):
+            try:
+                typevar_node_id, _ = type_node_cache.get_or_create(typevar, cls)
+            except Exception:
+                continue
+            insert_class_generic_params(
+                cursor, node_id=node_id, typevar_node_id=typevar_node_id, idx=idx
+            )

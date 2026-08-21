@@ -7,15 +7,15 @@ from bll.type_node_models import TypeNode
 logger = logging.getLogger(__name__)
 
 
-def insert_type_schema_ref(cursor, class_node_id: int, name: str, member_kind: Literal['method', 'attribute'],
+def insert_type_schema_ref(cursor, class_node_id: int, name: str, member_kind: Literal['method', 'attribute', 'property', 'classvar'],
                            type_node_id: int, position: int):
     cursor.execute(
         """
         INSERT IGNORE INTO type_schema_refs
-            (parent_ref_id, class_node_id, name, member_kind, type_node_id, description, position)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+            (class_node_id, name, member_kind, type_node_id, description, position)
+        VALUES (%s, %s, %s, %s, %s, %s)
         """,
-        (None, class_node_id, name, member_kind, type_node_id, None, position)
+        (class_node_id, name, member_kind, type_node_id, None, position)
     )
 
 
@@ -72,5 +72,15 @@ def insert_type_node(
         node.py_version_id, node.namespace, node.name, node.kind, node.is_generic, dedup_hash
     ))
 
-    return cursor.lastrowid
+    # INSERT IGNORE writes nothing when the node already exists, and `lastrowid` is then 0 - which
+    # is not a node id, and fails as a foreign key everywhere it is used. Recover the existing row
+    # instead, so a re-run resolves to the same node rather than poisoning every reference made
+    # from it. `dedup_hash` is exactly the identity this table dedups on.
+    new_id = cursor.lastrowid
+    if not new_id:
+        cursor.execute("SELECT id FROM type_nodes WHERE dedup_hash = %s", (dedup_hash,))
+        row = cursor.fetchone()
+        new_id = row[0] if row else None
+
+    return new_id
 

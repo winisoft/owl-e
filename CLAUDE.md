@@ -167,5 +167,7 @@ python main.py
 - Package structure: `com.wini.owle.*`
 - JVM target: Java 17
 - The system emphasizes modularity, safety, and flexibility
-- Database credentials may be hardcoded in development (see individual module docs)
+- **Database credentials live in `credentials.md` at the repository root** - untracked and
+  gitignored. It lists each MySQL user, its password, and the privileges it holds per schema.
+  Read connection details from there; never copy a value into a tracked file.
 - Python utilities require separate dependency management
