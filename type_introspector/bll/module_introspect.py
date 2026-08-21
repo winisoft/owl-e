@@ -9,7 +9,11 @@ from bll.dto_models import IntrospectedClass, IntrospectedModule, ClassDiscovery
 
 EXCLUDED_MODULES = {
     "antigravity", "this", "turtle", "pydoc", "tabnanny",
-    "test", "tests", "idlelib", "ensurepip", "__main__"
+    "test", "tests", "idlelib", "ensurepip", "__main__",
+    # `path` is now an environment's own Lib, which carries installed packages alongside the
+    # stdlib. Without these the type database would record whatever happens to be pip-installed
+    # in each environment as though it were part of Python.
+    "site-packages", "dist-packages", "lib2to3", "venv", "__pycache__",
 }
 
 def introspect_modules(lib_path: Path, py_version_id: int) -> List[IntrospectedModule]:

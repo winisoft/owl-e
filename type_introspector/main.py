@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List
 import logging
 
-from cpython_targets import CPYTHON_DATA
+from cpython_targets import current_targets, running_version
 
 from bll.dto_models import ClassDiscovery, IntrospectedClass
 from bll.type_node_cache import TypeNodeCache
@@ -27,7 +27,7 @@ def populate_introspected_type_data() -> None:
         cursor = conn.cursor()
 
         try:
-            for datum in CPYTHON_DATA:
+            for datum in current_targets():
                 py_version_id = datum["id"]
                 stdlib_lib_path = (BASE_DIR / datum["path"]).resolve(strict=True)
 
